@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum NotificationType {
+  VOTE_NOTIFICATION
+  REPORT_NOTIFICATION
+  COMMENT_NOTIFICATION
+  MESSAGE_NOTIFICATION
+  FEEDBACK_NOTIFICATION
+}
+
+enum FeedbackStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+enum ReportStatus {
+  RESOLVED
+  PENDING
+  REJECTED
+}
+enum UserRole {
+  DepartmentStaff
+  Student
+  Admin
+}
+model users {
+  user_id       Int      @id @default(autoincrement())
+  full_name     String?
+  password      String
+  email         String   @unique
+  role          UserRole
+  department_id Int
+  created_at    DateTime
+
+  department      departments                   @relation(fields: [department_id], references: [department_id])
+  feedbacks       feedbacks[]
+  votes           votes[]
+  comments        comments[]
+  comment_reports comment_reports[]
+  forwarding_logs forwarding_logs[]
+  conversations   clarification_conversations[]
+  messages        messages[]
+  announcements   announcements[]
+  notifications   notifications[]
+}
+
+model departments {
+  department_id   Int    @id @default(autoincrement())
+  department_name String
+
+  users                                                           users[]
+  feedbacks                                                       feedbacks[]
+  forwarding_logs_forwarding_logs_from_department_idTodepartments forwarding_logs[] @relation("FromDepartment")
+  forwarding_logs_forwarding_logs_to_department_idTodepartments   forwarding_logs[] @relation("ToDepartment")
+}
+
+model categories {
+  category_id   Int    @id @default(autoincrement())
+  category_name String
+
+  feedbacks feedbacks[]
+}
+
+model feedbacks {
+  feedback_id    Int            @id @default(autoincrement())
+  subject        String
+  description    String
+  current_status FeedbackStatus
+  is_private     Boolean
+  user_id        Int
+  department_id  Int
+  category_id    Int
+  created_at     DateTime
+
+  user             users                          @relation(fields: [user_id], references: [user_id])
+  department       departments                    @relation(fields: [department_id], references: [department_id])
+  category         categories                     @relation(fields: [category_id], references: [category_id])
+  status_history   feedback_status_history[]
+  forwarding_logs  forwarding_logs[]
+  forum_post       forum_posts?
+  conversations    clarification_conversations[]
+  file_attachments file_attachment_for_feedback[]
+}
+
+model feedback_status_history {
+  feedback_status_id Int            @id @default(autoincrement())
+  feedback_id        Int
+  status             FeedbackStatus
+  message            String?
+  created_at         DateTime
+
+  feedback feedbacks @relation(fields: [feedback_id], references: [feedback_id])
+}
+
+model forwarding_logs {
+  forwarding_log_id  Int      @id @default(autoincrement())
+  feedback_id        Int
+  from_department_id Int
+  to_department_id   Int
+  user_id            Int
+  message            String?
+  created_at         DateTime
+
+  feedback        feedbacks   @relation(fields: [feedback_id], references: [feedback_id])
+  from_department departments @relation("FromDepartment", fields: [from_department_id], references: [department_id])
+  to_department   departments @relation("ToDepartment", fields: [to_department_id], references: [department_id])
+  user            users       @relation(fields: [user_id], references: [user_id])
+}
+
+model forum_posts {
+  post_id     Int      @id @default(autoincrement())
+  feedback_id Int      @unique
+  created_at  DateTime
+
+  feedback feedbacks  @relation(fields: [feedback_id], references: [feedback_id])
+  votes    votes[]
+  comments comments[]
+}
+
+model votes {
+  user_id    Int
+  post_id    Int
+  created_at DateTime
+
+  user users       @relation(fields: [user_id], references: [user_id])
+  post forum_posts @relation(fields: [post_id], references: [post_id])
+
+  @@id([user_id, post_id])
+}
+
+model comments {
+  comment_id Int      @id @default(autoincrement())
+  post_id    Int
+  user_id    Int
+  content    String
+  created_at DateTime
+
+  post    forum_posts       @relation(fields: [post_id], references: [post_id])
+  user    users             @relation(fields: [user_id], references: [user_id])
+  reports comment_reports[]
+}
+
+model comment_reports {
+  comment_report_id Int          @id @default(autoincrement())
+  comment_id        Int
+  user_id           Int
+  reason            String?
+  status            ReportStatus
+  admin_response    String?
+  created_at        DateTime
+
+  comment comments @relation(fields: [comment_id], references: [comment_id])
+  user    users    @relation(fields: [user_id], references: [user_id])
+}
+
+model clarification_conversations {
+  conversation_id Int      @id @default(autoincrement())
+  feedback_id     Int
+  is_closed       Boolean
+  user_id         Int
+  created_at      DateTime
+
+  feedback feedbacks  @relation(fields: [feedback_id], references: [feedback_id])
+  user     users      @relation(fields: [user_id], references: [user_id])
+  messages messages[]
+}
+
+model messages {
+  message_id      Int      @id @default(autoincrement())
+  conversation_id Int
+  user_id         Int
+  content         String
+  created_at      DateTime
+
+  conversation clarification_conversations @relation(fields: [conversation_id], references: [conversation_id])
+  user         users                       @relation(fields: [user_id], references: [user_id])
+}
+
+model file_attachment_for_feedback {
+  id          Int    @id @default(autoincrement())
+  feedback_id Int
+  file_name   String
+  file_url    String
+
+  feedback feedbacks @relation(fields: [feedback_id], references: [feedback_id])
+}
+
+model file_attachment_for_announcement {
+  id              Int    @id @default(autoincrement())
+  announcement_id Int
+  file_name       String
+  file_url        String
+
+  announcement announcements @relation(fields: [announcement_id], references: [id])
+}
+
+model announcements {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  created_at DateTime
+  user_id    Int
+
+  user  users                              @relation(fields: [user_id], references: [user_id])
+  files file_attachment_for_announcement[]
+}
+
+model notifications {
+  notification_id   Int              @id @default(autoincrement())
+  user_id           Int
+  content           String
+  notification_type NotificationType
+  is_read           Boolean
+  created_at        DateTime
+
+  user users @relation(fields: [user_id], references: [user_id])
+}
