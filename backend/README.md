@@ -1,11 +1,15 @@
-# 1. Khởi động database
-npm run mysql:up    
+# 1. Start the database
 
-# 2. Apply migration từ Prisma schema
-npm run migration:generate    
+npm run db:up
 
-# 3. Seed dữ liệu ban đầu (nếu có init.sql)
-npm run db:seed    
+# 2. Apply migrations from Prisma schema
 
-# 4. Kiểm tra DB đã có bảng và dữ liệu
-npx prisma studio   # mở giao diện web của Prisma
+npm run migration:generate
+
+# 3. Seed initial data (if init.sql exists)
+
+npm run db:seed
+
+# 4. Verify the database has tables and data
+
+npx prisma studio
