@@ -1,17 +1,17 @@
 version: '3.9'
 
 services:
-  mysql:
-    image: mysql:8.0
+  postgres:
+    image: postgres:15
     container_name: university-feedback
     ports:
-      - '33061:3306'
+      - '5433:5432'   # 5432 là cổng mặc định của Postgres
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: UniversityFeedback
-      MYSQL_PASSWORD: 123456
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: UniversityFeedback
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
+  postgres_data:

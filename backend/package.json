@@ -23,7 +23,7 @@
     "prisma:generate": "prisma generate",
     "migration:generate": "prisma migrate dev --name init",
     "migration:deploy": "prisma migrate deploy",
-    "db:seed": "docker exec -i university-feedback mysql -u root -p123456 UniversityFeedback < db/init.sql"
+    "db:seed": "docker exec -i university-feedback psql -U root -d UniversityFeedback < db/init.sql"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
