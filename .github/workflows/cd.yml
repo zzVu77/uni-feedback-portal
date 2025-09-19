@@ -1,0 +1,91 @@
+name: CD Workflow
+description: This workflow runs on pushes to the main branch, checking for changes in backend and frontend, then building and deploying them if necessary.
+# This workflow is triggered on pushes to the main branch.
+on:
+  push:
+    branches:
+      - main # Chỉ chạy khi merge PR vào main
+
+jobs:
+  check-changes:
+    name: Check changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend_changed: ${{ steps.backend_check.outputs.changed }}
+      frontend_changed: ${{ steps.frontend_check.outputs.changed }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check backend changes
+        id: backend_check
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^backend/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check frontend changes
+        id: frontend_check
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^frontend/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy:
+    name: Build & Deploy FE/BE
+    needs: check-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [backend, frontend]
+    if: ${{ (matrix.project == 'backend' && needs.check-changes.outputs.backend_changed == 'true') || (matrix.project == 'frontend' && needs.check-changes.outputs.frontend_changed == 'true') }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ${{ matrix.project }}/node_modules
+          key: ${{ runner.os }}-node-${{ matrix.project }}-${{ hashFiles(matrix.project + '/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.project }}-
+
+      - name: Install dependencies
+        working-directory: ./${{ matrix.project }}
+        run: npm ci
+
+      - name: Build project
+        working-directory: ./${{ matrix.project }}
+        run: npm run build
+
+      - name: Deploy Backend to Render
+        if: matrix.project == 'backend'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}" \
+          -H "Authorization: Bearer ${RENDER_API_KEY}" \
+          -H "Accept: application/json"
+
+      - name: Deploy Frontend to Vercel
+        if: matrix.project == 'frontend'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npx vercel deploy ./frontend \
+            --prod \
+            --token $VERCEL_TOKEN \
+            --confirm \
+            --org ${{ secrets.VERCEL_ORG_ID }} \
+            --project ${{ secrets.VERCEL_PROJECT_ID }}

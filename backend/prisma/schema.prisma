@@ -8,7 +8,7 @@ datasource db {
 }
 // generator zod {
 //   provider                 = "prisma-zod-generator"
-//   output   = "../../shared/schemas"
+//   output   = "../../shared/src/schemas"
 // }
 enum NotificationType {
   VOTE_NOTIFICATION
