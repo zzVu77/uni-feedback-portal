@@ -6,7 +6,7 @@
     "format": "prettier --write \"src/**/*.tsx\"  \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" --fix",
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
