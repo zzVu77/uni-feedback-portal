@@ -6,7 +6,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+// generator zod {
+//   provider                 = "prisma-zod-generator"
+//   output   = "../../shared/schemas"
+// }
 enum NotificationType {
   VOTE_NOTIFICATION
   REPORT_NOTIFICATION
