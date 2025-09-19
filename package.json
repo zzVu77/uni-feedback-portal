@@ -30,9 +30,11 @@
     "npm": ">=8.0.0"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "cd backend && npm run format && npm run lint",
-      "cd frontend && npm run format && npm run lint"
+    "*.{ts,tsx,js,jsx,json,css,scss}": [
+      "npm run format --workspace=backend",
+      "npm run lint --workspace=backend",
+      "npm run format --workspace=frontend",
+      "npm run lint --workspace=frontend"
     ]
   }
 }
