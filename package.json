@@ -8,6 +8,7 @@
     "frontend"
   ],
   "scripts": {
+    "prepare": "husky",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
@@ -20,10 +21,18 @@
     "clean": "npm run clean --workspace=backend && npm run clean --workspace=frontend"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6"
   },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "cd backend && npm run format && npm run lint",
+      "cd frontend && npm run format && npm run lint"
+    ]
   }
 }
