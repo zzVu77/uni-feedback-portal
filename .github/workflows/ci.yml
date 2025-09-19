@@ -1,4 +1,4 @@
-name: CI - Dev Branch
+name: CI
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Lint & Build
+    name: Check lint & Run build
     runs-on: ubuntu-latest
 
     steps:
@@ -36,9 +36,7 @@ jobs:
       - name: Lint frontend
         run: npm run lint --workspace=frontend
 
-      # Build shared first, then backend, then frontend
-      - name: Build shared
-        run: npm run build --workspace=shared
+      # Build
 
       - name: Build backend
         run: npm run build --workspace=backend
