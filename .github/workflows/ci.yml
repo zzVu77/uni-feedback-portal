@@ -1,4 +1,6 @@
-name: CI
+name: CI Workflow
+description: This workflow runs on pushes and pull requests to the dev branch, checking linting and building the project.
+# This workflow is triggered on pushes and pull requests to the dev branch.
 
 on:
   push:
