@@ -1,0 +1,47 @@
+name: CI - Dev Branch
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Setup Node.js 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      # Install all dependencies for the workspace
+      - name: Install dependencies
+        run: npm install
+
+      # Lint backend and frontend
+      - name: Lint backend
+        run: npm run lint --workspace=backend
+
+      - name: Lint frontend
+        run: npm run lint --workspace=frontend
+
+      # Build shared first, then backend, then frontend
+      - name: Build shared
+        run: npm run build --workspace=shared
+
+      - name: Build backend
+        run: npm run build --workspace=backend
+
+      - name: Build frontend
+        run: npm run build --workspace=frontend
