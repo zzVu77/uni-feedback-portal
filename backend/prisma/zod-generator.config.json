@@ -1,0 +1,10 @@
+{
+  "mode": "default",
+  "pureModels": true,
+  "enums": true,
+  "variants": {
+    "pure": { "enabled": true },
+    "input": { "enabled": false },
+    "result": { "enabled": false }
+  }
+}
