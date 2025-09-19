@@ -4,7 +4,13 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": true, // bật tất cả strict checks, bao gồm noImplicitAny
+    "noImplicitAny": true, // cảnh báo khi biến có type là 'any' không rõ ràng
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
