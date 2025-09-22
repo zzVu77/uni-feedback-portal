@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Uni Portal Feedback API')
-    .setDescription('The Uni Portal Feedback API description')
+    .setDescription('The Uni Portal Feedback API documentation')
     .setVersion('0.1')
     .build();
   app.useGlobalPipes(
