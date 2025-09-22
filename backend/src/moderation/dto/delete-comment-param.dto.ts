@@ -1,4 +1,9 @@
 import { IsInt, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+
 export class DeleteCommentParamDto {
-  @IsInt() @Min(1) comment_id: number;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  comment_id: number;
 }

@@ -3,7 +3,7 @@ import { ReportStatus } from '@prisma/client';
 
 export class UpdateCommentReportDto {
   @IsEnum(ReportStatus)
-  status: 'RESOLVED' | 'REJECTED';
+  status: ReportStatus;
 
   @IsOptional()
   @IsString()
