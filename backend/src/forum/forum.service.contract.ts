@@ -1,8 +1,8 @@
-import { QueryPostsDto } from './dto/query-posts.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { GetPostResponseDto } from './dto/get-post-param-response.dto';
 import { QueryCommentsDto } from './dto/query-comments.dto';
-import { QueryPostsResponseDto } from './dto/query-posts-respone.dto';
-import { GetPostResponseDto } from './dto/get-post-param-respone.dto';
+import { QueryPostsResponseDto } from './dto/query-posts-response.dto';
+import { QueryPostsDto } from './dto/query-posts.dto';
 export interface ForumServiceContract {
   listPosts(
     query: QueryPostsDto,

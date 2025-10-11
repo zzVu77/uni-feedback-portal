@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { QueryPostsDto } from './dto/query-posts.dto';
-import { GetPostResponseDto } from './dto/get-post-param-respone.dto';
-import { QueryCommentsDto } from './dto/query-comments.dto';
 import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { GetPostResponseDto } from './dto/get-post-param-response.dto';
+import { QueryCommentsDto } from './dto/query-comments.dto';
+import { QueryPostsDto } from './dto/query-posts.dto';
 
 @Injectable()
 export class ForumService {
@@ -23,28 +23,24 @@ export class ForumService {
     // pagination
     const skip = (page - 1) * pageSize;
     const take = pageSize;
+    // Set up where condition
+    const where: Prisma.forum_postsWhereInput = {}; // start with empty condition
 
-    // WHERE condition
-    //Spread operator (...) = Copy toàn bộ key-value của object khác vào object mới.
-    const where: Prisma.forum_postsWhereInput = {};
-
+    // add conditions based on provided filters
     if (category_id || department_id || q) {
-      where.feedback = {}; // khởi tạo object
+      where.feedback = {}; // init object
 
       if (category_id) {
-        where.feedback.category_id = category_id; // 👈 gán number trực tiếp
+        where.feedback.category_id = category_id; // filter by category_id
       }
       if (department_id) {
-        where.feedback.department_id = department_id;
+        where.feedback.department_id = department_id; // filter by department_id
       }
       if (q) {
+        // search by subject
         where.feedback.subject = { contains: q, mode: 'insensitive' };
       }
     }
-    //if (!where.feedback) where.feedback = {};
-    //if (category_id) where.feedback.category_id = category_id;
-    //if (department_id) where.feedback.department_id = department_id;
-    //if (q) where.feedback.subject = { contains: q, mode: 'insensitive' };
 
     // ORDER BY
     let orderBy: Prisma.forum_postsOrderByWithRelationInput = {
@@ -53,16 +49,12 @@ export class ForumService {
     if (sortBy === 'top') {
       orderBy = {
         votes: {
-          _count: 'desc', // 👈 sort theo số lượng votes
+          _count: 'desc',
         },
       };
     }
 
-    // Query posts
-    // include: lấy toàn bộ cột ở bảng chính, còn relation thì bạn có thể true (tất cả) hoặc select (chọn cụ thể).
-    //select: cho phép bạn kiểm soát chi tiết, chỉ lấy đúng cột bạn muốn (cả bảng chính lẫn relation).
-    //Không được dùng include và select chung cấp.
-    //_count: là một shortcut Prisma cung cấp để đếm số record liên quan (relation count)
+    // Fetch posts with pagination and filters
     const [items, total] = await Promise.all([
       this.prisma.forum_posts.findMany({
         where,
@@ -86,7 +78,7 @@ export class ForumService {
       }),
       this.prisma.forum_posts.count({ where }),
     ]);
-    const mappedItems = items.map((post) => ({
+    const result = items.map((post) => ({
       post_id: post.post_id,
       feedback_id: post.feedback_id,
       created_at: post.created_at,
@@ -98,14 +90,9 @@ export class ForumService {
       comments_count: post._count.comments,
     }));
 
-    return { mappedItems, total };
+    return { result, total };
   }
-  // create(createForumDto: CreateForumDto) {
-  //   return 'This action adds a new forum';
-  // }
-  // findAll() {
-  //   return `This action returns all forum`;
-  // }
+
   async getPost(post_id: number, actorId: number): Promise<GetPostResponseDto> {
     // Fetch the post with relations
     const post = await this.prisma.forum_posts.findUnique({
@@ -147,12 +134,6 @@ export class ForumService {
     };
   }
 
-  // update(id: number, updateForumDto: UpdateForumDto) {
-  //   return `This action updates a #${id} forum`;
-  // }
-  // remove(id: number) {
-  //   return `This action removes a #${id} forum`;
-  // }
   async listComments(post_id: number, query: QueryCommentsDto) {
     const { page = 1, pageSize = 10 } = query;
     const skip = (page - 1) * pageSize;

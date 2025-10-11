@@ -30,8 +30,8 @@ export class QueryPostItemDto {
 }
 
 export class QueryPostsResponseDto {
-  @ApiProperty({ type: [QueryPostItemDto] })
-  items: QueryPostItemDto[];
+  @ApiProperty({ type: QueryPostItemDto })
+  result: QueryPostItemDto[];
 
   @ApiProperty({
     example: 100,
