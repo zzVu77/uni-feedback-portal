@@ -1,9 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { QueryAnnouncementsDto } from './dto/query-announcements.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AnnouncementDetailDto } from './dto/get-announcement-respone-dto';
-import { AnnouncementListResponseDto } from './dto/query-announcements-respone.dto';
+import {
+  AnnouncementDetailDto,
+  AnnouncementListResponseDto,
+  QueryAnnouncementsDto,
+} from './dto';
+
 @Injectable()
 export class AnnouncementsService {
   constructor(private prisma: PrismaService) {}
@@ -13,8 +16,8 @@ export class AnnouncementsService {
     const {
       page = 1,
       pageSize = 10,
-      department_id,
-      user_id,
+      departmentId,
+      userId,
       q,
       from,
       to,
@@ -26,12 +29,12 @@ export class AnnouncementsService {
     // Build dynamic WHERE condition
     const where: Prisma.announcementsWhereInput = {};
 
-    if (department_id) {
-      where.user = { department_id };
+    if (departmentId) {
+      where.user = { department_id: departmentId };
     }
 
-    if (user_id) {
-      where.user_id = user_id;
+    if (userId) {
+      where.user_id = userId;
     }
 
     if (q) {
@@ -74,11 +77,11 @@ export class AnnouncementsService {
       id: item.id,
       title: item.title,
       content: item.content,
-      created_at: item.created_at,
-      user_id: item.user_id,
-      user_name: item.user.full_name,
-      department_id: item.user.department.department_id,
-      department_name: item.user.department.department_name,
+      createdAt: item.created_at,
+      userId: item.user_id,
+      userName: item.user.full_name,
+      departmentId: item.user.department.department_id,
+      departmentName: item.user.department.department_name,
     }));
 
     return { results: mappedItems, total };
@@ -116,15 +119,9 @@ export class AnnouncementsService {
       department_name: announcement.user.department.department_name,
       files: announcement.files.map((f) => ({
         id: f.id,
-        file_name: f.file_name,
-        file_url: f.file_url,
+        fileName: f.file_name,
+        fileUrl: f.file_url,
       })),
     };
   }
-  // update(id: number, updateAnnouncementDto: UpdateAnnouncementDto) {
-  //   return `This action updates a #${id} announcement`;
-  // }
-  // remove(id: number) {
-  //   return `This action removes a #${id} announcement`;
-  // }
 }

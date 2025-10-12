@@ -4,8 +4,8 @@ import { Type } from 'class-transformer';
 export class QueryAnnouncementsDto {
   @IsOptional() @Type(() => Number) @IsInt() @Min(1) page?: number;
   @IsOptional() @Type(() => Number) @IsInt() @Min(1) pageSize?: number;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) department_id?: number;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) user_id?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) departmentId?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) userId?: number;
   @IsOptional() @IsString() q?: string;
   @IsOptional() @IsISO8601() from?: string;
   @IsOptional() @IsISO8601() to?: string;

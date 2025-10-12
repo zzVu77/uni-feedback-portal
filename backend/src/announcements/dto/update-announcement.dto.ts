@@ -6,7 +6,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { AnnouncementFileDto } from './create-announcement.dto';
+import { AnnouncementFileDto } from './announcement-file.dto';
 
 export class UpdateAnnouncementDto {
   @IsOptional() @IsString() @MinLength(3) title?: string;

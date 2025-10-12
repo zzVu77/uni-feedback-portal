@@ -11,19 +11,19 @@ export class AnnouncementItemDto {
   content: string;
 
   @ApiProperty({ example: '2025-09-29T15:00:00.000Z' })
-  created_at: Date;
+  createdAt: Date;
 
   @ApiProperty({ example: 10 })
-  user_id: number;
+  userId: number;
 
   @ApiProperty({ example: 'Nguyen Van A' })
-  user_name: string;
+  userName: string;
 
   @ApiProperty({ example: 2 })
-  department_id: number;
+  departmentId: number;
 
   @ApiProperty({ example: 'Phòng Nhân sự' })
-  department_name: string;
+  departmentName: string;
 }
 
 export class AnnouncementListResponseDto {

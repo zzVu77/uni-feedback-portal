@@ -1,10 +1,12 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { ApiTags, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { AnnouncementListResponseDto } from './dto/query-announcements-respone.dto';
-import { QueryAnnouncementsDto } from './dto/query-announcements.dto';
-import { AnnouncementDetailDto } from './dto/get-announcement-respone-dto';
-import { GetAnnouncementParamDto } from './dto/get-announcement-param.dto';
+import {
+  AnnouncementDetailDto,
+  AnnouncementListResponseDto,
+  AnnouncementParamDto,
+  QueryAnnouncementsDto,
+} from './dto';
 
 @ApiTags('Announcements')
 @Controller('announcement')
@@ -30,7 +32,7 @@ export class AnnouncementsController {
   })
   @ApiOperation({ summary: 'Get announcement detail by ID' })
   getAnnouncementDetail(
-    @Param() params: GetAnnouncementParamDto,
+    @Param() params: AnnouncementParamDto,
   ): Promise<AnnouncementDetailDto> {
     return this.announcementsService.getAnnouncementDetail(params.id);
   }

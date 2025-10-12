@@ -1,15 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-
-export class AnnouncementFileDto {
-  @ApiProperty({ example: 1 })
-  id: number;
-
-  @ApiProperty({ example: 'document.pdf' })
-  file_name: string;
-
-  @ApiProperty({ example: 'https://example.com/files/document.pdf' })
-  file_url: string;
-}
+import { AnnouncementFileDto } from './announcement-file.dto';
 
 export class AnnouncementDetailDto {
   @ApiProperty({ example: 1 })
