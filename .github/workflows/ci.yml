@@ -37,10 +37,10 @@ jobs:
         run: npx prisma generate --schema=backend/prisma/schema.prisma
 
       # 5. Type Checking
-      - name: Type Check backend 🛡️
+      - name: Type Check backend
         run: npm run type-check --workspace=backend
 
-      - name: Type Check frontend 🛡️
+      - name: Type Check frontend
         run: npm run type-check --workspace=frontend
 
       # 6. Lint backend and frontend
