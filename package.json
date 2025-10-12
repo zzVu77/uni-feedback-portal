@@ -30,13 +30,15 @@
     "npm": ">=8.0.0"
   },
   "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run type-check --workspace=backend",
+      "npm run type-check --workspace=frontend"
+    ],
     "*.{ts,tsx,js,jsx,json,css,scss}": [
       "npm run format --workspace=backend",
       "npm run lint --workspace=backend",
-      "npm run type-check --workspace=backend",
       "npm run format --workspace=frontend",
-      "npm run lint --workspace=frontend",
-      "npm run type-check --workspace=frontend"
+      "npm run lint --workspace=frontend"
     ]
   }
 }
