@@ -1,13 +1,13 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { ApiTags, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { QueryAnnouncementsResponseDto } from './dto/query-announcements-respone.dto';
+import { AnnouncementListResponseDto } from './dto/query-announcements-respone.dto';
 import { QueryAnnouncementsDto } from './dto/query-announcements.dto';
 import { AnnouncementDetailDto } from './dto/get-announcement-respone-dto';
 import { GetAnnouncementParamDto } from './dto/get-announcement-param.dto';
 
 @ApiTags('Announcements')
-@Controller('announcements')
+@Controller('announcement')
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) {}
 
@@ -19,25 +19,25 @@ export class AnnouncementsController {
   @Get()
   @ApiOkResponse({
     description: 'List announcements',
-    type: QueryAnnouncementsResponseDto, // Swagger hiển thị array AnnouncementDto
+    type: AnnouncementListResponseDto,
   })
   @ApiOperation({ summary: 'Get all announcements' })
-  findAll(
+  getAnnouncements(
     @Query() query: QueryAnnouncementsDto,
-  ): Promise<QueryAnnouncementsResponseDto> {
-    return this.announcementsService.list(query);
+  ): Promise<AnnouncementListResponseDto> {
+    return this.announcementsService.getAnnouncements(query);
   }
 
   @Get(':id')
   @ApiOkResponse({
     description: 'Get announcement detail by ID',
-    type: AnnouncementDetailDto, // Swagger hiển thị array AnnouncementDto
+    type: AnnouncementDetailDto,
   })
   @ApiOperation({ summary: 'Get announcement detail by ID' })
-  findOne(
+  getAnnouncementDetail(
     @Param() params: GetAnnouncementParamDto,
   ): Promise<AnnouncementDetailDto> {
-    return this.announcementsService.get(params.id);
+    return this.announcementsService.getAnnouncementDetail(params.id);
   }
 
   // @Patch(':id')

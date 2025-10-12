@@ -1,14 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class QueryAnnouncementItemDto {
+export class AnnouncementItemDto {
   @ApiProperty({ example: 1 })
   id: number;
 
   @ApiProperty({ example: 'Important Update' })
   title: string;
 
+  @ApiProperty({ example: 'The university will be closed on Friday.' })
+  content: string;
+
   @ApiProperty({ example: '2025-09-29T15:00:00.000Z' })
   created_at: Date;
+
+  @ApiProperty({ example: 10 })
+  user_id: number;
 
   @ApiProperty({ example: 'Nguyen Van A' })
   user_name: string;
@@ -20,9 +26,9 @@ export class QueryAnnouncementItemDto {
   department_name: string;
 }
 
-export class QueryAnnouncementsResponseDto {
-  @ApiProperty({ type: [QueryAnnouncementItemDto] })
-  items: QueryAnnouncementItemDto[];
+export class AnnouncementListResponseDto {
+  @ApiProperty({ type: [AnnouncementItemDto] })
+  results: AnnouncementItemDto[];
 
   @ApiProperty({
     example: 50,

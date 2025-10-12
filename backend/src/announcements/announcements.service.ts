@@ -3,11 +3,13 @@ import { QueryAnnouncementsDto } from './dto/query-announcements.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AnnouncementDetailDto } from './dto/get-announcement-respone-dto';
-import { AnnouncementsServiceContract } from './announcements.service.contract';
+import { AnnouncementListResponseDto } from './dto/query-announcements-respone.dto';
 @Injectable()
-export class AnnouncementsService implements AnnouncementsServiceContract {
+export class AnnouncementsService {
   constructor(private prisma: PrismaService) {}
-  async list(query: QueryAnnouncementsDto) {
+  async getAnnouncements(
+    query: QueryAnnouncementsDto,
+  ): Promise<AnnouncementListResponseDto> {
     const {
       page = 1,
       pageSize = 10,
@@ -80,12 +82,12 @@ export class AnnouncementsService implements AnnouncementsServiceContract {
       department_name: item.user.department.department_name,
     }));
 
-    return { items: mappedItems, total };
+    return { results: mappedItems, total };
   }
   // create(createAnnouncementDto: CreateAnnouncementDto) {
   //   return 'This action adds a new announcement';
   // }
-  async get(id: number): Promise<AnnouncementDetailDto> {
+  async getAnnouncementDetail(id: number): Promise<AnnouncementDetailDto> {
     const announcement = await this.prisma.announcements.findUnique({
       where: { id },
       include: {

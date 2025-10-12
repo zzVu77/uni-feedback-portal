@@ -1,11 +1,11 @@
 // import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { AnnouncementDetailDto } from './dto/get-announcement-respone-dto';
-import { QueryAnnouncementsResponseDto } from './dto/query-announcements-respone.dto';
+import { AnnouncementListResponseDto } from './dto/query-announcements-respone.dto';
 import { QueryAnnouncementsDto } from './dto/query-announcements.dto';
 // import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
 export interface AnnouncementsServiceContract {
-  list(query: QueryAnnouncementsDto): Promise<QueryAnnouncementsResponseDto>;
+  list(query: QueryAnnouncementsDto): Promise<AnnouncementListResponseDto>;
   // create(
   //   dto: CreateAnnouncementDto,
   //   actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
