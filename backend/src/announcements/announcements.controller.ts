@@ -11,11 +11,6 @@ import { GetAnnouncementParamDto } from './dto/get-announcement-param.dto';
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) {}
 
-  // @Post()
-  // create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-  //   return this.announcementsService.create(createAnnouncementDto);
-  // }
-
   @Get()
   @ApiOkResponse({
     description: 'List announcements',
@@ -39,17 +34,4 @@ export class AnnouncementsController {
   ): Promise<AnnouncementDetailDto> {
     return this.announcementsService.getAnnouncementDetail(params.id);
   }
-
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateAnnouncementDto: UpdateAnnouncementDto,
-  // ) {
-  //   return this.announcementsService.update(+id, updateAnnouncementDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.announcementsService.remove(+id);
-  // }
 }

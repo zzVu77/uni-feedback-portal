@@ -46,7 +46,6 @@ export class AnnouncementsService {
       if (from) where.created_at.gte = new Date(from);
       if (to) where.created_at.lte = new Date(to);
     }
-    // console.log('WHERE condition:', JSON.stringify(where, null, 2));
 
     // Query data + total count
     const [items, total] = await Promise.all([
@@ -84,9 +83,7 @@ export class AnnouncementsService {
 
     return { results: mappedItems, total };
   }
-  // create(createAnnouncementDto: CreateAnnouncementDto) {
-  //   return 'This action adds a new announcement';
-  // }
+
   async getAnnouncementDetail(id: number): Promise<AnnouncementDetailDto> {
     const announcement = await this.prisma.announcements.findUnique({
       where: { id },
