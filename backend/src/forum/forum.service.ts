@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetPostResponseDto } from './dto/get-post-param-response.dto';
-import { QueryCommentsDto } from './dto/query-comments.dto';
 import { QueryPostsDto } from './dto/query-posts.dto';
+import { GetPostResponseDto } from './dto/get-post-detail-respone.dto';
+// import { QueryCommentsDto } from './dto/query-comments.dto';
+import { GetPostsResponseDto } from './dto/get-posts-respone.dto';
 
 @Injectable()
 export class ForumService {
   constructor(private prisma: PrismaService) {}
 
-  async listPosts(query: QueryPostsDto) {
-    // destructure query params, if not provided, use default values
+  async getListPosts(query: QueryPostsDto): Promise<GetPostsResponseDto> {
     const {
       page = 1,
       pageSize = 10,
@@ -23,15 +23,14 @@ export class ForumService {
     // pagination
     const skip = (page - 1) * pageSize;
     const take = pageSize;
-    // Set up where condition
-    const where: Prisma.forum_postsWhereInput = {}; // start with empty condition
+    // WHERE condition
+    const where: Prisma.forum_postsWhereInput = {};
 
-    // add conditions based on provided filters
     if (category_id || department_id || q) {
-      where.feedback = {}; // init object
+      where.feedback = {};
 
       if (category_id) {
-        where.feedback.category_id = category_id; // filter by category_id
+        where.feedback.category_id = category_id;
       }
       if (department_id) {
         where.feedback.department_id = department_id; // filter by department_id
@@ -41,7 +40,6 @@ export class ForumService {
         where.feedback.subject = { contains: q, mode: 'insensitive' };
       }
     }
-
     // ORDER BY
     let orderBy: Prisma.forum_postsOrderByWithRelationInput = {
       created_at: 'desc',
@@ -54,7 +52,6 @@ export class ForumService {
       };
     }
 
-    // Fetch posts with pagination and filters
     const [items, total] = await Promise.all([
       this.prisma.forum_posts.findMany({
         where,
@@ -78,22 +75,30 @@ export class ForumService {
       }),
       this.prisma.forum_posts.count({ where }),
     ]);
-    const result = items.map((post) => ({
+    const mappedItems = items.map((post) => ({
       post_id: post.post_id,
       feedback_id: post.feedback_id,
       created_at: post.created_at,
       votes: post._count.votes,
       subject: post.feedback.subject,
-      excerpt: post.feedback.description.slice(0, 100), // ví dụ cắt description làm excerpt
+      excerpt: post.feedback.description.slice(0, 100),
       category_id: post.feedback.category_id,
       department_id: post.feedback.department_id,
       comments_count: post._count.comments,
     }));
 
-    return { result, total };
+    return { results: mappedItems, total };
   }
-
-  async getPost(post_id: number, actorId: number): Promise<GetPostResponseDto> {
+  // create(createForumDto: CreateForumDto) {
+  //   return 'This action adds a new forum';
+  // }
+  // findAll() {
+  //   return `This action returns all forum`;
+  // }
+  async getPostDetail(
+    post_id: number,
+    actorId: number,
+  ): Promise<GetPostResponseDto> {
     // Fetch the post with relations
     const post = await this.prisma.forum_posts.findUnique({
       where: { post_id },
@@ -134,39 +139,45 @@ export class ForumService {
     };
   }
 
-  async listComments(post_id: number, query: QueryCommentsDto) {
-    const { page = 1, pageSize = 10 } = query;
-    const skip = (page - 1) * pageSize;
-    const take = pageSize;
+  // update(id: number, updateForumDto: UpdateForumDto) {
+  //   return `This action updates a #${id} forum`;
+  // }
+  // remove(id: number) {
+  //   return `This action removes a #${id} forum`;
+  // }
+  // async listComments(post_id: number, query: QueryCommentsDto) {
+  //   const { page = 1, pageSize = 10 } = query;
+  //   const skip = (page - 1) * pageSize;
+  //   const take = pageSize;
 
-    const comments = await this.prisma.comments.findMany({
-      where: { post_id },
-      skip,
-      take,
-      orderBy: { created_at: 'desc' },
-      select: {
-        comment_id: true,
-        content: true,
-        created_at: true,
-        user: {
-          select: {
-            user_id: true,
-            full_name: true,
-            role: true,
-          },
-        },
-      },
-    });
+  //   const comments = await this.prisma.comments.findMany({
+  //     where: { post_id },
+  //     skip,
+  //     take,
+  //     orderBy: { created_at: 'desc' },
+  //     select: {
+  //       comment_id: true,
+  //       content: true,
+  //       created_at: true,
+  //       user: {
+  //         select: {
+  //           user_id: true,
+  //           full_name: true,
+  //           role: true,
+  //         },
+  //       },
+  //     },
+  //   });
 
-    return comments.map((c) => ({
-      comment_id: c.comment_id,
-      content: c.content,
-      created_at: c.created_at.toISOString(),
-      user: {
-        user_id: c.user.user_id,
-        full_name: c.user.full_name,
-        role: c.user.role,
-      },
-    }));
-  }
+  //   return comments.map((c) => ({
+  //     comment_id: c.comment_id,
+  //     content: c.content,
+  //     created_at: c.created_at.toISOString(),
+  //     user: {
+  //       user_id: c.user.user_id,
+  //       full_name: c.user.full_name,
+  //       role: c.user.role,
+  //     },
+  //   }));
+  // }
 }

@@ -1,14 +1,15 @@
 // import { CreateCommentDto } from './dto/create-comment.dto';
-import { GetPostResponseDto } from './dto/get-post-param-response.dto';
+import { GetPostResponseDto } from './dto/get-post-detail-respone.dto';
 import { QueryCommentsDto } from './dto/query-comments.dto';
-import { QueryPostsResponseDto } from './dto/query-posts-response.dto';
+import { GetPostsResponseDto } from './dto/get-posts-respone.dto';
 import { QueryPostsDto } from './dto/query-posts.dto';
+
 export interface ForumServiceContract {
-  listPosts(
+  getListPosts(
     query: QueryPostsDto,
     actorId?: number,
-  ): Promise<QueryPostsResponseDto>;
-  getPost(post_id: number, actorId: number): Promise<GetPostResponseDto>;
+  ): Promise<GetPostsResponseDto>;
+  getPostDetail(post_id: number, actorId: number): Promise<GetPostResponseDto>;
   vote(
     post_id: number,
     user_id: number,

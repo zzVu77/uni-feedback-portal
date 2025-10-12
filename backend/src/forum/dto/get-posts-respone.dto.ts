@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class QueryPostItemDto {
+export class PostItemDto {
   @ApiProperty({ example: 1 })
   post_id: number;
 
@@ -29,10 +29,9 @@ export class QueryPostItemDto {
   created_at: Date;
 }
 
-export class QueryPostsResponseDto {
-  @ApiProperty({ type: QueryPostItemDto })
-  result: QueryPostItemDto[];
-
+export class GetPostsResponseDto {
+  @ApiProperty({ type: [PostItemDto] })
+  results: PostItemDto[];
   @ApiProperty({
     example: 100,
     description: 'Tổng số post thỏa điều kiện (dùng cho pagination)',
