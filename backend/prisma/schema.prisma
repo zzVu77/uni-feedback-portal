@@ -37,7 +37,7 @@ enum UserRole {
 }
 model users {
   user_id       Int      @id @default(autoincrement())
-  full_name     String?
+  full_name     String
   password      String
   email         String   @unique
   role          UserRole
