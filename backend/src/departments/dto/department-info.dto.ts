@@ -6,12 +6,12 @@ export class DepartmentResponseDto {
     example: 1,
     nullable: false,
   })
-  department_id: number;
+  departmentId: number;
 
   @ApiProperty({
     description: 'Name of the department',
     example: 'Khoa Công nghệ thông tin',
     nullable: false,
   })
-  department_name: string;
+  departmentName: string;
 }
