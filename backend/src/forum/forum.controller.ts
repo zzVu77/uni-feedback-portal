@@ -1,10 +1,13 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ForumService } from './forum.service';
-import { QueryPostsDto } from './dto/query-posts.dto';
-import { GetPostsResponseDto } from './dto/get-posts-respone.dto';
-import { GetPostParamDto } from './dto/get-post-param.dto';
-import { GetPostResponseDto } from './dto/get-post-detail-respone.dto';
+import {
+  GetPostsResponseDto,
+  QueryPostsDto,
+  GetPostResponseDto,
+  GetPostParamDto,
+} from './dto';
+
 // import { QueryCommentsResponseDto } from './dto/query-comments-respone.dto';
 // import { QueryCategoriesDto } from 'src/categories/dto/query-categories.dto';
 @ApiTags('Forum Post')
@@ -21,7 +24,7 @@ export class ForumController {
   async getListPosts(
     @Query() query: QueryPostsDto,
   ): Promise<GetPostsResponseDto> {
-    return await this.forumService.getListPosts(query);
+    return await this.forumService.getListPosts(query, 2);
   }
   // Get post detail
   @Get(':id')

@@ -6,7 +6,10 @@ import { GetPostsResponseDto, QueryPostsDto, GetPostResponseDto } from './dto';
 export class ForumService {
   constructor(private prisma: PrismaService) {}
 
-  async getListPosts(query: QueryPostsDto): Promise<GetPostsResponseDto> {
+  async getListPosts(
+    query: QueryPostsDto,
+    userId: number,
+  ): Promise<GetPostsResponseDto> {
     const {
       page = 1,
       pageSize = 10,
@@ -63,7 +66,11 @@ export class ForumService {
               description: true,
               categoryId: true,
               departmentId: true,
+              currentStatus: true,
             },
+          },
+          votes: {
+            select: { userId: true }, // to check if actorId has voted
           },
           _count: { select: { comments: true, votes: true } },
           createdAt: true,
@@ -73,14 +80,15 @@ export class ForumService {
     ]);
     const mappedItems = items.map((post) => ({
       postId: post.postId,
-      feedbackId: post.feedbackId,
       createdAt: post.createdAt,
       votes: post._count.votes,
       subject: post.feedback.subject,
       excerpt: post.feedback.description.slice(0, 100),
       categoryId: post.feedback.categoryId,
       departmentId: post.feedback.departmentId,
+      currentStatus: post.feedback.currentStatus,
       commentsCount: post._count.comments,
+      hasVoted: post.votes.some((vote) => vote.userId === userId),
     }));
 
     return { results: mappedItems, total };
@@ -108,6 +116,7 @@ export class ForumService {
             description: true,
             categoryId: true,
             departmentId: true,
+            currentStatus: true,
           },
         },
         votes: {
@@ -129,6 +138,7 @@ export class ForumService {
         description: post.feedback.description,
         categoryId: post.feedback.categoryId,
         departmentId: post.feedback.departmentId,
+        currentStatus: post.feedback.currentStatus,
       },
       votes: post.votes.length,
       hasVoted: post.votes.some((vote) => vote.userId === actorId),

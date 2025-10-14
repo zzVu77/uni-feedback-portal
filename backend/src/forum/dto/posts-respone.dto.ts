@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-
 export class FeedbackDto {
   @ApiProperty({
     description: 'Unique identifier of the feedback',
@@ -30,6 +29,12 @@ export class FeedbackDto {
     example: 2,
   })
   departmentId: number;
+
+  @ApiProperty({
+    description: 'Current status of feedback',
+    example: 'PENDING',
+  })
+  currentStatus: string;
 }
 
 export class GetPostResponseDto {
@@ -62,4 +67,46 @@ export class GetPostResponseDto {
     example: true,
   })
   hasVoted: boolean;
+}
+
+export class PostItemDto {
+  @ApiProperty({ example: 1 })
+  postId: number;
+
+  @ApiProperty({ example: 'How to learn AI fast?' })
+  subject: string;
+
+  @ApiProperty({ example: 'This is a sample description...' })
+  excerpt: string;
+
+  @ApiProperty({ example: 2 })
+  categoryId: number;
+
+  @ApiProperty({ example: 3 })
+  departmentId: number;
+
+  @ApiProperty({ example: 'PENDING' })
+  currentStatus: string;
+
+  @ApiProperty({ example: 10 })
+  commentsCount: number;
+
+  @ApiProperty({ example: 25 })
+  votes: number;
+
+  @ApiProperty({ example: true })
+  hasVoted: boolean;
+
+  @ApiProperty({ example: '2025-09-24T12:34:56.000Z' })
+  createdAt: Date;
+}
+
+export class GetPostsResponseDto {
+  @ApiProperty({ type: [PostItemDto] })
+  results: PostItemDto[];
+  @ApiProperty({
+    example: 100,
+    description: 'Total post for pagination',
+  })
+  total: number;
 }
