@@ -4,12 +4,9 @@ import { ForumService } from './forum.service';
 import {
   GetPostsResponseDto,
   QueryPostsDto,
-  GetPostResponseDto,
+  PostResponseDto,
   GetPostParamDto,
 } from './dto';
-
-// import { QueryCommentsResponseDto } from './dto/query-comments-respone.dto';
-// import { QueryCategoriesDto } from 'src/categories/dto/query-categories.dto';
 @ApiTags('Forum Post')
 @Controller('forum/posts')
 export class ForumController {
@@ -18,7 +15,7 @@ export class ForumController {
   @Get()
   @ApiOkResponse({
     description: 'Get list posts',
-    type: [GetPostsResponseDto], // Swagger hiển thị array PostResponseDto
+    type: [GetPostsResponseDto],
   })
   @ApiOperation({ summary: 'Get all posts' })
   async getListPosts(
@@ -30,33 +27,11 @@ export class ForumController {
   @Get(':id')
   @ApiOkResponse({
     description: 'Get post detail',
-    type: GetPostResponseDto,
+    type: PostResponseDto,
   })
   async getPostDetail(
     @Param() param: GetPostParamDto,
-  ): Promise<GetPostResponseDto> {
+  ): Promise<PostResponseDto> {
     return this.forumService.getPostDetail(param.id, 1);
   }
-
-  // @Get(':id/comments')
-  // @ApiOkResponse({
-  //   description: 'Get comments of a post',
-  //   type: [QueryCommentsResponseDto],
-  // })
-  // @ApiOperation({ summary: 'Get list of comments by post_id' })
-  // async listComments(
-  //   @Param() param: GetPostParamDto,
-  //   @Query() query: QueryCategoriesDto,
-  // ) {
-  //   return this.forumService.listComments(param.id, query);
-  // }
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateForumDto: UpdateForumDto) {
-  //   return this.forumService.update(+id, updateForumDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.forumService.remove(+id);
-  // }
 }

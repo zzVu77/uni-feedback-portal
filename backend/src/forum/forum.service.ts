@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetPostsResponseDto, QueryPostsDto, GetPostResponseDto } from './dto';
+import { GetPostsResponseDto, QueryPostsDto, PostResponseDto } from './dto';
 @Injectable()
 export class ForumService {
   constructor(private prisma: PrismaService) {}
@@ -93,16 +93,11 @@ export class ForumService {
 
     return { results: mappedItems, total };
   }
-  // create(createForumDto: CreateForumDto) {
-  //   return 'This action adds a new forum';
-  // }
-  // findAll() {
-  //   return `This action returns all forum`;
-  // }
+
   async getPostDetail(
     postId: number,
     actorId: number,
-  ): Promise<GetPostResponseDto> {
+  ): Promise<PostResponseDto> {
     // Fetch the post with relations
     const post = await this.prisma.forumPosts.findUnique({
       where: { postId },
@@ -144,46 +139,4 @@ export class ForumService {
       hasVoted: post.votes.some((vote) => vote.userId === actorId),
     };
   }
-
-  // update(id: number, updateForumDto: UpdateForumDto) {
-  //   return `This action updates a #${id} forum`;
-  // }
-  // remove(id: number) {
-  //   return `This action removes a #${id} forum`;
-  // }
-  // async listComments(post_id: number, query: QueryCommentsDto) {
-  //   const { page = 1, pageSize = 10 } = query;
-  //   const skip = (page - 1) * pageSize;
-  //   const take = pageSize;
-
-  //   const comments = await this.prisma.comments.findMany({
-  //     where: { post_id },
-  //     skip,
-  //     take,
-  //     orderBy: { created_at: 'desc' },
-  //     select: {
-  //       comment_id: true,
-  //       content: true,
-  //       created_at: true,
-  //       user: {
-  //         select: {
-  //           user_id: true,
-  //           full_name: true,
-  //           role: true,
-  //         },
-  //       },
-  //     },
-  //   });
-
-  //   return comments.map((c) => ({
-  //     comment_id: c.comment_id,
-  //     content: c.content,
-  //     created_at: c.created_at.toISOString(),
-  //     user: {
-  //       user_id: c.user.user_id,
-  //       full_name: c.user.full_name,
-  //       role: c.user.role,
-  //     },
-  //   }));
-  // }
 }

@@ -1,10 +1,10 @@
-import { GetPostsResponseDto, QueryPostsDto, GetPostResponseDto } from './dto';
+import { GetPostsResponseDto, QueryPostsDto, PostResponseDto } from './dto';
 export interface ForumServiceContract {
   getListPosts(
     query: QueryPostsDto,
     actorId?: number,
   ): Promise<GetPostsResponseDto>;
-  getPostDetail(post_id: number, actorId: number): Promise<GetPostResponseDto>;
+  getPostDetail(post_id: number, actorId: number): Promise<PostResponseDto>;
   vote(
     post_id: number,
     user_id: number,
@@ -13,26 +13,4 @@ export interface ForumServiceContract {
     post_id: number,
     user_id: number,
   ): Promise<{ voted: false; votes: number }>;
-  // createComment(
-  //   dto: CreateCommentDto,
-  //   user_id: number,
-  // ): Promise<{
-  //   comment_id: number;
-  //   post_id: number;
-  //   content: string;
-  //   created_at: string;
-  //   user: { user_id: number; full_name: string | null; role: string };
-  // }>;
-  // listComments(
-  //   post_id: number,
-  //   query: QueryCommentsDto,
-  // ): Promise<{
-  //   items: Array<{
-  //     comment_id: number;
-  //     content: string;
-  //     created_at: string;
-  //     user: { user_id: number; full_name: string | null; role: string };
-  //   }>;
-  //   total: number;
-  // }>;
 }

@@ -34,10 +34,14 @@ export class FeedbackDto {
     description: 'Current status of feedback',
     example: 'PENDING',
   })
+  @ApiProperty({
+    description: 'Current status of feedback',
+    example: 'PENDING',
+  })
   currentStatus: string;
 }
 
-export class GetPostResponseDto {
+export class PostResponseDto {
   @ApiProperty({
     description: 'Unique identifier of the post',
     example: 123,
