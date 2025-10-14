@@ -8,7 +8,7 @@ import { GetPostResponseDto } from './dto/get-post-detail-respone.dto';
 // import { QueryCommentsResponseDto } from './dto/query-comments-respone.dto';
 // import { QueryCategoriesDto } from 'src/categories/dto/query-categories.dto';
 @ApiTags('Forum Post')
-@Controller('post')
+@Controller('forum/posts')
 export class ForumController {
   constructor(private readonly forumService: ForumService) {}
   // Get all posts
@@ -29,7 +29,9 @@ export class ForumController {
     description: 'Get post detail',
     type: GetPostResponseDto,
   })
-  getPostDetail(@Param() param: GetPostParamDto): Promise<GetPostResponseDto> {
+  async getPostDetail(
+    @Param() param: GetPostParamDto,
+  ): Promise<GetPostResponseDto> {
     return this.forumService.getPostDetail(param.id, 1);
   }
 

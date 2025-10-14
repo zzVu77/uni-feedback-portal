@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { QueryPostsDto } from './dto/query-posts.dto';
-import { GetPostResponseDto } from './dto/get-post-detail-respone.dto';
-// import { QueryCommentsDto } from './dto/query-comments.dto';
-import { GetPostsResponseDto } from './dto/get-posts-respone.dto';
-
+import { GetPostsResponseDto, QueryPostsDto, GetPostResponseDto } from './dto';
 @Injectable()
 export class ForumService {
   constructor(private prisma: PrismaService) {}
@@ -24,16 +20,16 @@ export class ForumService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
     // WHERE condition
-    const where: Prisma.forum_postsWhereInput = {};
+    const where: Prisma.ForumPostsWhereInput = {};
 
     if (category_id || department_id || q) {
       where.feedback = {};
 
       if (category_id) {
-        where.feedback.category_id = category_id;
+        where.feedback.categoryId = category_id;
       }
       if (department_id) {
-        where.feedback.department_id = department_id; // filter by department_id
+        where.feedback.departmentId = department_id; // filter by departmentId
       }
       if (q) {
         // search by subject
@@ -41,8 +37,8 @@ export class ForumService {
       }
     }
     // ORDER BY
-    let orderBy: Prisma.forum_postsOrderByWithRelationInput = {
-      created_at: 'desc',
+    let orderBy: Prisma.ForumPostsOrderByWithRelationInput = {
+      createdAt: 'desc',
     }; // default sort: new
     if (sortBy === 'top') {
       orderBy = {
@@ -53,38 +49,38 @@ export class ForumService {
     }
 
     const [items, total] = await Promise.all([
-      this.prisma.forum_posts.findMany({
+      this.prisma.forumPosts.findMany({
         where,
         skip,
         take,
         orderBy,
         select: {
-          post_id: true,
-          feedback_id: true,
+          postId: true,
+          feedbackId: true,
           feedback: {
             select: {
               subject: true,
               description: true,
-              category_id: true,
-              department_id: true,
+              categoryId: true,
+              departmentId: true,
             },
           },
           _count: { select: { comments: true, votes: true } },
-          created_at: true,
+          createdAt: true,
         },
       }),
-      this.prisma.forum_posts.count({ where }),
+      this.prisma.forumPosts.count({ where }),
     ]);
     const mappedItems = items.map((post) => ({
-      post_id: post.post_id,
-      feedback_id: post.feedback_id,
-      created_at: post.created_at,
+      postId: post.postId,
+      feedbackId: post.feedbackId,
+      createdAt: post.createdAt,
       votes: post._count.votes,
       subject: post.feedback.subject,
       excerpt: post.feedback.description.slice(0, 100),
-      category_id: post.feedback.category_id,
-      department_id: post.feedback.department_id,
-      comments_count: post._count.comments,
+      categoryId: post.feedback.categoryId,
+      departmentId: post.feedback.departmentId,
+      commentsCount: post._count.comments,
     }));
 
     return { results: mappedItems, total };
@@ -96,46 +92,46 @@ export class ForumService {
   //   return `This action returns all forum`;
   // }
   async getPostDetail(
-    post_id: number,
+    postId: number,
     actorId: number,
   ): Promise<GetPostResponseDto> {
     // Fetch the post with relations
-    const post = await this.prisma.forum_posts.findUnique({
-      where: { post_id },
+    const post = await this.prisma.forumPosts.findUnique({
+      where: { postId },
       select: {
-        post_id: true,
-        created_at: true,
+        postId: true,
+        createdAt: true,
         feedback: {
           select: {
-            feedback_id: true,
+            feedbackId: true,
             subject: true,
             description: true,
-            category_id: true,
-            department_id: true,
+            categoryId: true,
+            departmentId: true,
           },
         },
         votes: {
-          select: { user_id: true }, // to check if actorId has voted
+          select: { userId: true }, // to check if actorId has voted
         },
       },
     });
 
     if (!post) {
-      throw new Error(`Post with id ${post_id} not found`);
+      throw new Error(`Post with id ${postId} not found`);
     }
 
     return {
-      post_id: post.post_id,
-      created_at: post.created_at.toISOString(),
+      postId: post.postId,
+      createdAt: post.createdAt.toISOString(),
       feedback: {
-        feedback_id: post.feedback.feedback_id,
+        feedbackId: post.feedback.feedbackId,
         subject: post.feedback.subject,
         description: post.feedback.description,
-        category_id: post.feedback.category_id,
-        department_id: post.feedback.department_id,
+        categoryId: post.feedback.categoryId,
+        departmentId: post.feedback.departmentId,
       },
       votes: post.votes.length,
-      hasVoted: post.votes.some((vote) => vote.user_id === actorId),
+      hasVoted: post.votes.some((vote) => vote.userId === actorId),
     };
   }
 

@@ -5,7 +5,7 @@ export class FeedbackDto {
     description: 'Unique identifier of the feedback',
     example: 555,
   })
-  feedback_id: number;
+  feedbackId: number;
 
   @ApiProperty({
     description: 'Subject or title of the feedback',
@@ -23,13 +23,13 @@ export class FeedbackDto {
     description: 'Category identifier related to the feedback',
     example: 3,
   })
-  category_id: number;
+  categoryId: number;
 
   @ApiProperty({
     description: 'Department identifier that receives the feedback',
     example: 2,
   })
-  department_id: number;
+  departmentId: number;
 }
 
 export class GetPostResponseDto {
@@ -37,13 +37,13 @@ export class GetPostResponseDto {
     description: 'Unique identifier of the post',
     example: 123,
   })
-  post_id: number;
+  postId: number;
 
   @ApiProperty({
     description: 'Timestamp when the post was created (ISO string)',
     example: '2025-09-26T08:45:00.000Z',
   })
-  created_at: string;
+  createdAt: string;
 
   @ApiProperty({
     description: 'Feedback information attached to this post',

@@ -2,10 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PostItemDto {
   @ApiProperty({ example: 1 })
-  post_id: number;
+  postId: number;
 
   @ApiProperty({ example: 5 })
-  feedback_id: number;
+  feedbackId: number;
 
   @ApiProperty({ example: 'How to learn AI fast?' })
   subject: string;
@@ -14,19 +14,19 @@ export class PostItemDto {
   excerpt: string;
 
   @ApiProperty({ example: 2 })
-  category_id: number;
+  categoryId: number;
 
   @ApiProperty({ example: 3 })
-  department_id: number;
+  departmentId: number;
 
-  @ApiProperty({ example: 10, description: 'Số comment' })
-  comments_count: number;
+  @ApiProperty({ example: 10, description: 'Comment Total' })
+  commentsCount: number;
 
-  @ApiProperty({ example: 25, description: 'Số vote' })
+  @ApiProperty({ example: 25, description: 'Vote Total' })
   votes: number;
 
   @ApiProperty({ example: '2025-09-24T12:34:56.000Z' })
-  created_at: Date;
+  createdAt: Date;
 }
 
 export class GetPostsResponseDto {
@@ -34,7 +34,7 @@ export class GetPostsResponseDto {
   results: PostItemDto[];
   @ApiProperty({
     example: 100,
-    description: 'Tổng số post thỏa điều kiện (dùng cho pagination)',
+    description: 'Total post for pagination',
   })
   total: number;
 }

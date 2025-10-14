@@ -1,9 +1,4 @@
-// import { CreateCommentDto } from './dto/create-comment.dto';
-import { GetPostResponseDto } from './dto/get-post-detail-respone.dto';
-// import { QueryCommentsDto } from './dto/query-comments.dto';
-import { GetPostsResponseDto } from './dto/get-posts-respone.dto';
-import { QueryPostsDto } from './dto/query-posts.dto';
-
+import { GetPostsResponseDto, QueryPostsDto, GetPostResponseDto } from './dto';
 export interface ForumServiceContract {
   getListPosts(
     query: QueryPostsDto,
