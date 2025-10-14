@@ -1,8 +1,8 @@
 import { IsArray, IsBoolean, IsEnum, IsOptional } from 'class-validator';
-import { NotificationType } from '@prisma/client';
+import { NotificationTypes } from '@prisma/client';
 
 export class BulkPatchNotificationsDto {
   @IsOptional() @IsArray() ids?: number[];
   @IsOptional() @IsBoolean() all?: boolean;
-  @IsOptional() @IsEnum(NotificationType) type?: NotificationType;
+  @IsOptional() @IsEnum(NotificationTypes) type?: NotificationTypes;
 }

@@ -16,6 +16,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { ReportsModule } from './reports/reports.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ReportsModule,
     DashboardModule,
     PrismaModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

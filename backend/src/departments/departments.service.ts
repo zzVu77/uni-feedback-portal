@@ -8,8 +8,8 @@ export class DepartmentsService {
   async list(): Promise<DepartmentResponseDto[]> {
     const departments = await this.prisma.departments.findMany();
     return departments.map((dept) => ({
-      department_id: dept.department_id,
-      department_name: dept.department_name,
+      departmentId: dept.departmentId,
+      departmentName: dept.departmentName,
     }));
   }
   // create(createDepartmentDto: CreateDepartmentDto) {

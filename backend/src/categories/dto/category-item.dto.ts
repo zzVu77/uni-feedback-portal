@@ -5,11 +5,11 @@ export class CategoryResponseDto {
     example: 1,
     description: 'The unique identifier of the category',
   })
-  category_id: number;
+  categoryId: number;
 
   @ApiProperty({
     example: 'Technology',
     description: 'The name of the category',
   })
-  category_name: string;
+  categoryName: string;
 }

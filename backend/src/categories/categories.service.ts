@@ -8,8 +8,8 @@ export class CategoriesService {
   async list(): Promise<CategoryResponseDto[]> {
     return this.prisma.categories.findMany({
       select: {
-        category_id: true,
-        category_name: true,
+        categoryId: true,
+        categoryName: true,
       },
     });
   }
