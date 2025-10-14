@@ -1,32 +1,37 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ForumService } from './forum.service';
-
-@Controller('forum')
+import {
+  GetPostsResponseDto,
+  QueryPostsDto,
+  PostResponseDto,
+  GetPostParamDto,
+} from './dto';
+@ApiTags('Forum Post')
+@Controller('forum/posts')
 export class ForumController {
   constructor(private readonly forumService: ForumService) {}
-
-  // @Post()
-  // create(@Body() createForumDto: CreateForumDto) {
-  //   return this.forumService.create(createForumDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.forumService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.forumService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateForumDto: UpdateForumDto) {
-  //   return this.forumService.update(+id, updateForumDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.forumService.remove(+id);
-  // }
+  // Get all posts
+  @Get()
+  @ApiOkResponse({
+    description: 'Get list posts',
+    type: [GetPostsResponseDto],
+  })
+  @ApiOperation({ summary: 'Get all posts' })
+  async getListPosts(
+    @Query() query: QueryPostsDto,
+  ): Promise<GetPostsResponseDto> {
+    return await this.forumService.getListPosts(query, 2);
+  }
+  // Get post detail
+  @Get(':id')
+  @ApiOkResponse({
+    description: 'Get post detail',
+    type: PostResponseDto,
+  })
+  async getPostDetail(
+    @Param() param: GetPostParamDto,
+  ): Promise<PostResponseDto> {
+    return this.forumService.getPostDetail(param.id, 1);
+  }
 }
