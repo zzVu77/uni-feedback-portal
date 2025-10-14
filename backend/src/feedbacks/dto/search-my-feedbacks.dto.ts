@@ -7,13 +7,13 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { FeedbackStatus } from '@prisma/client';
+import { FeedbackStatuses } from '@prisma/client';
 
 export class SearchMyFeedbacksDto {
   @IsString() q: string;
-  @IsOptional() @IsEnum(FeedbackStatus) status?: FeedbackStatus;
+  @IsOptional() @IsEnum(FeedbackStatuses) status?: FeedbackStatuses;
   @IsOptional() @IsISO8601() from?: string;
   @IsOptional() @IsISO8601() to?: string;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) category_id?: number;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) department_id?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) categoryId?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) departmentId?: number;
 }

@@ -9,14 +9,14 @@ export class UsersService {
 
   async getById(userId: number): Promise<UserResponseDto> {
     const user = await this.prisma.users.findUnique({
-      where: { user_id: userId },
+      where: { userId: userId },
       select: {
-        user_id: true,
-        full_name: true,
+        userId: true,
+        fullName: true,
         email: true,
         role: true,
-        department_id: true,
-        created_at: true,
+        departmentId: true,
+        createdAt: true,
       },
     });
 
@@ -26,7 +26,7 @@ export class UsersService {
 
     return {
       ...user,
-      created_at: user.created_at.toISOString(),
+      createdAt: user.createdAt.toISOString(),
     };
   }
 }

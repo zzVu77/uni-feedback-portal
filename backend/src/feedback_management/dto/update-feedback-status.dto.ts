@@ -1,9 +1,9 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { FeedbackStatus } from '@prisma/client';
+import { FeedbackStatuses } from '@prisma/client';
 
 export class UpdateFeedbackStatusDto {
-  @IsEnum(FeedbackStatus)
-  status: FeedbackStatus;
+  @IsEnum(FeedbackStatuses)
+  status: FeedbackStatuses;
 
   @IsOptional()
   @IsString()

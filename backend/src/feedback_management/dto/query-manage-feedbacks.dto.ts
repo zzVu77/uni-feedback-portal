@@ -7,14 +7,14 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { FeedbackStatus } from '@prisma/client';
+import { FeedbackStatuses } from '@prisma/client';
 
 export class QueryManageFeedbacksDto {
   @IsOptional() @Type(() => Number) @IsInt() @Min(1) page?: number;
   @IsOptional() @Type(() => Number) @IsInt() @Min(1) pageSize?: number;
-  @IsOptional() @IsEnum(FeedbackStatus) status?: FeedbackStatus;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) category_id?: number;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) department_id?: number;
+  @IsOptional() @IsEnum(FeedbackStatuses) status?: FeedbackStatuses;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) categoryId?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) departmentId?: number;
   @IsOptional() @IsISO8601() from?: string;
   @IsOptional() @IsISO8601() to?: string;
   @IsOptional() @IsString() q?: string;

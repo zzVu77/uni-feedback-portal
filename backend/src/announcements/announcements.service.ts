@@ -27,14 +27,14 @@ export class AnnouncementsService {
     const take = pageSize;
 
     // Build dynamic WHERE condition
-    const where: Prisma.announcementsWhereInput = {};
+    const where: Prisma.AnnouncementsWhereInput = {};
 
     if (departmentId) {
-      where.user = { department_id: departmentId };
+      where.user = { departmentId: departmentId };
     }
 
     if (userId) {
-      where.user_id = userId;
+      where.userId = userId;
     }
 
     if (q) {
@@ -45,9 +45,9 @@ export class AnnouncementsService {
     }
 
     if (from || to) {
-      where.created_at = {};
-      if (from) where.created_at.gte = new Date(from);
-      if (to) where.created_at.lte = new Date(to);
+      where.createdAt = {};
+      if (from) where.createdAt.gte = new Date(from);
+      if (to) where.createdAt.lte = new Date(to);
     }
 
     // Query data + total count
@@ -56,14 +56,14 @@ export class AnnouncementsService {
         where,
         skip,
         take,
-        orderBy: { created_at: 'desc' },
+        orderBy: { createdAt: 'desc' },
         include: {
           user: {
             select: {
-              user_id: true,
-              full_name: true,
+              userId: true,
+              fullName: true,
               department: {
-                select: { department_id: true, department_name: true },
+                select: { departmentId: true, departmentName: true },
               },
             },
           },
@@ -77,11 +77,11 @@ export class AnnouncementsService {
       id: item.id,
       title: item.title,
       content: item.content,
-      createdAt: item.created_at,
-      userId: item.user_id,
-      userName: item.user.full_name,
-      departmentId: item.user.department.department_id,
-      departmentName: item.user.department.department_name,
+      createdAt: item.createdAt,
+      userId: item.userId,
+      userName: item.user.fullName,
+      departmentId: item.user.department.departmentId,
+      departmentName: item.user.department.departmentName,
     }));
 
     return { results: mappedItems, total };
@@ -93,11 +93,11 @@ export class AnnouncementsService {
       include: {
         user: {
           select: {
-            full_name: true,
+            fullName: true,
             department: {
               select: {
-                department_id: true,
-                department_name: true,
+                departmentId: true,
+                departmentName: true,
               },
             },
           },
@@ -113,14 +113,14 @@ export class AnnouncementsService {
       id: announcement.id,
       title: announcement.title,
       content: announcement.content,
-      createdAt: announcement.created_at,
-      userName: announcement.user.full_name,
-      departmentId: announcement.user.department.department_id,
-      departmentName: announcement.user.department.department_name,
+      createdAt: announcement.createdAt,
+      userName: announcement.user.fullName,
+      departmentId: announcement.user.department.departmentId,
+      departmentName: announcement.user.department.departmentName,
       files: announcement.files.map((f) => ({
         id: f.id,
-        fileName: f.file_name,
-        fileUrl: f.file_url,
+        fileName: f.fileName,
+        fileUrl: f.fileUrl,
       })),
     };
   }
