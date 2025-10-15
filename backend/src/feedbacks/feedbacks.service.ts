@@ -6,6 +6,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import {
+  FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
 } from './dto/query-my-feedbacks.dto';
@@ -13,6 +14,7 @@ import {
   GetFeedbackDetailResponse,
   GetFeedbackParamDto,
 } from './dto/get-feedback-param.dto';
+import { CreateFeedbackDto } from './dto/create-feedback.dto';
 
 @Injectable()
 export class FeedbacksService {
@@ -177,5 +179,68 @@ export class FeedbacksService {
     };
 
     return result;
+  }
+  async createFeedback(
+    dto: CreateFeedbackDto,
+    userId: number,
+  ): Promise<FeedbackSummary> {
+    // 🔍 Kiểm tra department & category có tồn tại không
+    const [department, category] = await Promise.all([
+      this.prisma.departments.findUnique({
+        where: { departmentId: dto.departmentId },
+      }),
+      this.prisma.categories.findUnique({
+        where: { categoryId: dto.categoryId },
+      }),
+    ]);
+
+    if (!department) {
+      throw new NotFoundException('Department not found');
+    }
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    // 🧩 Tạo feedback mới
+    const feedback = await this.prisma.feedbacks.create({
+      data: {
+        // feedbackId: 11, // Auto-increment
+        subject: dto.subject,
+        description: dto.description,
+        departmentId: dto.departmentId,
+        categoryId: dto.categoryId,
+        isPrivate: dto.isPrivate,
+        userId: userId,
+        currentStatus: 'PENDING',
+        createdAt: new Date(), //Fix later
+        fileAttachments: {
+          create: dto.fileAttachments?.map((f) => ({
+            fileName: f.fileName,
+            fileUrl: f.fileUrl,
+          })),
+        },
+      },
+      include: {
+        department: true,
+        category: true,
+      },
+    });
+
+    // 🎯 Trả về dạng FeedbackSummary DTO
+    return {
+      feedbackId: feedback.feedbackId,
+      subject: feedback.subject,
+      currentStatus: feedback.currentStatus,
+      isPrivate: feedback.isPrivate,
+      department: {
+        departmentId: feedback.department.departmentId,
+        departmentName: feedback.department.departmentName,
+      },
+      category: {
+        categoryId: feedback.category.categoryId,
+        categoryName: feedback.category.categoryName,
+      },
+      createdAt: feedback.createdAt.toISOString(),
+    };
   }
 }
