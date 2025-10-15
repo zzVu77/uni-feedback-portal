@@ -1,16 +1,10 @@
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { QueryMyFeedbacksDto } from './dto/query-my-feedbacks.dto';
 import { SearchMyFeedbacksDto } from './dto/search-my-feedbacks.dto';
-
-export interface FeedbackSummary {
-  feedback_id: number;
-  subject: string;
-  current_status: 'PENDING' | 'IN_PROGRESS' | 'RESOLVED' | 'REJECTED';
-  is_private: boolean;
-  department_id: number;
-  category_id: number;
-  created_at: string;
-}
+import {
+  QueryMyFeedbacksDto,
+  GetMyFeedbacksResponseDto,
+  FeedbackSummary,
+} from './dto/query-my-feedbacks.dto';
 
 export interface FeedbackDetail extends FeedbackSummary {
   description: string;
@@ -39,7 +33,7 @@ export interface FeedbacksServiceContract {
   getMyFeedbacks(
     query: QueryMyFeedbacksDto,
     userId: number,
-  ): Promise<{ items: FeedbackSummary[]; total: number }>;
+  ): Promise<GetMyFeedbacksResponseDto>;
   getFeedbackDetail(
     feedback_id: number,
     actor: {

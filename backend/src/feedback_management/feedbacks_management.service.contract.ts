@@ -2,10 +2,10 @@ import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { UpdateFeedbackStatusDto } from './dto/update-feedback-status.dto';
 import { CreateForwardingDto } from './dto/create-forwarding.dto';
 import {
-  FeedbackSummary,
+  // FeedbackSummary,
   FeedbackDetail,
 } from '../feedbacks/feedbacks.service.contract';
-
+import { FeedbackSummary } from '../feedbacks/dto/query-my-feedbacks.dto';
 export interface FeedbackManagementServiceContract {
   list(
     query: QueryManageFeedbacksDto,
