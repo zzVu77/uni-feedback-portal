@@ -8,8 +8,6 @@ import {
 
 export interface FeedbackDetail extends FeedbackSummary {
   description: string;
-  department: { department_id: number; department_name: string };
-  category: { category_id: number; category_name: string };
   status_history: Array<{
     status: string;
     message: string | null;

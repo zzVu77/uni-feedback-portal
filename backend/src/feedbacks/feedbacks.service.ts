@@ -57,8 +57,10 @@ export class FeedbacksService {
           subject: true,
           currentStatus: true,
           isPrivate: true,
-          departmentId: true,
-          categoryId: true,
+          department: {
+            select: { departmentId: true, departmentName: true },
+          },
+          category: { select: { categoryId: true, categoryName: true } },
           createdAt: true,
         },
       }),
@@ -66,7 +68,7 @@ export class FeedbacksService {
     ]);
 
     return {
-      items: items.map((item) => ({
+      results: items.map((item) => ({
         ...item,
         createdAt: item.createdAt.toISOString(),
       })),

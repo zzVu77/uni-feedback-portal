@@ -26,9 +26,9 @@ export class FeedbacksController {
     return this.feedbacksService.getMyFeedbacks(query, 2);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.feedbacksService.findOne(+id);
+  // @Get('/me/:id')
+  // getFeedbackDetail(@Param('id') id: string) {
+  //   return this.feedbacksService.getFeedbackDetail(+id);
   // }
 
   // @Patch(':id')

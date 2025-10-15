@@ -82,7 +82,7 @@ export class FeedbackSummary {
 
   @ApiProperty({
     example: 'Cannot log in to the system',
-    description: 'Feedback subject',
+    description: 'Feedback subject or title',
   })
   subject: string;
 
@@ -100,17 +100,32 @@ export class FeedbackSummary {
   isPrivate: boolean;
 
   @ApiProperty({
-    example: 3,
-    description: 'Department ID responsible for the feedback',
+    example: {
+      departmentId: 3,
+      departmentName: 'Information Technology Department',
+    },
+    description: 'Department responsible for handling the feedback',
   })
-  departmentId: number;
+  department: {
+    departmentId: number;
+    departmentName: string;
+  };
 
-  @ApiProperty({ example: 2, description: 'Category ID of the feedback' })
-  categoryId: number;
+  @ApiProperty({
+    example: {
+      categoryId: 2,
+      categoryName: 'System Login Issues',
+    },
+    description: 'Category of the feedback',
+  })
+  category: {
+    categoryId: number;
+    categoryName: string;
+  };
 
   @ApiProperty({
     example: '2025-10-15T10:00:00Z',
-    description: 'Date and time when the feedback was created',
+    description: 'Date and time when the feedback was created (ISO8601)',
   })
   createdAt: string;
 }
@@ -120,7 +135,7 @@ export class GetMyFeedbacksResponseDto {
     type: [FeedbackSummary],
     description: 'List of feedbacks submitted by the user',
   })
-  items: FeedbackSummary[];
+  results: FeedbackSummary[];
 
   @ApiProperty({ example: 45, description: 'Total number of feedbacks found' })
   total: number;
