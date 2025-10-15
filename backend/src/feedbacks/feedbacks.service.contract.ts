@@ -5,23 +5,10 @@ import {
   GetMyFeedbacksResponseDto,
   FeedbackSummary,
 } from './dto/query-my-feedbacks.dto';
-
-export interface FeedbackDetail extends FeedbackSummary {
-  description: string;
-  status_history: Array<{
-    status: string;
-    message: string | null;
-    created_at: string;
-  }>;
-  forwarding_logs: Array<{
-    forwarding_log_id: number;
-    from_department_id: number;
-    to_department_id: number;
-    message: string | null;
-    created_at: string;
-  }>;
-  attachments: Array<{ id: number; file_name: string; file_url: string }>;
-}
+import {
+  GetFeedbackParamDto,
+  GetFeedbackDetailResponse,
+} from './dto/get-feedback-param.dto';
 
 export interface FeedbacksServiceContract {
   createFeedback(
@@ -33,13 +20,13 @@ export interface FeedbacksServiceContract {
     userId: number,
   ): Promise<GetMyFeedbacksResponseDto>;
   getFeedbackDetail(
-    feedback_id: number,
+    params: GetFeedbackParamDto,
     actor: {
-      user_id: number;
-      role: 'Student' | 'DepartmentStaff' | 'Admin';
-      department_id: number;
+      userId: number;
+      role: 'STUDENT' | 'DEPARTMENTSTAFF' | 'ADMIN';
+      departmentId?: number;
     },
-  ): Promise<FeedbackDetail>;
+  ): Promise<GetFeedbackDetailResponse>;
   searchMyFeedbacks(
     query: SearchMyFeedbacksDto,
     userId: number,

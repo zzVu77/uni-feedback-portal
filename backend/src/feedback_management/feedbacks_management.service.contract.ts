@@ -1,11 +1,8 @@
 import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { UpdateFeedbackStatusDto } from './dto/update-feedback-status.dto';
 import { CreateForwardingDto } from './dto/create-forwarding.dto';
-import {
-  // FeedbackSummary,
-  FeedbackDetail,
-} from '../feedbacks/feedbacks.service.contract';
 import { FeedbackSummary } from '../feedbacks/dto/query-my-feedbacks.dto';
+import { GetFeedbackDetailResponse } from 'src/feedbacks/dto/get-feedback-param.dto';
 export interface FeedbackManagementServiceContract {
   list(
     query: QueryManageFeedbacksDto,
@@ -27,7 +24,7 @@ export interface FeedbackManagementServiceContract {
       role: 'DepartmentStaff' | 'Admin';
       department_id: number;
     },
-  ): Promise<FeedbackDetail & { forum_post?: { post_id: number } }>;
+  ): Promise<GetFeedbackDetailResponse & { forum_post?: { post_id: number } }>;
   updateStatus(
     feedback_id: number,
     dto: UpdateFeedbackStatusDto,

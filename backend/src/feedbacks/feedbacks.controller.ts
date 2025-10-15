@@ -1,10 +1,14 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FeedbacksService } from './feedbacks.service';
 import {
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
 } from './dto/query-my-feedbacks.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  GetFeedbackDetailResponse,
+  GetFeedbackParamDto,
+} from './dto/get-feedback-param.dto';
 
 @Controller('feedbacks')
 export class FeedbacksController {
@@ -26,10 +30,26 @@ export class FeedbacksController {
     return this.feedbacksService.getMyFeedbacks(query, 2);
   }
 
-  // @Get('/me/:id')
-  // getFeedbackDetail(@Param('id') id: string) {
-  //   return this.feedbacksService.getFeedbackDetail(+id);
-  // }
+  @Get('/me/:feedbackId')
+  @ApiOperation({
+    summary: 'Get feedback details by ID',
+    description:
+      'Retrieve detailed information about a specific feedback, including its status history, forwarding logs, and attached files.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback detail retrieved successfully',
+    type: GetFeedbackDetailResponse,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Feedback not found',
+  })
+  async getFeedbackDetail(
+    @Param() params: GetFeedbackParamDto,
+  ): Promise<GetFeedbackDetailResponse> {
+    return this.feedbacksService.getFeedbackDetail(params, 2);
+  }
 
   // @Patch(':id')
   // update(

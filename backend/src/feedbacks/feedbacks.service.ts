@@ -1,10 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import {
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
 } from './dto/query-my-feedbacks.dto';
+import {
+  GetFeedbackDetailResponse,
+  GetFeedbackParamDto,
+} from './dto/get-feedback-param.dto';
 
 @Injectable()
 export class FeedbacksService {
@@ -74,5 +82,100 @@ export class FeedbacksService {
       })),
       total,
     };
+  }
+  async getFeedbackDetail(
+    params: GetFeedbackParamDto,
+    userId: number,
+  ): Promise<GetFeedbackDetailResponse> {
+    const { feedbackId } = params;
+
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { feedbackId },
+      include: {
+        department: {
+          select: { departmentId: true, departmentName: true },
+        },
+        category: {
+          select: { categoryId: true, categoryName: true },
+        },
+        statusHistory: {
+          select: {
+            status: true,
+            message: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        forwardingLogs: {
+          select: {
+            forwardingLogId: true,
+            message: true,
+            createdAt: true,
+            fromDepartment: {
+              select: { departmentId: true, departmentName: true },
+            },
+            toDepartment: {
+              select: { departmentId: true, departmentName: true },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        fileAttachments: {
+          select: { id: true, fileName: true, fileUrl: true },
+        },
+      },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
+    }
+
+    // 🧩 Authorization check: Students can only view their own feedback
+    if (feedback.userId !== userId) {
+      throw new ForbiddenException('You are not allowed to view this feedback');
+    }
+
+    // 🏗️ Map data to FeedbackDetail DTO
+    const result: GetFeedbackDetailResponse = {
+      feedbackId: feedback.feedbackId,
+      subject: feedback.subject,
+      description: feedback.description,
+      currentStatus: feedback.currentStatus,
+      isPrivate: feedback.isPrivate,
+      createdAt: feedback.createdAt.toISOString(),
+      department: {
+        departmentId: feedback.department.departmentId,
+        departmentName: feedback.department.departmentName,
+      },
+      category: {
+        categoryId: feedback.category.categoryId,
+        categoryName: feedback.category.categoryName,
+      },
+      statusHistory: feedback.statusHistory.map((h) => ({
+        status: h.status,
+        message: h.message,
+        createdAt: h.createdAt.toISOString(),
+      })),
+      forwardingLogs: feedback.forwardingLogs.map((log) => ({
+        forwardingLogId: log.forwardingLogId,
+        fromDepartment: {
+          departmentId: log.fromDepartment.departmentId,
+          departmentName: log.fromDepartment.departmentName,
+        },
+        toDepartment: {
+          departmentId: log.toDepartment.departmentId,
+          departmentName: log.toDepartment.departmentName,
+        },
+        message: log.message,
+        createdAt: log.createdAt.toISOString(),
+      })),
+      fileAttachments: feedback.fileAttachments.map((a) => ({
+        id: a.id,
+        fileName: a.fileName,
+        fileUrl: a.fileUrl,
+      })),
+    };
+
+    return result;
   }
 }
