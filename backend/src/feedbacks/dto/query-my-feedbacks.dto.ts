@@ -7,7 +7,7 @@ import {
   IsISO8601,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { FeedbackStatuses } from '@prisma/client';
 
 export class QueryMyFeedbacksDto {
@@ -74,69 +74,4 @@ export class QueryMyFeedbacksDto {
   @IsOptional()
   @IsString()
   q?: string;
-}
-
-export class FeedbackSummary {
-  @ApiProperty({ example: 101, description: 'Unique ID of the feedback' })
-  feedbackId: number;
-
-  @ApiProperty({
-    example: 'Cannot log in to the system',
-    description: 'Feedback subject or title',
-  })
-  subject: string;
-
-  @ApiProperty({
-    example: 'IN_PROGRESS',
-    enum: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
-    description: 'Current status of the feedback',
-  })
-  currentStatus: 'PENDING' | 'IN_PROGRESS' | 'RESOLVED' | 'REJECTED';
-
-  @ApiProperty({
-    example: false,
-    description: 'Indicates if feedback is private',
-  })
-  isPrivate: boolean;
-
-  @ApiProperty({
-    example: {
-      departmentId: 3,
-      departmentName: 'Information Technology Department',
-    },
-    description: 'Department responsible for handling the feedback',
-  })
-  department: {
-    departmentId: number;
-    departmentName: string;
-  };
-
-  @ApiProperty({
-    example: {
-      categoryId: 2,
-      categoryName: 'System Login Issues',
-    },
-    description: 'Category of the feedback',
-  })
-  category: {
-    categoryId: number;
-    categoryName: string;
-  };
-
-  @ApiProperty({
-    example: '2025-10-15T10:00:00Z',
-    description: 'Date and time when the feedback was created (ISO8601)',
-  })
-  createdAt: string;
-}
-
-export class GetMyFeedbacksResponseDto {
-  @ApiProperty({
-    type: [FeedbackSummary],
-    description: 'List of feedbacks submitted by the user',
-  })
-  results: FeedbackSummary[];
-
-  @ApiProperty({ example: 45, description: 'Total number of feedbacks found' })
-  total: number;
 }

@@ -4,12 +4,10 @@ import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
-} from './dto/query-my-feedbacks.dto';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import {
   GetFeedbackDetailResponse,
   GetFeedbackParamDto,
-} from './dto/get-feedback-param.dto';
+} from './dto';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 
 @Controller('feedbacks')

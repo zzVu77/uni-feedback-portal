@@ -9,11 +9,9 @@ import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
-} from './dto/query-my-feedbacks.dto';
-import {
   GetFeedbackDetailResponse,
   GetFeedbackParamDto,
-} from './dto/get-feedback-param.dto';
+} from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 
 @Injectable()
@@ -184,7 +182,7 @@ export class FeedbacksService {
     dto: CreateFeedbackDto,
     userId: number,
   ): Promise<FeedbackSummary> {
-    // 🔍 Kiểm tra department & category có tồn tại không
+    // Check if department and category exist
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { departmentId: dto.departmentId },
@@ -201,7 +199,7 @@ export class FeedbacksService {
       throw new NotFoundException('Category not found');
     }
 
-    // 🧩 Tạo feedback mới
+    // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
         // feedbackId: 11, // Auto-increment
@@ -226,7 +224,7 @@ export class FeedbacksService {
       },
     });
 
-    // 🎯 Trả về dạng FeedbackSummary DTO
+    // Return summary
     return {
       feedbackId: feedback.feedbackId,
       subject: feedback.subject,

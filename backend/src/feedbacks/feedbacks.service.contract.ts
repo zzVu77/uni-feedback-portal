@@ -4,12 +4,9 @@ import {
   QueryMyFeedbacksDto,
   GetMyFeedbacksResponseDto,
   FeedbackSummary,
-} from './dto/query-my-feedbacks.dto';
-import {
   GetFeedbackParamDto,
   GetFeedbackDetailResponse,
-} from './dto/get-feedback-param.dto';
-
+} from './dto';
 export interface FeedbacksServiceContract {
   createFeedback(
     dto: CreateFeedbackDto,
