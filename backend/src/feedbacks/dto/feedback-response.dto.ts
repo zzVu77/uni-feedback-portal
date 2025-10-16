@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FeedbackStatuses } from '@prisma/client';
 
 // Summary of a single feedback for listing purposes
 export class FeedbackSummary {
@@ -13,10 +14,10 @@ export class FeedbackSummary {
 
   @ApiProperty({
     example: 'IN_PROGRESS',
-    enum: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
+    enum: FeedbackStatuses,
     description: 'Current status of the feedback',
   })
-  currentStatus: 'PENDING' | 'IN_PROGRESS' | 'RESOLVED' | 'REJECTED';
+  currentStatus: FeedbackStatuses;
 
   @ApiProperty({
     example: false,

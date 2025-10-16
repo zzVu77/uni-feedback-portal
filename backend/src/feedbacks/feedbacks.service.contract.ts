@@ -27,13 +27,5 @@ export interface FeedbacksServiceContract {
   searchMyFeedbacks(
     query: SearchMyFeedbacksDto,
     userId: number,
-  ): Promise<{
-    items: Array<{
-      feedback_id: number;
-      subject: string;
-      current_status: string;
-      created_at: string;
-    }>;
-    total: number;
-  }>;
+  ): Promise<GetMyFeedbacksResponseDto>;
 }

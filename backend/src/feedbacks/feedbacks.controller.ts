@@ -9,6 +9,7 @@ import {
 } from './dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { SearchMyFeedbacksDto } from './dto/search-my-feedbacks.dto';
 
 @Controller('feedbacks')
 export class FeedbacksController {
@@ -31,7 +32,6 @@ export class FeedbacksController {
     description: 'Invalid data or missing required fields',
   })
   createFeedback(@Body() createFeedbackDto: CreateFeedbackDto) {
-    // ⚠️ Mock userId = 1 for now. In production, extract from JWT.
     return this.feedbacksService.createFeedback(createFeedbackDto, 1);
   }
 
@@ -44,6 +44,17 @@ export class FeedbacksController {
   })
   getMyFeedbacks(@Query() query: QueryMyFeedbacksDto) {
     return this.feedbacksService.getMyFeedbacks(query, 2);
+  }
+
+  @Get('/me/search')
+  @ApiOperation({ summary: 'Search feedbacks of the current user' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of user feedbacks after search filters applied',
+    type: GetMyFeedbacksResponseDto,
+  })
+  searchMyFeedbacks(@Query() query: SearchMyFeedbacksDto) {
+    return this.feedbacksService.searchMyFeedbacks(query, 2);
   }
 
   @Get('/me/:feedbackId')
