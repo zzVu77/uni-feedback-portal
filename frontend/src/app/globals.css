@@ -52,10 +52,9 @@
 
   --color-neutral-light-primary-50: #ffffff;
   --color-neutral-light-primary-100: #f9fafb;
-  --color-neutral-light-primary-200: #f9fafb;
-  --color-neutral-light-primary-300: #ebebf2;
-  --color-neutral-light-primary-400: #e5e7eb;
-  --color-neutral-light-primary-500: #d1d5db;
+  --color-neutral-light-primary-200: #ebebf2;
+  --color-neutral-light-primary-300: #e5e7eb;
+  --color-neutral-light-primary-400: #d1d5db;
 
   /* --radius-*	Border radius utilities like rounded-sm */
   /* --drop-shadow-*	Drop shadow filter utilities like drop-shadow-md */
