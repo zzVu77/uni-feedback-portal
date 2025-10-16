@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
 
 const page = () => {
   return (
@@ -12,6 +11,7 @@ const page = () => {
         <Button variant="secondary">Secondary</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="link">Link</Button>
+        <Button variant="primary">Primary</Button>
       </div>
       <div className="flex flex-col gap-4 bg-black/20 py-4 px-40 rounded-3xl">
         <h1 className="text-4xl mx-auto font-bold text-black-400">
