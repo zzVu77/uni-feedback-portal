@@ -75,10 +75,6 @@ const page = () => {
           <div className="bg-neutral-light-primary-300 rounded-lg h-18 w-10"></div>
           <div className="bg-neutral-light-primary-400 rounded-lg h-18 w-10"></div>
           <div className="bg-neutral-light-primary-500 rounded-lg h-18 w-10"></div>
-          <div className="bg-neutral-light-primary-600 rounded-lg h-18 w-10"></div>
-          <div className="bg-neutral-light-primary-700 rounded-lg h-18 w-10"></div>
-          <div className="bg-neutral-light-primary-800 rounded-lg h-18 w-10"></div>
-          <div className="bg-neutral-light-primary-900 rounded-lg h-18 w-10"></div>
         </div>
       </div>
     </div>
