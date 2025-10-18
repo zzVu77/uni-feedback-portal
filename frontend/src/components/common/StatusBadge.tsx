@@ -1,44 +1,46 @@
 import { CircleAlert, CircleCheckBig, CircleX, Clock3 } from "lucide-react";
 import { Badge } from "../ui/badge";
+
 type StatusBadgeProps = {
   type: "PENDING" | "IN_PROGRESS" | "RESOLVED" | "REJECTED";
 };
+
+const STATUS_CONFIG = {
+  PENDING: {
+    text: "Đang chờ tiếp nhận",
+    icon: CircleAlert,
+    badgeClassName: "text-yellow-primary-500 bg-yellow-primary-100 py-1",
+    iconClassName: "text-yellow-primary-300",
+  },
+  IN_PROGRESS: {
+    text: "Đang xử lý",
+    icon: Clock3,
+    badgeClassName: "text-blue-primary-700 bg-blue-primary-100 py-1",
+    iconClassName: "text-blue-primary-300",
+  },
+  RESOLVED: {
+    text: "Đã xử lý",
+    icon: CircleCheckBig,
+    badgeClassName: "text-green-primary-500 bg-green-primary-100 py-1",
+    iconClassName: "text-green-primary-300",
+  },
+  REJECTED: {
+    text: "Từ chối",
+    icon: CircleX,
+    badgeClassName: "text-red-primary-500 bg-red-primary-300 py-1",
+    iconClassName: "text-red-primary-400",
+  },
+};
+
 const StatusBadge = ({ type }: StatusBadgeProps) => {
-  switch (type) {
-    case "PENDING":
-      return (
-        <Badge className="text-yellow-primary-500 bg-yellow-primary-100 py-1">
-          <CircleAlert className="text-yellow-primary-300 font-bold" /> Đang chờ
-          tiếp nhận
-        </Badge>
-      );
-    case "IN_PROGRESS":
-      return (
-        <Badge className="text-blue-primary-700 bg-blue-primary-100 py-1">
-          <Clock3 className="text-blue-primary-300 font-bold" /> Đang xử lý
-        </Badge>
-      );
-    case "RESOLVED":
-      return (
-        <Badge className="text-green-primary-500 bg-green-primary-100 py-1">
-          <CircleCheckBig className="text-green-primary-300 font-bold" /> Đã xử
-          lý
-        </Badge>
-      );
-    case "REJECTED":
-      return (
-        <Badge className="text-red-primary-500 bg-red-primary-300 py-1">
-          <CircleX className="text-red-primary-400 font-bold" /> Từ chối
-        </Badge>
-      );
-    default:
-      return (
-        <Badge className="text-yellow-primary-500 bg-yellow-primary-100 py-1">
-          <CircleAlert className="text-yellow-primary-300 font-bold" /> Đang đợi
-          xử lý
-        </Badge>
-      );
-  }
+  const config = STATUS_CONFIG[type] || STATUS_CONFIG.PENDING;
+  const { text, icon: Icon, badgeClassName, iconClassName } = config;
+  return (
+    <Badge className={badgeClassName}>
+      <Icon className={`${iconClassName} font-bold`} />
+      <span className="ml-1">{text}</span>
+    </Badge>
+  );
 };
 
 export default StatusBadge;
