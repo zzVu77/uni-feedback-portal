@@ -20,8 +20,8 @@ const FeedbackDetailHeader = () => {
         {/* Status Badge */}
         <StatusBadge type="PENDING" />
         {/* Description */}
-        <div className="mt-4">
-          <h2 className="text-[18px] font-medium">Mô tả chi tiết:</h2>
+        <div>
+          <h2 className="text-[18px] font-medium">Nội dung:</h2>
           <p className="text-[15px]">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
             perferendis minima ea et ipsum vero provident magni eveniet iure?
