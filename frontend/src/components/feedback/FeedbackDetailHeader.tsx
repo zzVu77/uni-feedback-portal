@@ -5,7 +5,7 @@ import Attachment from "./Attachment";
 const FeedbackDetailHeader = () => {
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 rounded-[8px] bg-white px-8 py-4 shadow-sm">
         {/* Title */}
         <div>
           <h1 className="text-[24px] font-bold text-black">Bóng đèn bị hỏng</h1>
@@ -22,7 +22,7 @@ const FeedbackDetailHeader = () => {
         {/* Description */}
         <div>
           <h2 className="text-[18px] font-medium">Nội dung:</h2>
-          <p className="text-[15px]">
+          <p className="text-[15px] font-normal text-black">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
             perferendis minima ea et ipsum vero provident magni eveniet iure?
             Iusto eveniet id provident a nam dolorum error magnam, perspiciatis.

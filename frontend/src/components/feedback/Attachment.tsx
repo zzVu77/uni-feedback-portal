@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 const Attachment = () => {
   return (
-    <div className="bg-neutral-light-primary-100 flex w-full flex-row justify-between rounded-[6px] border-[1px] border-gray-200 p-2">
+    <div className="bg-neutral-light-primary-100 flex w-full flex-row justify-between rounded-[8px] border-[1px] border-gray-200 p-2 shadow-xs">
       <div className="flex flex-row items-center gap-2">
         {/* File Icon */}
         <div className="bg-blue-primary-100 rounded-lg p-2">
