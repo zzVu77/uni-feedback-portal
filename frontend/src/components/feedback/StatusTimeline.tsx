@@ -28,11 +28,13 @@ const StatusTimeLine = () => {
     <div className="flex h-full flex-col items-start justify-center gap-4 rounded-[8px] bg-white px-8 py-4">
       {/* Timeline header */}
       <div className="flex h-full flex-row items-center gap-1">
-        <History className="h-6 w-6" />
-        <h2 className="text-[18px] font-medium">Lịch sử trạng thái</h2>
+        <History className="text-neutral-dark-primary-700 h-6 w-6" />
+        <h2 className="text-neutral-dark-primary-700 text-[18px] font-medium">
+          Lịch sử trạng thái
+        </h2>
       </div>
       {/* Timeline content */}
-      <div className="max-w-3xl px-6">
+      <div className="w-full px-6">
         <ol className="relative border-l border-blue-400">
           {timelineData.map((item, index) => (
             <TimeLineItem
