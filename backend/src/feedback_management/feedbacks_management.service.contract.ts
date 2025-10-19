@@ -1,8 +1,10 @@
 import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { UpdateFeedbackStatusDto } from './dto/update-feedback-status.dto';
 import { CreateForwardingDto } from './dto/create-forwarding.dto';
-import { FeedbackDetail } from '../feedbacks/dto/';
-import { ListFeedbacksResponseDto } from './dto/feedback_management_response.dto';
+import {
+  FeedbackDetailDto,
+  ListFeedbacksResponseDto,
+} from './dto/feedback_management_response.dto';
 export interface FeedbackManagementServiceContract {
   getAllFeedbacks(
     query: QueryManageFeedbacksDto,
@@ -12,27 +14,27 @@ export interface FeedbackManagementServiceContract {
       departmentId: number;
     },
   ): Promise<ListFeedbacksResponseDto>;
-  getDetail(
-    feedback_id: number,
+  getFeedbackDetail(
+    GetFeedbackParamDto: { feedbackId: number },
     actor: {
-      user_id: number;
-      role: 'DepartmentStaff' | 'Admin';
-      department_id: number;
+      userId: number;
+      role: 'DEPARTMENT_STAFF' | 'ADMIN';
+      departmentId: number;
     },
-  ): Promise<FeedbackDetail & { forum_post?: { post_id: number } }>;
+  ): Promise<FeedbackDetailDto>;
   updateStatus(
-    feedback_id: number,
+    feedbackId: number,
     dto: UpdateFeedbackStatusDto,
-    actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
+    actor: { userId: number; role: 'DEPARTMENT_STAFF' | 'ADMIN' },
   ): Promise<{
-    feedback_id: number;
-    current_status: string;
-    updated_at: string;
+    feedbackId: number;
+    currentStatus: string;
+    updatedAt: string;
   }>;
   createForwarding(
-    feedback_id: number,
+    feedbackId: number,
     dto: CreateForwardingDto,
-    actor: { user_id: number; from_department_id: number },
+    actor: { userId: number; fromDepartmentId: number },
   ): Promise<{
     forwarding_log_id: number;
     feedback_id: number;

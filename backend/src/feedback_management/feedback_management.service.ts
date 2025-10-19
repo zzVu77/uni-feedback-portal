@@ -1,8 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { Prisma } from '@prisma/client';
-import { ListFeedbacksResponseDto } from './dto/feedback_management_response.dto';
+import {
+  FeedbackDetailDto,
+  ListFeedbacksResponseDto,
+} from './dto/feedback_management_response.dto';
+import { GetFeedbackParamDto } from 'src/feedbacks/dto';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
@@ -89,5 +97,122 @@ export class FeedbackManagementService {
     }));
 
     return { items, total };
+  }
+  async getFeedbackDetail(
+    params: GetFeedbackParamDto,
+    actor: {
+      userId: number;
+      role: 'DEPARTMENT_STAFF' | 'ADMIN';
+      departmentId: number;
+    },
+  ): Promise<FeedbackDetailDto> {
+    const { feedbackId } = params;
+
+    // --- 1️⃣ Lấy feedback theo ID ---
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { feedbackId },
+      include: {
+        user: true, // lấy student info
+        forumPost: {
+          select: { postId: true },
+        },
+        department: {
+          select: { departmentId: true, departmentName: true },
+        },
+        category: {
+          select: { categoryId: true, categoryName: true },
+        },
+        statusHistory: {
+          select: {
+            status: true,
+            message: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        forwardingLogs: {
+          select: {
+            forwardingLogId: true,
+            message: true,
+            createdAt: true,
+            fromDepartment: {
+              select: { departmentId: true, departmentName: true },
+            },
+            toDepartment: {
+              select: { departmentId: true, departmentName: true },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        fileAttachments: {
+          select: { id: true, fileName: true, fileUrl: true },
+        },
+      },
+    });
+
+    // --- 2️⃣ Kiểm tra tồn tại ---
+    if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    // --- 3️⃣ Quyền truy cập ---
+    // Department staff chỉ xem được feedback thuộc department của mình
+    if (
+      actor.role === 'DEPARTMENT_STAFF' &&
+      feedback.departmentId !== actor.departmentId
+    ) {
+      throw new ForbiddenException('Access denied to this feedback');
+    }
+
+    // --- 4️⃣ Map dữ liệu ra DTO ---
+    const result: FeedbackDetailDto = {
+      feedbackId: feedback.feedbackId,
+      subject: feedback.subject,
+      description: feedback.description,
+      currentStatus: feedback.currentStatus,
+      isPrivate: feedback.isPrivate,
+      createdAt: feedback.createdAt.toISOString(),
+      student: {
+        userId: feedback.user.userId,
+        fullName: feedback.user.fullName,
+        email: feedback.user.email,
+      },
+      forumPost: feedback.forumPost
+        ? { postId: feedback.forumPost.postId }
+        : undefined,
+      department: {
+        departmentId: feedback.department.departmentId,
+        departmentName: feedback.department.departmentName,
+      },
+      category: {
+        categoryId: feedback.category.categoryId,
+        categoryName: feedback.category.categoryName,
+      },
+      statusHistory: feedback.statusHistory.map((h) => ({
+        status: h.status,
+        message: h.message,
+        createdAt: h.createdAt.toISOString(),
+      })),
+      forwardingLogs: feedback.forwardingLogs.map((log) => ({
+        forwardingLogId: log.forwardingLogId,
+        fromDepartment: {
+          departmentId: log.fromDepartment.departmentId,
+          departmentName: log.fromDepartment.departmentName,
+        },
+        toDepartment: {
+          departmentId: log.toDepartment.departmentId,
+          departmentName: log.toDepartment.departmentName,
+        },
+        message: log.message,
+        createdAt: log.createdAt.toISOString(),
+      })),
+      fileAttachments: feedback.fileAttachments.map((a) => ({
+        id: a.id,
+        fileName: a.fileName,
+        fileUrl: a.fileUrl,
+      })),
+    };
+
+    return result;
   }
 }
