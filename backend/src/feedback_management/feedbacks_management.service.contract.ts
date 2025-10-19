@@ -1,15 +1,14 @@
-import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
-import { UpdateFeedbackStatusDto } from './dto/update-feedback-status.dto';
-import { CreateForwardingDto } from './dto/create-forwarding.dto';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
   ListFeedbacksResponseDto,
-} from './dto/feedback_management_response.dto';
-import { FeedbackParamDto } from 'src/feedbacks/dto';
+  CreateForwardingDto,
+  UpdateFeedbackStatusDto,
+} from './dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/feedbacks/dto';
 export interface FeedbackManagementServiceContract {
   getAllFeedbacks(
-    query: QueryManageFeedbacksDto,
+    query: QueryFeedbacksDto,
     actor: {
       userId: number;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';

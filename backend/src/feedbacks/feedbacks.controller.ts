@@ -3,7 +3,7 @@ import { FeedbacksService } from './feedbacks.service';
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
-  QueryMyFeedbacksDto,
+  QueryFeedbacksDto,
   FeedbackDetail,
   FeedbackParamDto,
 } from './dto';
@@ -42,7 +42,7 @@ export class FeedbacksController {
     description: 'List of user feedbacks',
     type: GetMyFeedbacksResponseDto,
   })
-  getMyFeedbacks(@Query() query: QueryMyFeedbacksDto) {
+  getMyFeedbacks(@Query() query: QueryFeedbacksDto) {
     return this.feedbacksService.getMyFeedbacks(query, 2);
   }
 

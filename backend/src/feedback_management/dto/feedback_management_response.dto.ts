@@ -3,8 +3,8 @@ import {
   FeedbackSummary,
   FeedbackDetail,
 } from '../../feedbacks/dto/feedback-response.dto';
+import { FeedbackStatuses } from '@prisma/client';
 
-// Thông tin sinh viên
 class StudentInfo {
   @ApiProperty({ example: 12 })
   userId: number;
@@ -16,7 +16,6 @@ class StudentInfo {
   email: string;
 }
 
-// Dùng cho danh sách feedback
 export class ListFeedbacksResponseDto {
   @ApiProperty({
     type: () => [FeedbackSummary],
@@ -28,13 +27,11 @@ export class ListFeedbacksResponseDto {
   total: number;
 }
 
-// Bài đăng liên kết với feedback (ví dụ forum post)
 class ForumPost {
   @ApiProperty({ example: 101 })
   postId: number;
 }
 
-// Feedback chi tiết (gồm forumPost và student)
 export class FeedbackDetailDto extends FeedbackDetail {
   @ApiProperty({
     type: () => StudentInfo,
@@ -70,19 +67,37 @@ export class ForwardingResponseDto {
 
   @ApiProperty({
     type: DepartmentInfo,
-    description: 'Thông tin phòng ban gửi',
+    description: 'Information about the department that forwarded the feedback',
   })
   fromDepartment: DepartmentInfo;
 
   @ApiProperty({
     type: DepartmentInfo,
-    description: 'Thông tin phòng ban nhận',
+    description:
+      'Information about the department receiving the forwarded feedback',
   })
   toDepartment: DepartmentInfo;
 
-  @ApiProperty({ example: 'Phản hồi này cần được xử lý sớm.' })
+  @ApiProperty({ example: 'This feedback needs to be handled urgently.' })
   message?: string;
 
   @ApiProperty({ example: '2025-10-18T10:30:00.000Z' })
   createdAt: string;
+}
+export class UpdateFeedbackStatusResponseDto {
+  @ApiProperty({ example: 12, description: 'Unique ID of the feedback' })
+  feedbackId: number;
+
+  @ApiProperty({
+    enum: FeedbackStatuses,
+    example: FeedbackStatuses.RESOLVED,
+    description: 'Updated status of the feedback',
+  })
+  currentStatus: FeedbackStatuses;
+
+  @ApiProperty({
+    example: '2025-10-18T12:45:00Z',
+    description: 'Timestamp when the feedback status was updated (ISO8601)',
+  })
+  updatedAt: string;
 }

@@ -8,7 +8,7 @@ import { Prisma } from '@prisma/client';
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
-  QueryMyFeedbacksDto,
+  QueryFeedbacksDto,
   FeedbackDetail,
   FeedbackParamDto,
 } from './dto';
@@ -20,7 +20,7 @@ export class FeedbacksService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getMyFeedbacks(
-    query: QueryMyFeedbacksDto,
+    query: QueryFeedbacksDto,
     userId: number,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {

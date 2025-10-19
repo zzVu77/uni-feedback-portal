@@ -5,25 +5,22 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { Prisma } from '@prisma/client';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
   ListFeedbacksResponseDto,
-} from './dto/feedback_management_response.dto';
-import { FeedbackParamDto } from 'src/feedbacks/dto';
-import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
-} from './dto/update-feedback-status.dto';
-import { CreateForwardingDto } from './dto/create-forwarding.dto';
+  CreateForwardingDto,
+} from './dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/feedbacks/dto';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAllFeedbacks(
-    query: QueryManageFeedbacksDto,
+    query: QueryFeedbacksDto,
     actor: {
       userId: number;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';

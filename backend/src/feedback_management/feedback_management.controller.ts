@@ -8,19 +8,16 @@ import {
   Query,
 } from '@nestjs/common';
 import { FeedbackManagementService } from './feedback_management.service';
-import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
   ListFeedbacksResponseDto,
-} from './dto/feedback_management_response.dto';
-import { FeedbackParamDto } from 'src/feedbacks/dto';
-import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
-} from './dto/update-feedback-status.dto';
-import { CreateForwardingDto } from './dto/create-forwarding.dto';
+  CreateForwardingDto,
+} from './dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/feedbacks/dto';
 
 @Controller('managements/staff/feedbacks')
 export class FeedbackManagementController {
@@ -45,7 +42,7 @@ export class FeedbackManagementController {
     description: 'List of user feedbacks',
     type: ListFeedbacksResponseDto,
   })
-  getAllFeedbacks(@Query() query: QueryManageFeedbacksDto) {
+  getAllFeedbacks(@Query() query: QueryFeedbacksDto) {
     return this.feedbackManagementService.getAllFeedbacks(query, this.actor);
   }
 
