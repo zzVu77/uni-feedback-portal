@@ -6,10 +6,12 @@ on:
     branches:
       - dev
       - main
+      - frontend
   pull_request:
     branches:
       - dev
       - main
+      - frontend
 
 jobs:
   build_and_test:

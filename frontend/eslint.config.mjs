@@ -27,6 +27,12 @@ export default tseslint.config(
   {
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }], // cấm console.log
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
 );
