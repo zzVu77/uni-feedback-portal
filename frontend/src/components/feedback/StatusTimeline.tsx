@@ -64,7 +64,7 @@ const TimeLineItem = ({
 }) => {
   return (
     <li className="group mb-5 ml-6 bg-transparent">
-      <span className="ring-neutral-light-primary-200/80 absolute -left-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-100 ring-6 transition-colors duration-200 group-hover:bg-blue-400">
+      <span className="ring-neutral-light-primary-200/80 absolute -left-2 flex h-4 w-4 items-center justify-center rounded-full bg-white ring-6 transition-colors duration-200 group-hover:bg-blue-400">
         <div className="h-2 w-2 rounded-full bg-blue-400 transition-colors duration-200 group-hover:bg-white" />
       </span>
       <div className="bg-neutral-light-primary-100 flex flex-col gap-1 rounded-[8px] p-4 shadow-sm transition-shadow duration-200 hover:scale-101 hover:shadow-md">
