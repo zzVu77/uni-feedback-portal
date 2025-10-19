@@ -8,39 +8,40 @@ const StatusTimeLine = () => {
       status: "PENDING",
       date: "01.07.2021",
       title: "Góp ý đã được gửi thành công cho Thư viện.",
+      message: "",
     },
 
-    {
-      status: "IN_PROGRESS",
-      date: "13.09.2021",
-      title: "Góp ý của bạn đã được tiếp nhận và đang được xử lý bởi Thư viện",
-      message:
-        "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
-    },
-    {
-      status: "RESOLVED",
-      date: "25.11.2021",
-      title: "Góp ý của bạn đã được xử lý xong.",
-      message:
-        "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
-    },
-    {
-      status: "RESOLVED",
-      date: "25.11.2021",
-      title: "Góp ý của bạn đã được xử lý xong.",
-      message:
-        "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
-    },
-    {
-      status: "RESOLVED",
-      date: "25.11.2021",
-      title: "Góp ý của bạn đã được xử lý xong.",
-      message:
-        "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
-    },
+    // {
+    //   status: "IN_PROGRESS",
+    //   date: "13.09.2021",
+    //   title: "Góp ý của bạn đã được tiếp nhận và đang được xử lý bởi Thư viện",
+    //   message:
+    //     "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
+    // },
+    // {
+    //   status: "RESOLVED",
+    //   date: "25.11.2021",
+    //   title: "Góp ý của bạn đã được xử lý xong.",
+    //   message:
+    //     "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
+    // },
+    // {
+    //   status: "RESOLVED",
+    //   date: "25.11.2021",
+    //   title: "Góp ý của bạn đã được xử lý xong.",
+    //   message:
+    //     "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
+    // },
+    // {
+    //   status: "RESOLVED",
+    //   date: "25.11.2021",
+    //   title: "Góp ý của bạn đã được xử lý xong.",
+    //   message:
+    //     "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
+    // },
   ];
   return (
-    <div className="flex max-h-[620px] flex-col items-start justify-start gap-4 rounded-[8px] bg-white px-8 py-4 shadow-xs">
+    <div className="flex max-h-[580px] min-h-[250px] flex-col items-start justify-start gap-4 rounded-[8px] bg-white px-8 py-4 shadow-xs">
       {/* Timeline header */}
       <div className="flex flex-row items-center gap-1">
         <History className="text-neutral-dark-primary-700 h-6 w-6" />
@@ -50,7 +51,7 @@ const StatusTimeLine = () => {
       </div>
       {/* Timeline content */}
       <ScrollArea className="overflow-y-auto pr-4">
-        <div className="w-full px-6 pt-2">
+        <div className="w-full px-6 pt-4">
           <ol className="relative border-l border-blue-400">
             {timelineData.map((item, index) => (
               <TimeLineItem
