@@ -10,7 +10,11 @@ import {
   FeedbackDetailDto,
   ListFeedbacksResponseDto,
 } from './dto/feedback_management_response.dto';
-import { GetFeedbackParamDto } from 'src/feedbacks/dto';
+import { FeedbackParamDto } from 'src/feedbacks/dto';
+import {
+  UpdateFeedbackStatusDto,
+  UpdateFeedbackStatusResponseDto,
+} from './dto/update-feedback-status.dto';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
@@ -99,7 +103,7 @@ export class FeedbackManagementService {
     return { items, total };
   }
   async getFeedbackDetail(
-    params: GetFeedbackParamDto,
+    params: FeedbackParamDto,
     actor: {
       userId: number;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';
@@ -214,5 +218,55 @@ export class FeedbackManagementService {
     };
 
     return result;
+  }
+  async updateStatus(
+    params: FeedbackParamDto,
+    dto: UpdateFeedbackStatusDto,
+    actor: {
+      userId: number;
+      role: 'DEPARTMENT_STAFF' | 'ADMIN';
+      departmentId: number;
+    },
+  ): Promise<UpdateFeedbackStatusResponseDto> {
+    const { feedbackId } = params;
+
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { feedbackId: feedbackId },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    if (
+      actor.role !== 'ADMIN' &&
+      feedback.departmentId !== actor.departmentId
+    ) {
+      throw new ForbiddenException(
+        'You are not allowed to update this feedback',
+      );
+    }
+
+    const updatedFeedback = await this.prisma.feedbacks.update({
+      where: { feedbackId: feedbackId },
+      data: {
+        currentStatus: dto.status,
+      },
+    });
+
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedback.feedbackId,
+        status: dto.status,
+        message: dto.message ?? null,
+        createdAt: new Date(),
+      },
+    });
+
+    return {
+      feedbackId: updatedFeedback.feedbackId,
+      currentStatus: updatedFeedback.currentStatus,
+      updatedAt: new Date().toISOString(),
+    };
   }
 }

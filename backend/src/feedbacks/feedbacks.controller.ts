@@ -5,7 +5,7 @@ import {
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
   FeedbackDetail,
-  GetFeedbackParamDto,
+  FeedbackParamDto,
 } from './dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
@@ -73,7 +73,7 @@ export class FeedbacksController {
     description: 'Feedback not found',
   })
   async getFeedbackDetail(
-    @Param() params: GetFeedbackParamDto,
+    @Param() params: FeedbackParamDto,
   ): Promise<FeedbackDetail> {
     return this.feedbacksService.getFeedbackDetail(params, 2);
   }

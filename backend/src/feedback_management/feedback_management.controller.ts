@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import { FeedbackManagementService } from './feedback_management.service';
 import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -6,9 +6,13 @@ import {
   FeedbackDetailDto,
   ListFeedbacksResponseDto,
 } from './dto/feedback_management_response.dto';
-import { GetFeedbackParamDto } from 'src/feedbacks/dto';
+import { FeedbackParamDto } from 'src/feedbacks/dto';
+import {
+  UpdateFeedbackStatusDto,
+  UpdateFeedbackStatusResponseDto,
+} from './dto/update-feedback-status.dto';
 
-@Controller('feedback-management')
+@Controller('managements/staff/feedbacks')
 export class FeedbackManagementController {
   constructor(
     private readonly feedbackManagementService: FeedbackManagementService,
@@ -51,21 +55,24 @@ export class FeedbackManagementController {
     description: 'Feedback not found',
   })
   async getFeedbackDetail(
-    @Param() params: GetFeedbackParamDto,
+    @Param() params: FeedbackParamDto,
   ): Promise<FeedbackDetailDto> {
     return this.feedbackManagementService.getFeedbackDetail(params, this.actor);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateFeedbackManagementDto: UpdateFeedbackManagementDto,
-  // ) {
-  //   return this.feedbackManagementService.update(
-  //     +id,
-  //     updateFeedbackManagementDto,
-  //   );
-  // }
+  @Patch(':feedbackId/status')
+  @ApiOperation({ summary: 'Update the status of a feedback' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully updated feedback status',
+    type: UpdateFeedbackStatusResponseDto,
+  })
+  async updateStatus(
+    @Param() param: FeedbackParamDto,
+    @Body() dto: UpdateFeedbackStatusDto,
+  ): Promise<UpdateFeedbackStatusResponseDto> {
+    return this.feedbackManagementService.updateStatus(param, dto, this.actor);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

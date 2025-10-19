@@ -10,7 +10,7 @@ import {
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
   FeedbackDetail,
-  GetFeedbackParamDto,
+  FeedbackParamDto,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { SearchMyFeedbacksDto } from './dto/search-my-feedbacks.dto';
@@ -85,7 +85,7 @@ export class FeedbacksService {
     };
   }
   async getFeedbackDetail(
-    params: GetFeedbackParamDto,
+    params: FeedbackParamDto,
     userId: number,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;

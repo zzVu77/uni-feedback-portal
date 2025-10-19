@@ -5,6 +5,7 @@ import {
   FeedbackDetailDto,
   ListFeedbacksResponseDto,
 } from './dto/feedback_management_response.dto';
+import { FeedbackParamDto } from 'src/feedbacks/dto';
 export interface FeedbackManagementServiceContract {
   getAllFeedbacks(
     query: QueryManageFeedbacksDto,
@@ -15,7 +16,7 @@ export interface FeedbackManagementServiceContract {
     },
   ): Promise<ListFeedbacksResponseDto>;
   getFeedbackDetail(
-    GetFeedbackParamDto: { feedbackId: number },
+    params: FeedbackParamDto,
     actor: {
       userId: number;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';
@@ -23,14 +24,10 @@ export interface FeedbackManagementServiceContract {
     },
   ): Promise<FeedbackDetailDto>;
   updateStatus(
-    feedbackId: number,
+    FeedbackParamDto: { feedbackId: number },
     dto: UpdateFeedbackStatusDto,
     actor: { userId: number; role: 'DEPARTMENT_STAFF' | 'ADMIN' },
-  ): Promise<{
-    feedbackId: number;
-    currentStatus: string;
-    updatedAt: string;
-  }>;
+  ): Promise<UpdateFeedbackStatusDto>;
   createForwarding(
     feedbackId: number,
     dto: CreateForwardingDto,
