@@ -168,7 +168,7 @@ const ConversationSection = () => {
             <div className="flex flex-col items-center justify-center gap-2 py-10">
               <MessageCircleMore className="text-neutral-dark-primary-300 h-12 w-12" />
               <span className="text-neutral-dark-primary-300 text-center text-[15px] font-medium">
-                Chưa có cuộc tra đổi nào được tạo.
+                Chưa có cuộc trao đổi nào được tạo.
               </span>
             </div>
           )}

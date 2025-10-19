@@ -6,7 +6,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"; // <-- Thay đổi đường dẫn import cho phù hợp
+} from "@/components/ui/accordion";
 
 type ConversationItemProps = {
   isClosed: boolean;
