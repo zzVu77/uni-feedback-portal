@@ -2,7 +2,7 @@ import { CircleAlert, CircleCheckBig, CircleX, Clock3 } from "lucide-react";
 import { Badge } from "../ui/badge";
 
 type StatusBadgeProps = {
-  type: "PENDING" | "IN_PROGRESS" | "RESOLVED" | "REJECTED";
+  type: "PENDING" | "IN_PROGRESS" | "RESOLVED" | "REJECTED" | "CLOSED";
 };
 
 const STATUS_CONFIG = {
@@ -30,6 +30,13 @@ const STATUS_CONFIG = {
     badgeClassName: "text-red-primary-500 bg-red-primary-300 py-1",
     iconClassName: "text-red-primary-400",
   },
+  CLOSED: {
+    text: "Đã đóng",
+    icon: null,
+    badgeClassName:
+      "text-red-primary-500 bg-red-primary-300 py-1 gap-0 rounded-3xl",
+    iconClassName: "text-red-primary-400 h-5 w-5",
+  },
 };
 
 const StatusBadge = ({ type }: StatusBadgeProps) => {
@@ -37,7 +44,7 @@ const StatusBadge = ({ type }: StatusBadgeProps) => {
   const { text, icon: Icon, badgeClassName, iconClassName } = config;
   return (
     <Badge className={badgeClassName}>
-      <Icon className={`${iconClassName} font-bold`} />
+      {Icon && <Icon className={`${iconClassName} font-bold`} />}
       <span className="ml-1">{text}</span>
     </Badge>
   );

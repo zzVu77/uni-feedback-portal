@@ -1,3 +1,4 @@
+import ConversationSection from "@/components/conversation/ConversationSection";
 import MessageItem from "@/components/conversation/MessageItem";
 import FeedbackDetailHeader from "@/components/feedback/FeedbackDetailHeader";
 import StatusTimeLine from "@/components/feedback/StatusTimeline";
@@ -23,6 +24,7 @@ const page = () => {
           timestamp="10:00 19/10/2025"
         />
       </div>
+      <ConversationSection />
     </div>
   );
 };
