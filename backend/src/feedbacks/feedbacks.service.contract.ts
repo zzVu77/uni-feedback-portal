@@ -5,7 +5,7 @@ import {
   GetMyFeedbacksResponseDto,
   FeedbackSummary,
   GetFeedbackParamDto,
-  GetFeedbackDetailResponse,
+  FeedbackDetail,
 } from './dto';
 export interface FeedbacksServiceContract {
   createFeedback(
@@ -23,7 +23,7 @@ export interface FeedbacksServiceContract {
       role: 'STUDENT' | 'DEPARTMENTSTAFF' | 'ADMIN';
       departmentId?: number;
     },
-  ): Promise<GetFeedbackDetailResponse>;
+  ): Promise<FeedbackDetail>;
   searchMyFeedbacks(
     query: SearchMyFeedbacksDto,
     userId: number,

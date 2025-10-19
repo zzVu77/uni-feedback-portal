@@ -9,7 +9,7 @@ import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
-  GetFeedbackDetailResponse,
+  FeedbackDetail,
   GetFeedbackParamDto,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
@@ -87,7 +87,7 @@ export class FeedbacksService {
   async getFeedbackDetail(
     params: GetFeedbackParamDto,
     userId: number,
-  ): Promise<GetFeedbackDetailResponse> {
+  ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
@@ -137,7 +137,7 @@ export class FeedbacksService {
     }
 
     // 🏗️ Map data to FeedbackDetail DTO
-    const result: GetFeedbackDetailResponse = {
+    const result: FeedbackDetail = {
       feedbackId: feedback.feedbackId,
       subject: feedback.subject,
       description: feedback.description,

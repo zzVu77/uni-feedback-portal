@@ -4,7 +4,7 @@ import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryMyFeedbacksDto,
-  GetFeedbackDetailResponse,
+  FeedbackDetail,
   GetFeedbackParamDto,
 } from './dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -66,7 +66,7 @@ export class FeedbacksController {
   @ApiResponse({
     status: 200,
     description: 'Feedback detail retrieved successfully',
-    type: GetFeedbackDetailResponse,
+    type: FeedbackDetail,
   })
   @ApiResponse({
     status: 404,
@@ -74,7 +74,7 @@ export class FeedbacksController {
   })
   async getFeedbackDetail(
     @Param() params: GetFeedbackParamDto,
-  ): Promise<GetFeedbackDetailResponse> {
+  ): Promise<FeedbackDetail> {
     return this.feedbacksService.getFeedbackDetail(params, 2);
   }
 
