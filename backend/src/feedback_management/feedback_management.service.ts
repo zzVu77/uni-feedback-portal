@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -8,6 +9,7 @@ import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { Prisma } from '@prisma/client';
 import {
   FeedbackDetailDto,
+  ForwardingResponseDto,
   ListFeedbacksResponseDto,
 } from './dto/feedback_management_response.dto';
 import { FeedbackParamDto } from 'src/feedbacks/dto';
@@ -15,6 +17,7 @@ import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
 } from './dto/update-feedback-status.dto';
+import { CreateForwardingDto } from './dto/create-forwarding.dto';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
@@ -267,6 +270,77 @@ export class FeedbackManagementService {
       feedbackId: updatedFeedback.feedbackId,
       currentStatus: updatedFeedback.currentStatus,
       updatedAt: new Date().toISOString(),
+    };
+  }
+  async createForwarding(
+    feedbackId: number,
+    dto: CreateForwardingDto,
+    actor: {
+      userId: number;
+      departmentId: number;
+    },
+  ): Promise<ForwardingResponseDto> {
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { feedbackId },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
+    }
+    if (feedback.departmentId !== actor.departmentId) {
+      throw new ForbiddenException(
+        `You are not allowed to forward feedback #${feedbackId} belonging to another department`,
+      );
+    }
+    const toDepartment = await this.prisma.departments.findUnique({
+      where: { departmentId: dto.toDepartmentId },
+    });
+
+    if (!toDepartment) {
+      throw new NotFoundException(
+        `Department with ID ${dto.toDepartmentId} not found`,
+      );
+    }
+
+    if (dto.toDepartmentId === actor.departmentId) {
+      throw new BadRequestException('Cannot forward to the same department');
+    }
+
+    // 4️⃣ Tạo bản ghi forwarding mới
+    const forwarding = await this.prisma.forwardingLogs.create({
+      data: {
+        feedbackId,
+        fromDepartmentId: actor.departmentId,
+        toDepartmentId: dto.toDepartmentId,
+        userId: actor.userId,
+        message: dto.message,
+        createdAt: new Date(),
+      },
+      include: {
+        fromDepartment: true,
+        toDepartment: true,
+      },
+    });
+
+    await this.prisma.feedbacks.update({
+      where: { feedbackId },
+      data: {
+        departmentId: dto.toDepartmentId,
+      },
+    });
+    return {
+      forwardingLogId: forwarding.forwardingLogId,
+      feedbackId: forwarding.feedbackId,
+      fromDepartment: {
+        id: forwarding.fromDepartment.departmentId,
+        name: forwarding.fromDepartment.departmentName,
+      },
+      toDepartment: {
+        id: forwarding.toDepartment.departmentId,
+        name: forwarding.toDepartment.departmentName,
+      },
+      message: forwarding.message ?? '',
+      createdAt: forwarding.createdAt.toISOString(),
     };
   }
 }

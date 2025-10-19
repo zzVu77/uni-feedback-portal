@@ -52,3 +52,37 @@ export class FeedbackDetailDto extends FeedbackDetail {
   })
   forumPost?: ForumPost;
 }
+
+class DepartmentInfo {
+  @ApiProperty({ example: 2 })
+  id: number;
+
+  @ApiProperty({ example: 'IT Department' })
+  name: string;
+}
+
+export class ForwardingResponseDto {
+  @ApiProperty({ example: 101 })
+  forwardingLogId: number;
+
+  @ApiProperty({ example: 15 })
+  feedbackId: number;
+
+  @ApiProperty({
+    type: DepartmentInfo,
+    description: 'Thông tin phòng ban gửi',
+  })
+  fromDepartment: DepartmentInfo;
+
+  @ApiProperty({
+    type: DepartmentInfo,
+    description: 'Thông tin phòng ban nhận',
+  })
+  toDepartment: DepartmentInfo;
+
+  @ApiProperty({ example: 'Phản hồi này cần được xử lý sớm.' })
+  message?: string;
+
+  @ApiProperty({ example: '2025-10-18T10:30:00.000Z' })
+  createdAt: string;
+}

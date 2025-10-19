@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { FeedbackManagementService } from './feedback_management.service';
 import { QueryManageFeedbacksDto } from './dto/query-manage-feedbacks.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   FeedbackDetailDto,
+  ForwardingResponseDto,
   ListFeedbacksResponseDto,
 } from './dto/feedback_management_response.dto';
 import { FeedbackParamDto } from 'src/feedbacks/dto';
@@ -11,6 +20,7 @@ import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
 } from './dto/update-feedback-status.dto';
+import { CreateForwardingDto } from './dto/create-forwarding.dto';
 
 @Controller('managements/staff/feedbacks')
 export class FeedbackManagementController {
@@ -72,6 +82,27 @@ export class FeedbackManagementController {
     @Body() dto: UpdateFeedbackStatusDto,
   ): Promise<UpdateFeedbackStatusResponseDto> {
     return this.feedbackManagementService.updateStatus(param, dto, this.actor);
+  }
+
+  @Post(':feedbackId/forwardings')
+  @ApiOperation({ summary: 'Forward feedback to another department' })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully forwarded feedback to another department',
+    type: ForwardingResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Feedback or department not found' })
+  @ApiResponse({ status: 400, description: 'Invalid forwarding request' })
+  // @UseGuards(AuthGuard)
+  async createForwarding(
+    @Param() params: FeedbackParamDto,
+    @Body() dto: CreateForwardingDto,
+  ): Promise<ForwardingResponseDto> {
+    return this.feedbackManagementService.createForwarding(
+      params.feedbackId,
+      dto,
+      { userId: this.actor.userId, departmentId: this.actor.departmentId },
+    );
   }
 
   // @Delete(':id')
