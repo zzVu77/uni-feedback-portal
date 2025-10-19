@@ -1,5 +1,6 @@
 import { History, NotebookPen } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
+import { ScrollArea } from "../ui/scroll-area";
 
 const StatusTimeLine = () => {
   const timelineData = [
@@ -23,30 +24,46 @@ const StatusTimeLine = () => {
       message:
         "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
     },
+    {
+      status: "RESOLVED",
+      date: "25.11.2021",
+      title: "Góp ý của bạn đã được xử lý xong.",
+      message:
+        "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
+    },
+    {
+      status: "RESOLVED",
+      date: "25.11.2021",
+      title: "Góp ý của bạn đã được xử lý xong.",
+      message:
+        "Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam an deleniti.",
+    },
   ];
   return (
-    <div className="flex h-full flex-col items-start justify-center gap-4 rounded-[8px] bg-white px-8 py-4">
+    <div className="flex max-h-[620px] flex-col items-start justify-start gap-4 rounded-[8px] bg-white px-8 py-4 shadow-xs">
       {/* Timeline header */}
-      <div className="flex h-full flex-row items-center gap-1">
+      <div className="flex flex-row items-center gap-1">
         <History className="text-neutral-dark-primary-700 h-6 w-6" />
         <h2 className="text-neutral-dark-primary-700 text-[18px] font-medium">
           Lịch sử trạng thái
         </h2>
       </div>
       {/* Timeline content */}
-      <div className="w-full px-6">
-        <ol className="relative border-l border-blue-400">
-          {timelineData.map((item, index) => (
-            <TimeLineItem
-              key={index}
-              date={item.date}
-              title={item.title}
-              message={item.message ?? ""}
-              status={item.status as "PENDING" | "IN_PROGRESS" | "RESOLVED"}
-            />
-          ))}
-        </ol>
-      </div>
+      <ScrollArea className="overflow-y-auto pr-4">
+        <div className="w-full px-6 pt-2">
+          <ol className="relative border-l border-blue-400">
+            {timelineData.map((item, index) => (
+              <TimeLineItem
+                key={index}
+                date={item.date}
+                title={item.title}
+                message={item.message ?? ""}
+                status={item.status as "PENDING" | "IN_PROGRESS" | "RESOLVED"}
+              />
+            ))}
+          </ol>
+        </div>
+      </ScrollArea>
     </div>
   );
 };

@@ -21,16 +21,16 @@ const Wrapper: React.FC<WrapperProps> = ({
   return (
     <div
       className={cn(
-        "w-full h-full px-5 md:px-[40px] flex flex-col items-center gap-10 pb-[80px] lg:pb-[100px]",
+        "flex h-full w-full flex-col items-center gap-10 px-5 pb-[80px] md:px-[40px] lg:pb-[100px]",
         classNames?.container,
       )}
     >
       {title && (
-        <div className="max-w-[600px] flex flex-col items-center gap-2 justify-center">
+        <div className="flex max-w-[600px] flex-col items-center justify-center gap-2">
           {title && (
             <h2
               className={cn(
-                "text-white text-[33px] font-[900] text-center uppercase",
+                "text-center text-[33px] font-[900] text-white uppercase",
                 classNames?.title,
               )}
             >
@@ -40,7 +40,7 @@ const Wrapper: React.FC<WrapperProps> = ({
           {description && (
             <p
               className={cn(
-                "font-[200] text-[16px] text-center text-white",
+                "text-center text-[16px] font-[200] text-white",
                 classNames?.desc,
               )}
             >
