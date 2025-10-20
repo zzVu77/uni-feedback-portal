@@ -13,7 +13,6 @@ import {
   GetFeedbackParamDto,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { SearchMyFeedbacksDto } from './dto/search-my-feedbacks.dto';
 
 @Injectable()
 export class FeedbacksService {
@@ -240,58 +239,6 @@ export class FeedbacksService {
         categoryName: feedback.category.categoryName,
       },
       createdAt: feedback.createdAt.toISOString(),
-    };
-  }
-  async searchMyFeedbacks(
-    query: SearchMyFeedbacksDto,
-    userId: number,
-  ): Promise<GetMyFeedbacksResponseDto> {
-    const { status, categoryId, departmentId, from, to, q } = query;
-    // Implementation here
-    const whereClause: Prisma.FeedbacksWhereInput = {
-      userId,
-      ...(status && { currentStatus: status }),
-      ...(categoryId && { categoryId }),
-      ...(departmentId && { departmentId }),
-      ...(from || to
-        ? {
-            createdAt: {
-              ...(from && { gte: new Date(from) }),
-              ...(to && { lte: new Date(to) }),
-            },
-          }
-        : {}),
-      ...(q && {
-        OR: [
-          { subject: { contains: q, mode: 'insensitive' } },
-          { description: { contains: q, mode: 'insensitive' } },
-        ],
-      }),
-    };
-    const [items, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where: whereClause,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          feedbackId: true,
-          subject: true,
-          currentStatus: true,
-          isPrivate: true,
-          department: {
-            select: { departmentId: true, departmentName: true },
-          },
-          category: { select: { categoryId: true, categoryName: true } },
-          createdAt: true,
-        },
-      }),
-      this.prisma.feedbacks.count({ where: whereClause }),
-    ]);
-    return {
-      results: items.map((item) => ({
-        ...item,
-        createdAt: item.createdAt.toISOString(),
-      })),
-      total,
     };
   }
 }

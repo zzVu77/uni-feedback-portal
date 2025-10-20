@@ -1,5 +1,4 @@
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { SearchMyFeedbacksDto } from './dto/search-my-feedbacks.dto';
 import {
   QueryMyFeedbacksDto,
   GetMyFeedbacksResponseDto,
@@ -24,8 +23,4 @@ export interface FeedbacksServiceContract {
       departmentId?: number;
     },
   ): Promise<FeedbackDetail>;
-  searchMyFeedbacks(
-    query: SearchMyFeedbacksDto,
-    userId: number,
-  ): Promise<GetMyFeedbacksResponseDto>;
 }
