@@ -5,7 +5,7 @@ import StatusTimeLine from "@/components/feedback/StatusTimeline";
 
 const page = () => {
   return (
-    <div className="space-y-3 px-20 py-10">
+    <div className="space-y-3 px-5 py-10">
       <FeedbackForm />
       <FeedbackDetailHeader />
       <StatusTimeLine />
