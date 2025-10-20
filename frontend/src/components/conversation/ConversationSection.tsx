@@ -16,142 +16,142 @@ type Conversation = {
   listMessage: Message[];
 };
 const listConversation: Conversation[] = [
-  //   {
-  //     isClosed: true,
-  //     subject: "Request for additional information",
-  //     listMessage: [
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     isClosed: true,
-  //     subject: "Request for additional information",
-  //     listMessage: [
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     isClosed: true,
-  //     subject: "Request for additional information",
-  //     listMessage: [
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     isClosed: true,
-  //     subject: "Request for additional information",
-  //     listMessage: [
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STAFF",
-  //         isReceived: true,
-  //         content: "Can you provide more details?",
-  //         name: "John Doe",
-  //         timestamp: "2023-03-15T12:00:00Z",
-  //       },
-  //       {
-  //         typeOfUser: "STUDENT",
-  //         isReceived: false,
-  //         content: "Sure, I will send the details shortly.",
-  //         name: "Jane Smith",
-  //         timestamp: "2023-03-15T12:05:00Z",
-  //       },
-  //     ],
-  //   },
+  {
+    isClosed: true,
+    subject: "Request for additional information",
+    listMessage: [
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+    ],
+  },
+  {
+    isClosed: true,
+    subject: "Request for additional information",
+    listMessage: [
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+    ],
+  },
+  {
+    isClosed: true,
+    subject: "Request for additional information",
+    listMessage: [
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+    ],
+  },
+  {
+    isClosed: true,
+    subject: "Request for additional information",
+    listMessage: [
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+      {
+        typeOfUser: "STAFF",
+        isReceived: true,
+        content: "Can you provide more details?",
+        name: "John Doe",
+        timestamp: "2023-03-15T12:00:00Z",
+      },
+      {
+        typeOfUser: "STUDENT",
+        isReceived: false,
+        content: "Sure, I will send the details shortly.",
+        name: "Jane Smith",
+        timestamp: "2023-03-15T12:05:00Z",
+      },
+    ],
+  },
 ];
 const ConversationSection = () => {
   return (
