@@ -79,7 +79,7 @@ export class FeedbackManagementService {
       this.prisma.feedbacks.count({ where }),
     ]);
 
-    const items = feedbacks.map((f) => ({
+    const results = feedbacks.map((f) => ({
       feedbackId: f.feedbackId,
       subject: f.subject,
       currentStatus: f.currentStatus,
@@ -104,7 +104,7 @@ export class FeedbackManagementService {
           }),
     }));
 
-    return { items, total };
+    return { results, total };
   }
   async getFeedbackDetail(
     params: FeedbackParamDto,

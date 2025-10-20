@@ -21,7 +21,7 @@ export class ListFeedbacksResponseDto {
     type: () => [FeedbackSummary],
     description: 'List of feedbacks with optional student info',
   })
-  items: (FeedbackSummary & { student?: StudentInfo })[];
+  results: (FeedbackSummary & { student?: StudentInfo })[];
 
   @ApiProperty({ example: 42, description: 'Total number of feedbacks' })
   total: number;
