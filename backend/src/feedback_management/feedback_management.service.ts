@@ -93,11 +93,15 @@ export class FeedbackManagementService {
         categoryName: f.category.categoryName,
       },
       createdAt: f.createdAt.toISOString(),
-      student: {
-        userId: f.user.userId,
-        fullName: f.user.fullName,
-        email: f.user.email,
-      },
+      ...(f.isPrivate
+        ? {}
+        : {
+            student: {
+              userId: f.user.userId,
+              fullName: f.user.fullName,
+              email: f.user.email,
+            },
+          }),
     }));
 
     return { items, total };
@@ -176,11 +180,15 @@ export class FeedbackManagementService {
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       createdAt: feedback.createdAt.toISOString(),
-      student: {
-        userId: feedback.user.userId,
-        fullName: feedback.user.fullName,
-        email: feedback.user.email,
-      },
+      ...(feedback.isPrivate
+        ? {}
+        : {
+            student: {
+              userId: feedback.user.userId,
+              fullName: feedback.user.fullName,
+              email: feedback.user.email,
+            },
+          }),
       forumPost: feedback.forumPost
         ? { postId: feedback.forumPost.postId }
         : undefined,
