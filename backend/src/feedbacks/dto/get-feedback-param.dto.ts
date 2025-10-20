@@ -1,7 +1,7 @@
 import { IsInt, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-export class GetFeedbackParamDto {
+export class FeedbackParamDto {
   @ApiProperty({
     example: 123,
     description: 'Unique ID of the feedback to retrieve details for',

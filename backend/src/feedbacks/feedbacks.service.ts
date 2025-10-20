@@ -8,9 +8,9 @@ import { Prisma } from '@prisma/client';
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
-  QueryMyFeedbacksDto,
+  QueryFeedbacksDto,
   FeedbackDetail,
-  GetFeedbackParamDto,
+  FeedbackParamDto,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 
@@ -19,7 +19,7 @@ export class FeedbacksService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getMyFeedbacks(
-    query: QueryMyFeedbacksDto,
+    query: QueryFeedbacksDto,
     userId: number,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {
@@ -84,7 +84,7 @@ export class FeedbacksService {
     };
   }
   async getFeedbackDetail(
-    params: GetFeedbackParamDto,
+    params: FeedbackParamDto,
     userId: number,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;

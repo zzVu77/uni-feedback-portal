@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { FeedbackStatuses } from '@prisma/client';
 
-export class QueryMyFeedbacksDto {
+export class QueryFeedbacksDto {
   @ApiPropertyOptional({ example: 1, description: 'Current page number' })
   @IsOptional()
   @Type(() => Number)
