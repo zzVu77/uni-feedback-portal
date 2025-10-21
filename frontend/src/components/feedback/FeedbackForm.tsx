@@ -1,8 +1,22 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RotateCcw, Send } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import ConfirmationDialog from "../common/ConfirmationDialog";
+import { FileInput } from "../common/FileInput";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -13,6 +27,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -24,9 +39,7 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
-import { FileInput } from "../common/FileInput";
-import { RotateCcw, Send } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
+
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
@@ -80,6 +93,7 @@ const formSchema = z.object({
     ),
 });
 const FeedbackForm = () => {
+  const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -92,26 +106,35 @@ const FeedbackForm = () => {
       attachments: [],
     },
   });
+  const { isDirty } = form.formState;
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    return alert(JSON.stringify(values));
+    alert(JSON.stringify(values));
+    setIsSubmitDialogOpen(false);
+    form.reset();
   };
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
+  };
+  const handleAttemptSubmit = async () => {
+    const isFormValid = await form.trigger();
+    if (isFormValid) {
+      setIsSubmitDialogOpen(true);
+    }
   };
 
   return (
     <>
       <Form {...form}>
         <form
-          className="flex flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
-          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
+          onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <span className="text-[20px] font-semibold lg:text-[28px]">
             Gửi góp ý đến nhà trường
           </span>
           <ScrollArea className="overflow-y-auto pr-1">
-            <div className="flex h-[76vh] flex-col gap-2 px-2">
+            <div className="flex h-[76vh] flex-col gap-4 px-2">
               {/* Anonymous option */}
               <FormField
                 control={form.control}
@@ -119,23 +142,51 @@ const FeedbackForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-[8px] px-5 py-2 shadow-xs">
-                        <div>
-                          <p className="text-[14px] font-medium lg:text-[16px]">
-                            Ẩn danh
+                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-[8px] px-5 py-2 shadow-sm">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex w-full flex-row items-center justify-between gap-4 lg:justify-start">
+                            <p className="text-[15px] font-medium lg:text-[16px]">
+                              Ẩn danh
+                            </p>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              id="isPrivate"
+                              className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
+                            />
+                          </div>
+                          <p className="text-[14px]">
+                            Nếu bạn chọn gửi{" "}
+                            <span className="text-blue-primary-600 font-medium">
+                              Ẩn danh
+                            </span>
+                            , thông tin cá nhân của bạn sẽ
+                            <span className="font-medium text-green-700">
+                              {" "}
+                              không hiển thị với các phòng ban xử lý
+                            </span>
+                            .
                           </p>
-                          <p className="text-muted-foreground text-[12px] font-normal lg:text-[14px]">
-                            Thông tin của bạn sẽ không hiển thị với cán bộ kiểm
-                            duyệt (nhưng ban quản trị cấp cao vẫn có thể xem
-                            được trong những trường hợp cần thiết).
+
+                          <p className="text-[14px] text-gray-700 italic">
+                            Tuy nhiên, trong một số trường hợp đặc biệt,
+                            <span className="font-medium text-amber-500">
+                              {" "}
+                              ban quản trị cấp cao{" "}
+                            </span>
+                            vẫn có thể truy cập thông tin này để đảm bảo
+                            <span className="font-medium text-pink-500">
+                              {" "}
+                              tính minh bạch
+                            </span>{" "}
+                            và
+                            <span className="text-purple-primary-500 font-medium">
+                              {" "}
+                              an toàn
+                            </span>
+                            .
                           </p>
                         </div>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          id="isPrivate"
-                          className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
-                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -192,9 +243,6 @@ const FeedbackForm = () => {
                           </SelectContent>
                         </Select>
                       </FormControl>
-                      {/* <FormDescription>
-                          This is your public display name.
-                        </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -234,9 +282,6 @@ const FeedbackForm = () => {
                           </SelectContent>
                         </Select>
                       </FormControl>
-                      {/* <FormDescription>
-                          This is your public display name.
-                        </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -296,27 +341,106 @@ const FeedbackForm = () => {
               />
             </div>
           </ScrollArea>
-          <div className="flex flex-row items-center justify-center gap-4 lg:justify-end">
-            <Button
-              onClick={handleResetForm}
-              type="button"
-              variant={"outline"}
-              className="bg-neutral-light-primary-200/20 hover:bg-neutral-light-primary-200/50 flex max-w-lg flex-row items-center gap-2 py-5 shadow-md"
+          <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-3 lg:justify-end">
+            <ConfirmationDialog
+              title="Xác nhận làm mới biểu mẫu?"
+              description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
+              onConfirm={handleResetForm}
+              confirmText="Đồng ý"
             >
-              <RotateCcw />
-              Làm mới
-            </Button>
+              <Button
+                type="button"
+                disabled={!isDirty}
+                variant={"cancel"}
+                className="flex max-w-lg flex-row items-center gap-2 py-5"
+              >
+                <RotateCcw className="h-5 w-5" />
+                Làm mới
+              </Button>
+            </ConfirmationDialog>
+
             <Button
-              type="submit"
+              type="button"
+              disabled={!isDirty}
               variant={"primary"}
+              onClick={handleAttemptSubmit}
               className="flex max-w-lg flex-row items-center gap-2 py-5 shadow-md"
             >
-              <Send />
+              <Send className="h-5 w-5" />
               Gửi góp ý
             </Button>
           </div>
         </form>
       </Form>
+      <AlertDialog
+        open={isSubmitDialogOpen}
+        onOpenChange={setIsSubmitDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Vui lòng xác nhận trước khi gửi</AlertDialogTitle>
+
+            <AlertDialogDescription
+              asChild
+              className="space-y-2 text-sm leading-relaxed text-gray-600"
+            >
+              <div>
+                <p>
+                  Sau khi nhấn{" "}
+                  <span className="text-blue-primary-600 font-medium">
+                    “Gửi”
+                  </span>
+                  , bạn sẽ
+                  <span className="font-semibold text-red-600">
+                    {" "}
+                    không thể chỉnh sửa hoặc hủy bỏ{" "}
+                  </span>
+                  góp ý đã gửi.
+                </p>
+                <p className="text-[14px]">
+                  Nếu bạn chọn gửi{" "}
+                  <span className="text-blue-primary-600 font-medium">
+                    Ẩn danh
+                  </span>
+                  , thông tin cá nhân của bạn sẽ
+                  <span className="font-medium text-green-700">
+                    {" "}
+                    không hiển thị với các phòng ban xử lý
+                  </span>
+                  .
+                </p>
+                <p className="text-[14px] text-gray-700 italic">
+                  Tuy nhiên, trong một số trường hợp đặc biệt,
+                  <span className="font-medium text-amber-500">
+                    {" "}
+                    ban quản trị cấp cao{" "}
+                  </span>
+                  vẫn có thể truy cập thông tin này để đảm bảo
+                  <span className="font-medium text-pink-500">
+                    {" "}
+                    tính minh bạch
+                  </span>{" "}
+                  và
+                  <span className="text-purple-primary-500 font-medium">
+                    {" "}
+                    an toàn
+                  </span>
+                  .
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel variant={"cancel"}>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              variant={"primary"}
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Gửi
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

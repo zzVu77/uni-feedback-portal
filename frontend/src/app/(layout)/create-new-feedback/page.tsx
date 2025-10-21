@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="h-screen w-full px-2 py-4 md:px-12">
+    <div className="h-[100%] w-full px-2 py-4 md:px-12">
       <FeedbackForm />
     </div>
   );
