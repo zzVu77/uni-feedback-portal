@@ -104,14 +104,14 @@ const FeedbackForm = () => {
     <>
       <Form {...form}>
         <form
-          className="flex flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
+          className="flex h-full flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:h-full lg:px-8 lg:py-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <span className="text-[20px] font-semibold lg:text-[28px]">
             Gửi góp ý đến nhà trường
           </span>
           <ScrollArea className="overflow-y-auto pr-1">
-            <div className="flex h-[76vh] flex-col gap-2 px-2">
+            <div className="flex h-[76vh] flex-col gap-4 px-2">
               {/* Anonymous option */}
               <FormField
                 control={form.control}
@@ -119,23 +119,25 @@ const FeedbackForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-[8px] px-5 py-2 shadow-xs">
-                        <div>
-                          <p className="text-[14px] font-medium lg:text-[16px]">
-                            Ẩn danh
-                          </p>
+                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-[8px] px-5 py-2 shadow-sm">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex w-full flex-row items-center justify-between gap-4 lg:justify-start">
+                            <p className="text-[15px] font-medium lg:text-[16px]">
+                              Ẩn danh
+                            </p>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              id="isPrivate"
+                              className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
+                            />
+                          </div>
                           <p className="text-muted-foreground text-[12px] font-normal lg:text-[14px]">
-                            Thông tin của bạn sẽ không hiển thị với cán bộ kiểm
-                            duyệt (nhưng ban quản trị cấp cao vẫn có thể xem
+                            Thông tin của bạn sẽ không hiển thị với cán bộ xử lý
+                            và kiểm duyệt ( ban quản trị cấp cao vẫn có thể xem
                             được trong những trường hợp cần thiết).
                           </p>
                         </div>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          id="isPrivate"
-                          className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
-                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -296,12 +298,12 @@ const FeedbackForm = () => {
               />
             </div>
           </ScrollArea>
-          <div className="flex flex-row items-center justify-center gap-4 lg:justify-end">
+          <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-3 lg:justify-end">
             <Button
               onClick={handleResetForm}
               type="button"
               variant={"outline"}
-              className="bg-neutral-light-primary-200/20 hover:bg-neutral-light-primary-200/50 flex max-w-lg flex-row items-center gap-2 py-5 shadow-md"
+              className="bg-red-primary-400 hover:bg-red-primary-400/90 flex max-w-lg flex-row items-center gap-2 py-5 text-white shadow-md hover:text-white"
             >
               <RotateCcw />
               Làm mới
