@@ -110,8 +110,8 @@ const FeedbackForm = () => {
           <span className="text-[20px] font-semibold lg:text-[28px]">
             Gửi góp ý đến nhà trường
           </span>
-          <ScrollArea className="overflow-y-auto pr-4">
-            <div className="flex h-[76vh] flex-col gap-2">
+          <ScrollArea className="overflow-y-auto pr-1">
+            <div className="flex h-[76vh] flex-col gap-2 px-2">
               {/* Anonymous option */}
               <FormField
                 control={form.control}
