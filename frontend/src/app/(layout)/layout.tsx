@@ -9,7 +9,7 @@ export default function AdminLayout({
     <div className="flex h-screen">
       <MobileNavigation />
       <Sidebar />
-      <main className="h-full flex-1 overflow-y-auto bg-gray-100 px-1 pt-14 lg:pt-0">
+      <main className="h-full flex-1 overflow-y-auto bg-gray-100 px-1 pt-16 pb-4 lg:py-3">
         {children}
       </main>
     </div>

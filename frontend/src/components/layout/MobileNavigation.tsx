@@ -23,11 +23,14 @@ import Sidebar from "./Sidebar";
 const MobileNavigation = () => {
   const [open, setOpen] = React.useState(false);
   return (
-    <div className="fixed top-0 left-0 z-50 flex h-16 w-full items-center justify-between border-t border-gray-200 bg-white px-4 shadow-md lg:hidden">
+    <div className="bg-neutral-dark-primary-800 fixed top-0 left-0 z-50 flex h-16 w-full items-center justify-between px-4 shadow-md lg:hidden">
       <Drawer open={open} onOpenChange={setOpen} direction="left">
         <DrawerTrigger asChild>
-          <Button variant="outline" className="border-0 px-1 shadow-none">
-            <Menu />
+          <Button
+            variant="outline"
+            className="border-0 bg-transparent px-1 shadow-none"
+          >
+            <Menu className="text-white" />
           </Button>
         </DrawerTrigger>
         <DrawerContent className="w-3">

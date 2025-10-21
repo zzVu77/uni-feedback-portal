@@ -127,7 +127,7 @@ const FeedbackForm = () => {
     <>
       <Form {...form}>
         <form
-          className="flex h-full flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:h-full lg:px-8 lg:py-4"
+          className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <span className="text-[20px] font-semibold lg:text-[28px]">
@@ -354,7 +354,7 @@ const FeedbackForm = () => {
                 variant={"cancel"}
                 className="flex max-w-lg flex-row items-center gap-2 py-5"
               >
-                <RotateCcw />
+                <RotateCcw className="h-5 w-5" />
                 Làm mới
               </Button>
             </ConfirmationDialog>
@@ -366,7 +366,7 @@ const FeedbackForm = () => {
               onClick={handleAttemptSubmit}
               className="flex max-w-lg flex-row items-center gap-2 py-5 shadow-md"
             >
-              <Send />
+              <Send className="h-5 w-5" />
               Gửi góp ý
             </Button>
           </div>
