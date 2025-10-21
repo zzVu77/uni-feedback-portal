@@ -391,6 +391,7 @@ INSERT INTO
         "toDepartmentId",
         "userId",
         "message",
+        "note",
         "createdAt"
     )
 VALUES (
@@ -400,6 +401,7 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440000',
         '550e8400-e29b-41d4-a716-44665544000a',
         'Forwarded to IT support team for inspection.',
+        'Urgent: Projector critical for classes.',
         '2025-09-02 09:30:00'
     ),
     (
@@ -409,6 +411,7 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440002',
         '550e8400-e29b-41d4-a716-446655440008',
         'Forwarded to registrar for system check.',
+        NULL,
         '2025-09-02 10:30:00'
     ),
     (
@@ -418,6 +421,7 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440000',
         '550e8400-e29b-41d4-a716-44665544000a',
         'Forwarded to network team.',
+        'Check network logs for details.',
         '2025-09-04 14:30:00'
     ),
     (
@@ -427,6 +431,7 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440000',
         '550e8400-e29b-41d4-a716-446655440011',
         'Forwarded to library maintenance team.',
+        NULL,
         '2025-09-05 10:10:00'
     ),
     (
@@ -436,6 +441,7 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440002',
         '550e8400-e29b-41d4-a716-446655440008',
         'Forwarded to scholarship office.',
+        'High priority: Affects multiple students.',
         '2025-09-05 10:40:00'
     ),
     (
@@ -445,9 +451,9 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440000',
         '550e8400-e29b-41d4-a716-44665544000a',
         'Forwarded to computer lab admin.',
+        NULL,
         '2025-09-06 11:10:00'
     );
-
 -- Inserting forum posts
 INSERT INTO
     "ForumPosts" (

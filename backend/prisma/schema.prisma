@@ -124,7 +124,8 @@ model ForwardingLogs {
   fromDepartmentId String   @db.Uuid
   toDepartmentId   String   @db.Uuid
   userId           String   @db.Uuid
-  message          String?
+  message          String
+  note             String?
   createdAt        DateTime @default(now())
 
   feedback        Feedbacks   @relation(fields: [feedbackId], references: [id], onDelete: Cascade)

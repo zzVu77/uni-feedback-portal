@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateForwardingDto {
   @ApiProperty({
@@ -9,13 +9,12 @@ export class CreateForwardingDto {
   @IsString()
   toDepartmentId: string;
 
-  // @ApiProperty({
-  //   example:
-  //     'Forwarding this feedback to the IT department for further review.',
-  //   description: 'Optional message or reason for forwarding the feedback',
-  //   required: false,
-  // })
-  // @IsOptional()
-  // @IsString()
-  // message?: string;
+  @ApiProperty({
+    example: 'Please review this feedback for further action.',
+    description: 'Optional note accompanying the forwarding',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  note?: string;
 }

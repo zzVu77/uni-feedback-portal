@@ -329,6 +329,7 @@ export class FeedbackManagementService {
         toDepartmentId: dto.toDepartmentId,
         userId: actor.userId,
         message: generateForwardingMessage(toDepartment.name),
+        note: dto.note,
         createdAt: new Date(),
       },
       include: {
@@ -354,7 +355,8 @@ export class FeedbackManagementService {
         id: forwarding.toDepartment.id,
         name: forwarding.toDepartment.name,
       },
-      message: forwarding.message ?? '',
+      message: forwarding.message,
+      note: forwarding.note ?? null,
       createdAt: forwarding.createdAt.toISOString(),
     };
   }

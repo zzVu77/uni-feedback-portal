@@ -79,8 +79,9 @@ export class ForwardingResponseDto {
   toDepartment: DepartmentInfo;
 
   @ApiProperty({ example: 'This feedback needs to be handled urgently.' })
-  message?: string;
-
+  message: string;
+  @ApiProperty({ example: 'Please review this feedback for further action.' })
+  note?: string | null;
   @ApiProperty({ example: '2025-10-18T10:30:00.000Z' })
   createdAt: string;
 }
