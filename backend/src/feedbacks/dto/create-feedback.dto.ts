@@ -1,9 +1,7 @@
 import {
   IsBoolean,
-  IsInt,
   IsOptional,
   IsString,
-  Min,
   MinLength,
   ValidateNested,
   IsArray,
@@ -37,6 +35,14 @@ export class CreateFeedbackDto {
   @MinLength(3)
   subject: string;
 
+  @ApiPropertyOptional({
+    description: 'A specific location related to the feedback (if applicable).',
+    example: 'Main Campus Library, Building A',
+  })
+  @IsString()
+  @IsOptional()
+  location?: string;
+
   @ApiProperty({
     example:
       'After resetting my password, I can no longer log in. Please assist as soon as possible.',
@@ -49,23 +55,19 @@ export class CreateFeedbackDto {
   description: string;
 
   @ApiProperty({
-    example: 2,
+    example: '550e8400-e29b-41d4-a716-446655440006',
     description:
       'The ID of the feedback category (linked to the Categories table).',
-    minimum: 1,
   })
-  @IsInt()
-  @Min(1)
-  categoryId: number;
+  @IsString()
+  categoryId: string;
 
   @ApiProperty({
-    example: 3,
+    example: '550e8400-e29b-41d4-a716-446655440003',
     description: 'The ID of the department receiving the feedback.',
-    minimum: 1,
   })
-  @IsInt()
-  @Min(1)
-  departmentId: number;
+  @IsString()
+  departmentId: string;
 
   @ApiProperty({
     example: false,

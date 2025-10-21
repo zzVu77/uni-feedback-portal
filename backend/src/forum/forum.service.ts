@@ -8,13 +8,13 @@ export class ForumService {
 
   async getListPosts(
     query: QueryPostsDto,
-    userId: number,
+    userId: string,
   ): Promise<GetPostsResponseDto> {
     const {
       page = 1,
       pageSize = 10,
-      category_id,
-      department_id,
+      categoryId,
+      departmentId,
       sortBy,
       q,
     } = query;
@@ -25,14 +25,14 @@ export class ForumService {
     // WHERE condition
     const where: Prisma.ForumPostsWhereInput = {};
 
-    if (category_id || department_id || q) {
+    if (categoryId || departmentId || q) {
       where.feedback = {};
 
-      if (category_id) {
-        where.feedback.categoryId = category_id;
+      if (categoryId) {
+        where.feedback.categoryId = categoryId;
       }
-      if (department_id) {
-        where.feedback.departmentId = department_id; // filter by departmentId
+      if (departmentId) {
+        where.feedback.departmentId = departmentId; // filter by departmentId
       }
       if (q) {
         // search by subject
@@ -58,7 +58,7 @@ export class ForumService {
         take,
         orderBy,
         select: {
-          postId: true,
+          id: true,
           feedbackId: true,
           feedback: {
             select: {
@@ -79,7 +79,7 @@ export class ForumService {
       this.prisma.forumPosts.count({ where }),
     ]);
     const mappedItems = items.map((post) => ({
-      postId: post.postId,
+      id: post.id,
       createdAt: post.createdAt,
       votes: post._count.votes,
       subject: post.feedback.subject,
@@ -95,18 +95,18 @@ export class ForumService {
   }
 
   async getPostDetail(
-    postId: number,
-    actorId: number,
+    postId: string,
+    actorId: string,
   ): Promise<PostResponseDto> {
     // Fetch the post with relations
     const post = await this.prisma.forumPosts.findUnique({
-      where: { postId },
+      where: { id: postId },
       select: {
-        postId: true,
+        id: true,
         createdAt: true,
         feedback: {
           select: {
-            feedbackId: true,
+            id: true,
             subject: true,
             description: true,
             categoryId: true,
@@ -125,10 +125,10 @@ export class ForumService {
     }
 
     return {
-      postId: post.postId,
+      id: post.id,
       createdAt: post.createdAt.toISOString(),
       feedback: {
-        feedbackId: post.feedback.feedbackId,
+        id: post.feedback.id,
         subject: post.feedback.subject,
         description: post.feedback.description,
         categoryId: post.feedback.categoryId,

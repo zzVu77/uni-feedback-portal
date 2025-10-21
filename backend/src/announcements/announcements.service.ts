@@ -60,10 +60,10 @@ export class AnnouncementsService {
         include: {
           user: {
             select: {
-              userId: true,
+              id: true,
               fullName: true,
               department: {
-                select: { departmentId: true, departmentName: true },
+                select: { id: true, name: true },
               },
             },
           },
@@ -80,14 +80,14 @@ export class AnnouncementsService {
       createdAt: item.createdAt,
       userId: item.userId,
       userName: item.user.fullName,
-      departmentId: item.user.department.departmentId,
-      departmentName: item.user.department.departmentName,
+      departmentId: item.user.department.id,
+      departmentName: item.user.department.name,
     }));
 
     return { results: mappedItems, total };
   }
 
-  async getAnnouncementDetail(id: number): Promise<AnnouncementDetailDto> {
+  async getAnnouncementDetail(id: string): Promise<AnnouncementDetailDto> {
     const announcement = await this.prisma.announcements.findUnique({
       where: { id },
       include: {
@@ -96,8 +96,8 @@ export class AnnouncementsService {
             fullName: true,
             department: {
               select: {
-                departmentId: true,
-                departmentName: true,
+                id: true,
+                name: true,
               },
             },
           },
@@ -115,8 +115,8 @@ export class AnnouncementsService {
       content: announcement.content,
       createdAt: announcement.createdAt,
       userName: announcement.user.fullName,
-      departmentId: announcement.user.department.departmentId,
-      departmentName: announcement.user.department.departmentName,
+      departmentId: announcement.user.department.id,
+      departmentName: announcement.user.department.name,
       files: announcement.files.map((f) => ({
         id: f.id,
         fileName: f.fileName,

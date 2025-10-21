@@ -1,17 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateForwardingDto {
   @ApiProperty({
-    example: 3,
+    example: '550e8400-e29b-41d4-a716-446655440001',
     description: 'ID of the department the feedback will be forwarded to',
-    minimum: 1,
   })
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  toDepartmentId: number;
+  @IsString()
+  toDepartmentId: string;
 
   @ApiProperty({
     example:

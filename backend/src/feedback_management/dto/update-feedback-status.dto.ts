@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { FeedbackStatuses } from '@prisma/client';
+import { FeedbackStatus } from '@prisma/client';
 
 export class UpdateFeedbackStatusDto {
   @ApiProperty({
-    enum: FeedbackStatuses,
-    example: FeedbackStatuses.RESOLVED,
+    enum: FeedbackStatus,
+    example: FeedbackStatus.RESOLVED,
     description: 'New status of the feedback',
   })
-  @IsEnum(FeedbackStatuses)
-  status: FeedbackStatuses;
+  @IsEnum(FeedbackStatus)
+  status: FeedbackStatus;
 
   @ApiProperty({
     example: 'Issue resolved successfully',
@@ -19,5 +19,15 @@ export class UpdateFeedbackStatusDto {
   })
   @IsOptional()
   @IsString()
-  message?: string;
+  message: string;
+
+  @ApiProperty({
+    example: 'Additional note regarding the status update',
+    required: false,
+    description:
+      'Optional note providing extra information about the status update',
+  })
+  @IsOptional()
+  @IsString()
+  note?: string;
 }

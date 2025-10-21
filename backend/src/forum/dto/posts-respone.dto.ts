@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 export class FeedbackDto {
   @ApiProperty({
     description: 'Unique identifier of the feedback',
-    example: 555,
+    example: '555e8400-e29b-41d4-a716-446655440009',
   })
-  feedbackId: number;
+  id: string;
 
   @ApiProperty({
     description: 'Subject or title of the feedback',
@@ -20,15 +20,15 @@ export class FeedbackDto {
 
   @ApiProperty({
     description: 'Category identifier related to the feedback',
-    example: 3,
+    example: '550e8400-e29b-41d4-a716-446655440009',
   })
-  categoryId: number;
+  categoryId: string;
 
   @ApiProperty({
     description: 'Department identifier that receives the feedback',
-    example: 2,
+    example: '550e8400-e29b-41d4-a716-446655440009',
   })
-  departmentId: number;
+  departmentId: string;
 
   @ApiProperty({
     description: 'Current status of feedback',
@@ -44,9 +44,9 @@ export class FeedbackDto {
 export class PostResponseDto {
   @ApiProperty({
     description: 'Unique identifier of the post',
-    example: 123,
+    example: '550e8400-e29b-41d4-a716-446655440009',
   })
-  postId: number;
+  id: string;
 
   @ApiProperty({
     description: 'Timestamp when the post was created (ISO string)',
@@ -74,8 +74,8 @@ export class PostResponseDto {
 }
 
 export class PostItemDto {
-  @ApiProperty({ example: 1 })
-  postId: number;
+  @ApiProperty({ example: '150e8400-e29b-41d4-a716-446655440009' })
+  id: string;
 
   @ApiProperty({ example: 'How to learn AI fast?' })
   subject: string;
@@ -83,11 +83,11 @@ export class PostItemDto {
   @ApiProperty({ example: 'This is a sample description...' })
   excerpt: string;
 
-  @ApiProperty({ example: 2 })
-  categoryId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  categoryId: string;
 
-  @ApiProperty({ example: 3 })
-  departmentId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  departmentId: string;
 
   @ApiProperty({ example: 'PENDING' })
   currentStatus: string;

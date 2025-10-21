@@ -17,17 +17,21 @@ export class QueryPostsDto {
   @Min(1)
   pageSize?: number;
 
-  @ApiPropertyOptional({ example: 2, description: 'Filter by category_id' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440004',
+    description: 'Filter by categoryId',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  category_id?: number;
+  @IsString()
+  categoryId?: string;
 
-  @ApiPropertyOptional({ example: 3, description: 'Filter by department_id' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Filter by departmentId',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  department_id?: number;
+  @IsString()
+  departmentId?: string;
 
   @ApiPropertyOptional({
     example: 'top',

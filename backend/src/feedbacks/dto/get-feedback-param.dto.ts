@@ -1,14 +1,10 @@
-import { IsInt, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class FeedbackParamDto {
   @ApiProperty({
-    example: 123,
+    example: '550e8400-e29b-41d4-a716-446655440018',
     description: 'Unique ID of the feedback to retrieve details for',
-    minimum: 1,
   })
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  feedbackId: number;
+  @IsString()
+  feedbackId: string;
 }

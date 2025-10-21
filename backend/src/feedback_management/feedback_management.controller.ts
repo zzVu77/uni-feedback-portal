@@ -25,9 +25,9 @@ export class FeedbackManagementController {
     private readonly feedbackManagementService: FeedbackManagementService,
   ) {}
   actor = {
-    userId: 1,
+    userId: '550e8400-e29b-41d4-a716-44665544000a',
     role: 'DEPARTMENT_STAFF',
-    departmentId: 1,
+    departmentId: '550e8400-e29b-41d4-a716-446655440000',
   } as const;
 
   // @Post()

@@ -7,11 +7,11 @@ import { UserResponseDto } from './dto/user-response.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getById(userId: number): Promise<UserResponseDto> {
+  async getById(userId: string): Promise<UserResponseDto> {
     const user = await this.prisma.users.findUnique({
-      where: { userId: userId },
+      where: { id: userId },
       select: {
-        userId: true,
+        id: true,
         fullName: true,
         email: true,
         role: true,

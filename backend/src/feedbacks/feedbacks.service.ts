@@ -20,7 +20,7 @@ export class FeedbacksService {
 
   async getMyFeedbacks(
     query: QueryFeedbacksDto,
-    userId: number,
+    userId: string,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {
       page = 1,
@@ -53,6 +53,7 @@ export class FeedbacksService {
         ],
       }),
     };
+    // console.log('whereClause', whereClause);
 
     const [items, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
@@ -61,14 +62,15 @@ export class FeedbacksService {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
         select: {
-          feedbackId: true,
+          id: true,
           subject: true,
+          location: true,
           currentStatus: true,
           isPrivate: true,
           department: {
-            select: { departmentId: true, departmentName: true },
+            select: { id: true, name: true },
           },
-          category: { select: { categoryId: true, categoryName: true } },
+          category: { select: { id: true, name: true } },
           createdAt: true,
         },
       }),
@@ -85,37 +87,38 @@ export class FeedbacksService {
   }
   async getFeedbackDetail(
     params: FeedbackParamDto,
-    userId: number,
+    userId: string,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { feedbackId },
+      where: { id: feedbackId },
       include: {
         department: {
-          select: { departmentId: true, departmentName: true },
+          select: { id: true, name: true },
         },
         category: {
-          select: { categoryId: true, categoryName: true },
+          select: { id: true, name: true },
         },
         statusHistory: {
           select: {
             status: true,
             message: true,
+            note: true,
             createdAt: true,
           },
           orderBy: { createdAt: 'asc' },
         },
         forwardingLogs: {
           select: {
-            forwardingLogId: true,
+            id: true,
             message: true,
             createdAt: true,
             fromDepartment: {
-              select: { departmentId: true, departmentName: true },
+              select: { id: true, name: true },
             },
             toDepartment: {
-              select: { departmentId: true, departmentName: true },
+              select: { id: true, name: true },
             },
           },
           orderBy: { createdAt: 'asc' },
@@ -137,34 +140,35 @@ export class FeedbacksService {
 
     // 🏗️ Map data to FeedbackDetail DTO
     const result: FeedbackDetail = {
-      feedbackId: feedback.feedbackId,
+      id: feedback.id,
       subject: feedback.subject,
       description: feedback.description,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       createdAt: feedback.createdAt.toISOString(),
       department: {
-        departmentId: feedback.department.departmentId,
-        departmentName: feedback.department.departmentName,
+        id: feedback.department.id,
+        name: feedback.department.name,
       },
       category: {
-        categoryId: feedback.category.categoryId,
-        categoryName: feedback.category.categoryName,
+        id: feedback.category.id,
+        name: feedback.category.name,
       },
       statusHistory: feedback.statusHistory.map((h) => ({
         status: h.status,
         message: h.message,
+        note: h.note,
         createdAt: h.createdAt.toISOString(),
       })),
       forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        forwardingLogId: log.forwardingLogId,
+        id: log.id,
         fromDepartment: {
-          departmentId: log.fromDepartment.departmentId,
-          departmentName: log.fromDepartment.departmentName,
+          id: log.fromDepartment.id,
+          name: log.fromDepartment.name,
         },
         toDepartment: {
-          departmentId: log.toDepartment.departmentId,
-          departmentName: log.toDepartment.departmentName,
+          id: log.toDepartment.id,
+          name: log.toDepartment.name,
         },
         message: log.message,
         createdAt: log.createdAt.toISOString(),
@@ -180,15 +184,15 @@ export class FeedbacksService {
   }
   async createFeedback(
     dto: CreateFeedbackDto,
-    userId: number,
+    userId: string,
   ): Promise<FeedbackSummary> {
     // Check if department and category exist
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
-        where: { departmentId: dto.departmentId },
+        where: { id: dto.departmentId },
       }),
       this.prisma.categories.findUnique({
-        where: { categoryId: dto.categoryId },
+        where: { id: dto.categoryId },
       }),
     ]);
 
@@ -202,15 +206,13 @@ export class FeedbacksService {
     // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
-        // feedbackId: 11, // Auto-increment
         subject: dto.subject,
         description: dto.description,
+        location: dto.location ?? null,
         departmentId: dto.departmentId,
         categoryId: dto.categoryId,
         isPrivate: dto.isPrivate,
         userId: userId,
-        currentStatus: 'PENDING',
-        createdAt: new Date(), //Fix later
         fileAttachments: {
           create: dto.fileAttachments?.map((f) => ({
             fileName: f.fileName,
@@ -226,17 +228,17 @@ export class FeedbacksService {
 
     // Return summary
     return {
-      feedbackId: feedback.feedbackId,
+      id: feedback.id,
       subject: feedback.subject,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       department: {
-        departmentId: feedback.department.departmentId,
-        departmentName: feedback.department.departmentName,
+        id: feedback.department.id,
+        name: feedback.department.name,
       },
       category: {
-        categoryId: feedback.category.categoryId,
-        categoryName: feedback.category.categoryName,
+        id: feedback.category.id,
+        name: feedback.category.name,
       },
       createdAt: feedback.createdAt.toISOString(),
     };

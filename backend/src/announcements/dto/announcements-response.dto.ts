@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AnnouncementItemDto {
-  @ApiProperty({ example: 1 })
-  id: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  id: string;
 
   @ApiProperty({ example: 'Important Update' })
   title: string;
@@ -13,14 +13,14 @@ export class AnnouncementItemDto {
   @ApiProperty({ example: '2025-09-29T15:00:00.000Z' })
   createdAt: Date;
 
-  @ApiProperty({ example: 10 })
-  userId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  userId: string;
 
   @ApiProperty({ example: 'Nguyen Van A' })
   userName: string;
 
-  @ApiProperty({ example: 2 })
-  departmentId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  departmentId: string;
 
   @ApiProperty({ example: 'Phòng Nhân sự' })
   departmentName: string;

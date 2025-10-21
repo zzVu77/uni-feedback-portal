@@ -1,11 +1,11 @@
-import { IsInt, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetPostParamDto {
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  @ApiProperty({ example: 1, description: 'Post ID' })
-  id: number;
+  @IsString()
+  @ApiProperty({
+    example: '550e8400-e29b-41d4-a716-44665544002e',
+    description: 'Post ID',
+  })
+  id: string;
 }

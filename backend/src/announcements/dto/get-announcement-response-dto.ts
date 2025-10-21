@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AnnouncementFileDto } from './announcement-file.dto';
 
 export class AnnouncementDetailDto {
-  @ApiProperty({ example: 1 })
-  id: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  id: string;
 
   @ApiProperty({ example: 'Important Update' })
   title: string;
@@ -17,8 +17,8 @@ export class AnnouncementDetailDto {
   @ApiProperty({ example: 'Nguyen Van A' })
   userName: string;
 
-  @ApiProperty({ example: 2 })
-  departmentId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
+  departmentId: string;
 
   @ApiProperty({ example: 'Phòng Nhân sự' })
   departmentName: string;

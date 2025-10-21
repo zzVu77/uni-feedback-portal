@@ -11,6 +11,7 @@ import {
 @Controller('forum/posts')
 export class ForumController {
   constructor(private readonly forumService: ForumService) {}
+  userId = '550e8400-e29b-41d4-a716-446655440009'; // dummy userId
   // Get all posts
   @Get()
   @ApiOkResponse({
@@ -21,7 +22,7 @@ export class ForumController {
   async getListPosts(
     @Query() query: QueryPostsDto,
   ): Promise<GetPostsResponseDto> {
-    return await this.forumService.getListPosts(query, 2);
+    return await this.forumService.getListPosts(query, this.userId);
   }
   // Get post detail
   @Get(':id')
@@ -32,6 +33,6 @@ export class ForumController {
   async getPostDetail(
     @Param() param: GetPostParamDto,
   ): Promise<PostResponseDto> {
-    return this.forumService.getPostDetail(param.id, 1);
+    return this.forumService.getPostDetail(param.id, this.userId);
   }
 }

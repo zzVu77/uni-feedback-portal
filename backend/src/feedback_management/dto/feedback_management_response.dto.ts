@@ -3,11 +3,11 @@ import {
   FeedbackSummary,
   FeedbackDetail,
 } from '../../feedbacks/dto/feedback-response.dto';
-import { FeedbackStatuses } from '@prisma/client';
+import { FeedbackStatus } from '@prisma/client';
 
 class StudentInfo {
-  @ApiProperty({ example: 12 })
-  userId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
+  id: string;
 
   @ApiProperty({ example: 'Nguyen Van A', nullable: true })
   fullName: string | null;
@@ -28,8 +28,8 @@ export class ListFeedbacksResponseDto {
 }
 
 class ForumPost {
-  @ApiProperty({ example: 101 })
-  postId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
+  id: string;
 }
 
 export class FeedbackDetailDto extends FeedbackDetail {
@@ -51,19 +51,19 @@ export class FeedbackDetailDto extends FeedbackDetail {
 }
 
 class DepartmentInfo {
-  @ApiProperty({ example: 2 })
-  id: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
+  id: string;
 
   @ApiProperty({ example: 'IT Department' })
   name: string;
 }
 
 export class ForwardingResponseDto {
-  @ApiProperty({ example: 101 })
-  forwardingLogId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
+  forwardingLogId: string;
 
-  @ApiProperty({ example: 15 })
-  feedbackId: number;
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
+  feedbackId: string;
 
   @ApiProperty({
     type: DepartmentInfo,
@@ -85,15 +85,18 @@ export class ForwardingResponseDto {
   createdAt: string;
 }
 export class UpdateFeedbackStatusResponseDto {
-  @ApiProperty({ example: 12, description: 'Unique ID of the feedback' })
-  feedbackId: number;
+  @ApiProperty({
+    example: '550e8400-e29b-41d4-a716-44665544001c',
+    description: 'Unique ID of the feedback',
+  })
+  feedbackId: string;
 
   @ApiProperty({
-    enum: FeedbackStatuses,
-    example: FeedbackStatuses.RESOLVED,
+    enum: FeedbackStatus,
+    example: FeedbackStatus.RESOLVED,
     description: 'Updated status of the feedback',
   })
-  currentStatus: FeedbackStatuses;
+  currentStatus: FeedbackStatus;
 
   @ApiProperty({
     example: '2025-10-18T12:45:00Z',

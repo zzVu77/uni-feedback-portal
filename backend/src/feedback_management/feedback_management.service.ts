@@ -22,9 +22,9 @@ export class FeedbackManagementService {
   async getAllFeedbacks(
     query: QueryFeedbacksDto,
     actor: {
-      userId: number;
+      userId: string;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';
-      departmentId: number;
+      departmentId: string;
     },
   ): Promise<ListFeedbacksResponseDto> {
     const {
@@ -71,33 +71,34 @@ export class FeedbackManagementService {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
         include: {
-          department: { select: { departmentId: true, departmentName: true } },
-          category: { select: { categoryId: true, categoryName: true } },
-          user: { select: { userId: true, fullName: true, email: true } },
+          department: { select: { id: true, name: true } },
+          category: { select: { id: true, name: true } },
+          user: { select: { id: true, fullName: true, email: true } },
         },
       }),
       this.prisma.feedbacks.count({ where }),
     ]);
 
     const results = feedbacks.map((f) => ({
-      feedbackId: f.feedbackId,
+      id: f.id,
       subject: f.subject,
+      location: f.location ? f.location : null,
       currentStatus: f.currentStatus,
       isPrivate: f.isPrivate,
       department: {
-        departmentId: f.department.departmentId,
-        departmentName: f.department.departmentName,
+        id: f.department.id,
+        name: f.department.name,
       },
       category: {
-        categoryId: f.category.categoryId,
-        categoryName: f.category.categoryName,
+        id: f.category.id,
+        name: f.category.name,
       },
       createdAt: f.createdAt.toISOString(),
       ...(f.isPrivate
         ? {}
         : {
             student: {
-              userId: f.user.userId,
+              id: f.user.id,
               fullName: f.user.fullName,
               email: f.user.email,
             },
@@ -109,45 +110,46 @@ export class FeedbackManagementService {
   async getFeedbackDetail(
     params: FeedbackParamDto,
     actor: {
-      userId: number;
+      userId: string;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';
-      departmentId: number;
+      departmentId: string;
     },
   ): Promise<FeedbackDetailDto> {
     const { feedbackId } = params;
 
     // --- 1️⃣ Lấy feedback theo ID ---
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { feedbackId },
+      where: { id: feedbackId },
       include: {
         user: true, // lấy student info
         forumPost: {
-          select: { postId: true },
+          select: { id: true },
         },
         department: {
-          select: { departmentId: true, departmentName: true },
+          select: { id: true, name: true },
         },
         category: {
-          select: { categoryId: true, categoryName: true },
+          select: { id: true, name: true },
         },
         statusHistory: {
           select: {
             status: true,
             message: true,
+            note: true,
             createdAt: true,
           },
           orderBy: { createdAt: 'asc' },
         },
         forwardingLogs: {
           select: {
-            forwardingLogId: true,
+            id: true,
             message: true,
             createdAt: true,
             fromDepartment: {
-              select: { departmentId: true, departmentName: true },
+              select: { id: true, name: true },
             },
             toDepartment: {
-              select: { departmentId: true, departmentName: true },
+              select: { id: true, name: true },
             },
           },
           orderBy: { createdAt: 'asc' },
@@ -174,7 +176,7 @@ export class FeedbackManagementService {
 
     // --- 4️⃣ Map dữ liệu ra DTO ---
     const result: FeedbackDetailDto = {
-      feedbackId: feedback.feedbackId,
+      id: feedback.id,
       subject: feedback.subject,
       description: feedback.description,
       currentStatus: feedback.currentStatus,
@@ -184,36 +186,35 @@ export class FeedbackManagementService {
         ? {}
         : {
             student: {
-              userId: feedback.user.userId,
+              id: feedback.user.id,
               fullName: feedback.user.fullName,
               email: feedback.user.email,
             },
           }),
-      forumPost: feedback.forumPost
-        ? { postId: feedback.forumPost.postId }
-        : undefined,
+      forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: {
-        departmentId: feedback.department.departmentId,
-        departmentName: feedback.department.departmentName,
+        id: feedback.department.id,
+        name: feedback.department.name,
       },
       category: {
-        categoryId: feedback.category.categoryId,
-        categoryName: feedback.category.categoryName,
+        id: feedback.category.id,
+        name: feedback.category.name,
       },
       statusHistory: feedback.statusHistory.map((h) => ({
         status: h.status,
         message: h.message,
+        note: h.note ?? null,
         createdAt: h.createdAt.toISOString(),
       })),
       forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        forwardingLogId: log.forwardingLogId,
+        id: log.id,
         fromDepartment: {
-          departmentId: log.fromDepartment.departmentId,
-          departmentName: log.fromDepartment.departmentName,
+          id: log.fromDepartment.id,
+          name: log.fromDepartment.name,
         },
         toDepartment: {
-          departmentId: log.toDepartment.departmentId,
-          departmentName: log.toDepartment.departmentName,
+          id: log.toDepartment.id,
+          name: log.toDepartment.name,
         },
         message: log.message,
         createdAt: log.createdAt.toISOString(),
@@ -231,15 +232,15 @@ export class FeedbackManagementService {
     params: FeedbackParamDto,
     dto: UpdateFeedbackStatusDto,
     actor: {
-      userId: number;
+      userId: string;
       role: 'DEPARTMENT_STAFF' | 'ADMIN';
-      departmentId: number;
+      departmentId: string;
     },
   ): Promise<UpdateFeedbackStatusResponseDto> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { feedbackId: feedbackId },
+      where: { id: feedbackId },
     });
 
     if (!feedback) {
@@ -256,7 +257,7 @@ export class FeedbackManagementService {
     }
 
     const updatedFeedback = await this.prisma.feedbacks.update({
-      where: { feedbackId: feedbackId },
+      where: { id: feedbackId },
       data: {
         currentStatus: dto.status,
       },
@@ -264,29 +265,30 @@ export class FeedbackManagementService {
 
     await this.prisma.feedbackStatusHistory.create({
       data: {
-        feedbackId: feedback.feedbackId,
+        feedbackId: feedback.id,
         status: dto.status,
         message: dto.message ?? null,
+        note: dto.note ?? null,
         createdAt: new Date(),
       },
     });
 
     return {
-      feedbackId: updatedFeedback.feedbackId,
+      feedbackId: updatedFeedback.id,
       currentStatus: updatedFeedback.currentStatus,
       updatedAt: new Date().toISOString(),
     };
   }
   async createForwarding(
-    feedbackId: number,
+    feedbackId: string,
     dto: CreateForwardingDto,
     actor: {
-      userId: number;
-      departmentId: number;
+      userId: string;
+      departmentId: string;
     },
   ): Promise<ForwardingResponseDto> {
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { feedbackId },
+      where: { id: feedbackId },
     });
 
     if (!feedback) {
@@ -298,7 +300,7 @@ export class FeedbackManagementService {
       );
     }
     const toDepartment = await this.prisma.departments.findUnique({
-      where: { departmentId: dto.toDepartmentId },
+      where: { id: dto.toDepartmentId },
     });
 
     if (!toDepartment) {
@@ -328,21 +330,21 @@ export class FeedbackManagementService {
     });
 
     await this.prisma.feedbacks.update({
-      where: { feedbackId },
+      where: { id: feedbackId },
       data: {
         departmentId: dto.toDepartmentId,
       },
     });
     return {
-      forwardingLogId: forwarding.forwardingLogId,
+      forwardingLogId: forwarding.id,
       feedbackId: forwarding.feedbackId,
       fromDepartment: {
-        id: forwarding.fromDepartment.departmentId,
-        name: forwarding.fromDepartment.departmentName,
+        id: forwarding.fromDepartment.id,
+        name: forwarding.fromDepartment.name,
       },
       toDepartment: {
-        id: forwarding.toDepartment.departmentId,
-        name: forwarding.toDepartment.departmentName,
+        id: forwarding.toDepartment.id,
+        name: forwarding.toDepartment.name,
       },
       message: forwarding.message ?? '',
       createdAt: forwarding.createdAt.toISOString(),

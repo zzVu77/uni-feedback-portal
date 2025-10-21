@@ -1,153 +1,29 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { FeedbackStatuses } from '@prisma/client';
-
-// // Summary of a single feedback for listing purposes
-// export class FeedbackSummary {
-//   @ApiProperty({ example: 101, description: 'Unique ID of the feedback' })
-//   feedbackId: number;
-
-//   @ApiProperty({
-//     example: 'Cannot log in to the system',
-//     description: 'Feedback subject or title',
-//   })
-//   subject: string;
-
-//   @ApiProperty({
-//     example: 'IN_PROGRESS',
-//     enum: FeedbackStatuses,
-//     description: 'Current status of the feedback',
-//   })
-//   currentStatus: FeedbackStatuses;
-
-//   @ApiProperty({
-//     example: false,
-//     description: 'Indicates if feedback is private',
-//   })
-//   isPrivate: boolean;
-
-//   @ApiProperty({
-//     example: {
-//       departmentId: 3,
-//       departmentName: 'Information Technology Department',
-//     },
-//     description: 'Department responsible for handling the feedback',
-//   })
-//   department: {
-//     departmentId: number;
-//     departmentName: string;
-//   };
-
-//   @ApiProperty({
-//     example: {
-//       categoryId: 2,
-//       categoryName: 'System Login Issues',
-//     },
-//     description: 'Category of the feedback',
-//   })
-//   category: {
-//     categoryId: number;
-//     categoryName: string;
-//   };
-
-//   @ApiProperty({
-//     example: '2025-10-15T10:00:00Z',
-//     description: 'Date and time when the feedback was created (ISO8601)',
-//   })
-//   createdAt: string;
-// }
-
-// // Detailed response for a specific feedback, extending the summary
-// export class GetFeedbackDetailResponse extends FeedbackSummary {
-//   @ApiProperty({
-//     example:
-//       'I cannot access my account after password reset. Please check my issue.',
-//     description: 'Detailed description of the feedback',
-//   })
-//   description: string;
-
-//   @ApiProperty({
-//     description: 'List of status changes for this feedback over time',
-//     example: [
-//       {
-//         status: 'PENDING',
-//         message: null,
-//         createdAt: '2025-10-15T10:00:00Z',
-//       },
-//       {
-//         status: 'IN_PROGRESS',
-//         message: 'Assigned to technical support',
-//         createdAt: '2025-10-16T09:30:00Z',
-//       },
-//     ],
-//   })
-//   statusHistory: Array<{
-//     status: string;
-//     message: string | null;
-//     createdAt: string;
-//   }>;
-
-//   @ApiProperty({
-//     description:
-//       'Records of how the feedback was forwarded between departments, including department names',
-//     example: [
-//       {
-//         forwardingLogId: 10,
-//         fromDepartment: {
-//           departmentId: 2,
-//           departmentName: 'Support',
-//         },
-//         toDepartment: {
-//           departmentId: 5,
-//           departmentName: 'Technical',
-//         },
-//         message: 'Forwarded to technical department for investigation',
-//         createdAt: '2025-10-15T14:00:00Z',
-//       },
-//     ],
-//   })
-//   forwardingLogs: Array<{
-//     forwardingLogId: number;
-//     fromDepartment: {
-//       departmentId: number;
-//       departmentName: string;
-//     };
-//     toDepartment: {
-//       departmentId: number;
-//       departmentName: string;
-//     };
-//     message: string | null;
-//     createdAt: string;
-//   }>;
-
-//   @ApiProperty({
-//     description: 'List of attached files related to the feedback',
-//     example: [
-//       {
-//         id: 1,
-//         fileName: 'screenshot.png',
-//         fileUrl: 'https://example.com/files/screenshot.png',
-//       },
-//     ],
-//   })
-//   fileAttachments: Array<{ id: number; fileName: string; fileUrl: string }>;
-// }
+import { FeedbackStatus } from '@prisma/client';
 
 export class FeedbackDetail {
-  @ApiProperty({ example: 101, description: 'Unique ID of the feedback' })
-  feedbackId: number;
+  @ApiProperty({
+    example: '550e8400-e29b-41d4-a716-44665544001c',
+    description: 'Unique ID of the feedback',
+  })
+  id: string;
 
   @ApiProperty({
     example: 'Cannot log in to the system',
     description: 'Feedback subject or title',
   })
   subject: string;
-
+  @ApiProperty({
+    example: 'Room 101, Main Building',
+    description: 'Location where the feedback was observed',
+  })
+  location?: string | null;
   @ApiProperty({
     example: 'IN_PROGRESS',
-    enum: FeedbackStatuses,
+    enum: FeedbackStatus,
     description: 'Current status of the feedback',
   })
-  currentStatus: FeedbackStatuses;
+  currentStatus: FeedbackStatus;
 
   @ApiProperty({
     example: false,
@@ -157,26 +33,26 @@ export class FeedbackDetail {
 
   @ApiProperty({
     example: {
-      departmentId: 3,
-      departmentName: 'Information Technology Department',
+      id: '550e8400-e29b-41d4-a716-44665544001c',
+      name: 'Information Technology Department',
     },
     description: 'Department responsible for handling the feedback',
   })
   department: {
-    departmentId: number;
-    departmentName: string;
+    id: string;
+    name: string;
   };
 
   @ApiProperty({
     example: {
-      categoryId: 2,
-      categoryName: 'System Login Issues',
+      id: '550e8400-e29b-41d4-a716-44665544001c',
+      name: 'System Login Issues',
     },
     description: 'Category of the feedback',
   })
   category: {
-    categoryId: number;
-    categoryName: string;
+    id: string;
+    name: string;
   };
 
   @ApiProperty({
@@ -197,19 +73,22 @@ export class FeedbackDetail {
     example: [
       {
         status: 'PENDING',
-        message: null,
+        message: 'Feedback has been successfully submitted to the department',
+        note: 'Lighting issue reported',
         createdAt: '2025-10-15T10:00:00Z',
       },
       {
         status: 'IN_PROGRESS',
-        message: 'Assigned to technical support',
+        message: 'Feedback is being processed by the department',
+        note: 'Lighting issue reported',
         createdAt: '2025-10-16T09:30:00Z',
       },
     ],
   })
   statusHistory: Array<{
     status: string;
-    message: string | null;
+    message: string;
+    note: string | null;
     createdAt: string;
   }>;
 
@@ -218,14 +97,14 @@ export class FeedbackDetail {
       'Records of how the feedback was forwarded between departments, including department names',
     example: [
       {
-        forwardingLogId: 10,
+        id: '550e8400-e29b-41d4-a716-44665544001c',
         fromDepartment: {
-          departmentId: 2,
-          departmentName: 'Support',
+          id: 2,
+          name: 'Support',
         },
         toDepartment: {
-          departmentId: 5,
-          departmentName: 'Technical',
+          id: '550e8400-e29b-41d4-a716-44665544002c',
+          name: 'Technical',
         },
         message: 'Forwarded to technical department for investigation',
         createdAt: '2025-10-15T14:00:00Z',
@@ -233,9 +112,9 @@ export class FeedbackDetail {
     ],
   })
   forwardingLogs: Array<{
-    forwardingLogId: number;
-    fromDepartment: { departmentId: number; departmentName: string };
-    toDepartment: { departmentId: number; departmentName: string };
+    id: string;
+    fromDepartment: { id: string; name: string };
+    toDepartment: { id: string; name: string };
     message: string | null;
     createdAt: string;
   }>;
@@ -244,13 +123,13 @@ export class FeedbackDetail {
     description: 'List of attached files related to the feedback',
     example: [
       {
-        id: 1,
+        id: '550e8400-e29b-41d4-a716-44665544001c',
         fileName: 'screenshot.png',
         fileUrl: 'https://example.com/files/screenshot.png',
       },
     ],
   })
-  fileAttachments: Array<{ id: number; fileName: string; fileUrl: string }>;
+  fileAttachments: Array<{ id: string; fileName: string; fileUrl: string }>;
 }
 
 export class FeedbackSummary extends OmitType(FeedbackDetail, [

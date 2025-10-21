@@ -1,9 +1,9 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { ReportStatuses } from '@prisma/client';
+import { ReportStatus } from '@prisma/client';
 
 export class UpdateCommentReportDto {
-  @IsEnum(ReportStatuses)
-  status: ReportStatuses;
+  @IsEnum(ReportStatus)
+  status: ReportStatus;
 
   @IsOptional()
   @IsString()

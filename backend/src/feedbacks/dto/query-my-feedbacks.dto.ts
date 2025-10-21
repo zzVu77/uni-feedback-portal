@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { FeedbackStatuses } from '@prisma/client';
+import { FeedbackStatus } from '@prisma/client';
 
 export class QueryFeedbacksDto {
   @ApiPropertyOptional({ example: 1, description: 'Current page number' })
@@ -29,27 +29,29 @@ export class QueryFeedbacksDto {
   pageSize?: number;
 
   @ApiPropertyOptional({
-    enum: FeedbackStatuses,
+    enum: FeedbackStatus,
     example: 'PENDING',
     description: 'Filter by feedback status',
   })
   @IsOptional()
-  @IsEnum(FeedbackStatuses)
-  status?: FeedbackStatuses;
+  @IsEnum(FeedbackStatus)
+  status?: FeedbackStatus;
 
-  @ApiPropertyOptional({ example: 2, description: 'Filter by category ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440006',
+    description: 'Filter by category ID',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  categoryId?: number;
+  @IsString()
+  categoryId?: string;
 
-  @ApiPropertyOptional({ example: 1, description: 'Filter by department ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440003',
+    description: 'Filter by department ID',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  departmentId?: number;
+  @IsString()
+  departmentId?: string;
 
   @ApiPropertyOptional({
     example: '2024-01-01',

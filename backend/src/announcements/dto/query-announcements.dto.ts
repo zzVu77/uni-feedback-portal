@@ -17,19 +17,21 @@ export class QueryAnnouncementsDto {
   @Min(1)
   pageSize?: number;
 
-  @ApiPropertyOptional({ description: 'Filter by department ID', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Filter by department ID',
+    example: '550e8400-e29b-41d4-a716-446655440001',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  departmentId?: number;
+  @IsString()
+  departmentId?: string;
 
-  @ApiPropertyOptional({ description: 'Filter by user ID', example: 2 })
+  @ApiPropertyOptional({
+    description: 'Filter by user ID',
+    example: '550e8400-e29b-41d4-a716-44665544000c',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  userId?: number;
+  @IsString()
+  userId?: string;
 
   @ApiPropertyOptional({ description: 'Search query', example: 'maintenance' })
   @IsOptional()

@@ -13,7 +13,7 @@ import { CreateFeedbackDto } from './dto/create-feedback.dto';
 @Controller('feedbacks')
 export class FeedbacksController {
   constructor(private readonly feedbacksService: FeedbacksService) {}
-
+  userId = '550e8400-e29b-41d4-a716-446655440009'; // dummy userId
   @Post()
   @ApiOperation({
     summary: 'Create a new feedback',
@@ -31,7 +31,7 @@ export class FeedbacksController {
     description: 'Invalid data or missing required fields',
   })
   createFeedback(@Body() createFeedbackDto: CreateFeedbackDto) {
-    return this.feedbacksService.createFeedback(createFeedbackDto, 1);
+    return this.feedbacksService.createFeedback(createFeedbackDto, this.userId);
   }
 
   @Get()
@@ -42,7 +42,7 @@ export class FeedbacksController {
     type: GetMyFeedbacksResponseDto,
   })
   getMyFeedbacks(@Query() query: QueryFeedbacksDto) {
-    return this.feedbacksService.getMyFeedbacks(query, 2);
+    return this.feedbacksService.getMyFeedbacks(query, this.userId);
   }
 
   @Get('/me/:feedbackId')
@@ -63,7 +63,7 @@ export class FeedbacksController {
   async getFeedbackDetail(
     @Param() params: FeedbackParamDto,
   ): Promise<FeedbackDetail> {
-    return this.feedbacksService.getFeedbackDetail(params, 2);
+    return this.feedbacksService.getFeedbackDetail(params, this.userId);
   }
 
   // @Patch(':id')

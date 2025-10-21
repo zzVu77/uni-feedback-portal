@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserResponseDto {
-  @ApiProperty({ example: 1, description: 'Unique user identifier' })
-  userId: number;
+  @ApiProperty({ example: '1', description: 'Unique user identifier' })
+  id: string;
 
   @ApiProperty({
     example: 'Nguyen Van A',
@@ -25,10 +25,10 @@ export class UserResponseDto {
   role: 'STUDENT' | 'DEPARTMENT_STAFF' | 'ADMIN';
 
   @ApiProperty({
-    example: 2,
+    example: '2',
     description: 'Department ID where the user belongs',
   })
-  departmentId: number;
+  departmentId: string;
 
   @ApiProperty({
     example: '2025-09-22T12:34:56.000Z',
