@@ -109,6 +109,8 @@ const FeedbackForm = () => {
   const { isDirty } = form.formState;
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     alert(JSON.stringify(values));
+    setIsSubmitDialogOpen(false);
+    form.reset();
   };
   const handleResetForm = () => {
     form.reset();
@@ -378,49 +380,54 @@ const FeedbackForm = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Vui lòng xác nhận trước khi gửi</AlertDialogTitle>
 
-            <AlertDialogDescription className="space-y-2 text-sm leading-relaxed text-gray-600">
-              <p>
-                Sau khi nhấn{" "}
-                <span className="text-blue-primary-600 font-medium">“Gửi”</span>
-                , bạn sẽ
-                <span className="font-semibold text-red-600">
-                  {" "}
-                  không thể chỉnh sửa hoặc hủy bỏ{" "}
-                </span>
-                góp ý đã gửi.
-              </p>
-
-              <p className="text-[14px]">
-                Nếu bạn chọn gửi{" "}
-                <span className="text-blue-primary-600 font-medium">
-                  Ẩn danh
-                </span>
-                , thông tin cá nhân của bạn sẽ
-                <span className="font-medium text-green-700">
-                  {" "}
-                  không hiển thị với các phòng ban xử lý
-                </span>
-                .
-              </p>
-
-              <p className="text-[14px] text-gray-700 italic">
-                Tuy nhiên, trong một số trường hợp đặc biệt,
-                <span className="font-medium text-amber-500">
-                  {" "}
-                  ban quản trị cấp cao{" "}
-                </span>
-                vẫn có thể truy cập thông tin này để đảm bảo
-                <span className="font-medium text-pink-500">
-                  {" "}
-                  tính minh bạch
-                </span>{" "}
-                và
-                <span className="text-purple-primary-500 font-medium">
-                  {" "}
-                  an toàn
-                </span>
-                .
-              </p>
+            <AlertDialogDescription
+              asChild
+              className="space-y-2 text-sm leading-relaxed text-gray-600"
+            >
+              <div>
+                <p>
+                  Sau khi nhấn{" "}
+                  <span className="text-blue-primary-600 font-medium">
+                    “Gửi”
+                  </span>
+                  , bạn sẽ
+                  <span className="font-semibold text-red-600">
+                    {" "}
+                    không thể chỉnh sửa hoặc hủy bỏ{" "}
+                  </span>
+                  góp ý đã gửi.
+                </p>
+                <p className="text-[14px]">
+                  Nếu bạn chọn gửi{" "}
+                  <span className="text-blue-primary-600 font-medium">
+                    Ẩn danh
+                  </span>
+                  , thông tin cá nhân của bạn sẽ
+                  <span className="font-medium text-green-700">
+                    {" "}
+                    không hiển thị với các phòng ban xử lý
+                  </span>
+                  .
+                </p>
+                <p className="text-[14px] text-gray-700 italic">
+                  Tuy nhiên, trong một số trường hợp đặc biệt,
+                  <span className="font-medium text-amber-500">
+                    {" "}
+                    ban quản trị cấp cao{" "}
+                  </span>
+                  vẫn có thể truy cập thông tin này để đảm bảo
+                  <span className="font-medium text-pink-500">
+                    {" "}
+                    tính minh bạch
+                  </span>{" "}
+                  và
+                  <span className="text-purple-primary-500 font-medium">
+                    {" "}
+                    an toàn
+                  </span>
+                  .
+                </p>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
