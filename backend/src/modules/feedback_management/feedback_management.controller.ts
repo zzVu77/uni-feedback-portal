@@ -17,7 +17,7 @@ import {
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
 } from './dto';
-import { FeedbackParamDto, QueryFeedbacksDto } from 'src/feedbacks/dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
 
 @Controller('managements/staff/feedbacks')
 export class FeedbackManagementController {

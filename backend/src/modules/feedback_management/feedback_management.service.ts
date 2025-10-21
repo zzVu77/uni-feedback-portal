@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import {
   FeedbackDetailDto,
@@ -14,7 +14,11 @@ import {
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
 } from './dto';
-import { FeedbackParamDto, QueryFeedbacksDto } from 'src/feedbacks/dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
+import {
+  generateForwardingMessage,
+  generateStatusUpdateMessage,
+} from 'src/shared/helpers/feedback-message.helper';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
@@ -241,6 +245,7 @@ export class FeedbackManagementService {
 
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId },
+      include: { department: true },
     });
 
     if (!feedback) {
@@ -267,7 +272,10 @@ export class FeedbackManagementService {
       data: {
         feedbackId: feedback.id,
         status: dto.status,
-        message: dto.message ?? null,
+        message: generateStatusUpdateMessage(
+          feedback.department.name,
+          dto.status,
+        ),
         note: dto.note ?? null,
         createdAt: new Date(),
       },
@@ -320,7 +328,7 @@ export class FeedbackManagementService {
         fromDepartmentId: actor.departmentId,
         toDepartmentId: dto.toDepartmentId,
         userId: actor.userId,
-        message: dto.message,
+        message: generateForwardingMessage(toDepartment.name),
         createdAt: new Date(),
       },
       include: {

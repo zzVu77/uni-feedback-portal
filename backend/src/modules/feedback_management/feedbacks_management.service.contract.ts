@@ -5,7 +5,7 @@ import {
   CreateForwardingDto,
   UpdateFeedbackStatusDto,
 } from './dto';
-import { FeedbackParamDto, QueryFeedbacksDto } from 'src/feedbacks/dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
 export interface FeedbackManagementServiceContract {
   getAllFeedbacks(
     query: QueryFeedbacksDto,

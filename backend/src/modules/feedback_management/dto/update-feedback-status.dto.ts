@@ -12,16 +12,6 @@ export class UpdateFeedbackStatusDto {
   status: FeedbackStatus;
 
   @ApiProperty({
-    example: 'Issue resolved successfully',
-    required: false,
-    description:
-      'Optional message describing the reason or context of status change',
-  })
-  @IsOptional()
-  @IsString()
-  message: string;
-
-  @ApiProperty({
     example: 'Additional note regarding the status update',
     required: false,
     description:
