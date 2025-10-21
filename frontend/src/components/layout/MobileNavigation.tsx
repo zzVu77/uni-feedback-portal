@@ -43,7 +43,7 @@ const MobileNavigation = () => {
             <AvatarFallback className="text-black">CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="mr-3">
           <DropdownMenuLabel>
             <div className="flex flex-col items-center gap-[2px]">
               <span className="text-[14px] font-medium">Nguyễn Văn Vũ</span>
