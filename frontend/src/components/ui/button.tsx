@@ -21,6 +21,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         primary:
           "bg-blue-primary-500 text-white hover:bg-blue-primary-600 rounded-[6px]",
+        cancel:
+          "bg-red-primary-400 hover:bg-red-primary-400/90 text-white hover:text-white rounded-[6px]",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

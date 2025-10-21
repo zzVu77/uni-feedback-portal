@@ -1,8 +1,22 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RotateCcw, Send } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import ConfirmationDialog from "../common/ConfirmationDialog";
+import { FileInput } from "../common/FileInput";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -13,6 +27,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -24,9 +39,7 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
-import { FileInput } from "../common/FileInput";
-import { RotateCcw, Send } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
+
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
@@ -80,6 +93,7 @@ const formSchema = z.object({
     ),
 });
 const FeedbackForm = () => {
+  const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -92,12 +106,19 @@ const FeedbackForm = () => {
       attachments: [],
     },
   });
+  const { isDirty } = form.formState;
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    return alert(JSON.stringify(values));
+    alert(JSON.stringify(values));
   };
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
+  };
+  const handleAttemptSubmit = async () => {
+    const isFormValid = await form.trigger();
+    if (isFormValid) {
+      setIsSubmitDialogOpen(true);
+    }
   };
 
   return (
@@ -105,7 +126,7 @@ const FeedbackForm = () => {
       <Form {...form}>
         <form
           className="flex h-full flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:h-full lg:px-8 lg:py-4"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <span className="text-[20px] font-semibold lg:text-[28px]">
             Gửi góp ý đến nhà trường
@@ -132,10 +153,36 @@ const FeedbackForm = () => {
                               className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
                             />
                           </div>
-                          <p className="text-muted-foreground text-[12px] font-normal lg:text-[14px]">
-                            Thông tin của bạn sẽ không hiển thị với cán bộ xử lý
-                            và kiểm duyệt ( ban quản trị cấp cao vẫn có thể xem
-                            được trong những trường hợp cần thiết).
+                          <p className="text-[14px]">
+                            Nếu bạn chọn gửi{" "}
+                            <span className="text-blue-primary-600 font-medium">
+                              Ẩn danh
+                            </span>
+                            , thông tin cá nhân của bạn sẽ
+                            <span className="font-medium text-green-700">
+                              {" "}
+                              không hiển thị với các phòng ban xử lý
+                            </span>
+                            .
+                          </p>
+
+                          <p className="text-[14px] text-gray-700 italic">
+                            Tuy nhiên, trong một số trường hợp đặc biệt,
+                            <span className="font-medium text-amber-500">
+                              {" "}
+                              ban quản trị cấp cao{" "}
+                            </span>
+                            vẫn có thể truy cập thông tin này để đảm bảo
+                            <span className="font-medium text-pink-500">
+                              {" "}
+                              tính minh bạch
+                            </span>{" "}
+                            và
+                            <span className="text-purple-primary-500 font-medium">
+                              {" "}
+                              an toàn
+                            </span>
+                            .
                           </p>
                         </div>
                       </div>
@@ -194,9 +241,6 @@ const FeedbackForm = () => {
                           </SelectContent>
                         </Select>
                       </FormControl>
-                      {/* <FormDescription>
-                          This is your public display name.
-                        </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -236,9 +280,6 @@ const FeedbackForm = () => {
                           </SelectContent>
                         </Select>
                       </FormControl>
-                      {/* <FormDescription>
-                          This is your public display name.
-                        </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -299,18 +340,28 @@ const FeedbackForm = () => {
             </div>
           </ScrollArea>
           <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-3 lg:justify-end">
-            <Button
-              onClick={handleResetForm}
-              type="button"
-              variant={"outline"}
-              className="bg-red-primary-400 hover:bg-red-primary-400/90 flex max-w-lg flex-row items-center gap-2 py-5 text-white shadow-md hover:text-white"
+            <ConfirmationDialog
+              title="Xác nhận làm mới biểu mẫu?"
+              description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
+              onConfirm={handleResetForm}
+              confirmText="Đồng ý"
             >
-              <RotateCcw />
-              Làm mới
-            </Button>
+              <Button
+                type="button"
+                disabled={!isDirty}
+                variant={"cancel"}
+                className="flex max-w-lg flex-row items-center gap-2 py-5"
+              >
+                <RotateCcw />
+                Làm mới
+              </Button>
+            </ConfirmationDialog>
+
             <Button
-              type="submit"
+              type="button"
+              disabled={!isDirty}
               variant={"primary"}
+              onClick={handleAttemptSubmit}
               className="flex max-w-lg flex-row items-center gap-2 py-5 shadow-md"
             >
               <Send />
@@ -319,6 +370,70 @@ const FeedbackForm = () => {
           </div>
         </form>
       </Form>
+      <AlertDialog
+        open={isSubmitDialogOpen}
+        onOpenChange={setIsSubmitDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Vui lòng xác nhận trước khi gửi</AlertDialogTitle>
+
+            <AlertDialogDescription className="space-y-2 text-sm leading-relaxed text-gray-600">
+              <p>
+                Sau khi nhấn{" "}
+                <span className="text-blue-primary-600 font-medium">“Gửi”</span>
+                , bạn sẽ
+                <span className="font-semibold text-red-600">
+                  {" "}
+                  không thể chỉnh sửa hoặc hủy bỏ{" "}
+                </span>
+                góp ý đã gửi.
+              </p>
+
+              <p className="text-[14px]">
+                Nếu bạn chọn gửi{" "}
+                <span className="text-blue-primary-600 font-medium">
+                  Ẩn danh
+                </span>
+                , thông tin cá nhân của bạn sẽ
+                <span className="font-medium text-green-700">
+                  {" "}
+                  không hiển thị với các phòng ban xử lý
+                </span>
+                .
+              </p>
+
+              <p className="text-[14px] text-gray-700 italic">
+                Tuy nhiên, trong một số trường hợp đặc biệt,
+                <span className="font-medium text-amber-500">
+                  {" "}
+                  ban quản trị cấp cao{" "}
+                </span>
+                vẫn có thể truy cập thông tin này để đảm bảo
+                <span className="font-medium text-pink-500">
+                  {" "}
+                  tính minh bạch
+                </span>{" "}
+                và
+                <span className="text-purple-primary-500 font-medium">
+                  {" "}
+                  an toàn
+                </span>
+                .
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel variant={"cancel"}>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              variant={"primary"}
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Gửi
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
