@@ -99,9 +99,9 @@ export class UpdateFeedbackStatusResponseDto {
   })
   currentStatus: FeedbackStatus;
 
-  @ApiProperty({
-    example: '2025-10-18T12:45:00Z',
-    description: 'Timestamp when the feedback status was updated (ISO8601)',
-  })
-  updatedAt: string;
+  // @ApiProperty({
+  //   example: '2025-10-18T12:45:00Z',
+  //   description: 'Timestamp when the feedback status was updated (ISO8601)',
+  // })
+  // updatedAt: string;
 }

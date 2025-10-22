@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import {
@@ -80,6 +76,7 @@ export class FeedbacksService {
     return {
       results: items.map((item) => ({
         ...item,
+        location: item.location ? item.location : null,
         createdAt: item.createdAt.toISOString(),
       })),
       total,
@@ -92,7 +89,7 @@ export class FeedbacksService {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId },
+      where: { id: feedbackId, userId: userId },
       include: {
         department: {
           select: { id: true, name: true },
@@ -133,16 +130,12 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
 
-    // 🧩 Authorization check: Students can only view their own feedback
-    if (feedback.userId !== userId) {
-      throw new ForbiddenException('You are not allowed to view this feedback');
-    }
-
     // 🏗️ Map data to FeedbackDetail DTO
     const result: FeedbackDetail = {
       id: feedback.id,
       subject: feedback.subject,
       description: feedback.description,
+      location: feedback.location ? feedback.location : null,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       createdAt: feedback.createdAt.toISOString(),
@@ -230,6 +223,7 @@ export class FeedbacksService {
     return {
       id: feedback.id,
       subject: feedback.subject,
+      location: feedback.location ? feedback.location : null,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       department: {

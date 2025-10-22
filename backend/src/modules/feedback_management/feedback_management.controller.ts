@@ -16,8 +16,9 @@ import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
+  QueryFeedbackByStaffDto,
 } from './dto';
-import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
+import { FeedbackParamDto } from 'src/modules/feedbacks/dto';
 
 @Controller('managements/staff/feedbacks')
 export class FeedbackManagementController {
@@ -26,7 +27,6 @@ export class FeedbackManagementController {
   ) {}
   actor = {
     userId: '550e8400-e29b-41d4-a716-44665544000a',
-    role: 'DEPARTMENT_STAFF',
     departmentId: '550e8400-e29b-41d4-a716-446655440000',
   } as const;
 
@@ -42,7 +42,7 @@ export class FeedbackManagementController {
     description: 'List of user feedbacks',
     type: ListFeedbacksResponseDto,
   })
-  getAllFeedbacks(@Query() query: QueryFeedbacksDto) {
+  getAllFeedbacks(@Query() query: QueryFeedbackByStaffDto) {
     return this.feedbackManagementService.getAllFeedbacks(query, this.actor);
   }
 

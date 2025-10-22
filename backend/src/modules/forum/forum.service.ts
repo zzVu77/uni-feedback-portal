@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { GetPostsResponseDto, QueryPostsDto, PostResponseDto } from './dto';
@@ -121,7 +121,7 @@ export class ForumService {
     });
 
     if (!post) {
-      throw new Error(`Post with id ${postId} not found`);
+      throw new NotFoundException(`Post not found`);
     }
 
     return {

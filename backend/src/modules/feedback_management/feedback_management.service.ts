@@ -13,8 +13,9 @@ import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
+  QueryFeedbackByStaffDto,
 } from './dto';
-import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
+import { FeedbackParamDto } from 'src/modules/feedbacks/dto';
 import {
   generateForwardingMessage,
   generateStatusUpdateMessage,
@@ -24,34 +25,18 @@ export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAllFeedbacks(
-    query: QueryFeedbacksDto,
+    query: QueryFeedbackByStaffDto,
     actor: {
       userId: string;
-      role: 'DEPARTMENT_STAFF' | 'ADMIN';
       departmentId: string;
     },
   ): Promise<ListFeedbacksResponseDto> {
-    const {
-      page = 1,
-      pageSize = 10,
-      status,
-      categoryId,
-      departmentId,
-      from,
-      to,
-      q,
-    } = query;
+    const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
     const where: Prisma.FeedbacksWhereInput = {};
-    console.log('actor', actor);
-    // role-based filter
-    if (actor.role === 'DEPARTMENT_STAFF') {
-      where.departmentId = actor.departmentId;
-    } else if (departmentId) {
-      where.departmentId = departmentId;
-    }
 
     // optional filters
+    where.departmentId = actor.departmentId;
     if (status) where.currentStatus = status;
     if (categoryId) where.categoryId = categoryId;
     if (from || to) {
@@ -115,17 +100,18 @@ export class FeedbackManagementService {
     params: FeedbackParamDto,
     actor: {
       userId: string;
-      role: 'DEPARTMENT_STAFF' | 'ADMIN';
       departmentId: string;
     },
   ): Promise<FeedbackDetailDto> {
     const { feedbackId } = params;
 
-    // --- 1️⃣ Lấy feedback theo ID ---
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId },
+      where: {
+        id: feedbackId,
+        departmentId: actor.departmentId,
+      },
       include: {
-        user: true, // lấy student info
+        user: true,
         forumPost: {
           select: { id: true },
         },
@@ -164,21 +150,10 @@ export class FeedbackManagementService {
       },
     });
 
-    // --- 2️⃣ Kiểm tra tồn tại ---
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
 
-    // --- 3️⃣ Quyền truy cập ---
-    // Department staff chỉ xem được feedback thuộc department của mình
-    if (
-      actor.role === 'DEPARTMENT_STAFF' &&
-      feedback.departmentId !== actor.departmentId
-    ) {
-      throw new ForbiddenException('Access denied to this feedback');
-    }
-
-    // --- 4️⃣ Map dữ liệu ra DTO ---
     const result: FeedbackDetailDto = {
       id: feedback.id,
       subject: feedback.subject,
@@ -237,14 +212,13 @@ export class FeedbackManagementService {
     dto: UpdateFeedbackStatusDto,
     actor: {
       userId: string;
-      role: 'DEPARTMENT_STAFF' | 'ADMIN';
       departmentId: string;
     },
   ): Promise<UpdateFeedbackStatusResponseDto> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId },
+      where: { id: feedbackId, departmentId: actor.departmentId },
       include: { department: true },
     });
 
@@ -252,17 +226,8 @@ export class FeedbackManagementService {
       throw new NotFoundException('Feedback not found');
     }
 
-    if (
-      actor.role !== 'ADMIN' &&
-      feedback.departmentId !== actor.departmentId
-    ) {
-      throw new ForbiddenException(
-        'You are not allowed to update this feedback',
-      );
-    }
-
     const updatedFeedback = await this.prisma.feedbacks.update({
-      where: { id: feedbackId },
+      where: { id: feedbackId, departmentId: actor.departmentId },
       data: {
         currentStatus: dto.status,
       },
@@ -277,14 +242,12 @@ export class FeedbackManagementService {
           dto.status,
         ),
         note: dto.note ?? null,
-        createdAt: new Date(),
       },
     });
 
     return {
       feedbackId: updatedFeedback.id,
       currentStatus: updatedFeedback.currentStatus,
-      updatedAt: new Date().toISOString(),
     };
   }
   async createForwarding(
@@ -296,11 +259,11 @@ export class FeedbackManagementService {
     },
   ): Promise<ForwardingResponseDto> {
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId },
+      where: { id: feedbackId, departmentId: actor.departmentId },
     });
 
     if (!feedback) {
-      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
+      throw new NotFoundException(`Feedback not found`);
     }
     if (feedback.departmentId !== actor.departmentId) {
       throw new ForbiddenException(
@@ -321,7 +284,6 @@ export class FeedbackManagementService {
       throw new BadRequestException('Cannot forward to the same department');
     }
 
-    // 4️⃣ Tạo bản ghi forwarding mới
     const forwarding = await this.prisma.forwardingLogs.create({
       data: {
         feedbackId,
@@ -330,7 +292,6 @@ export class FeedbackManagementService {
         userId: actor.userId,
         message: generateForwardingMessage(toDepartment.name),
         note: dto.note,
-        createdAt: new Date(),
       },
       include: {
         fromDepartment: true,
