@@ -1,26 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CommentUserDto {
+export class UserInfo {
   @ApiProperty({ example: 1 })
-  user_id: number;
+  id: string;
 
   @ApiProperty({ example: 'Nguyen Van A' })
-  full_name: string;
+  fullName: string;
 
   @ApiProperty({ example: 'student' })
   role: string;
 }
 
-export class QueryCommentsResponseDto {
+export class CommentDto {
   @ApiProperty({ example: 1 })
-  comment_id: number;
+  id: string;
 
   @ApiProperty({ example: 'This is a comment' })
   content: string;
 
   @ApiProperty({ example: '2025-09-26T09:30:00.000Z' })
-  created_at: string;
+  createdAt: string;
 
-  @ApiProperty({ type: () => CommentUserDto })
-  user: CommentUserDto;
+  @ApiProperty({ type: () => UserInfo })
+  user: UserInfo;
+}
+
+export class CommentsResponseDto {
+  @ApiProperty({ type: [CommentDto] })
+  results: CommentDto[];
+
+  @ApiProperty({ example: 50 })
+  total: number;
 }
