@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import { UserInfo, DepartmentInfo } from './get-announcement-response-dto';
 export class AnnouncementItemDto {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
   id: string;
@@ -13,17 +13,11 @@ export class AnnouncementItemDto {
   @ApiProperty({ example: '2025-09-29T15:00:00.000Z' })
   createdAt: Date;
 
-  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
-  userId: string;
+  @ApiProperty({ type: UserInfo })
+  user: UserInfo;
 
-  @ApiProperty({ example: 'Nguyen Van A' })
-  userName: string;
-
-  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
-  departmentId: string;
-
-  @ApiProperty({ example: 'Phòng Nhân sự' })
-  departmentName: string;
+  @ApiProperty({ type: DepartmentInfo })
+  department: DepartmentInfo;
 }
 
 export class AnnouncementListResponseDto {
@@ -32,7 +26,7 @@ export class AnnouncementListResponseDto {
 
   @ApiProperty({
     example: 50,
-    description: 'Tổng số announcements thỏa điều kiện (dùng cho pagination)',
+    description: 'Total number of announcements available',
   })
   total: number;
 }

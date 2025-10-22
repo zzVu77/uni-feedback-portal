@@ -78,10 +78,14 @@ export class AnnouncementsService {
       title: item.title,
       content: item.content,
       createdAt: item.createdAt,
-      userId: item.userId,
-      userName: item.user.fullName,
-      departmentId: item.user.department.id,
-      departmentName: item.user.department.name,
+      user: {
+        id: item.user.id,
+        userName: item.user.fullName,
+      },
+      department: {
+        id: item.user.department.id,
+        name: item.user.department.name,
+      },
     }));
 
     return { results: mappedItems, total };
@@ -114,9 +118,14 @@ export class AnnouncementsService {
       title: announcement.title,
       content: announcement.content,
       createdAt: announcement.createdAt,
-      userName: announcement.user.fullName,
-      departmentId: announcement.user.department.id,
-      departmentName: announcement.user.department.name,
+      user: {
+        id: announcement.userId,
+        userName: announcement.user.fullName,
+      },
+      department: {
+        id: announcement.user.department.id,
+        name: announcement.user.department.name,
+      },
       files: announcement.files.map((f) => ({
         id: f.id,
         fileName: f.fileName,
