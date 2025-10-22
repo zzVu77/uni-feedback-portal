@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { DepartmentsModule } from './departments/departments.module';
-import { CategoriesModule } from './categories/categories.module';
-import { FeedbacksModule } from './feedbacks/feedbacks.module';
-import { FeedbackManagementModule } from './feedback_management/feedback_management.module';
-import { ForumModule } from './forum/forum.module';
-import { ModerationModule } from './moderation/moderation.module';
-import { ClarificationsModule } from './clarifications/clarifications.module';
-import { AnnouncementsModule } from './announcements/announcements.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { UploadsModule } from './uploads/uploads.module';
-import { ReportsModule } from './reports/reports.module';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { CommentModule } from './comment/comment.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { DepartmentsModule } from './modules/departments/departments.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { FeedbacksModule } from './modules/feedbacks/feedbacks.module';
+import { FeedbackManagementModule } from './modules/feedback_management/feedback_management.module';
+import { ForumModule } from './modules/forum/forum.module';
+import { ModerationModule } from './modules/moderation/moderation.module';
+import { ClarificationsModule } from './modules/clarifications/clarifications.module';
+import { AnnouncementsModule } from './modules/announcements/announcements.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
+import { ReportsModule } from './modules/reports/reports.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [

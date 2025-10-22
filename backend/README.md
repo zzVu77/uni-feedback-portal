@@ -13,3 +13,8 @@ npm run db:seed
 # 4. Verify the database has tables and data
 
 npx prisma studio
+
+npx prisma migrate dev --name refactor_schema
+
+npx prisma migrate reset
+npx prisma generate
