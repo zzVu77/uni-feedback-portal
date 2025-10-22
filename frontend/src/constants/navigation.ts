@@ -12,7 +12,7 @@ import {
 export const studentNavigation = [
   { href: "#3", label: "Thông báo", icon: Bell },
   { href: "/create-new-feedback", label: "Gửi góp ý", icon: MessageSquareText },
-  { href: "#1", label: "Lịch sử góp ý của tôi", icon: History },
+  { href: "#1", label: "Lịch sử góp ý ", icon: History },
   { href: "#2", label: "Diễn đàn", icon: MessageCircle },
 ];
 export const staffNavigation = [

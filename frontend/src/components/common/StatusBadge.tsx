@@ -1,4 +1,4 @@
-import { CircleAlert, CircleCheckBig, CircleX, Clock3 } from "lucide-react";
+import { CircleAlert, CircleCheckBig, CircleX, Loader } from "lucide-react";
 import { Badge } from "../ui/badge";
 
 type StatusBadgeProps = {
@@ -14,7 +14,7 @@ const STATUS_CONFIG = {
   },
   IN_PROGRESS: {
     text: "Đang xử lý",
-    icon: Clock3,
+    icon: Loader,
     badgeClassName: "text-blue-primary-700 bg-blue-primary-100 py-1",
     iconClassName: "text-blue-primary-300",
   },

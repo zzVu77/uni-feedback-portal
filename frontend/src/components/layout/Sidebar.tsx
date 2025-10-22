@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ASSETS } from "@/constants/assets";
 
-import { adminNavigation } from "@/constants/navigation";
+import { studentNavigation } from "@/constants/navigation";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
@@ -50,7 +50,7 @@ export default function Sidebar({ showOnMobile = false }: SidebarProps) {
 
         <div className="flex h-full flex-col justify-between border-t-1 border-white/20">
           <div className="flex flex-col gap-2">
-            {adminNavigation.map(({ href, label, icon: Icon }) => (
+            {studentNavigation.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href}>
                 <Button
                   variant="ghost"
