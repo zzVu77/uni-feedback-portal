@@ -4,7 +4,7 @@ import { ForumService } from './forum.service';
 import {
   GetPostsResponseDto,
   QueryPostsDto,
-  PostResponseDto,
+  PostDetailDto,
   GetPostParamDto,
 } from './dto';
 @ApiTags('Forum Post')
@@ -28,11 +28,9 @@ export class ForumController {
   @Get(':id')
   @ApiOkResponse({
     description: 'Get post detail',
-    type: PostResponseDto,
+    type: PostDetailDto,
   })
-  async getPostDetail(
-    @Param() param: GetPostParamDto,
-  ): Promise<PostResponseDto> {
+  async getPostDetail(@Param() param: GetPostParamDto): Promise<PostDetailDto> {
     return this.forumService.getPostDetail(param.id, this.userId);
   }
 }

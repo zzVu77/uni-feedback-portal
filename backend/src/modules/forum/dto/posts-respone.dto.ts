@@ -1,47 +1,26 @@
-import { ApiProperty } from '@nestjs/swagger';
-export class FeedbackDto {
-  @ApiProperty({
-    description: 'Unique identifier of the feedback',
-    example: '555e8400-e29b-41d4-a716-446655440009',
-  })
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { FeedbackDetail } from 'src/modules/feedbacks/dto';
+import { CommentsResponseDto } from 'src/modules/comment/dto/';
+export class FeedbackForumDto extends OmitType(FeedbackDetail, [
+  'statusHistory',
+  'forwardingLogs',
+  'createdAt',
+]) {}
+
+export class FeedbackForumSummaryDto extends OmitType(FeedbackForumDto, [
+  'fileAttachments',
+] as const) {}
+class UserInfo {
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
   id: string;
 
-  @ApiProperty({
-    description: 'Subject or title of the feedback',
-    example: 'Improve WiFi in the dormitory',
-  })
-  subject: string;
+  @ApiProperty({ example: 'Nguyen Van A', nullable: true })
+  fullName: string | null;
 
-  @ApiProperty({
-    description: 'Detailed description of the feedback',
-    example: 'WiFi connection is often unstable in the evening.',
-  })
-  description: string;
-
-  @ApiProperty({
-    description: 'Category identifier related to the feedback',
-    example: '550e8400-e29b-41d4-a716-446655440009',
-  })
-  categoryId: string;
-
-  @ApiProperty({
-    description: 'Department identifier that receives the feedback',
-    example: '550e8400-e29b-41d4-a716-446655440009',
-  })
-  departmentId: string;
-
-  @ApiProperty({
-    description: 'Current status of feedback',
-    example: 'PENDING',
-  })
-  @ApiProperty({
-    description: 'Current status of feedback',
-    example: 'PENDING',
-  })
-  currentStatus: string;
+  @ApiProperty({ example: 'a@student.edu.vn' })
+  email: string;
 }
-
-export class PostResponseDto {
+export class PostDetailDto {
   @ApiProperty({
     description: 'Unique identifier of the post',
     example: '550e8400-e29b-41d4-a716-446655440009',
@@ -56,9 +35,14 @@ export class PostResponseDto {
 
   @ApiProperty({
     description: 'Feedback information attached to this post',
-    type: FeedbackDto,
+    type: FeedbackForumDto,
   })
-  feedback: FeedbackDto;
+  feedback: FeedbackForumDto;
+  @ApiProperty({
+    description: 'Information about the user who created the post',
+    type: UserInfo,
+  })
+  user?: UserInfo | null;
 
   @ApiProperty({
     description: 'Total number of votes',
@@ -71,43 +55,28 @@ export class PostResponseDto {
     example: true,
   })
   hasVoted: boolean;
+
+  @ApiProperty({
+    description: 'Comments associated with the post',
+    type: CommentsResponseDto,
+  })
+  comments: CommentsResponseDto;
 }
 
-export class PostItemDto {
-  @ApiProperty({ example: '150e8400-e29b-41d4-a716-446655440009' })
-  id: string;
-
-  @ApiProperty({ example: 'How to learn AI fast?' })
-  subject: string;
-
-  @ApiProperty({ example: 'This is a sample description...' })
-  excerpt: string;
-
-  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
-  categoryId: string;
-
-  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440009' })
-  departmentId: string;
-
-  @ApiProperty({ example: 'PENDING' })
-  currentStatus: string;
+export class PostSummaryDto extends OmitType(PostDetailDto, [
+  'comments',
+  'feedback',
+] as const) {
+  @ApiProperty({ type: FeedbackForumSummaryDto })
+  feedback: FeedbackForumSummaryDto;
 
   @ApiProperty({ example: 10 })
   commentsCount: number;
-
-  @ApiProperty({ example: 25 })
-  votes: number;
-
-  @ApiProperty({ example: true })
-  hasVoted: boolean;
-
-  @ApiProperty({ example: '2025-09-24T12:34:56.000Z' })
-  createdAt: Date;
 }
 
 export class GetPostsResponseDto {
-  @ApiProperty({ type: [PostItemDto] })
-  results: PostItemDto[];
+  @ApiProperty({ type: [PostSummaryDto] })
+  results: PostSummaryDto[];
   @ApiProperty({
     example: 100,
     description: 'Total post for pagination',
