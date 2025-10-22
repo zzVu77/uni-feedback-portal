@@ -2,25 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { ASSETS } from "@/constants/assets";
 
+import { adminNavigation } from "@/constants/navigation";
 import { cn } from "@/lib/utils";
-import {
-  Bell,
-  History,
-  LogOut,
-  MessageCircle,
-  MessageSquareText,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const menuItems = [
-  { href: "#3", label: "Thông báo", icon: Bell },
-  { href: "/create-new-feedback", label: "Gửi góp ý", icon: MessageSquareText },
-  { href: "#1", label: "Lịch sử góp ý của tôi", icon: History },
-  { href: "#2", label: "Diễn đàn", icon: MessageCircle },
-];
 type SidebarProps = {
   showOnMobile?: boolean;
 };
@@ -61,7 +50,7 @@ export default function Sidebar({ showOnMobile = false }: SidebarProps) {
 
         <div className="flex h-full flex-col justify-between border-t-1 border-white/20">
           <div className="flex flex-col gap-2">
-            {menuItems.map(({ href, label, icon: Icon }) => (
+            {adminNavigation.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href}>
                 <Button
                   variant="ghost"
