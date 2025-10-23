@@ -1,11 +1,12 @@
 import { MyFeedbacksHistoryTable } from "@/components/feedback/my-feedbacks-history/MyFeedbacksHistoryTable";
+import Wrapper from "@/components/shared/Wrapper";
 import React from "react";
 
 const Page = () => {
   return (
-    <div>
+    <Wrapper>
       <MyFeedbacksHistoryTable />
-    </div>
+    </Wrapper>
   );
 };
 

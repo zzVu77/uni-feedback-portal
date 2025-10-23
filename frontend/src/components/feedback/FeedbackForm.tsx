@@ -341,7 +341,7 @@ const FeedbackForm = () => {
               />
             </div>
           </ScrollArea>
-          <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-3 lg:justify-end">
+          <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
             <ConfirmationDialog
               title="Xác nhận làm mới biểu mẫu?"
               description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
@@ -352,7 +352,7 @@ const FeedbackForm = () => {
                 type="button"
                 disabled={!isDirty}
                 variant={"cancel"}
-                className="flex max-w-lg flex-row items-center gap-2 py-5"
+                className="flex max-w-lg flex-row items-center gap-2 py-3"
               >
                 <RotateCcw className="h-5 w-5" />
                 Làm mới
@@ -364,7 +364,7 @@ const FeedbackForm = () => {
               disabled={!isDirty}
               variant={"primary"}
               onClick={handleAttemptSubmit}
-              className="flex max-w-lg flex-row items-center gap-2 py-5 shadow-md"
+              className="flex max-w-lg flex-row items-center gap-2 py-3 shadow-md"
             >
               <Send className="h-5 w-5" />
               Gửi góp ý

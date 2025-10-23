@@ -21,7 +21,7 @@ const Wrapper: React.FC<WrapperProps> = ({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col items-center gap-10 px-5 pb-[80px] md:px-[40px] lg:pb-[100px]",
+        "flex h-full w-full flex-col items-center gap-5 px-2 lg:px-8",
         classNames?.container,
       )}
     >

@@ -12,10 +12,18 @@ const FeedbackDetailHeader = () => {
         </div>
         {/* Information */}
         <ul className="text-neutral-dark-primary-500 flex list-inside list-disc flex-col gap-2 md:grid md:grid-cols-2 lg:flex lg:flex-row">
-          <li className="font-light">Phòng ban tiếp nhận: Thư viện</li>
-          <li className="font-light">Ngày gửi: 2023-11-01</li>
-          <li className="font-light">Danh mục: Cơ sở vật chất</li>
-          <li className="font-light">Địa điểm: Phòng F1-406</li>
+          <li className="text-[12px] font-normal xl:text-[14px]">
+            Phòng ban tiếp nhận: Thư viện
+          </li>
+          <li className="text-[12px] font-normal xl:text-[14px]">
+            Ngày gửi: 2023-11-01
+          </li>
+          <li className="text-[12px] font-normal xl:text-[14px]">
+            Danh mục: Cơ sở vật chất
+          </li>
+          <li className="text-[12px] font-normal xl:text-[14px]">
+            Địa điểm: Phòng F1-406
+          </li>
         </ul>
         {/* Status Badge */}
         <StatusBadge type="PENDING" />
