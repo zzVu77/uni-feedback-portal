@@ -5,7 +5,7 @@
   "scripts": {
     "type-check": "tsc --noEmit --project tsconfig.json",
     "format": "prettier --write \"src/**/*.tsx\"  \"src/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\"",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start"
