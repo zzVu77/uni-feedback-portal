@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 
-import Filter from "@/components/common/Filter";
+import Filter from "@/components/common/filter/Filter";
 import SearchBar from "@/components/common/SearchBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -72,18 +72,10 @@ export function MyFeedbacksHistoryTable() {
         </Suspense>
         <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
           <Suspense fallback={null}>
-            <Filter
-              typeOfFilter="status"
-              items={mockStatus}
-              filterName="Trạng thái"
-            />
+            <Filter type="status" items={mockStatus} />
           </Suspense>
           <Suspense fallback={null}>
-            <Filter
-              typeOfFilter="department"
-              items={departmentOptions}
-              filterName="Phòng ban"
-            />
+            <Filter type="department" items={departmentOptions} />
           </Suspense>
         </div>
       </div>
