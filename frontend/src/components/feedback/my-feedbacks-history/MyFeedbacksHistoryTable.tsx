@@ -65,7 +65,7 @@ export function MyFeedbacksHistoryTable() {
     { label: "Thư viện", value: "library" },
   ];
   return (
-    <div className="flex w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
+    <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
         <Suspense fallback={null}>
           <SearchBar />
