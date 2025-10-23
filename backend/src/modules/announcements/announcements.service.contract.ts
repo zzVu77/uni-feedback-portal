@@ -1,25 +1,25 @@
 // import { CreateAnnouncementDto } from './dto/create-announcement.dto';
-import { AnnouncementDetailDto } from './dto/get-announcement-response-dto';
-import { AnnouncementListResponseDto } from './dto/announcements-response.dto';
-import { QueryAnnouncementsDto } from './dto/query-announcements.dto';
-// import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
+import {
+  AnnouncementDetailDto,
+  AnnouncementListResponseDto,
+  QueryAnnouncementsDto,
+  CreateAnnouncementDto,
+  UpdateAnnouncementDto,
+} from './dto/';
 
 export interface AnnouncementsServiceContract {
   getAnnouncements(
     query: QueryAnnouncementsDto,
   ): Promise<AnnouncementListResponseDto>;
-  // create(
-  //   dto: CreateAnnouncementDto,
-  //   actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
-  // ): Promise<{ id: number; title: string; created_at: string }>;
-  getAnnouncementDetail(id: number): Promise<AnnouncementDetailDto>;
-  // update(
-  //   id: number,
-  //   dto: UpdateAnnouncementDto,
-  //   actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
-  // ): Promise<{ id: number; updated_at: string }>;
-  // delete(
-  //   id: number,
-  //   actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
-  // ): Promise<{ success: true }>;
+  create(
+    dto: CreateAnnouncementDto,
+    userId: string,
+  ): Promise<AnnouncementDetailDto>;
+  getAnnouncementDetail(id: string): Promise<AnnouncementDetailDto>;
+  update(
+    id: string,
+    dto: UpdateAnnouncementDto,
+    userId: string,
+  ): Promise<AnnouncementDetailDto>;
+  delete(id: string, userId: string): Promise<{ success: boolean }>;
 }
