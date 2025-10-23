@@ -108,7 +108,7 @@ export class AnnouncementsService {
             },
           },
         },
-        files: true,
+        files: { select: { fileName: true, fileUrl: true } },
       },
     });
     if (!announcement) {
@@ -129,7 +129,6 @@ export class AnnouncementsService {
         name: announcement.user.department.name,
       },
       files: announcement.files.map((f) => ({
-        id: f.id,
         fileName: f.fileName,
         fileUrl: f.fileUrl,
       })),
@@ -164,11 +163,15 @@ export class AnnouncementsService {
       },
       include: {
         user: {
-          include: {
-            department: true,
+          select: {
+            id: true,
+            fullName: true,
+            department: {
+              select: { id: true, name: true },
+            },
           },
         },
-        files: true,
+        files: { select: { fileName: true, fileUrl: true } },
       },
     });
 
@@ -198,7 +201,6 @@ export class AnnouncementsService {
   ): Promise<AnnouncementDetailDto> {
     const existing = await this.prisma.announcements.findUnique({
       where: { id, userId },
-      include: { files: true },
     });
 
     if (!existing) throw new NotFoundException('Announcement not found');
@@ -248,8 +250,14 @@ export class AnnouncementsService {
         content: dto.content,
       },
       include: {
-        files: true,
-        user: { select: { id: true, fullName: true, department: true } },
+        files: { select: { fileName: true, fileUrl: true } },
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            department: { select: { id: true, name: true } },
+          },
+        },
       },
     });
 
@@ -270,7 +278,6 @@ export class AnnouncementsService {
       },
 
       files: updated.files.map((f) => ({
-        id: f.id,
         fileUrl: f.fileUrl,
         fileName: f.fileName,
       })),
