@@ -25,6 +25,11 @@ export default tseslint.config(
     },
   },
   {
+    linterOptions: {
+      reportUnusedDisableDirectives: false,
+    },
+  },
+  {
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }], // cấm console.log
       "prettier/prettier": ["error", { endOfLine: "auto" }],
