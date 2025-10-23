@@ -20,8 +20,8 @@ export function ForumSection() {
     { label: "Phổ biến nhất", value: "library" },
   ];
   return (
-    <div className="flex w-full flex-col gap-6 bg-transparent">
-      <Tabs defaultValue="feedbacks" className="flex flex-col gap-5 pb-2">
+    <div>
+      <Tabs defaultValue="feedbacks" className="flex flex-col gap-4 pb-2">
         <TabsList className="h-auto w-full bg-white px-2 py-1 shadow-lg">
           <TabsTrigger
             value="feedbacks"
