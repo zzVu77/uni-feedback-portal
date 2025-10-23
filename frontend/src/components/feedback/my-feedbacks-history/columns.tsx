@@ -141,18 +141,20 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
   },
   {
     accessorKey: "department",
+    accessorFn: (row) => row.department.name,
     header: "Phòng ban tiếp nhận",
-    cell: ({ row }) => {
-      const department = row.getValue("department");
-      return <div className="capitalize">{department.name}</div>;
+    cell: ({ cell }) => {
+      const departmentName = cell.getValue() as string;
+      return <div className="capitalize">{departmentName}</div>;
     },
   },
   {
     accessorKey: "category",
+    accessorFn: (row) => row.category.name,
     header: "Danh mục",
-    cell: ({ row }) => {
-      const category = row.getValue("category");
-      return <div className="capitalize">{category.name}</div>;
+    cell: ({ cell }) => {
+      const categoryName = cell.getValue() as string;
+      return <div className="capitalize">{categoryName}</div>;
     },
   },
   {
@@ -200,8 +202,8 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const createdAt = row.getValue("createdAt");
+    cell: ({ cell }) => {
+      const createdAt = cell.getValue() as string;
       return (
         <time className="capitalize">
           {new Date(createdAt).toLocaleDateString("vi-VN")}
