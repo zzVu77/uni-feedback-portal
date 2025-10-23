@@ -9,6 +9,8 @@ const page = () => {
   return (
     <div className="space-y-3 px-5 py-10">
       <PostCard />
+      <PostCard />
+      <PostCard />
       <MyFeedbacksHistoryTable />
       <FeedbackForm />
       <FeedbackDetailHeader />

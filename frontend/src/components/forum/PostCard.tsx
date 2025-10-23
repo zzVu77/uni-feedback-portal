@@ -2,15 +2,18 @@ import { MessageCircle, ThumbsUp, User } from "lucide-react";
 import InfoBadge from "../common/InfoBadge";
 import StatusBadge from "../common/StatusBadge";
 import { Separator } from "../ui/separator";
+import Link from "next/link";
 
 const PostCard = () => {
   return (
-    <div className="flex w-full flex-col gap-3 rounded-[8px] bg-white px-3 py-4 shadow-sm md:px-4">
+    <div className="flex w-full flex-col gap-3 rounded-[8px] bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
       <div className="flex flex-row items-center justify-between">
         {/* Post Title */}
-        <h2 className="text-md max-w-[200px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
-          Extended Library Hours During Finals Week
-        </h2>
+        <Link href={"#"}>
+          <h2 className="text-md hover:text-blue-primary-300 max-w-[200px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
+            Extended Library Hours During Finals Week
+          </h2>
+        </Link>
         <StatusBadge type="IN_PROGRESS" />
       </div>
       {/* Post Short Content */}
