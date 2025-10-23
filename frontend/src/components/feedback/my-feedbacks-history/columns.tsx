@@ -10,6 +10,7 @@ import {
   ChevronRight,
   History,
   LayoutDashboard,
+  Loader,
   TextInitial,
 } from "lucide-react";
 import Link from "next/link";
@@ -190,7 +191,7 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <History className="h-3 w-3" />
+          <Loader className="h-3 w-3" />
           Trạng thái
           <ArrowUpDown className="h-3 w-3" />
         </Button>
