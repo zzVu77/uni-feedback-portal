@@ -111,7 +111,7 @@ export function MyFeedbacksHistoryTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="hover:bg-blue-primary-100/40"
+                  className="hover:bg-blue-primary-100/40 text-xs lg:text-[13px]"
                   key={row.id}
                   data-state={row.getIsSelected()}
                 >
@@ -138,11 +138,10 @@ export function MyFeedbacksHistoryTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2">
         <div className="space-x-2">
           <Button
-            variant="primary"
-            className="bg-blue-primary-400/90"
+            variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -150,8 +149,7 @@ export function MyFeedbacksHistoryTable() {
             <ChevronLeft />
           </Button>
           <Button
-            variant="primary"
-            className="bg-blue-primary-400/90"
+            variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}

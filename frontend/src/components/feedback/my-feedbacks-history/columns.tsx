@@ -3,7 +3,15 @@ import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { MyFeedbackHistoryItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronRight } from "lucide-react";
+import {
+  ArrowUpDown,
+  Building2,
+  CalendarClock,
+  ChevronRight,
+  History,
+  LayoutDashboard,
+  TextInitial,
+} from "lucide-react";
 import Link from "next/link";
 
 export const dummyData: MyFeedbackHistoryItem[] = [
@@ -125,10 +133,17 @@ export const dummyData: MyFeedbackHistoryItem[] = [
 export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
   {
     accessorKey: "subject",
-    header: "Tiêu đề",
+    header: () => {
+      return (
+        <div className="flex items-center gap-2">
+          <TextInitial className="h-3 w-3" />
+          Tiêu đề
+        </div>
+      );
+    },
     cell: ({ row }) => (
       <div
-        className="max-w-xs truncate capitalize lg:max-w-sm"
+        className="max-w-[250px] truncate capitalize lg:max-w-sm"
         title={row.getValue("subject")}
       >
         {row.getValue("subject")}
@@ -138,7 +153,14 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
   {
     accessorKey: "department",
     accessorFn: (row) => row.department.name,
-    header: "Phòng ban tiếp nhận",
+    header: () => {
+      return (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-3 w-3" />
+          Phòng ban tiếp nhận
+        </div>
+      );
+    },
     cell: ({ cell }) => {
       const departmentName = cell.getValue() as string;
       return <div className="capitalize">{departmentName}</div>;
@@ -147,7 +169,14 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
   {
     accessorKey: "category",
     accessorFn: (row) => row.category.name,
-    header: "Danh mục",
+    header: () => {
+      return (
+        <div className="flex items-center gap-2">
+          <LayoutDashboard className="h-3 w-3" />
+          Danh mục
+        </div>
+      );
+    },
     cell: ({ cell }) => {
       const categoryName = cell.getValue() as string;
       return <div className="capitalize">{categoryName}</div>;
@@ -161,8 +190,9 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
+          <History className="h-3 w-3" />
           Trạng thái
-          <ArrowUpDown className="h-4 w-4" />
+          <ArrowUpDown className="h-3 w-3" />
         </Button>
       );
     },
@@ -193,8 +223,9 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Ngày tạo
-          <ArrowUpDown className="h-4 w-4" />
+          <CalendarClock className="h-3 w-3" />
+          Ngày gửi
+          <ArrowUpDown className="h-3 w-3" />
         </Button>
       );
     },
@@ -202,7 +233,7 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
       const createdAt = cell.getValue() as string;
       return (
         <time className="capitalize">
-          {new Date(createdAt).toLocaleDateString("vi-VN")}
+          {new Date(createdAt).toLocaleString("vi-VN")}
         </time>
       );
     },
