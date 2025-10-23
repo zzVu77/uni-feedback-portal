@@ -1,8 +1,8 @@
-import { MessageCircle, ThumbsUp, User } from "lucide-react";
+import { MessageSquare, ThumbsUp, User } from "lucide-react";
+import Link from "next/link";
 import InfoBadge from "../common/InfoBadge";
 import StatusBadge from "../common/StatusBadge";
 import { Separator } from "../ui/separator";
-import Link from "next/link";
 
 const PostCard = () => {
   return (
@@ -57,7 +57,7 @@ const PostCard = () => {
             </span>
           </div>
           <div className="flex flex-row items-center gap-1 rounded-lg">
-            <MessageCircle className="text-blue-primary-400 h-4 w-4" />
+            <MessageSquare className="text-blue-primary-400 h-4 w-4" />
             <span className="text-neutral-dark-primary-400 text-[11px] md:text-[14px]">
               123
             </span>
