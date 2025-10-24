@@ -1,9 +1,28 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  Patch,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { QueryCommentsDto } from './dto';
+import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  CommentReportDto,
+  CommentReportResponseDto,
+  CreateCommentReportDto,
+  QueryCommentReportsDto,
+  QueryCommentsDto,
+  UpdateCommentReportDto,
+} from './dto';
 import { PostParamDto } from '../forum/dto';
+import {
+  CommentParamDto,
+  CommentReportParamDto,
+} from './dto/comment-param.dto';
 
 @Controller('comment')
 export class CommentController {
@@ -23,7 +42,6 @@ export class CommentController {
       this.userId,
     );
   }
-  // 🟡 Get all comments
   @Get('/post/:id')
   @ApiOperation({ summary: 'Get all comments' })
   @ApiOkResponse({ description: 'List of comments' })
@@ -34,18 +52,50 @@ export class CommentController {
     return this.commentService.getComments(params.id, query);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.commentService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-  //   return this.commentService.update(+id, updateCommentDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.commentService.remove(+id);
-  // }
+  @Post('reports/:commentId')
+  @ApiOperation({ summary: 'Report a comment (user)' })
+  @ApiResponse({
+    status: 201,
+    description: 'Report created successfully',
+    type: CommentReportDto,
+  })
+  async createReport(
+    @Param() params: CommentParamDto,
+    @Body() dto: CreateCommentReportDto,
+  ) {
+    return this.commentService.createReport(params.commentId, this.userId, dto);
+  }
+  @Get('/reports/:commentReportId')
+  @ApiOperation({ summary: 'Get comment report details (admin)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Comment report details',
+    type: CommentReportDto,
+  })
+  async getReportDetail(@Param() params: CommentReportParamDto) {
+    return this.commentService.getReportDetail(params.commentReportId);
+  }
+  @Get('/reports')
+  @ApiOperation({ summary: 'Get all comment reports (admin)' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of comment reports',
+    type: CommentReportResponseDto,
+  })
+  async getReports(@Query() query: QueryCommentReportsDto) {
+    return this.commentService.getReports(query);
+  }
+  @Patch('/reports/:commentReportId')
+  @ApiOperation({ summary: 'Update comment report status or response (admin)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Report updated successfully',
+    type: CommentReportDto,
+  })
+  async updateReport(
+    @Param() params: CommentReportParamDto,
+    @Body() dto: UpdateCommentReportDto,
+  ) {
+    return this.commentService.updateReport(params.commentReportId, dto);
+  }
 }
