@@ -51,13 +51,13 @@ const PostCard = () => {
         </div>
         <div className="flex flex-row items-center justify-between gap-3">
           <div className="flex flex-row items-center gap-1">
-            <ThumbsUp className="text-blue-primary-400 h-4 w-4" />
+            <ThumbsUp className="text-neutral-dark-primary-400 h-4 w-4" />
             <span className="text-neutral-dark-primary-400 text-[11px] md:text-[14px]">
               123
             </span>
           </div>
           <div className="flex flex-row items-center gap-1 rounded-lg">
-            <MessageSquare className="text-blue-primary-400 h-4 w-4" />
+            <MessageSquare className="text-neutral-dark-primary-400 h-4 w-4" />
             <span className="text-neutral-dark-primary-400 text-[11px] md:text-[14px]">
               123
             </span>
