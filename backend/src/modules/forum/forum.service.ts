@@ -13,8 +13,7 @@ import {
 } from './dto';
 @Injectable()
 export class ForumService {
-  constructor(private prisma: PrismaService) {}
-
+  constructor(private readonly prisma: PrismaService) {}
   async getListPosts(
     query: QueryPostsDto,
     userId: string,
@@ -190,42 +189,7 @@ export class ForumService {
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
-    // 🔹 MOCK COMMENT DATA
-    const mockComments = [
-      {
-        id: 'cmt-1',
-        content: 'Totally agree with this feedback!',
-        createdAt: new Date('2025-10-21T09:00:00Z').toISOString(),
-        user: {
-          id: 'user-1',
-          fullName: 'Nguyen Van A',
-          email: 'a@student.edu.vn',
-          role: 'STUDENT',
-        },
-      },
-      {
-        id: 'cmt-2',
-        content: 'We are currently working on fixing this issue.',
-        createdAt: new Date('2025-10-21T10:15:00Z').toISOString(),
-        user: {
-          id: 'user-2',
-          fullName: 'Tran Thi B',
-          email: 'b@dept.edu.vn',
-          role: 'DEPARTMENT_STAFF',
-        },
-      },
-      {
-        id: 'cmt-3',
-        content: 'Issue resolved in the latest update.',
-        createdAt: new Date('2025-10-22T08:45:00Z').toISOString(),
-        user: {
-          id: 'user-3',
-          fullName: 'Admin C',
-          email: 'admin@school.edu.vn',
-          role: 'ADMIN',
-        },
-      },
-    ];
+
     return {
       id: post.id,
       createdAt: post.createdAt.toISOString(),
@@ -261,10 +225,6 @@ export class ForumService {
               email: post.feedback.user.email,
             },
           }),
-      comments: {
-        results: mockComments,
-        total: mockComments.length,
-      },
     };
   }
   async vote(postId: string, userId: string): Promise<VoteResponseDto> {

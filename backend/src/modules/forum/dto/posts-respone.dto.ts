@@ -1,6 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { FeedbackDetail } from 'src/modules/feedbacks/dto';
-import { CommentsResponseDto } from 'src/modules/comment/dto/';
 export class FeedbackForumDto extends OmitType(FeedbackDetail, [
   'statusHistory',
   'forwardingLogs',
@@ -55,16 +54,9 @@ export class PostDetailDto {
     example: true,
   })
   hasVoted: boolean;
-
-  @ApiProperty({
-    description: 'Comments associated with the post',
-    type: CommentsResponseDto,
-  })
-  comments: CommentsResponseDto;
 }
 
 export class PostSummaryDto extends OmitType(PostDetailDto, [
-  'comments',
   'feedback',
 ] as const) {
   @ApiProperty({ type: FeedbackForumSummaryDto })
