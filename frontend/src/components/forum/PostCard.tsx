@@ -9,7 +9,7 @@ const PostCard = () => {
     <div className="flex w-full flex-col gap-3 rounded-[8px] bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
       <div className="flex flex-row items-center justify-between">
         {/* Post Title */}
-        <Link href={"#"}>
+        <Link href={"/forum/1"}>
           <h2 className="text-md hover:text-blue-primary-300 max-w-[200px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
             Extended Library Hours During Finals Week
           </h2>

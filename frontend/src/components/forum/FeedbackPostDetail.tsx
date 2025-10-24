@@ -89,7 +89,7 @@ const FeedbackPostDetail = () => {
             className="hover:text-red-primary-400 flex flex-row items-center gap-1 rounded-lg border-none shadow-none hover:bg-transparent"
             variant="outline"
           >
-            <Flag className="hover:text-blue-primary-600 h-4 w-4" />
+            <Flag className="hover:text-blue-primary-600 h-4 w-4" /> Báo cáo
           </Button>
         </div>
       </div>
