@@ -16,7 +16,7 @@ const FeedbackPostDetail = () => {
     <div className="flex w-full flex-col gap-3 rounded-[8px] bg-white px-3 py-4 shadow-sm md:px-4">
       <div className="flex flex-row items-center justify-between">
         {/* Post Title */}
-        <h2 className="text-md hover:text-blue-primary-300 font-semibold md:text-[16px] lg:text-2xl">
+        <h2 className="text-md font-semibold md:text-[16px] lg:text-2xl">
           Extended Library Hours During Finals Week
         </h2>
         <StatusBadge type="IN_PROGRESS" />
