@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 
-const SearchBar = () => {
+const SearchBar = ({ placeholder }: { placeholder: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
@@ -37,8 +37,8 @@ const SearchBar = () => {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           type="text"
-          placeholder="Tìm kiếm theo tiêu đề ..."
-          className="bg-background h-10 w-full rounded-lg pl-10 shadow-sm"
+          placeholder={placeholder ?? "Tìm kiếm..."}
+          className="bg-background w-full rounded-lg pl-10 shadow-sm"
         />
       </div>
       {/* <Button

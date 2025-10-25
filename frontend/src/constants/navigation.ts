@@ -13,7 +13,7 @@ export const studentNavigation = [
   { href: "#3", label: "Thông báo", icon: Bell },
   { href: "/create-new-feedback", label: "Gửi góp ý", icon: MessageSquareText },
   { href: "/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
-  { href: "#2", label: "Diễn đàn", icon: MessageCircle },
+  { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
 ];
 export const staffNavigation = [
   { href: "#3", label: "Thông báo", icon: Bell },

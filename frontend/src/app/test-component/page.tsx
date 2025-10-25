@@ -4,9 +4,14 @@ import FeedbackForm from "@/components/feedback/FeedbackForm";
 import { MyFeedbacksHistoryTable } from "@/components/feedback/my-feedbacks-history/MyFeedbacksHistoryTable";
 import StatusTimeLine from "@/components/feedback/StatusTimeline";
 
+import PostCard from "@/components/forum/PostCard";
+
 const page = () => {
   return (
     <div className="space-y-3 px-5 py-10">
+      <PostCard />
+      <PostCard />
+      <PostCard />
       <MyFeedbacksHistoryTable />
       <FeedbackForm />
       <FeedbackDetailHeader />
