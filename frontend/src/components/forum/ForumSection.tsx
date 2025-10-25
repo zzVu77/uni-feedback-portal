@@ -4,6 +4,7 @@ import { Megaphone, MessageCircle } from "lucide-react";
 import { Suspense } from "react";
 import SearchBar from "../common/SearchBar";
 import Filter from "../common/filter/Filter";
+import AnnouncementCard from "./AnnouncementCard";
 
 export function ForumSection() {
   const mockCategory = [
@@ -68,14 +69,14 @@ export function ForumSection() {
           value="announcements"
           className="flex h-screen w-full flex-col gap-4"
         >
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
+          <AnnouncementCard />
         </TabsContent>
       </Tabs>
     </div>
