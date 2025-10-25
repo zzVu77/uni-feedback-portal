@@ -18,12 +18,12 @@ const OfficialResponse = ({
           Phản hồi từ nhà trường
         </span>
       </div>
-      <div className="flex flex-row items-center justify-start gap-1">
+      <div className="flex flex-row items-center justify-start gap-2">
         <div className="bg-blue-primary-200 flex h-10 w-10 flex-row items-center justify-center rounded-full p-2">
           <Building2 className="text-blue-primary-600" />
         </div>
         <div className="flex flex-col gap-[2px]">
-          <span className="text-[16px] font-semibold text-black/70">
+          <span className="text-blue-primary-300/80 text-[16px] font-semibold">
             {departmentName ?? "Khoa Đào tạo quốc tế"}
           </span>
           <time className="text-sm font-normal text-gray-400">
