@@ -4,7 +4,9 @@ import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   AnnouncementDetailDto,
   AnnouncementListResponseDto,
+  CreateAnnouncementDto,
   QueryAnnouncementsDto,
+  UpdateAnnouncementDto,
 } from './dto';
 
 @Injectable()
@@ -106,7 +108,7 @@ export class AnnouncementsService {
             },
           },
         },
-        files: true,
+        files: { select: { fileName: true, fileUrl: true } },
       },
     });
     if (!announcement) {
@@ -127,10 +129,177 @@ export class AnnouncementsService {
         name: announcement.user.department.name,
       },
       files: announcement.files.map((f) => ({
-        id: f.id,
         fileName: f.fileName,
         fileUrl: f.fileUrl,
       })),
     };
+  }
+  async createAnnouncement(
+    dto: CreateAnnouncementDto,
+    userId: string,
+  ): Promise<AnnouncementDetailDto> {
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+      include: { department: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const announcement = await this.prisma.announcements.create({
+      data: {
+        title: dto.title,
+        content: dto.content,
+        userId: user.id,
+        files: dto.files
+          ? {
+              create: dto.files.map((file) => ({
+                fileName: file.fileName,
+                fileUrl: file.fileUrl,
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            department: {
+              select: { id: true, name: true },
+            },
+          },
+        },
+        files: { select: { fileName: true, fileUrl: true } },
+      },
+    });
+
+    return {
+      id: announcement.id,
+      title: announcement.title,
+      content: announcement.content,
+      createdAt: announcement.createdAt,
+      user: {
+        id: announcement.user.id,
+        userName: announcement.user.fullName,
+      },
+      department: {
+        id: announcement.user.department.id,
+        name: announcement.user.department.name,
+      },
+      files: announcement.files.map((f) => ({
+        fileName: f.fileName,
+        fileUrl: f.fileUrl,
+      })),
+    };
+  }
+  async updateAnnouncement(
+    id: string,
+    dto: UpdateAnnouncementDto,
+    userId: string,
+  ): Promise<AnnouncementDetailDto> {
+    const existing = await this.prisma.announcements.findUnique({
+      where: { id, userId },
+    });
+
+    if (!existing) throw new NotFoundException('Announcement not found');
+
+    const existingFiles =
+      await this.prisma.fileAttachmentForAnnouncement.findMany({
+        where: { announcementId: id },
+      });
+
+    // get list of new file URLs from dto
+    const newFileUrls = dto.files?.map((f) => f.fileUrl) ?? [];
+
+    // Identify files to delete
+    const filesToDelete = existingFiles.filter(
+      (f) => !newFileUrls.includes(f.fileUrl),
+    );
+
+    // Identify files to add
+    const filesToAdd =
+      dto.files?.filter(
+        (f) => !existingFiles.some((e) => e.fileUrl === f.fileUrl),
+      ) ?? [];
+
+    // Delete file if exist
+    if (filesToDelete.length > 0) {
+      await this.prisma.fileAttachmentForAnnouncement.deleteMany({
+        where: { id: { in: filesToDelete.map((f) => f.id) } },
+      });
+    }
+    // Add new file (if any)
+    if (filesToAdd.length > 0) {
+      await this.prisma.fileAttachmentForAnnouncement.createMany({
+        data: filesToAdd.map((f) => ({
+          announcementId: id,
+          fileName: f.fileName,
+          fileUrl: f.fileUrl,
+        })),
+      });
+    }
+    // console.log('Files to delete:', filesToDelete);
+    // console.log('Files to add:', filesToAdd);
+    // console.log('existingFiles:', existingFiles);
+    const updated = await this.prisma.announcements.update({
+      where: { id },
+      data: {
+        title: dto.title,
+        content: dto.content,
+      },
+      include: {
+        files: { select: { fileName: true, fileUrl: true } },
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            department: { select: { id: true, name: true } },
+          },
+        },
+      },
+    });
+
+    const mapped: AnnouncementDetailDto = {
+      id: updated.id,
+      title: updated.title,
+      content: updated.content,
+      createdAt: updated.createdAt,
+
+      user: {
+        id: updated.user.id,
+        userName: updated.user.fullName,
+      },
+
+      department: {
+        id: updated.user.department.id,
+        name: updated.user.department.name,
+      },
+
+      files: updated.files.map((f) => ({
+        fileUrl: f.fileUrl,
+        fileName: f.fileName,
+      })),
+    };
+
+    return mapped;
+  }
+
+  async deleteAnnouncement(
+    id: string,
+    userId: string,
+  ): Promise<{ success: boolean }> {
+    const existing = await this.prisma.announcements.findUnique({
+      where: { id, userId },
+    });
+
+    if (!existing) throw new NotFoundException('Announcement not found');
+
+    await this.prisma.announcements.delete({
+      where: { id },
+    });
+
+    return { success: true };
   }
 }
