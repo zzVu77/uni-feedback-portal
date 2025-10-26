@@ -49,7 +49,10 @@ export class AnnouncementsService {
     if (from || to) {
       where.createdAt = {};
       if (from) where.createdAt.gte = new Date(from);
-      if (to) where.createdAt.lte = new Date(to);
+      if (to)
+        where.createdAt.lt = new Date(
+          new Date(to).setDate(new Date(to).getDate() + 1),
+        );
     }
 
     // Query data + total count

@@ -15,6 +15,8 @@ export class ForumService {
       pageSize = 10,
       categoryId,
       departmentId,
+      from,
+      to,
       sortBy,
       q,
     } = query;
@@ -23,22 +25,24 @@ export class ForumService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
     // WHERE condition
-    const where: Prisma.ForumPostsWhereInput = {};
+    const whereClause: Prisma.ForumPostsWhereInput = {
+      feedback: {
+        ...(categoryId && { categoryId }),
+        ...(departmentId && { departmentId }),
+        ...(q && { subject: { contains: q, mode: 'insensitive' } }),
+      },
+      ...(from || to
+        ? {
+            createdAt: {
+              ...(from && { gte: new Date(from) }),
+              ...(to && {
+                lt: new Date(new Date(to).setDate(new Date(to).getDate() + 1)),
+              }),
+            },
+          }
+        : {}),
+    };
 
-    if (categoryId || departmentId || q) {
-      where.feedback = {};
-
-      if (categoryId) {
-        where.feedback.categoryId = categoryId;
-      }
-      if (departmentId) {
-        where.feedback.departmentId = departmentId; // filter by departmentId
-      }
-      if (q) {
-        // search by subject
-        where.feedback.subject = { contains: q, mode: 'insensitive' };
-      }
-    }
     // ORDER BY
     let orderBy: Prisma.ForumPostsOrderByWithRelationInput = {
       createdAt: 'desc',
@@ -53,7 +57,7 @@ export class ForumService {
 
     const [items, total] = await Promise.all([
       this.prisma.forumPosts.findMany({
-        where,
+        where: whereClause,
         skip,
         take,
         orderBy,
@@ -93,7 +97,7 @@ export class ForumService {
           _count: { select: { comments: true, votes: true } },
         },
       }),
-      this.prisma.forumPosts.count({ where }),
+      this.prisma.forumPosts.count({ where: whereClause }),
     ]);
     const mappedItems = items.map((post) => ({
       id: post.id,

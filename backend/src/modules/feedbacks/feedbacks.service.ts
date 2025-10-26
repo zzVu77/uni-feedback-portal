@@ -38,7 +38,9 @@ export class FeedbacksService {
         ? {
             createdAt: {
               ...(from && { gte: new Date(from) }),
-              ...(to && { lte: new Date(to) }),
+              ...(to && {
+                lt: new Date(new Date(to).setDate(new Date(to).getDate() + 1)),
+              }),
             },
           }
         : {}),
