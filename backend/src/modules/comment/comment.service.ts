@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -18,7 +19,6 @@ import {
 } from './dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Prisma, ReportStatus } from '@prisma/client';
-import { report } from 'process';
 @Injectable()
 export class CommentService {
   constructor(private prisma: PrismaService) {}
@@ -144,15 +144,19 @@ export class CommentService {
     userId: string,
     dto: CreateCommentReportDto,
   ): Promise<CommentReportDto> {
-    const comment = await this.prisma.comments.findUnique({
+    const comment = await this.prisma.comments.findFirst({
       where: { id: commentId, deletedAt: null },
     });
 
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
+    const existing = await this.prisma.commentReports.findFirst({
+      where: { commentId, userId },
+    });
+    if (existing)
+      throw new BadRequestException('You have already reported this comment.');
 
-    // Tạo report
     const report = await this.prisma.commentReports.create({
       data: {
         commentId,
@@ -171,7 +175,7 @@ export class CommentService {
               select: {
                 id: true,
                 feedback: {
-                  select: { id: true, subject: true, description: true },
+                  select: { subject: true, description: true },
                 },
               },
             },
@@ -200,6 +204,11 @@ export class CommentService {
         user: {
           id: report.comment.user.id,
           fullName: report.comment.user.fullName,
+        },
+        post: {
+          id: report.comment.post?.id,
+          subject: report.comment.post.feedback?.subject,
+          description: report.comment.post.feedback?.description,
         },
       },
     };
@@ -227,15 +236,8 @@ export class CommentService {
               id: true,
               content: true,
               createdAt: true,
+              deletedAt: true,
               user: { select: { id: true, fullName: true } },
-              post: {
-                select: {
-                  id: true,
-                  feedback: {
-                    select: { id: true, subject: true, description: true },
-                  },
-                },
-              },
             },
           },
           user: { select: { id: true, fullName: true } },
@@ -251,7 +253,6 @@ export class CommentService {
         status: item.status,
         adminResponse: item.adminResponse ?? null,
         createdAt: item.createdAt.toISOString(),
-
         reportedBy: {
           id: item.user.id,
           fullName: item.user.fullName,
@@ -261,6 +262,7 @@ export class CommentService {
           id: item.comment.id,
           content: item.comment.content,
           createdAt: item.comment.createdAt.toISOString(),
+          deletedAt: item.comment.deletedAt?.toISOString() ?? null,
           user: {
             id: item.comment.user.id,
             fullName: item.comment.user.fullName,
@@ -281,12 +283,13 @@ export class CommentService {
             id: true,
             content: true,
             createdAt: true,
+            deletedAt: true,
             user: { select: { id: true, fullName: true } },
             post: {
               select: {
                 id: true,
                 feedback: {
-                  select: { id: true, subject: true, description: true },
+                  select: { subject: true, description: true },
                 },
               },
             },
@@ -314,9 +317,15 @@ export class CommentService {
         id: report.comment.id,
         content: report.comment.content,
         createdAt: report.comment.createdAt.toISOString(),
+        deletedAt: report.comment.deletedAt?.toISOString() ?? null,
         user: {
           id: report.comment.user.id,
           fullName: report.comment.user.fullName,
+        },
+        post: {
+          id: report.comment.post?.id,
+          subject: report.comment.post.feedback?.subject,
+          description: report.comment.post.feedback?.description,
         },
       },
     };
@@ -329,10 +338,17 @@ export class CommentService {
   ): Promise<CommentReportDto> {
     const report = await this.prisma.commentReports.findUnique({
       where: { id },
+      include: {
+        comment: true,
+      },
     });
 
     if (!report) {
       throw new NotFoundException('Report not found');
+    }
+
+    if (dto.status === 'RESOLVED' && report.comment) {
+      await this.deleteComment(report.comment.id);
     }
 
     const updatedReport = await this.prisma.commentReports.update({
@@ -347,12 +363,13 @@ export class CommentService {
             id: true,
             content: true,
             createdAt: true,
+            deletedAt: true,
             user: { select: { id: true, fullName: true } },
             post: {
               select: {
                 id: true,
                 feedback: {
-                  select: { id: true, subject: true, description: true },
+                  select: { subject: true, description: true },
                 },
               },
             },
@@ -361,7 +378,13 @@ export class CommentService {
         user: { select: { id: true, fullName: true } },
       },
     });
-
+    await this.prisma.commentReports.updateMany({
+      where: { commentId: report.comment.id, id: { not: id } },
+      data: {
+        status: dto.status,
+        adminResponse: dto.adminResponse ?? undefined,
+      },
+    });
     const mappedReport: CommentReportDto = {
       id: updatedReport.id,
       reason: updatedReport.reason ?? null,
@@ -378,13 +401,70 @@ export class CommentService {
         id: updatedReport.comment.id,
         content: updatedReport.comment.content,
         createdAt: updatedReport.comment.createdAt.toISOString(),
+        deletedAt: updatedReport.comment.deletedAt
+          ? updatedReport.comment.deletedAt.toISOString()
+          : null,
         user: {
           id: updatedReport.comment.user.id,
           fullName: updatedReport.comment.user.fullName,
+        },
+        post: {
+          id: updatedReport.comment.post?.id,
+          subject: updatedReport.comment.post.feedback?.subject,
+          description: updatedReport.comment.post.feedback?.description,
         },
       },
     };
 
     return mappedReport;
+  }
+  async deleteComment(commentId: string, userId?: string): Promise<CommentDto> {
+    const comment = await this.prisma.comments.findUnique({
+      where: { id: commentId },
+      include: {
+        user: { select: { id: true, fullName: true } },
+      },
+    });
+
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    if (userId && comment.user.id !== userId) {
+      throw new ForbiddenException(
+        'You are not allowed to delete this comment',
+      );
+    }
+
+    const now = new Date();
+
+    const updatedComment = await this.prisma.comments.update({
+      where: { id: commentId },
+      data: { deletedAt: now },
+      include: {
+        user: { select: { id: true, fullName: true } },
+      },
+    });
+
+    await this.prisma.comments.updateMany({
+      where: { parentId: commentId },
+      data: { deletedAt: now },
+    });
+
+    const mappedComment: CommentDto = {
+      id: updatedComment.id,
+      content: updatedComment.content,
+      createdAt: updatedComment.createdAt.toISOString(),
+      deletedAt: updatedComment.deletedAt
+        ? updatedComment.deletedAt.toISOString()
+        : null,
+      user: {
+        id: updatedComment.user.id,
+        fullName: updatedComment.user.fullName,
+      },
+      parentId: updatedComment.parentId,
+    };
+
+    return mappedComment;
   }
 }

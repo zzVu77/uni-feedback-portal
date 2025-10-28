@@ -7,10 +7,15 @@ import {
   CommentReportResponseDto,
   QueryCommentReportsDto,
   UpdateCommentReportDto,
+  CommentReportDto,
 } from './dto/';
 
 export interface CommentServiceContract {
-  createComment(dto: CreateCommentDto, userId: string): Promise<CommentDto>;
+  createComment(
+    dto: CreateCommentDto,
+    postId: string,
+    userId: string,
+  ): Promise<CommentDto>;
   getComments(
     postId: string,
     query: QueryCommentsDto,
@@ -20,14 +25,13 @@ export interface CommentServiceContract {
     commentId: string,
     userId: string,
     dto: CreateCommentReportDto,
-  ): Promise<CommentReportResponseDto>;
-  getReportDetail(id: string): Promise<CommentReportResponseDto>;
-  getReports(
-    query: QueryCommentReportsDto,
-  ): Promise<{ results: CommentReportResponseDto[]; total: number }>;
+  ): Promise<CommentReportDto>;
+  getReportDetail(commentReportId: string): Promise<CommentReportDto | null>;
+  getReports(query: QueryCommentReportsDto): Promise<CommentReportResponseDto>;
 
   updateReport(
     id: string,
     dto: UpdateCommentReportDto,
-  ): Promise<CommentReportResponseDto>;
+  ): Promise<CommentReportDto>;
+  deleteComment(commentId: string, userId?: string): Promise<CommentDto>;
 }

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { ReportStatus } from '@prisma/client';
 
 export class UserInfo {
@@ -11,7 +11,7 @@ export class UserInfo {
   @ApiProperty({ example: 'student' })
   role?: string;
 }
-export class FeedbackInfo {
+export class PostInfo {
   @ApiProperty({ example: 'a84b6d12-9c31-43a1-bc24-958b08f2b92c' })
   id: string;
 
@@ -22,7 +22,7 @@ export class FeedbackInfo {
   description: string;
 }
 export class CommentDto {
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 'a84b6d12-9c31-43a1-bc24-958b08f2b92c' })
   id: string;
 
   @ApiProperty({ example: 'This is a comment' })
@@ -33,17 +33,22 @@ export class CommentDto {
 
   @ApiProperty({ type: () => UserInfo })
   user: UserInfo;
-  // 👇 Optional feedback info (only used in report context)
-  @ApiProperty({ type: () => FeedbackInfo, required: false })
-  feedback?: FeedbackInfo;
 
+  @ApiProperty({ example: null, nullable: true })
+  deletedAt?: string | null;
   @ApiProperty({ example: null, nullable: true })
   parentId?: string | null;
 
   @ApiProperty({ type: () => [CommentDto], required: false })
   replies?: CommentDto[];
 }
-
+export class CommentForReportDto extends OmitType(CommentDto, [
+  'replies',
+  'parentId',
+] as const) {
+  @ApiProperty({ type: () => PostInfo, required: false })
+  post?: PostInfo;
+}
 export class CommentsResponseDto {
   @ApiProperty({ type: [CommentDto] })
   results: CommentDto[];
@@ -59,8 +64,8 @@ export class CommentReportDto {
   @ApiProperty({ type: () => UserInfo })
   reportedBy: UserInfo;
 
-  @ApiProperty({ type: () => CommentDto })
-  comment: CommentDto;
+  @ApiProperty({ type: () => CommentForReportDto })
+  comment: CommentForReportDto;
 
   @ApiProperty()
   reason?: string | null;

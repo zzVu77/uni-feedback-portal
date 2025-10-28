@@ -11,8 +11,10 @@ import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
+  CommentDto,
   CommentReportDto,
   CommentReportResponseDto,
+  CommentsResponseDto,
   CreateCommentReportDto,
   QueryCommentReportsDto,
   QueryCommentsDto,
@@ -31,7 +33,10 @@ export class CommentController {
   userId = '550e8400-e29b-41d4-a716-446655440009'; // dummy userId
   @Post('/post/:id')
   @ApiOperation({ summary: 'Create a new comment' })
-  @ApiOkResponse({ description: 'Comment created successfully' })
+  @ApiOkResponse({
+    description: 'Comment created successfully',
+    type: CommentDto,
+  })
   async createComment(
     @Param() params: PostParamDto,
     @Body() createCommentDto: CreateCommentDto,
@@ -44,7 +49,10 @@ export class CommentController {
   }
   @Get('/post/:id')
   @ApiOperation({ summary: 'Get all comments' })
-  @ApiOkResponse({ description: 'List of comments' })
+  @ApiOkResponse({
+    description: 'List of comments',
+    type: CommentsResponseDto,
+  })
   async getComments(
     @Param() params: PostParamDto,
     @Query() query: QueryCommentsDto,
