@@ -54,7 +54,7 @@ export class QueryFeedbacksDto {
   departmentId?: string;
 
   @ApiPropertyOptional({
-    example: '2024-01-01',
+    example: '2025-01-01',
     description: 'Filter feedbacks created after this date (ISO8601 format)',
   })
   @IsOptional()
@@ -62,7 +62,7 @@ export class QueryFeedbacksDto {
   from?: string;
 
   @ApiPropertyOptional({
-    example: '2024-12-31',
+    example: '2025-12-31',
     description: 'Filter feedbacks created before this date (ISO8601 format)',
   })
   @IsOptional()
