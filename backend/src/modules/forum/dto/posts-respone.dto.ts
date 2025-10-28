@@ -1,6 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { FeedbackDetail } from 'src/modules/feedbacks/dto';
-import { CommentsResponseDto } from 'src/modules/comment/dto/';
 export class FeedbackForumDto extends OmitType(FeedbackDetail, [
   'statusHistory',
   'forwardingLogs',
@@ -55,16 +54,9 @@ export class PostDetailDto {
     example: true,
   })
   hasVoted: boolean;
-
-  @ApiProperty({
-    description: 'Comments associated with the post',
-    type: CommentsResponseDto,
-  })
-  comments: CommentsResponseDto;
 }
 
 export class PostSummaryDto extends OmitType(PostDetailDto, [
-  'comments',
   'feedback',
 ] as const) {
   @ApiProperty({ type: FeedbackForumSummaryDto })
@@ -82,4 +74,21 @@ export class GetPostsResponseDto {
     description: 'Total post for pagination',
   })
   total: number;
+}
+
+export class VoteResponseDto {
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440001' })
+  postId: string;
+
+  @ApiProperty({
+    example: true,
+    description: 'Indicates if the current user has voted',
+  })
+  isVoted: boolean;
+
+  @ApiProperty({
+    example: 42,
+    description: 'Total number of votes for this post',
+  })
+  totalVotes: number;
 }

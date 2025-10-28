@@ -1,11 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { GetPostsResponseDto, QueryPostsDto, PostDetailDto } from './dto';
+import {
+  GetPostsResponseDto,
+  QueryPostsDto,
+  PostDetailDto,
+  VoteResponseDto,
+} from './dto';
 @Injectable()
 export class ForumService {
-  constructor(private prisma: PrismaService) {}
-
+  constructor(private readonly prisma: PrismaService) {}
   async getListPosts(
     query: QueryPostsDto,
     userId: string,
@@ -181,42 +189,7 @@ export class ForumService {
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
-    // 🔹 MOCK COMMENT DATA
-    const mockComments = [
-      {
-        id: 'cmt-1',
-        content: 'Totally agree with this feedback!',
-        createdAt: new Date('2025-10-21T09:00:00Z').toISOString(),
-        user: {
-          id: 'user-1',
-          fullName: 'Nguyen Van A',
-          email: 'a@student.edu.vn',
-          role: 'STUDENT',
-        },
-      },
-      {
-        id: 'cmt-2',
-        content: 'We are currently working on fixing this issue.',
-        createdAt: new Date('2025-10-21T10:15:00Z').toISOString(),
-        user: {
-          id: 'user-2',
-          fullName: 'Tran Thi B',
-          email: 'b@dept.edu.vn',
-          role: 'DEPARTMENT_STAFF',
-        },
-      },
-      {
-        id: 'cmt-3',
-        content: 'Issue resolved in the latest update.',
-        createdAt: new Date('2025-10-22T08:45:00Z').toISOString(),
-        user: {
-          id: 'user-3',
-          fullName: 'Admin C',
-          email: 'admin@school.edu.vn',
-          role: 'ADMIN',
-        },
-      },
-    ];
+
     return {
       id: post.id,
       createdAt: post.createdAt.toISOString(),
@@ -252,10 +225,92 @@ export class ForumService {
               email: post.feedback.user.email,
             },
           }),
-      comments: {
-        results: mockComments,
-        total: mockComments.length,
+    };
+  }
+  async vote(postId: string, userId: string): Promise<VoteResponseDto> {
+    const post = await this.prisma.forumPosts.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    // Kiểm tra user đã vote chưa
+    const existingVote = await this.prisma.votes.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId: postId,
+        },
       },
+    });
+
+    if (existingVote) {
+      throw new BadRequestException('User already voted this post');
+    }
+
+    // Tạo vote mới
+    await this.prisma.votes.create({
+      data: {
+        userId,
+        postId: postId,
+      },
+    });
+
+    // Đếm lại tổng vote
+    const totalVotes = await this.prisma.votes.count({
+      where: { postId: postId },
+    });
+
+    return {
+      postId: postId,
+      isVoted: true,
+      totalVotes,
+    };
+  }
+  async unvote(postId: string, userId: string): Promise<VoteResponseDto> {
+    const post = await this.prisma.forumPosts.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    // Kiểm tra xem user đã vote chưa
+    const existingVote = await this.prisma.votes.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId: postId,
+        },
+      },
+    });
+
+    if (!existingVote) {
+      throw new BadRequestException('User has not voted this post yet');
+    }
+
+    // Xóa vote
+    await this.prisma.votes.delete({
+      where: {
+        userId_postId: {
+          userId,
+          postId: postId,
+        },
+      },
+    });
+
+    // Đếm lại tổng vote
+    const totalVotes = await this.prisma.votes.count({
+      where: { postId: postId },
+    });
+
+    return {
+      postId: postId,
+      isVoted: false,
+      totalVotes,
     };
   }
 }
