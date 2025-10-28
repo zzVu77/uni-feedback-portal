@@ -36,6 +36,12 @@ export class CommentDto {
   // 👇 Optional feedback info (only used in report context)
   @ApiProperty({ type: () => FeedbackInfo, required: false })
   feedback?: FeedbackInfo;
+
+  @ApiProperty({ example: null, nullable: true })
+  parentId?: string | null;
+
+  @ApiProperty({ type: () => [CommentDto], required: false })
+  replies?: CommentDto[];
 }
 
 export class CommentsResponseDto {

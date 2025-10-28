@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import {
@@ -30,21 +34,36 @@ export class CommentService {
       throw new NotFoundException(`Post not found`);
     }
 
-    // Tạo comment mới
+    if (dto.parentId) {
+      const parentComment = await this.prisma.comments.findUnique({
+        where: { id: dto.parentId },
+        select: { parentId: true },
+      });
+
+      if (!parentComment) {
+        throw new NotFoundException(`Parent comment not found`);
+      }
+
+      if (parentComment.parentId) {
+        throw new BadRequestException(`You cannot reply to a reply comment.`);
+      }
+    }
     const comment = await this.prisma.comments.create({
       data: {
         postId: postId,
         userId,
         content: dto.content,
+        parentId: dto.parentId ?? null,
       },
       include: {
-        user: true, // lấy thông tin người tạo comment
+        user: true,
       },
     });
 
     return {
       id: comment.id,
       content: comment.content,
+      parentId: comment.parentId,
       createdAt: comment.createdAt.toISOString(),
       user: {
         id: comment.user.id,
@@ -53,7 +72,6 @@ export class CommentService {
       },
     };
   }
-
   async getComments(
     postId: string,
     query: QueryCommentsDto,
@@ -61,11 +79,24 @@ export class CommentService {
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 10;
 
-    const [results, total] = await Promise.all([
+    const [rootComments, total] = await Promise.all([
       this.prisma.comments.findMany({
-        where: { postId },
+        where: {
+          postId,
+          deletedAt: null,
+          parentId: null,
+        },
         include: {
           user: true,
+          replies: {
+            where: { deletedAt: null },
+            include: {
+              user: true,
+            },
+            orderBy: {
+              createdAt: 'asc',
+            },
+          },
         },
         orderBy: {
           createdAt: 'desc',
@@ -74,32 +105,47 @@ export class CommentService {
         take: pageSize,
       }),
       this.prisma.comments.count({
-        where: { postId },
+        where: {
+          postId,
+          deletedAt: null,
+        },
       }),
     ]);
 
-    return {
-      results: results.map((comment) => ({
-        id: comment.id,
-        content: comment.content,
-        createdAt: comment.createdAt.toISOString(),
+    const results = rootComments.map((comment) => ({
+      id: comment.id,
+      content: comment.content,
+      createdAt: comment.createdAt.toISOString(),
+      user: {
+        id: comment.user.id,
+        fullName: comment.user.fullName,
+        role: comment.user.role,
+      },
+      replies: comment.replies.map((reply) => ({
+        id: reply.id,
+        content: reply.content,
+        createdAt: reply.createdAt.toISOString(),
         user: {
-          id: comment.user.id,
-          fullName: comment.user.fullName,
-          role: comment.user.role,
+          id: reply.user.id,
+          fullName: reply.user.fullName,
+          role: reply.user.role,
         },
       })),
+    }));
+
+    return {
+      results,
       total,
     };
   }
+
   async createReport(
     commentId: string,
     userId: string,
     dto: CreateCommentReportDto,
   ): Promise<CommentReportDto> {
-    // Kiểm tra comment tồn tại
     const comment = await this.prisma.comments.findUnique({
-      where: { id: commentId },
+      where: { id: commentId, deletedAt: null },
     });
 
     if (!comment) {
