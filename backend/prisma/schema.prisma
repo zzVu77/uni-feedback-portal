@@ -161,7 +161,7 @@ model Comments {
   userId     String   @db.Uuid
   content    String
   createdAt  DateTime @default(now())
-
+  deletedAt  DateTime? 
   post       ForumPosts       @relation(fields: [postId], references: [id], onDelete: Cascade)
   user       Users            @relation(fields: [userId], references: [id])
   reports    CommentReports[]
