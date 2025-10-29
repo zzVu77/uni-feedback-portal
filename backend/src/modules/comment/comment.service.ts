@@ -272,9 +272,7 @@ export class CommentService {
       total,
     };
   }
-  async getReportDetail(
-    commentReportId: string,
-  ): Promise<CommentReportDto | null> {
+  async getReportDetail(commentReportId: string): Promise<CommentReportDto> {
     const report = await this.prisma.commentReports.findUnique({
       where: { id: commentReportId },
       include: {

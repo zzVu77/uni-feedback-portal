@@ -26,7 +26,7 @@ export interface CommentServiceContract {
     userId: string,
     dto: CreateCommentReportDto,
   ): Promise<CommentReportDto>;
-  getReportDetail(commentReportId: string): Promise<CommentReportDto | null>;
+  getReportDetail(commentReportId: string): Promise<CommentReportDto>;
   getReports(query: QueryCommentReportsDto): Promise<CommentReportResponseDto>;
 
   updateReport(
