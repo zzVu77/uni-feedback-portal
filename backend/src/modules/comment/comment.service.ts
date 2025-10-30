@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
   ForbiddenException,
@@ -14,7 +13,7 @@ import {
   CreateCommentDto,
 } from './dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma, ReportStatus } from '@prisma/client';
+import { ReportStatus } from '@prisma/client';
 import { CommentReportDto } from '../moderation/dto';
 @Injectable()
 export class CommentService {
