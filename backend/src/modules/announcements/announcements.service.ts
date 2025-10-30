@@ -80,7 +80,7 @@ export class AnnouncementsService {
       createdAt: item.createdAt,
       user: {
         id: item.user.id,
-        fullName: item.user.fullName,
+        userName: item.user.fullName,
       },
       department: {
         id: item.user.department.id,
@@ -120,7 +120,7 @@ export class AnnouncementsService {
       createdAt: announcement.createdAt,
       user: {
         id: announcement.userId,
-        fullName: announcement.user.fullName,
+        userName: announcement.user.fullName,
       },
       department: {
         id: announcement.user.department.id,

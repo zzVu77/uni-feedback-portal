@@ -4,7 +4,7 @@ export class UserInfo {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544000a' })
   id: string;
   @ApiProperty({ example: 'Nguyen Van A' })
-  fullName: string;
+  userName: string;
 }
 
 export class DepartmentInfo {
