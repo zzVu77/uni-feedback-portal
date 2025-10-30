@@ -1,37 +1,33 @@
+import { CommentReportDto } from '../moderation/dto';
 import {
   CommentDto,
   CommentsResponseDto,
   CreateCommentDto,
   QueryCommentsDto,
   CreateCommentReportDto,
-  CommentReportResponseDto,
-  QueryCommentReportsDto,
-  UpdateCommentReportDto,
-  CommentReportDto,
 } from './dto/';
 
 export interface CommentServiceContract {
-  createComment(
+  CreateComment(
     dto: CreateCommentDto,
     postId: string,
     userId: string,
   ): Promise<CommentDto>;
-  getComments(
+  GetComments(
     postId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto>;
 
-  createReport(
+  CreateCommentReport(
     commentId: string,
     userId: string,
     dto: CreateCommentReportDto,
   ): Promise<CommentReportDto>;
-  getReportDetail(commentReportId: string): Promise<CommentReportDto>;
-  getReports(query: QueryCommentReportsDto): Promise<CommentReportResponseDto>;
-
-  updateReport(
-    id: string,
-    dto: UpdateCommentReportDto,
-  ): Promise<CommentReportDto>;
-  deleteComment(commentId: string, userId?: string): Promise<CommentDto>;
+  DeleteComment(
+    commentId: string,
+    actor: {
+      role: 'STUDENT' | 'ADMIN';
+      id: string;
+    },
+  ): Promise<CommentDto>;
 }
