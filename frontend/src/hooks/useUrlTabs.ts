@@ -4,11 +4,11 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
 /**
- * Custom Hook để quản lý trạng thái tab dựa trên URL search params.
- * * @template T - Union type của các giá trị tab hợp lệ, ví dụ: "all" | "feedback" | "forum"
- * @param {string} paramName - Tên của param trong URL, ví dụ: 'tab'
- * @param {readonly T[]} validTabs - Mảng các giá trị tab hợp lệ (sử dụng `readonly` để đảm bảo mảng không thay đổi)
- * @param {T} defaultValue - Giá trị mặc định của tab
+ * Custom Hook to manage tab state based on URL search params.
+ * @template T - Union type of valid tab values, e.g., "all" | "feedback" | "forum"
+ * @param {string} paramName - Name of the param in the URL, e.g., 'tab'
+ * @param {readonly T[]} validTabs - Array of valid tab values (use `readonly` to ensure the array is not modified)
+ * @param {T} defaultValue - Default tab value if URL param is missing or invalid
  * @returns {{
  * currentTabValue: T,
  * handleTabChange: (value: T) => void
@@ -22,24 +22,24 @@ export function useUrlTabs<T extends string>(
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // 1. Lấy giá trị hiện tại từ URL
+  // 1. Get current tab value from URL
   const rawTabValue = searchParams.get(paramName);
 
-  // 2. Ép kiểu và kiểm tra tính hợp lệ
-  // Sử dụng assertion `as T` an toàn vì chúng ta kiểm tra `validTabs.includes`
+  // 2. Cast and validate
+  // Use assertion `as T` safely because we check `validTabs.includes`
   const currentTabValue: T = validTabs.includes(rawTabValue as T)
     ? (rawTabValue as T)
     : defaultValue;
 
-  // 3. Hàm cập nhật URL khi tab thay đổi
+  // 3. Function to update URL when tab changes
   const handleTabChange = useCallback(
     (value: T) => {
-      // TypeScript đảm bảo `value` là một trong các `T`
+      // TypeScript ensures `value` is one of `T`
 
       const newSearchParams = new URLSearchParams(searchParams.toString());
       newSearchParams.set(paramName, value);
 
-      // Cập nhật URL
+      // Update URL
       router.push(`?${newSearchParams.toString()}`, { scroll: false });
     },
     [router, searchParams, paramName],
