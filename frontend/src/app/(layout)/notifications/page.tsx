@@ -1,11 +1,13 @@
 import NotificationSection from "@/components/notification/NotificationSection";
 import Wrapper from "@/components/shared/Wrapper";
-import React from "react";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
     <Wrapper>
-      <NotificationSection />
+      <Suspense fallback={<div>Loading notifications...</div>}>
+        <NotificationSection />
+      </Suspense>
     </Wrapper>
   );
 };
