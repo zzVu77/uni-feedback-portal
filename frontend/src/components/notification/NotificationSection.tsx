@@ -5,6 +5,7 @@ import Filter from "../common/filter/Filter";
 import NotificationItem from "./NotificationItem";
 import { useUrlTabs } from "@/hooks/useUrlTabs";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ScrollArea } from "../ui/scroll-area";
 type NotificationTab = "all" | "feedback" | "forum";
 const NotificationSection = () => {
   const TAB_PARAM_NAME = "tab";
@@ -65,7 +66,7 @@ const NotificationSection = () => {
           Diễn đàn
         </TabsTrigger>
       </TabsList>
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
+      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center md:justify-center lg:justify-start">
         <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
           <Suspense fallback={null}>
             <Filter type="notificationStatus" items={mockNotificationStatus} />
@@ -77,166 +78,178 @@ const NotificationSection = () => {
       </div>
 
       <TabsContent value="all" className="flex h-screen w-full flex-col gap-4">
-        <NotificationItem
-          isRead={false}
-          type="ADMIN_NOTIFICATION"
-          time="2025-05-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="COMMENT_POST_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_PROCESSING_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_RECEIVED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_REJECTED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_RESOLVED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="FEEDBACK_SUBMITTED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="MESSAGE_NEW_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="MESSAGE_SYSTEM_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="REPORT_COMMENT_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
+        <ScrollArea className="overflow-y-auto pr-1">
+          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
+            <NotificationItem
+              isRead={false}
+              type="ADMIN_NOTIFICATION"
+              time="2025-05-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="COMMENT_POST_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_PROCESSING_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_RECEIVED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_REJECTED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_RESOLVED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="FEEDBACK_SUBMITTED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="MESSAGE_NEW_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="MESSAGE_SYSTEM_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="REPORT_COMMENT_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+          </div>
+        </ScrollArea>
       </TabsContent>
       <TabsContent
         value="feedback"
         className="flex h-screen w-full flex-col gap-4"
       >
-        <NotificationItem
-          isRead={false}
-          type="ADMIN_NOTIFICATION"
-          time="2025-05-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="COMMENT_POST_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_PROCESSING_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_RECEIVED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_REJECTED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_RESOLVED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="FEEDBACK_SUBMITTED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="MESSAGE_NEW_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="MESSAGE_SYSTEM_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="REPORT_COMMENT_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
+        <ScrollArea className="overflow-y-auto pr-1">
+          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
+            <NotificationItem
+              isRead={false}
+              type="ADMIN_NOTIFICATION"
+              time="2025-05-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="COMMENT_POST_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_PROCESSING_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_RECEIVED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_REJECTED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_RESOLVED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="FEEDBACK_SUBMITTED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="MESSAGE_NEW_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="MESSAGE_SYSTEM_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="REPORT_COMMENT_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+          </div>
+        </ScrollArea>
       </TabsContent>
       <TabsContent
         value="forum"
         className="flex h-screen w-full flex-col gap-4"
       >
-        <NotificationItem
-          isRead={false}
-          type="ADMIN_NOTIFICATION"
-          time="2025-05-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="COMMENT_POST_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_PROCESSING_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_RECEIVED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_REJECTED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={true}
-          type="FEEDBACK_RESOLVED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="FEEDBACK_SUBMITTED_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="MESSAGE_NEW_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="MESSAGE_SYSTEM_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
-        <NotificationItem
-          isRead={false}
-          type="REPORT_COMMENT_NOTIFICATION"
-          time="2023-03-01T12:00:00Z"
-        />
+        <ScrollArea className="overflow-y-auto pr-1">
+          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
+            <NotificationItem
+              isRead={false}
+              type="ADMIN_NOTIFICATION"
+              time="2025-05-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="COMMENT_POST_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_PROCESSING_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_RECEIVED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_REJECTED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={true}
+              type="FEEDBACK_RESOLVED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="FEEDBACK_SUBMITTED_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="MESSAGE_NEW_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="MESSAGE_SYSTEM_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+            <NotificationItem
+              isRead={false}
+              type="REPORT_COMMENT_NOTIFICATION"
+              time="2023-03-01T12:00:00Z"
+            />
+          </div>
+        </ScrollArea>
       </TabsContent>
     </Tabs>
   );
