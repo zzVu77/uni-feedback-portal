@@ -1,5 +1,6 @@
 import {
   ArrowDownNarrowWide,
+  BellDot,
   Building,
   Hourglass,
   LayoutGrid,
@@ -12,7 +13,12 @@ export interface FilterDefinition {
   icon: ElementType;
 }
 
-export type FilterType = "status" | "department" | "category" | "sort";
+export type FilterType =
+  | "status"
+  | "department"
+  | "category"
+  | "sort"
+  | "notificationStatus";
 
 export const filtersConfig: Record<FilterType, FilterDefinition> = {
   status: {
@@ -34,5 +40,10 @@ export const filtersConfig: Record<FilterType, FilterDefinition> = {
     param: "sort",
     placeholder: "Sắp xếp",
     icon: ArrowDownNarrowWide,
+  },
+  notificationStatus: {
+    param: "isRead",
+    placeholder: "Trạng thái",
+    icon: BellDot,
   },
 };

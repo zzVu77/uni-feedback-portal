@@ -23,7 +23,7 @@ export function ForumSection() {
   return (
     <div>
       <Tabs defaultValue="feedbacks" className="flex flex-col gap-4 pb-2">
-        <TabsList className="h-auto w-full bg-white px-2 py-1 shadow-lg">
+        <TabsList className="h-auto w-full border-2 bg-white px-2 py-1 shadow-lg">
           <TabsTrigger
             value="feedbacks"
             className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
