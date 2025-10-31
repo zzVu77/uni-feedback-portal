@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const studentNavigation = [
-  { href: "#3", label: "Thông báo", icon: Bell },
+  { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/create-new-feedback", label: "Gửi góp ý", icon: MessageSquareText },
   { href: "/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
