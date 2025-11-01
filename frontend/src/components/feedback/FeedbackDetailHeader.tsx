@@ -1,14 +1,29 @@
 import React from "react";
 import StatusBadge from "../common/StatusBadge";
 import Attachment from "./Attachment";
+import { Button } from "../ui/button";
+import { SquarePen } from "lucide-react";
+import Link from "next/link";
 
 const FeedbackDetailHeader = () => {
   return (
     <>
       <div className="flex flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-xs lg:px-8">
         {/* Title */}
-        <div>
-          <h1 className="text-[24px] font-bold text-black">Bóng đèn bị hỏng</h1>
+        <div className="flex flex-col items-start justify-between gap-1 md:flex-row lg:gap-4">
+          <h1 className="order-2 text-[16px] font-bold text-black md:order-1 lg:text-[24px]">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
+            ratione dicta quia. Inventore animi qui expedita accusamus ex
+            voluptates dignissimos officia molestiae! Rerum mollitia distinctio
+            consequuntur molestias, veniam illum dolores.
+          </h1>
+          {/* //TODO: If status is PENDING, show edit button */}
+          <Link href={"/my-feedbacks/1/edit"} className="order-1 md:order-2">
+            <Button className="h-fit border-1 bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
+              <SquarePen className="h-4 w-4 text-black" />
+              Sửa
+            </Button>
+          </Link>
         </div>
         {/* Information */}
         <ul className="text-neutral-dark-primary-500 flex list-inside list-disc flex-col gap-2 md:grid md:grid-cols-2 lg:flex lg:flex-row">
@@ -30,7 +45,7 @@ const FeedbackDetailHeader = () => {
         {/* Description */}
         <div>
           <h2 className="text-[18px] font-medium">Nội dung:</h2>
-          <p className="text-[15px] font-normal text-black">
+          <p className="text-[13px] font-normal text-black lg:text-[14px]">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
             perferendis minima ea et ipsum vero provident magni eveniet iure?
             Iusto eveniet id provident a nam dolorum error magnam, perspiciatis.
