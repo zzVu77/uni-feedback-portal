@@ -6,6 +6,7 @@ import NotificationItem from "./NotificationItem";
 import { useUrlTabs } from "@/hooks/useUrlTabs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea } from "../ui/scroll-area";
+import { BellDot, MessageCircle, MessageSquareText } from "lucide-react";
 type NotificationTab = "all" | "feedback" | "forum";
 const NotificationSection = () => {
   const TAB_PARAM_NAME = "tab";
@@ -51,18 +52,21 @@ const NotificationSection = () => {
           value="all"
           className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold text-black/70 transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
         >
+          <BellDot />
           Tất cả
         </TabsTrigger>
         <TabsTrigger
           value="feedback"
           className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold text-black/70 transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
         >
+          <MessageSquareText />
           Góp ý
         </TabsTrigger>
         <TabsTrigger
           value="forum"
           className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold text-black/70 transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
         >
+          <MessageCircle />
           Diễn đàn
         </TabsTrigger>
       </TabsList>
