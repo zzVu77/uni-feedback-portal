@@ -8,14 +8,18 @@ import {
   MessageSquareText,
   MessageSquareWarning,
 } from "lucide-react";
-
-export const studentNavigation = [
+export type NavigationItem = {
+  href: string;
+  label: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+};
+export const studentNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/create-new-feedback", label: "Gửi góp ý", icon: MessageSquareText },
   { href: "/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
 ];
-export const staffNavigation = [
+export const staffNavigation: NavigationItem[] = [
   { href: "#3", label: "Thông báo", icon: Bell },
   { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
   { href: "#1", label: "Góp ý tiếp nhận", icon: History },
@@ -23,7 +27,7 @@ export const staffNavigation = [
   { href: "#5", label: "Quản lý bài đăng", icon: Megaphone },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
 ];
-export const adminNavigation = [
+export const adminNavigation: NavigationItem[] = [
   { href: "#3", label: "Thông báo", icon: Bell },
   { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
   { href: "#1", label: "Góp ý tiếp nhận", icon: History },

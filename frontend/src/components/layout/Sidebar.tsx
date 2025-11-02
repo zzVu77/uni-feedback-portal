@@ -2,7 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { ASSETS } from "@/constants/assets";
 
-import { studentNavigation } from "@/constants/navigation";
+import {
+  adminNavigation,
+  NavigationItem,
+  staffNavigation,
+  studentNavigation,
+} from "@/constants/navigation";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
@@ -12,10 +17,27 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type SidebarProps = {
   showOnMobile?: boolean;
+  type?: "student" | "staff" | "admin";
 };
-export default function Sidebar({ showOnMobile = false }: SidebarProps) {
+export default function Sidebar({
+  showOnMobile = false,
+  type = "student",
+}: SidebarProps) {
+  let navigation: NavigationItem[];
   const pathname = usePathname();
-
+  switch (type) {
+    case "student":
+      navigation = studentNavigation;
+      break;
+    case "staff":
+      navigation = staffNavigation;
+      break;
+    case "admin":
+      navigation = adminNavigation;
+      break;
+    default:
+      navigation = studentNavigation;
+  }
   return (
     <div>
       {/* Sidebar Desktop */}
@@ -50,7 +72,7 @@ export default function Sidebar({ showOnMobile = false }: SidebarProps) {
 
         <div className="flex h-full flex-col justify-between border-t-1 border-white/20">
           <div className="flex flex-col gap-2">
-            {studentNavigation.map(({ href, label, icon: Icon }) => (
+            {navigation.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href}>
                 <Button
                   variant="ghost"
