@@ -42,3 +42,7 @@ export type MyFeedbackHistoryItem = Pick<
   FeedbackDetail,
   "id" | "subject" | "currentStatus" | "createdAt" | "category" | "department"
 >;
+export type StaffFeedbackItem = Pick<
+  FeedbackDetail,
+  "id" | "subject" | "currentStatus" | "createdAt" | "category" | "department"
+>;
