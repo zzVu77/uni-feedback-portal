@@ -14,18 +14,22 @@ export type NavigationItem = {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 export const studentNavigation: NavigationItem[] = [
-  { href: "/notifications", label: "Thông báo", icon: Bell },
-  { href: "/create-new-feedback", label: "Gửi góp ý", icon: MessageSquareText },
-  { href: "/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
-  { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
+  { href: "/student/notifications", label: "Thông báo", icon: Bell },
+  {
+    href: "/student/create-new-feedback",
+    label: "Gửi góp ý",
+    icon: MessageSquareText,
+  },
+  { href: "/student/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
+  { href: "/student/forum", label: "Diễn đàn", icon: MessageCircle },
 ];
 export const staffNavigation: NavigationItem[] = [
-  { href: "#3", label: "Thông báo", icon: Bell },
-  { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
-  { href: "#2", label: "Diễn đàn", icon: MessageCircle },
+  { href: "/staff/notifications", label: "Thông báo", icon: Bell },
+  { href: "/staff/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
+  { href: "/staff/forum", label: "Diễn đàn", icon: MessageCircle },
   { href: "#5", label: "Quản lý bài đăng", icon: Megaphone },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
+  { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
 ];
 export const adminNavigation: NavigationItem[] = [
   { href: "#3", label: "Thông báo", icon: Bell },
