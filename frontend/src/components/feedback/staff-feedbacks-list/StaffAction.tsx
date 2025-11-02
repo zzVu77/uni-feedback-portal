@@ -43,7 +43,7 @@ const mockDepartments = [
 ];
 const StaffAction = () => {
   return (
-    <div className="flex w-full flex-col gap-2 rounded-[8px] bg-white px-3 py-4 shadow-md">
+    <div className="flex h-full w-full flex-col gap-2 rounded-[8px] bg-white/80 px-3 py-4 shadow-md">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
       <Select>
         <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border-[1px] bg-white font-semibold shadow-sm focus-visible:border-[1px] focus-visible:ring-0">
@@ -98,7 +98,7 @@ const StaffAction = () => {
             </AlertDialogHeader>
             <Select>
               <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border-[1px] bg-white font-semibold shadow-sm focus-visible:border-[1px] focus-visible:ring-0">
-                <SelectValue placeholder="Chọn trạng thái" />
+                <SelectValue placeholder="Chọn phòng ban" />
               </SelectTrigger>
               <SelectContent>
                 {mockDepartments.map((item) => (
