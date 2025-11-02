@@ -22,7 +22,7 @@ export const studentNavigation: NavigationItem[] = [
 export const staffNavigation: NavigationItem[] = [
   { href: "#3", label: "Thông báo", icon: Bell },
   { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "#1", label: "Góp ý tiếp nhận", icon: History },
+  { href: "/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
   { href: "#2", label: "Diễn đàn", icon: MessageCircle },
   { href: "#5", label: "Quản lý bài đăng", icon: Megaphone },
   { href: "#6", label: "Thống kê", icon: ChartColumn },

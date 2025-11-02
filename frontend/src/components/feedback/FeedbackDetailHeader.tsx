@@ -4,8 +4,10 @@ import Attachment from "./Attachment";
 import { Button } from "../ui/button";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
-
-const FeedbackDetailHeader = () => {
+type Props = {
+  type: "student" | "staff";
+};
+const FeedbackDetailHeader = ({ type = "student" }: Props) => {
   return (
     <>
       <div className="flex flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-xs lg:px-8">
@@ -17,13 +19,15 @@ const FeedbackDetailHeader = () => {
             voluptates dignissimos officia molestiae! Rerum mollitia distinctio
             consequuntur molestias, veniam illum dolores.
           </h1>
-          {/* //TODO: If status is PENDING, show edit button */}
-          <Link href={"/my-feedbacks/1/edit"} className="order-1 md:order-2">
-            <Button className="h-fit border-1 bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
-              <SquarePen className="h-4 w-4 text-black" />
-              Sửa
-            </Button>
-          </Link>
+          {type === "student" && (
+            //TODO: If status is PENDING, show edit button
+            <Link href={"/my-feedbacks/1/edit"} className="order-1 md:order-2">
+              <Button className="h-fit border-1 bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
+                <SquarePen className="h-4 w-4 text-black" />
+                Sửa
+              </Button>
+            </Link>
+          )}
         </div>
         {/* Information */}
         <ul className="text-neutral-dark-primary-500 flex list-inside list-disc flex-col gap-2 md:grid md:grid-cols-2 lg:flex lg:flex-row">
