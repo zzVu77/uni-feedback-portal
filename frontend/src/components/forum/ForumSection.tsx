@@ -50,7 +50,7 @@ export function ForumSection() {
     <div>
       <Tabs
         value={currentTabValue}
-        onValueChange={(value: ForumTab) => handleTabChange(value)}
+        onValueChange={(value) => handleTabChange(value as ForumTab)}
         defaultValue="feedbacks"
         className="flex flex-col gap-4 pb-2"
       >

@@ -30,7 +30,7 @@ export const staffNavigation: NavigationItem[] = [
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   {
     href: "announcement-management",
-    label: "Quản lý bài đăng",
+    label: "Quản lý thông báo",
     icon: Megaphone,
   },
   { href: "#6", label: "Thống kê", icon: ChartColumn },

@@ -117,7 +117,7 @@ const AnnouncementForm = ({
     <>
       <Form {...form}>
         <form
-          className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
+          className="rounded-xlbg-white flex h-full flex-col gap-2 px-4 py-4 shadow-md lg:px-8 lg:py-4"
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
@@ -268,11 +268,8 @@ const AnnouncementForm = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel variant={"cancel"}>Hủy</AlertDialogCancel>
-            <AlertDialogAction
-              variant={"primary"}
-              onClick={form.handleSubmit(onSubmit)}
-            >
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>
               Có
             </AlertDialogAction>
           </AlertDialogFooter>

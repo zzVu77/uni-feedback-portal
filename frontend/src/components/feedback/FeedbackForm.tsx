@@ -465,11 +465,8 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel variant={"cancel"}>Hủy</AlertDialogCancel>
-            <AlertDialogAction
-              variant={"primary"}
-              onClick={form.handleSubmit(onSubmit)}
-            >
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>
               Gửi
             </AlertDialogAction>
           </AlertDialogFooter>

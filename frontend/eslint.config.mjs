@@ -33,6 +33,7 @@ export default tseslint.config(
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }], // cấm console.log
       "prettier/prettier": ["error", { endOfLine: "auto" }],
+      "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_" },
