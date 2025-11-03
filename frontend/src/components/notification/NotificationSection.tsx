@@ -45,7 +45,9 @@ const NotificationSection = () => {
     <Tabs
       className="flex w-full flex-col gap-4 pb-2"
       value={currentTabValue}
-      onValueChange={(value) => handleTabChange(value as NotificationTab)}
+      onValueChange={(value: string) =>
+        handleTabChange(value as NotificationTab)
+      }
     >
       <TabsList className="h-auto w-full border-2 bg-white px-2 py-1 shadow-lg">
         <TabsTrigger

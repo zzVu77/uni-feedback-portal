@@ -134,9 +134,9 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
           className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
-          <span className="text-[20px] font-semibold lg:text-[28px]">
-            Gửi góp ý đến nhà trường
-          </span>
+          <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
+            {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
+          </h2>
           <ScrollArea className="overflow-y-auto pr-1">
             <div className="flex h-[76vh] flex-col gap-4 px-2">
               {/* Anonymous option */}

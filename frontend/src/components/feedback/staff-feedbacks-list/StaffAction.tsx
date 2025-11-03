@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 import ConfirmationDialog from "@/components/common/ConfirmationDialog";
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
