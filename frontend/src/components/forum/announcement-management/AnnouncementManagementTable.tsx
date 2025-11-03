@@ -70,7 +70,7 @@ export function AnnouncementManagementTable() {
           <Link href="/announcement-management/create">
             <Button variant={"primary"} className="rounded-lg">
               <CirclePlus className="h-5 w-5" />
-              Tạo bài viết mới
+              Tạo thông báo mới
             </Button>
           </Link>
         </div>
