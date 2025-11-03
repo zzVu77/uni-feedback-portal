@@ -23,11 +23,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ChevronLeft, ChevronRight, CirclePlus } from "lucide-react";
 import { Suspense } from "react";
-import { dummyData, staffFeedbackColumns } from "./columns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
-export function ListDepartmentFeedback() {
+import { announcementManagementColumns, dummyData } from "./columns";
+import Link from "next/link";
+const sortOptions = [
+  { label: "Tất cả", value: "all" },
+  { label: "Mới nhất", value: "newest" },
+  { label: "Cũ nhất", value: "oldest" },
+];
+export function AnnouncementManagementTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -37,7 +42,7 @@ export function ListDepartmentFeedback() {
 
   const table = useReactTable({
     data: dummyData,
-    columns: staffFeedbackColumns,
+    columns: announcementManagementColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -51,19 +56,7 @@ export function ListDepartmentFeedback() {
       columnVisibility,
     },
   });
-  const mockStatus = [
-    { label: "Tất cả", value: "all" },
-    { label: "Đang chờ tiếp nhận", value: "pending" },
-    { label: "Đang xử lý", value: "in-progress" },
-    { label: "Đã xử lý", value: "resolved" },
-    { label: "Từ chối", value: "rejected" },
-  ];
-  const departmentOptions = [
-    { label: "All", value: "all" },
-    { label: "Khoa Công nghệ thông tin", value: "fit" },
-    { label: "Khoa Đào tạo quốc tế", value: "fie" },
-    { label: "Thư viện", value: "library" },
-  ];
+
   return (
     <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
@@ -72,11 +65,14 @@ export function ListDepartmentFeedback() {
         </Suspense>
         <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
           <Suspense fallback={null}>
-            <Filter type="status" items={mockStatus} />
+            <Filter type="sort" items={sortOptions} />
           </Suspense>
-          <Suspense fallback={null}>
-            <Filter type="department" items={departmentOptions} />
-          </Suspense>
+          <Link href="/announcement-management/create">
+            <Button variant={"primary"} className="rounded-lg">
+              <CirclePlus className="h-5 w-5" />
+              Tạo bài viết mới
+            </Button>
+          </Link>
         </div>
       </div>
       <div className="overflow-hidden rounded-md border">
@@ -120,7 +116,7 @@ export function ListDepartmentFeedback() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={staffFeedbackColumns.length}
+                  colSpan={announcementManagementColumns.length}
                   className="h-24 text-center"
                 >
                   No results.

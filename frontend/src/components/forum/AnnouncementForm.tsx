@@ -121,7 +121,7 @@ const AnnouncementForm = ({
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
-            {type === "edit" ? "Chỉnh thông báo" : "Tạo thông báo mới"}
+            {type === "edit" ? "Chỉnh sửa thông báo" : "Tạo thông báo mới"}
           </h2>
           <ScrollArea className="w-full overflow-y-auto pr-1">
             <div className="flex h-[76vh] flex-col gap-4 px-2">

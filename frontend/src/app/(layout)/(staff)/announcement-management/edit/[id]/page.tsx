@@ -5,7 +5,7 @@ const page = () => {
   return (
     <Wrapper>
       <div className="h-[100%] w-full">
-        <AnnouncementForm />
+        <AnnouncementForm type="edit" />
       </div>
     </Wrapper>
   );

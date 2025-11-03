@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Bell,
   ChartColumn,
@@ -27,7 +28,11 @@ export const staffNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
-  { href: "#5", label: "Quản lý bài đăng", icon: Megaphone },
+  {
+    href: "announcement-management",
+    label: "Quản lý bài đăng",
+    icon: Megaphone,
+  },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
   { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
 ];

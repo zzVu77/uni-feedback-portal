@@ -171,7 +171,7 @@ export const dummyData: StaffFeedbackItem[] = [
   },
 ];
 
-export const myFeedbacksHistoryColumns: ColumnDef<StaffFeedbackItem>[] = [
+export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
   {
     accessorKey: "subject",
     header: () => {
