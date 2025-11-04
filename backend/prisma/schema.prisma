@@ -159,12 +159,15 @@ model Comments {
   id         String   @id @default(uuid()) @db.Uuid
   postId     String   @db.Uuid
   userId     String   @db.Uuid
+  parentId    String?     @db.Uuid
   content    String
   createdAt  DateTime @default(now())
-
+  deletedAt  DateTime? 
   post       ForumPosts       @relation(fields: [postId], references: [id], onDelete: Cascade)
   user       Users            @relation(fields: [userId], references: [id])
   reports    CommentReports[]
+  parent      Comments?    @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     Comments[]   @relation("CommentReplies")
 }
 
 model CommentReports {

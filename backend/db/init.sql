@@ -541,63 +541,311 @@ VALUES (
     );
 
 -- Inserting comments
+-- Inserting comments: 7 gốc + 21 reply (student discussion) + 6 official staff responses
 INSERT INTO
     "Comments" (
         "id",
         "postId",
         "userId",
+        "parentId",
         "content",
         "createdAt"
     )
-VALUES (
+VALUES
+    -- Comment gốc 1 (Projector - post 44002e)
+    (
         '550e8400-e29b-41d4-a716-446655440034',
         '550e8400-e29b-41d4-a716-44665544002e',
         '550e8400-e29b-41d4-a716-44665544000b',
+        NULL,
         'I faced the same issue in Room 101 yesterday!',
         '2025-09-02 09:25:00'
     ),
+    -- 3 reply (sinh viên bàn tán)
     (
-        '550e8400-e29b-41d4-a716-446655440035',
+        '550e8400-e29b-41d4-a716-446655440060',
+        '550e8400-e29b-41d4-a716-44665544002e',
+        '550e8400-e29b-41d4-a716-446655440009',
+        '550e8400-e29b-41d4-a716-446655440034',
+        'Yeah, I was there too! The screen went black mid-lecture.',
+        '2025-09-02 09:40:00'
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446655440061',
+        '550e8400-e29b-41d4-a716-44665544002e',
+        '550e8400-e29b-41d4-a716-44665544000e',
+        '550e8400-e29b-41d4-a716-446655440034',
+        'We have a group presentation tomorrow... this is bad.',
+        '2025-09-02 09:45:00'
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446655440062',
         '550e8400-e29b-41d4-a716-44665544002e',
         '550e8400-e29b-41d4-a716-44665544000d',
-        'Please fix this soon, it affects our classes.',
-        '2025-09-02 09:30:00'
+        '550e8400-e29b-41d4-a716-446655440034',
+        'Anyone know if they’re fixing it today?',
+        '2025-09-02 09:50:00'
     ),
-    (
-        '550e8400-e29b-41d4-a716-446655440036',
-        '550e8400-e29b-41d4-a716-44665544002f',
-        '550e8400-e29b-41d4-a716-446655440009',
-        'The food quality has been poor for weeks.',
-        '2025-09-03 09:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440037',
-        '550e8400-e29b-41d4-a716-446655440030',
-        '550e8400-e29b-41d4-a716-44665544000b',
-        'Wi-Fi issues are worst during peak hours.',
-        '2025-09-04 14:25:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440038',
-        '550e8400-e29b-41d4-a716-446655440031',
-        '550e8400-e29b-41d4-a716-446655440010',
-        'Flickering lights affect reading.',
-        '2025-09-05 10:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440039',
-        '550e8400-e29b-41d4-a716-446655440032',
-        '550e8400-e29b-41d4-a716-446655440009',
-        'Parking is always full in mornings.',
-        '2025-09-06 08:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544003a',
-        '550e8400-e29b-41d4-a716-446655440033',
-        '550e8400-e29b-41d4-a716-44665544000e',
-        'Software in Lab 202 is outdated.',
-        '2025-09-06 11:15:00'
-    );
+
+-- Comment gốc 2
+(
+    '550e8400-e29b-41d4-a716-446655440035',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    '550e8400-e29b-41d4-a716-44665544000d',
+    NULL,
+    'Please fix this soon, it affects our classes.',
+    '2025-09-02 09:30:00'
+),
+-- 3 reply
+(
+    '550e8400-e29b-41d4-a716-446655440063',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    '550e8400-e29b-41d4-a716-44665544000b',
+    '550e8400-e29b-41d4-a716-446655440035',
+    'I had to use my phone to show slides last week!',
+    '2025-09-02 10:00:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440064',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    '550e8400-e29b-41d4-a716-446655440009',
+    '550e8400-e29b-41d4-a716-446655440035',
+    'This happens every semester in Room 101...',
+    '2025-09-02 10:05:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440065',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    '550e8400-e29b-41d4-a716-44665544000e',
+    '550e8400-e29b-41d4-a716-446655440035',
+    'Hope they replace it, not just restart...',
+    '2025-09-02 10:10:00'
+),
+
+-- Comment gốc 3 (Cafeteria - post 44002f)
+(
+    '550e8400-e29b-41d4-a716-446655440036',
+    '550e8400-e29b-41d4-a716-44665544002f',
+    '550e8400-e29b-41d4-a716-446655440009',
+    NULL,
+    'The food quality has been poor for weeks.',
+    '2025-09-03 09:10:00'
+),
+-- 3 reply
+(
+    '550e8400-e29b-41d4-a716-446655440066',
+    '550e8400-e29b-41d4-a716-44665544002f',
+    '550e8400-e29b-41d4-a716-44665544000d',
+    '550e8400-e29b-41d4-a716-446655440036',
+    'The rice is always undercooked!',
+    '2025-09-03 09:30:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440067',
+    '550e8400-e29b-41d4-a716-44665544002f',
+    '550e8400-e29b-41d4-a716-44665544000b',
+    '550e8400-e29b-41d4-a716-446655440036',
+    'I stopped eating there after last Monday.',
+    '2025-09-03 09:35:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440068',
+    '550e8400-e29b-41d4-a716-44665544002f',
+    '550e8400-e29b-41d4-a716-44665544000e',
+    '550e8400-e29b-41d4-a716-446655440036',
+    'We need more vegetarian options too.',
+    '2025-09-03 09:40:00'
+),
+
+-- Comment gốc 4 (Wi-Fi - post 440030)
+(
+    '550e8400-e29b-41d4-a716-446655440037',
+    '550e8400-e29b-41d4-a716-446655440030',
+    '550e8400-e29b-41d4-a716-44665544000b',
+    NULL,
+    'Wi-Fi issues are worst during peak hours.',
+    '2025-09-04 14:25:00'
+),
+-- 3 reply
+(
+    '550e8400-e29b-41d4-a716-446655440069',
+    '550e8400-e29b-41d4-a716-446655440030',
+    '550e8400-e29b-41d4-a716-446655440009',
+    '550e8400-e29b-41d4-a716-446655440037',
+    'Can’t even load Moodle from 12–2 PM.',
+    '2025-09-04 14:40:00'
+),
+(
+    '550e8400-e29b-41d4-a716-44665544006a',
+    '550e8400-e29b-41d4-a716-446655440030',
+    '550e8400-e29b-41d4-a716-44665544000e',
+    '550e8400-e29b-41d4-a716-446655440037',
+    'I use mobile data every day now.',
+    '2025-09-04 14:45:00'
+),
+(
+    '550e8400-e29b-41d4-a716-44665544006b',
+    '550e8400-e29b-41d4-a716-446655440030',
+    '550e8400-e29b-41d4-a716-44665544000d',
+    '550e8400-e29b-41d4-a716-446655440037',
+    'Same in the lab, drops every 5 minutes.',
+    '2025-09-04 14:50:00'
+),
+
+-- Comment gốc 5 (Library lighting - post 440031)
+(
+    '550e8400-e29b-41d4-a716-446655440038',
+    '550e8400-e29b-41d4-a716-446655440031',
+    '550e8400-e29b-41d4-a716-446655440010',
+    NULL,
+    'Flickering lights affect reading.',
+    '2025-09-05 10:20:00'
+),
+-- 3 reply
+(
+    '550e8400-e29b-41d4-a716-44665544006c',
+    '550e8400-e29b-41d4-a716-446655440031',
+    '550e8400-e29b-41d4-a716-44665544000d',
+    '550e8400-e29b-41d4-a716-446655440038',
+    'It’s like a disco in the study area!',
+    '2025-09-05 10:35:00'
+),
+(
+    '550e8400-e29b-41d4-a716-44665544006d',
+    '550e8400-e29b-41d4-a716-446655440031',
+    '550e8400-e29b-41d4-a716-44665544000b',
+    '550e8400-e29b-41d4-a716-446655440038',
+    'Gives me a headache after 30 mins.',
+    '2025-09-05 10:40:00'
+),
+(
+    '550e8400-e29b-41d4-a716-44665544006e',
+    '550e8400-e29b-41d4-a716-446655440031',
+    '550e8400-e29b-41d4-a716-446655440009',
+    '550e8400-e29b-41d4-a716-446655440038',
+    'I moved to the 1st floor, better there.',
+    '2025-09-05 10:45:00'
+),
+
+-- Comment gốc 6 (Parking - post 440032)
+(
+    '550e8400-e29b-41d4-a716-446655440039',
+    '550e8400-e29b-41d4-a716-446655440032',
+    '550e8400-e29b-41d4-a716-446655440009',
+    NULL,
+    'Parking is always full in mornings.',
+    '2025-09-06 08:15:00'
+),
+-- 3 reply
+(
+    '550e8400-e29b-41d4-a716-44665544006f',
+    '550e8400-e29b-41d4-a716-446655440032',
+    '550e8400-e29b-41d4-a716-44665544000e',
+    '550e8400-e29b-41d4-a716-446655440039',
+    'I circle for 20 mins every day!',
+    '2025-09-06 08:30:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440070',
+    '550e8400-e29b-41d4-a716-446655440032',
+    '550e8400-e29b-41d4-a716-44665544000d',
+    '550e8400-e29b-41d4-a716-446655440039',
+    'Even at 7:45 AM, no spot.',
+    '2025-09-06 08:35:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440071',
+    '550e8400-e29b-41d4-a716-446655440032',
+    '550e8400-e29b-41d4-a716-44665544000b',
+    '550e8400-e29b-41d4-a716-446655440039',
+    'I park at the mall and walk now.',
+    '2025-09-06 08:40:00'
+),
+
+-- Comment gốc 7 (Software Lab - post 440033)
+(
+    '550e8400-e29b-41d4-a716-44665544003a',
+    '550e8400-e29b-41d4-a716-446655440033',
+    '550e8400-e29b-41d4-a716-44665544000e',
+    NULL,
+    'Software in Lab 202 is outdated.',
+    '2025-09-06 11:15:00'
+),
+-- 3 reply
+(
+    '550e8400-e29b-41d4-a716-446655440072',
+    '550e8400-e29b-41d4-a716-446655440033',
+    '550e8400-e29b-41d4-a716-446655440009',
+    '550e8400-e29b-41d4-a716-44665544003a',
+    'Still on Python 3.8? We need 3.11!',
+    '2025-09-06 11:25:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440073',
+    '550e8400-e29b-41d4-a716-446655440033',
+    '550e8400-e29b-41d4-a716-44665544000b',
+    '550e8400-e29b-41d4-a716-44665544003a',
+    'VS Code keeps crashing on my project.',
+    '2025-09-06 11:30:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440074',
+    '550e8400-e29b-41d4-a716-446655440033',
+    '550e8400-e29b-41d4-a716-44665544000d',
+    '550e8400-e29b-41d4-a716-44665544003a',
+    'I use my laptop instead, lab is useless.',
+    '2025-09-06 11:35:00'
+),
+
+-- 6 OFFICIAL STAFF RESPONSES (same format)
+(
+    '550e8400-e29b-41d4-a716-446655440075',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    '550e8400-e29b-41d4-a716-44665544000a',
+    NULL,
+    'We have noted your feedback regarding the projector in Room 101 and will address it promptly. Rest assured, the issue is being handled.',
+    '2025-09-02 14:00:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440076',
+    '550e8400-e29b-41d4-a716-44665544002f',
+    '550e8400-e29b-41d4-a716-44665544000c',
+    NULL,
+    'We have noted your feedback about cafeteria food quality and will address it with the vendor. Rest assured, improvements are in progress.',
+    '2025-09-03 12:00:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440077',
+    '550e8400-e29b-41d4-a716-446655440030',
+    '550e8400-e29b-41d4-a716-44665544000a',
+    NULL,
+    'We have noted your feedback on Wi-Fi connectivity and will address it with the network team. Rest assured, we are working on a solution.',
+    '2025-09-05 09:00:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440078',
+    '550e8400-e29b-41d4-a716-446655440031',
+    '550e8400-e29b-41d4-a716-446655440011',
+    NULL,
+    'We have noted your feedback about library lighting and will address it with maintenance. Rest assured, the issue is under review.',
+    '2025-09-05 15:00:00'
+),
+(
+    '550e8400-e29b-41d4-a716-446655440079',
+    '550e8400-e29b-41d4-a716-446655440032',
+    '550e8400-e29b-41d4-a716-446655440008',
+    NULL,
+    'We have noted your feedback on parking availability and will address it with campus planning. Rest assured, additional solutions are being explored.',
+    '2025-09-09 08:00:00'
+),
+(
+    '550e8400-e29b-41d4-a716-44665544007a',
+    '550e8400-e29b-41d4-a716-446655440033',
+    '550e8400-e29b-41d4-a716-44665544000a',
+    NULL,
+    'We have noted your feedback on Lab 202 software and will address it with the IT team. Rest assured, an update is being prepared.',
+    '2025-09-07 09:00:00'
+);
 
 -- Inserting comment reports
 INSERT INTO
