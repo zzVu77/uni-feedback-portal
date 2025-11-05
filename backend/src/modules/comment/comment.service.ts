@@ -18,13 +18,9 @@ import {
   CommentTargetType,
   ReportStatus,
 } from '@prisma/client';
-import { AnnouncementsService } from '../announcements/announcements.service';
 @Injectable()
 export class CommentService {
-  constructor(
-    private prisma: PrismaService,
-    private announcementService: AnnouncementsService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
   async CreateForumPostComment(
     dto: CreateCommentDto,
     postId: string,
