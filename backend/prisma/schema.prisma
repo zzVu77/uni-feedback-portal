@@ -22,6 +22,7 @@ enum NotificationType {
   COMMENT_NOTIFICATION
   MESSAGE_NOTIFICATION
   FEEDBACK_NOTIFICATION
+  ANNOUNCEMENT_NOTIFICATION
 }
 
 enum FeedbackStatus {
@@ -42,6 +43,12 @@ enum UserRole {
   STUDENT
   ADMIN
 }
+
+enum CommentTargetType {
+  FORUM_POST
+  ANNOUNCEMENT
+}
+
 
 // ================================
 // MODELS
@@ -66,6 +73,7 @@ model Users {
   messages       Messages[]
   announcements  Announcements[]
   notifications  Notifications[]
+  refreshTokens  RefreshTokens[]
 }
 
 model Departments {
@@ -141,7 +149,6 @@ model ForumPosts {
 
   feedback Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
   votes    Votes[]
-  comments Comments[]
 }
 
 model Votes {
@@ -156,19 +163,20 @@ model Votes {
 }
 
 model Comments {
-  id         String   @id @default(uuid()) @db.Uuid
-  postId     String   @db.Uuid
-  userId     String   @db.Uuid
-  parentId    String?     @db.Uuid
-  content    String
-  createdAt  DateTime @default(now())
-  deletedAt  DateTime? 
-  post       ForumPosts       @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user       Users            @relation(fields: [userId], references: [id])
-  reports    CommentReports[]
-  parent      Comments?    @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies     Comments[]   @relation("CommentReplies")
+  id           String             @id @default(uuid()) @db.Uuid
+  targetId     String             @db.Uuid              
+  targetType   CommentTargetType  
+  userId       String             @db.Uuid
+  parentId     String?            @db.Uuid
+  content      String
+  createdAt    DateTime           @default(now())
+  deletedAt    DateTime?          
+  user         Users              @relation(fields: [userId], references: [id])
+  reports      CommentReports[]
+  parent       Comments?          @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies      Comments[]         @relation("CommentReplies")
 }
+
 
 model CommentReports {
   id             String        @id @default(uuid()) @db.Uuid
@@ -199,12 +207,12 @@ model Messages {
   id             String   @id @default(uuid()) @db.Uuid
   conversationId String   @db.Uuid
   userId         String   @db.Uuid
-  content        String?  // 👈 Cho phép null nếu chỉ gửi file
+  content        String?  
   createdAt      DateTime @default(now())
 
   conversation ClarificationConversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   user         Users                     @relation(fields: [userId], references: [id])
-  attachments  FileAttachmentForMessage[] // 👈 Quan hệ mới
+  attachments  FileAttachmentForMessage[] 
 }
 
 model FileAttachmentForMessage {
@@ -252,6 +260,14 @@ model Notifications {
   notificationType  NotificationType
   isRead            Boolean           @default(false)
   createdAt         DateTime          @default(now())
-
+  relatedEntityId   String?          @db.Uuid 
   user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RefreshTokens {
+  token     String   @id @unique
+  userId    String   @db.Uuid 
+  expiredAt DateTime
+  createdAt DateTime @default(now())
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
