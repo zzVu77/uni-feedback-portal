@@ -29,7 +29,7 @@ export const staffNavigation: NavigationItem[] = [
   { href: "/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   {
-    href: "announcement-management",
+    href: "/announcement-management",
     label: "Quản lý thông báo",
     icon: Megaphone,
   },
@@ -37,10 +37,15 @@ export const staffNavigation: NavigationItem[] = [
   { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
 ];
 export const adminNavigation: NavigationItem[] = [
-  { href: "#3", label: "Thông báo", icon: Bell },
-  { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
+  { href: "/notifications", label: "Thông báo", icon: Bell },
+  // { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
+  { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   { href: "#1", label: "Góp ý tiếp nhận", icon: History },
-  { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
-  { href: "#7", label: "Quản lý bình luận", icon: MessageSquareWarning },
+  // { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
+  {
+    href: "/reported-comment-management",
+    label: "Quản lý bình luận vi phạm",
+    icon: MessageSquareWarning,
+  },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
 ];
