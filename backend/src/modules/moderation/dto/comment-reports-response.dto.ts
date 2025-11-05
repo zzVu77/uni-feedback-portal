@@ -1,25 +1,26 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { ReportStatus } from '@prisma/client';
+import { CommentTargetType, ReportStatus } from '@prisma/client';
 import { CommentDto, UserInfo } from 'src/modules/comment/dto';
 
-export class PostInfo {
+export class CommentTargetInfoDto {
   @ApiProperty({
     example: 'a84b6d12-9c31-43a1-bc24-958b08f2b92c',
-    description: 'Unique identifier of the post associated with the comment.',
+    description:
+      'Unique identifier of the target (Forum Post or Announcement).',
   })
   id: string;
 
   @ApiProperty({
     example: 'Broken Air Conditioner in Room 302',
-    description: 'Title or subject of the post.',
+    description: 'Title or subject of the target.',
   })
-  subject: string;
+  title: string;
 
   @ApiProperty({
     example: 'The AC in the classroom is not working properly.',
-    description: 'Detailed description of the post content.',
+    description: 'Content or description of the target.',
   })
-  description: string;
+  content: string;
 }
 
 export class CommentForModerationDto extends OmitType(CommentDto, [
@@ -27,19 +28,26 @@ export class CommentForModerationDto extends OmitType(CommentDto, [
   'parentId',
 ] as const) {
   @ApiProperty({
-    type: () => PostInfo,
-    description: 'Information about the post related to the reported comment.',
-  })
-  post: PostInfo;
-
-  @ApiProperty({
     example: '2025-10-29T10:30:00.000Z',
     description:
       'Timestamp indicating when the comment was deleted, or null if active.',
   })
   deletedAt: string | null;
 }
+export class ReportTargetDto {
+  @ApiProperty({
+    enum: CommentTargetType,
+    example: CommentTargetType.FORUM_POST,
+    description: 'The target type the comment belongs to',
+  })
+  targetType: CommentTargetType;
 
+  @ApiProperty({
+    type: () => CommentTargetInfoDto,
+    description: 'Target details (Post or Announcement).',
+  })
+  targetInfo: CommentTargetInfoDto;
+}
 export class CommentReportDto {
   @ApiProperty({
     example: 'd4b5f3a8-83e9-4c11-b3b9-912dbed11f71',
@@ -58,7 +66,12 @@ export class CommentReportDto {
     description: 'Details of the reported comment.',
   })
   comment: CommentForModerationDto;
-
+  @ApiProperty({
+    type: () => ReportTargetDto,
+    description:
+      'Information about the context (Post/Announcement) where the comment was made.',
+  })
+  target: ReportTargetDto;
   @ApiProperty({
     example: 'Inappropriate language used.',
     description: 'Reason provided by the user for reporting the comment.',

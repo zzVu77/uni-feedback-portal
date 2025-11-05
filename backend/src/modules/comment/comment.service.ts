@@ -13,12 +13,19 @@ import {
   CreateCommentDto,
 } from './dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { ReportStatus } from '@prisma/client';
-import { CommentReportDto } from '../moderation/dto';
+import {
+  CommentReports,
+  CommentTargetType,
+  ReportStatus,
+} from '@prisma/client';
+import { AnnouncementsService } from '../announcements/announcements.service';
 @Injectable()
 export class CommentService {
-  constructor(private prisma: PrismaService) {}
-  async CreateComment(
+  constructor(
+    private prisma: PrismaService,
+    private announcementService: AnnouncementsService,
+  ) {}
+  async CreateForumPostComment(
     dto: CreateCommentDto,
     postId: string,
     userId: string,
@@ -46,9 +53,10 @@ export class CommentService {
     }
     const comment = await this.prisma.comments.create({
       data: {
-        postId: postId,
+        targetId: postId,
         userId,
         content: dto.content,
+        targetType: CommentTargetType.FORUM_POST,
         parentId: dto.parentId ?? null,
       },
       include: {
@@ -68,7 +76,7 @@ export class CommentService {
       },
     };
   }
-  async GetComments(
+  async GetForumPostComments(
     postId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto> {
@@ -78,7 +86,8 @@ export class CommentService {
     const [rootComments, total] = await Promise.all([
       this.prisma.comments.findMany({
         where: {
-          postId,
+          targetId: postId,
+          targetType: CommentTargetType.FORUM_POST,
           deletedAt: null,
           parentId: null,
         },
@@ -102,7 +111,8 @@ export class CommentService {
       }),
       this.prisma.comments.count({
         where: {
-          postId,
+          targetId: postId,
+          targetType: CommentTargetType.FORUM_POST,
           deletedAt: null,
         },
       }),
@@ -139,19 +149,28 @@ export class CommentService {
     commentId: string,
     userId: string,
     dto: CreateCommentReportDto,
-  ): Promise<CommentReportDto> {
+  ): Promise<CommentReports> {
     const comment = await this.prisma.comments.findFirst({
       where: { id: commentId, deletedAt: null },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        deletedAt: true,
+        targetType: true,
+        targetId: true,
+        user: { select: { id: true, fullName: true } },
+      },
     });
 
-    if (!comment) {
-      throw new NotFoundException('Comment not found');
-    }
+    if (!comment) throw new NotFoundException('Comment not found');
+
     const existing = await this.prisma.commentReports.findFirst({
       where: { commentId, userId },
     });
-    if (existing)
+    if (existing) {
       throw new BadRequestException('You have already reported this comment.');
+    }
 
     const report = await this.prisma.commentReports.create({
       data: {
@@ -161,60 +180,12 @@ export class CommentService {
         status: ReportStatus.PENDING,
       },
       include: {
-        comment: {
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            user: { select: { id: true, fullName: true } },
-            post: {
-              select: {
-                id: true,
-                feedback: {
-                  select: { subject: true, description: true },
-                },
-              },
-            },
-            deletedAt: true,
-          },
-        },
         user: { select: { id: true, fullName: true } },
       },
     });
-
-    const mappedReport: CommentReportDto = {
-      id: report.id,
-      reason: report.reason ?? null,
-      status: report.status,
-      adminResponse: report.adminResponse ?? null,
-      createdAt: report.createdAt.toISOString(),
-
-      reportedBy: {
-        id: report.user.id,
-        fullName: report.user.fullName,
-      },
-
-      comment: {
-        id: report.comment.id,
-        content: report.comment.content,
-        createdAt: report.comment.createdAt.toISOString(),
-        user: {
-          id: report.comment.user.id,
-          fullName: report.comment.user.fullName,
-        },
-        post: {
-          id: report.comment.post?.id,
-          subject: report.comment.post.feedback?.subject,
-          description: report.comment.post.feedback?.description,
-        },
-        deletedAt: report.comment.deletedAt
-          ? report.comment.deletedAt.toISOString()
-          : null,
-      },
-    };
-
-    return mappedReport;
+    return report;
   }
+
   async DeleteComment(
     commentId: string,
     actor: {
@@ -266,5 +237,26 @@ export class CommentService {
     };
 
     return mappedComment;
+  }
+  async countCommentsForPosts(
+    postIds: string[],
+  ): Promise<Record<string, number>> {
+    const commentCounts = await this.prisma.comments.groupBy({
+      by: ['targetId'],
+      where: {
+        targetType: CommentTargetType.FORUM_POST,
+        targetId: { in: postIds },
+        deletedAt: null,
+      },
+      _count: { _all: true },
+    });
+
+    return commentCounts.reduce(
+      (acc, c) => {
+        acc[c.targetId] = c._count._all;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }
 }

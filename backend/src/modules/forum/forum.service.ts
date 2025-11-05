@@ -1,8 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
@@ -11,9 +9,13 @@ import {
   PostDetailDto,
   VoteResponseDto,
 } from './dto';
+import { CommentService } from '../comment/comment.service';
 @Injectable()
 export class ForumService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private commentService: CommentService,
+  ) {}
   async getListPosts(
     query: QueryPostsDto,
     userId: string,
@@ -102,11 +104,14 @@ export class ForumService {
           votes: {
             select: { userId: true }, // to check if actorId has voted
           },
-          _count: { select: { comments: true, votes: true } },
+          _count: { select: { votes: true } },
         },
       }),
       this.prisma.forumPosts.count({ where: whereClause }),
     ]);
+    const postIds = items.map((p) => p.id);
+    const commentCountMap =
+      await this.commentService.countCommentsForPosts(postIds);
     const mappedItems = items.map((post) => ({
       id: post.id,
       createdAt: post.createdAt.toISOString(),
@@ -136,7 +141,7 @@ export class ForumService {
               email: post.feedback.user.email,
             },
           }),
-      commentsCount: post._count.comments,
+      commentsCount: commentCountMap[post.id] ?? 0,
       hasVoted: post.votes.some((vote) => vote.userId === userId),
     }));
 
@@ -316,5 +321,34 @@ export class ForumService {
       isVoted: false,
       totalVotes,
     };
+  }
+  async getManyByIds(
+    ids: string[],
+  ): Promise<Record<string, { id: string; title: string; content: string }>> {
+    if (!ids || ids.length === 0) return {};
+
+    const posts = await this.prisma.forumPosts.findMany({
+      where: { id: { in: ids } },
+      select: {
+        id: true,
+        feedback: {
+          select: {
+            subject: true,
+            description: true,
+          },
+        },
+      },
+    });
+
+    return Object.fromEntries(
+      posts.map((p) => [
+        p.id,
+        {
+          id: p.id,
+          title: p.feedback?.subject ?? '(Deleted)',
+          content: p.feedback?.description ?? '(No content available)',
+        },
+      ]),
+    );
   }
 }

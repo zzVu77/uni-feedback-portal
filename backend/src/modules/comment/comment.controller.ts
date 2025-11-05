@@ -19,7 +19,6 @@ import {
   CommentDeletedResponseDto,
 } from './dto';
 import { PostParamDto } from '../forum/dto';
-import { CommentReportDto } from '../moderation/dto';
 
 @Controller('comment')
 export class CommentController {
@@ -32,11 +31,11 @@ export class CommentController {
     description: 'Comment created successfully',
     type: CommentDto,
   })
-  async CreateComment(
+  async CreateForumPostComment(
     @Param() params: PostParamDto,
     @Body() createCommentDto: CreateCommentDto,
   ) {
-    return this.commentService.CreateComment(
+    return this.commentService.CreateForumPostComment(
       createCommentDto,
       params.id,
       this.userId,
@@ -48,24 +47,23 @@ export class CommentController {
     description: 'List of comments',
     type: CommentsResponseDto,
   })
-  async GetComments(
+  async GetForumPostComments(
     @Param() params: PostParamDto,
     @Query() query: QueryCommentsDto,
   ) {
-    return this.commentService.GetComments(params.id, query);
+    return this.commentService.GetForumPostComments(params.id, query);
   }
   @Post('/report/:commentId')
   @ApiOperation({ summary: 'Report a comment (user)' })
   @ApiResponse({
-    status: 201,
+    status: 204,
     description: 'Report created successfully',
-    type: CommentReportDto,
   })
   async CreateCommentReport(
     @Param() params: CommentParamDto,
     @Body() dto: CreateCommentReportDto,
   ) {
-    return this.commentService.CreateCommentReport(
+    await this.commentService.CreateCommentReport(
       params.commentId,
       this.userId,
       dto,
