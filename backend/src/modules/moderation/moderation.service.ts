@@ -14,7 +14,7 @@ import { CommentTargetType, Prisma } from '@prisma/client';
 import { CommentService } from '../comment/comment.service';
 import { ForumService } from '../forum/forum.service';
 import { AnnouncementsService } from '../announcements/announcements.service';
-
+import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message.helper';
 @Injectable()
 export class ModerationService {
   constructor(
@@ -222,7 +222,7 @@ export class ModerationService {
       where: { id },
       data: {
         status: dto.status ?? report.status,
-        adminResponse: dto.adminResponse ?? report.adminResponse,
+        adminResponse: GenerateAdminResponse(dto.status),
       },
       include: {
         comment: {
@@ -243,7 +243,7 @@ export class ModerationService {
       where: { commentId: report.comment.id, id: { not: id } },
       data: {
         status: dto.status,
-        adminResponse: dto.adminResponse ?? undefined,
+        adminResponse: GenerateAdminResponse(dto.status),
       },
     });
     const { targetId, targetType } = updatedReport.comment;

@@ -17,8 +17,8 @@ import {
 } from './dto';
 import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
 import {
-  generateForwardingMessage,
-  generateStatusUpdateMessage,
+  GenerateForwardingMessage,
+  GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
 @Injectable()
 export class FeedbackManagementService {
@@ -240,7 +240,7 @@ export class FeedbackManagementService {
       data: {
         feedbackId: feedback.id,
         status: dto.status,
-        message: generateStatusUpdateMessage(
+        message: GenerateStatusUpdateMessage(
           feedback.department.name,
           dto.status,
         ),
@@ -293,7 +293,7 @@ export class FeedbackManagementService {
         fromDepartmentId: actor.departmentId,
         toDepartmentId: dto.toDepartmentId,
         userId: actor.userId,
-        message: generateForwardingMessage(toDepartment.name),
+        message: GenerateForwardingMessage(toDepartment.name),
         note: dto.note,
       },
       include: {
