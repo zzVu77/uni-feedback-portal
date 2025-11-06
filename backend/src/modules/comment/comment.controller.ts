@@ -71,7 +71,7 @@ export class CommentController {
     type: CommentDto,
   })
   async CreateAnnouncementComment(
-    @Param() params: AnnouncementParamDto, // Sử dụng DTO phù hợp
+    @Param() params: AnnouncementParamDto,
     @Body() createCommentDto: CreateCommentDto,
   ) {
     return this.commentService.CreateAnnouncementComment(
@@ -88,7 +88,7 @@ export class CommentController {
     type: CommentsResponseDto,
   })
   async GetAnnouncementComments(
-    @Param() params: AnnouncementParamDto, // Sử dụng DTO phù hợp
+    @Param() params: AnnouncementParamDto,
     @Query() query: QueryCommentsDto,
   ) {
     return this.commentService.GetAnnouncementComments(params.id, query);

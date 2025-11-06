@@ -1,33 +1,57 @@
-import { CommentReportDto } from '../moderation/dto';
 import {
+  CommentDeletedResponseDto,
   CommentDto,
   CommentsResponseDto,
   CreateCommentDto,
-  QueryCommentsDto,
   CreateCommentReportDto,
+  QueryCommentsDto,
 } from './dto/';
+import { CommentReports, UserRole } from '@prisma/client';
 
 export interface CommentServiceContract {
-  CreateComment(
+  // ===================== CREATE =====================
+  CreateForumPostComment(
     dto: CreateCommentDto,
     postId: string,
     userId: string,
   ): Promise<CommentDto>;
-  GetComments(
+
+  CreateAnnouncementComment(
+    dto: CreateCommentDto,
+    announcementId: string,
+    userId: string,
+  ): Promise<CommentDto>;
+
+  // ===================== READ (GET) =====================
+  GetForumPostComments(
     postId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto>;
 
+  GetAnnouncementComments(
+    announcementId: string,
+    query: QueryCommentsDto,
+  ): Promise<CommentsResponseDto>;
+
+  // ===================== READ (COUNT) =====================
+  countCommentsForPosts(postIds: string[]): Promise<Record<string, number>>;
+
+  countCommentsForAnnouncements(
+    announcementIds: string[],
+  ): Promise<Record<string, number>>;
+
+  // ===================== OTHER ACTIONS =====================
   CreateCommentReport(
     commentId: string,
     userId: string,
     dto: CreateCommentReportDto,
-  ): Promise<CommentReportDto>;
+  ): Promise<CommentReports>;
+
   DeleteComment(
     commentId: string,
     actor: {
-      role: 'STUDENT' | 'ADMIN';
       id: string;
+      role: UserRole;
     },
-  ): Promise<CommentDto>;
+  ): Promise<CommentDeletedResponseDto>;
 }
