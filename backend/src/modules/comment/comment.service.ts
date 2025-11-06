@@ -17,10 +17,13 @@ import {
   CommentReports,
   CommentTargetType,
   ReportStatus,
+  UserRole,
 } from '@prisma/client';
+
 @Injectable()
 export class CommentService {
   constructor(private prisma: PrismaService) {}
+
   async CreateForumPostComment(
     dto: CreateCommentDto,
     postId: string,
@@ -33,6 +36,40 @@ export class CommentService {
       throw new NotFoundException(`Post not found`);
     }
 
+    return this._createComment(
+      dto,
+      postId,
+      CommentTargetType.FORUM_POST,
+      userId,
+    );
+  }
+
+  async CreateAnnouncementComment(
+    dto: CreateCommentDto,
+    announcementId: string,
+    userId: string,
+  ): Promise<CommentDto> {
+    const announcement = await this.prisma.announcements.findUnique({
+      where: { id: announcementId },
+    });
+    if (!announcement) {
+      throw new NotFoundException(`Announcement not found`);
+    }
+
+    return this._createComment(
+      dto,
+      announcementId,
+      CommentTargetType.ANNOUNCEMENT,
+      userId,
+    );
+  }
+
+  private async _createComment(
+    dto: CreateCommentDto,
+    targetId: string,
+    targetType: CommentTargetType,
+    userId: string,
+  ): Promise<CommentDto> {
     if (dto.parentId) {
       const parentComment = await this.prisma.comments.findUnique({
         where: { id: dto.parentId },
@@ -47,12 +84,13 @@ export class CommentService {
         throw new BadRequestException(`You cannot reply to a reply comment.`);
       }
     }
+
     const comment = await this.prisma.comments.create({
       data: {
-        targetId: postId,
+        targetId,
         userId,
         content: dto.content,
-        targetType: CommentTargetType.FORUM_POST,
+        targetType,
         parentId: dto.parentId ?? null,
       },
       include: {
@@ -72,8 +110,32 @@ export class CommentService {
       },
     };
   }
+
   async GetForumPostComments(
     postId: string,
+    query: QueryCommentsDto,
+  ): Promise<CommentsResponseDto> {
+    return this._getCommentsByTarget(
+      postId,
+      CommentTargetType.FORUM_POST,
+      query,
+    );
+  }
+
+  async GetAnnouncementComments(
+    announcementId: string,
+    query: QueryCommentsDto,
+  ): Promise<CommentsResponseDto> {
+    return this._getCommentsByTarget(
+      announcementId,
+      CommentTargetType.ANNOUNCEMENT,
+      query,
+    );
+  }
+
+  private async _getCommentsByTarget(
+    targetId: string,
+    targetType: CommentTargetType,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto> {
     const page = query.page ?? 1;
@@ -82,8 +144,8 @@ export class CommentService {
     const [rootComments, total] = await Promise.all([
       this.prisma.comments.findMany({
         where: {
-          targetId: postId,
-          targetType: CommentTargetType.FORUM_POST,
+          targetId,
+          targetType,
           deletedAt: null,
           parentId: null,
         },
@@ -107,8 +169,8 @@ export class CommentService {
       }),
       this.prisma.comments.count({
         where: {
-          targetId: postId,
-          targetType: CommentTargetType.FORUM_POST,
+          targetId,
+          targetType,
           deletedAt: null,
         },
       }),
@@ -139,6 +201,44 @@ export class CommentService {
       results,
       total,
     };
+  }
+
+  async countCommentsForPosts(
+    postIds: string[],
+  ): Promise<Record<string, number>> {
+    return this._countCommentsForTargets(postIds, CommentTargetType.FORUM_POST);
+  }
+
+  async countCommentsForAnnouncements(
+    announcementIds: string[],
+  ): Promise<Record<string, number>> {
+    return this._countCommentsForTargets(
+      announcementIds,
+      CommentTargetType.ANNOUNCEMENT,
+    );
+  }
+
+  private async _countCommentsForTargets(
+    targetIds: string[],
+    targetType: CommentTargetType,
+  ): Promise<Record<string, number>> {
+    const commentCounts = await this.prisma.comments.groupBy({
+      by: ['targetId'],
+      where: {
+        targetType,
+        targetId: { in: targetIds },
+        deletedAt: null,
+      },
+      _count: { _all: true },
+    });
+
+    return commentCounts.reduce(
+      (acc, c) => {
+        acc[c.targetId] = c._count._all;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }
 
   async CreateCommentReport(
@@ -186,7 +286,7 @@ export class CommentService {
     commentId: string,
     actor: {
       id: string;
-      role: 'ADMIN' | 'STUDENT';
+      role: UserRole;
     },
   ): Promise<CommentDeletedResponseDto> {
     const comment = await this.prisma.comments.findUnique({
@@ -200,12 +300,11 @@ export class CommentService {
       throw new NotFoundException('Comment not found');
     }
 
-    if (actor.role == 'STUDENT' && comment.user.id !== actor.id) {
+    if (actor.role === UserRole.STUDENT && comment.user.id !== actor.id) {
       throw new ForbiddenException(
         'You are not allowed to delete this comment',
       );
     }
-
     const now = new Date();
 
     const updatedComment = await this.prisma.comments.update({
@@ -233,26 +332,5 @@ export class CommentService {
     };
 
     return mappedComment;
-  }
-  async countCommentsForPosts(
-    postIds: string[],
-  ): Promise<Record<string, number>> {
-    const commentCounts = await this.prisma.comments.groupBy({
-      by: ['targetId'],
-      where: {
-        targetType: CommentTargetType.FORUM_POST,
-        targetId: { in: postIds },
-        deletedAt: null,
-      },
-      _count: { _all: true },
-    });
-
-    return commentCounts.reduce(
-      (acc, c) => {
-        acc[c.targetId] = c._count._all;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
   }
 }

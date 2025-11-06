@@ -71,19 +71,15 @@ export class ModerationService {
       .filter((i) => i.comment.targetType === CommentTargetType.ANNOUNCEMENT)
       .map((i) => i.comment.targetId);
 
-    // === 5. Gọi service 1 lần để lấy dữ liệu Post/Announcement ===
-    // Hàm getManyByIds sẽ trả về dạng Map<string, { id, title, content }>
     const [postMap, announcementMap] = await Promise.all([
       this.forumService.getManyByIds(postIds),
       this.announcementService.getManyByIds(announcementIds),
     ]);
 
-    // === 6. Ánh xạ sang DTO ===
     const results = items.map((item) => {
       const comment = item.comment;
       const targetType = comment.targetType;
 
-      // Lấy thông tin target (nếu có)
       const targetInfo =
         targetType === CommentTargetType.FORUM_POST
           ? postMap[comment.targetId]
@@ -123,7 +119,6 @@ export class ModerationService {
       };
     });
 
-    // === 7. Trả về DTO chuẩn ===
     return {
       results,
       total,
