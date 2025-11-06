@@ -218,10 +218,6 @@ export class ModerationService {
       throw new NotFoundException('Report not found');
     }
 
-    if (dto.status === 'RESOLVED' && report.comment) {
-      await this.commentService.DeleteComment(report.comment.id, actor);
-    }
-
     const updatedReport = await this.prisma.commentReports.update({
       where: { id },
       data: {

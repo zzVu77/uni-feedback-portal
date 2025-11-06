@@ -309,7 +309,7 @@ export class CommentService {
 
     const updatedComment = await this.prisma.comments.update({
       where: { id: commentId },
-      data: { deletedAt: now },
+      data: { deletedAt: now, deletedBy: actor.id },
       include: {
         user: { select: { id: true, fullName: true } },
       },

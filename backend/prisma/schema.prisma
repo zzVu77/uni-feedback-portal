@@ -35,7 +35,6 @@ enum FeedbackStatus {
 enum ReportStatus {
   RESOLVED
   PENDING
-  REJECTED
 }
 
 enum UserRole {
@@ -74,6 +73,7 @@ model Users {
   announcements  Announcements[]
   notifications  Notifications[]
   refreshTokens  RefreshTokens[]
+  deletedComments Comments[] @relation("CommentDeleter")
 }
 
 model Departments {
@@ -171,10 +171,12 @@ model Comments {
   content      String
   createdAt    DateTime           @default(now())
   deletedAt    DateTime?          
+  deletedBy  String?   @db.Uuid
   user         Users              @relation(fields: [userId], references: [id])
   reports      CommentReports[]
   parent       Comments?          @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies      Comments[]         @relation("CommentReplies")
+  deleter    Users?    @relation("CommentDeleter", fields: [deletedBy], references: [id])
 }
 
 
