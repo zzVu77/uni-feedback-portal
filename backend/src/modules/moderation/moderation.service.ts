@@ -11,7 +11,7 @@ import {
   UpdateCommentReportDto,
 } from './dto';
 import { CommentTargetType, Prisma } from '@prisma/client';
-import { CommentService } from '../comment/comment.service';
+// import { CommentService } from '../comment/comment.service';
 import { ForumService } from '../forum/forum.service';
 import { AnnouncementsService } from '../announcements/announcements.service';
 import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message.helper';
@@ -19,7 +19,7 @@ import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message
 export class ModerationService {
   constructor(
     private prisma: PrismaService,
-    private commentService: CommentService,
+    // private commentService: CommentService,
     private readonly forumService: ForumService,
     private readonly announcementService: AnnouncementsService,
   ) {}
