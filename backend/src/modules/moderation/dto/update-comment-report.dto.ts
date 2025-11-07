@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional } from 'class-validator';
 import { ReportStatus } from '@prisma/client';
 
 export class UpdateCommentReportDto {
@@ -7,6 +7,14 @@ export class UpdateCommentReportDto {
   @IsEnum(ReportStatus)
   status: ReportStatus;
 
+  @ApiProperty({
+    description: 'True if the reported comment is deleted',
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isDeleted?: boolean;
   // @ApiPropertyOptional({
   //   description: 'Admin response to the report',
   //   example: 'Comment removed',

@@ -11,7 +11,7 @@ import {
   UpdateCommentReportDto,
 } from './dto';
 import { CommentTargetType, Prisma } from '@prisma/client';
-// import { CommentService } from '../comment/comment.service';
+import { CommentService } from '../comment/comment.service';
 import { ForumService } from '../forum/forum.service';
 import { AnnouncementsService } from '../announcements/announcements.service';
 import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message.helper';
@@ -19,7 +19,7 @@ import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message
 export class ModerationService {
   constructor(
     private prisma: PrismaService,
-    // private commentService: CommentService,
+    private commentService: CommentService,
     private readonly forumService: ForumService,
     private readonly announcementService: AnnouncementsService,
   ) {}
@@ -217,12 +217,18 @@ export class ModerationService {
     if (!report) {
       throw new NotFoundException('Report not found');
     }
+    const isDeleting = dto.isDeleted === true;
 
+    if (isDeleting && report.comment) {
+      await this.commentService.DeleteComment(report.comment.id, actor);
+    }
+
+    const adminResponse = GenerateAdminResponse(dto.status, isDeleting);
     const updatedReport = await this.prisma.commentReports.update({
       where: { id },
       data: {
         status: dto.status ?? report.status,
-        adminResponse: GenerateAdminResponse(dto.status),
+        adminResponse: adminResponse,
       },
       include: {
         comment: {
@@ -243,7 +249,7 @@ export class ModerationService {
       where: { commentId: report.comment.id, id: { not: id } },
       data: {
         status: dto.status,
-        adminResponse: GenerateAdminResponse(dto.status),
+        adminResponse: adminResponse,
       },
     });
     const { targetId, targetType } = updatedReport.comment;

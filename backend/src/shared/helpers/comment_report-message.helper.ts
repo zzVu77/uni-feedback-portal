@@ -1,9 +1,14 @@
 import { ReportStatus } from '@prisma/client';
 
-export function GenerateAdminResponse(status: ReportStatus): string {
+export function GenerateAdminResponse(
+  status: ReportStatus,
+  isDeleted: boolean,
+): string {
   switch (status) {
     case ReportStatus.RESOLVED:
-      return 'The reported comment has been reviewed and appropriate action was taken.';
+      return isDeleted
+        ? 'The reported comment has been reviewed and removed.'
+        : 'The reported comment has been reviewed and found not to violate guidelines.';
     case ReportStatus.PENDING:
       return 'The report is pending review by the administration.';
     default:
