@@ -6,6 +6,7 @@ import {
   FeedbackParamDto,
   FeedbackDetail,
 } from './dto';
+import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 export interface FeedbacksServiceContract {
   createFeedback(
     dto: CreateFeedbackDto,
@@ -23,4 +24,10 @@ export interface FeedbacksServiceContract {
       departmentId?: number;
     },
   ): Promise<FeedbackDetail>;
+  updateFeedback(
+    params: FeedbackParamDto,
+    dto: UpdateFeedbackDto,
+    userId: string,
+  ): Promise<FeedbackDetail>;
+  deleteFeedback(params: FeedbackParamDto, userId: string): Promise<void>;
 }
