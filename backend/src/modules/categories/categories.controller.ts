@@ -1,16 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CategoryResponseDto } from './dto/category-item.dto';
+import { CategoryListResponseDto } from './dto/category-response.dto';
 @ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
-  @ApiOkResponse({ type: [CategoryResponseDto] })
+  @ApiOkResponse({ type: CategoryListResponseDto })
   @ApiOperation({ summary: 'Get all categories' })
   @Get()
-  async list(): Promise<CategoryResponseDto[]> {
-    return this.categoriesService.list();
+  async list(): Promise<void> {
+    // return this.categoriesService.list();
   }
   // @Post()
   // create(@Body() createCategoryDto: CreateCategoryDto) {
