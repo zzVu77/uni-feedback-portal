@@ -4,3 +4,4 @@ export * from './close-clarification.dto';
 export * from './clarification-param.dto';
 export * from './query-clarifications.dto';
 export * from './create-message.dto';
+export * from './clarification-response.dto';

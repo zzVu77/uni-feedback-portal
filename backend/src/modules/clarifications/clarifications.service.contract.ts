@@ -1,66 +1,30 @@
-import { CreateClarificationDto } from './dto/create-clarification.dto';
-import { QueryClarificationsDto } from './dto/query-clarifications.dto';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { CloseClarificationDto } from './dto/close-clarification.dto';
+import {
+  CloseClarificationDto,
+  CreateClarificationDto,
+  CreateMessageDto,
+  QueryClarificationsDto,
+  ClarificationDetailDto,
+  ClarificationListResponseDto,
+  MessageDto,
+} from './dto/';
 
 export interface ClarificationsServiceContract {
-  open(
+  CreateClarificationConversation(
     dto: CreateClarificationDto,
-    actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
-  ): Promise<{
-    conversation_id: number;
-    feedback_id: number;
-    is_closed: false;
-    created_at: string;
-  }>;
-  list(
+    userId: string,
+  ): Promise<ClarificationDetailDto>;
+  GetAllClarificationsConversations(
     query: QueryClarificationsDto,
-    actor: {
-      user_id: number;
-      role: 'Student' | 'DepartmentStaff' | 'Admin';
-      department_id: number;
-    },
-  ): Promise<{
-    items: Array<{
-      conversation_id: number;
-      feedback_id: number;
-      is_closed: boolean;
-      created_at: string;
-    }>;
-    total: number;
-  }>;
-  get(
-    conversation_id: number,
-    actor: { user_id: number; role: 'Student' | 'DepartmentStaff' | 'Admin' },
-  ): Promise<{
-    conversation_id: number;
-    feedback_id: number;
-    is_closed: boolean;
-    created_at: string;
-    messages: Array<{
-      message_id: number;
-      user_id: number;
-      content: string;
-      created_at: string;
-    }>;
-  }>;
-  postMessage(
-    dto: CreateMessageDto,
-    actor: { user_id: number },
-  ): Promise<{
-    message_id: number;
-    conversation_id: number;
-    user_id: number;
-    content: string;
-    created_at: string;
-  }>;
-  close(
-    conversation_id: number,
+    userId: string,
+  ): Promise<ClarificationListResponseDto>;
+  GetClarificationConversationDetail(
+    conversationId: string,
+    userId: string,
+  ): Promise<ClarificationDetailDto>;
+  CreateMessage(dto: CreateMessageDto, userId: string): Promise<MessageDto>;
+  CloseClarification(
+    conversationId: string,
     dto: CloseClarificationDto,
-    actor: { user_id: number; role: 'DepartmentStaff' | 'Admin' },
-  ): Promise<{
-    conversation_id: number;
-    is_closed: boolean;
-    updated_at: string;
-  }>;
+    userId: string,
+  ): Promise<ClarificationDetailDto>;
 }
