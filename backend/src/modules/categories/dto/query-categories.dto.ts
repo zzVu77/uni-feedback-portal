@@ -1,6 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsBooleanString,
+  IsInt,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class QueryCategoriesDto {
   @ApiPropertyOptional({
@@ -10,6 +16,15 @@ export class QueryCategoriesDto {
   @IsOptional()
   @IsString()
   q?: string;
+
+  @ApiPropertyOptional({
+    description:
+      "Filter categories by their active status ('true' or 'false'). If not provided, all categories are returned.",
+    example: 'true',
+  })
+  @IsOptional()
+  @IsBooleanString()
+  isActive?: string;
 
   @ApiPropertyOptional({
     description: 'The page number for pagination.',

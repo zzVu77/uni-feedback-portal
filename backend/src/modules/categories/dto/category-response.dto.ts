@@ -15,6 +15,12 @@ export class CategoryDto {
   name: string;
 
   @ApiProperty({
+    description: 'Indicates if the category is active and can be used.',
+    example: true,
+  })
+  isActive: boolean;
+
+  @ApiProperty({
     description: 'The number of feedbacks associated with this category.',
     example: 42,
   })
