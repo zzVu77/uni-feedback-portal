@@ -41,7 +41,7 @@ export const adminNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   // { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
-  { href: "#1", label: "Góp ý tiếp nhận", icon: History },
+  { href: "/feedbacks-management", label: "Góp ý tiếp nhận", icon: History },
   // { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
   {
     href: "/reported-comment-management",
