@@ -1,6 +1,8 @@
+"use client";
 import { Flag, User } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
+import { ReportDialog } from "./ReportDialog";
 
 const CommentItem = () => {
   return (
@@ -24,12 +26,14 @@ const CommentItem = () => {
           cumque omnis totam nam, illum illo voluptas! Tempora nemo, delectus
           nam itaque rerum quod sunt, ut ea accusamus ex fugiat iste.
         </p>
-        <Button
-          className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none px-0 text-sm shadow-none hover:bg-transparent"
-          variant="outline"
-        >
-          <Flag className="h-4 w-4" /> Báo cáo
-        </Button>
+        <ReportDialog onSubmit={() => Promise.resolve()}>
+          <Button
+            className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none px-0 text-sm shadow-none hover:bg-transparent"
+            variant="outline"
+          >
+            <Flag className="h-4 w-4" /> Báo cáo
+          </Button>
+        </ReportDialog>
       </div>
     </div>
   );

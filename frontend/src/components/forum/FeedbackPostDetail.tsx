@@ -1,15 +1,9 @@
-import {
-  CalendarFold,
-  Flag,
-  MessageSquare,
-  ThumbsUp,
-  User,
-} from "lucide-react";
+import { CalendarFold, MessageSquare, ThumbsUp, User } from "lucide-react";
 import InfoBadge from "../common/InfoBadge";
 import StatusBadge from "../common/StatusBadge";
-import { Separator } from "../ui/separator";
 import Attachment from "../feedback/Attachment";
 import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 
 const FeedbackPostDetail = () => {
   return (
@@ -84,12 +78,6 @@ const FeedbackPostDetail = () => {
           >
             <MessageSquare className="hover:text-blue-primary-600 h-4 w-4" />
             123
-          </Button>
-          <Button
-            className="hover:text-red-primary-400 flex flex-row items-center gap-1 rounded-lg border-none shadow-none hover:bg-transparent"
-            variant="outline"
-          >
-            <Flag className="hover:text-blue-primary-600 h-4 w-4" /> Báo cáo
           </Button>
         </div>
       </div>
