@@ -69,13 +69,21 @@ model Users {
 }
 
 model Departments {
-  id           String  @id @default(uuid()) @db.Uuid
+  id           String   @id @default(uuid()) @db.Uuid
   name         String
+  email        String   @unique
+  description  String?
+  location     String?
+  phone        String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
 
-  users        Users[]
-  feedbacks    Feedbacks[]
+  users                          Users[]
+  feedbacks                      Feedbacks[]
   forwardingLogsFromDepartmentId ForwardingLogs[] @relation("FromDepartment")
   forwardingLogsToDepartmentId   ForwardingLogs[] @relation("ToDepartment")
+
+  @@index([isActive])
 }
 
 model Categories {

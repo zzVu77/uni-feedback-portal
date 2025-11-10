@@ -1,21 +1,54 @@
 -- Inserting departments
 INSERT INTO
-    "Departments" ("id", "name")
+    "Departments" (
+        "id",
+        "name",
+        "email",
+        "description",
+        "location",
+        "phone",
+        "isActive",
+        "createdAt"
+    )
 VALUES (
         '550e8400-e29b-41d4-a716-446655440000',
-        'IT Department'
+        'IT Department',
+        'it.support@university.edu',
+        'Handles all technical infrastructure, network, and software support.',
+        'Building A, Room 101',
+        '123-456-7890',
+        true,
+        '2025-09-01 09:00:00'
     ),
     (
         '550e8400-e29b-41d4-a716-446655440001',
-        'Human Resources'
+        'Human Resources',
+        'hr@university.edu',
+        'Manages employee relations, payroll, and benefits.',
+        'Building B, Room 205',
+        '123-456-7891',
+        true,
+        '2025-09-01 09:00:00'
     ),
     (
         '550e8400-e29b-41d4-a716-446655440002',
-        'Academic Affairs'
+        'Academic Affairs',
+        'academic.affairs@university.edu',
+        'Oversees curriculum, course scheduling, and faculty matters.',
+        'Building C, Room 310',
+        '123-456-7892',
+        true,
+        '2025-09-01 09:00:00'
     ),
     (
         '550e8400-e29b-41d4-a716-446655440003',
-        'Student Services'
+        'Student Services',
+        'student.services@university.edu',
+        'Provides support for student life, including housing, counseling, and activities.',
+        'Building D, Room 100',
+        '123-456-7893',
+        true,
+        '2025-09-01 09:00:00'
     );
 
 -- Inserting categories
