@@ -4,6 +4,7 @@ import {
   ChartColumn,
   History,
   LayoutDashboard,
+  LayoutList,
   Megaphone,
   MessageCircle,
   MessageSquareText,
@@ -46,6 +47,11 @@ export const adminNavigation: NavigationItem[] = [
     href: "/reported-comment-management",
     label: "Quản lý bình luận vi phạm",
     icon: MessageSquareWarning,
+  },
+  {
+    href: "/category-management",
+    label: "Quản lý danh mục",
+    icon: LayoutList,
   },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
 ];
