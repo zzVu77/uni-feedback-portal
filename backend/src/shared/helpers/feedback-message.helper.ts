@@ -1,5 +1,5 @@
 import { FeedbackStatus } from '@prisma/client';
-export function generateStatusUpdateMessage(
+export function GenerateStatusUpdateMessage(
   departmentName: string,
   status: FeedbackStatus,
 ): string {
@@ -20,6 +20,6 @@ export function generateStatusUpdateMessage(
       return `Trạng thái phản hồi đã được cập nhật tại bộ phận ${departmentName}.`;
   }
 }
-export function generateForwardingMessage(departmentName: string): string {
+export function GenerateForwardingMessage(departmentName: string): string {
   return `Phản hồi đã được chuyển tiếp đến bộ phận ${departmentName} để xử lý tiếp.`;
 }

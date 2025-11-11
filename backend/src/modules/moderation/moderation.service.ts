@@ -10,14 +10,18 @@ import {
   CommentReportDto,
   UpdateCommentReportDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { CommentTargetType, Prisma } from '@prisma/client';
 import { CommentService } from '../comment/comment.service';
-
+import { ForumService } from '../forum/forum.service';
+import { AnnouncementsService } from '../announcements/announcements.service';
+import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message.helper';
 @Injectable()
 export class ModerationService {
   constructor(
     private prisma: PrismaService,
     private commentService: CommentService,
+    private readonly forumService: ForumService,
+    private readonly announcementService: AnnouncementsService,
   ) {}
   async GetReports(
     query: QueryCommentReportsDto,
@@ -28,6 +32,7 @@ export class ModerationService {
         'You do not have permission to perform this action.',
       );
     }
+
     const { page = 1, pageSize = 10, status } = query;
     const skip = (page - 1) * pageSize;
 
@@ -47,15 +52,9 @@ export class ModerationService {
               content: true,
               createdAt: true,
               deletedAt: true,
+              targetId: true,
+              targetType: true,
               user: { select: { id: true, fullName: true } },
-              post: {
-                select: {
-                  id: true,
-                  feedback: {
-                    select: { subject: true, description: true },
-                  },
-                },
-              },
             },
           },
           user: { select: { id: true, fullName: true } },
@@ -64,37 +63,68 @@ export class ModerationService {
       this.prisma.commentReports.count({ where }),
     ]);
 
-    return {
-      results: items.map((item) => ({
+    const postIds = items
+      .filter((i) => i.comment.targetType === CommentTargetType.FORUM_POST)
+      .map((i) => i.comment.targetId);
+
+    const announcementIds = items
+      .filter((i) => i.comment.targetType === CommentTargetType.ANNOUNCEMENT)
+      .map((i) => i.comment.targetId);
+
+    const [postMap, announcementMap] = await Promise.all([
+      this.forumService.getManyByIds(postIds),
+      this.announcementService.getManyByIds(announcementIds),
+    ]);
+
+    const results = items.map((item) => {
+      const comment = item.comment;
+      const targetType = comment.targetType;
+
+      const targetInfo =
+        targetType === CommentTargetType.FORUM_POST
+          ? postMap[comment.targetId]
+          : announcementMap[comment.targetId];
+
+      return {
         id: item.id,
         reason: item.reason ?? null,
         status: item.status,
         adminResponse: item.adminResponse ?? null,
         createdAt: item.createdAt.toISOString(),
+
         reportedBy: {
           id: item.user.id,
           fullName: item.user.fullName,
         },
 
         comment: {
-          id: item.comment.id,
-          content: item.comment.content,
-          createdAt: item.comment.createdAt.toISOString(),
-          deletedAt: item.comment.deletedAt?.toISOString() ?? null,
+          id: comment.id,
+          content: comment.content,
+          createdAt: comment.createdAt.toISOString(),
+          deletedAt: comment.deletedAt?.toISOString() ?? null,
           user: {
-            id: item.comment.user.id,
-            fullName: item.comment.user.fullName,
-          },
-          post: {
-            id: item.comment.post?.id,
-            subject: item.comment.post.feedback?.subject,
-            description: item.comment.post.feedback?.description,
+            id: comment.user.id,
+            fullName: comment.user.fullName,
           },
         },
-      })),
+
+        target: {
+          targetType,
+          targetInfo: {
+            id: targetInfo?.id ?? comment.targetId,
+            title: targetInfo?.title ?? '(Deleted)',
+            content: targetInfo?.content ?? '(No content available)',
+          },
+        },
+      };
+    });
+
+    return {
+      results,
       total,
     };
   }
+
   async GetReportDetail(
     commentReportId: string,
     actor: { role: 'ADMIN'; id: string },
@@ -103,6 +133,7 @@ export class ModerationService {
       throw new ForbiddenException('Access denied: Admin privileges required.');
     }
 
+    // === 1. Lấy report chi tiết + quan hệ comment, user ===
     const report = await this.prisma.commentReports.findUnique({
       where: { id: commentReportId },
       include: {
@@ -112,23 +143,24 @@ export class ModerationService {
             content: true,
             createdAt: true,
             deletedAt: true,
+            targetId: true,
+            targetType: true,
             user: { select: { id: true, fullName: true } },
-            post: {
-              select: {
-                id: true,
-                feedback: {
-                  select: { subject: true, description: true },
-                },
-              },
-            },
           },
         },
         user: { select: { id: true, fullName: true } },
       },
     });
+
     if (!report) {
       throw new NotFoundException(`Report not found`);
     }
+
+    // === 2. Lấy targetInfo từ service tương ứng ===
+    const { targetId, targetType } = report.comment;
+    const targetInfo = await this.getTargetInfo(targetId, targetType);
+
+    // === 3. Map dữ liệu sang DTO ===
     const mappedReport: CommentReportDto = {
       id: report.id,
       reason: report.reason ?? null,
@@ -150,16 +182,21 @@ export class ModerationService {
           id: report.comment.user.id,
           fullName: report.comment.user.fullName,
         },
-        post: {
-          id: report.comment.post?.id,
-          subject: report.comment.post.feedback?.subject,
-          description: report.comment.post.feedback?.description,
+      },
+
+      target: {
+        targetType,
+        targetInfo: {
+          id: targetInfo?.id ?? targetId,
+          title: targetInfo?.title ?? '(Deleted)',
+          content: targetInfo?.content ?? '(No content available)',
         },
       },
     };
 
     return mappedReport;
   }
+
   async UpdateReport(
     id: string,
     dto: UpdateCommentReportDto,
@@ -180,16 +217,18 @@ export class ModerationService {
     if (!report) {
       throw new NotFoundException('Report not found');
     }
+    const isDeleting = dto.isDeleted === true;
 
-    if (dto.status === 'RESOLVED' && report.comment) {
+    if (isDeleting && report.comment) {
       await this.commentService.DeleteComment(report.comment.id, actor);
     }
 
+    const adminResponse = GenerateAdminResponse(dto.status, isDeleting);
     const updatedReport = await this.prisma.commentReports.update({
       where: { id },
       data: {
         status: dto.status ?? report.status,
-        adminResponse: dto.adminResponse ?? report.adminResponse,
+        adminResponse: adminResponse,
       },
       include: {
         comment: {
@@ -199,14 +238,8 @@ export class ModerationService {
             createdAt: true,
             deletedAt: true,
             user: { select: { id: true, fullName: true } },
-            post: {
-              select: {
-                id: true,
-                feedback: {
-                  select: { subject: true, description: true },
-                },
-              },
-            },
+            targetId: true,
+            targetType: true,
           },
         },
         user: { select: { id: true, fullName: true } },
@@ -216,9 +249,12 @@ export class ModerationService {
       where: { commentId: report.comment.id, id: { not: id } },
       data: {
         status: dto.status,
-        adminResponse: dto.adminResponse ?? undefined,
+        adminResponse: adminResponse,
       },
     });
+    const { targetId, targetType } = updatedReport.comment;
+    const targetInfo = await this.getTargetInfo(targetId, targetType);
+
     const mappedReport: CommentReportDto = {
       id: updatedReport.id,
       reason: updatedReport.reason ?? null,
@@ -242,14 +278,28 @@ export class ModerationService {
           id: updatedReport.comment.user.id,
           fullName: updatedReport.comment.user.fullName,
         },
-        post: {
-          id: updatedReport.comment.post?.id,
-          subject: updatedReport.comment.post.feedback?.subject,
-          description: updatedReport.comment.post.feedback?.description,
+      },
+      target: {
+        targetType,
+        targetInfo: {
+          id: targetInfo?.id ?? targetId,
+          title: targetInfo?.title ?? '(Deleted)',
+          content: targetInfo?.content ?? '(No content available)',
         },
       },
     };
 
     return mappedReport;
+  }
+  private async getTargetInfo(targetId: string, targetType: CommentTargetType) {
+    if (targetType === CommentTargetType.FORUM_POST) {
+      const map = await this.forumService.getManyByIds([targetId]);
+      return map[targetId] ?? null;
+    }
+    if (targetType === CommentTargetType.ANNOUNCEMENT) {
+      const map = await this.announcementService.getManyByIds([targetId]);
+      return map[targetId] ?? null;
+    }
+    return null;
   }
 }

@@ -305,4 +305,28 @@ export class AnnouncementsService {
 
     return { success: true };
   }
+  async getManyByIds(
+    ids: string[],
+  ): Promise<Record<string, { id: string; title: string; content: string }>> {
+    if (!ids || ids.length === 0) return {};
+
+    const posts = await this.prisma.announcements.findMany({
+      where: { id: { in: ids } },
+      select: {
+        id: true,
+        content: true,
+        title: true,
+      },
+    });
+    return Object.fromEntries(
+      posts.map((p) => [
+        p.id,
+        {
+          id: p.id,
+          title: p.title ?? '(Deleted)',
+          content: p.content ?? '(No content available)',
+        },
+      ]),
+    );
+  }
 }
