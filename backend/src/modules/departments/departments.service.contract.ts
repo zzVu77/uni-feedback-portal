@@ -1,6 +1,35 @@
-// import { DepartmentInfoDto } from './dto/department-info.dto';
-// import { QueryDepartmentsDto } from './dto/query-departments.dto';
+import {
+  CreateDepartmentDto,
+  DepartmentDto,
+  DepartmentListResponseDto,
+  QueryDepartmentsDto,
+  UpdateDepartmentDto,
+  UpdateDepartmentStatusDto,
+} from './dto';
+import { UserPayload } from './departments.service';
+export interface DepartmentsServiceContract {
+  CreateDepartment(
+    dto: CreateDepartmentDto,
+    user: UserPayload,
+  ): Promise<DepartmentDto>;
 
-// export interface DepartmentsServiceContract {
-//   list(query: QueryDepartmentsDto): Promise<{ items: DepartmentInfoDto[] }>;
-// }
+  GetAllDepartments(
+    query: QueryDepartmentsDto,
+  ): Promise<DepartmentListResponseDto>;
+
+  GetDepartmentById(id: string): Promise<DepartmentDto>;
+
+  UpdateDepartment(
+    id: string,
+    dto: UpdateDepartmentDto,
+    user: UserPayload,
+  ): Promise<DepartmentDto>;
+
+  UpdateDepartmentStatus(
+    id: string,
+    dto: UpdateDepartmentStatusDto,
+    user: UserPayload,
+  ): Promise<DepartmentDto>;
+
+  DeleteDepartment(id: string, user: UserPayload): Promise<void>;
+}
