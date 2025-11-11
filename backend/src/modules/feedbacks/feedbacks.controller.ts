@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Patch,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
 import { FeedbacksService } from './feedbacks.service';
 import {
   FeedbackSummary,
@@ -9,6 +19,7 @@ import {
 } from './dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 
 @Controller('feedbacks')
 export class FeedbacksController {
@@ -66,16 +77,44 @@ export class FeedbacksController {
     return this.feedbacksService.getFeedbackDetail(params, this.userId);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateFeedbackDto: UpdateFeedbackDto,
-  // ) {
-  //   return this.feedbacksService.update(+id, updateFeedbackDto);
-  // }
+  @Patch('/me/:feedbackId')
+  @ApiOperation({
+    summary: 'Update a feedback',
+    description:
+      'Allows the user to update their own feedback, but only if it is in "PENDING" status. All fields are optional.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback updated successfully',
+    type: FeedbackDetail,
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Feedback not found' })
+  updateFeedback(
+    @Param() params: FeedbackParamDto,
+    @Body() updateFeedbackDto: UpdateFeedbackDto,
+  ): Promise<FeedbackDetail> {
+    return this.feedbacksService.updateFeedback(
+      params,
+      updateFeedbackDto,
+      this.userId,
+    );
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.feedbacksService.remove(+id);
-  // }
+  @Delete('/me/:feedbackId')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'Delete a feedback',
+    description:
+      'Allows the user to delete their own feedback, but only if it is in "PENDING" status.',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'Feedback deleted successfully',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Feedback not found' })
+  deleteFeedback(@Param() params: FeedbackParamDto): Promise<void> {
+    return this.feedbacksService.deleteFeedback(params, this.userId);
+  }
 }
