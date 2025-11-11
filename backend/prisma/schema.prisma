@@ -1,3 +1,8 @@
+// ================================
+// Prisma Schema for Feedback System
+// Refactored version - UUID, defaults, best practices
+// ================================
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,16 +11,18 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-// generator zod {
-//   provider                 = "prisma-zod-generator"
-//   output   = "../../shared/src/schemas"
-// }
+
+// ================================
+// ENUMS (singular form)
+// ================================
+
 enum NotificationType {
   VOTE_NOTIFICATION
   REPORT_NOTIFICATION
   COMMENT_NOTIFICATION
   MESSAGE_NOTIFICATION
   FEEDBACK_NOTIFICATION
+  ANNOUNCEMENT_NOTIFICATION
 }
 
 enum FeedbackStatus {
@@ -28,202 +35,252 @@ enum FeedbackStatus {
 enum ReportStatus {
   RESOLVED
   PENDING
-  REJECTED
 }
+
 enum UserRole {
-  DepartmentStaff
-  Student
-  Admin
-}
-model users {
-  user_id       Int      @id @default(autoincrement())
-  full_name     String?
-  password      String
-  email         String   @unique
-  role          UserRole
-  department_id Int
-  created_at    DateTime
-
-  department      departments                   @relation(fields: [department_id], references: [department_id])
-  feedbacks       feedbacks[]
-  votes           votes[]
-  comments        comments[]
-  comment_reports comment_reports[]
-  forwarding_logs forwarding_logs[]
-  conversations   clarification_conversations[]
-  messages        messages[]
-  announcements   announcements[]
-  notifications   notifications[]
+  DEPARTMENT_STAFF
+  STUDENT
+  ADMIN
 }
 
-model departments {
-  department_id   Int    @id @default(autoincrement())
-  department_name String
-
-  users                                                           users[]
-  feedbacks                                                       feedbacks[]
-  forwarding_logs_forwarding_logs_from_department_idTodepartments forwarding_logs[] @relation("FromDepartment")
-  forwarding_logs_forwarding_logs_to_department_idTodepartments   forwarding_logs[] @relation("ToDepartment")
+enum CommentTargetType {
+  FORUM_POST
+  ANNOUNCEMENT
 }
 
-model categories {
-  category_id   Int    @id @default(autoincrement())
-  category_name String
 
-  feedbacks feedbacks[]
+// ================================
+// MODELS
+// ================================
+
+model Users {
+  id             String   @id @default(uuid()) @db.Uuid
+  fullName       String
+  password       String
+  email          String   @unique
+  role           UserRole
+  departmentId   String   @db.Uuid
+  createdAt      DateTime @default(now())
+
+  department     Departments                   @relation(fields: [departmentId], references: [id])
+  feedbacks      Feedbacks[]
+  votes          Votes[]
+  comments       Comments[]
+  commentReports CommentReports[]
+  forwardingLogs ForwardingLogs[]
+  conversations  ClarificationConversations[]
+  messages       Messages[]
+  announcements  Announcements[]
+  notifications  Notifications[]
+  refreshTokens  RefreshTokens[]
+  deletedComments Comments[] @relation("CommentDeleter")
 }
 
-model feedbacks {
-  feedback_id    Int            @id @default(autoincrement())
-  subject        String
-  description    String
-  current_status FeedbackStatus
-  is_private     Boolean
-  user_id        Int
-  department_id  Int
-  category_id    Int
-  created_at     DateTime
+model Departments {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  email        String   @unique
+  description  String?
+  location     String?
+  phone        String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
 
-  user             users                          @relation(fields: [user_id], references: [user_id])
-  department       departments                    @relation(fields: [department_id], references: [department_id])
-  category         categories                     @relation(fields: [category_id], references: [category_id])
-  status_history   feedback_status_history[]
-  forwarding_logs  forwarding_logs[]
-  forum_post       forum_posts?
-  conversations    clarification_conversations[]
-  file_attachments file_attachment_for_feedback[]
+  users                          Users[]
+  feedbacks                      Feedbacks[]
+  forwardingLogsFromDepartmentId ForwardingLogs[] @relation("FromDepartment")
+  forwardingLogsToDepartmentId   ForwardingLogs[] @relation("ToDepartment")
+
+  @@index([isActive])
 }
 
-model feedback_status_history {
-  feedback_status_id Int            @id @default(autoincrement())
-  feedback_id        Int
-  status             FeedbackStatus
-  message            String?
-  created_at         DateTime
+model Categories {
+  id        String      @id @default(uuid()) @db.Uuid
+  name      String      @unique
+  isActive  Boolean     @default(true) 
+  feedbacks Feedbacks[]
 
-  feedback feedbacks @relation(fields: [feedback_id], references: [feedback_id])
+  @@index([isActive]) 
 }
 
-model forwarding_logs {
-  forwarding_log_id  Int      @id @default(autoincrement())
-  feedback_id        Int
-  from_department_id Int
-  to_department_id   Int
-  user_id            Int
-  message            String?
-  created_at         DateTime
+model Feedbacks {
+  id              String            @id @default(uuid()) @db.Uuid
+  subject         String
+  description     String
+  location       String? 
+  currentStatus   FeedbackStatus    @default(PENDING)
+  isPrivate       Boolean           @default(false)
+  userId          String            @db.Uuid
+  departmentId    String            @db.Uuid
+  categoryId      String            @db.Uuid
+  createdAt       DateTime          @default(now())
 
-  feedback        feedbacks   @relation(fields: [feedback_id], references: [feedback_id])
-  from_department departments @relation("FromDepartment", fields: [from_department_id], references: [department_id])
-  to_department   departments @relation("ToDepartment", fields: [to_department_id], references: [department_id])
-  user            users       @relation(fields: [user_id], references: [user_id])
+  user            Users             @relation(fields: [userId], references: [id])
+  department      Departments       @relation(fields: [departmentId], references: [id])
+  category        Categories        @relation(fields: [categoryId], references: [id])
+  statusHistory   FeedbackStatusHistory[]
+  forwardingLogs  ForwardingLogs[]
+  forumPost       ForumPosts?
+  conversations   ClarificationConversations[]
+  fileAttachments FileAttachmentForFeedback[]
 }
 
-model forum_posts {
-  post_id     Int      @id @default(autoincrement())
-  feedback_id Int      @unique
-  created_at  DateTime
+model FeedbackStatusHistory {
+  id          String          @id @default(uuid()) @db.Uuid
+  feedbackId  String          @db.Uuid
+  status      FeedbackStatus
+  message     String           // luôn required
+  note        String?          // cho phép null
+  createdAt   DateTime         @default(now())
 
-  feedback feedbacks  @relation(fields: [feedback_id], references: [feedback_id])
-  votes    votes[]
-  comments comments[]
+  feedback Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 }
 
-model votes {
-  user_id    Int
-  post_id    Int
-  created_at DateTime
+model ForwardingLogs {
+  id               String   @id @default(uuid()) @db.Uuid
+  feedbackId       String   @db.Uuid
+  fromDepartmentId String   @db.Uuid
+  toDepartmentId   String   @db.Uuid
+  userId           String   @db.Uuid
+  message          String
+  note             String?
+  createdAt        DateTime @default(now())
 
-  user users       @relation(fields: [user_id], references: [user_id])
-  post forum_posts @relation(fields: [post_id], references: [post_id])
-
-  @@id([user_id, post_id])
+  feedback        Feedbacks   @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  fromDepartment  Departments @relation("FromDepartment", fields: [fromDepartmentId], references: [id])
+  toDepartment    Departments @relation("ToDepartment", fields: [toDepartmentId], references: [id])
+  user            Users       @relation(fields: [userId], references: [id])
 }
 
-model comments {
-  comment_id Int      @id @default(autoincrement())
-  post_id    Int
-  user_id    Int
-  content    String
-  created_at DateTime
+model ForumPosts {
+  id         String   @id @default(uuid()) @db.Uuid
+  feedbackId String   @unique @db.Uuid
+  createdAt  DateTime @default(now())
 
-  post    forum_posts       @relation(fields: [post_id], references: [post_id])
-  user    users             @relation(fields: [user_id], references: [user_id])
-  reports comment_reports[]
+  feedback Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  votes    Votes[]
 }
 
-model comment_reports {
-  comment_report_id Int          @id @default(autoincrement())
-  comment_id        Int
-  user_id           Int
-  reason            String?
-  status            ReportStatus
-  admin_response    String?
-  created_at        DateTime
+model Votes {
+  userId    String   @db.Uuid
+  postId    String   @db.Uuid
+  createdAt DateTime @default(now())
 
-  comment comments @relation(fields: [comment_id], references: [comment_id])
-  user    users    @relation(fields: [user_id], references: [user_id])
+  user Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post ForumPosts @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
 }
 
-model clarification_conversations {
-  conversation_id Int      @id @default(autoincrement())
-  feedback_id     Int
-  is_closed       Boolean
-  user_id         Int
-  created_at      DateTime
-
-  feedback feedbacks  @relation(fields: [feedback_id], references: [feedback_id])
-  user     users      @relation(fields: [user_id], references: [user_id])
-  messages messages[]
+model Comments {
+  id           String             @id @default(uuid()) @db.Uuid
+  targetId     String             @db.Uuid              
+  targetType   CommentTargetType  
+  userId       String             @db.Uuid
+  parentId     String?            @db.Uuid
+  content      String
+  createdAt    DateTime           @default(now())
+  deletedAt    DateTime?          
+  deletedBy  String?   @db.Uuid
+  user         Users              @relation(fields: [userId], references: [id])
+  reports      CommentReports[]
+  parent       Comments?          @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies      Comments[]         @relation("CommentReplies")
+  deleter    Users?    @relation("CommentDeleter", fields: [deletedBy], references: [id])
 }
 
-model messages {
-  message_id      Int      @id @default(autoincrement())
-  conversation_id Int
-  user_id         Int
-  content         String
-  created_at      DateTime
 
-  conversation clarification_conversations @relation(fields: [conversation_id], references: [conversation_id])
-  user         users                       @relation(fields: [user_id], references: [user_id])
+model CommentReports {
+  id             String        @id @default(uuid()) @db.Uuid
+  commentId      String        @db.Uuid
+  userId         String        @db.Uuid
+  reason         String?
+  status         ReportStatus  @default(PENDING)
+  adminResponse  String?
+  createdAt      DateTime      @default(now())
+
+  comment Comments @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    Users    @relation(fields: [userId], references: [id])
 }
 
-model file_attachment_for_feedback {
-  id          Int    @id @default(autoincrement())
-  feedback_id Int
-  file_name   String
-  file_url    String
+model ClarificationConversations {
+  id          String   @id @default(uuid()) @db.Uuid
+  subject     String
+  feedbackId  String   @db.Uuid
+  isClosed    Boolean  @default(false)
+  userId      String   @db.Uuid
+  createdAt   DateTime @default(now())
 
-  feedback feedbacks @relation(fields: [feedback_id], references: [feedback_id])
+  feedback Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  user     Users     @relation(fields: [userId], references: [id])
+  messages Messages[]
 }
 
-model file_attachment_for_announcement {
-  id              Int    @id @default(autoincrement())
-  announcement_id Int
-  file_name       String
-  file_url        String
+model Messages {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @db.Uuid
+  userId         String   @db.Uuid
+  content        String?  
+  createdAt      DateTime @default(now())
 
-  announcement announcements @relation(fields: [announcement_id], references: [id])
+  conversation ClarificationConversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         Users                     @relation(fields: [userId], references: [id])
+  attachments  FileAttachmentForMessage[] 
 }
 
-model announcements {
-  id         Int      @id @default(autoincrement())
+model FileAttachmentForMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  messageId String   @db.Uuid
+  fileName  String
+  fileUrl   String
+
+  message Messages @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model FileAttachmentForFeedback {
+  id         String  @id @default(uuid()) @db.Uuid
+  feedbackId String  @db.Uuid
+  fileName   String
+  fileUrl    String
+
+  feedback Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+}
+
+model FileAttachmentForAnnouncement {
+  id             String  @id @default(uuid()) @db.Uuid
+  announcementId String  @db.Uuid
+  fileName       String
+  fileUrl        String
+
+  announcement Announcements @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+}
+
+model Announcements {
+  id         String   @id @default(uuid()) @db.Uuid
   title      String
   content    String
-  created_at DateTime
-  user_id    Int
+  createdAt  DateTime @default(now())
+  userId     String   @db.Uuid
 
-  user  users                              @relation(fields: [user_id], references: [user_id])
-  files file_attachment_for_announcement[]
+  user  Users                        @relation(fields: [userId], references: [id])
+  files FileAttachmentForAnnouncement[]
 }
 
-model notifications {
-  notification_id   Int              @id @default(autoincrement())
-  user_id           Int
+model Notifications {
+  id                String            @id @default(uuid()) @db.Uuid
+  userId            String            @db.Uuid
   content           String
-  notification_type NotificationType
-  is_read           Boolean
-  created_at        DateTime
+  notificationType  NotificationType
+  isRead            Boolean           @default(false)
+  createdAt         DateTime          @default(now())
+  relatedEntityId   String?          @db.Uuid 
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  user users @relation(fields: [user_id], references: [user_id])
+model RefreshTokens {
+  token     String   @id @unique
+  userId    String   @db.Uuid 
+  expiredAt DateTime
+  createdAt DateTime @default(now())
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

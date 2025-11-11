@@ -8,7 +8,6 @@
     "frontend"
   ],
   "scripts": {
-    "prepare": "if [ -z \"$CI\" ]; then husky install; fi",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
@@ -18,6 +17,7 @@
     "start": "npm run start --workspace=backend",
     "test": "npm run test --workspace=backend && npm run test --workspace=frontend",
     "lint": "npm run lint --workspace=backend && npm run lint --workspace=frontend",
+    "type-check": "npm run type-check --workspace=backend && npm run type-check --workspace=frontend",
     "clean": "npm run clean --workspace=backend && npm run clean --workspace=frontend"
   },
   "devDependencies": {
@@ -28,13 +28,5 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css,scss}": [
-      "npm run format --workspace=backend",
-      "npm run lint --workspace=backend",
-      "npm run format --workspace=frontend",
-      "npm run lint --workspace=frontend"
-    ]
   }
 }

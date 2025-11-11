@@ -1,0 +1,120 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Patch,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
+import { FeedbacksService } from './feedbacks.service';
+import {
+  FeedbackSummary,
+  GetMyFeedbacksResponseDto,
+  QueryFeedbacksDto,
+  FeedbackDetail,
+  FeedbackParamDto,
+} from './dto';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+
+@Controller('feedbacks')
+export class FeedbacksController {
+  constructor(private readonly feedbacksService: FeedbacksService) {}
+  userId = '550e8400-e29b-41d4-a716-446655440009'; // dummy userId
+  @Post()
+  @ApiOperation({
+    summary: 'Create a new feedback',
+    description:
+      'Allows users to submit feedback to a specific department. Attachments such as images or documents can also be included.',
+  })
+  @ApiBody({ type: CreateFeedbackDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Feedback created successfully',
+    type: FeedbackSummary,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data or missing required fields',
+  })
+  createFeedback(@Body() createFeedbackDto: CreateFeedbackDto) {
+    return this.feedbacksService.createFeedback(createFeedbackDto, this.userId);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all feedbacks of the current user' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of user feedbacks',
+    type: GetMyFeedbacksResponseDto,
+  })
+  getMyFeedbacks(@Query() query: QueryFeedbacksDto) {
+    return this.feedbacksService.getMyFeedbacks(query, this.userId);
+  }
+
+  @Get('/me/:feedbackId')
+  @ApiOperation({
+    summary: 'Get feedback details by ID',
+    description:
+      'Retrieve detailed information about a specific feedback, including its status history, forwarding logs, and attached files.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback detail retrieved successfully',
+    type: FeedbackDetail,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Feedback not found',
+  })
+  async getFeedbackDetail(
+    @Param() params: FeedbackParamDto,
+  ): Promise<FeedbackDetail> {
+    return this.feedbacksService.getFeedbackDetail(params, this.userId);
+  }
+
+  @Patch('/me/:feedbackId')
+  @ApiOperation({
+    summary: 'Update a feedback',
+    description:
+      'Allows the user to update their own feedback, but only if it is in "PENDING" status. All fields are optional.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback updated successfully',
+    type: FeedbackDetail,
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Feedback not found' })
+  updateFeedback(
+    @Param() params: FeedbackParamDto,
+    @Body() updateFeedbackDto: UpdateFeedbackDto,
+  ): Promise<FeedbackDetail> {
+    return this.feedbacksService.updateFeedback(
+      params,
+      updateFeedbackDto,
+      this.userId,
+    );
+  }
+
+  @Delete('/me/:feedbackId')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'Delete a feedback',
+    description:
+      'Allows the user to delete their own feedback, but only if it is in "PENDING" status.',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'Feedback deleted successfully',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Feedback not found' })
+  deleteFeedback(@Param() params: FeedbackParamDto): Promise<void> {
+    return this.feedbacksService.deleteFeedback(params, this.userId);
+  }
+}

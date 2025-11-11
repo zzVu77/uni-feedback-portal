@@ -1,49 +1,58 @@
 name: CI Workflow
-description: This workflow runs on pushes and pull requests to the dev branch, checking linting and building the project.
+description: This workflow runs on pushes and pull requests to the dev/main branches, checking types, linting, testing, and building the project.
 
 on:
   push:
     branches:
       - dev
       - main
+      - frontend
   pull_request:
     branches:
       - dev
       - main
+      - frontend
 
 jobs:
-  build:
-    name: Check lint & Run build
+  build_and_test:
+    name: Build, Lint, and Type Check
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repo
+      # 1. Checkout the repo
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Setup Node.js 20
+      # 2. Setup Node.js 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
 
-      # Install all dependencies for the workspace
+      # 3. Install all dependencies for the workspace
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # ✅ Generate Prisma Client cho backend
+      # 4. Generate Prisma Client cho backend
       - name: Generate Prisma Client
         run: npx prisma generate --schema=backend/prisma/schema.prisma
 
-      # Lint backend and frontend
+      # 5. Type Checking
+      - name: Type Check backend
+        run: npm run type-check --workspace=backend
+
+      - name: Type Check frontend
+        run: npm run type-check --workspace=frontend
+
+      # 6. Lint backend and frontend
       - name: Lint backend
         run: npm run lint --workspace=backend
 
       - name: Lint frontend
         run: npm run lint --workspace=frontend
 
-      # Build
+      # 7. Build
       - name: Build backend
         run: npm run build --workspace=backend
 
