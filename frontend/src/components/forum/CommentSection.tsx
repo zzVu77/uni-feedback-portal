@@ -114,6 +114,11 @@ const CommentSection: React.FC = () => {
           {/* Render list comment */}
           {comments.map((comment) => (
             <CommentItem
+              onDelete={() => {}}
+              currentUser={{
+                id: "1234",
+                role: "STUDENT",
+              }}
               key={comment.id}
               comment={comment}
               onReplySubmit={handleReplySubmit}

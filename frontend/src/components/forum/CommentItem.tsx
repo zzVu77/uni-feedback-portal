@@ -1,15 +1,24 @@
-"use client";
-import { Flag, User, MessageSquareReply, Send, BadgeCheck } from "lucide-react";
+import {
+  Flag,
+  User,
+  MessageSquareReply,
+  Send,
+  BadgeCheck,
+  Trash2,
+} from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { ReportDialog } from "./ReportDialog";
 import { Comment } from "@/types";
 import { cn } from "@/lib/utils";
+import ConfirmationDialog from "../common/ConfirmationDialog";
 
 interface CommentItemProps {
   comment: Comment;
   onReplySubmit: (parentId: string, content: string) => void;
+  onDelete: (commentId: string) => void;
+  currentUser: { id: string; role: string };
   level?: number;
   isLast?: boolean;
 }
@@ -17,6 +26,8 @@ interface CommentItemProps {
 const CommentItem: React.FC<CommentItemProps> = ({
   comment,
   onReplySubmit,
+  onDelete,
+  currentUser,
   level = 1,
   isLast = false,
 }) => {
@@ -29,6 +40,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
     setReplyContent("");
     setIsReplying(false);
   };
+
+  const handleDelete = () => {
+    onDelete(comment.id);
+  };
+
+  const isAuthor = currentUser.id === comment.user.id;
 
   return (
     <div
@@ -74,6 +91,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
               <Flag className="h-4 w-4" /> Báo cáo
             </Button>
           </ReportDialog>
+          {isAuthor && (
+            <ConfirmationDialog
+              title="Xác nhận xóa bình luận"
+              description="Bạn có chắc chắn muốn xóa bình luận này không? Hành động này không thể hoàn tác."
+              onConfirm={handleDelete}
+            >
+              <Button
+                className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
+                variant="outline"
+              >
+                <Trash2 className="h-4 w-4" /> Xóa
+              </Button>
+            </ConfirmationDialog>
+          )}
         </div>
         {/* Form reply */}
         {isReplying && (
@@ -114,6 +145,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 key={reply.id}
                 comment={reply}
                 onReplySubmit={onReplySubmit}
+                onDelete={onDelete}
+                currentUser={currentUser}
                 level={level + 1}
                 isLast={
                   reply.id === comment.replies[comment.replies.length - 1].id
