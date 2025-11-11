@@ -25,20 +25,32 @@ export type FeedbackDetail = {
     note: string | null;
     createdAt: string;
   }>;
-  forwardingLogs: Array<{
+  // Optional forwarding logs
+  forwardingLogs?: Array<{
     id: string;
     fromDepartment: { id: string; name: string };
     toDepartment: { id: string; name: string };
     message: string | null;
     createdAt: string;
   }>;
-  fileAttachments: Array<{
+  // Optional file attachments
+  fileAttachments?: Array<{
     id: string;
     fileName: string;
     fileUrl: string;
   }>;
+  // For staff feedback view and can be null for private feedbacks
+  student?: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
 };
 export type MyFeedbackHistoryItem = Pick<
   FeedbackDetail,
   "id" | "subject" | "currentStatus" | "createdAt" | "category" | "department"
+>;
+export type StaffFeedbackItem = Pick<
+  FeedbackDetail,
+  "id" | "subject" | "currentStatus" | "createdAt" | "category" | "student"
 >;

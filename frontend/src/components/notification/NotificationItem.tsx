@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { cn } from "@/lib/utils";
-import { TypeOfNotification } from "@/types/notification";
 import {
   Bell,
   CheckCircle,
@@ -15,6 +15,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { formatDistanceToNow } from "../utils/formatDistanceToNow";
+import { TypeOfNotification } from "@/types";
 type NotificationType = {
   type: TypeOfNotification;
   title?: string;

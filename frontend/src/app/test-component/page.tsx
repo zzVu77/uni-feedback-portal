@@ -65,7 +65,7 @@ const page = () => {
       <PostCard />
       <MyFeedbacksHistoryTable />
       <FeedbackForm />
-      <FeedbackDetailHeader />
+      <FeedbackDetailHeader type="student" />
       <StatusTimeLine />
       <ConversationSection />
     </div>

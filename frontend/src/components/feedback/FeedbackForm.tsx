@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RotateCcw, Send } from "lucide-react";
+import { RotateCcw, Save, Send, X } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -92,18 +92,22 @@ const formSchema = z.object({
       "Chỉ chấp nhận các định dạng .jpg, .png, .pdf, .docx, .txt",
     ),
 });
-const FeedbackForm = () => {
+type FeedbackFormProps = {
+  type?: "create" | "edit";
+  initialData?: z.infer<typeof formSchema>;
+};
+const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: "",
-      feedbackCategory: "",
-      location: "",
-      department: "",
-      description: "",
-      isPrivate: false,
-      attachments: [],
+      subject: initialData?.subject || "",
+      feedbackCategory: initialData?.feedbackCategory || "",
+      location: initialData?.location || "",
+      department: initialData?.department || "",
+      description: initialData?.description || "",
+      isPrivate: initialData?.isPrivate || false,
+      attachments: initialData?.attachments || [],
     },
   });
   const { isDirty } = form.formState;
@@ -130,9 +134,9 @@ const FeedbackForm = () => {
           className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
-          <span className="text-[20px] font-semibold lg:text-[28px]">
-            Gửi góp ý đến nhà trường
-          </span>
+          <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
+            {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
+          </h2>
           <ScrollArea className="overflow-y-auto pr-1">
             <div className="flex h-[76vh] flex-col gap-4 px-2">
               {/* Anonymous option */}
@@ -341,35 +345,65 @@ const FeedbackForm = () => {
               />
             </div>
           </ScrollArea>
-          <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
-            <ConfirmationDialog
-              title="Xác nhận làm mới biểu mẫu?"
-              description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
-              onConfirm={handleResetForm}
-              confirmText="Đồng ý"
-            >
+          {type == "create" ? (
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+              <ConfirmationDialog
+                title="Xác nhận làm mới biểu mẫu?"
+                description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
+                onConfirm={handleResetForm}
+                confirmText="Đồng ý"
+              >
+                <Button
+                  type="button"
+                  disabled={!isDirty}
+                  variant={"cancel"}
+                  className="flex max-w-lg flex-row items-center gap-2 py-3"
+                >
+                  <RotateCcw className="h-5 w-5" />
+                  Làm mới
+                </Button>
+              </ConfirmationDialog>
+
               <Button
                 type="button"
                 disabled={!isDirty}
+                variant={"primary"}
+                onClick={handleAttemptSubmit}
+                className="flex max-w-lg flex-row items-center gap-2 py-3 shadow-md"
+              >
+                <Send className="h-5 w-5" />
+                Gửi góp ý
+              </Button>
+            </div>
+          ) : (
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+              <Button
+                type="button"
                 variant={"cancel"}
+                onClick={() => {}} // TODO: Implement cancel functionality ( back again to detail page )
                 className="flex max-w-lg flex-row items-center gap-2 py-3"
               >
-                <RotateCcw className="h-5 w-5" />
-                Làm mới
+                <X className="h-5 w-5" />
+                Hủy
               </Button>
-            </ConfirmationDialog>
-
-            <Button
-              type="button"
-              disabled={!isDirty}
-              variant={"primary"}
-              onClick={handleAttemptSubmit}
-              className="flex max-w-lg flex-row items-center gap-2 py-3 shadow-md"
-            >
-              <Send className="h-5 w-5" />
-              Gửi góp ý
-            </Button>
-          </div>
+              <ConfirmationDialog
+                title="Bạn có chắc chắn muốn cập nhật góp ý này?"
+                description="Hành động này sẽ làm thay đổi góp ý cũ của bạn. Bạn có muốn tiếp tục không?"
+                onConfirm={handleResetForm}
+                confirmText="Đồng ý"
+              >
+                <Button
+                  type="button"
+                  onClick={() => {}} // TODO: Implement update functionality
+                  variant={"primary"}
+                  className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
+                >
+                  <Save className="h-5 w-5" />
+                  Cập nhật
+                </Button>
+              </ConfirmationDialog>
+            </div>
+          )}
         </form>
       </Form>
       <AlertDialog
@@ -431,11 +465,8 @@ const FeedbackForm = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel variant={"cancel"}>Hủy</AlertDialogCancel>
-            <AlertDialogAction
-              variant={"primary"}
-              onClick={form.handleSubmit(onSubmit)}
-            >
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>
               Gửi
             </AlertDialogAction>
           </AlertDialogFooter>
