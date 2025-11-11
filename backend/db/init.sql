@@ -721,7 +721,7 @@ VALUES
 (
     '550e8400-e29b-41d4-a716-44665544006e',
     '550e8400-e29b-41d4-a716-446655440031',
-    '550e8400-e29b-41d4-a716-446655440009',
+    '550e8400-e29b-41d4-a716-44665544009',
     '550e8400-e29b-41d4-a716-446655440038',
     'I moved to the 1st floor, better there.',
     '2025-09-05 10:45:00'
@@ -890,6 +890,7 @@ VALUES (
 INSERT INTO
     "ClarificationConversations" (
         "id",
+        "subject",
         "feedbackId",
         "isClosed",
         "userId",
@@ -897,6 +898,7 @@ INSERT INTO
     )
 VALUES (
         '550e8400-e29b-41d4-a716-44665544003e',
+        'Clarification on Course Registration Issue',
         '550e8400-e29b-41d4-a716-446655440013',
         false,
         '550e8400-e29b-41d4-a716-44665544000b',
@@ -904,6 +906,7 @@ VALUES (
     ),
     (
         '550e8400-e29b-41d4-a716-44665544003f',
+        'Follow-up on Cafeteria Food Quality',
         '550e8400-e29b-41d4-a716-446655440014',
         true,
         '550e8400-e29b-41d4-a716-44665544000d',
@@ -911,6 +914,7 @@ VALUES (
     ),
     (
         '550e8400-e29b-41d4-a716-446655440040',
+        'Details needed for Scholarship Application Problem',
         '550e8400-e29b-41d4-a716-446655440017',
         false,
         '550e8400-e29b-41d4-a716-446655440010',
@@ -918,6 +922,7 @@ VALUES (
     ),
     (
         '550e8400-e29b-41d4-a716-446655440041',
+        'Regarding Cafeteria Menu Feedback',
         '550e8400-e29b-41d4-a716-44665544001b',
         false,
         '550e8400-e29b-41d4-a716-44665544000d',

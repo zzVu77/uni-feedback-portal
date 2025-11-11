@@ -195,6 +195,7 @@ model CommentReports {
 
 model ClarificationConversations {
   id          String   @id @default(uuid()) @db.Uuid
+  subject     String
   feedbackId  String   @db.Uuid
   isClosed    Boolean  @default(false)
   userId      String   @db.Uuid
