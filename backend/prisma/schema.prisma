@@ -87,10 +87,12 @@ model Departments {
 }
 
 model Categories {
-  id   String  @id @default(uuid()) @db.Uuid
-  name String
-
+  id        String      @id @default(uuid()) @db.Uuid
+  name      String      @unique
+  isActive  Boolean     @default(true) 
   feedbacks Feedbacks[]
+
+  @@index([isActive]) 
 }
 
 model Feedbacks {
