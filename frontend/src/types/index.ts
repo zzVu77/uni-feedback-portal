@@ -3,3 +3,4 @@ export * from "./notification";
 export * from "./categories";
 export * from "./announcement";
 export * from "./reported-comment";
+export * from "./comment";
