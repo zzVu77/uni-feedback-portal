@@ -8,6 +8,7 @@ async function bootstrap() {
     .setTitle('Uni Portal Feedback API')
     .setDescription('The Uni Portal Feedback API documentation')
     .setVersion('0.1')
+    .addBearerAuth()
     .build();
   app.useGlobalPipes(
     new ValidationPipe({

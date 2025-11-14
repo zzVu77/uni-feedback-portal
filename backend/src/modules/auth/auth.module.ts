@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -9,18 +9,20 @@ import { RolesGuard } from './guards/roles.guard';
 import { TokenService } from './token.service';
 import { APP_GUARD } from '@nestjs/core';
 
+@Global()
 @Module({
   imports: [PrismaModule, JwtModule.register({})],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AccessTokenGuard,
+      useClass: AccessTokenGuard, // Only AccessTokenGuard is global
     },
     AuthService,
     HashingService,
-    RolesGuard,
+    RolesGuard, // RolesGuard is now a regular provider
     TokenService,
   ],
   controllers: [AuthController],
+  exports: [HashingService, TokenService],
 })
 export class AuthModule {}

@@ -15,14 +15,17 @@ export class RolesGuard implements CanActivate {
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
+    console.log('Role guard: Required Roles:', requiredRoles);
 
+    // If the @Roles decorator is not present, deny access because this guard
+    // is now used explicitly for role-based authorization.
     if (!requiredRoles) {
-      return true;
+      return false;
     }
 
     const request = context.switchToHttp().getRequest<Request>();
     const user: ActiveUserData | undefined = request[REQUEST_USER_KEY];
-
+    console.log('Role guard: Active User:', user);
     return user ? requiredRoles.some((role) => user.role === role) : false;
   }
 }

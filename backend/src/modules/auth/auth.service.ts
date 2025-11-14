@@ -5,16 +5,17 @@ import { AuthResponseDto } from './dto';
 import { Users } from '@prisma/client';
 import { TokenService } from './token.service';
 import jwtConfig from '../../config/jwt.config';
+import { AuthServiceContract } from './auth.service.contract';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements AuthServiceContract {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly hashingService: HashingService,
     private readonly tokenService: TokenService,
   ) {}
 
-  async login(email: string, password: string): Promise<AuthResponseDto> {
+  async Login(email: string, password: string): Promise<AuthResponseDto> {
     const user = await this.prismaService.users.findUnique({
       where: { email },
     });
@@ -35,7 +36,7 @@ export class AuthService {
     return this.generateTokens(user);
   }
 
-  async refreshToken(refreshToken: string): Promise<AuthResponseDto> {
+  async RefreshToken(refreshToken: string): Promise<AuthResponseDto> {
     try {
       const { sub, refreshTokenId } =
         await this.tokenService.verifyRefreshToken(refreshToken);
@@ -63,16 +64,21 @@ export class AuthService {
     }
   }
 
-  async logout(refreshToken: string): Promise<void> {
+  async Logout(refreshToken: string): Promise<void> {
     try {
       const { refreshTokenId } =
         await this.tokenService.verifyRefreshToken(refreshToken);
 
-      await this.prismaService.refreshTokens.delete({
+      // Using deleteMany to avoid an error if the token is already deleted.
+      // This makes the logout operation idempotent.
+      await this.prismaService.refreshTokens.deleteMany({
         where: { token: refreshTokenId },
       });
     } catch {
-      return;
+      // If token verification fails, we throw an error.
+      // The client should not be told the logout was "successful"
+      // if the token was invalid in the first place.
+      throw new UnauthorizedException('Invalid refresh token');
     }
   }
 

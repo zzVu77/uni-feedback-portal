@@ -1,6 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
+  ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -14,7 +15,7 @@ import { Public } from './decorators/public.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
+  @Public() // Mark this endpoint as public
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User login' })
@@ -23,11 +24,11 @@ export class AuthController {
     type: AuthResponseDto,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password.' })
-  login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
-    return this.authService.login(loginDto.email, loginDto.password);
+  Login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
+    return this.authService.Login(loginDto.email, loginDto.password);
   }
 
-  @Public()
+  @Public() // Mark this endpoint as public
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh access token' })
@@ -38,26 +39,18 @@ export class AuthController {
   @ApiUnauthorizedResponse({
     description: 'Invalid or expired refresh token.',
   })
-  refreshToken(
+  RefreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
   ): Promise<AuthResponseDto> {
-    return this.authService.refreshToken(refreshTokenDto.refreshToken);
+    return this.authService.RefreshToken(refreshTokenDto.refreshToken);
   }
 
+  @ApiBearerAuth()
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'User logout' })
   @ApiOkResponse({ description: 'User logged out successfully.' })
-  logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
-    return this.authService.logout(refreshTokenDto.refreshToken);
+  Logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
+    return this.authService.Logout(refreshTokenDto.refreshToken);
   }
-
-  // @ApiBearerAuth()
-  // @UseGuards(RolesGuard) // AccessTokenGuard is now global
-  // @Roles(UserRole.ADMIN)
-  // @Get('profile')
-  // @ApiOperation({ summary: 'Get user profile (Admin only)' })
-  // getProfile(@ActiveUser() user: ActiveUserData) {
-  //   return user;
-  // }
 }
