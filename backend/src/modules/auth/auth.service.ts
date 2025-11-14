@@ -1,23 +1,17 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { HashingService } from './hashing.service';
-import { JwtService } from '@nestjs/jwt';
-import type { ConfigType } from '@nestjs/config';
-import jwtConfig from '../../config/jwt.config';
-import { ActiveUserData } from './interfaces/active-user-data.interface';
-
 import { AuthResponseDto } from './dto';
 import { Users } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { TokenService } from './token.service';
+import jwtConfig from '../../config/jwt.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly hashingService: HashingService,
-    private readonly jwtService: JwtService,
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private readonly tokenService: TokenService,
   ) {}
 
   async login(email: string, password: string): Promise<AuthResponseDto> {
@@ -43,13 +37,8 @@ export class AuthService {
 
   async refreshToken(refreshToken: string): Promise<AuthResponseDto> {
     try {
-      const { sub, refreshTokenId } = await this.jwtService.verifyAsync<
-        Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
-      >(refreshToken, {
-        secret: this.jwtConfiguration.refreshSecret,
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-      });
+      const { sub, refreshTokenId } =
+        await this.tokenService.verifyRefreshToken(refreshToken);
 
       const user = await this.prismaService.users.findUniqueOrThrow({
         where: { id: sub },
@@ -76,13 +65,8 @@ export class AuthService {
 
   async logout(refreshToken: string): Promise<void> {
     try {
-      const { refreshTokenId } = await this.jwtService.verifyAsync<{
-        refreshTokenId: string;
-      }>(refreshToken, {
-        secret: this.jwtConfiguration.refreshSecret,
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-      });
+      const { refreshTokenId } =
+        await this.tokenService.verifyRefreshToken(refreshToken);
 
       await this.prismaService.refreshTokens.delete({
         where: { token: refreshTokenId },
@@ -93,30 +77,15 @@ export class AuthService {
   }
 
   private async generateTokens(user: Users): Promise<AuthResponseDto> {
-    const refreshTokenId = randomUUID();
-    const [accessToken, refreshToken] = await Promise.all([
-      this.signToken<Partial<ActiveUserData>>(
-        user.id,
-        this.jwtConfiguration.accessTokenTtl,
-        { role: user.role },
-        this.jwtConfiguration.accessSecret,
-      ),
-      this.signToken(
-        user.id,
-        this.jwtConfiguration.refreshTokenTtl,
-        {
-          refreshTokenId,
-        },
-        this.jwtConfiguration.refreshSecret,
-      ),
-    ]);
+    const { accessToken, refreshToken, refreshTokenId } =
+      await this.tokenService.generateTokens(user);
 
     await this.prismaService.refreshTokens.create({
       data: {
         token: refreshTokenId,
         userId: user.id,
         expiredAt: new Date(
-          Date.now() + this.jwtConfiguration.refreshTokenTtl * 1000,
+          Date.now() + parseInt(jwtConfig.JWT_REFRESH_TOKEN_TTL) * 1000,
         ),
       },
     });
@@ -125,25 +94,5 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
-  }
-
-  private async signToken<T>(
-    userId: string,
-    expiresIn: number,
-    payload?: T,
-    secret?: string,
-  ) {
-    return this.jwtService.signAsync(
-      {
-        sub: userId,
-        ...payload,
-      },
-      {
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        secret: secret,
-        expiresIn,
-      },
-    );
   }
 }

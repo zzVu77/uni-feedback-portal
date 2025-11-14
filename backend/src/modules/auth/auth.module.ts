@@ -4,16 +4,23 @@ import { AuthController } from './auth.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { HashingService } from './hashing.service';
 import { JwtModule } from '@nestjs/jwt';
-import jwtConfig from '../../config/jwt.config';
-import { ConfigModule } from '@nestjs/config';
+import { AccessTokenGuard } from './guards/access-token.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { TokenService } from './token.service';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
-  imports: [
-    PrismaModule,
-    JwtModule.registerAsync(jwtConfig.asProvider()),
-    ConfigModule.forFeature(jwtConfig),
+  imports: [PrismaModule, JwtModule.register({})],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+    AuthService,
+    HashingService,
+    RolesGuard,
+    TokenService,
   ],
-  providers: [AuthService, HashingService],
   controllers: [AuthController],
 })
 export class AuthModule {}

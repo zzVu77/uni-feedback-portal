@@ -7,24 +7,14 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthResponseDto, LoginDto, RefreshTokenDto } from './dto';
+import { Public } from './decorators/public.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  /**
-   * @temporary
-   * This endpoint is for generating a hashed password for seeding/testing purposes.
-   * It should be removed after use.
-   * Access it via GET /auth/hash/test123456
-   */
-  // @ApiExcludeEndpoint()
-  // @Get('hash/:password')
-  // hashPassword(@Param('password') password: string): Promise<string> {
-  //   return this.authService.hashPassword(password);
-  // }
-
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User login' })
@@ -37,6 +27,7 @@ export class AuthController {
     return this.authService.login(loginDto.email, loginDto.password);
   }
 
+  @Public()
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh access token' })
@@ -60,4 +51,13 @@ export class AuthController {
   logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
     return this.authService.logout(refreshTokenDto.refreshToken);
   }
+
+  // @ApiBearerAuth()
+  // @UseGuards(RolesGuard) // AccessTokenGuard is now global
+  // @Roles(UserRole.ADMIN)
+  // @Get('profile')
+  // @ApiOperation({ summary: 'Get user profile (Admin only)' })
+  // getProfile(@ActiveUser() user: ActiveUserData) {
+  //   return user;
+  // }
 }

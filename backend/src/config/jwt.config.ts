@@ -1,11 +1,35 @@
-import { registerAs } from '@nestjs/config';
+import { plainToInstance } from 'class-transformer';
+import { IsNotEmpty, IsString, validateSync } from 'class-validator';
+import 'dotenv/config'; // Make sure to load .env variables
 
-export default registerAs('jwt', () => ({
-  secret: process.env.JWT_ACCESS_SECRET, // For JwtModule registration
-  accessSecret: process.env.JWT_ACCESS_SECRET, // For JwtModule registration
-  refreshSecret: process.env.JWT_REFRESH_SECRET,
-  audience: process.env.JWT_TOKEN_AUDIENCE,
-  issuer: process.env.JWT_TOKEN_ISSUER,
-  accessTokenTtl: parseInt(process.env.JWT_ACCESS_TOKEN_TTL ?? '3600', 10),
-  refreshTokenTtl: parseInt(process.env.JWT_REFRESH_TOKEN_TTL ?? '86400', 10),
-}));
+class EnvConfig {
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_TOKEN_TTL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_TOKEN_TTL: string;
+}
+
+const validatedConfig = plainToInstance(EnvConfig, process.env, {
+  enableImplicitConversion: true,
+});
+
+const errors = validateSync(validatedConfig, {
+  skipMissingProperties: false,
+});
+
+if (errors.length > 0) {
+  throw new Error(errors.toString());
+}
+
+export default validatedConfig;
