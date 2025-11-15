@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma, FeedbackStatus } from '@prisma/client';
+import { Prisma, FeedbackStatus, UserRole } from '@prisma/client';
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
@@ -14,14 +14,15 @@ import {
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class FeedbacksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getMyFeedbacks(
+  async getFeedbacks(
     query: QueryFeedbacksDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {
       page = 1,
@@ -34,83 +35,104 @@ export class FeedbacksService {
       q,
     } = query;
 
-    const whereClause: Prisma.FeedbacksWhereInput = {
-      userId,
-      ...(status && { currentStatus: status }),
-      ...(categoryId && { categoryId }),
-      ...(departmentId && { departmentId }),
-      ...(from || to
-        ? {
-            createdAt: {
-              ...(from && { gte: new Date(from) }),
-              ...(to && {
-                lt: new Date(new Date(to).setDate(new Date(to).getDate() + 1)),
-              }),
-            },
-          }
-        : {}),
-      ...(q && {
-        OR: [
-          { subject: { contains: q, mode: 'insensitive' } },
-          { description: { contains: q, mode: 'insensitive' } },
-        ],
-      }),
-    };
-    // console.log('whereClause', whereClause);
+    const where: Prisma.FeedbacksWhereInput = {};
+
+    // Apply role-based filters
+    switch (actor.role) {
+      case UserRole.STUDENT:
+        where.userId = actor.sub;
+        break;
+      case UserRole.DEPARTMENT_STAFF:
+        // Staff can only see feedbacks in their department
+        where.departmentId = actor.departmentId;
+        break;
+      case UserRole.ADMIN:
+        // Admin can see all, but can still filter by department if provided in query
+        if (departmentId) {
+          where.departmentId = departmentId;
+        }
+        break;
+      default:
+        // Deny access for any other roles by default
+        throw new ForbiddenException(
+          'You do not have permission to access this resource.',
+        );
+    }
+
+    // Apply additional query filters
+    if (status) where.currentStatus = status;
+    if (categoryId) where.categoryId = categoryId;
+    if (from || to) {
+      where.createdAt = {};
+      if (from) where.createdAt.gte = new Date(from);
+      if (to) {
+        where.createdAt.lt = new Date(
+          new Date(to).setDate(new Date(to).getDate() + 1),
+        );
+      }
+    }
+    if (q) {
+      where.OR = [
+        { subject: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+      ];
+    }
 
     const [items, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
-        where: whereClause,
+        where,
         skip: (page - 1) * pageSize,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          subject: true,
-          location: true,
-          currentStatus: true,
-          isPrivate: true,
-          department: {
-            select: { id: true, name: true },
-          },
+        include: {
+          department: { select: { id: true, name: true } },
           category: { select: { id: true, name: true } },
-          createdAt: true,
+          user: { select: { id: true, fullName: true, email: true } },
         },
       }),
-      this.prisma.feedbacks.count({ where: whereClause }),
+      this.prisma.feedbacks.count({ where }),
     ]);
 
-    return {
-      results: items.map((item) => ({
-        ...item,
-        location: item.location ? item.location : null,
-        createdAt: item.createdAt.toISOString(),
-      })),
-      total,
-    };
+    const results = items.map((f) => ({
+      id: f.id,
+      subject: f.subject,
+      location: f.location ? f.location : null,
+      currentStatus: f.currentStatus,
+      isPrivate: f.isPrivate,
+      department: f.department,
+      category: f.category,
+      createdAt: f.createdAt.toISOString(),
+      ...(f.isPrivate &&
+      actor.role !== UserRole.STUDENT &&
+      f.userId !== actor.sub
+        ? {}
+        : {
+            student: {
+              id: f.user.id,
+              fullName: f.user.fullName,
+              email: f.user.email,
+            },
+          }),
+    }));
+
+    return { results, total };
   }
+
   async getFeedbackDetail(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId: userId },
+      where: { id: feedbackId },
       include: {
-        department: {
-          select: { id: true, name: true },
-        },
-        category: {
-          select: { id: true, name: true },
-        },
+        user: true,
+        forumPost: { select: { id: true } },
+        department: { select: { id: true, name: true } },
+        category: { select: { id: true, name: true } },
         statusHistory: {
-          select: {
-            status: true,
-            message: true,
-            note: true,
-            createdAt: true,
-          },
+          select: { status: true, message: true, note: true, createdAt: true },
           orderBy: { createdAt: 'asc' },
         },
         forwardingLogs: {
@@ -118,12 +140,8 @@ export class FeedbacksService {
             id: true,
             message: true,
             createdAt: true,
-            fromDepartment: {
-              select: { id: true, name: true },
-            },
-            toDepartment: {
-              select: { id: true, name: true },
-            },
+            fromDepartment: { select: { id: true, name: true } },
+            toDepartment: { select: { id: true, name: true } },
           },
           orderBy: { createdAt: 'asc' },
         },
@@ -137,7 +155,30 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
 
-    // 🏗️ Map data to FeedbackDetail DTO
+    // Apply role-based access control
+    switch (actor.role) {
+      case UserRole.STUDENT:
+        if (feedback.userId !== actor.sub) {
+          throw new ForbiddenException('You can only view your own feedback.');
+        }
+        break;
+      case UserRole.DEPARTMENT_STAFF:
+        if (feedback.departmentId !== actor.departmentId) {
+          throw new ForbiddenException(
+            'You can only view feedback in your department.',
+          );
+        }
+        break;
+      case UserRole.ADMIN:
+        // Admin can view all feedbacks
+        break;
+      default:
+        throw new ForbiddenException(
+          'You do not have permission to access this resource.',
+        );
+    }
+
+    // Map data to FeedbackDetail DTO
     const result: FeedbackDetail = {
       id: feedback.id,
       subject: feedback.subject,
@@ -146,6 +187,17 @@ export class FeedbacksService {
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       createdAt: feedback.createdAt.toISOString(),
+      ...(feedback.isPrivate &&
+      actor.role !== UserRole.STUDENT &&
+      feedback.userId !== actor.sub
+        ? {}
+        : {
+            student: {
+              id: feedback.user.id,
+              fullName: feedback.user.fullName,
+              email: feedback.user.email,
+            },
+          }),
       department: {
         id: feedback.department.id,
         name: feedback.department.name,

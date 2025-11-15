@@ -15,11 +15,17 @@ export class TokenService {
 
   async generateTokens(user: Users) {
     const refreshTokenId = randomUUID();
+    console.log('Generating tokens for user:', user.id);
+    const accessTokenPayload: Partial<ActiveUserData> = {
+      role: user.role,
+      ...(user.departmentId && { departmentId: user.departmentId }),
+    };
+
     const [accessToken, refreshToken] = await Promise.all([
       this.signToken<Partial<ActiveUserData>>(
         user.id,
         parseInt(jwtConfig.JWT_ACCESS_TOKEN_TTL),
-        { role: user.role },
+        accessTokenPayload,
         jwtConfig.JWT_ACCESS_SECRET,
       ),
       this.signToken(

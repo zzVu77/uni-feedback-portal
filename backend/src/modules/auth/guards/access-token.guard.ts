@@ -35,6 +35,7 @@ export class AccessTokenGuard implements CanActivate {
     }
     try {
       const payload = await this.tokenService.verifyAccessToken(token);
+      console.log('AccessTokenGuard: token payload=', payload);
       request[REQUEST_USER_KEY] = payload;
     } catch {
       throw new UnauthorizedException();
