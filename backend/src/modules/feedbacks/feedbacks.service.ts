@@ -430,6 +430,16 @@ export class FeedbacksService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
+    if (category.isActive === true) {
+      throw new ForbiddenException(
+        'You cannot create feedback under an inactive category.',
+      );
+    }
+    if (department.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback to an inactive department.',
+      );
+    }
 
     // Create new feedback
     const feedback = await this.prisma.feedbacks.create({

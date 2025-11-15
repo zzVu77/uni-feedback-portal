@@ -72,11 +72,11 @@ export class AnnouncementsController {
     description: 'Announcement created successfully',
     type: AnnouncementDetailDto,
   })
-  create(
+  createAnnouncement(
     @Body() dto: CreateAnnouncementDto,
     @ActiveUser() user: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
-    return this.announcementsService.createAnnouncement(dto, user.sub);
+    return this.announcementsService.createAnnouncement(dto, user);
   }
 
   @Patch(':id')
@@ -92,11 +92,7 @@ export class AnnouncementsController {
     @Body() dto: UpdateAnnouncementDto,
     @ActiveUser() user: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
-    return this.announcementsService.updateAnnouncement(
-      params.id,
-      dto,
-      user.sub,
-    );
+    return this.announcementsService.updateAnnouncement(params.id, dto, user);
   }
   @Delete(':id')
   @UseGuards(RolesGuard)
@@ -108,10 +104,10 @@ export class AnnouncementsController {
     },
   })
   @ApiOperation({ summary: 'Delete an announcement (Staff only)' })
-  delete(
+  deleteAnnouncement(
     @Param() params: AnnouncementParamDto,
     @ActiveUser() user: ActiveUserData,
   ): Promise<{ success: boolean }> {
-    return this.announcementsService.deleteAnnouncement(params.id, user.sub);
+    return this.announcementsService.deleteAnnouncement(params.id, user);
   }
 }
