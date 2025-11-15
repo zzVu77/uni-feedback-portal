@@ -29,6 +29,8 @@ import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
+import { DepartmentOption } from "@/types/department";
+import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 
 function TableSkeleton() {
   return (
@@ -58,14 +60,11 @@ export function MyFeedbacksHistoryTable() {
     { label: "Từ chối", value: "rejected" },
   ];
 
-  const departmentOptions = [
-    { label: "All", value: "all" },
+  const { data: options } = useGetDepartmentOptions();
 
-    { label: "Khoa Công nghệ thông tin", value: "fit" },
-
-    { label: "Khoa Đào tạo quốc tế", value: "fie" },
-
-    { label: "Thư viện", value: "library" },
+  const departmentOptions: DepartmentOption[] = [
+    { label: "Tất cả", value: "all" },
+    ...(options ?? []),
   ];
   const filters = useFeedbackFilters();
 
