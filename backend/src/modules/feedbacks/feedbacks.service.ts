@@ -37,14 +37,17 @@ export class FeedbacksService {
     const whereClause: Prisma.FeedbacksWhereInput = {
       userId,
       ...(status && {
+        // if (status) filter by status unless it's 'all'
         currentStatus:
           status.toUpperCase() in FeedbackStatus
             ? (status.toUpperCase() as FeedbackStatus)
             : undefined,
       }),
+      // if (categoryId) filter by categoryId unless it's 'all'
       ...(categoryId && {
         categoryId: categoryId == 'all' ? undefined : categoryId,
       }),
+      // if (departmentId) filter by departmentId unless it's 'all'
       ...(departmentId && {
         departmentId: departmentId == 'all' ? undefined : departmentId,
       }),
@@ -65,7 +68,7 @@ export class FeedbacksService {
         ],
       }),
     };
-
+    // Fetch feedbacks with pagination and total count. Return empty list on error.
     try {
       const [items, total] = await Promise.all([
         this.prisma.feedbacks.findMany({
