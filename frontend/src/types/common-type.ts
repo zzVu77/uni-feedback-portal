@@ -8,3 +8,7 @@ export interface BaseFilter {
   limit?: number;
   q?: string;
 }
+export type OptionType = {
+  label: string;
+  value: string;
+};

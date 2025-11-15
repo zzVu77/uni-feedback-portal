@@ -1,7 +1,7 @@
 import axiosInstance from "@/config/axiosConfig";
-import { DepartmentOption } from "@/types";
+import { OptionType } from "@/types";
 
-export const getDepartmentOptions = async (): Promise<DepartmentOption[]> => {
+export const getDepartmentOptions = async (): Promise<OptionType[]> => {
   const response = await axiosInstance.get<{ id: string; name: string }[]>(
     "/departments/options",
   );

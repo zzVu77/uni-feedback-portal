@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
-import { FeedbackFilter, FeedbackStatus } from "@/types"; // Đảm bảo type này khớp
+import { FeedbackFilter, FeedbackStatus } from "@/types";
 
 const DEFAULT_PAGE_SIZE = 10;
 

@@ -30,7 +30,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
-import { DepartmentOption } from "@/types";
 
 function TableSkeleton() {
   return (
@@ -60,11 +59,10 @@ export function MyFeedbacksHistoryTable() {
     { label: "Từ chối", value: "rejected" },
   ];
 
-  const { data: options } = useGetDepartmentOptions();
-
-  const departmentOptions: DepartmentOption[] = [
+  const { data } = useGetDepartmentOptions();
+  const departmentOptions = [
     { label: "Tất cả", value: "all" },
-    ...(options ?? []),
+    ...(data || []),
   ];
   const filters = useFeedbackFilters();
 
@@ -155,14 +153,13 @@ export function MyFeedbacksHistoryTable() {
             <Filter type="status" items={mockStatus} />
           </Suspense>
           <Suspense fallback={null}>
-            <Filter type="department" items={departmentOptions} />
+            <Filter type="department" items={departmentOptions || []} />
           </Suspense>
         </div>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader className="bg-neutral-light-primary-200/60">
-            {/* ... (Giữ nguyên TableHeader) ... */}
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -202,7 +199,6 @@ export function MyFeedbacksHistoryTable() {
                   colSpan={myFeedbacksHistoryColumns.length}
                   className="h-24 text-center"
                 >
-                  {/* 10. (Cải tiến) Hiển thị No results chỉ khi không loading */}
                   {!isFetching && "Không tìm thấy kết quả."}
                 </TableCell>
               </TableRow>
