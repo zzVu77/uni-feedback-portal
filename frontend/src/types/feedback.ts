@@ -1,4 +1,7 @@
+import { BaseFilter } from "./common-type";
+
 export type FeedbackStatus =
+  | ""
   | "PENDING"
   | "IN_PROGRESS"
   | "RESOLVED"
@@ -54,3 +57,10 @@ export type StaffFeedbackItem = Pick<
   FeedbackDetail,
   "id" | "subject" | "currentStatus" | "createdAt" | "category" | "student"
 >;
+export interface FeedbackFilter extends BaseFilter {
+  status?: FeedbackStatus;
+  categoryId?: string;
+  departmentId?: string;
+  from?: string;
+  to?: string;
+}

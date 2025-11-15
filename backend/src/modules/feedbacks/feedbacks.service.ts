@@ -36,9 +36,18 @@ export class FeedbacksService {
 
     const whereClause: Prisma.FeedbacksWhereInput = {
       userId,
-      ...(status && { currentStatus: status }),
-      ...(categoryId && { categoryId }),
-      ...(departmentId && { departmentId }),
+      ...(status && {
+        currentStatus:
+          status.toUpperCase() in FeedbackStatus
+            ? (status.toUpperCase() as FeedbackStatus)
+            : undefined,
+      }),
+      ...(categoryId && {
+        categoryId: categoryId == 'all' ? undefined : categoryId,
+      }),
+      ...(departmentId && {
+        departmentId: departmentId == 'all' ? undefined : departmentId,
+      }),
       ...(from || to
         ? {
             createdAt: {
@@ -56,38 +65,46 @@ export class FeedbacksService {
         ],
       }),
     };
-    // console.log('whereClause', whereClause);
 
-    const [items, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where: whereClause,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          subject: true,
-          location: true,
-          currentStatus: true,
-          isPrivate: true,
-          department: {
-            select: { id: true, name: true },
+    try {
+      const [items, total] = await Promise.all([
+        this.prisma.feedbacks.findMany({
+          where: whereClause,
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            subject: true,
+            location: true,
+            currentStatus: true,
+            isPrivate: true,
+            department: {
+              select: { id: true, name: true },
+            },
+            category: { select: { id: true, name: true } },
+            createdAt: true,
           },
-          category: { select: { id: true, name: true } },
-          createdAt: true,
-        },
-      }),
-      this.prisma.feedbacks.count({ where: whereClause }),
-    ]);
-
-    return {
-      results: items.map((item) => ({
-        ...item,
-        location: item.location ? item.location : null,
-        createdAt: item.createdAt.toISOString(),
-      })),
-      total,
-    };
+        }),
+        this.prisma.feedbacks.count({ where: whereClause }),
+      ]);
+      return {
+        results: items
+          ? items.map((item) => ({
+              ...item,
+              location: item.location ? item.location : null,
+              createdAt: item.createdAt.toISOString(),
+            }))
+          : [],
+        total,
+      };
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+      return {
+        results: [],
+        total: 0,
+      };
+    }
   }
   async getFeedbackDetail(
     params: FeedbackParamDto,
