@@ -5,8 +5,8 @@ import React from "react";
 const page = () => {
   return (
     <Wrapper>
-      <div className="h-[100%] w-full">
-        <FeedbackForm />
+      <div className="h-full w-full">
+        <FeedbackForm type="create" />
       </div>
     </Wrapper>
   );

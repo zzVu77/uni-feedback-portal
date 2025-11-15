@@ -39,6 +39,8 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
+import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
+import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
@@ -96,8 +98,11 @@ type FeedbackFormProps = {
   type?: "create" | "edit";
   initialData?: z.infer<typeof formSchema>;
 };
+
 const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+  const { data: categoryOptions } = useCategoryOptionsData();
+  const { data: departmentOptions } = useDepartmentOptionsData();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -131,7 +136,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
     <>
       <Form {...form}>
         <form
-          className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
+          className="flex h-full flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
@@ -146,7 +151,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-[8px] px-5 py-2 shadow-sm">
+                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-xl px-5 py-2 shadow-sm">
                         <div className="flex flex-col gap-2">
                           <div className="flex w-full flex-row items-center justify-between gap-4 lg:justify-start">
                             <p className="text-[15px] font-medium lg:text-[16px]">
@@ -234,15 +239,14 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                           <SelectContent>
                             <SelectGroup>
                               <SelectLabel>Danh mục</SelectLabel>
-                              <SelectItem value="thuvien">Thư viện</SelectItem>
-                              <SelectItem value="giang_vien">
-                                Giảng viên
-                              </SelectItem>
-                              <SelectItem value="hoc_lieu">Học liệu</SelectItem>
-                              <SelectItem value="co_so_vat_chat">
-                                Cơ sở vật chất
-                              </SelectItem>
-                              <SelectItem value="khac">Khác</SelectItem>
+                              {categoryOptions.map((option) => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -269,19 +273,14 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                           <SelectContent>
                             <SelectGroup>
                               <SelectLabel>Phòng ban</SelectLabel>
-                              <SelectItem value="khoa_dtqt">
-                                Khoa ĐTQT
-                              </SelectItem>
-                              <SelectItem value="khoa_cntt">
-                                Khoa CNTT
-                              </SelectItem>
-                              <SelectItem value="khoa_kinh_te">
-                                Khoa Kinh tế
-                              </SelectItem>
-                              <SelectItem value="khoa_ngoai_ngu">
-                                Khoa Ngoại ngữ
-                              </SelectItem>
-                              <SelectItem value="khac">Khác</SelectItem>
+                              {departmentOptions.map((option) => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -346,7 +345,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
             </div>
           </ScrollArea>
           {type == "create" ? (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <ConfirmationDialog
                 title="Xác nhận làm mới biểu mẫu?"
                 description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
@@ -376,7 +375,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
               </Button>
             </div>
           ) : (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <Button
                 type="button"
                 variant={"cancel"}

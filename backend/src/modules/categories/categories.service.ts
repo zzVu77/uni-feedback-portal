@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma, UserRole } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { UserPayload } from 'src/shared/interfaces/user-payload.interface';
 import {
@@ -15,8 +16,8 @@ import {
 import {
   CategoryDto,
   CategoryListResponseDto,
+  CategoryOptionResponseDto,
 } from './dto/category-response.dto';
-import { Prisma, UserRole } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
@@ -59,7 +60,17 @@ export class CategoriesService {
       feedbackCount: 0,
     };
   }
-
+  async getCategoryOptions(): Promise<CategoryOptionResponseDto[]> {
+    const categories = await this.prisma.categories.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return categories;
+  }
   async GetAllCategories(
     query: QueryCategoriesDto,
   ): Promise<CategoryListResponseDto> {

@@ -28,6 +28,7 @@ import {
   CategoryParamDto,
   UpdateCategoryDto,
   UpdateCategoryStatusDto,
+  CategoryOptionResponseDto,
 } from './dto';
 
 @ApiTags('Categories')
@@ -75,17 +76,27 @@ export class CategoriesController {
     return this.categoriesService.GetAllCategories(query);
   }
 
-  // @Get(':categoryId')
-  // @ApiOperation({ summary: 'Get a single category by ID' })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Category details retrieved successfully.',
-  //   type: CategoryDto,
-  // })
-  // @ApiResponse({ status: 404, description: 'Category not found.' })
-  // GetCategoryById(@Param() params: CategoryParamDto): Promise<CategoryDto> {
-  //   return this.categoriesService.GetCategoryById(params.categoryId);
-  // }
+  @Get('options')
+  @ApiOperation({ summary: 'Get a list of departments' })
+  @ApiResponse({
+    status: 200,
+    description: 'A list of departments.',
+    type: [CategoryOptionResponseDto],
+  })
+  getCategoryOptions(): Promise<CategoryOptionResponseDto[]> {
+    return this.categoriesService.getCategoryOptions();
+  }
+  @Get(':categoryId')
+  @ApiOperation({ summary: 'Get a single category by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Category details retrieved successfully.',
+    type: CategoryDto,
+  })
+  @ApiResponse({ status: 404, description: 'Category not found.' })
+  GetCategoryById(@Param() params: CategoryParamDto): Promise<CategoryDto> {
+    return this.categoriesService.GetCategoryById(params.categoryId);
+  }
 
   @Patch(':categoryId')
   @ApiOperation({ summary: 'Update a category' })
