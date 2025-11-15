@@ -5,3 +5,4 @@ export * from "./announcement";
 export * from "./reported-comment";
 export * from "./comment";
 export * from "./common-type";
+export * from "./department";

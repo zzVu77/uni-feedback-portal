@@ -29,8 +29,8 @@ import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
-import { DepartmentOption } from "@/types/department";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
+import { DepartmentOption } from "@/types";
 
 function TableSkeleton() {
   return (
