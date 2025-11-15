@@ -1,4 +1,5 @@
 // import { CreateAnnouncementDto } from './dto/create-announcement.dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import {
   AnnouncementDetailDto,
   AnnouncementListResponseDto,
@@ -11,15 +12,18 @@ export interface AnnouncementsServiceContract {
   getAnnouncements(
     query: QueryAnnouncementsDto,
   ): Promise<AnnouncementListResponseDto>;
-  create(
+  createAnnouncement(
     dto: CreateAnnouncementDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto>;
   getAnnouncementDetail(id: string): Promise<AnnouncementDetailDto>;
-  update(
+  updateAnnouncement(
     id: string,
     dto: UpdateAnnouncementDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto>;
-  delete(id: string, userId: string): Promise<{ success: boolean }>;
+  deleteAnnouncement(
+    id: string,
+    actor: ActiveUserData,
+  ): Promise<{ success: boolean }>;
 }
