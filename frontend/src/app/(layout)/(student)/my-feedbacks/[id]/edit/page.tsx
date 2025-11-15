@@ -1,21 +1,23 @@
-import FeedbackForm from "@/components/feedback/FeedbackForm";
 import Wrapper from "@/components/shared/Wrapper";
-import React from "react";
 
 const page = () => {
-  const feedbackData = {
-    subject: "lorem ipsum",
-    feedbackCategory: "hoc_lieu",
-    location: "A101",
-    department: "khoa_dtqt",
-    description: "lorem ipsum dolor sit amet",
-    isPrivate: true,
-    attachments: [],
-  };
+  // const feedbackData = {
+  //   subject: "lorem ipsum",
+  //   categoryId: "hoc_lieu",
+  //   departmentId: "khoa_dtqt",
+  //   location: "A101",
+  //   description: "lorem ipsum dolor sit amet",
+  //   isPrivate: true,
+  //   attachments: [],
+  // };
   return (
     <Wrapper>
-      <div className="h-[100%] w-full">
-        <FeedbackForm type="edit" initialData={feedbackData} />
+      <div className="h-full w-full">
+        {/* <FeedbackForm
+          type="edit"
+          initialData={feedbackData}
+          onSubmit={() => {}}
+        /> */}
       </div>
     </Wrapper>
   );

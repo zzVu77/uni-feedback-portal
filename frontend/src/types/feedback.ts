@@ -64,3 +64,12 @@ export interface FeedbackFilter extends BaseFilter {
   from?: string;
   to?: string;
 }
+export type FeedbackParams = {
+  isPrivate: boolean;
+  subject: string;
+  location: string;
+  departmentId: string;
+  categoryId: string;
+  description: string;
+  // attachments: string[];
+};
