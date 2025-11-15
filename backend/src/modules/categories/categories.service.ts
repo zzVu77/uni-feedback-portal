@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { UserPayload } from 'src/shared/interfaces/user-payload.interface';
 import {
   CreateCategoryDto,
   QueryCategoriesDto,
@@ -17,24 +16,25 @@ import {
   CategoryListResponseDto,
 } from './dto/category-response.dto';
 import { Prisma, UserRole } from '@prisma/client';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private checkAdminOrStaff(role: UserRole) {
-    if (role !== UserRole.ADMIN && role !== UserRole.DEPARTMENT_STAFF) {
+  private _ensureIsAdmin(user: ActiveUserData) {
+    if (user.role !== UserRole.ADMIN) {
       throw new ForbiddenException(
         'You do not have permission to perform this action.',
       );
     }
   }
 
-  async CreateCategory(
+  async createCategory(
     dto: CreateCategoryDto,
-    user: UserPayload,
+    user: ActiveUserData,
   ): Promise<CategoryDto> {
-    this.checkAdminOrStaff(user.role);
+    this._ensureIsAdmin(user);
 
     const existingCategory = await this.prisma.categories.findFirst({
       where: { name: { equals: dto.name, mode: 'insensitive' } },
@@ -60,7 +60,7 @@ export class CategoriesService {
     };
   }
 
-  async GetAllCategories(
+  async getAllCategories(
     query: QueryCategoriesDto,
   ): Promise<CategoryListResponseDto> {
     const { page = 1, pageSize = 10, q, isActive } = query;
@@ -100,7 +100,7 @@ export class CategoriesService {
     return { results, total };
   }
 
-  async GetCategoryById(id: string): Promise<CategoryDto> {
+  async getCategoryById(id: string): Promise<CategoryDto> {
     const category = await this.prisma.categories.findUnique({
       where: { id, isActive: true },
       include: {
@@ -122,14 +122,14 @@ export class CategoriesService {
     };
   }
 
-  async UpdateCategory(
+  async updateCategory(
     id: string,
     dto: UpdateCategoryDto,
-    user: UserPayload,
+    user: ActiveUserData,
   ): Promise<CategoryDto> {
-    this.checkAdminOrStaff(user.role);
+    this._ensureIsAdmin(user);
 
-    await this.GetCategoryById(id); // Check if category exists
+    await this.getCategoryById(id); // Check if category exists
 
     if (dto.name) {
       const existingCategory = await this.prisma.categories.findFirst({
@@ -163,12 +163,12 @@ export class CategoriesService {
     };
   }
 
-  async UpdateCategoryStatus(
+  async updateCategoryStatus(
     id: string,
     dto: UpdateCategoryStatusDto,
-    user: UserPayload,
+    user: ActiveUserData,
   ): Promise<CategoryDto> {
-    this.checkAdminOrStaff(user.role);
+    this._ensureIsAdmin(user);
 
     const category = await this.prisma.categories.findUnique({ where: { id } });
     if (!category) {
@@ -193,12 +193,8 @@ export class CategoriesService {
     };
   }
 
-  async DeleteCategory(id: string, user: UserPayload): Promise<void> {
-    if (user.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(
-        'Only Admins can permanently delete categories.',
-      );
-    }
+  async deleteCategory(id: string, user: ActiveUserData): Promise<void> {
+    this._ensureIsAdmin(user);
 
     const feedbackCount = await this.prisma.feedbacks.count({
       where: { categoryId: id },
