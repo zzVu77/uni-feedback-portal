@@ -1,11 +1,13 @@
 import { MyFeedbacksHistoryTable } from "@/components/feedback/my-feedbacks-history/MyFeedbacksHistoryTable";
 import Wrapper from "@/components/shared/Wrapper";
-import React from "react";
+import React, { Suspense } from "react";
 
 const Page = () => {
   return (
     <Wrapper>
-      <MyFeedbacksHistoryTable />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MyFeedbacksHistoryTable />
+      </Suspense>
     </Wrapper>
   );
 };
