@@ -77,10 +77,10 @@ export class CategoriesController {
   }
 
   @Get('options')
-  @ApiOperation({ summary: 'Get a list of departments' })
+  @ApiOperation({ summary: 'Get a list of categories' })
   @ApiResponse({
     status: 200,
-    description: 'A list of departments.',
+    description: 'A list of categories.',
     type: [CategoryOptionResponseDto],
   })
   getCategoryOptions(): Promise<CategoryOptionResponseDto[]> {
