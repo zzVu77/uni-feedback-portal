@@ -2,7 +2,7 @@ import { CircleAlert, CircleCheckBig, CircleX, Loader } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 
-type StatusBadgeProps = {
+export type StatusBadgeProps = {
   type: "PENDING" | "IN_PROGRESS" | "RESOLVED" | "REJECTED" | "CLOSED";
 };
 

@@ -1,5 +1,4 @@
 import ConversationSection from "@/components/conversation/ConversationSection";
-import FeedbackDetailHeader from "@/components/feedback/FeedbackDetailHeader";
 import { MyFeedbacksHistoryTable } from "@/components/feedback/my-feedbacks-history/MyFeedbacksHistoryTable";
 import StatusTimeLine from "@/components/feedback/StatusTimeline";
 
@@ -64,7 +63,7 @@ const page = () => {
       <PostCard />
       <MyFeedbacksHistoryTable />
       {/* <FeedbackForm /> */}
-      <FeedbackDetailHeader type="student" />
+      {/* <FeedbackDetailHeader type="student" /> */}
       <StatusTimeLine />
       <ConversationSection />
     </div>

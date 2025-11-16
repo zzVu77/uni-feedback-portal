@@ -73,3 +73,15 @@ export type FeedbackParams = {
   description: string;
   // attachments: string[];
 };
+export type FeedbackHeaderType = Pick<
+  FeedbackDetail,
+  // | "id"
+  | "subject"
+  | "description"
+  | "location"
+  | "currentStatus"
+  // | "isPrivate"
+  | "createdAt"
+  | "category"
+  | "department"
+>;

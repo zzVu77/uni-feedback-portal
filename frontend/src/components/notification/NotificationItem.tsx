@@ -14,7 +14,7 @@ import {
   ThumbsUp,
   XCircle,
 } from "lucide-react";
-import { formatDistanceToNow } from "../utils/formatDistanceToNow";
+import { formatDistanceToNow } from "../../utils/formatDistanceToNow";
 import { TypeOfNotification } from "@/types";
 type NotificationType = {
   type: TypeOfNotification;

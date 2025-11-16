@@ -1,5 +1,6 @@
 import axiosInstance from "@/config/axiosConfig";
 import {
+  FeedbackDetail,
   FeedbackFilter,
   FeedbackParams,
   MyFeedbackHistoryItem,
@@ -14,6 +15,15 @@ export const getAllFeedbacks = async (
   >("/feedbacks", {
     params: filter,
   });
+  return response;
+};
+// Get feedback detail by id for the logged-in student
+export const getMyFeedbackById = async (
+  id: string,
+): Promise<FeedbackDetail> => {
+  const response = await axiosInstance.get<FeedbackDetail>(
+    `/feedbacks/me/${id}`,
+  );
   return response;
 };
 export const createNewFeedback = async (data: FeedbackParams) => {

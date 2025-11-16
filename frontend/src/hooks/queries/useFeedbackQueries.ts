@@ -3,20 +3,37 @@
 import {
   createNewFeedback,
   getAllFeedbacks,
+  getMyFeedbackById,
 } from "@/services/feedback-service";
 import { FeedbackFilter, FeedbackParams } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const FEEDBACK_QUERY_KEYS = {
-  FEEDBACKS: "feedbacks",
+  student: {
+    MY_FEEDBACKS: "my-feedbacks",
+    MY_FEEDBACK_DETAIL: "my-feedback-detail",
+  },
 };
 export const useGetFeedbacks = (filters: FeedbackFilter) => {
   return useQuery({
-    queryKey: [FEEDBACK_QUERY_KEYS.FEEDBACKS, filters],
+    queryKey: [FEEDBACK_QUERY_KEYS.student.MY_FEEDBACKS, filters],
     queryFn: () => getAllFeedbacks(filters),
     retry: false,
     placeholderData: (previousData) => previousData,
+  });
+};
+// Get feedback detail by id for the logged-in student
+export const useGetMyFeedbackById = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.student.MY_FEEDBACK_DETAIL, id],
+    queryFn: () => getMyFeedbackById(id),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+    ...options,
   });
 };
 export const useCreateFeedback = () => {
