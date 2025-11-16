@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/lib/QueryProvider";
+import { Check, Info, X } from "lucide-react";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster
+          icons={{
+            success: <Check className="mr-4 h-5 w-5 text-green-500" />,
+            info: <Info className="mr-4 h-5 w-5 text-blue-500" />,
+            error: <X className="mr-4 h-5 w-5 text-red-500" />,
+          }}
+        />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

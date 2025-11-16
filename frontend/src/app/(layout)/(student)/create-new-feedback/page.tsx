@@ -4,16 +4,19 @@ import Wrapper from "@/components/shared/Wrapper";
 import { useCreateFeedback } from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackParams } from "@/types";
 const page = () => {
-  const createFeedback = useCreateFeedback();
-
+  const { mutateAsync: createFeedback, isPending } = useCreateFeedback();
   const handleSubmit = async (values: FeedbackParams) => {
-    await createFeedback.mutateAsync(values);
+    await createFeedback(values);
   };
 
   return (
     <Wrapper>
       <div className="h-full w-full">
-        <FeedbackForm type="create" onSubmit={handleSubmit} />
+        <FeedbackForm
+          type="create"
+          onSubmit={handleSubmit}
+          isPending={isPending}
+        />
       </div>
     </Wrapper>
   );

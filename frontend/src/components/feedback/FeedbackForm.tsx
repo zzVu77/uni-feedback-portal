@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
+import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
+import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
+import { FeedbackParams } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RotateCcw, Save, Send, X } from "lucide-react";
 import { useState } from "react";
@@ -39,9 +42,6 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
-import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
-import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
-import { FeedbackParams } from "@/types";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
@@ -98,12 +98,14 @@ type FeedbackFormProps = {
   type?: "create" | "edit";
   initialData?: z.infer<typeof formSchema>;
   onSubmit: (values: FeedbackParams) => Promise<void>;
+  isPending?: boolean;
 };
 
 const FeedbackForm = ({
   type = "edit",
   initialData,
   onSubmit,
+  isPending,
 }: FeedbackFormProps) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const { data: categoryOptions } = useCategoryOptionsData();
@@ -484,7 +486,7 @@ const FeedbackForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSubmitForm}>
+            <AlertDialogAction onClick={handleSubmitForm} disabled={isPending}>
               Gửi
             </AlertDialogAction>
           </AlertDialogFooter>
