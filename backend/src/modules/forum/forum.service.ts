@@ -10,6 +10,7 @@ import {
   VoteResponseDto,
 } from './dto';
 import { CommentService } from '../comment/comment.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Injectable()
 export class ForumService {
   constructor(
@@ -18,7 +19,7 @@ export class ForumService {
   ) {}
   async getListPosts(
     query: QueryPostsDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<GetPostsResponseDto> {
     const {
       page = 1,
@@ -142,13 +143,16 @@ export class ForumService {
             },
           }),
       commentsCount: commentCountMap[post.id] ?? 0,
-      hasVoted: post.votes.some((vote) => vote.userId === userId),
+      hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
     }));
 
     return { results: mappedItems, total };
   }
 
-  async getPostDetail(postId: string, userId: string): Promise<PostDetailDto> {
+  async getPostDetail(
+    postId: string,
+    actor: ActiveUserData,
+  ): Promise<PostDetailDto> {
     // Fetch the post with relations
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
@@ -203,7 +207,7 @@ export class ForumService {
       id: post.id,
       createdAt: post.createdAt.toISOString(),
       votes: post.votes.length,
-      hasVoted: post.votes.some((vote) => vote.userId === userId),
+      hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
       feedback: {
         id: post.feedback.id,
         subject: post.feedback.subject,
@@ -228,7 +232,7 @@ export class ForumService {
       ...(post.feedback.isPrivate
         ? {}
         : {
-            student: {
+            user: {
               id: post.feedback.user.id,
               fullName: post.feedback.user.fullName,
               email: post.feedback.user.email,
@@ -236,7 +240,7 @@ export class ForumService {
           }),
     };
   }
-  async vote(postId: string, userId: string): Promise<VoteResponseDto> {
+  async vote(postId: string, actor: ActiveUserData): Promise<VoteResponseDto> {
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
     });
@@ -249,7 +253,7 @@ export class ForumService {
     const existingVote = await this.prisma.votes.findUnique({
       where: {
         userId_postId: {
-          userId,
+          userId: actor.sub,
           postId: postId,
         },
       },
@@ -262,7 +266,7 @@ export class ForumService {
     // Tạo vote mới
     await this.prisma.votes.create({
       data: {
-        userId,
+        userId: actor.sub,
         postId: postId,
       },
     });
@@ -278,7 +282,10 @@ export class ForumService {
       totalVotes,
     };
   }
-  async unvote(postId: string, userId: string): Promise<VoteResponseDto> {
+  async unvote(
+    postId: string,
+    actor: ActiveUserData,
+  ): Promise<VoteResponseDto> {
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
     });
@@ -291,7 +298,7 @@ export class ForumService {
     const existingVote = await this.prisma.votes.findUnique({
       where: {
         userId_postId: {
-          userId,
+          userId: actor.sub,
           postId: postId,
         },
       },
@@ -305,7 +312,7 @@ export class ForumService {
     await this.prisma.votes.delete({
       where: {
         userId_postId: {
-          userId,
+          userId: actor.sub,
           postId: postId,
         },
       },

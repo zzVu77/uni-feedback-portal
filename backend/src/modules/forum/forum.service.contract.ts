@@ -1,16 +1,17 @@
-import { GetPostsResponseDto, QueryPostsDto, PostDetailDto } from './dto';
+import {
+  GetPostsResponseDto,
+  QueryPostsDto,
+  PostDetailDto,
+  VoteResponseDto,
+} from './dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+
 export interface ForumServiceContract {
   getListPosts(
     query: QueryPostsDto,
-    actorId?: number,
+    actor: ActiveUserData,
   ): Promise<GetPostsResponseDto>;
-  getPostDetail(post_id: number, actorId: number): Promise<PostDetailDto>;
-  vote(
-    post_id: number,
-    user_id: number,
-  ): Promise<{ voted: true; votes: number }>;
-  unvote(
-    post_id: number,
-    user_id: number,
-  ): Promise<{ voted: false; votes: number }>;
+  getPostDetail(postId: string, actor: ActiveUserData): Promise<PostDetailDto>;
+  vote(postId: string, actor: ActiveUserData): Promise<VoteResponseDto>;
+  unvote(postId: string, actor: ActiveUserData): Promise<VoteResponseDto>;
 }
