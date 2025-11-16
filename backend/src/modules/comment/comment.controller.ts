@@ -6,11 +6,17 @@ import {
   Param,
   Query,
   Delete,
-  HttpCode,
+  // HttpCode,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CommentDto,
   CommentsResponseDto,
@@ -21,13 +27,16 @@ import {
 } from './dto';
 import { PostParamDto } from '../forum/dto';
 import { AnnouncementParamDto } from '../announcements/dto';
-import { UserRole } from '@prisma/client';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { CommentReports } from '@prisma/client';
 
-@Controller('comment')
+@ApiTags('Comments')
+@ApiBearerAuth()
+@Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  userId = '550e8400-e29b-41d4-a716-446655440009'; // dummy userId
   // ==========================================================
   // 1. FORUM POST COMMENTS
   // ==========================================================
@@ -38,14 +47,15 @@ export class CommentController {
     description: 'Comment created successfully',
     type: CommentDto,
   })
-  async CreateForumPostComment(
+  async createForumPostComment(
     @Param() params: PostParamDto,
     @Body() createCommentDto: CreateCommentDto,
+    @ActiveUser() actor: ActiveUserData,
   ) {
-    return this.commentService.CreateForumPostComment(
+    return this.commentService.createForumPostComment(
       createCommentDto,
       params.id,
-      this.userId,
+      actor,
     );
   }
   @Get('/post/:id')
@@ -54,11 +64,11 @@ export class CommentController {
     description: 'List of comments',
     type: CommentsResponseDto,
   })
-  async GetForumPostComments(
+  async getForumPostComments(
     @Param() params: PostParamDto,
     @Query() query: QueryCommentsDto,
   ) {
-    return this.commentService.GetForumPostComments(params.id, query);
+    return this.commentService.getForumPostComments(params.id, query);
   }
   // ==========================================================
   // 2.ANNOUNCEMENT COMMENTS
@@ -70,14 +80,15 @@ export class CommentController {
     description: 'Comment created successfully',
     type: CommentDto,
   })
-  async CreateAnnouncementComment(
+  async createAnnouncementComment(
     @Param() params: AnnouncementParamDto,
     @Body() createCommentDto: CreateCommentDto,
+    @ActiveUser() actor: ActiveUserData,
   ) {
-    return this.commentService.CreateAnnouncementComment(
+    return this.commentService.createAnnouncementComment(
       createCommentDto,
       params.id,
-      this.userId,
+      actor,
     );
   }
 
@@ -87,11 +98,11 @@ export class CommentController {
     description: 'List of comments',
     type: CommentsResponseDto,
   })
-  async GetAnnouncementComments(
+  async getAnnouncementComments(
     @Param() params: AnnouncementParamDto,
     @Query() query: QueryCommentsDto,
   ) {
-    return this.commentService.GetAnnouncementComments(params.id, query);
+    return this.commentService.getAnnouncementComments(params.id, query);
   }
   // ==========================================================
   // 3. SHARED ACTIONS (Report, Delete)
@@ -100,31 +111,30 @@ export class CommentController {
   @Post('/report/:commentId')
   @ApiOperation({ summary: 'Report a comment (user)' })
   @ApiResponse({
-    status: 204,
+    status: 201,
     description: 'Report created successfully',
   })
-  @HttpCode(204)
-  async CreateCommentReport(
+  async createCommentReport(
     @Param() params: CommentParamDto,
     @Body() dto: CreateCommentReportDto,
-  ) {
-    await this.commentService.CreateCommentReport(
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<CommentReports> {
+    return this.commentService.createCommentReport(
       params.commentId,
-      this.userId,
+      actor,
       dto,
     );
   }
   @Delete('/:commentId')
   @ApiOperation({ summary: 'Delete comment' })
   @ApiResponse({
-    status: 200,
+    status: 204,
     description: 'Delete comment successfully',
-    type: CommentDeletedResponseDto,
   })
-  async DeleteComment(@Param() params: CommentParamDto) {
-    return this.commentService.DeleteComment(params.commentId, {
-      id: this.userId,
-      role: UserRole.STUDENT,
-    });
+  async deleteComment(
+    @Param() params: CommentParamDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<CommentDeletedResponseDto> {
+    return this.commentService.deleteComment(params.commentId, actor);
   }
 }
