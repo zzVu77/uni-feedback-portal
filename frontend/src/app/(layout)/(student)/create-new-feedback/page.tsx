@@ -2,10 +2,10 @@
 import FeedbackForm from "@/components/feedback/FeedbackForm";
 import Wrapper from "@/components/shared/Wrapper";
 import { useCreateFeedback } from "@/hooks/queries/useFeedbackQueries";
-import { FeedbackParams } from "@/types";
+import { FeedbackBodyParams } from "@/types";
 const page = () => {
   const { mutateAsync: createFeedback, isPending } = useCreateFeedback();
-  const handleSubmit = async (values: FeedbackParams) => {
+  const handleSubmit = async (values: FeedbackBodyParams) => {
     await createFeedback(values);
   };
 

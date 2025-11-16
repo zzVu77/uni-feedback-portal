@@ -2,11 +2,11 @@ import axiosInstance from "@/config/axiosConfig";
 import {
   FeedbackDetail,
   FeedbackFilter,
-  FeedbackParams,
+  FeedbackBodyParams,
   MyFeedbackHistoryItem,
   PaginatedResponse,
 } from "@/types";
-
+// Feedback service functions for student
 export const getAllFeedbacks = async (
   filter: FeedbackFilter,
 ): Promise<PaginatedResponse<MyFeedbackHistoryItem>> => {
@@ -17,7 +17,6 @@ export const getAllFeedbacks = async (
   });
   return response;
 };
-// Get feedback detail by id for the logged-in student
 export const getMyFeedbackById = async (
   id: string,
 ): Promise<FeedbackDetail> => {
@@ -26,7 +25,15 @@ export const getMyFeedbackById = async (
   );
   return response;
 };
-export const createNewFeedback = async (data: FeedbackParams) => {
+export const updateFeedbackById = async (
+  id: string,
+  data: FeedbackBodyParams,
+) => {
+  await axiosInstance.patch(`/feedbacks/me/${id}`, {
+    ...data,
+  });
+};
+export const createNewFeedback = async (data: FeedbackBodyParams) => {
   await axiosInstance.post("/feedbacks", {
     ...data,
   });

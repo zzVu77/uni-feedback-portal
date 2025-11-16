@@ -4,8 +4,9 @@ import {
   createNewFeedback,
   getAllFeedbacks,
   getMyFeedbackById,
+  updateFeedbackById,
 } from "@/services/feedback-service";
-import { FeedbackFilter, FeedbackParams } from "@/types";
+import { FeedbackFilter, FeedbackBodyParams } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -15,6 +16,7 @@ export const FEEDBACK_QUERY_KEYS = {
     MY_FEEDBACK_DETAIL: "my-feedback-detail",
   },
 };
+// Hooks for student feedback queries
 export const useGetFeedbacks = (filters: FeedbackFilter) => {
   return useQuery({
     queryKey: [FEEDBACK_QUERY_KEYS.student.MY_FEEDBACKS, filters],
@@ -23,7 +25,6 @@ export const useGetFeedbacks = (filters: FeedbackFilter) => {
     placeholderData: (previousData) => previousData,
   });
 };
-// Get feedback detail by id for the logged-in student
 export const useGetMyFeedbackById = (
   id: string,
   options?: { enabled?: boolean },
@@ -38,10 +39,27 @@ export const useGetMyFeedbackById = (
 };
 export const useCreateFeedback = () => {
   return useMutation({
-    mutationFn: (data: FeedbackParams) => createNewFeedback(data),
+    mutationFn: (data: FeedbackBodyParams) => createNewFeedback(data),
     retry: false,
     onSuccess: () => {
       toast.success("Gửi góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+type feedbackUpdateParams = {
+  id: string;
+  data: FeedbackBodyParams;
+};
+export const useUpdateFeedbackById = () => {
+  return useMutation({
+    mutationFn: (params: feedbackUpdateParams) =>
+      updateFeedbackById(params.id, params.data),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Cập nhật góp ý thành công!");
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");

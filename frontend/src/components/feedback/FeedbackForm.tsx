@@ -2,7 +2,7 @@
 "use client";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
-import { FeedbackParams } from "@/types";
+import { FeedbackBodyParams } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RotateCcw, Save, Send, X } from "lucide-react";
 import { useState } from "react";
@@ -42,6 +42,7 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
+import { useRouter } from "next/navigation";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
@@ -96,8 +97,8 @@ const formSchema = z.object({
 
 type FeedbackFormProps = {
   type?: "create" | "edit";
-  initialData?: z.infer<typeof formSchema>;
-  onSubmit: (values: FeedbackParams) => Promise<void>;
+  initialData?: FeedbackBodyParams;
+  onSubmit: (values: FeedbackBodyParams) => Promise<void>;
   isPending?: boolean;
 };
 
@@ -107,6 +108,7 @@ const FeedbackForm = ({
   onSubmit,
   isPending,
 }: FeedbackFormProps) => {
+  const router = useRouter();
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const { data: categoryOptions } = useCategoryOptionsData();
   const { data: departmentOptions } = useDepartmentOptionsData();
@@ -119,12 +121,12 @@ const FeedbackForm = ({
       departmentId: initialData?.departmentId || "",
       description: initialData?.description || "",
       isPrivate: initialData?.isPrivate || false,
-      attachments: initialData?.attachments || [],
+      // attachments: initialData?.attachments || [],
     },
   });
   const mapFormValuesToFeedbackParams = (
     values: z.infer<typeof formSchema>,
-  ): FeedbackParams => {
+  ): FeedbackBodyParams => {
     return {
       subject: values.subject,
       categoryId: values.categoryId,
@@ -136,12 +138,6 @@ const FeedbackForm = ({
     };
   };
   const { isDirty } = form.formState;
-  const handleSubmitForm = form.handleSubmit(async (values) => {
-    const payload = mapFormValuesToFeedbackParams(values);
-    await onSubmit(payload);
-    form.reset();
-    setIsSubmitDialogOpen(false);
-  });
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
@@ -152,6 +148,19 @@ const FeedbackForm = ({
       setIsSubmitDialogOpen(true);
     }
   };
+  const handleSendFeedback = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToFeedbackParams(values);
+    await onSubmit(payload);
+    form.reset();
+    setIsSubmitDialogOpen(false);
+  });
+  const handleUpdateFeedback = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToFeedbackParams(values);
+    await onSubmit(payload);
+    setTimeout(() => {
+      router.back();
+    }, 1000);
+  });
 
   return (
     <>
@@ -406,22 +415,17 @@ const FeedbackForm = ({
                 <X className="h-5 w-5" />
                 Hủy
               </Button>
-              <ConfirmationDialog
-                title="Bạn có chắc chắn muốn cập nhật góp ý này?"
-                description="Hành động này sẽ làm thay đổi góp ý cũ của bạn. Bạn có muốn tiếp tục không?"
-                onConfirm={handleResetForm}
-                confirmText="Đồng ý"
+
+              <Button
+                type="button"
+                variant={"primary"}
+                className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
+                disabled={isPending}
+                onClick={handleUpdateFeedback}
               >
-                <Button
-                  type="button"
-                  onClick={() => {}} // TODO: Implement update functionality
-                  variant={"primary"}
-                  className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
-                >
-                  <Save className="h-5 w-5" />
-                  Cập nhật
-                </Button>
-              </ConfirmationDialog>
+                <Save className="h-5 w-5" />
+                Cập nhật
+              </Button>
             </div>
           )}
         </form>
@@ -486,7 +490,10 @@ const FeedbackForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSubmitForm} disabled={isPending}>
+            <AlertDialogAction
+              onClick={handleSendFeedback}
+              disabled={isPending}
+            >
               Gửi
             </AlertDialogAction>
           </AlertDialogFooter>

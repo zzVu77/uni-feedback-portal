@@ -1,25 +1,18 @@
 "use client";
-
 import ConversationSection from "@/components/conversation/ConversationSection";
 import FeedbackDetailHeader from "@/components/feedback/FeedbackDetailHeader";
 import StatusTimeLine from "@/components/feedback/StatusTimeline";
 import Wrapper from "@/components/shared/Wrapper";
 import { useGetMyFeedbackById } from "@/hooks/queries/useFeedbackQueries";
+import { useIsClient } from "@/hooks/useIsClient";
 import { mapFeedbackDetailToHeader } from "@/utils/mappers";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const Page = () => {
   const params = useParams();
   const id = params.id as string;
 
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsClient(true);
-    }
-  }, []);
+  const isClient = useIsClient();
   const { data: feedback, isLoading } = useGetMyFeedbackById(id, {
     enabled: isClient,
   });

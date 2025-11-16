@@ -31,6 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster
+          position="top-right"
           icons={{
             success: <Check className="mr-4 h-5 w-5 text-green-500" />,
             info: <Info className="mr-4 h-5 w-5 text-blue-500" />,

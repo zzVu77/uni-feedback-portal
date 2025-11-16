@@ -64,10 +64,10 @@ export interface FeedbackFilter extends BaseFilter {
   from?: string;
   to?: string;
 }
-export type FeedbackParams = {
+export type FeedbackBodyParams = {
   isPrivate: boolean;
   subject: string;
-  location: string;
+  location?: string | null;
   departmentId: string;
   categoryId: string;
   description: string;
