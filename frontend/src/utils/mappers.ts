@@ -4,6 +4,7 @@ export const mapFeedbackDetailToHeader = (
   feedbackDetail: FeedbackDetail,
 ): FeedbackHeaderType => {
   return {
+    id: feedbackDetail.id,
     subject: feedbackDetail.subject,
     description: feedbackDetail.description,
     location: feedbackDetail.location,

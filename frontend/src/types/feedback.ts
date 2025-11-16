@@ -75,7 +75,7 @@ export type FeedbackParams = {
 };
 export type FeedbackHeaderType = Pick<
   FeedbackDetail,
-  // | "id"
+  | "id"
   | "subject"
   | "description"
   | "location"

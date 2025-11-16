@@ -17,7 +17,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
     currentStatus,
     department,
     description,
-    // id,
+    id,
     // isPrivate,
     location,
   } = data;
@@ -36,7 +36,10 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           </h1>
           {type === "student" && currentStatus === "PENDING" && (
             //TODO: If status is PENDING, show edit button
-            <Link href={"/my-feedbacks/1/edit"} className="order-1 md:order-2">
+            <Link
+              href={`/my-feedbacks/${id}/edit`}
+              className="order-1 md:order-2"
+            >
               <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
                 <SquarePen className="h-4 w-4 text-black" />
                 Sửa
