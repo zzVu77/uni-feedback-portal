@@ -6,9 +6,16 @@ import {
   Param,
   Query,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { ClarificationsService } from './clarifications.service';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreateClarificationDto,
   QueryClarificationsDto,
@@ -19,17 +26,22 @@ import {
   ClarificationListResponseDto,
   MessageDto,
 } from './dto/';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '@prisma/client';
 @ApiTags('Clarifications')
+@ApiBearerAuth()
 @Controller('clarifications')
 export class ClarificationsController {
   constructor(private readonly clarificationsService: ClarificationsService) {}
-  // Dummy user ID for demonstration purposes
-  // private readonly userId = '550e8400-e29b-41d4-a716-446655440009';
-  private readonly userId = '550e8400-e29b-41d4-a716-44665544000b';
 
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
-    summary: 'Create a new clarification conversation',
+    summary: 'Create a new clarification conversation (Staff only)',
     description:
       'Starts a new conversation thread related to a specific feedback item.',
   })
@@ -41,13 +53,13 @@ export class ClarificationsController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 404, description: 'Feedback not found.' })
-  CreateClarificationConversation(
+  createClarificationConversation(
     @Body() createClarificationDto: CreateClarificationDto,
+    @ActiveUser() user: ActiveUserData,
   ) {
-    // Assuming the service method needs the user ID of the creator
-    return this.clarificationsService.CreateClarificationConversation(
+    return this.clarificationsService.createClarificationConversation(
       createClarificationDto,
-      this.userId,
+      user,
     );
   }
 
@@ -62,10 +74,13 @@ export class ClarificationsController {
     description: 'A list of conversations.',
     type: ClarificationListResponseDto,
   })
-  GetAllClarificationsConversations(@Query() query: QueryClarificationsDto) {
-    return this.clarificationsService.GetAllClarificationsConversations(
+  getAllClarificationsConversations(
+    @Query() query: QueryClarificationsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    return this.clarificationsService.getAllClarificationsConversations(
       query,
-      this.userId,
+      user,
     );
   }
 
@@ -81,10 +96,13 @@ export class ClarificationsController {
     type: ClarificationDetailDto,
   })
   @ApiResponse({ status: 404, description: 'Conversation not found.' })
-  GetClarificationConversationDetail(@Param() params: ClarificationParamDto) {
-    return this.clarificationsService.GetClarificationConversationDetail(
+  getClarificationConversationDetail(
+    @Param() params: ClarificationParamDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    return this.clarificationsService.getClarificationConversationDetail(
       params.conversationId,
-      this.userId,
+      user,
     );
   }
 
@@ -105,20 +123,23 @@ export class ClarificationsController {
     description: 'Forbidden. Conversation is closed.',
   })
   @ApiResponse({ status: 404, description: 'Conversation not found.' })
-  CreateMessage(
+  createMessage(
     @Param() params: ClarificationParamDto,
     @Body() createMessageDto: CreateMessageDto,
+    @ActiveUser() user: ActiveUserData,
   ) {
-    return this.clarificationsService.CreateMessage(
+    return this.clarificationsService.createMessage(
       params.conversationId,
       createMessageDto,
-      this.userId,
+      user,
     );
   }
 
   @Patch(':conversationId')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
-    summary: 'Close a conversation',
+    summary: 'Close a conversation (Staff only)',
     description:
       'Marks a clarification conversation as closed. Only the user who started the conversation can close it.',
   })
@@ -130,14 +151,15 @@ export class ClarificationsController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 404, description: 'Conversation not found.' })
-  CloseClarificationConversation(
+  closeClarificationConversation(
     @Param() params: ClarificationParamDto,
     @Body() closeClarificationDto: CloseClarificationDto,
+    @ActiveUser() user: ActiveUserData,
   ) {
-    return this.clarificationsService.CloseClarificationConversation(
+    return this.clarificationsService.closeClarificationConversation(
       params.conversationId,
       closeClarificationDto,
-      this.userId,
+      user,
     );
   }
 }
