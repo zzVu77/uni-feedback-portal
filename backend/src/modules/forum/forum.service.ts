@@ -32,10 +32,8 @@ export class ForumService {
       q,
     } = query;
 
-    // pagination
     const skip = (page - 1) * pageSize;
     const take = pageSize;
-    // WHERE condition
     const whereClause: Prisma.ForumPostsWhereInput = {
       feedback: {
         ...(categoryId && { categoryId }),
@@ -54,10 +52,9 @@ export class ForumService {
         : {}),
     };
 
-    // ORDER BY
     let orderBy: Prisma.ForumPostsOrderByWithRelationInput = {
       createdAt: 'desc',
-    }; // default sort: new
+    };
     if (sortBy === 'top') {
       orderBy = {
         votes: {
@@ -103,7 +100,7 @@ export class ForumService {
             },
           },
           votes: {
-            select: { userId: true }, // to check if actorId has voted
+            select: { userId: true },
           },
           _count: { select: { votes: true } },
         },
@@ -153,7 +150,6 @@ export class ForumService {
     postId: string,
     actor: ActiveUserData,
   ): Promise<PostDetailDto> {
-    // Fetch the post with relations
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
       include: {
@@ -194,7 +190,7 @@ export class ForumService {
           },
         },
         votes: {
-          select: { userId: true }, // to check if actorId has voted
+          select: { userId: true },
         },
       },
     });
@@ -249,7 +245,6 @@ export class ForumService {
       throw new NotFoundException('Post not found');
     }
 
-    // Kiểm tra user đã vote chưa
     const existingVote = await this.prisma.votes.findUnique({
       where: {
         userId_postId: {
@@ -263,7 +258,6 @@ export class ForumService {
       throw new BadRequestException('User already voted this post');
     }
 
-    // Tạo vote mới
     await this.prisma.votes.create({
       data: {
         userId: actor.sub,
@@ -271,7 +265,6 @@ export class ForumService {
       },
     });
 
-    // Đếm lại tổng vote
     const totalVotes = await this.prisma.votes.count({
       where: { postId: postId },
     });
@@ -294,7 +287,6 @@ export class ForumService {
       throw new NotFoundException('Post not found');
     }
 
-    // Kiểm tra xem user đã vote chưa
     const existingVote = await this.prisma.votes.findUnique({
       where: {
         userId_postId: {
@@ -308,7 +300,6 @@ export class ForumService {
       throw new BadRequestException('User has not voted this post yet');
     }
 
-    // Xóa vote
     await this.prisma.votes.delete({
       where: {
         userId_postId: {
@@ -318,7 +309,6 @@ export class ForumService {
       },
     });
 
-    // Đếm lại tổng vote
     const totalVotes = await this.prisma.votes.count({
       where: { postId: postId },
     });

@@ -10,7 +10,7 @@ import {
   CreateCategoryDto,
   QueryCategoriesDto,
   UpdateCategoryDto,
-  UpdateCategoryStatusDto, // Import DTO mới
+  UpdateCategoryStatusDto,
 } from './dto';
 import {
   CategoryDto,
@@ -67,7 +67,6 @@ export class CategoriesService {
     const skip = (page - 1) * pageSize;
 
     const where: Prisma.CategoriesWhereInput = {
-      // Conditionally filter by isActive status if the parameter is provided
       ...(isActive !== undefined && { isActive: isActive === 'true' }),
       ...(q && { name: { contains: q, mode: 'insensitive' } }),
     };
@@ -77,10 +76,7 @@ export class CategoriesService {
         where,
         skip,
         take: pageSize,
-        orderBy: [
-          { isActive: 'desc' }, // Sort by active status first (true comes before false)
-          { name: 'asc' }, // Then sort by name alphabetically
-        ],
+        orderBy: [{ isActive: 'desc' }, { name: 'asc' }],
         include: {
           _count: {
             select: { feedbacks: true },
@@ -129,7 +125,7 @@ export class CategoriesService {
   ): Promise<CategoryDto> {
     this._ensureIsAdmin(user);
 
-    await this.getCategoryById(id); // Check if category exists
+    await this.getCategoryById(id);
 
     if (dto.name) {
       const existingCategory = await this.prisma.categories.findFirst({

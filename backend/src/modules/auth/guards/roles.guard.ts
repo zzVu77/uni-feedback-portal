@@ -17,8 +17,6 @@ export class RolesGuard implements CanActivate {
     );
     console.log('Role guard: Required Roles:', requiredRoles);
 
-    // If the @Roles decorator is not present, deny access because this guard
-    // is now used explicitly for role-based authorization.
     if (!requiredRoles) {
       return false;
     }

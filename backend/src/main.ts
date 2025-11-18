@@ -7,13 +7,11 @@ import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Kích hoạt middleware để đọc cookie
   app.use(cookieParser());
 
-  // Cấu hình CORS để cho phép trình duyệt gửi cookie
   app.enableCors({
-    origin: 'http://localhost:3000', // <-- Thay bằng URL của frontend của bạn
-    credentials: true, // <-- Dòng này là BẮT BUỘC
+    origin: 'http://localhost:3000',
+    credentials: true,
   });
 
   const config = new DocumentBuilder()

@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { IsNotEmpty, IsString, validateSync } from 'class-validator';
-import 'dotenv/config'; // Make sure to load .env variables
+import 'dotenv/config';
 
 class EnvConfig {
   @IsString()

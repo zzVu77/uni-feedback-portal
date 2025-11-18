@@ -1,4 +1,3 @@
-// import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import {
   AnnouncementDetailDto,

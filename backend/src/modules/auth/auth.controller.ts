@@ -34,7 +34,7 @@ interface RequestWithCookies extends Request {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public() // Mark this endpoint as public
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User login' })
@@ -130,14 +130,14 @@ export class AuthController {
       secure: isProduction,
       maxAge: accessTokenMaxAge,
       path: '/',
-      sameSite: 'strict', // Thêm thuộc tính này
+      sameSite: 'strict',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: isProduction,
       maxAge: refreshTokenMaxAge,
       path: '/',
-      sameSite: 'strict', // Thêm thuộc tính này
+      sameSite: 'strict',
     });
   }
 }

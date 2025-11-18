@@ -308,7 +308,6 @@ export class FeedbackManagementService {
 
     const where: Prisma.FeedbacksWhereInput = {};
 
-    // optional filters
     if (status) where.currentStatus = status;
     if (departmentId) where.departmentId = departmentId;
     if (categoryId) where.categoryId = categoryId;

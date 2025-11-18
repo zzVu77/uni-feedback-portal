@@ -33,8 +33,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 
 @ApiBearerAuth()
-@UseGuards(RolesGuard) // Apply guard at controller level
-@Roles(UserRole.STUDENT) // All endpoints in this controller are for STUDENTS only
+@UseGuards(RolesGuard)
+@Roles(UserRole.STUDENT)
 @Controller('feedbacks')
 export class FeedbacksController {
   constructor(private readonly feedbacksService: FeedbacksService) {}

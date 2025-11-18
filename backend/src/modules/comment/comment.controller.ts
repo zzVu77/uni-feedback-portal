@@ -6,7 +6,6 @@ import {
   Param,
   Query,
   Delete,
-  // HttpCode,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';

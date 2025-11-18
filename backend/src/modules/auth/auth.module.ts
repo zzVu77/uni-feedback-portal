@@ -16,11 +16,11 @@ import { MailModule } from '../mail/mail.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AccessTokenGuard, // Only AccessTokenGuard is global
+      useClass: AccessTokenGuard,
     },
     AuthService,
     HashingService,
-    RolesGuard, // RolesGuard is now a regular provider
+    RolesGuard,
     TokenService,
   ],
   controllers: [AuthController],

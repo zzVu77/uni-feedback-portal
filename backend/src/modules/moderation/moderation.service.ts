@@ -137,7 +137,6 @@ export class ModerationService {
   ): Promise<CommentReportDto> {
     this._ensureIsAdmin(actor);
 
-    // === 1. Lấy report chi tiết + quan hệ comment, user ===
     const report = await this.prisma.commentReports.findUnique({
       where: { id: commentReportId },
       include: {
@@ -160,11 +159,9 @@ export class ModerationService {
       throw new NotFoundException(`Report not found`);
     }
 
-    // === 2. Lấy targetInfo từ service tương ứng ===
     const { targetId, targetType } = report.comment;
     const targetInfo = await this.getTargetInfo(targetId, targetType);
 
-    // === 3. Map dữ liệu sang DTO ===
     const mappedReport: CommentReportDto = {
       id: report.id,
       reason: report.reason ?? null,

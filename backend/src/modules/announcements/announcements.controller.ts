@@ -32,11 +32,10 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 @ApiTags('Announcements')
 @Controller('announcement')
-@ApiBearerAuth() // Apply Bearer Auth to all endpoints in this controller
+@ApiBearerAuth()
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) {}
 
-  // No @Roles decorator means any authenticated user can access
   @Get()
   @ApiOkResponse({
     description: 'List announcements',
@@ -49,7 +48,6 @@ export class AnnouncementsController {
     return this.announcementsService.getAnnouncements(query);
   }
 
-  // No @Roles decorator means any authenticated user can access
   @Get(':id')
   @ApiOkResponse({
     description: 'Get announcement detail by ID',
