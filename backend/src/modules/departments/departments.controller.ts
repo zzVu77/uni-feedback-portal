@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import {
@@ -27,15 +28,10 @@ import {
   UpdateDepartmentDto,
 } from './dto';
 import { UserRole } from '@prisma/client';
-
-/**
- * TEMPORARY: Defines the structure of the user object attached to the request.
- * This will be moved to a shared location after refactoring.
- */
-export interface UserPayload {
-  userId: string;
-  role: UserRole;
-}
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @ApiTags('Departments')
 @ApiBearerAuth()
@@ -43,13 +39,9 @@ export interface UserPayload {
 export class DepartmentsController {
   constructor(private readonly departmentsService: DepartmentsService) {}
 
-  // Dummy user payload for demonstration. In a real app, this would come from a custom decorator.
-  private readonly dummyUser: UserPayload = {
-    userId: '550e8400-e29b-41d4-a716-446655440008', // Admin User ID
-    role: UserRole.ADMIN,
-  };
-
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create a new department (Admin only)' })
   @ApiBody({ type: CreateDepartmentDto })
   @ApiResponse({
@@ -62,13 +54,11 @@ export class DepartmentsController {
     status: 409,
     description: 'Conflict. Department email already exists.',
   })
-  CreateDepartment(
+  createDepartment(
     @Body() createDepartmentDto: CreateDepartmentDto,
+    @ActiveUser() actor: ActiveUserData,
   ): Promise<DepartmentDto> {
-    return this.departmentsService.CreateDepartment(
-      createDepartmentDto,
-      this.dummyUser,
-    );
+    return this.departmentsService.createDepartment(createDepartmentDto, actor);
   }
 
   @Get()
@@ -78,10 +68,10 @@ export class DepartmentsController {
     description: 'A list of departments.',
     type: DepartmentListResponseDto,
   })
-  GetAllDepartments(
+  getAllDepartments(
     @Query() query: QueryDepartmentsDto,
   ): Promise<DepartmentListResponseDto> {
-    return this.departmentsService.GetAllDepartments(query);
+    return this.departmentsService.getAllDepartments(query);
   }
 
   @Get(':departmentId')
@@ -92,13 +82,15 @@ export class DepartmentsController {
     type: DepartmentDto,
   })
   @ApiResponse({ status: 404, description: 'Department not found.' })
-  GetDepartmentById(
+  getDepartmentById(
     @Param() params: DepartmentParamDto,
   ): Promise<DepartmentDto> {
-    return this.departmentsService.GetDepartmentById(params.departmentId);
+    return this.departmentsService.getDepartmentById(params.departmentId);
   }
 
   @Patch(':departmentId')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Update a department (Admin only)' })
   @ApiBody({ type: UpdateDepartmentDto })
   @ApiResponse({
@@ -112,18 +104,21 @@ export class DepartmentsController {
     status: 409,
     description: 'Conflict. Department email already exists.',
   })
-  UpdateDepartment(
+  updateDepartment(
     @Param() params: DepartmentParamDto,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
+    @ActiveUser() actor: ActiveUserData,
   ): Promise<DepartmentDto> {
-    return this.departmentsService.UpdateDepartment(
+    return this.departmentsService.updateDepartment(
       params.departmentId,
       updateDepartmentDto,
-      this.dummyUser,
+      actor,
     );
   }
 
   @Patch(':departmentId/status')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Activate or deactivate a department (Admin only)' })
   @ApiBody({ type: UpdateDepartmentStatusDto })
   @ApiResponse({
@@ -133,19 +128,22 @@ export class DepartmentsController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden resource.' })
   @ApiResponse({ status: 404, description: 'Department not found.' })
-  UpdateDepartmentStatus(
+  updateDepartmentStatus(
     @Param() params: DepartmentParamDto,
     @Body() updateStatusDto: UpdateDepartmentStatusDto,
+    @ActiveUser() actor: ActiveUserData,
   ): Promise<DepartmentDto> {
-    return this.departmentsService.UpdateDepartmentStatus(
+    return this.departmentsService.updateDepartmentStatus(
       params.departmentId,
       updateStatusDto,
-      this.dummyUser,
+      actor,
     );
   }
 
   @Delete(':departmentId/permanent')
   @HttpCode(204)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Permanently delete a department (Admin only)' })
   @ApiResponse({
     status: 204,
@@ -156,10 +154,10 @@ export class DepartmentsController {
     description: 'Forbidden. Department may be in use or user is not an admin.',
   })
   @ApiResponse({ status: 404, description: 'Department not found.' })
-  DeleteDepartment(@Param() params: DepartmentParamDto): Promise<void> {
-    return this.departmentsService.DeleteDepartment(
-      params.departmentId,
-      this.dummyUser,
-    );
+  deleteDepartment(
+    @Param() params: DepartmentParamDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<void> {
+    return this.departmentsService.deleteDepartment(params.departmentId, actor);
   }
 }
