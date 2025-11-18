@@ -38,3 +38,6 @@ export const createNewFeedback = async (data: FeedbackBodyParams) => {
     ...data,
   });
 };
+export const deleteFeedbackById = async (id: string) => {
+  await axiosInstance.delete(`/feedbacks/me/${id}`);
+};

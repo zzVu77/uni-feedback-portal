@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createNewFeedback,
+  deleteFeedbackById,
   getAllFeedbacks,
   getMyFeedbackById,
   updateFeedbackById,
@@ -15,6 +16,10 @@ export const FEEDBACK_QUERY_KEYS = {
     MY_FEEDBACKS: "my-feedbacks",
     MY_FEEDBACK_DETAIL: "my-feedback-detail",
   },
+};
+type FeedbackUpdateParams = {
+  id: string;
+  data: FeedbackBodyParams;
 };
 // Hooks for student feedback queries
 export const useGetFeedbacks = (filters: FeedbackFilter) => {
@@ -49,17 +54,25 @@ export const useCreateFeedback = () => {
     },
   });
 };
-type feedbackUpdateParams = {
-  id: string;
-  data: FeedbackBodyParams;
-};
 export const useUpdateFeedbackById = () => {
   return useMutation({
-    mutationFn: (params: feedbackUpdateParams) =>
+    mutationFn: (params: FeedbackUpdateParams) =>
       updateFeedbackById(params.id, params.data),
     retry: false,
     onSuccess: () => {
       toast.success("Cập nhật góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+export const useDeleteFeedbackById = () => {
+  return useMutation({
+    mutationFn: (id: string) => deleteFeedbackById(id),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Xoá góp ý thành công!");
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");

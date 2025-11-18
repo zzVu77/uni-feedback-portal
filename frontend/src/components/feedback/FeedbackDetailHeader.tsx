@@ -1,14 +1,15 @@
-import React from "react";
-import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
-import Attachment from "./Attachment";
-import { Button } from "../ui/button";
-import { SquarePen } from "lucide-react";
-import Link from "next/link";
+import { useDeleteFeedbackById } from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackHeaderType } from "@/types";
+import { SquarePen, Trash2 } from "lucide-react";
+import Link from "next/link";
+import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
+import { Button } from "../ui/button";
+import Attachment from "./Attachment";
 type Props = {
   type: "student" | "staff";
   data: FeedbackHeaderType;
 };
+
 const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   const {
     subject,
@@ -21,6 +22,13 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
     // isPrivate,
     location,
   } = data;
+  const { mutateAsync: deleteFeedback, isPending } = useDeleteFeedbackById();
+  const handleDelete = async () => {
+    await deleteFeedback(id);
+    setTimeout(() => {
+      window.location.href = "/my-feedbacks";
+    }, 1000);
+  };
   return (
     <>
       <div className="flex flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
@@ -36,15 +44,24 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           </h1>
           {type === "student" && currentStatus === "PENDING" && (
             //TODO: If status is PENDING, show edit button
-            <Link
-              href={`/my-feedbacks/${id}/edit`}
-              className="order-1 md:order-2"
-            >
-              <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
-                <SquarePen className="h-4 w-4 text-black" />
-                Sửa
+            <div className="order-1 flex flex-row items-center gap-2 md:order-2">
+              <Link href={`/my-feedbacks/${id}/edit`}>
+                <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
+                  <SquarePen className="h-4 w-4 text-black" />
+                  Sửa
+                </Button>
+              </Link>
+              <Button
+                className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
+                onClick={() => {
+                  void handleDelete();
+                }}
+                disabled={isPending}
+              >
+                <Trash2 className="h-4 w-4 text-white" />
+                Xóa
               </Button>
-            </Link>
+            </div>
           )}
         </div>
         {/* Information */}

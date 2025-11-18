@@ -42,8 +42,7 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
-import { useRouter } from "next/navigation";
-
+import { useRouter, useParams } from "next/navigation";
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
@@ -109,6 +108,9 @@ const FeedbackForm = ({
   isPending,
 }: FeedbackFormProps) => {
   const router = useRouter();
+
+  const params = useParams();
+  const id = params.id as string; // chính xác luôn
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const { data: categoryOptions } = useCategoryOptionsData();
   const { data: departmentOptions } = useDepartmentOptionsData();
@@ -158,7 +160,7 @@ const FeedbackForm = ({
     const payload = mapFormValuesToFeedbackParams(values);
     await onSubmit(payload);
     setTimeout(() => {
-      router.back();
+      router.replace(`/my-feedbacks/${id}`);
     }, 1000);
   });
 
