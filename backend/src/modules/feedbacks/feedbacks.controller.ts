@@ -33,13 +33,13 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 
 @ApiBearerAuth()
+@UseGuards(RolesGuard) // Apply guard at controller level
+@Roles(UserRole.STUDENT) // All endpoints in this controller are for STUDENTS only
 @Controller('feedbacks')
 export class FeedbacksController {
   constructor(private readonly feedbacksService: FeedbacksService) {}
 
   @Post()
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.STUDENT)
   @ApiOperation({
     summary: 'Create a new feedback (Student only)',
     description:
@@ -59,11 +59,11 @@ export class FeedbacksController {
     @Body() createFeedbackDto: CreateFeedbackDto,
     @ActiveUser() user: ActiveUserData,
   ) {
-    return this.feedbacksService.createFeedback(createFeedbackDto, user.sub);
+    return this.feedbacksService.createFeedback(createFeedbackDto, user);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get feedbacks based on user role' })
+  @ApiOperation({ summary: 'Get feedbacks for the logged-in student' })
   @ApiResponse({
     status: 200,
     description: 'List of feedbacks',
@@ -76,9 +76,9 @@ export class FeedbacksController {
     return this.feedbacksService.getFeedbacks(query, actor);
   }
 
-  @Get(':feedbackId')
+  @Get('/me/:feedbackId')
   @ApiOperation({
-    summary: 'Get feedback details by ID',
+    summary: 'Get feedback details by ID (Student and Owner only)',
     description:
       'Retrieve detailed information about a specific feedback, including its status history, forwarding logs, and attached files.',
   })
@@ -98,9 +98,7 @@ export class FeedbacksController {
     return this.feedbacksService.getFeedbackDetail(params, actor);
   }
 
-  @Patch(':feedbackId')
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.STUDENT)
+  @Patch('/me/:feedbackId')
   @ApiOperation({
     summary: 'Update a feedback (Student and Owner only)',
     description:
@@ -121,13 +119,11 @@ export class FeedbacksController {
     return this.feedbacksService.updateFeedback(
       params,
       updateFeedbackDto,
-      user.sub,
+      user,
     );
   }
 
-  @Delete(':feedbackId')
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.STUDENT)
+  @Delete('/me/:feedbackId')
   @HttpCode(204)
   @ApiOperation({
     summary: 'Delete a feedback (Student and Owner only)',
@@ -144,6 +140,6 @@ export class FeedbacksController {
     @Param() params: FeedbackParamDto,
     @ActiveUser() user: ActiveUserData,
   ): Promise<void> {
-    return this.feedbacksService.deleteFeedback(params, user.sub);
+    return this.feedbacksService.deleteFeedback(params, user);
   }
 }

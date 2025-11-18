@@ -1,25 +1,30 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { FeedbackManagementService } from './feedback_management.service';
 import {
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
-  ApiBearerAuth,
 } from '@nestjs/swagger';
 import {
+  FeedbackDetailDto,
   ForwardingResponseDto,
+  ListFeedbacksResponseDto,
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
+  QueryFeedbackByStaffDto,
 } from './dto';
-import { FeedbackParamDto } from 'src/modules/feedbacks/dto';
+import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
@@ -29,17 +34,57 @@ import type { ActiveUserData } from '../auth/interfaces/active-user-data.interfa
 @ApiTags('Feedback Management')
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
-@Roles(UserRole.DEPARTMENT_STAFF)
-@Controller('feedback-management')
+@Controller('managements')
 export class FeedbackManagementController {
   constructor(
     private readonly feedbackManagementService: FeedbackManagementService,
   ) {}
 
-  @Patch(':feedbackId/status')
-  @ApiOperation({
-    summary: 'Update the status of a feedback (Department Staff only)',
+  // ==========================================================
+  // 1. DEPARTMENT STAFF ROUTES
+  // ==========================================================
+
+  @Get('/staff/feedbacks')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({ summary: 'Get feedbacks for the current staff member' })
+  @ApiResponse({
+    status: 200,
+    description: "List of feedbacks in the staff member's department",
+    type: ListFeedbacksResponseDto,
   })
+  getStaffFeedbacks(
+    @Query() query: QueryFeedbackByStaffDto,
+    @ActiveUser() actor: ActiveUserData,
+  ) {
+    return this.feedbackManagementService.getAllStaffFeedbacks(query, actor);
+  }
+
+  @Get('/staff/feedbacks/:feedbackId')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({
+    summary: 'Get feedback details by ID (Staff only)',
+    description:
+      "Retrieve detailed information about a specific feedback within the staff member's department.",
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback detail retrieved successfully',
+    type: FeedbackDetailDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Feedback not found in this department',
+  })
+  async getStaffFeedbackDetail(
+    @Param() params: FeedbackParamDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<FeedbackDetailDto> {
+    return this.feedbackManagementService.getStaffFeedbackDetail(params, actor);
+  }
+
+  @Patch('/staff/feedbacks/:feedbackId/status')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({ summary: 'Update the status of a feedback (Staff only)' })
   @ApiResponse({
     status: 200,
     description: 'Successfully updated feedback status',
@@ -50,15 +95,13 @@ export class FeedbackManagementController {
     @Body() dto: UpdateFeedbackStatusDto,
     @ActiveUser() actor: ActiveUserData,
   ): Promise<UpdateFeedbackStatusResponseDto> {
-    return this.feedbackManagementService.updateStatus(param, dto, {
-      userId: actor.sub,
-      departmentId: actor.departmentId ?? '',
-    });
+    return this.feedbackManagementService.updateStatus(param, dto, actor);
   }
 
-  @Post(':feedbackId/forward')
+  @Post('/staff/feedbacks/:feedbackId/forwardings')
+  @Roles(UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
-    summary: 'Forward feedback to another department (Department Staff only)',
+    summary: 'Forward feedback to another department (Staff only)',
   })
   @ApiResponse({
     status: 201,
@@ -75,7 +118,45 @@ export class FeedbackManagementController {
     return this.feedbackManagementService.createForwarding(
       params.feedbackId,
       dto,
-      { userId: actor.sub, departmentId: actor.departmentId ?? '' },
+      actor,
     );
+  }
+
+  // ==========================================================
+  // 2. ADMIN ROUTES
+  // ==========================================================
+
+  @Get('/admin/feedbacks')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Get all feedbacks (Admin only)' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all feedbacks in the system',
+    type: ListFeedbacksResponseDto,
+  })
+  getAllFeedbacks(@Query() query: QueryFeedbacksDto) {
+    return this.feedbackManagementService.getAllFeedbacks(query);
+  }
+
+  @Get('/admin/feedbacks/:feedbackId')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: 'Get any feedback details by ID (Admin only)',
+    description:
+      'Retrieve detailed information about any specific feedback in the system.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback detail retrieved successfully',
+    type: FeedbackDetailDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Feedback not found',
+  })
+  async getFeedbackDetail(
+    @Param() params: FeedbackParamDto,
+  ): Promise<FeedbackDetailDto> {
+    return this.feedbackManagementService.getFeedbackDetail(params);
   }
 }
