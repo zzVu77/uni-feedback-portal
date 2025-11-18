@@ -401,7 +401,7 @@ export class FeedbacksService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
-    if (category.isActive === true) {
+    if (category.isActive === false) {
       throw new ForbiddenException(
         'You cannot create feedback under an inactive category.',
       );

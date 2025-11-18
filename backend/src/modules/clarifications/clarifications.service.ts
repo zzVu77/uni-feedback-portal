@@ -32,7 +32,7 @@ export class ClarificationsService {
       );
     }
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId },
+      where: { id: feedbackId, departmentId: actor.departmentId },
     });
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
@@ -90,7 +90,7 @@ export class ClarificationsService {
     const where: Prisma.ClarificationConversationsWhereInput = {
       OR: [{ userId: actor.sub }, { feedback: { userId: actor.sub } }],
       ...(feedbackId && { feedbackId }),
-      ...(isClosed && { isClosed: isClosed === 'true' }),
+      ...(isClosed !== undefined && { isClosed: isClosed === 'true' }),
     };
 
     const [items, total] = await this.prisma.$transaction([
