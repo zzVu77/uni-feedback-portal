@@ -1,3 +1,4 @@
+import { Loading } from "@/components/common/Loading";
 import { MyFeedbacksHistoryTable } from "@/components/feedback/my-feedbacks-history/MyFeedbacksHistoryTable";
 import Wrapper from "@/components/shared/Wrapper";
 import React, { Suspense } from "react";
@@ -5,7 +6,7 @@ import React, { Suspense } from "react";
 const Page = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading variant="fullscreen" />}>
         <MyFeedbacksHistoryTable />
       </Suspense>
     </Wrapper>

@@ -14,6 +14,7 @@ import {
 import * as React from "react"; // <-- 2. Import React đầy đủ
 
 import Filter from "@/components/common/filter/Filter";
+import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,12 +25,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useGetFeedbacks } from "@/hooks/queries/useFeedbackQueries";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
-import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 
 function TableSkeleton() {
   return (
@@ -143,7 +144,7 @@ export function MyFeedbacksHistoryTable() {
     <div className="relative flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
       {isFetching && (
         <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-white/50">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <Loading variant="spinner" />
         </div>
       )}
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
