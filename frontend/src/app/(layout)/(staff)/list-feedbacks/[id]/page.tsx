@@ -24,7 +24,13 @@ const Page = () => {
       <div className="grid grid-cols-1 gap-x-5 gap-y-8 pb-3 lg:grid-cols-2">
         <div className="col-span-1 flex w-full flex-col items-start justify-between gap-2 lg:col-span-2 lg:flex-row">
           <FeedbackDetailHeader type="staff" data={feedbackHeaderData} />
-          <StaffAction />
+          {feedback.currentStatus !== "REJECTED" &&
+            feedback.currentStatus !== "RESOLVED" && (
+              <StaffAction
+                feedbackId={id}
+                currentStatus={feedback.currentStatus}
+              />
+            )}
         </div>
         <StatusTimeLine />
         <ConversationSection />

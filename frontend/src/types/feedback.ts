@@ -73,6 +73,16 @@ export type FeedbackBodyParams = {
   description: string;
   // attachments: string[];
 };
+export type UpdateFeedbackStatusParams = {
+  id: string;
+  status: FeedbackStatus;
+  note?: string;
+};
+export type ForwardFeedbackParams = {
+  id: string;
+  toDepartmentId: string;
+  note?: string;
+};
 export type FeedbackHeaderType = Pick<
   FeedbackDetail,
   | "id"

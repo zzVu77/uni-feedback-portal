@@ -62,3 +62,23 @@ export const getStaffFeedbackById = async (
   );
   return response;
 };
+export const updateStaffFeedbackStatusById = async (
+  id: string,
+  status: string,
+  note?: string,
+) => {
+  await axiosInstance.patch(`/managements/staff/feedbacks/${id}/status`, {
+    status,
+    note,
+  });
+};
+export const forwardStaffFeedbackById = async (
+  id: string,
+  toDepartmentId: string,
+  note?: string,
+) => {
+  await axiosInstance.post(`/managements/staff/feedbacks/${id}/forwarding`, {
+    toDepartmentId,
+    note,
+  });
+};
