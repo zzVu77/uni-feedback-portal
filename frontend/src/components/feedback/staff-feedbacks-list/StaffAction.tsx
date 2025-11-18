@@ -98,7 +98,6 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
 
   const { mutateAsync: updateStatus } = useUpdateStaffFeedbackStatusById();
   const { mutateAsync: forwardFeedback } = useForwardStaffFeedbackById();
-
   const handleOnStatusSubmit = async (data: UpdateStatusValues) => {
     try {
       await updateStatus({
@@ -116,6 +115,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
         }),
       ]);
       statusForm.reset();
+      statusForm.clearErrors();
     } catch (error) {
       console.error("Update failed", error);
     }
@@ -157,7 +157,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
               <FormItem>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   disabled={isFinished}
                 >
                   <FormControl>
@@ -167,9 +167,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
                   </FormControl>
                   <SelectContent>
                     {statusOptions.map((item) => {
-                      const isDisabled =
-                        terminalStates.includes(currentStatus) ||
-                        item.value === currentStatus;
+                      const isDisabled = terminalStates.includes(currentStatus);
                       return (
                         <SelectItem
                           key={item.value}

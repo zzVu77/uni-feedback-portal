@@ -22,12 +22,12 @@ export type FeedbackDetail = {
   };
   createdAt: string;
   description: string;
-  statusHistory: Array<{
-    status: string;
+  statusHistory: {
+    status: FeedbackStatus;
     message: string;
     note: string | null;
     createdAt: string;
-  }>;
+  }[];
   // Optional forwarding logs
   forwardingLogs?: Array<{
     id: string;
@@ -96,3 +96,4 @@ export type FeedbackHeaderType = Pick<
   | "department"
   | "student"
 >;
+export type FeedbackTimelineType = Pick<FeedbackDetail, "statusHistory">;

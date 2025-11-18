@@ -1,5 +1,4 @@
 import ConversationSection from "@/components/conversation/ConversationSection";
-import StatusTimeLine from "@/components/feedback/StatusTimeline";
 import Wrapper from "@/components/shared/Wrapper";
 
 const Page = () => {
@@ -10,7 +9,7 @@ const Page = () => {
           {/* <FeedbackDetailHeader type="staff" /> */}
           {/* <StaffAction /> */}
         </div>
-        <StatusTimeLine />
+        {/* <StatusTimeLine /> */}
         <ConversationSection />
       </div>
     </Wrapper>
