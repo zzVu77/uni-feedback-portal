@@ -25,14 +25,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { FeedbackStatus } from "@/constants/data";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useGetFeedbacks } from "@/hooks/queries/useFeedbackQueries";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
-import { FeedbackStatus } from "@/constants/data";
-import { TableSkeleton } from "@/components/common/TableSkeleton";
+import { cn } from "@/lib/utils";
 
 export function MyFeedbacksHistoryTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -52,12 +52,7 @@ export function MyFeedbacksHistoryTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const {
-    data: feedbacks,
-    isLoading,
-    isFetching,
-    isError,
-  } = useGetFeedbacks(filters);
+  const { data: feedbacks, isFetching, isError } = useGetFeedbacks(filters);
 
   const tableData = React.useMemo(
     () => (isError ? [] : (feedbacks?.results ?? [])),
@@ -102,10 +97,6 @@ export function MyFeedbacksHistoryTable() {
     },
   });
 
-  if (isLoading) {
-    return <TableSkeleton />;
-  }
-
   // if (isError) {
   //   return (
   //     <div className="flex h-screen w-full flex-col items-center justify-center gap-4 rounded-md bg-white p-4 text-red-500">
@@ -124,11 +115,6 @@ export function MyFeedbacksHistoryTable() {
 
   return (
     <div className="relative flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      {isFetching && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-white/50">
-          <Loading variant="spinner" />
-        </div>
-      )}
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
         <Suspense fallback={null}>
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
@@ -143,7 +129,7 @@ export function MyFeedbacksHistoryTable() {
         </div>
       </div>
       <div className="overflow-hidden rounded-md border">
-        <Table>
+        <Table className={cn(tableData.length === 0 && "h-[70vh]")}>
           <TableHeader className="bg-neutral-light-primary-200/60">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -182,9 +168,15 @@ export function MyFeedbacksHistoryTable() {
               <TableRow>
                 <TableCell
                   colSpan={myFeedbacksHistoryColumns.length}
-                  className="h-24 text-center"
+                  className="h-24 font-medium text-red-500"
                 >
-                  {!isFetching && "Không tìm thấy kết quả."}
+                  {!isFetching && (
+                    <div className="flex flex-row items-center justify-center gap-2 text-center">
+                      <SearchX />
+                      Không có dữ liệu để hiển thị
+                    </div>
+                  )}
+                  {isFetching && <Loading variant="spinner" />}
                 </TableCell>
               </TableRow>
             )}

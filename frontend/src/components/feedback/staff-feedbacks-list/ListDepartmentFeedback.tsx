@@ -15,7 +15,6 @@ import * as React from "react";
 import Filter from "@/components/common/filter/Filter";
 import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
-import { TableSkeleton } from "@/components/common/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -28,7 +27,8 @@ import {
 import { FeedbackStatus } from "@/constants/data";
 import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
 import { useGetStaffFeedbacks } from "@/hooks/queries/useFeedbackQueries";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { staffFeedbackColumns } from "./columns";
@@ -46,7 +46,6 @@ export function ListDepartmentFeedback() {
   const searchParams = useSearchParams();
   const {
     data: feedbacks,
-    isLoading,
     isFetching,
     isError,
   } = useGetStaffFeedbacks(filters);
@@ -93,29 +92,18 @@ export function ListDepartmentFeedback() {
     },
   });
 
-  if (isLoading) {
-    return <TableSkeleton />;
-  }
-
   return (
     <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      {isFetching && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-white/50">
-          <Loading variant="spinner" />
-        </div>
-      )}
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
+      <div className="flex w-full flex-row items-start justify-between gap-2 md:items-center">
         <Suspense fallback={null}>
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
         </Suspense>
-        <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
-          <Suspense fallback={null}>
-            <Filter type="status" items={FeedbackStatus} />
-          </Suspense>
-        </div>
+        <Suspense fallback={null}>
+          <Filter type="status" items={FeedbackStatus} />
+        </Suspense>
       </div>
       <div className="overflow-hidden rounded-md border">
-        <Table>
+        <Table className={cn(tableData.length === 0 && "h-[70vh]")}>
           <TableHeader className="bg-neutral-light-primary-200/60">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -156,35 +144,43 @@ export function ListDepartmentFeedback() {
               <TableRow>
                 <TableCell
                   colSpan={staffFeedbackColumns.length}
-                  className="h-24 text-center"
+                  className="h-24 font-medium text-red-500"
                 >
-                  No results.
+                  {!isFetching && (
+                    <div className="flex flex-row items-center justify-center gap-2 text-center">
+                      <SearchX />
+                      Không có dữ liệu để hiển thị
+                    </div>
+                  )}
+                  {isFetching && <Loading variant="spinner" />}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ChevronRight />
-          </Button>
+      {table.getPageCount() > 1 && (
+        <div className="flex items-center justify-end space-x-2">
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRight />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
