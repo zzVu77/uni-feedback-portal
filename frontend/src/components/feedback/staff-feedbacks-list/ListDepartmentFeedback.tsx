@@ -13,7 +13,9 @@ import {
 import * as React from "react";
 
 import Filter from "@/components/common/filter/Filter";
+import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
+import { TableSkeleton } from "@/components/common/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -23,9 +25,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Suspense } from "react";
-import { dummyData, staffFeedbackColumns } from "./columns";
+import { FeedbackStatus } from "@/constants/data";
+import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
+import { useGetStaffFeedbacks } from "@/hooks/queries/useFeedbackQueries";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { staffFeedbackColumns } from "./columns";
 
 export function ListDepartmentFeedback() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -34,9 +40,28 @@ export function ListDepartmentFeedback() {
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+  const filters = useFeedbackFilters();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const {
+    data: feedbacks,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetStaffFeedbacks(filters);
+  const tableData = React.useMemo(
+    () => (isError ? [] : (feedbacks?.results ?? [])),
+    [feedbacks],
+  );
+  const pageCount = React.useMemo(() => {
+    return feedbacks?.total
+      ? Math.ceil(feedbacks.total / filters?.pageSize)
+      : 0;
+  }, [feedbacks?.total, filters.pageSize]);
 
   const table = useReactTable({
-    data: dummyData,
+    data: tableData,
     columns: staffFeedbackColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -45,37 +70,47 @@ export function ListDepartmentFeedback() {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    // Pagination
+    manualPagination: true,
+    pageCount: pageCount,
+    onPaginationChange: (updater) => {
+      if (typeof updater === "function") {
+        const newPagination = updater(table.getState().pagination);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("page", String(newPagination.pageIndex + 1));
+        params.set("pageSize", String(newPagination.pageSize));
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
+    },
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      pagination: {
+        pageIndex: filters.page - 1,
+        pageSize: filters.pageSize,
+      },
     },
   });
-  const mockStatus = [
-    { label: "Tất cả", value: "all" },
-    { label: "Đang chờ tiếp nhận", value: "pending" },
-    { label: "Đang xử lý", value: "in-progress" },
-    { label: "Đã xử lý", value: "resolved" },
-    { label: "Từ chối", value: "rejected" },
-  ];
-  const departmentOptions = [
-    { label: "All", value: "all" },
-    { label: "Khoa Công nghệ thông tin", value: "fit" },
-    { label: "Khoa Đào tạo quốc tế", value: "fie" },
-    { label: "Thư viện", value: "library" },
-  ];
+
+  if (isLoading) {
+    return <TableSkeleton />;
+  }
+
   return (
     <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
+      {isFetching && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-white/50">
+          <Loading variant="spinner" />
+        </div>
+      )}
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
         <Suspense fallback={null}>
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
         </Suspense>
         <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
           <Suspense fallback={null}>
-            <Filter type="status" items={mockStatus} />
-          </Suspense>
-          <Suspense fallback={null}>
-            <Filter type="department" items={departmentOptions} />
+            <Filter type="status" items={FeedbackStatus} />
           </Suspense>
         </div>
       </div>

@@ -4,6 +4,7 @@ import {
   createNewFeedback,
   deleteFeedbackById,
   getAllFeedbacks,
+  getAllStaffFeedbacks,
   getMyFeedbackById,
   updateFeedbackById,
 } from "@/services/feedback-service";
@@ -15,6 +16,10 @@ export const FEEDBACK_QUERY_KEYS = {
   student: {
     MY_FEEDBACKS: "my-feedbacks",
     MY_FEEDBACK_DETAIL: "my-feedback-detail",
+  },
+  staff: {
+    STAFF_FEEDBACKS: "staff-feedbacks",
+    STAFF_FEEDBACK_DETAIL: "staff-feedback-detail",
   },
 };
 type FeedbackUpdateParams = {
@@ -77,5 +82,14 @@ export const useDeleteFeedbackById = () => {
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
     },
+  });
+};
+// Hooks for staff feedback queries
+export const useGetStaffFeedbacks = (filters: FeedbackFilter) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS, filters],
+    queryFn: () => getAllStaffFeedbacks(filters),
+    retry: false,
+    placeholderData: (previousData) => previousData,
   });
 };

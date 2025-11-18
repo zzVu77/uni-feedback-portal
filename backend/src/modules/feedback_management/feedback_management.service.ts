@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { FeedbackStatus, Prisma } from '@prisma/client';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
@@ -37,7 +37,12 @@ export class FeedbackManagementService {
 
     // optional filters
     where.departmentId = actor.departmentId;
-    if (status) where.currentStatus = status;
+    if (status) {
+      where.currentStatus =
+        status.toUpperCase() in FeedbackStatus
+          ? (status.toUpperCase() as FeedbackStatus)
+          : undefined;
+    }
     if (categoryId) where.categoryId = categoryId;
     if (from || to) {
       where.createdAt = {};

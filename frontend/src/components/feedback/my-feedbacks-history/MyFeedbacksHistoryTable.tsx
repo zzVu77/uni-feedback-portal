@@ -31,15 +31,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
-
-function TableSkeleton() {
-  return (
-    <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      <div className="h-10 w-full rounded-md border bg-gray-100/50" />
-      <div className="h-full w-full rounded-md border bg-gray-100/50" />
-    </div>
-  );
-}
+import { FeedbackStatus } from "@/constants/data";
+import { TableSkeleton } from "@/components/common/TableSkeleton";
 
 export function MyFeedbacksHistoryTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -48,17 +41,6 @@ export function MyFeedbacksHistoryTable() {
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-
-  const mockStatus = [
-    { label: "Tất cả", value: "all" },
-
-    { label: "Đang chờ tiếp nhận", value: "pending" },
-
-    { label: "Đang xử lý", value: "in_progress" },
-    { label: "Đã xử lý", value: "resolved" },
-
-    { label: "Từ chối", value: "rejected" },
-  ];
 
   const { data } = useGetDepartmentOptions();
   const departmentOptions = [
@@ -153,7 +135,7 @@ export function MyFeedbacksHistoryTable() {
         </Suspense>
         <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
           <Suspense fallback={null}>
-            <Filter type="status" items={mockStatus} />
+            <Filter type="status" items={FeedbackStatus} />
           </Suspense>
           <Suspense fallback={null}>
             <Filter type="department" items={departmentOptions || []} />

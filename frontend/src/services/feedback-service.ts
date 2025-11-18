@@ -41,3 +41,16 @@ export const createNewFeedback = async (data: FeedbackBodyParams) => {
 export const deleteFeedbackById = async (id: string) => {
   await axiosInstance.delete(`/feedbacks/me/${id}`);
 };
+
+// Feedback service functions for staff
+export const getAllStaffFeedbacks = async (
+  filter: FeedbackFilter,
+): Promise<PaginatedResponse<FeedbackDetail>> => {
+  const response = await axiosInstance.get<PaginatedResponse<FeedbackDetail>>(
+    "/managements/staff/feedbacks",
+    {
+      params: filter,
+    },
+  );
+  return response;
+};
