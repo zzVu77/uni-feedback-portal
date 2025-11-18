@@ -80,8 +80,9 @@ export type FeedbackHeaderType = Pick<
   | "description"
   | "location"
   | "currentStatus"
-  // | "isPrivate"
+  | "isPrivate"
   | "createdAt"
   | "category"
   | "department"
+  | "student"
 >;

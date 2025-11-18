@@ -8,7 +8,6 @@ import {
   Building2,
   CalendarClock,
   ChevronRight,
-  History,
   LayoutDashboard,
   Loader,
   TextInitial,

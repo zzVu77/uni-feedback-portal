@@ -54,3 +54,11 @@ export const getAllStaffFeedbacks = async (
   );
   return response;
 };
+export const getStaffFeedbackById = async (
+  id: string,
+): Promise<FeedbackDetail> => {
+  const response = await axiosInstance.get<FeedbackDetail>(
+    `/managements/staff/feedbacks/${id}`,
+  );
+  return response;
+};

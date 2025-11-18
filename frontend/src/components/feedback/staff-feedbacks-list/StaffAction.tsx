@@ -44,10 +44,10 @@ const mockDepartments = [
 ];
 const StaffAction = () => {
   return (
-    <div className="flex h-full w-full flex-col gap-2 rounded-[8px] bg-white/80 px-3 py-4 shadow-md">
+    <div className="flex h-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-md lg:w-auto">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
       <Select>
-        <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border-[1px] bg-white font-semibold shadow-sm focus-visible:border-[1px] focus-visible:ring-0">
+        <SelectTrigger className="md:mim-w-[150px] focus-visible:borderfocus-visible:ring-0 h-10 w-full min-w-[100px] cursor-pointer rounded-md border bg-white font-semibold shadow-sm">
           <SelectValue placeholder="Chọn trạng thái" />
         </SelectTrigger>
         <SelectContent>
@@ -98,7 +98,7 @@ const StaffAction = () => {
               </DialogDescription>
             </AlertDialogHeader>
             <Select>
-              <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border-[1px] bg-white font-semibold shadow-sm focus-visible:border-[1px] focus-visible:ring-0">
+              <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border bg-white font-semibold shadow-sm focus-visible:border focus-visible:ring-0">
                 <SelectValue placeholder="Chọn phòng ban" />
               </SelectTrigger>
               <SelectContent>
@@ -109,7 +109,7 @@ const StaffAction = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Textarea placeholder="Ghi chú (Không bắt buộc) " />
+            <Textarea className="w-2" placeholder="Ghi chú (Không bắt buộc) " />
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="cancel">Hủy</Button>

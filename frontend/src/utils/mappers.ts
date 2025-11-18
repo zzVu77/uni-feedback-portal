@@ -13,9 +13,11 @@ export const mapFeedbackDetailToHeader = (
     description: feedbackDetail.description,
     location: feedbackDetail.location,
     currentStatus: feedbackDetail.currentStatus,
+    isPrivate: feedbackDetail.isPrivate,
     createdAt: feedbackDetail.createdAt,
     category: feedbackDetail.category,
     department: feedbackDetail.department,
+    student: feedbackDetail.student,
   };
 };
 

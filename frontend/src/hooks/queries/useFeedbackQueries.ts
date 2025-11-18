@@ -6,6 +6,7 @@ import {
   getAllFeedbacks,
   getAllStaffFeedbacks,
   getMyFeedbackById,
+  getStaffFeedbackById,
   updateFeedbackById,
 } from "@/services/feedback-service";
 import { FeedbackFilter, FeedbackBodyParams } from "@/types";
@@ -91,5 +92,17 @@ export const useGetStaffFeedbacks = (filters: FeedbackFilter) => {
     queryFn: () => getAllStaffFeedbacks(filters),
     retry: false,
     placeholderData: (previousData) => previousData,
+  });
+};
+export const useGetStaffFeedbackById = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL, id],
+    queryFn: () => getStaffFeedbackById(id),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+    ...options,
   });
 };
