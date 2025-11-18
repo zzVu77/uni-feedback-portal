@@ -47,7 +47,7 @@ const StaffAction = () => {
     <div className="flex h-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-md lg:w-auto">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
       <Select>
-        <SelectTrigger className="md:mim-w-[150px] focus-visible:borderfocus-visible:ring-0 h-10 w-full min-w-[100px] cursor-pointer rounded-md border bg-white font-semibold shadow-sm">
+        <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border bg-white font-semibold shadow-sm focus-visible:border not-last:focus-visible:ring-0">
           <SelectValue placeholder="Chọn trạng thái" />
         </SelectTrigger>
         <SelectContent>
