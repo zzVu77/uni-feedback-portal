@@ -8,10 +8,11 @@ import { AccessTokenGuard } from './guards/access-token.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { TokenService } from './token.service';
 import { APP_GUARD } from '@nestjs/core';
+import { MailModule } from '../mail/mail.module';
 
 @Global()
 @Module({
-  imports: [PrismaModule, JwtModule.register({})],
+  imports: [PrismaModule, JwtModule.register({}), MailModule],
   providers: [
     {
       provide: APP_GUARD,

@@ -4,10 +4,17 @@ import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AuthResponseDto, LoginDto, RefreshTokenDto } from './dto';
+import {
+  AuthResponseDto,
+  ForgotPasswordDto,
+  LoginDto,
+  RefreshTokenDto,
+  ResetPasswordDto,
+} from './dto';
 import { Public } from './decorators/public.decorator';
 
 @ApiTags('auth')
@@ -26,6 +33,31 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid email or password.' })
   Login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
     return this.authService.Login(loginDto.email, loginDto.password);
+  }
+
+  @Public()
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Request a password reset OTP' })
+  @ApiResponse({
+    status: 200,
+    description: 'If an account with this email exists, an OTP will be sent.',
+  })
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto.email);
+  }
+
+  @Public()
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reset password with OTP' })
+  @ApiResponse({
+    status: 200,
+    description: 'Password has been reset successfully.',
+  })
+  @ApiResponse({ status: 400, description: 'Invalid or expired OTP.' })
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 
   @Public() // Mark this endpoint as public
