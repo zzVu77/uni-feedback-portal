@@ -1,4 +1,5 @@
 "use client";
+import { Loading } from "@/components/common/Loading";
 import FeedbackForm from "@/components/feedback/FeedbackForm";
 import Wrapper from "@/components/shared/Wrapper";
 import {
@@ -18,7 +19,7 @@ const page = () => {
   const { data: feedback, isLoading } = useGetMyFeedbackById(id, {
     enabled: isClient,
   });
-  if (isLoading || !feedback) return <div>Loading...</div>;
+  if (isLoading || !feedback) return <Loading variant="spinner" />;
   const initialData = mapFeedbackDetailToBodyParams(feedback);
   const handleSubmit = async (values: FeedbackBodyParams) => {
     await updateFeedback({ id, data: values });

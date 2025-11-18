@@ -1,4 +1,5 @@
 "use client";
+import { Loading } from "@/components/common/Loading";
 import ConversationSection from "@/components/conversation/ConversationSection";
 import FeedbackDetailHeader from "@/components/feedback/FeedbackDetailHeader";
 import StatusTimeLine from "@/components/feedback/StatusTimeline";
@@ -16,7 +17,7 @@ const Page = () => {
   const { data: feedback, isLoading } = useGetMyFeedbackById(id, {
     enabled: isClient,
   });
-  if (isLoading || !feedback) return <div>Loading...</div>;
+  if (isLoading || !feedback) return <Loading variant="spinner" />;
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
     <Wrapper>
