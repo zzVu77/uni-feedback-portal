@@ -15,7 +15,6 @@ export class TokenService {
 
   async generateTokens(user: Users) {
     const refreshTokenId = randomUUID();
-    console.log('Generating tokens for user:', user.id);
     const accessTokenPayload: Partial<ActiveUserData> = {
       role: user.role,
       ...(user.departmentId && { departmentId: user.departmentId }),

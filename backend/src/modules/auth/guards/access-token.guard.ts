@@ -9,7 +9,9 @@ import { REQUEST_USER_KEY } from '../constants/auth.constants';
 import { TokenService } from '../token.service';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-
+interface RequestWithCookies extends Request {
+  cookies: { [key: string]: string };
+}
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
@@ -28,7 +30,7 @@ export class AccessTokenGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<Request>();
-    const token = this.extractTokenFromHeader(request);
+    const token = this.extractTokenFromCookie(request);
     console.log('AccessTokenGuard: extracted token=', token);
     if (!token) {
       throw new UnauthorizedException();
@@ -43,8 +45,9 @@ export class AccessTokenGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private extractTokenFromCookie(
+    request: RequestWithCookies,
+  ): string | undefined {
+    return request.cookies?.accessToken;
   }
 }

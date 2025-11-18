@@ -1,4 +1,13 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
   ApiBearerAuth,
@@ -12,11 +21,14 @@ import {
   AuthResponseDto,
   ForgotPasswordDto,
   LoginDto,
-  RefreshTokenDto,
   ResetPasswordDto,
 } from './dto';
 import { Public } from './decorators/public.decorator';
-
+import type { Request, Response } from 'express';
+import jwtConfig from '../../config/jwt.config';
+interface RequestWithCookies extends Request {
+  cookies: { [key: string]: string };
+}
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -28,11 +40,18 @@ export class AuthController {
   @ApiOperation({ summary: 'User login' })
   @ApiOkResponse({
     description: 'User logged in successfully.',
-    type: AuthResponseDto,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password.' })
-  Login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
-    return this.authService.Login(loginDto.email, loginDto.password);
+  async Login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<{ message: string }> {
+    const tokens = await this.authService.Login(
+      loginDto.email,
+      loginDto.password,
+    );
+    this.setAuthCookies(response, tokens);
+    return { message: 'Login successful' };
   }
 
   @Public()
@@ -60,29 +79,65 @@ export class AuthController {
     return this.authService.resetPassword(resetPasswordDto);
   }
 
-  @Public() // Mark this endpoint as public
+  @Public()
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh access token' })
   @ApiOkResponse({
     description: 'Access token refreshed successfully.',
-    type: AuthResponseDto,
   })
   @ApiUnauthorizedResponse({
     description: 'Invalid or expired refresh token.',
   })
-  RefreshToken(
-    @Body() refreshTokenDto: RefreshTokenDto,
-  ): Promise<AuthResponseDto> {
-    return this.authService.RefreshToken(refreshTokenDto.refreshToken);
+  async RefreshToken(
+    @Req() request: RequestWithCookies,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<{ message: string }> {
+    const refreshTokenFromCookie = request.cookies?.refreshToken;
+    if (!refreshTokenFromCookie) {
+      throw new UnauthorizedException('Refresh token not found in cookie.');
+    }
+    const tokens = await this.authService.RefreshToken(refreshTokenFromCookie);
+    this.setAuthCookies(response, tokens);
+    return { message: 'Access token refreshed' };
   }
 
   @ApiBearerAuth()
   @Post('logout')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User logout' })
   @ApiOkResponse({ description: 'User logged out successfully.' })
-  Logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
-    return this.authService.Logout(refreshTokenDto.refreshToken);
+  async Logout(
+    @Req() request: RequestWithCookies,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<{ message: string }> {
+    const refreshToken = request.cookies?.refreshToken;
+    if (refreshToken) {
+      await this.authService.Logout(refreshToken);
+    }
+    response.clearCookie('accessToken', { path: '/' });
+    response.clearCookie('refreshToken', { path: '/' });
+    return { message: 'Logout successful' };
+  }
+
+  private setAuthCookies(response: Response, tokens: AuthResponseDto) {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const accessTokenMaxAge = parseInt(jwtConfig.JWT_ACCESS_TOKEN_TTL) * 1000;
+    const refreshTokenMaxAge = parseInt(jwtConfig.JWT_REFRESH_TOKEN_TTL) * 1000;
+
+    response.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      secure: isProduction,
+      maxAge: accessTokenMaxAge,
+      path: '/',
+      sameSite: 'strict', // Thêm thuộc tính này
+    });
+    response.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      maxAge: refreshTokenMaxAge,
+      path: '/',
+      sameSite: 'strict', // Thêm thuộc tính này
+    });
   }
 }
