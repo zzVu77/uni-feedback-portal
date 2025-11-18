@@ -10,6 +10,7 @@ import {
   CreateDepartmentDto,
   DepartmentDto,
   DepartmentListResponseDto,
+  DepartmentOptionResponseDto,
   QueryDepartmentsDto,
   UpdateDepartmentDto,
   UpdateDepartmentStatusDto,
@@ -92,6 +93,17 @@ export class DepartmentsService {
     });
 
     return this.mapToDto(department);
+  }
+  async getDepartmentOptions(): Promise<DepartmentOptionResponseDto[]> {
+    const departments = await this.prisma.departments.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return departments;
   }
 
   async GetAllDepartments(

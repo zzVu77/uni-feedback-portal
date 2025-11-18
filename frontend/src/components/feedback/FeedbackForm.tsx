@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
+import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
+import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
+import { FeedbackBodyParams } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RotateCcw, Save, Send, X } from "lucide-react";
 import { useState } from "react";
@@ -39,7 +42,7 @@ import {
 } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
-
+import { useRouter, useParams } from "next/navigation";
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
@@ -59,10 +62,8 @@ const formSchema = z.object({
     .max(500, {
       message: "Tiêu đề chỉ có tối đa 500 ký tự.",
     }),
-  feedbackCategory: z
-    .string()
-    .min(1, { message: "Vui lòng chọn một danh mục." }),
-  department: z.string().min(1, { message: "Vui lòng chọn một phòng ban." }),
+  categoryId: z.string().min(1, { message: "Vui lòng chọn một danh mục." }),
+  departmentId: z.string().min(1, { message: "Vui lòng chọn một phòng ban." }),
 
   location: z
     .string()
@@ -92,30 +93,53 @@ const formSchema = z.object({
       "Chỉ chấp nhận các định dạng .jpg, .png, .pdf, .docx, .txt",
     ),
 });
+
 type FeedbackFormProps = {
   type?: "create" | "edit";
-  initialData?: z.infer<typeof formSchema>;
+  initialData?: FeedbackBodyParams;
+  onSubmit: (values: FeedbackBodyParams) => Promise<void>;
+  isPending?: boolean;
 };
-const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
+
+const FeedbackForm = ({
+  type = "edit",
+  initialData,
+  onSubmit,
+  isPending,
+}: FeedbackFormProps) => {
+  const router = useRouter();
+
+  const params = useParams();
+  const id = params.id as string; // chính xác luôn
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+  const { data: categoryOptions } = useCategoryOptionsData();
+  const { data: departmentOptions } = useDepartmentOptionsData();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       subject: initialData?.subject || "",
-      feedbackCategory: initialData?.feedbackCategory || "",
       location: initialData?.location || "",
-      department: initialData?.department || "",
+      categoryId: initialData?.categoryId || "",
+      departmentId: initialData?.departmentId || "",
       description: initialData?.description || "",
       isPrivate: initialData?.isPrivate || false,
-      attachments: initialData?.attachments || [],
+      // attachments: initialData?.attachments || [],
     },
   });
-  const { isDirty } = form.formState;
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values));
-    setIsSubmitDialogOpen(false);
-    form.reset();
+  const mapFormValuesToFeedbackParams = (
+    values: z.infer<typeof formSchema>,
+  ): FeedbackBodyParams => {
+    return {
+      subject: values.subject,
+      categoryId: values.categoryId,
+      departmentId: values.departmentId, // map tên đúng API
+      location: values.location || "",
+      description: values.description,
+      isPrivate: values.isPrivate || false,
+      // attachments: values.attachments,
+    };
   };
+  const { isDirty } = form.formState;
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
@@ -126,12 +150,25 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
       setIsSubmitDialogOpen(true);
     }
   };
+  const handleSendFeedback = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToFeedbackParams(values);
+    await onSubmit(payload);
+    form.reset();
+    setIsSubmitDialogOpen(false);
+  });
+  const handleUpdateFeedback = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToFeedbackParams(values);
+    await onSubmit(payload);
+    setTimeout(() => {
+      router.replace(`/my-feedbacks/${id}`);
+    }, 1000);
+  });
 
   return (
     <>
       <Form {...form}>
         <form
-          className="flex h-[100%] flex-col gap-2 rounded-[8px] bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
+          className="flex h-full flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
           onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
@@ -146,7 +183,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-[8px] px-5 py-2 shadow-sm">
+                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-xl px-5 py-2 shadow-sm">
                         <div className="flex flex-col gap-2">
                           <div className="flex w-full flex-row items-center justify-between gap-4 lg:justify-start">
                             <p className="text-[15px] font-medium lg:text-[16px]">
@@ -219,14 +256,14 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                 {/* Category Selection */}
                 <FormField
                   control={form.control}
-                  name="feedbackCategory"
+                  name="categoryId"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Danh mục góp ý</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Chọn danh mục" />
@@ -234,15 +271,14 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                           <SelectContent>
                             <SelectGroup>
                               <SelectLabel>Danh mục</SelectLabel>
-                              <SelectItem value="thuvien">Thư viện</SelectItem>
-                              <SelectItem value="giang_vien">
-                                Giảng viên
-                              </SelectItem>
-                              <SelectItem value="hoc_lieu">Học liệu</SelectItem>
-                              <SelectItem value="co_so_vat_chat">
-                                Cơ sở vật chất
-                              </SelectItem>
-                              <SelectItem value="khac">Khác</SelectItem>
+                              {categoryOptions.map((option) => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -254,14 +290,14 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                 {/* Department Selection */}
                 <FormField
                   control={form.control}
-                  name="department"
+                  name="departmentId"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Phòng ban tiếp nhận</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Chọn phòng ban " />
@@ -269,19 +305,14 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                           <SelectContent>
                             <SelectGroup>
                               <SelectLabel>Phòng ban</SelectLabel>
-                              <SelectItem value="khoa_dtqt">
-                                Khoa ĐTQT
-                              </SelectItem>
-                              <SelectItem value="khoa_cntt">
-                                Khoa CNTT
-                              </SelectItem>
-                              <SelectItem value="khoa_kinh_te">
-                                Khoa Kinh tế
-                              </SelectItem>
-                              <SelectItem value="khoa_ngoai_ngu">
-                                Khoa Ngoại ngữ
-                              </SelectItem>
-                              <SelectItem value="khac">Khác</SelectItem>
+                              {departmentOptions.map((option) => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -346,7 +377,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
             </div>
           </ScrollArea>
           {type == "create" ? (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <ConfirmationDialog
                 title="Xác nhận làm mới biểu mẫu?"
                 description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
@@ -376,7 +407,7 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
               </Button>
             </div>
           ) : (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <Button
                 type="button"
                 variant={"cancel"}
@@ -386,22 +417,17 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
                 <X className="h-5 w-5" />
                 Hủy
               </Button>
-              <ConfirmationDialog
-                title="Bạn có chắc chắn muốn cập nhật góp ý này?"
-                description="Hành động này sẽ làm thay đổi góp ý cũ của bạn. Bạn có muốn tiếp tục không?"
-                onConfirm={handleResetForm}
-                confirmText="Đồng ý"
+
+              <Button
+                type="button"
+                variant={"primary"}
+                className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
+                disabled={isPending}
+                onClick={handleUpdateFeedback}
               >
-                <Button
-                  type="button"
-                  onClick={() => {}} // TODO: Implement update functionality
-                  variant={"primary"}
-                  className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
-                >
-                  <Save className="h-5 w-5" />
-                  Cập nhật
-                </Button>
-              </ConfirmationDialog>
+                <Save className="h-5 w-5" />
+                Cập nhật
+              </Button>
             </div>
           )}
         </form>
@@ -466,7 +492,10 @@ const FeedbackForm = ({ type = "edit", initialData }: FeedbackFormProps) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>
+            <AlertDialogAction
+              onClick={handleSendFeedback}
+              disabled={isPending}
+            >
               Gửi
             </AlertDialogAction>
           </AlertDialogFooter>

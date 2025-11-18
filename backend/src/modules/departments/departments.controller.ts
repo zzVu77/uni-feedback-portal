@@ -25,6 +25,7 @@ import {
   QueryDepartmentsDto,
   UpdateDepartmentStatusDto,
   UpdateDepartmentDto,
+  DepartmentOptionResponseDto,
 } from './dto';
 import { UserRole } from '@prisma/client';
 
@@ -82,6 +83,16 @@ export class DepartmentsController {
     @Query() query: QueryDepartmentsDto,
   ): Promise<DepartmentListResponseDto> {
     return this.departmentsService.GetAllDepartments(query);
+  }
+  @Get('options')
+  @ApiOperation({ summary: 'Get a list of departments' })
+  @ApiResponse({
+    status: 200,
+    description: 'A list of departments.',
+    type: [DepartmentOptionResponseDto],
+  })
+  getDepartmentOptions(): Promise<DepartmentOptionResponseDto[]> {
+    return this.departmentsService.getDepartmentOptions();
   }
 
   @Get(':departmentId')

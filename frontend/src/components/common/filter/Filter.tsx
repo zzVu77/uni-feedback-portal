@@ -22,7 +22,7 @@ const Filter = ({ type, items }: Props) => {
   const config = filtersConfig[type];
   const Icon = config.icon;
 
-  const currentValue = searchParams.get(config.param) || "";
+  const currentValue = searchParams.get(config.param) || "all";
 
   const handleChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -37,11 +37,13 @@ const Filter = ({ type, items }: Props) => {
 
     router.replace(`?${params.toString()}`, { scroll: false });
   };
-
+  // if (currentValue!== items.find(item=>item.value===currentValue)?.value) {
+  //   c
+  // }
   return (
     <Select onValueChange={handleChange} defaultValue={currentValue}>
-      <SelectTrigger className="md:mim-w-[150px] h-10 w-max min-w-[100px] cursor-pointer rounded-lg border-[1px] bg-white font-semibold shadow-sm focus-visible:border-[1px] focus-visible:ring-0">
-        <Icon className="h-4 w-4 flex-shrink-0 text-gray-500" />
+      <SelectTrigger className="md:mim-w-[150px] h-10 w-max min-w-[100px] cursor-pointer rounded-lg border bg-white font-semibold shadow-sm focus-visible:border focus-visible:ring-0">
+        <Icon className="h-4 w-4 shrink-0 text-gray-500" />
 
         <SelectValue placeholder={config.placeholder} />
       </SelectTrigger>

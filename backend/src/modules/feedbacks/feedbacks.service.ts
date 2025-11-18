@@ -36,9 +36,21 @@ export class FeedbacksService {
 
     const whereClause: Prisma.FeedbacksWhereInput = {
       userId,
-      ...(status && { currentStatus: status }),
-      ...(categoryId && { categoryId }),
-      ...(departmentId && { departmentId }),
+      ...(status && {
+        // if (status) filter by status unless it's 'all'
+        currentStatus:
+          status.toUpperCase() in FeedbackStatus
+            ? (status.toUpperCase() as FeedbackStatus)
+            : undefined,
+      }),
+      // if (categoryId) filter by categoryId unless it's 'all'
+      ...(categoryId && {
+        categoryId: categoryId == 'all' ? undefined : categoryId,
+      }),
+      // if (departmentId) filter by departmentId unless it's 'all'
+      ...(departmentId && {
+        departmentId: departmentId == 'all' ? undefined : departmentId,
+      }),
       ...(from || to
         ? {
             createdAt: {
@@ -56,38 +68,47 @@ export class FeedbacksService {
         ],
       }),
     };
-    // console.log('whereClause', whereClause);
-
-    const [items, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where: whereClause,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          subject: true,
-          location: true,
-          currentStatus: true,
-          isPrivate: true,
-          department: {
-            select: { id: true, name: true },
+    // Fetch feedbacks with pagination and total count. Return empty list on error.
+    try {
+      const [items, total] = await Promise.all([
+        this.prisma.feedbacks.findMany({
+          where: whereClause,
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            subject: true,
+            location: true,
+            currentStatus: true,
+            isPrivate: true,
+            department: {
+              select: { id: true, name: true },
+            },
+            category: { select: { id: true, name: true } },
+            createdAt: true,
           },
-          category: { select: { id: true, name: true } },
-          createdAt: true,
-        },
-      }),
-      this.prisma.feedbacks.count({ where: whereClause }),
-    ]);
-
-    return {
-      results: items.map((item) => ({
-        ...item,
-        location: item.location ? item.location : null,
-        createdAt: item.createdAt.toISOString(),
-      })),
-      total,
-    };
+        }),
+        this.prisma.feedbacks.count({ where: whereClause }),
+      ]);
+      return {
+        results: items
+          ? items.map((item) => ({
+              ...item,
+              location: item.location ? item.location : null,
+              createdAt: item.createdAt.toISOString(),
+            }))
+          : [],
+        total,
+      };
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+      throw new Error('Error fetching feedbacks:', error);
+      // return {
+      //   results: [],
+      //   total: 0,
+      // };
+    }
   }
   async getFeedbackDetail(
     params: FeedbackParamDto,

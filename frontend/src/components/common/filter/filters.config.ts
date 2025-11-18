@@ -27,7 +27,7 @@ export const filtersConfig: Record<FilterType, FilterDefinition> = {
     icon: Hourglass,
   },
   department: {
-    param: "department",
+    param: "departmentId",
     placeholder: "Phòng ban",
     icon: Building,
   },
