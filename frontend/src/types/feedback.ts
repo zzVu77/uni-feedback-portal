@@ -29,19 +29,19 @@ export type FeedbackDetail = {
     createdAt: string;
   }[];
   // Optional forwarding logs
-  forwardingLogs?: Array<{
+  forwardingLogs?: {
     id: string;
     fromDepartment: { id: string; name: string };
     toDepartment: { id: string; name: string };
     message: string | null;
     createdAt: string;
-  }>;
+  }[];
   // Optional file attachments
-  fileAttachments?: Array<{
+  fileAttachments?: {
     id: string;
     fileName: string;
     fileUrl: string;
-  }>;
+  }[];
   // For staff feedback view and can be null for private feedbacks
   student?: {
     id: string;
@@ -96,4 +96,3 @@ export type FeedbackHeaderType = Pick<
   | "department"
   | "student"
 >;
-export type FeedbackTimelineType = Pick<FeedbackDetail, "statusHistory">;
