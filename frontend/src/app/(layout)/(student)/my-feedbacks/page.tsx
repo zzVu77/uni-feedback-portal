@@ -1,11 +1,14 @@
+import { Loading } from "@/components/common/Loading";
 import { MyFeedbacksHistoryTable } from "@/components/feedback/my-feedbacks-history/MyFeedbacksHistoryTable";
 import Wrapper from "@/components/shared/Wrapper";
-import React from "react";
+import React, { Suspense } from "react";
 
 const Page = () => {
   return (
     <Wrapper>
-      <MyFeedbacksHistoryTable />
+      <Suspense fallback={<Loading variant="fullscreen" />}>
+        <MyFeedbacksHistoryTable />
+      </Suspense>
     </Wrapper>
   );
 };

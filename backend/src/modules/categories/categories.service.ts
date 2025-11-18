@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma, UserRole } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   CreateCategoryDto,
@@ -15,7 +16,6 @@ import {
   CategoryDto,
   CategoryListResponseDto,
 } from './dto/category-response.dto';
-import { Prisma, UserRole } from '@prisma/client';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()

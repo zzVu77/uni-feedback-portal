@@ -1,14 +1,7 @@
-import {
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-  IsISO8601,
-} from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { FeedbackStatus } from '@prisma/client';
+import { Type } from 'class-transformer';
+import { IsInt, IsISO8601, IsOptional, IsString, Min } from 'class-validator';
 
 export class QueryFeedbacksDto {
   @ApiPropertyOptional({ example: 1, description: 'Current page number' })
@@ -34,7 +27,7 @@ export class QueryFeedbacksDto {
     description: 'Filter by feedback status',
   })
   @IsOptional()
-  @IsEnum(FeedbackStatus)
+  // @IsEnum(FeedbackStatus)
   status?: FeedbackStatus;
 
   @ApiPropertyOptional({

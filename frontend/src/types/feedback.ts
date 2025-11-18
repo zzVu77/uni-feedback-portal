@@ -1,4 +1,7 @@
+import { BaseFilter } from "./common-type";
+
 export type FeedbackStatus =
+  | ""
   | "PENDING"
   | "IN_PROGRESS"
   | "RESOLVED"
@@ -53,4 +56,32 @@ export type MyFeedbackHistoryItem = Pick<
 export type StaffFeedbackItem = Pick<
   FeedbackDetail,
   "id" | "subject" | "currentStatus" | "createdAt" | "category" | "student"
+>;
+export interface FeedbackFilter extends BaseFilter {
+  status?: FeedbackStatus;
+  categoryId?: string;
+  departmentId?: string;
+  from?: string;
+  to?: string;
+}
+export type FeedbackBodyParams = {
+  isPrivate: boolean;
+  subject: string;
+  location?: string | null;
+  departmentId: string;
+  categoryId: string;
+  description: string;
+  // attachments: string[];
+};
+export type FeedbackHeaderType = Pick<
+  FeedbackDetail,
+  | "id"
+  | "subject"
+  | "description"
+  | "location"
+  | "currentStatus"
+  // | "isPrivate"
+  | "createdAt"
+  | "category"
+  | "department"
 >;

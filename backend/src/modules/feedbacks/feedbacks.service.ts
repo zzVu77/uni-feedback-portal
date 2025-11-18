@@ -103,8 +103,7 @@ export class FeedbacksService {
         total,
       };
     } catch (error) {
-      console.error('Error fetching feedbacks:', error);
-      throw new Error('Error fetching feedbacks:', error);
+      throw new Error('Error fetching feedbacks:', { cause: error });
       // return {
       //   results: [],
       //   total: 0,

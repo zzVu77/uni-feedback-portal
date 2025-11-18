@@ -35,6 +35,11 @@ async function bootstrap() {
       defaultModelsExpandDepth: -1,
     },
   });
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(process.env.PORT ?? 8080);
 }
 bootstrap();

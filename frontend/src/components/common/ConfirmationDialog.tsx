@@ -1,4 +1,5 @@
 // components/common/ConfirmationDialog.tsx
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,13 +11,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import React from "react";
+import React, { useState } from "react";
 
 interface ConfirmationDialogProps {
   children: React.ReactNode;
   title: string;
   description: string;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void> | void;
   confirmText?: string;
   cancelText?: string;
 }
@@ -29,8 +30,14 @@ const ConfirmationDialog = ({
   confirmText = "Xác nhận",
   cancelText = "Hủy",
 }: ConfirmationDialogProps) => {
+  const [open, setOpen] = useState(false);
+  const handleConfirm = async () => {
+    await onConfirm?.();
+    setOpen(false);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       {/* 'children' is the trigger element for the dialog */}
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
@@ -44,7 +51,7 @@ const ConfirmationDialog = ({
           </AlertDialogCancel>
           <AlertDialogAction
             className="bg-blue-600 hover:bg-blue-500"
-            onClick={onConfirm}
+            onClick={() => void handleConfirm()}
           >
             {confirmText}
           </AlertDialogAction>

@@ -11,10 +11,10 @@ const SearchBar = ({ placeholder }: { placeholder: string }) => {
   const handleSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
     if (query) {
-      params.set("title", query.toLowerCase());
+      params.set("q", query.toLowerCase());
       params.set("page", "1");
     } else {
-      params.delete("title");
+      params.delete("q");
       params.delete("page");
     }
     router.replace(`?${params.toString()}`);
