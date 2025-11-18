@@ -46,22 +46,27 @@ const StaffAction = () => {
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-md lg:w-auto">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
-      <Select>
-        <SelectTrigger className="md:mim-w-[150px] h-10 w-full min-w-[100px] cursor-pointer rounded-md border bg-white font-semibold shadow-sm focus-visible:border not-last:focus-visible:ring-0">
-          <SelectValue placeholder="Chọn trạng thái" />
-        </SelectTrigger>
-        <SelectContent>
-          {statusOptions.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              <item.icon
-                className={`ml-2 inline-block h-4 w-4 ${item.className}`}
-              />
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Textarea placeholder="Ghi chú (Không bắt buộc) " />
+      <div className="flex w-full flex-col gap-2 lg:max-w-[200px]">
+        <Select>
+          <SelectTrigger className="h-10 w-full cursor-pointer rounded-md border bg-white font-semibold shadow-sm focus-visible:border not-last:focus-visible:ring-0">
+            <SelectValue placeholder="Chọn trạng thái" />
+          </SelectTrigger>
+          <SelectContent>
+            {statusOptions.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                <item.icon
+                  className={`ml-2 inline-block h-4 w-4 ${item.className}`}
+                />
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Textarea
+          className="max-h-[200px] w-full"
+          placeholder="Ghi chú (Không bắt buộc) "
+        />
+      </div>
       <ConfirmationDialog
         title="Cập nhật trạng thái phản hồi"
         description="Bạn có chắc chắn muốn cập nhật trạng thái của phản hồi này không?"
