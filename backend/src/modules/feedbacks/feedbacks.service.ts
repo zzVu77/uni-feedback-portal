@@ -103,10 +103,11 @@ export class FeedbacksService {
       };
     } catch (error) {
       console.error('Error fetching feedbacks:', error);
-      return {
-        results: [],
-        total: 0,
-      };
+      throw new Error('Error fetching feedbacks:', error);
+      // return {
+      //   results: [],
+      //   total: 0,
+      // };
     }
   }
   async getFeedbackDetail(

@@ -69,7 +69,6 @@ export function MyFeedbacksHistoryTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   const {
     data: feedbacks,
     isLoading,
@@ -77,7 +76,10 @@ export function MyFeedbacksHistoryTable() {
     isError,
   } = useGetFeedbacks(filters);
 
-  const tableData = React.useMemo(() => feedbacks?.results ?? [], [feedbacks]);
+  const tableData = React.useMemo(
+    () => (isError ? [] : (feedbacks?.results ?? [])),
+    [feedbacks],
+  );
   const pageCount = React.useMemo(() => {
     return feedbacks?.total
       ? Math.ceil(feedbacks.total / filters?.pageSize)
@@ -121,21 +123,21 @@ export function MyFeedbacksHistoryTable() {
     return <TableSkeleton />;
   }
 
-  if (isError) {
-    return (
-      <div className="flex h-screen w-full flex-col items-center justify-center gap-4 rounded-md bg-white p-4 text-red-500">
-        Đã xảy ra lỗi khi tải dữ liệu
-        <Button
-          variant="destructive"
-          onClick={() => {
-            router.replace(pathname);
-          }}
-        >
-          Thử lại
-        </Button>
-      </div>
-    );
-  }
+  // if (isError) {
+  //   return (
+  //     <div className="flex h-screen w-full flex-col items-center justify-center gap-4 rounded-md bg-white p-4 text-red-500">
+  //       Đã xảy ra lỗi khi tải dữ liệu
+  //       <Button
+  //         variant="destructive"
+  //         onClick={() => {
+  //           router.replace(pathname);
+  //         }}
+  //       >
+  //         Thử lại
+  //       </Button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="relative flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
