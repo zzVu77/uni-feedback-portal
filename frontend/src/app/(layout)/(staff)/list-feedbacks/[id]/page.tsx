@@ -21,7 +21,7 @@ const Page = () => {
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
     <Wrapper classNames={{ container: "lg:px-4" }}>
-      <div className="grid w-full grid-cols-1 gap-x-5 gap-y-8 pb-3 lg:grid-cols-2">
+      <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2 pb-3 lg:grid-cols-2">
         <div className="col-span-1 flex w-full flex-col items-start justify-between gap-2 lg:col-span-2 lg:flex-row">
           <FeedbackDetailHeader type="staff" data={feedbackHeaderData} />
           {feedback.currentStatus !== "REJECTED" &&

@@ -25,9 +25,9 @@ const StatusTimeLine = ({
               <Hourglass className="h-6 w-6 text-gray-400" />
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-sm font-medium text-gray-900">
+              <span className="text-center text-[15px] font-medium text-neutral-400">
                 Chưa có cập nhật nào
-              </p>
+              </span>
               <p className="text-xs text-gray-500">
                 Hệ thống chưa ghi nhận thay đổi trạng thái cho phản hồi này.
               </p>
