@@ -1,23 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { OmitType } from '@nestjs/swagger';
+import { FileAttachmentDto } from './file-attachment.dto';
 
-export class CreateFileAttachmentDto {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  fileName: string;
-
-  @ApiProperty()
-  @IsUrl()
-  @IsNotEmpty()
-  fileUrl: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  fileType: string;
-
-  @ApiProperty()
-  @IsInt()
-  fileSize: number;
-}
+export class CreateFileAttachmentDto extends OmitType(FileAttachmentDto, [
+  'id',
+] as const) {}

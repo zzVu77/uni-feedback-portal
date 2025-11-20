@@ -64,12 +64,6 @@ export class CreateFeedbackDto {
   @ApiPropertyOptional({
     description: 'A list of attached files (if any).',
     type: [CreateFileAttachmentDto],
-    example: [
-      {
-        fileName: 'error_screenshot.png',
-        fileUrl: 'https://example.com/files/error_screenshot.png',
-      },
-    ],
   })
   @IsOptional()
   @IsArray()
