@@ -1,32 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { UploadsService } from './uploads.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Uploads')
 @Controller('uploads')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
-  // @Post()
-  // create(@Body() createUploadDto: CreateUploadDto) {
-  //   return this.uploadsService.create(createUploadDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.uploadsService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.uploadsService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUploadDto: UpdateUploadDto) {
-  //   return this.uploadsService.update(+id, updateUploadDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.uploadsService.remove(+id);
-  // }
+  // Các endpoints cho việc tạo presigned URL và xóa file sẽ được thêm ở đây sau
 }

@@ -7,8 +7,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AnnouncementFileDto } from './announcement-file.dto';
-
+import { CreateFileAttachmentDto } from '../../uploads/dto/';
 export class CreateAnnouncementDto {
   @ApiProperty({
     description: 'Title of the announcement (minimum 3 characters)',
@@ -30,7 +29,7 @@ export class CreateAnnouncementDto {
 
   @ApiPropertyOptional({
     description: 'List of files attached to the announcement (optional)',
-    type: [AnnouncementFileDto],
+    type: [CreateFileAttachmentDto],
     example: [
       {
         fileName: 'schedule.pdf',
@@ -41,6 +40,6 @@ export class CreateAnnouncementDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => AnnouncementFileDto)
-  files?: AnnouncementFileDto[];
+  @Type(() => CreateFileAttachmentDto)
+  files?: CreateFileAttachmentDto[];
 }

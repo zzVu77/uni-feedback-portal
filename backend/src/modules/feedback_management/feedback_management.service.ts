@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { FileTargetType, Prisma } from '@prisma/client';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
@@ -20,9 +20,13 @@ import {
   GenerateForwardingMessage,
   GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
+import { UploadsService } from '../uploads/uploads.service';
 @Injectable()
 export class FeedbackManagementService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
   async getAllStaffFeedbacks(
     query: QueryFeedbackByStaffDto,
@@ -147,15 +151,18 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
+        // Không include file ở đây
       },
     });
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      feedback.id,
+      FileTargetType.FEEDBACK,
+    );
 
     const result: FeedbackDetailDto = {
       id: feedback.id,
@@ -201,11 +208,7 @@ export class FeedbackManagementService {
         message: log.message,
         createdAt: log.createdAt.toISOString(),
       })),
-      fileAttachments: feedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      fileAttachments: fileAttachments,
     };
 
     return result;
@@ -444,15 +447,18 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
+        // Không include file ở đây
       },
     });
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      feedback.id,
+      FileTargetType.FEEDBACK,
+    );
 
     const result: FeedbackDetailDto = {
       id: feedback.id,
@@ -498,11 +504,7 @@ export class FeedbackManagementService {
         message: log.message,
         createdAt: log.createdAt.toISOString(),
       })),
-      fileAttachments: feedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      fileAttachments: fileAttachments,
     };
 
     return result;

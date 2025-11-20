@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import { Prisma } from '@prisma/client';
+import { FileTargetType, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   GetPostsResponseDto,
@@ -10,11 +10,13 @@ import {
   VoteResponseDto,
 } from './dto';
 import { CommentService } from '../comment/comment.service';
+import { UploadsService } from '../uploads/uploads.service';
 @Injectable()
 export class ForumService {
   constructor(
     private readonly prisma: PrismaService,
     private commentService: CommentService,
+    private readonly uploadsService: UploadsService,
   ) {}
   async getListPosts(
     query: QueryPostsDto,
@@ -161,13 +163,7 @@ export class ForumService {
             location: true,
             currentStatus: true,
             isPrivate: true,
-            fileAttachments: {
-              select: {
-                id: true,
-                fileName: true,
-                fileUrl: true,
-              },
-            },
+            // Không include fileAttachments ở đây
             user: {
               select: {
                 id: true,
@@ -199,6 +195,12 @@ export class ForumService {
       throw new NotFoundException(`Post not found`);
     }
 
+    // Lấy file đính kèm bằng UploadsService
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      post.feedback.id,
+      FileTargetType.FEEDBACK,
+    );
+
     return {
       id: post.id,
       createdAt: post.createdAt.toISOString(),
@@ -219,11 +221,7 @@ export class ForumService {
           name: post.feedback.department.name,
         },
         currentStatus: post.feedback.currentStatus,
-        fileAttachments: post.feedback.fileAttachments.map((f) => ({
-          id: f.id,
-          fileName: f.fileName,
-          fileUrl: f.fileUrl,
-        })),
+        fileAttachments: fileAttachments,
       },
       ...(post.feedback.isPrivate
         ? {}

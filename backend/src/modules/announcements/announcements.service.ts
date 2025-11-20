@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { FileTargetType, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   AnnouncementDetailDto,
@@ -8,10 +8,14 @@ import {
   QueryAnnouncementsDto,
   UpdateAnnouncementDto,
 } from './dto';
+import { UploadsService } from '../uploads/uploads.service';
 
 @Injectable()
 export class AnnouncementsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
   async getAnnouncements(
     query: QueryAnnouncementsDto,
   ): Promise<AnnouncementListResponseDto> {
@@ -102,6 +106,7 @@ export class AnnouncementsService {
       include: {
         user: {
           select: {
+            id: true, // Thêm id của user
             fullName: true,
             department: {
               select: {
@@ -111,12 +116,18 @@ export class AnnouncementsService {
             },
           },
         },
-        files: { select: { fileName: true, fileUrl: true } },
+        // Không include files ở đây nữa
       },
     });
     if (!announcement) {
       throw new NotFoundException(`Announcement with id ${id} not found`);
     }
+
+    // Lấy file đính kèm bằng UploadsService
+    const files = await this.uploadsService.getAttachmentsForTarget(
+      id,
+      FileTargetType.ANNOUNCEMENT,
+    );
 
     return {
       id: announcement.id,
@@ -131,10 +142,7 @@ export class AnnouncementsService {
         id: announcement.user.department.id,
         name: announcement.user.department.name,
       },
-      files: announcement.files.map((f) => ({
-        fileName: f.fileName,
-        fileUrl: f.fileUrl,
-      })),
+      files: files, // Trả về đúng cấu trúc DTO mới
     };
   }
   async createAnnouncement(
@@ -155,138 +163,49 @@ export class AnnouncementsService {
         title: dto.title,
         content: dto.content,
         userId: user.id,
-        files: dto.files
-          ? {
-              create: dto.files.map((file) => ({
-                fileName: file.fileName,
-                fileUrl: file.fileUrl,
-              })),
-            }
-          : undefined,
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            fullName: true,
-            department: {
-              select: { id: true, name: true },
-            },
-          },
-        },
-        files: { select: { fileName: true, fileUrl: true } },
       },
     });
 
-    return {
-      id: announcement.id,
-      title: announcement.title,
-      content: announcement.content,
-      createdAt: announcement.createdAt,
-      user: {
-        id: announcement.user.id,
-        userName: announcement.user.fullName,
-      },
-      department: {
-        id: announcement.user.department.id,
-        name: announcement.user.department.name,
-      },
-      files: announcement.files.map((f) => ({
-        fileName: f.fileName,
-        fileUrl: f.fileUrl,
-      })),
-    };
+    // Gọi service chuyên dụng để xử lý file
+    if (dto.files && dto.files.length > 0) {
+      await this.uploadsService.updateAttachmentsForTarget(
+        announcement.id,
+        FileTargetType.ANNOUNCEMENT,
+        dto.files,
+      );
+    }
+
+    // Lấy lại thông tin chi tiết để trả về
+    return this.getAnnouncementDetail(announcement.id);
   }
   async updateAnnouncement(
     id: string,
     dto: UpdateAnnouncementDto,
     userId: string,
   ): Promise<AnnouncementDetailDto> {
-    const existing = await this.prisma.announcements.findUnique({
+    const announcement = await this.prisma.announcements.findUnique({
       where: { id, userId },
     });
 
-    if (!existing) throw new NotFoundException('Announcement not found');
+    if (!announcement) throw new NotFoundException('Announcement not found');
 
-    const existingFiles =
-      await this.prisma.fileAttachmentForAnnouncement.findMany({
-        where: { announcementId: id },
-      });
-
-    // get list of new file URLs from dto
-    const newFileUrls = dto.files?.map((f) => f.fileUrl) ?? [];
-
-    // Identify files to delete
-    const filesToDelete = existingFiles.filter(
-      (f) => !newFileUrls.includes(f.fileUrl),
-    );
-
-    // Identify files to add
-    const filesToAdd =
-      dto.files?.filter(
-        (f) => !existingFiles.some((e) => e.fileUrl === f.fileUrl),
-      ) ?? [];
-
-    // Delete file if exist
-    if (filesToDelete.length > 0) {
-      await this.prisma.fileAttachmentForAnnouncement.deleteMany({
-        where: { id: { in: filesToDelete.map((f) => f.id) } },
-      });
-    }
-    // Add new file (if any)
-    if (filesToAdd.length > 0) {
-      await this.prisma.fileAttachmentForAnnouncement.createMany({
-        data: filesToAdd.map((f) => ({
-          announcementId: id,
-          fileName: f.fileName,
-          fileUrl: f.fileUrl,
-        })),
-      });
-    }
-    // console.log('Files to delete:', filesToDelete);
-    // console.log('Files to add:', filesToAdd);
-    // console.log('existingFiles:', existingFiles);
-    const updated = await this.prisma.announcements.update({
+    // 1. Cập nhật thông tin announcement
+    await this.prisma.announcements.update({
       where: { id },
       data: {
         title: dto.title,
         content: dto.content,
       },
-      include: {
-        files: { select: { fileName: true, fileUrl: true } },
-        user: {
-          select: {
-            id: true,
-            fullName: true,
-            department: { select: { id: true, name: true } },
-          },
-        },
-      },
     });
 
-    const mapped: AnnouncementDetailDto = {
-      id: updated.id,
-      title: updated.title,
-      content: updated.content,
-      createdAt: updated.createdAt,
+    // 2. Cập nhật file đính kèm bằng service chuyên dụng
+    await this.uploadsService.updateAttachmentsForTarget(
+      id,
+      FileTargetType.ANNOUNCEMENT,
+      dto.files ?? [],
+    );
 
-      user: {
-        id: updated.user.id,
-        userName: updated.user.fullName,
-      },
-
-      department: {
-        id: updated.user.department.id,
-        name: updated.user.department.name,
-      },
-
-      files: updated.files.map((f) => ({
-        fileUrl: f.fileUrl,
-        fileName: f.fileName,
-      })),
-    };
-
-    return mapped;
+    return this.getAnnouncementDetail(id);
   }
 
   async deleteAnnouncement(
@@ -299,6 +218,13 @@ export class AnnouncementsService {
 
     if (!existing) throw new NotFoundException('Announcement not found');
 
+    // Xóa file đính kèm trong DB (và trên S3 trong tương lai) bằng service
+    await this.uploadsService.deleteAttachmentsForTarget(
+      id,
+      FileTargetType.ANNOUNCEMENT,
+    );
+
+    // Xóa announcement
     await this.prisma.announcements.delete({
       where: { id },
     });
