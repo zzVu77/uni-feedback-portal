@@ -1,4 +1,3 @@
-import ConversationSection from "@/components/conversation/ConversationSection";
 import Wrapper from "@/components/shared/Wrapper";
 
 const Page = () => {
@@ -10,7 +9,7 @@ const Page = () => {
           {/* <StaffAction /> */}
         </div>
         {/* <StatusTimeLine /> */}
-        <ConversationSection />
+        {/* <ConversationSection /> */}
       </div>
     </Wrapper>
   );

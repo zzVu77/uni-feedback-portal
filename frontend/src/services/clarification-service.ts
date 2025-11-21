@@ -1,5 +1,6 @@
 import axiosInstance from "@/config/axiosConfig";
 import {
+  ConversationBodyParams,
   ConversationDetail,
   ConversationFilter,
   ConversationSummary,
@@ -25,17 +26,15 @@ export const getConversationDetailById = async (
   return response;
 };
 
-// export const getMyFeedbackById = async (
-//   id: string,
-// ): Promise<FeedbackDetail> => {
-//   const response = await axiosInstance.get<FeedbackDetail>(
-//     `${clarificationBaseUrl}/me/${id}`,
-//   );
-//   return response;
-// };
+export const createNewConversation = async (data: ConversationBodyParams) => {
+  await axiosInstance.post(clarificationBaseUrl, {
+    ...data,
+  });
+};
 
-// export const createNewFeedback = async (data: FeedbackBodyParams) => {
-//   await axiosInstance.post(clarificationBaseUrl, {
-//     ...data,
-//   });
-// };
+export const closeConversationById = async (id: string) => {
+  await axiosInstance.patch(`${clarificationBaseUrl}/${id}`, {
+    isClosed: true,
+    message: "Vấn đề đã được làm rõ. Đóng cuộc hội thoại này.",
+  });
+};

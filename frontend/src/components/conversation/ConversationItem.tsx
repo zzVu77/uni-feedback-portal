@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import {
   Accordion,
   AccordionContent,
@@ -8,20 +9,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetClarificationsDetailById } from "@/hooks/queries/useClarificationQueries";
 import { ConversationSummary } from "@/types";
-import { SendHorizontal } from "lucide-react"; // Icon gửi tin nhắn reply
+import { MessageCircleOff, SendHorizontal } from "lucide-react";
 import React, { useState } from "react";
-import StatusBadge from "../common/StatusBadge"; // Giả sử bạn đã có component này
-import MessageItem from "./MessageItem"; // Giả sử bạn đã có component này
-
+import ConfirmationDialog from "../common/ConfirmationDialog";
+import StatusBadge from "../common/StatusBadge";
+import MessageItem from "./MessageItem";
+// 1. Add role to Props type``
 type ConversationItemProps = {
   data: ConversationSummary[];
+  role: "student" | "staff";
+  onClose: (id: string) => void | Promise<void>;
 };
 
-const ConversationItem = ({ data }: ConversationItemProps) => {
+const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
   const [replyText, setReplyText] = useState("");
+  const [conversationId, setConversationId] = useState<string>("");
+  const { data: conversationDetail } =
+    useGetClarificationsDetailById(conversationId);
 
   const handleSendReply = () => {
     if (!replyText.trim()) return;
+    // Call API reply here...
     setReplyText("");
   };
 
@@ -30,11 +38,13 @@ const ConversationItem = ({ data }: ConversationItemProps) => {
       handleSendReply();
     }
   };
-  const [conversationId, setConversationId] = useState<string>("");
-  const { data: conversationDetail } =
-    useGetClarificationsDetailById(conversationId);
+
   const handleOnChangeConversation = (id: string) => {
     setConversationId(id);
+  };
+
+  const handleCloseConversation = async (id: string) => {
+    await onClose(id);
   };
 
   return (
@@ -58,13 +68,36 @@ const ConversationItem = ({ data }: ConversationItemProps) => {
                         {conversation.subject ||
                           "Request for additional information"}
                       </span>
-                      {conversation.isClosed ? (
-                        <StatusBadge type="CLOSED" />
-                      ) : (
-                        <StatusBadge type="OPENING" />
-                      )}
+
+                      {/* 2. Group Badge and Action Button */}
+                      <div className="flex items-center gap-2">
+                        {/* LOGIC: Staff & Not Closed -> Show Close Button */}
+                        {conversation.isClosed ? (
+                          <StatusBadge type="CLOSED" />
+                        ) : (
+                          <StatusBadge type="OPENING" />
+                        )}
+                        {role === "staff" && !conversation.isClosed && (
+                          <ConfirmationDialog
+                            title="Bạn có muốn kết thúc cuộc hội thoại này?"
+                            description="Hành động này sẽ đánh dấu cuộc hội thoại là đã đóng và không thể tiếp tục trao đổi."
+                            onConfirm={() => {
+                              void handleCloseConversation(conversation.id);
+                            }}
+                            confirmText="Đồng ý"
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-7 rounded-3xl border-red-200 px-2 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                            >
+                              <MessageCircleOff className="mr-1 h-3 w-3" />
+                              Kết thúc hội thoại
+                            </Button>
+                          </ConfirmationDialog>
+                        )}
+                      </div>
                     </div>
-                    {/* //Todo: Add timestamp or last message preview */}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full flex-col border-t border-neutral-100 bg-white p-0">

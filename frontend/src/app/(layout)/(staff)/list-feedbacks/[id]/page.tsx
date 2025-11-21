@@ -33,7 +33,7 @@ const Page = () => {
             )}
         </div>
         <StatusTimeLine statusHistory={feedback.statusHistory} />
-        <ConversationSection />
+        <ConversationSection role="staff" />
       </div>
     </Wrapper>
   );

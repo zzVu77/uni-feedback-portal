@@ -28,3 +28,8 @@ export type ConversationFilter = Omit<BaseFilter, "limit" | "q"> & {
   feedbackId?: string;
   isClosed?: boolean;
 };
+export type ConversationBodyParams = {
+  feedbackId: string;
+  subject: string;
+  initialMessage: string;
+};

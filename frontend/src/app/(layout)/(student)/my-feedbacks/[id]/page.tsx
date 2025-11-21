@@ -25,7 +25,7 @@ const Page = () => {
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
         </div>
         {/* <StatusTimeLine /> */}
-        <ConversationSection />
+        <ConversationSection role="student" />
       </div>
     </Wrapper>
   );
