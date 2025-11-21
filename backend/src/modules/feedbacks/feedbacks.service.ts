@@ -250,22 +250,91 @@ export class FeedbacksService {
     }
 
     // Handle file attachments update using UploadsService
-    await this.uploadsService.updateAttachmentsForTarget(
-      feedbackId,
-      FileTargetType.FEEDBACK,
-      dto.fileAttachments ?? [],
-    );
+    const updateFileAttachments =
+      await this.uploadsService.updateAttachmentsForTarget(
+        feedbackId,
+        FileTargetType.FEEDBACK,
+        dto.fileAttachments ?? [],
+      );
 
     // Update feedback scalar fields
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fileAttachments, ...updateData } = dto;
-    await this.prisma.feedbacks.update({
+    const updateFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
+      include: {
+        department: {
+          select: { id: true, name: true },
+        },
+        category: {
+          select: { id: true, name: true },
+        },
+        statusHistory: {
+          select: {
+            status: true,
+            message: true,
+            note: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        forwardingLogs: {
+          select: {
+            id: true,
+            message: true,
+            createdAt: true,
+            fromDepartment: {
+              select: { id: true, name: true },
+            },
+            toDepartment: {
+              select: { id: true, name: true },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
     });
-
+    const result: FeedbackDetail = {
+      id: updateFeedback.id,
+      subject: updateFeedback.subject,
+      description: updateFeedback.description,
+      location: updateFeedback.location ? updateFeedback.location : null,
+      currentStatus: updateFeedback.currentStatus,
+      isPrivate: updateFeedback.isPrivate,
+      createdAt: updateFeedback.createdAt.toISOString(),
+      department: {
+        id: updateFeedback.department.id,
+        name: updateFeedback.department.name,
+      },
+      category: {
+        id: updateFeedback.category.id,
+        name: updateFeedback.category.name,
+      },
+      statusHistory: updateFeedback.statusHistory.map((h) => ({
+        status: h.status,
+        message: h.message,
+        note: h.note,
+        createdAt: h.createdAt.toISOString(),
+      })),
+      forwardingLogs: updateFeedback.forwardingLogs.map((log) => ({
+        id: log.id,
+        fromDepartment: {
+          id: log.fromDepartment.id,
+          name: log.fromDepartment.name,
+        },
+        toDepartment: {
+          id: log.toDepartment.id,
+          name: log.toDepartment.name,
+        },
+        message: log.message,
+        createdAt: log.createdAt.toISOString(),
+      })),
+      fileAttachments: updateFileAttachments,
+    };
+    return result;
     // Return detail
-    return this.getFeedbackDetail(params, userId);
+    // return this.getFeedbackDetail(params, userId);
   }
 
   async deleteFeedback(

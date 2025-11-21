@@ -46,6 +46,12 @@ export class UploadsService {
    */
   private async deleteFileFromS3(fileUrl: string): Promise<void> {
     try {
+      const supabaseStorageUrlPrefix = `https://${config.SUPABASE_PROJECT_REF}.supabase.co/storage/v1/object/public/${config.SUPABASE_BUCKET_NAME}/`;
+      if (!fileUrl.startsWith(supabaseStorageUrlPrefix)) {
+        console.warn(`Skipping deletion of non-Supabase file: ${fileUrl}`);
+        return;
+      }
+
       // Extract the file path from the public URL
       const urlObject = new URL(fileUrl);
       const bucketName = config.SUPABASE_BUCKET_NAME;
@@ -147,7 +153,7 @@ export class UploadsService {
     targetId: string,
     targetType: FileTargetType,
     newFiles: CreateFileAttachmentDto[],
-  ) {
+  ): Promise<FileAttachmentDto[]> {
     const existingFiles = await this.getAttachmentsForTarget(
       targetId,
       targetType,
@@ -189,6 +195,24 @@ export class UploadsService {
         })),
       });
     }
+
+    // Trả về danh sách file cuối cùng
+    const finalFileUrls = newFileUrls ?? [];
+    const finalFiles = await this.prisma.fileAttachments.findMany({
+      where: {
+        targetId,
+        targetType,
+        fileUrl: { in: finalFileUrls },
+      },
+    });
+
+    return finalFiles.map((a) => ({
+      id: a.id,
+      fileName: a.fileName,
+      fileUrl: a.fileUrl,
+      fileType: a.fileType,
+      fileSize: a.fileSize,
+    }));
   }
 
   /**

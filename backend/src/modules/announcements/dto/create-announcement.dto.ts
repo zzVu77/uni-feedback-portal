@@ -30,12 +30,6 @@ export class CreateAnnouncementDto {
   @ApiPropertyOptional({
     description: 'List of files attached to the announcement (optional)',
     type: [CreateFileAttachmentDto],
-    example: [
-      {
-        fileName: 'schedule.pdf',
-        fileUrl: 'https://example.com/files/schedule.pdf',
-      },
-    ],
   })
   @IsOptional()
   @IsArray()

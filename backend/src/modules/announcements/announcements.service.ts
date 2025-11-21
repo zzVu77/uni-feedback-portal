@@ -9,6 +9,7 @@ import {
   UpdateAnnouncementDto,
 } from './dto';
 import { UploadsService } from '../uploads/uploads.service';
+import { FileAttachmentDto } from '../uploads/dto/file-attachment.dto';
 
 @Injectable()
 export class AnnouncementsService {
@@ -166,31 +167,54 @@ export class AnnouncementsService {
       },
     });
 
+    let files: FileAttachmentDto[] = [];
     // Gọi service chuyên dụng để xử lý file
     if (dto.files && dto.files.length > 0) {
-      await this.uploadsService.updateAttachmentsForTarget(
+      files = await this.uploadsService.updateAttachmentsForTarget(
         announcement.id,
         FileTargetType.ANNOUNCEMENT,
         dto.files,
       );
     }
 
-    // Lấy lại thông tin chi tiết để trả về
-    return this.getAnnouncementDetail(announcement.id);
+    // Trả về DTO được xây dựng thủ công
+    return {
+      id: announcement.id,
+      title: announcement.title,
+      content: announcement.content,
+      createdAt: announcement.createdAt,
+      user: {
+        id: user.id,
+        userName: user.fullName,
+      },
+      department: {
+        id: user.department.id,
+        name: user.department.name,
+      },
+      files: files,
+    };
   }
   async updateAnnouncement(
     id: string,
     dto: UpdateAnnouncementDto,
     userId: string,
   ): Promise<AnnouncementDetailDto> {
-    const announcement = await this.prisma.announcements.findUnique({
+    const existingAnnouncement = await this.prisma.announcements.findUnique({
       where: { id, userId },
+      include: {
+        user: {
+          include: {
+            department: true,
+          },
+        },
+      },
     });
 
-    if (!announcement) throw new NotFoundException('Announcement not found');
+    if (!existingAnnouncement)
+      throw new NotFoundException('Announcement not found');
 
     // 1. Cập nhật thông tin announcement
-    await this.prisma.announcements.update({
+    const updatedAnnouncement = await this.prisma.announcements.update({
       where: { id },
       data: {
         title: dto.title,
@@ -199,13 +223,28 @@ export class AnnouncementsService {
     });
 
     // 2. Cập nhật file đính kèm bằng service chuyên dụng
-    await this.uploadsService.updateAttachmentsForTarget(
+    const files = await this.uploadsService.updateAttachmentsForTarget(
       id,
       FileTargetType.ANNOUNCEMENT,
       dto.files ?? [],
     );
 
-    return this.getAnnouncementDetail(id);
+    // 3. Trả về DTO được xây dựng thủ công
+    return {
+      id: updatedAnnouncement.id,
+      title: updatedAnnouncement.title,
+      content: updatedAnnouncement.content,
+      createdAt: updatedAnnouncement.createdAt,
+      user: {
+        id: existingAnnouncement.user.id,
+        userName: existingAnnouncement.user.fullName,
+      },
+      department: {
+        id: existingAnnouncement.user.department.id,
+        name: existingAnnouncement.user.department.name,
+      },
+      files: files,
+    };
   }
 
   async deleteAnnouncement(
