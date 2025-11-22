@@ -10,13 +10,13 @@ export type AnnouncementDetail = {
   createdAt: string;
   content: string;
   // Optional file attachments
-  fileAttachments?: Array<{
+  files?: {
     id: string;
     fileName: string;
     fileUrl: string;
-  }>;
+  }[];
 };
-export type AnnouncementListItem = Omit<AnnouncementDetail, "fileAttachments">;
+export type AnnouncementListItem = Omit<AnnouncementDetail, "files">;
 export type AnnouncementManagementItem = Pick<
   AnnouncementDetail,
   "id" | "title" | "createdAt"
