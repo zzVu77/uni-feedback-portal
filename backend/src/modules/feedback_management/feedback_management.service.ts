@@ -38,10 +38,11 @@ export class FeedbackManagementService {
     // optional filters
     where.departmentId = actor.departmentId;
     if (status) {
-      where.currentStatus =
-        status.toUpperCase() in FeedbackStatus
-          ? (status.toUpperCase() as FeedbackStatus)
-          : undefined;
+      where.currentStatus = Object.values(FeedbackStatus).includes(
+        status.toUpperCase() as FeedbackStatus,
+      )
+        ? (status.toUpperCase() as FeedbackStatus)
+        : undefined;
     }
     if (categoryId) where.categoryId = categoryId;
     if (from || to) {
