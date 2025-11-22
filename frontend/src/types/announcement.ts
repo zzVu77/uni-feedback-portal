@@ -1,6 +1,6 @@
 import { BaseFilter } from "./common-type";
 
-export type AnnouncementDetail = {
+export type AnnouncementDetailType = {
   id: string;
   title: string;
   department: {
@@ -16,9 +16,9 @@ export type AnnouncementDetail = {
     fileUrl: string;
   }[];
 };
-export type AnnouncementListItem = Omit<AnnouncementDetail, "files">;
+export type AnnouncementListItem = Omit<AnnouncementDetailType, "files">;
 export type AnnouncementManagementItem = Pick<
-  AnnouncementDetail,
+  AnnouncementDetailType,
   "id" | "title" | "createdAt"
 >;
 export interface AnnouncementFilter extends BaseFilter {

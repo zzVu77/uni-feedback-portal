@@ -1,5 +1,6 @@
 import axiosInstance from "@/config/axiosConfig";
 import {
+  AnnouncementDetailType,
   AnnouncementFilter,
   AnnouncementListItem,
   PaginatedResponse,
@@ -14,5 +15,13 @@ export const getAllAnnouncements = async (
   >(announcementBaseUrl, {
     params: filter,
   });
+  return response;
+};
+export const getAnnouncementById = async (
+  id: string,
+): Promise<AnnouncementDetailType> => {
+  const response = await axiosInstance.get<AnnouncementDetailType>(
+    `${announcementBaseUrl}/${id}`,
+  );
   return response;
 };
