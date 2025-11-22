@@ -1,3 +1,5 @@
+import { BaseFilter } from "./common-type";
+
 export type AnnouncementDetail = {
   id: string;
   title: string;
@@ -5,10 +7,8 @@ export type AnnouncementDetail = {
     id: string;
     name: string;
   };
-
   createdAt: string;
   content: string;
-
   // Optional file attachments
   fileAttachments?: Array<{
     id: string;
@@ -16,7 +16,11 @@ export type AnnouncementDetail = {
     fileUrl: string;
   }>;
 };
+export type AnnouncementListItem = Omit<AnnouncementDetail, "fileAttachments">;
 export type AnnouncementManagementItem = Pick<
   AnnouncementDetail,
   "id" | "title" | "createdAt"
 >;
+export interface AnnouncementFilter extends BaseFilter {
+  departmentId?: string;
+}

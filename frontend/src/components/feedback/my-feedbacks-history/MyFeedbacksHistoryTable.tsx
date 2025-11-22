@@ -13,6 +13,7 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react"; // <-- 2. Import React đầy đủ
 
+import CommonFilter from "@/components/common/CommonFilter";
 import Filter from "@/components/common/filter/Filter";
 import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
@@ -26,13 +27,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FeedbackStatus } from "@/constants/data";
-import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useGetFeedbacks } from "@/hooks/queries/useFeedbackQueries";
+import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { myFeedbacksHistoryColumns } from "./columns";
-import { cn } from "@/lib/utils";
 
 export function MyFeedbacksHistoryTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -42,11 +42,6 @@ export function MyFeedbacksHistoryTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
 
-  const { data } = useGetDepartmentOptions();
-  const departmentOptions = [
-    { label: "Tất cả", value: "all" },
-    ...(data || []),
-  ];
   const filters = useFeedbackFilters();
 
   const router = useRouter();
@@ -123,9 +118,7 @@ export function MyFeedbacksHistoryTable() {
           <Suspense fallback={null}>
             <Filter type="status" items={FeedbackStatus} />
           </Suspense>
-          <Suspense fallback={null}>
-            <Filter type="department" items={departmentOptions || []} />
-          </Suspense>
+          <CommonFilter.DepartmentSelection />
         </div>
       </div>
       <div className="overflow-hidden rounded-md border">

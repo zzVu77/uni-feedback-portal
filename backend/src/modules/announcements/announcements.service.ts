@@ -31,7 +31,9 @@ export class AnnouncementsService {
     // Build dynamic WHERE condition
     const where: Prisma.AnnouncementsWhereInput = {};
 
-    if (departmentId) {
+    if (departmentId === 'all') {
+      where.user = { departmentId: undefined };
+    } else {
       where.user = { departmentId: departmentId };
     }
 
