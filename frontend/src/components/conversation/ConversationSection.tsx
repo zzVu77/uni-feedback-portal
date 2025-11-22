@@ -141,8 +141,12 @@ const NewConversationForm = ({
 // --- Component: ConversationSection ---
 interface ConversationSectionProps {
   role: "student" | "staff";
+  currentFeedbackStatus: string;
 }
-const ConversationSection = ({ role }: ConversationSectionProps) => {
+const ConversationSection = ({
+  role,
+  currentFeedbackStatus,
+}: ConversationSectionProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const params = useParams();
   const feedbackId = params.id as string;
@@ -155,26 +159,30 @@ const ConversationSection = ({ role }: ConversationSectionProps) => {
   const { mutateAsync: createConversation, isPending } =
     useCreateNewConversation();
 
-  // Derived State (Tính toán trạng thái hiển thị)
+  // Derived State
   const conversations = listConversation?.results || [];
   const hasConversations = conversations.length > 0;
   const allConversationsClosed = conversations.every(
     (c) => c.isClosed === true,
   );
 
-  // Logic điều kiện hiển thị nút tạo
-  const canCreateNew = !hasConversations || allConversationsClosed;
-  const { mutateAsync: closeConversation } = useCloseConversationById();
+  // Logic to determine if "Create New Conversation" button should be shown
+  const canCreateNew =
+    (!hasConversations || allConversationsClosed) &&
+    role === "staff" &&
+    currentFeedbackStatus !== "RESOLVED" &&
+    currentFeedbackStatus !== "REJECTED";
   // Handler
+  const { mutateAsync: closeConversation } = useCloseConversationById();
+
   const handleCreateSubmit = async (values: NewConversationFormValues) => {
     const payload: ConversationBodyParams = {
       feedbackId,
       subject: values.subject,
-      initialMessage: values.initialMessage, // Đảm bảo API map đúng field này (ví dụ: content)
+      initialMessage: values.initialMessage,
     };
     try {
       await createConversation(payload);
-      // CLEAN CODE: Reset form state immediately after success
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: [CLARIFICATION_QUERY_KEYS, defaultFilters],
@@ -237,10 +245,10 @@ const ConversationSection = ({ role }: ConversationSectionProps) => {
               )}
 
               {/* CREATE BUTTON */}
-              {/* Chỉ hiển thị khi không ở chế độ tạo VÀ (chưa có tin nhắn nào HOẶC tất cả đã đóng) */}
+              {/* Only show when not in create mode AND (no conversations OR all are closed) */}
               {canCreateNew && (
                 <Button
-                  variant="primary" // Lưu ý: Shadcn mặc định thường là "default", check lại theme của bạn
+                  variant="primary"
                   className="mx-auto w-fit bg-blue-600 text-white hover:bg-blue-700"
                   onClick={() => setIsCreating(true)}
                 >

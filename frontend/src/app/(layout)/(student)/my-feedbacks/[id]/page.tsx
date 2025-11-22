@@ -25,7 +25,10 @@ const Page = () => {
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
         </div>
         {/* <StatusTimeLine /> */}
-        <ConversationSection role="student" />
+        <ConversationSection
+          currentFeedbackStatus={feedback.currentStatus}
+          role="student"
+        />
       </div>
     </Wrapper>
   );
