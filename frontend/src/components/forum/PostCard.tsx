@@ -6,7 +6,7 @@ import { Separator } from "../ui/separator";
 
 const PostCard = () => {
   return (
-    <div className="flex w-full flex-col gap-3 rounded-[8px] bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
+    <div className="flex w-full flex-col gap-3 rounded-xl bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
       <div className="flex flex-row items-center justify-between">
         {/* Post Title */}
         <Link href={"/forum/posts/1"}>

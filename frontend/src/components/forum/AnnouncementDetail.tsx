@@ -7,7 +7,7 @@ type Props = {
 };
 const AnnouncementDetail = ({ data }: Props) => {
   return (
-    <div className="flex w-full flex-col gap-3 rounded-[8px] bg-white px-3 py-4 shadow-sm md:px-4">
+    <div className="flex w-full flex-col gap-3 rounded-xl bg-white px-3 py-4 shadow-sm md:px-4">
       {/* Post Title */}
       <h2 className="text-md font-semibold md:text-[16px] lg:text-2xl">
         {data.title || "Extended Library Hours During Finals Week"}

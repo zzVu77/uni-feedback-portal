@@ -226,7 +226,7 @@ const AnnouncementForm = ({
           </ScrollArea>
 
           {type == "create" ? (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <ConfirmationDialog
                 title="Xác nhận làm mới biểu mẫu?"
                 description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
@@ -256,7 +256,7 @@ const AnnouncementForm = ({
               </Button>
             </div>
           ) : (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <Button
                 type="button"
                 variant={"cancel"}
