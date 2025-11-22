@@ -2,12 +2,17 @@ import { AnnouncementListItem } from "@/types";
 import { Building2 } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
+import { useMemo } from "react";
+import { stripHtml } from "@/utils/stripHtml";
 
 const AnnouncementCard = ({
   announcement,
 }: {
   announcement: AnnouncementListItem;
 }) => {
+  const previewContent = useMemo(() => {
+    return stripHtml(announcement.content);
+  }, [announcement.content]);
   return (
     <div className="flex w-full flex-col gap-4 rounded-xl bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
       <div className="flex flex-row items-center justify-between">
@@ -20,7 +25,7 @@ const AnnouncementCard = ({
       </div>
       {/* Post Short Content */}
       <h3 className="lg:text-md text-neutral-dark-primary-600 line-clamp-2 text-sm font-normal">
-        {announcement.content}
+        {previewContent}
       </h3>
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex h-5 items-center space-x-1 text-sm">
