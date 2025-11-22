@@ -64,7 +64,7 @@ export interface FeedbackFilter extends BaseFilter {
   from?: string;
   to?: string;
 }
-export type FeedbackBodyParams = {
+export type CreateFeedbackPayload = {
   isPrivate: boolean;
   subject: string;
   location?: string | null;

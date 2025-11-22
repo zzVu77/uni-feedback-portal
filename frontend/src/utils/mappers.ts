@@ -1,5 +1,5 @@
 import {
-  FeedbackBodyParams,
+  CreateFeedbackPayload,
   FeedbackDetail,
   FeedbackHeaderType,
 } from "@/types/feedback";
@@ -23,7 +23,7 @@ export const mapFeedbackDetailToHeader = (
 
 export const mapFeedbackDetailToBodyParams = (
   feedbackDetail: FeedbackDetail,
-): FeedbackBodyParams => {
+): CreateFeedbackPayload => {
   return {
     isPrivate: feedbackDetail.isPrivate,
     subject: feedbackDetail.subject,

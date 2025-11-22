@@ -13,7 +13,7 @@ import {
 } from "@/services/feedback-service";
 import {
   FeedbackFilter,
-  FeedbackBodyParams,
+  CreateFeedbackPayload,
   UpdateFeedbackStatusParams,
   ForwardFeedbackParams,
 } from "@/types";
@@ -32,7 +32,7 @@ export const FEEDBACK_QUERY_KEYS = {
 };
 type FeedbackUpdateParams = {
   id: string;
-  data: FeedbackBodyParams;
+  data: CreateFeedbackPayload;
 };
 // Hooks for student feedback queries
 export const useGetFeedbacks = (filters: FeedbackFilter) => {
@@ -57,7 +57,7 @@ export const useGetMyFeedbackById = (
 };
 export const useCreateFeedback = () => {
   return useMutation({
-    mutationFn: (data: FeedbackBodyParams) => createNewFeedback(data),
+    mutationFn: (data: CreateFeedbackPayload) => createNewFeedback(data),
     retry: false,
     onSuccess: () => {
       toast.success("Gửi góp ý thành công!");

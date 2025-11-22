@@ -2,7 +2,7 @@
 "use client";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
-import { FeedbackBodyParams } from "@/types";
+import { CreateFeedbackPayload } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RotateCcw, Save, Send, X } from "lucide-react";
 import { useState } from "react";
@@ -96,8 +96,8 @@ const formSchema = z.object({
 
 type FeedbackFormProps = {
   type?: "create" | "edit";
-  initialData?: FeedbackBodyParams;
-  onSubmit: (values: FeedbackBodyParams) => Promise<void>;
+  initialData?: CreateFeedbackPayload;
+  onSubmit: (values: CreateFeedbackPayload) => Promise<void>;
   isPending?: boolean;
 };
 
@@ -128,7 +128,7 @@ const FeedbackForm = ({
   });
   const mapFormValuesToFeedbackParams = (
     values: z.infer<typeof formSchema>,
-  ): FeedbackBodyParams => {
+  ): CreateFeedbackPayload => {
     return {
       subject: values.subject,
       categoryId: values.categoryId,

@@ -2,7 +2,7 @@ import axiosInstance from "@/config/axiosConfig";
 import {
   FeedbackDetail,
   FeedbackFilter,
-  FeedbackBodyParams,
+  CreateFeedbackPayload,
   MyFeedbackHistoryItem,
   PaginatedResponse,
 } from "@/types";
@@ -29,13 +29,13 @@ export const getMyFeedbackById = async (
 };
 export const updateFeedbackById = async (
   id: string,
-  data: FeedbackBodyParams,
+  data: CreateFeedbackPayload,
 ) => {
   await axiosInstance.patch(`${studentFeedbackBaseUrl}/me/${id}`, {
     ...data,
   });
 };
-export const createNewFeedback = async (data: FeedbackBodyParams) => {
+export const createNewFeedback = async (data: CreateFeedbackPayload) => {
   await axiosInstance.post(studentFeedbackBaseUrl, {
     ...data,
   });
