@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createAnnouncement,
+  deleteAnnouncementById,
   getAllAnnouncements,
   getAnnouncementById,
+  updateAnnouncementById,
 } from "@/services/announcement-service";
 import {
   AnnouncementFilter,
@@ -49,6 +51,29 @@ export const useCreateAnnouncement = () => {
     mutationFn: (data: CreateAnnouncementPayload) => createAnnouncement(data),
     onSuccess: () => {
       toast.success("Tạo thông báo thành công!");
+    },
+    onError: () => {
+      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại!");
+    },
+  });
+};
+export const useUpdateAnnouncementById = (id: string) => {
+  return useMutation({
+    mutationFn: (data: CreateAnnouncementPayload) =>
+      updateAnnouncementById(id, data),
+    onSuccess: () => {
+      toast.success("Cập nhật thông báo thành công!");
+    },
+    onError: () => {
+      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại!");
+    },
+  });
+};
+export const useDeleteAnnouncementById = () => {
+  return useMutation({
+    mutationFn: (id: string) => deleteAnnouncementById(id),
+    onSuccess: () => {
+      toast.success("Xoá thông báo thành công!");
     },
     onError: () => {
       toast.error("Đã có lỗi xảy ra. Vui lòng thử lại!");

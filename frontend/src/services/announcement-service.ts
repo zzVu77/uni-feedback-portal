@@ -34,3 +34,15 @@ export const createAnnouncement = async (
     ...payload,
   });
 };
+
+export const updateAnnouncementById = async (
+  id: string,
+  payload: CreateAnnouncementPayload,
+) => {
+  await axiosInstance.patch(`${announcementBaseUrl}/${id}`, {
+    ...payload,
+  });
+};
+export const deleteAnnouncementById = async (id: string) => {
+  await axiosInstance.delete(`${announcementBaseUrl}/${id}`);
+};
