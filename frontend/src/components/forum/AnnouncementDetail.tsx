@@ -2,10 +2,12 @@ import type { AnnouncementDetailType } from "@/types";
 import { Building2, CalendarFold } from "lucide-react";
 import Attachment from "../feedback/Attachment";
 import { Separator } from "../ui/separator";
+import DOMPurify from "dompurify";
 type Props = {
   data: AnnouncementDetailType;
 };
 const AnnouncementDetail = ({ data }: Props) => {
+  const safeContent = DOMPurify.sanitize(data.content || "");
   return (
     <div className="flex w-full flex-col gap-3 rounded-xl bg-white px-3 py-4 shadow-sm md:px-4">
       {/* Post Title */}
@@ -31,10 +33,14 @@ const AnnouncementDetail = ({ data }: Props) => {
           }) || "2023-11-01"}
         </span>
       </div>
-      {/* Post Short Content */}
-      <span className="text-md font-normal text-black/80">
+      {/* Post Content */}
+      <div
+        className="prose prose-neutral prose-headings:font-semibold prose-a:text-blue-600 prose-img:rounded-lg max-w-none"
+        dangerouslySetInnerHTML={{ __html: safeContent }}
+      />
+      {/* <span className="text-md font-normal text-black/80">
         {data.content || "No content available"}
-      </span>
+      </span> */}
       {/* Attachments */}
       {/* //TODO: Integrate loading files */}
       <div className="flex flex-col gap-2">

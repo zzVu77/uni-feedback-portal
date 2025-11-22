@@ -186,8 +186,9 @@ const AnnouncementForm = ({
                               field.onChange(content);
                             }
                           }}
-                          height="150px"
+                          height="auto"
                           setOptions={{
+                            minHeight: "200px",
                             buttonList: [
                               ["undo", "redo"],
                               ["font", "fontSize", "formatBlock"],
