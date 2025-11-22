@@ -254,8 +254,21 @@ export class ClarificationsService {
       );
     }
 
-    const updatedConversation =
-      await this.prisma.clarificationConversations.update({
+    // use transaction to ensure atomicity
+    const updatedConversation = await this.prisma.$transaction(async (tx) => {
+      // 1. if there's a message, create it first
+      if (dto.message) {
+        await tx.messages.create({
+          data: {
+            conversationId: conversationId,
+            userId: userId,
+            content: dto.message,
+          },
+        });
+      }
+
+      // 2.then update the conversation to closed
+      return await tx.clarificationConversations.update({
         where: { id: conversationId },
         data: {
           isClosed: dto.isClosed,
@@ -270,6 +283,7 @@ export class ClarificationsService {
           },
         },
       });
+    });
 
     return {
       id: updatedConversation.id,

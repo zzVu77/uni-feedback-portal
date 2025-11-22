@@ -3,11 +3,20 @@
 import {
   createNewFeedback,
   deleteFeedbackById,
+  forwardStaffFeedbackById,
   getAllFeedbacks,
+  getAllStaffFeedbacks,
   getMyFeedbackById,
+  getStaffFeedbackById,
   updateFeedbackById,
+  updateStaffFeedbackStatusById,
 } from "@/services/feedback-service";
-import { FeedbackFilter, FeedbackBodyParams } from "@/types";
+import {
+  FeedbackFilter,
+  CreateFeedbackPayload,
+  UpdateFeedbackStatusParams,
+  ForwardFeedbackParams,
+} from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -16,10 +25,14 @@ export const FEEDBACK_QUERY_KEYS = {
     MY_FEEDBACKS: "my-feedbacks",
     MY_FEEDBACK_DETAIL: "my-feedback-detail",
   },
+  staff: {
+    STAFF_FEEDBACKS: "staff-feedbacks",
+    STAFF_FEEDBACK_DETAIL: "staff-feedback-detail",
+  },
 };
 type FeedbackUpdateParams = {
   id: string;
-  data: FeedbackBodyParams;
+  data: CreateFeedbackPayload;
 };
 // Hooks for student feedback queries
 export const useGetFeedbacks = (filters: FeedbackFilter) => {
@@ -44,7 +57,7 @@ export const useGetMyFeedbackById = (
 };
 export const useCreateFeedback = () => {
   return useMutation({
-    mutationFn: (data: FeedbackBodyParams) => createNewFeedback(data),
+    mutationFn: (data: CreateFeedbackPayload) => createNewFeedback(data),
     retry: false,
     onSuccess: () => {
       toast.success("Gửi góp ý thành công!");
@@ -73,6 +86,54 @@ export const useDeleteFeedbackById = () => {
     retry: false,
     onSuccess: () => {
       toast.success("Xoá góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+// Hooks for staff feedback queries
+export const useGetStaffFeedbacks = (filters: FeedbackFilter) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS, filters],
+    queryFn: () => getAllStaffFeedbacks(filters),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+  });
+};
+export const useGetStaffFeedbackById = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL, id],
+    queryFn: () => getStaffFeedbackById(id),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+    ...options,
+  });
+};
+export const useUpdateStaffFeedbackStatusById = () => {
+  return useMutation({
+    mutationFn: (params: UpdateFeedbackStatusParams) =>
+      updateStaffFeedbackStatusById(params.id, params.status, params.note),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Cập nhật trạng thái góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+
+export const useForwardStaffFeedbackById = () => {
+  return useMutation({
+    mutationFn: (params: ForwardFeedbackParams) =>
+      forwardStaffFeedbackById(params.id, params.toDepartmentId, params.note),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Chuyển tiếp góp ý thành công!");
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");

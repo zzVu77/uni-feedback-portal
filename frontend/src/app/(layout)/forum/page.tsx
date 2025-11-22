@@ -5,9 +5,11 @@ import { Suspense } from "react";
 const Page = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<div>Loading forum...</div>}>
-        <ForumSection />
-      </Suspense>
+      <div className="w-full">
+        <Suspense fallback={<div>Loading forum...</div>}>
+          <ForumSection />
+        </Suspense>
+      </div>
     </Wrapper>
   );
 };

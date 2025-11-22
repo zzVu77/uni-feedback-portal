@@ -25,8 +25,8 @@ export class ClarificationsController {
   constructor(private readonly clarificationsService: ClarificationsService) {}
   // Dummy user ID for demonstration purposes
   // private readonly userId = '550e8400-e29b-41d4-a716-446655440009';
-  private readonly userId = '550e8400-e29b-41d4-a716-44665544000b';
-
+  private readonly userId = '550e8400-e29b-41d4-a716-446655440009';
+  private readonly staffId = '550e8400-e29b-41d4-a716-44665544000f';
   @Post()
   @ApiOperation({
     summary: 'Create a new clarification conversation',
@@ -47,7 +47,7 @@ export class ClarificationsController {
     // Assuming the service method needs the user ID of the creator
     return this.clarificationsService.CreateClarificationConversation(
       createClarificationDto,
-      this.userId,
+      this.staffId,
     );
   }
 
@@ -65,7 +65,7 @@ export class ClarificationsController {
   GetAllClarificationsConversations(@Query() query: QueryClarificationsDto) {
     return this.clarificationsService.GetAllClarificationsConversations(
       query,
-      this.userId,
+      this.staffId,
     );
   }
 
@@ -84,7 +84,7 @@ export class ClarificationsController {
   GetClarificationConversationDetail(@Param() params: ClarificationParamDto) {
     return this.clarificationsService.GetClarificationConversationDetail(
       params.conversationId,
-      this.userId,
+      this.staffId,
     );
   }
 
@@ -137,7 +137,7 @@ export class ClarificationsController {
     return this.clarificationsService.CloseClarificationConversation(
       params.conversationId,
       closeClarificationDto,
-      this.userId,
+      this.staffId,
     );
   }
 }

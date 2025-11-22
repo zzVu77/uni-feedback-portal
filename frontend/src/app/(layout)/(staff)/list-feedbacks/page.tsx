@@ -1,11 +1,14 @@
+import { Loading } from "@/components/common/Loading";
 import { ListDepartmentFeedback } from "@/components/feedback/staff-feedbacks-list/ListDepartmentFeedback";
 import Wrapper from "@/components/shared/Wrapper";
-import React from "react";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
     <Wrapper>
-      <ListDepartmentFeedback />
+      <Suspense fallback={<Loading variant="spinner" />}>
+        <ListDepartmentFeedback />
+      </Suspense>
     </Wrapper>
   );
 };
