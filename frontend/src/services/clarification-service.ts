@@ -4,6 +4,7 @@ import {
   ConversationDetail,
   ConversationFilter,
   ConversationSummary,
+  MessageBodyParams,
   PaginatedResponse,
 } from "@/types";
 export const clarificationBaseUrl = "/clarifications";
@@ -37,4 +38,16 @@ export const closeConversationById = async (id: string) => {
     isClosed: true,
     message: "Vấn đề đã được làm rõ. Đóng cuộc hội thoại này.",
   });
+};
+
+export const createMessageInConversation = async (
+  conversationId: string,
+  data: MessageBodyParams,
+) => {
+  await axiosInstance.post(
+    `${clarificationBaseUrl}/${conversationId}/messages`,
+    {
+      ...data,
+    },
+  );
 };

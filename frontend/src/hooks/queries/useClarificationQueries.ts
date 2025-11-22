@@ -2,11 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   closeConversationById,
+  createMessageInConversation,
   createNewConversation,
   getAllConversationsByFeedbackId,
   getConversationDetailById,
 } from "@/services/clarification-service";
-import { ConversationBodyParams, ConversationFilter } from "@/types";
+import {
+  ConversationBodyParams,
+  ConversationFilter,
+  MessageBodyParams,
+} from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -49,6 +54,17 @@ export const useCloseConversationById = () => {
     onSuccess: () => {
       toast.success("Thao tác thành công!");
     },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+
+export const useCreateMessageInConversation = (conversationId: string) => {
+  return useMutation({
+    mutationFn: (data: MessageBodyParams) =>
+      createMessageInConversation(conversationId, data),
+    retry: false,
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
     },

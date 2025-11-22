@@ -33,3 +33,10 @@ export type ConversationBodyParams = {
   subject: string;
   initialMessage: string;
 };
+export type MessageBodyParams = {
+  content: string;
+  attachments?: {
+    fileName: string;
+    fileUrl: string;
+  }[];
+};

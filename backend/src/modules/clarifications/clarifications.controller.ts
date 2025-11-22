@@ -25,7 +25,7 @@ export class ClarificationsController {
   constructor(private readonly clarificationsService: ClarificationsService) {}
   // Dummy user ID for demonstration purposes
   // private readonly userId = '550e8400-e29b-41d4-a716-446655440009';
-  private readonly userId = '550e8400-e29b-41d4-a716-44665544000b';
+  private readonly userId = '550e8400-e29b-41d4-a716-446655440009';
   private readonly staffId = '550e8400-e29b-41d4-a716-44665544000f';
   @Post()
   @ApiOperation({

@@ -7,14 +7,20 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useGetClarificationsDetailById } from "@/hooks/queries/useClarificationQueries";
+import {
+  CLARIFICATION_QUERY_KEYS,
+  useCreateMessageInConversation,
+  useGetClarificationsDetailById,
+} from "@/hooks/queries/useClarificationQueries";
 import { ConversationSummary } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { MessageCircleOff, SendHorizontal } from "lucide-react";
-import React, { useState } from "react";
+// NEW: Import useEffect and useRef
+import React, { useEffect, useRef, useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import StatusBadge from "../common/StatusBadge";
 import MessageItem from "./MessageItem";
-// 1. Add role to Props type``
+
 type ConversationItemProps = {
   data: ConversationSummary[];
   role: "student" | "staff";
@@ -24,18 +30,35 @@ type ConversationItemProps = {
 const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
   const [replyText, setReplyText] = useState("");
   const [conversationId, setConversationId] = useState<string>("");
+
+  // NEW: Tạo ref để tham chiếu đến đáy của danh sách tin nhắn
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const { data: conversationDetail } =
     useGetClarificationsDetailById(conversationId);
+  const { mutateAsync: createMessageInConversation } =
+    useCreateMessageInConversation(conversationId);
+  const queryClient = useQueryClient();
 
-  const handleSendReply = () => {
+  // NEW: useEffect để tự động scroll mỗi khi conversationDetail thay đổi (có tin nhắn mới)
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversationDetail]); // Dependency là conversationDetail để kích hoạt khi fetch lại dữ liệu
+
+  const handleSendReply = async () => {
     if (!replyText.trim()) return;
-    // Call API reply here...
+    await createMessageInConversation({ content: replyText });
+    await queryClient.invalidateQueries({
+      queryKey: [CLARIFICATION_QUERY_KEYS, conversationId],
+    });
     setReplyText("");
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleSendReply();
+      await handleSendReply();
     }
   };
 
@@ -69,9 +92,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                           "Request for additional information"}
                       </span>
 
-                      {/* 2. Group Badge and Action Button */}
                       <div className="flex items-center gap-2">
-                        {/* LOGIC: Staff & Not Closed -> Show Close Button */}
                         {conversation.isClosed ? (
                           <StatusBadge type="CLOSED" />
                         ) : (
@@ -105,16 +126,22 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                     {conversationDetail &&
                     conversationDetail.messages &&
                     conversationDetail.messages.length > 0 ? (
-                      conversationDetail.messages.map((message, index) => (
-                        <MessageItem key={index} {...message} />
-                      ))
+                      <>
+                        {conversationDetail.messages.map((message, index) => (
+                          <MessageItem key={index} {...message} />
+                        ))}
+                        {/* NEW: Thêm thẻ div rỗng ở cuối danh sách để làm mốc scroll */}
+                        {/* Chỉ render ref này nếu ID của accordion item khớp với conversationId đang chọn */}
+                        {conversation.id === conversationId && (
+                          <div ref={messagesEndRef} />
+                        )}
+                      </>
                     ) : (
                       <p className="text-center text-sm text-neutral-400 italic">
                         Chưa có tin nhắn nào.
                       </p>
                     )}
                   </div>
-                  {/* If not closed, show reply input */}
                   {!conversation.isClosed && (
                     <div className="flex items-center gap-2 border-t border-neutral-100 bg-neutral-50 p-3">
                       <Input
