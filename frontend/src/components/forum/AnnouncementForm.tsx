@@ -32,6 +32,7 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import dynamic from "next/dynamic";
 
+import { CreateAnnouncementPayload } from "@/types";
 import "suneditor/dist/css/suneditor.min.css";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -80,12 +81,16 @@ const formSchema = z.object({
     ),
 });
 type AnnouncementForm = {
-  type?: "create" | "edit";
+  type: "create" | "edit";
   initialData?: z.infer<typeof formSchema>;
+  onSubmit: (values: CreateAnnouncementPayload) => Promise<void>;
+  isPending?: boolean;
 };
 const AnnouncementForm = ({
   type = "create",
   initialData,
+  onSubmit,
+  isPending,
 }: AnnouncementForm) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -96,12 +101,27 @@ const AnnouncementForm = ({
       attachments: initialData?.attachments || [],
     },
   });
+  const mapFormValuesToAnnouncementPayload = (
+    values: z.infer<typeof formSchema>,
+  ): CreateAnnouncementPayload => {
+    return {
+      title: values.subject,
+      content: values.content,
+      // attachments: values.attachments,
+    };
+  };
   const { isDirty } = form.formState;
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values));
+  const handleCreateAnnouncement = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToAnnouncementPayload(values);
+    await onSubmit(payload);
     setIsSubmitDialogOpen(false);
     form.reset();
-  };
+  });
+
+  const handleUpdateAnnouncement = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToAnnouncementPayload(values);
+    await onSubmit(payload);
+  });
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
@@ -150,7 +170,16 @@ const AnnouncementForm = ({
                       <FormControl>
                         <SunEditor
                           defaultValue={field.value}
-                          onChange={field.onChange}
+                          onChange={(content) => {
+                            const textContent = content
+                              .replace(/<[^>]+>/g, "")
+                              .trim();
+                            if (!textContent) {
+                              field.onChange("");
+                            } else {
+                              field.onChange(content);
+                            }
+                          }}
                           height="150px"
                           setOptions={{
                             buttonList: [
@@ -239,7 +268,7 @@ const AnnouncementForm = ({
               >
                 <Button
                   type="button"
-                  onClick={() => {}} // TODO: Implement update functionality
+                  onClick={handleUpdateAnnouncement} // TODO: Implement update functionality
                   variant={"primary"}
                   className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
                 >
@@ -269,7 +298,10 @@ const AnnouncementForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>
+            <AlertDialogAction
+              disabled={isPending}
+              onClick={handleCreateAnnouncement}
+            >
               Có
             </AlertDialogAction>
           </AlertDialogFooter>

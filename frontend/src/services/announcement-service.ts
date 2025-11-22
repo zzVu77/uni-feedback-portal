@@ -3,6 +3,7 @@ import {
   AnnouncementDetailType,
   AnnouncementFilter,
   AnnouncementListItem,
+  CreateAnnouncementPayload,
   PaginatedResponse,
 } from "@/types";
 
@@ -24,4 +25,12 @@ export const getAnnouncementById = async (
     `${announcementBaseUrl}/${id}`,
   );
   return response;
+};
+
+export const createAnnouncement = async (
+  payload: CreateAnnouncementPayload,
+) => {
+  await axiosInstance.post(announcementBaseUrl, {
+    ...payload,
+  });
 };

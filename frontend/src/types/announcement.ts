@@ -24,3 +24,9 @@ export type AnnouncementManagementItem = Pick<
 export interface AnnouncementFilter extends BaseFilter {
   departmentId?: string;
 }
+
+export type CreateAnnouncementPayload = Pick<
+  AnnouncementDetailType,
+  "title" | "content"
+  //Todo: Add files when file upload is implemented
+>;
