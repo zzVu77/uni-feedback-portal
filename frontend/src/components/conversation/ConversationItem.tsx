@@ -68,6 +68,9 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
 
   const handleCloseConversation = async (id: string) => {
     await onClose(id);
+    await queryClient.invalidateQueries({
+      queryKey: [CLARIFICATION_QUERY_KEYS, conversationId],
+    });
   };
 
   return (
