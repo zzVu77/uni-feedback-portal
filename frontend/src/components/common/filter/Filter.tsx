@@ -27,13 +27,14 @@ const Filter = ({ type, items }: Props) => {
   const handleChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (value) {
-      params.set(config.param, value);
-    } else {
+    if (value === "all") {
       params.delete(config.param);
+    } else {
+      params.set(config.param, value);
     }
 
-    // params.delete("page");
+    // Reset page to 1 when filter changes
+    params.delete("page");
 
     router.replace(`?${params.toString()}`, { scroll: false });
   };
