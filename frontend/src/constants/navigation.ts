@@ -16,17 +16,16 @@ export type NavigationItem = {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 export const studentNavigation: NavigationItem[] = [
-  { href: "/notifications", label: "Thông báo", icon: Bell },
+  { href: "/student/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
   {
     href: "/student/create-new-feedback",
     label: "Gửi góp ý",
     icon: MessageSquareText,
   },
-  { href: "/student/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
+  { href: "/notifications", label: "Thông báo", icon: Bell },
 ];
 export const staffNavigation: NavigationItem[] = [
-  { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/staff/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   {
@@ -34,19 +33,16 @@ export const staffNavigation: NavigationItem[] = [
     label: "Quản lý thông báo",
     icon: Megaphone,
   },
+  { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
   { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
 ];
 export const adminNavigation: NavigationItem[] = [
-  { href: "/notifications", label: "Thông báo", icon: Bell },
-  // { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   {
     href: "/admin/feedbacks-management",
     label: "Góp ý tiếp nhận",
     icon: History,
   },
-  // { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
   {
     href: "/admin/reported-comment-management",
     label: "Quản lý bình luận vi phạm",
@@ -57,5 +53,9 @@ export const adminNavigation: NavigationItem[] = [
     label: "Quản lý danh mục",
     icon: LayoutList,
   },
+  { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
+  { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "#6", label: "Thống kê", icon: ChartColumn },
+  // { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
+  // { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
 ];

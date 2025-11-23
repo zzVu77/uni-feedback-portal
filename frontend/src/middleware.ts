@@ -13,14 +13,11 @@ export interface JwtPayloadCustom extends JWTPayload {
   departmentId?: string;
 }
 
-// Helper function to get the dashboard URL based on the user's role
-
 async function verifyToken(token: string): Promise<JwtPayloadCustom | null> {
   try {
     const { payload } = await jwtVerify(token, secret);
     return payload as JwtPayloadCustom;
   } catch {
-    console.log("Access token is expired or invalid");
     return null;
   }
 }
@@ -31,68 +28,75 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Define route types
+  const isRootRoute = pathname === "/";
   const isPublicRoute =
     pathname.startsWith("/login") || pathname.startsWith("/signup");
   const isAdminRoute = pathname.startsWith("/admin");
   const isStudentRoute = pathname.startsWith("/student");
   const isStaffRoute = pathname.startsWith("/staff");
 
-  // If no access token and no refresh token are present
+  // --------------------------------------------------------
+  // CASE 1: Not Authenticated (No tokens present)
+  // --------------------------------------------------------
   if (!accessToken && !refreshToken) {
+    // Allow access to public routes
     if (isPublicRoute) {
       return NextResponse.next();
-    } else {
+    }
+    // Redirect root or protected routes to Login
+    else {
       const loginUrl = new URL("/login", req.url);
-      loginUrl.searchParams.set("returnTo", pathname);
+      // Set returnTo parameter (skip for root URL)
+      if (!isRootRoute) {
+        loginUrl.searchParams.set("returnTo", pathname);
+      }
       return NextResponse.redirect(loginUrl);
     }
   }
 
-  // If access token is present
+  // --------------------------------------------------------
+  // CASE 2: Access Token present (Verification required)
+  // --------------------------------------------------------
   if (accessToken) {
-    // Verify the access token
+    // Verify token once
     const validPayload = await verifyToken(accessToken);
 
-    // If the token is invalid and there's a refresh token, attempt to refresh
+    // 2.1: Invalid/Expired Access Token but Refresh Token exists -> Attempt Refresh
     if (!validPayload && refreshToken) {
       const refreshUrl = new URL("/api/auth/refresh", req.url);
       refreshUrl.searchParams.set("returnTo", pathname);
       return NextResponse.redirect(refreshUrl);
     }
 
-    // If the token is valid
+    // 2.2: Valid Token -> RBAC Authorization
     if (validPayload) {
       const userRole = validPayload.role;
       const dashboardUrl = getUrlByRole(userRole);
 
-      // If the user is authenticated and trying to access a public route, redirect to their dashboard
-      if (isPublicRoute) {
+      // A. Redirect authenticated users from Public/Root pages to their Dashboard
+      if (isPublicRoute || isRootRoute) {
         return NextResponse.redirect(new URL(dashboardUrl, req.url));
       }
 
-      // Role-Based Access Control (RBAC) Logic
-
-      // 1. If trying to access Admin routes but role is not ADMIN
+      // B. RBAC - Prevent cross-role access
       if (isAdminRoute && userRole !== "ADMIN") {
         return NextResponse.redirect(new URL(dashboardUrl, req.url));
       }
-
-      // 2. If trying to access Student routes but role is not STUDENT
       if (isStudentRoute && userRole !== "STUDENT") {
         return NextResponse.redirect(new URL(dashboardUrl, req.url));
       }
-
-      // 3. If trying to access Staff routes but role is not DEPARTMENT_STAFF
       if (isStaffRoute && userRole !== "DEPARTMENT_STAFF") {
         return NextResponse.redirect(new URL(dashboardUrl, req.url));
       }
 
-      // If everything matches (e.g., Admin accessing /admin), allow the request
+      // C. Allow access if role matches
       return NextResponse.next();
     }
   }
 
-  // If no access token but there's a refresh token (Fallback case)
+  // --------------------------------------------------------
+  // CASE 3: Only Refresh Token present (Fallback)
+  // --------------------------------------------------------
   else if (refreshToken) {
     const refreshUrl = new URL("/api/auth/refresh", req.url);
     refreshUrl.searchParams.set("returnTo", pathname);
