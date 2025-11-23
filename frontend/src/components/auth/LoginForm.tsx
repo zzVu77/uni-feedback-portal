@@ -42,7 +42,7 @@ export function LoginForm() {
   });
 
   return (
-    <div className="0 flex min-h-screen flex-col items-center justify-start gap-4 bg-gray-100 px-2 py-3 lg:px-10 lg:py-8">
+    <div className="flex min-h-screen flex-col items-center justify-start gap-4 bg-gray-100 px-2 py-3 lg:px-10 lg:py-8">
       <Image
         src={ASSETS.LOGO_UTE}
         alt="School Logo"
@@ -53,7 +53,7 @@ export function LoginForm() {
       <h1 className="text-center text-xl font-extrabold text-blue-900 md:text-2xl">
         TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP.HCM
       </h1>
-      <div className="0 flex w-full max-w-lg flex-col justify-center gap-4 rounded-lg bg-white px-6 py-6 shadow-lg">
+      <div className="flex w-full max-w-lg flex-col justify-center gap-4 rounded-lg bg-white px-6 py-6 shadow-lg">
         <div className="flex flex-col items-center justify-center gap-2">
           <h2 className="text-red-primary-500/80 text-center text-2xl font-bold tracking-wide uppercase">
             Đăng nhập
