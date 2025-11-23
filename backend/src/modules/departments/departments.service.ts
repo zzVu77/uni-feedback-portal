@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Departments, Prisma, UserRole } from '@prisma/client';
 import {
   CreateDepartmentDto,
   DepartmentDto,
@@ -15,12 +14,8 @@ import {
   UpdateDepartmentDto,
   UpdateDepartmentStatusDto,
 } from './dto';
-
-// This interface is duplicated from the controller for now.
-export interface UserPayload {
-  userId: string;
-  role: UserRole;
-}
+import { Departments, Prisma, UserRole } from '@prisma/client';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 // Define a more specific type for the department object coming from Prisma queries
 type DepartmentWithCounts = Departments & {
@@ -68,9 +63,9 @@ export class DepartmentsService {
     };
   };
 
-  async CreateDepartment(
+  async createDepartment(
     dto: CreateDepartmentDto,
-    user: UserPayload,
+    user: ActiveUserData,
   ): Promise<DepartmentDto> {
     this.checkAdmin(user.role);
 
@@ -106,7 +101,7 @@ export class DepartmentsService {
     return departments;
   }
 
-  async GetAllDepartments(
+  async getAllDepartments(
     query: QueryDepartmentsDto,
   ): Promise<DepartmentListResponseDto> {
     const { page = 1, pageSize = 10, q, isActive } = query;
@@ -143,7 +138,7 @@ export class DepartmentsService {
     };
   }
 
-  async GetDepartmentById(id: string): Promise<DepartmentDto> {
+  async getDepartmentById(id: string): Promise<DepartmentDto> {
     const department = await this.prisma.departments.findUnique({
       where: { id },
       include: {
@@ -160,10 +155,10 @@ export class DepartmentsService {
     return this.mapToDto(department);
   }
 
-  async UpdateDepartment(
+  async updateDepartment(
     id: string,
     dto: UpdateDepartmentDto,
-    user: UserPayload,
+    user: ActiveUserData,
   ): Promise<DepartmentDto> {
     this.checkAdmin(user.role);
     await this.getDepartmentOrThrow(id);
@@ -192,10 +187,10 @@ export class DepartmentsService {
     return this.mapToDto(updatedDepartment);
   }
 
-  async UpdateDepartmentStatus(
+  async updateDepartmentStatus(
     id: string,
     dto: UpdateDepartmentStatusDto,
-    user: UserPayload,
+    user: ActiveUserData,
   ): Promise<DepartmentDto> {
     this.checkAdmin(user.role);
     await this.getDepartmentOrThrow(id);
@@ -213,7 +208,7 @@ export class DepartmentsService {
     return this.mapToDto(updatedDepartment);
   }
 
-  async DeleteDepartment(id: string, user: UserPayload): Promise<void> {
+  async deleteDepartment(id: string, user: ActiveUserData): Promise<void> {
     this.checkAdmin(user.role);
     await this.getDepartmentOrThrow(id);
 

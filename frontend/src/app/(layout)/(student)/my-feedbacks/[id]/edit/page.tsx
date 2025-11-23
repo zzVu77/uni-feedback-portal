@@ -7,7 +7,7 @@ import {
   useUpdateFeedbackById,
 } from "@/hooks/queries/useFeedbackQueries";
 import { useIsClient } from "@/hooks/useIsClient";
-import { FeedbackBodyParams } from "@/types";
+import { CreateFeedbackPayload } from "@/types";
 import { mapFeedbackDetailToBodyParams } from "@/utils/mappers";
 import { useParams } from "next/navigation";
 
@@ -21,7 +21,7 @@ const page = () => {
   });
   if (isLoading || !feedback) return <Loading variant="spinner" />;
   const initialData = mapFeedbackDetailToBodyParams(feedback);
-  const handleSubmit = async (values: FeedbackBodyParams) => {
+  const handleSubmit = async (values: CreateFeedbackPayload) => {
     await updateFeedback({ id, data: values });
   };
   return (

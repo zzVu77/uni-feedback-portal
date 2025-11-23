@@ -27,13 +27,14 @@ const Filter = ({ type, items }: Props) => {
   const handleChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (value) {
-      params.set(config.param, value);
-    } else {
+    if (value === "all") {
       params.delete(config.param);
+    } else {
+      params.set(config.param, value);
     }
 
-    // params.delete("page");
+    // Reset page to 1 when filter changes
+    params.delete("page");
 
     router.replace(`?${params.toString()}`, { scroll: false });
   };
@@ -42,7 +43,7 @@ const Filter = ({ type, items }: Props) => {
   // }
   return (
     <Select onValueChange={handleChange} defaultValue={currentValue}>
-      <SelectTrigger className="md:mim-w-[150px] h-10 w-max min-w-[100px] cursor-pointer rounded-lg border bg-white font-semibold shadow-sm focus-visible:border focus-visible:ring-0">
+      <SelectTrigger className="h-10 w-auto cursor-pointer rounded-lg border bg-white font-semibold shadow-sm focus-visible:border focus-visible:ring-0 md:min-w-[150px] lg:w-max">
         <Icon className="h-4 w-4 shrink-0 text-gray-500" />
 
         <SelectValue placeholder={config.placeholder} />

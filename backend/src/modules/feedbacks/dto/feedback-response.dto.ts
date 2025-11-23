@@ -133,7 +133,6 @@ export class FeedbackSummary extends OmitType(FeedbackDetail, [
   'forwardingLogs',
   'fileAttachments',
 ] as const) {}
-// Response DTO for querying user's feedbacks with pagination
 export class GetMyFeedbacksResponseDto {
   @ApiProperty({
     type: [FeedbackSummary],

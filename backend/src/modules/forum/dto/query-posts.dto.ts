@@ -5,7 +5,7 @@ import { Type } from 'class-transformer';
 export class QueryPostsDto {
   @ApiPropertyOptional({ example: 1, description: 'Page Number?' })
   @IsOptional()
-  @Type(() => Number) // convert to number
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   page?: number;

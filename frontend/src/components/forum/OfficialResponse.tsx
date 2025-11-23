@@ -11,7 +11,7 @@ const OfficialResponse = ({
   responseContent,
 }: Props) => {
   return (
-    <div className="border-blue-primary-200/80 bg-blue-primary-100/20 flex w-full flex-col gap-3 rounded-[8px] border-1 px-4 py-2 shadow-sm">
+    <div className="border-blue-primary-200/80 bg-blue-primary-100/20 flex w-full flex-col gap-3 rounded-xl border px-4 py-2 shadow-sm">
       <div className="flex w-full flex-row items-center justify-start gap-1">
         <BadgeCheck className="text-blue-primary-700 h-5 w-5" />
         <span className="text-blue-primary-700 text-lg font-medium tracking-wide">
@@ -22,7 +22,7 @@ const OfficialResponse = ({
         <div className="bg-blue-primary-200 flex h-10 w-10 flex-row items-center justify-center rounded-full p-2">
           <Building2 className="text-blue-primary-600" />
         </div>
-        <div className="flex flex-col gap-[2px]">
+        <div className="flex flex-col gap-0.5">
           <span className="text-blue-primary-300/80 text-[16px] font-semibold">
             {departmentName ?? "Khoa Đào tạo quốc tế"}
           </span>

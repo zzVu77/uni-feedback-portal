@@ -1,5 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { FileTargetType, Prisma } from '@prisma/client';
+import { FileTargetType, Prisma, UserRole } from '@prisma/client';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   AnnouncementDetailDto,
@@ -10,6 +14,7 @@ import {
 } from './dto';
 import { UploadsService } from '../uploads/uploads.service';
 import { FileAttachmentDto } from '../uploads/dto/file-attachment.dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class AnnouncementsService {
@@ -143,27 +148,27 @@ export class AnnouncementsService {
         id: announcement.user.department.id,
         name: announcement.user.department.name,
       },
-      files: files, // Trả về đúng cấu trúc DTO mới
+      files: files,
     };
   }
   async createAnnouncement(
     dto: CreateAnnouncementDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
-    const user = await this.prisma.users.findUnique({
-      where: { id: userId },
-      include: { department: true },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    this._ensureIsDepartmentStaff(actor);
 
     const announcement = await this.prisma.announcements.create({
       data: {
         title: dto.title,
         content: dto.content,
-        userId: user.id,
+        userId: actor.sub,
+      },
+      include: {
+        user: {
+          include: {
+            department: true,
+          },
+        },
       },
     });
 
@@ -184,12 +189,12 @@ export class AnnouncementsService {
       content: announcement.content,
       createdAt: announcement.createdAt,
       user: {
-        id: user.id,
-        userName: user.fullName,
+        id: announcement.user.id,
+        userName: announcement.user.fullName,
       },
       department: {
-        id: user.department.id,
-        name: user.department.name,
+        id: announcement.user.department.id,
+        name: announcement.user.department.name,
       },
       files: files,
     };
@@ -197,10 +202,10 @@ export class AnnouncementsService {
   async updateAnnouncement(
     id: string,
     dto: UpdateAnnouncementDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
     const existingAnnouncement = await this.prisma.announcements.findUnique({
-      where: { id, userId },
+      where: { id, userId: actor.sub },
       include: {
         user: {
           include: {
@@ -213,7 +218,6 @@ export class AnnouncementsService {
     if (!existingAnnouncement)
       throw new NotFoundException('Announcement not found');
 
-    // 1. Cập nhật thông tin announcement
     const updatedAnnouncement = await this.prisma.announcements.update({
       where: { id },
       data: {
@@ -222,7 +226,6 @@ export class AnnouncementsService {
       },
     });
 
-    // 2. Cập nhật file đính kèm bằng service chuyên dụng
     const files = await this.uploadsService.updateAttachmentsForTarget(
       id,
       FileTargetType.ANNOUNCEMENT,
@@ -249,10 +252,12 @@ export class AnnouncementsService {
 
   async deleteAnnouncement(
     id: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<{ success: boolean }> {
+    this._ensureIsDepartmentStaff(actor);
+
     const existing = await this.prisma.announcements.findUnique({
-      where: { id, userId },
+      where: { id, userId: actor.sub },
     });
 
     if (!existing) throw new NotFoundException('Announcement not found');
@@ -293,5 +298,13 @@ export class AnnouncementsService {
         },
       ]),
     );
+  }
+
+  private _ensureIsDepartmentStaff(actor: ActiveUserData) {
+    if (actor.role !== UserRole.DEPARTMENT_STAFF) {
+      throw new ForbiddenException(
+        'This action is only allowed for Department Staff.',
+      );
+    }
   }
 }

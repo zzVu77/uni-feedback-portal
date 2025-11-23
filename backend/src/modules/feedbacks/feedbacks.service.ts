@@ -15,6 +15,7 @@ import {
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { UploadsService } from '../uploads/uploads.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class FeedbacksService {
@@ -23,9 +24,9 @@ export class FeedbacksService {
     private readonly uploadsService: UploadsService,
   ) {}
 
-  async getMyFeedbacks(
+  async getFeedbacks(
     query: QueryFeedbacksDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {
       page = 1,
@@ -39,19 +40,16 @@ export class FeedbacksService {
     } = query;
 
     const whereClause: Prisma.FeedbacksWhereInput = {
-      userId,
+      userId: actor.sub,
       ...(status && {
-        // if (status) filter by status unless it's 'all'
         currentStatus:
           status.toUpperCase() in FeedbackStatus
             ? (status.toUpperCase() as FeedbackStatus)
             : undefined,
       }),
-      // if (categoryId) filter by categoryId unless it's 'all'
       ...(categoryId && {
         categoryId: categoryId == 'all' ? undefined : categoryId,
       }),
-      // if (departmentId) filter by departmentId unless it's 'all'
       ...(departmentId && {
         departmentId: departmentId == 'all' ? undefined : departmentId,
       }),
@@ -72,7 +70,7 @@ export class FeedbacksService {
         ],
       }),
     };
-    // Fetch feedbacks with pagination and total count. Return empty list on error.
+
     try {
       const [items, total] = await Promise.all([
         this.prisma.feedbacks.findMany({
@@ -106,22 +104,18 @@ export class FeedbacksService {
         total,
       };
     } catch (error) {
-      console.error('Error fetching feedbacks:', error);
-      throw new Error('Error fetching feedbacks:', error);
-      // return {
-      //   results: [],
-      //   total: 0,
-      // };
+      throw new Error('Error fetching feedbacks:', { cause: error });
     }
   }
+
   async getFeedbackDetail(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId: userId },
+      where: { id: feedbackId, userId: actor.sub },
       include: {
         department: {
           select: { id: true, name: true },
@@ -160,13 +154,11 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
 
-    // Lấy file đính kèm bằng UploadsService
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
       feedback.id,
       FileTargetType.FEEDBACK,
     );
 
-    // 🏗️ Map data to FeedbackDetail DTO
     const result: FeedbackDetail = {
       id: feedback.id,
       subject: feedback.subject,
@@ -211,27 +203,24 @@ export class FeedbacksService {
   async updateFeedback(
     params: FeedbackParamDto,
     dto: UpdateFeedbackDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
-    // Find the existing feedback
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
 
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    // Check if feedback is in PENDING status
     if (feedback.currentStatus !== FeedbackStatus.PENDING) {
       throw new ForbiddenException(
         'Feedback can only be updated when in PENDING status.',
       );
     }
 
-    // Validate department and category if they are being updated
     if (dto.departmentId) {
       const department = await this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -339,12 +328,12 @@ export class FeedbacksService {
 
   async deleteFeedback(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<void> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
 
     if (!feedback) {
@@ -364,15 +353,14 @@ export class FeedbacksService {
     );
 
     await this.prisma.feedbacks.delete({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
   }
 
   async createFeedback(
     dto: CreateFeedbackDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackSummary> {
-    // Check if department and category exist
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -388,6 +376,16 @@ export class FeedbacksService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
+    if (category.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback under an inactive category.',
+      );
+    }
+    if (department.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback to an inactive department.',
+      );
+    }
 
     const { fileAttachments, ...feedbackData } = dto;
 
@@ -395,7 +393,7 @@ export class FeedbacksService {
     const feedback = await this.prisma.feedbacks.create({
       data: {
         ...feedbackData,
-        userId: userId,
+        userId: actor.sub,
       },
       include: {
         department: true,

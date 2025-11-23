@@ -6,30 +6,31 @@ import {
   UpdateDepartmentDto,
   UpdateDepartmentStatusDto,
 } from './dto';
-import { UserPayload } from './departments.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+
 export interface DepartmentsServiceContract {
-  CreateDepartment(
+  createDepartment(
     dto: CreateDepartmentDto,
-    user: UserPayload,
+    actor: ActiveUserData,
   ): Promise<DepartmentDto>;
 
-  GetAllDepartments(
+  getAllDepartments(
     query: QueryDepartmentsDto,
   ): Promise<DepartmentListResponseDto>;
 
-  GetDepartmentById(id: string): Promise<DepartmentDto>;
+  getDepartmentById(id: string): Promise<DepartmentDto>;
 
-  UpdateDepartment(
+  updateDepartment(
     id: string,
     dto: UpdateDepartmentDto,
-    user: UserPayload,
+    actor: ActiveUserData,
   ): Promise<DepartmentDto>;
 
-  UpdateDepartmentStatus(
+  updateDepartmentStatus(
     id: string,
     dto: UpdateDepartmentStatusDto,
-    user: UserPayload,
+    actor: ActiveUserData,
   ): Promise<DepartmentDto>;
 
-  DeleteDepartment(id: string, user: UserPayload): Promise<void>;
+  deleteDepartment(id: string, actor: ActiveUserData): Promise<void>;
 }

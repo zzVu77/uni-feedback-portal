@@ -1,5 +1,5 @@
 import {
-  FeedbackBodyParams,
+  CreateFeedbackPayload,
   FeedbackDetail,
   FeedbackHeaderType,
 } from "@/types/feedback";
@@ -13,15 +13,17 @@ export const mapFeedbackDetailToHeader = (
     description: feedbackDetail.description,
     location: feedbackDetail.location,
     currentStatus: feedbackDetail.currentStatus,
+    isPrivate: feedbackDetail.isPrivate,
     createdAt: feedbackDetail.createdAt,
     category: feedbackDetail.category,
     department: feedbackDetail.department,
+    student: feedbackDetail.student,
   };
 };
 
 export const mapFeedbackDetailToBodyParams = (
   feedbackDetail: FeedbackDetail,
-): FeedbackBodyParams => {
+): CreateFeedbackPayload => {
   return {
     isPrivate: feedbackDetail.isPrivate,
     subject: feedbackDetail.subject,

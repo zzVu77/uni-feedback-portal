@@ -32,7 +32,9 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import dynamic from "next/dynamic";
 
+import { CreateAnnouncementPayload } from "@/types";
 import "suneditor/dist/css/suneditor.min.css";
+import { useRouter } from "next/navigation";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -50,7 +52,7 @@ const ACCEPTED_FILE_TYPES = [
   "text/plain", // .txt
 ];
 const formSchema = z.object({
-  subject: z
+  title: z
     .string()
     .min(3, {
       message: "Tiêu đề phải có ít nhất 3 ký tự.",
@@ -80,28 +82,48 @@ const formSchema = z.object({
     ),
 });
 type AnnouncementForm = {
-  type?: "create" | "edit";
-  initialData?: z.infer<typeof formSchema>;
+  type: "create" | "edit";
+  initialData?: CreateAnnouncementPayload;
+  onSubmit: (values: CreateAnnouncementPayload) => Promise<void>;
+  isPending?: boolean;
 };
 const AnnouncementForm = ({
   type = "create",
   initialData,
+  onSubmit,
+  isPending,
 }: AnnouncementForm) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: initialData?.subject || "",
+      title: initialData?.title || "",
       content: initialData?.content || "",
-      attachments: initialData?.attachments || [],
+      // attachments: initialData?.attachments || [],
+      attachments: [],
     },
   });
+  const mapFormValuesToAnnouncementPayload = (
+    values: z.infer<typeof formSchema>,
+  ): CreateAnnouncementPayload => {
+    return {
+      title: values.title,
+      content: values.content,
+      // attachments: values.attachments,
+    };
+  };
   const { isDirty } = form.formState;
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values));
+  const handleCreateAnnouncement = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToAnnouncementPayload(values);
+    await onSubmit(payload);
     setIsSubmitDialogOpen(false);
     form.reset();
-  };
+  });
+
+  const handleUpdateAnnouncement = form.handleSubmit(async (values) => {
+    const payload = mapFormValuesToAnnouncementPayload(values);
+    await onSubmit(payload);
+  });
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
@@ -111,6 +133,10 @@ const AnnouncementForm = ({
     if (isFormValid) {
       setIsSubmitDialogOpen(true);
     }
+  };
+  const router = useRouter();
+  const handleCancel = () => {
+    router.push("/announcement-management");
   };
 
   return (
@@ -128,7 +154,7 @@ const AnnouncementForm = ({
               {/* Subject Field */}
               <FormField
                 control={form.control}
-                name="subject"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tiêu đề thông báo</FormLabel>
@@ -150,9 +176,19 @@ const AnnouncementForm = ({
                       <FormControl>
                         <SunEditor
                           defaultValue={field.value}
-                          onChange={field.onChange}
-                          height="150px"
+                          onChange={(content) => {
+                            const textContent = content
+                              .replace(/<[^>]+>/g, "")
+                              .trim();
+                            if (!textContent) {
+                              field.onChange("");
+                            } else {
+                              field.onChange(content);
+                            }
+                          }}
+                          height="auto"
                           setOptions={{
+                            minHeight: "200px",
                             buttonList: [
                               ["undo", "redo"],
                               ["font", "fontSize", "formatBlock"],
@@ -191,7 +227,7 @@ const AnnouncementForm = ({
           </ScrollArea>
 
           {type == "create" ? (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <ConfirmationDialog
                 title="Xác nhận làm mới biểu mẫu?"
                 description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
@@ -221,11 +257,11 @@ const AnnouncementForm = ({
               </Button>
             </div>
           ) : (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t-1 pt-2 lg:justify-end">
+            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <Button
                 type="button"
                 variant={"cancel"}
-                onClick={() => {}} // TODO: Implement cancel functionality ( back again to detail page )
+                onClick={handleCancel} // TODO: Implement cancel functionality ( back again to detail page )
                 className="flex max-w-lg flex-row items-center gap-2 py-3"
               >
                 <X className="h-5 w-5" />
@@ -239,7 +275,7 @@ const AnnouncementForm = ({
               >
                 <Button
                   type="button"
-                  onClick={() => {}} // TODO: Implement update functionality
+                  onClick={handleUpdateAnnouncement} // TODO: Implement update functionality
                   variant={"primary"}
                   className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
                 >
@@ -269,7 +305,10 @@ const AnnouncementForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>
+            <AlertDialogAction
+              disabled={isPending}
+              onClick={handleCreateAnnouncement}
+            >
               Có
             </AlertDialogAction>
           </AlertDialogFooter>

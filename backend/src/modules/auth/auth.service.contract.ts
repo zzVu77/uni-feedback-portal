@@ -1,20 +1,9 @@
-// auth/auth.service.contract.ts
-import { LoginDto } from './dto/login.dto';
-import { LogoutDto } from './dto/logout.dto';
-import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { TokensResponseDto } from './dto/tokens-response.dto';
+import { AuthResponseDto } from './dto';
 
-export interface AuthServiceContract {
-  login(dto: LoginDto): Promise<TokensResponseDto>; // issue access/refresh, include user payload
-  logout(userId: number, dto?: LogoutDto): Promise<{ success: true }>;
-  requestPasswordReset(
-    dto: RequestPasswordResetDto,
-  ): Promise<{ success: true }>;
-  resetPassword(dto: ResetPasswordDto): Promise<{ success: true }>;
-  changePassword(
-    userId: number,
-    dto: ChangePasswordDto,
-  ): Promise<{ success: true }>;
+export abstract class AuthServiceContract {
+  abstract Login(email: string, password: string): Promise<AuthResponseDto>;
+
+  abstract RefreshToken(refreshToken: string): Promise<AuthResponseDto>;
+
+  abstract Logout(refreshToken: string): Promise<void>;
 }
