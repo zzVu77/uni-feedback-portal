@@ -4,9 +4,6 @@ import { UserInfo } from "@/types";
 import { jwtVerify } from "jose";
 
 const SECRET_KEY = process.env.JWT_ACCESS_SECRET!;
-if (!SECRET_KEY) {
-  throw new Error("JWT_ACCESS_SECRET is not defined");
-}
 export type DecodedToken = {
   sub: string;
   role: "DEPARTMENT_STAFF" | "STUDENT" | "ADMIN";
