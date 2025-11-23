@@ -1,22 +1,32 @@
-export type AnnouncementDetail = {
+import { BaseFilter } from "./common-type";
+
+export type AnnouncementDetailType = {
   id: string;
   title: string;
   department: {
     id: string;
     name: string;
   };
-
   createdAt: string;
   content: string;
-
   // Optional file attachments
-  fileAttachments?: Array<{
+  files?: {
     id: string;
     fileName: string;
     fileUrl: string;
-  }>;
+  }[];
 };
+export type AnnouncementListItem = Omit<AnnouncementDetailType, "files">;
 export type AnnouncementManagementItem = Pick<
-  AnnouncementDetail,
+  AnnouncementDetailType,
   "id" | "title" | "createdAt"
+>;
+export interface AnnouncementFilter extends BaseFilter {
+  departmentId?: string;
+}
+
+export type CreateAnnouncementPayload = Pick<
+  AnnouncementDetailType,
+  "title" | "content"
+  //Todo: Add files when file upload is implemented
 >;

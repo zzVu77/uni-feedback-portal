@@ -1,5 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma, UserRole } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   AnnouncementDetailDto,
@@ -8,6 +12,7 @@ import {
   QueryAnnouncementsDto,
   UpdateAnnouncementDto,
 } from './dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class AnnouncementsService {
@@ -139,22 +144,15 @@ export class AnnouncementsService {
   }
   async createAnnouncement(
     dto: CreateAnnouncementDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
-    const user = await this.prisma.users.findUnique({
-      where: { id: userId },
-      include: { department: true },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    this._ensureIsDepartmentStaff(actor);
 
     const announcement = await this.prisma.announcements.create({
       data: {
         title: dto.title,
         content: dto.content,
-        userId: user.id,
+        userId: actor.sub,
         files: dto.files
           ? {
               create: dto.files.map((file) => ({
@@ -200,10 +198,12 @@ export class AnnouncementsService {
   async updateAnnouncement(
     id: string,
     dto: UpdateAnnouncementDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
+    this._ensureIsDepartmentStaff(actor);
+
     const existing = await this.prisma.announcements.findUnique({
-      where: { id, userId },
+      where: { id, userId: actor.sub },
     });
 
     if (!existing) throw new NotFoundException('Announcement not found');
@@ -291,10 +291,12 @@ export class AnnouncementsService {
 
   async deleteAnnouncement(
     id: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<{ success: boolean }> {
+    this._ensureIsDepartmentStaff(actor);
+
     const existing = await this.prisma.announcements.findUnique({
-      where: { id, userId },
+      where: { id, userId: actor.sub },
     });
 
     if (!existing) throw new NotFoundException('Announcement not found');
@@ -328,5 +330,13 @@ export class AnnouncementsService {
         },
       ]),
     );
+  }
+
+  private _ensureIsDepartmentStaff(actor: ActiveUserData) {
+    if (actor.role !== UserRole.DEPARTMENT_STAFF) {
+      throw new ForbiddenException(
+        'This action is only allowed for Department Staff.',
+      );
+    }
   }
 }

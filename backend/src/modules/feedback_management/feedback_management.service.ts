@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { FeedbackStatus, Prisma } from '@prisma/client';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
@@ -20,32 +20,39 @@ import {
   GenerateForwardingMessage,
   GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAllStaffFeedbacks(
     query: QueryFeedbackByStaffDto,
-    actor: {
-      userId: string;
-      departmentId: string;
-    },
+    actor: ActiveUserData,
   ): Promise<ListFeedbacksResponseDto> {
     const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
-    const where: Prisma.FeedbacksWhereInput = {};
+    const where: Prisma.FeedbacksWhereInput = {
+      departmentId: actor.departmentId,
+    };
 
     // optional filters
     where.departmentId = actor.departmentId;
-    if (status) where.currentStatus = status;
+    if (status) {
+      where.currentStatus = Object.values(FeedbackStatus).includes(
+        status.toUpperCase() as FeedbackStatus,
+      )
+        ? (status.toUpperCase() as FeedbackStatus)
+        : undefined;
+    }
     if (categoryId) where.categoryId = categoryId;
     if (from || to) {
       where.createdAt = {};
       if (from) where.createdAt.gte = new Date(from);
-      if (to)
+      if (to) {
         where.createdAt.lt = new Date(
           new Date(to).setDate(new Date(to).getDate() + 1),
         );
+      }
     }
 
     if (q) {
@@ -54,7 +61,6 @@ export class FeedbackManagementService {
         { description: { contains: q, mode: 'insensitive' } },
       ];
     }
-    console.log('where', where);
 
     const [feedbacks, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
@@ -77,14 +83,8 @@ export class FeedbackManagementService {
       location: f.location ? f.location : null,
       currentStatus: f.currentStatus,
       isPrivate: f.isPrivate,
-      department: {
-        id: f.department.id,
-        name: f.department.name,
-      },
-      category: {
-        id: f.category.id,
-        name: f.category.name,
-      },
+      department: f.department,
+      category: f.category,
       createdAt: f.createdAt.toISOString(),
       ...(f.isPrivate
         ? {}
@@ -101,10 +101,7 @@ export class FeedbackManagementService {
   }
   async getStaffFeedbackDetail(
     params: FeedbackParamDto,
-    actor: {
-      userId: string;
-      departmentId: string;
-    },
+    actor: ActiveUserData,
   ): Promise<FeedbackDetailDto> {
     const { feedbackId } = params;
 
@@ -161,6 +158,7 @@ export class FeedbackManagementService {
       id: feedback.id,
       subject: feedback.subject,
       description: feedback.description,
+      location: feedback.location,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       createdAt: feedback.createdAt.toISOString(),
@@ -174,14 +172,8 @@ export class FeedbackManagementService {
             },
           }),
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
-      department: {
-        id: feedback.department.id,
-        name: feedback.department.name,
-      },
-      category: {
-        id: feedback.category.id,
-        name: feedback.category.name,
-      },
+      department: feedback.department,
+      category: feedback.category,
       statusHistory: feedback.statusHistory.map((h) => ({
         status: h.status,
         message: h.message,
@@ -190,22 +182,12 @@ export class FeedbackManagementService {
       })),
       forwardingLogs: feedback.forwardingLogs.map((log) => ({
         id: log.id,
-        fromDepartment: {
-          id: log.fromDepartment.id,
-          name: log.fromDepartment.name,
-        },
-        toDepartment: {
-          id: log.toDepartment.id,
-          name: log.toDepartment.name,
-        },
+        fromDepartment: log.fromDepartment,
+        toDepartment: log.toDepartment,
         message: log.message,
         createdAt: log.createdAt.toISOString(),
       })),
-      fileAttachments: feedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      fileAttachments: feedback.fileAttachments,
     };
 
     return result;
@@ -213,10 +195,7 @@ export class FeedbackManagementService {
   async updateStatus(
     params: FeedbackParamDto,
     dto: UpdateFeedbackStatusDto,
-    actor: {
-      userId: string;
-      departmentId: string;
-    },
+    actor: ActiveUserData,
   ): Promise<UpdateFeedbackStatusResponseDto> {
     const { feedbackId } = params;
 
@@ -256,10 +235,7 @@ export class FeedbackManagementService {
   async createForwarding(
     feedbackId: string,
     dto: CreateForwardingDto,
-    actor: {
-      userId: string;
-      departmentId: string;
-    },
+    actor: ActiveUserData,
   ): Promise<ForwardingResponseDto> {
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
@@ -292,7 +268,7 @@ export class FeedbackManagementService {
         feedbackId,
         fromDepartmentId: actor.departmentId,
         toDepartmentId: dto.toDepartmentId,
-        userId: actor.userId,
+        userId: actor.sub,
         message: GenerateForwardingMessage(toDepartment.name),
         note: dto.note,
       },
@@ -340,14 +316,17 @@ export class FeedbackManagementService {
 
     const where: Prisma.FeedbacksWhereInput = {};
 
-    // optional filters
     if (status) where.currentStatus = status;
     if (departmentId) where.departmentId = departmentId;
     if (categoryId) where.categoryId = categoryId;
     if (from || to) {
       where.createdAt = {};
       if (from) where.createdAt.gte = new Date(from);
-      if (to) where.createdAt.lte = new Date(to);
+      if (to) {
+        where.createdAt.lt = new Date(
+          new Date(to).setDate(new Date(to).getDate() + 1),
+        );
+      }
     }
 
     if (q) {
@@ -356,7 +335,6 @@ export class FeedbackManagementService {
         { description: { contains: q, mode: 'insensitive' } },
       ];
     }
-    console.log('where', where);
 
     const [feedbacks, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
@@ -379,14 +357,8 @@ export class FeedbackManagementService {
       location: f.location ? f.location : null,
       currentStatus: f.currentStatus,
       isPrivate: f.isPrivate,
-      department: {
-        id: f.department.id,
-        name: f.department.name,
-      },
-      category: {
-        id: f.category.id,
-        name: f.category.name,
-      },
+      department: f.department,
+      category: f.category,
       createdAt: f.createdAt.toISOString(),
       ...(f.isPrivate
         ? {}
@@ -458,6 +430,7 @@ export class FeedbackManagementService {
       id: feedback.id,
       subject: feedback.subject,
       description: feedback.description,
+      location: feedback.location,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
       createdAt: feedback.createdAt.toISOString(),
@@ -471,14 +444,8 @@ export class FeedbackManagementService {
             },
           }),
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
-      department: {
-        id: feedback.department.id,
-        name: feedback.department.name,
-      },
-      category: {
-        id: feedback.category.id,
-        name: feedback.category.name,
-      },
+      department: feedback.department,
+      category: feedback.category,
       statusHistory: feedback.statusHistory.map((h) => ({
         status: h.status,
         message: h.message,
@@ -487,22 +454,12 @@ export class FeedbackManagementService {
       })),
       forwardingLogs: feedback.forwardingLogs.map((log) => ({
         id: log.id,
-        fromDepartment: {
-          id: log.fromDepartment.id,
-          name: log.fromDepartment.name,
-        },
-        toDepartment: {
-          id: log.toDepartment.id,
-          name: log.toDepartment.name,
-        },
+        fromDepartment: log.fromDepartment,
+        toDepartment: log.toDepartment,
         message: log.message,
         createdAt: log.createdAt.toISOString(),
       })),
-      fileAttachments: feedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      fileAttachments: feedback.fileAttachments,
     };
 
     return result;

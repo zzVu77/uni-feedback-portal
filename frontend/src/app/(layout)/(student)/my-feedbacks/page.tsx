@@ -6,7 +6,7 @@ import React, { Suspense } from "react";
 const Page = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<Loading variant="fullscreen" />}>
+      <Suspense fallback={<Loading variant="spinner" />}>
         <MyFeedbacksHistoryTable />
       </Suspense>
     </Wrapper>

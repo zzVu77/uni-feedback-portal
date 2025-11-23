@@ -4,19 +4,20 @@ import {
   QueryCommentReportsDto,
   UpdateCommentReportDto,
 } from './dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 export interface ModerationServiceContract {
   getCommentReportDetail(
     commentReportId: string,
-    actor: { role: 'ADMIN'; id: string },
+    actor: ActiveUserData,
   ): Promise<CommentReportDto>;
   getCommentReports(
     query: QueryCommentReportsDto,
-    actor: { role: 'ADMIN'; id: string },
+    actor: ActiveUserData,
   ): Promise<CommentReportResponseDto>;
   updateCommentReport(
     id: string,
-    actor: { role: 'ADMIN'; id: string },
     dto: UpdateCommentReportDto,
+    actor: ActiveUserData,
   ): Promise<CommentReportDto>;
 }

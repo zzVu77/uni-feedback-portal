@@ -19,7 +19,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
     department,
     description,
     id,
-    // isPrivate,
+    isPrivate,
     location,
   } = data;
   const { mutateAsync: deleteFeedback, isPending } = useDeleteFeedbackById();
@@ -31,7 +31,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   };
   return (
     <>
-      <div className="flex flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
+      <div className="flex w-full flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
         {/* Title */}
         <div className="flex flex-col items-start justify-between gap-1 md:flex-row lg:gap-4">
           <h1 className="order-2 text-[16px] font-bold text-black md:order-1 lg:text-[24px]">
@@ -65,10 +65,19 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           )}
         </div>
         {/* Information */}
-        <ul className="text-neutral-dark-primary-500 flex list-inside list-disc flex-col gap-2 md:grid md:grid-cols-2 lg:flex lg:flex-row">
-          <li className="text-[12px] font-normal xl:text-[14px]">
-            Phòng ban tiếp nhận: {department.name || "Phòng Quản trị hệ thống"}
-          </li>
+        <ul className="text-neutral-dark-primary-500 flex list-inside list-disc flex-col gap-2 md:grid lg:flex lg:flex-row">
+          {type === "staff" ? (
+            <li className="text-[12px] font-normal xl:text-[14px]">
+              Người gửi:{" "}
+              {isPrivate ? "Ẩn danh" : data.student?.fullName || "Nguyễn Văn A"}
+            </li>
+          ) : (
+            <li className="text-[12px] font-normal xl:text-[14px]">
+              Phòng ban tiếp nhận:{" "}
+              {department.name || "Phòng Quản trị hệ thống"}
+            </li>
+          )}
+
           <li className="text-[12px] font-normal xl:text-[14px]">
             Ngày gửi: {new Date(createdAt).toLocaleDateString("vi-VN")}
           </li>

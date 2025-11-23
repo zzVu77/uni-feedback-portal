@@ -1,13 +1,18 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PostCard from "./PostCard";
+import { useGetAllAnnouncement } from "@/hooks/queries/useAnnouncementQueries";
+import { useUrlTabs } from "@/hooks/useUrlTabs";
 import { Megaphone, MessageCircle } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
+import CommonFilter from "../common/CommonFilter";
+import { Loading } from "../common/Loading";
 import SearchBar from "../common/SearchBar";
 import Filter from "../common/filter/Filter";
 import AnnouncementCard from "./AnnouncementCard";
-import { useUrlTabs } from "@/hooks/useUrlTabs";
-import { useRouter, useSearchParams } from "next/navigation";
+import PostCard from "./PostCard";
+import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
+
 type ForumTab = "feedbacks" | "announcements";
 
 export function ForumSection() {
@@ -20,6 +25,8 @@ export function ForumSection() {
     VALID_TABS,
     DEFAULT_TAB,
   );
+  const filters = useAnnouncementFilters();
+  const { data: announcements, isLoading } = useGetAllAnnouncement(filters);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -33,13 +40,13 @@ export function ForumSection() {
     }
   }, [router, searchParams]);
 
-  const mockCategory = [
-    { label: "Tất cả", value: "all" },
-    { label: "Parking", value: "parking" },
-    { label: "Facilities", value: "facilities" },
-    { label: "Cafeteria", value: "cafeteria" },
-    { label: "Student Services", value: "student-services" },
-  ];
+  // const mockCategory = [
+  //   { label: "Tất cả", value: "all" },
+  //   { label: "Parking", value: "parking" },
+  //   { label: "Facilities", value: "facilities" },
+  //   { label: "Cafeteria", value: "cafeteria" },
+  //   { label: "Student Services", value: "student-services" },
+  // ];
   const sortOptions = [
     { label: "Tất cả", value: "all" },
     { label: "Mới nhất", value: "newest" },
@@ -52,7 +59,7 @@ export function ForumSection() {
         value={currentTabValue}
         onValueChange={(value) => handleTabChange(value as ForumTab)}
         defaultValue="feedbacks"
-        className="flex flex-col gap-4 pb-2"
+        className="flex w-full flex-col gap-4 pb-2"
       >
         <TabsList className="h-auto w-full border-2 bg-white px-2 py-1 shadow-lg">
           <TabsTrigger
@@ -75,9 +82,11 @@ export function ForumSection() {
             <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
           </Suspense>
           <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
-            <Suspense fallback={null}>
-              <Filter type="category" items={mockCategory} />
-            </Suspense>
+            {currentTabValue === "feedbacks" ? (
+              <CommonFilter.CategorySelection />
+            ) : (
+              <CommonFilter.DepartmentSelection />
+            )}
             <Suspense fallback={null}>
               <Filter type="sort" items={sortOptions} />
             </Suspense>
@@ -100,14 +109,13 @@ export function ForumSection() {
           value="announcements"
           className="flex h-screen w-full flex-col gap-4"
         >
-          <AnnouncementCard />
-          <AnnouncementCard />
-          <AnnouncementCard />
-          <AnnouncementCard />
-          <AnnouncementCard />
-          <AnnouncementCard />
-          <AnnouncementCard />
-          <AnnouncementCard />
+          {isLoading && <Loading variant="spinner" />}
+          {announcements?.results.map((announcement) => (
+            <AnnouncementCard
+              key={announcement.id}
+              announcement={announcement}
+            />
+          ))}
         </TabsContent>
       </Tabs>
     </div>

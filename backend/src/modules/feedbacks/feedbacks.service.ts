@@ -14,14 +14,15 @@ import {
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class FeedbacksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getMyFeedbacks(
+  async getFeedbacks(
     query: QueryFeedbacksDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {
       page = 1,
@@ -35,19 +36,16 @@ export class FeedbacksService {
     } = query;
 
     const whereClause: Prisma.FeedbacksWhereInput = {
-      userId,
+      userId: actor.sub,
       ...(status && {
-        // if (status) filter by status unless it's 'all'
         currentStatus:
           status.toUpperCase() in FeedbackStatus
             ? (status.toUpperCase() as FeedbackStatus)
             : undefined,
       }),
-      // if (categoryId) filter by categoryId unless it's 'all'
       ...(categoryId && {
         categoryId: categoryId == 'all' ? undefined : categoryId,
       }),
-      // if (departmentId) filter by departmentId unless it's 'all'
       ...(departmentId && {
         departmentId: departmentId == 'all' ? undefined : departmentId,
       }),
@@ -68,7 +66,7 @@ export class FeedbacksService {
         ],
       }),
     };
-    // Fetch feedbacks with pagination and total count. Return empty list on error.
+
     try {
       const [items, total] = await Promise.all([
         this.prisma.feedbacks.findMany({
@@ -102,22 +100,18 @@ export class FeedbacksService {
         total,
       };
     } catch (error) {
-      console.error('Error fetching feedbacks:', error);
-      throw new Error('Error fetching feedbacks:', error);
-      // return {
-      //   results: [],
-      //   total: 0,
-      // };
+      throw new Error('Error fetching feedbacks:', { cause: error });
     }
   }
+
   async getFeedbackDetail(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId: userId },
+      where: { id: feedbackId, userId: actor.sub },
       include: {
         department: {
           select: { id: true, name: true },
@@ -158,7 +152,6 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
 
-    // 🏗️ Map data to FeedbackDetail DTO
     const result: FeedbackDetail = {
       id: feedback.id,
       subject: feedback.subject,
@@ -207,27 +200,24 @@ export class FeedbacksService {
   async updateFeedback(
     params: FeedbackParamDto,
     dto: UpdateFeedbackDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
-    // Find the existing feedback
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
 
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    // Check if feedback is in PENDING status
     if (feedback.currentStatus !== FeedbackStatus.PENDING) {
       throw new ForbiddenException(
         'Feedback can only be updated when in PENDING status.',
       );
     }
 
-    // Validate department and category if they are being updated
     if (dto.departmentId) {
       const department = await this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -245,7 +235,6 @@ export class FeedbacksService {
       }
     }
 
-    // Handle file attachments update
     if (dto.fileAttachments) {
       const existingFiles =
         await this.prisma.fileAttachmentForFeedback.findMany({
@@ -254,12 +243,10 @@ export class FeedbacksService {
 
       const newFileUrls = dto.fileAttachments.map((f) => f.fileUrl);
 
-      // Identify files to delete
       const filesToDelete = existingFiles.filter(
         (f) => !newFileUrls.includes(f.fileUrl),
       );
 
-      // Identify files to add
       const filesToAdd = dto.fileAttachments.filter(
         (f) => !existingFiles.some((e) => e.fileUrl === f.fileUrl),
       );
@@ -281,7 +268,6 @@ export class FeedbacksService {
       }
     }
 
-    // Update feedback scalar fields
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fileAttachments, ...updateData } = dto;
     const updatedFeedback = await this.prisma.feedbacks.update({
@@ -310,7 +296,6 @@ export class FeedbacksService {
       },
     });
 
-    // Return detail
     return {
       id: updatedFeedback.id,
       subject: updatedFeedback.subject,
@@ -356,12 +341,12 @@ export class FeedbacksService {
 
   async deleteFeedback(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<void> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
 
     if (!feedback) {
@@ -375,15 +360,14 @@ export class FeedbacksService {
     }
 
     await this.prisma.feedbacks.delete({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
   }
 
   async createFeedback(
     dto: CreateFeedbackDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackSummary> {
-    // Check if department and category exist
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -399,8 +383,17 @@ export class FeedbacksService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
+    if (category.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback under an inactive category.',
+      );
+    }
+    if (department.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback to an inactive department.',
+      );
+    }
 
-    // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
         subject: dto.subject,
@@ -409,7 +402,7 @@ export class FeedbacksService {
         departmentId: dto.departmentId,
         categoryId: dto.categoryId,
         isPrivate: dto.isPrivate,
-        userId: userId,
+        userId: actor.sub,
         fileAttachments: {
           create: dto.fileAttachments?.map((f) => ({
             fileName: f.fileName,
@@ -423,7 +416,6 @@ export class FeedbacksService {
       },
     });
 
-    // Return summary
     return {
       id: feedback.id,
       subject: feedback.subject,

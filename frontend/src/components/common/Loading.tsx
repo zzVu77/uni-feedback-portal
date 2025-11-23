@@ -136,7 +136,7 @@ export const Loading: React.FC<LoadingProps> = ({
     <div
       role="status"
       className={cn(
-        "flex flex-col items-center justify-center gap-3",
+        "flex h-full flex-col items-center justify-center gap-3",
         className,
       )}
     >

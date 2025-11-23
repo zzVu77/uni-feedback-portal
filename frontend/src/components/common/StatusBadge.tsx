@@ -3,7 +3,13 @@ import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 
 export type StatusBadgeProps = {
-  type: "PENDING" | "IN_PROGRESS" | "RESOLVED" | "REJECTED" | "CLOSED";
+  type:
+    | "PENDING"
+    | "IN_PROGRESS"
+    | "RESOLVED"
+    | "REJECTED"
+    | "CLOSED"
+    | "OPENING";
 };
 
 const STATUS_CONFIG = {
@@ -36,7 +42,14 @@ const STATUS_CONFIG = {
     icon: null,
     badgeClassName:
       "text-red-primary-500 bg-red-primary-300 py-1 gap-0 rounded-3xl",
-    iconClassName: "text-red-primary-400 h-5 w-5",
+    iconClassName: "",
+  },
+  OPENING: {
+    text: "Đang mở",
+    icon: null,
+    badgeClassName:
+      "text-green-primary-500 bg-green-primary-100 py-1 gap-0 rounded-3xl",
+    iconClassName: "",
   },
 };
 
@@ -44,9 +57,9 @@ const StatusBadge = ({ type }: StatusBadgeProps) => {
   const config = STATUS_CONFIG[type] || STATUS_CONFIG.PENDING;
   const { text, icon: Icon, badgeClassName, iconClassName } = config;
   return (
-    <Badge className={cn(badgeClassName, "py-[2px] md:py-1")}>
+    <Badge className={cn(badgeClassName, "py-0.5 md:py-1")}>
       {Icon && <Icon className={`${iconClassName} font-bold`} />}
-      <span className="ml-[1px] text-[10px] md:text-xs">{text}</span>
+      <span className="ml-px text-[10px] md:text-xs">{text}</span>
     </Badge>
   );
 };

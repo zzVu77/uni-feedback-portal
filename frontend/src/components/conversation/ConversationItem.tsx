@@ -1,52 +1,175 @@
-import React from "react";
-import StatusBadge from "../common/StatusBadge";
-import MessageItem from "./MessageItem";
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  CLARIFICATION_QUERY_KEYS,
+  useCreateMessageInConversation,
+  useGetClarificationsDetailById,
+} from "@/hooks/queries/useClarificationQueries";
+import { ConversationSummary } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
+import { MessageCircleOff, SendHorizontal } from "lucide-react";
+// NEW: Import useEffect and useRef
+import React, { useEffect, useRef, useState } from "react";
+import ConfirmationDialog from "../common/ConfirmationDialog";
+import StatusBadge from "../common/StatusBadge";
+import MessageItem from "./MessageItem";
 
 type ConversationItemProps = {
-  isClosed: boolean;
-  subject: string;
-  listMessage: {
-    typeOfUser: "STAFF" | "STUDENT";
-    isReceived: boolean;
-    content: string;
-    name: string;
-    timestamp: string;
-  }[];
+  data: ConversationSummary[];
+  role: "student" | "staff";
+  onClose: (id: string) => void | Promise<void>;
 };
 
-const ConversationItem = ({
-  isClosed,
-  subject,
-  listMessage,
-}: ConversationItemProps) => {
-  return (
-    <Accordion type="multiple" className="w-full">
-      <AccordionItem
-        value="item-1"
-        className="border-neutral-light-primary-300 rounded-[8px] border-[1px]"
-      >
-        <AccordionTrigger className="bg-neutral-light-primary-100 cursor-pointer rounded-t-[8px] border-b-1 p-2 text-left hover:no-underline">
-          <div className="flex flex-col items-start gap-1">
-            <span className="text-[15px] font-medium">
-              {subject || "Request for additional information"}
-            </span>
-            {isClosed && <StatusBadge type="CLOSED" />}
-          </div>
-        </AccordionTrigger>
+const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
+  const [replyText, setReplyText] = useState("");
+  const [conversationId, setConversationId] = useState<string>("");
 
-        <AccordionContent className="flex w-full flex-col gap-4 rounded-b-[8px] border-b-1 px-4 py-2">
-          {listMessage.map((message, index) => (
-            <MessageItem key={index} {...message} />
-          ))}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+  // NEW: Tạo ref để tham chiếu đến đáy của danh sách tin nhắn
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { data: conversationDetail } =
+    useGetClarificationsDetailById(conversationId);
+  const { mutateAsync: createMessageInConversation } =
+    useCreateMessageInConversation(conversationId);
+  const queryClient = useQueryClient();
+
+  // NEW: useEffect để tự động scroll mỗi khi conversationDetail thay đổi (có tin nhắn mới)
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversationDetail]); // Dependency là conversationDetail để kích hoạt khi fetch lại dữ liệu
+
+  const handleSendReply = async () => {
+    if (!replyText.trim()) return;
+    await createMessageInConversation({ content: replyText });
+    await queryClient.invalidateQueries({
+      queryKey: [CLARIFICATION_QUERY_KEYS, conversationId],
+    });
+    setReplyText("");
+  };
+
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      await handleSendReply();
+    }
+  };
+
+  const handleOnChangeConversation = (id: string) => {
+    setConversationId(id);
+  };
+
+  const handleCloseConversation = async (id: string) => {
+    await onClose(id);
+    await queryClient.invalidateQueries({
+      queryKey: [CLARIFICATION_QUERY_KEYS, conversationId],
+    });
+  };
+
+  return (
+    <>
+      <Accordion type="single" className="w-full" collapsible>
+        <div className="flex flex-col gap-4">
+          {data &&
+            data.map((conversation) => (
+              <AccordionItem
+                value={conversation.id}
+                className="overflow-hidden rounded-lg border border-neutral-200 shadow-sm"
+                key={conversation.id}
+              >
+                <AccordionTrigger
+                  className="cursor-pointer bg-neutral-50 px-4 py-3 text-left transition-colors hover:bg-neutral-100 hover:no-underline"
+                  onClick={() => handleOnChangeConversation(conversation.id)}
+                >
+                  <div className="flex w-full flex-col items-start gap-1">
+                    <div className="flex w-full items-center justify-between pr-2">
+                      <span className="text-[15px] font-semibold text-neutral-800">
+                        {conversation.subject ||
+                          "Request for additional information"}
+                      </span>
+
+                      <div className="flex items-center gap-2">
+                        {conversation.isClosed ? (
+                          <StatusBadge type="CLOSED" />
+                        ) : (
+                          <StatusBadge type="OPENING" />
+                        )}
+                        {role === "staff" && !conversation.isClosed && (
+                          <ConfirmationDialog
+                            title="Bạn có muốn kết thúc cuộc hội thoại này?"
+                            description="Hành động này sẽ đánh dấu cuộc hội thoại là đã đóng và không thể tiếp tục trao đổi."
+                            onConfirm={() => {
+                              void handleCloseConversation(conversation.id);
+                            }}
+                            confirmText="Đồng ý"
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-7 rounded-3xl border-red-200 px-2 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                            >
+                              <MessageCircleOff className="mr-1 h-3 w-3" />
+                              Kết thúc hội thoại
+                            </Button>
+                          </ConfirmationDialog>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="flex w-full flex-col border-t border-neutral-100 bg-white p-0">
+                  <div className="flex max-h-[300px] flex-col gap-4 overflow-y-auto px-4 py-4">
+                    {conversationDetail &&
+                    conversationDetail.messages &&
+                    conversationDetail.messages.length > 0 ? (
+                      <>
+                        {conversationDetail.messages.map((message, index) => (
+                          <MessageItem key={index} {...message} />
+                        ))}
+                        {/* NEW: Thêm thẻ div rỗng ở cuối danh sách để làm mốc scroll */}
+                        {/* Chỉ render ref này nếu ID của accordion item khớp với conversationId đang chọn */}
+                        {conversation.id === conversationId && (
+                          <div ref={messagesEndRef} />
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-center text-sm text-neutral-400 italic">
+                        Chưa có tin nhắn nào.
+                      </p>
+                    )}
+                  </div>
+                  {!conversation.isClosed && (
+                    <div className="flex items-center gap-2 border-t border-neutral-100 bg-neutral-50 p-3">
+                      <Input
+                        placeholder="Nhập nội dung trao đổi..."
+                        className="flex-1 border-neutral-300 bg-white focus-visible:ring-blue-500"
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                      />
+                      <Button
+                        size="icon"
+                        className="h-10 w-10 shrink-0 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                        onClick={handleSendReply}
+                        disabled={!replyText.trim()}
+                      >
+                        <SendHorizontal className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+        </div>
+      </Accordion>
+    </>
   );
 };
 

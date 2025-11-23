@@ -22,26 +22,26 @@ export type FeedbackDetail = {
   };
   createdAt: string;
   description: string;
-  statusHistory: Array<{
-    status: string;
+  statusHistory: {
+    status: FeedbackStatus;
     message: string;
     note: string | null;
     createdAt: string;
-  }>;
+  }[];
   // Optional forwarding logs
-  forwardingLogs?: Array<{
+  forwardingLogs?: {
     id: string;
     fromDepartment: { id: string; name: string };
     toDepartment: { id: string; name: string };
     message: string | null;
     createdAt: string;
-  }>;
+  }[];
   // Optional file attachments
-  fileAttachments?: Array<{
+  fileAttachments?: {
     id: string;
     fileName: string;
     fileUrl: string;
-  }>;
+  }[];
   // For staff feedback view and can be null for private feedbacks
   student?: {
     id: string;
@@ -64,7 +64,7 @@ export interface FeedbackFilter extends BaseFilter {
   from?: string;
   to?: string;
 }
-export type FeedbackBodyParams = {
+export type CreateFeedbackPayload = {
   isPrivate: boolean;
   subject: string;
   location?: string | null;
@@ -73,6 +73,16 @@ export type FeedbackBodyParams = {
   description: string;
   // attachments: string[];
 };
+export type UpdateFeedbackStatusParams = {
+  id: string;
+  status: FeedbackStatus;
+  note?: string;
+};
+export type ForwardFeedbackParams = {
+  id: string;
+  toDepartmentId: string;
+  note?: string;
+};
 export type FeedbackHeaderType = Pick<
   FeedbackDetail,
   | "id"
@@ -80,8 +90,9 @@ export type FeedbackHeaderType = Pick<
   | "description"
   | "location"
   | "currentStatus"
-  // | "isPrivate"
+  | "isPrivate"
   | "createdAt"
   | "category"
   | "department"
+  | "student"
 >;
