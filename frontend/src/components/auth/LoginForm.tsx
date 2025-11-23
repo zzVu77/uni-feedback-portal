@@ -1,5 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ASSETS } from "@/constants/assets";
+import { useLogin } from "@/hooks/queries/useAuthenticationQueries";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -26,6 +28,7 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+  const { mutateAsync: login, isPending } = useLogin();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,10 +37,9 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Handle form submission logic here
-    alert(JSON.stringify(values, null, 2));
-  }
+  const onSubmit = form.handleSubmit(async (values) => {
+    await login(values);
+  });
 
   return (
     <div className="0 flex min-h-screen flex-col items-center justify-start gap-4 bg-gray-100 px-2 py-3 lg:px-10 lg:py-8">
@@ -61,7 +63,10 @@ export function LoginForm() {
           </span>
         </div>
         <Form {...form}>
-          <form className="space-y-4 md:space-y-6">
+          <form
+            className="space-y-4 md:space-y-6"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <FormField
               control={form.control}
               name="email"
@@ -90,11 +95,13 @@ export function LoginForm() {
             />
             <div>
               <Button
-                type="button"
+                type="submit"
                 variant={"primary"}
                 className="bg-blue-primary-600 hover:bg-blue-primary-700 w-full"
-                onClick={() => void form.handleSubmit(onSubmit)}
+                disabled={isPending}
+                onClick={onSubmit}
               >
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Đăng nhập
               </Button>
             </div>

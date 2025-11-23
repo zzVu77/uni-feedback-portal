@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ASSETS } from "@/constants/assets";
-
 import {
   adminNavigation,
   NavigationItem,
@@ -14,6 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useLogout } from "@/hooks/queries/useAuthenticationQueries";
 
 type SidebarProps = {
   showOnMobile?: boolean;
@@ -38,16 +38,17 @@ export default function Sidebar({
     default:
       navigation = studentNavigation;
   }
+  const { mutateAsync: logout, isPending } = useLogout();
   return (
     <div>
       {/* Sidebar Desktop */}
       <div
         className={cn(
-          "bg-neutral-dark-primary-800 border-neutral-dark-primary-800/20 h-screen w-60 flex-col gap-4 border-r-1 text-white",
+          "bg-neutral-dark-primary-800 border-neutral-dark-primary-800/20 h-screen w-60 flex-col gap-4 border-r text-white",
           showOnMobile ? "flex w-full" : "hidden lg:flex",
         )}
       >
-        <div className="flex items-center justify-center border-b-1 border-white/20 py-3">
+        <div className="flex items-center justify-center border-b border-white/20 py-3">
           <Image
             src={ASSETS.LOGO_UTE}
             alt="Logo UTE"
@@ -70,7 +71,7 @@ export default function Sidebar({
           </div>
         </div>
 
-        <div className="flex h-full flex-col justify-between border-t-1 border-white/20">
+        <div className="flex h-full flex-col justify-between border-t border-white/20">
           <div className="flex flex-col gap-2">
             {navigation.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href}>
@@ -90,7 +91,11 @@ export default function Sidebar({
             ))}
           </div>
           <div className="border-t border-white/20 p-2">
-            <Button className="text-neutral-dark-primary-800 flex w-full items-center justify-center bg-white hover:bg-gray-100">
+            <Button
+              onClick={() => logout()}
+              disabled={isPending}
+              className="text-neutral-dark-primary-800 flex w-full items-center justify-center bg-white hover:bg-gray-100"
+            >
               <LogOut className="text-neutral-dark-primary-800 mr-2 h-4 w-4" />
               Đăng xuất
             </Button>
