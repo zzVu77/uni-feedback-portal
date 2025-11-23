@@ -55,7 +55,7 @@ export function LoginForm() {
       </h1>
       <div className="0 flex w-full max-w-lg flex-col justify-center gap-4 rounded-lg bg-white px-6 py-6 shadow-lg">
         <div className="flex flex-col items-center justify-center gap-2">
-          <h2 className="text-red-primary-400/80 text-center text-2xl font-bold tracking-wide uppercase">
+          <h2 className="text-red-primary-500/80 text-center text-2xl font-bold tracking-wide uppercase">
             Đăng nhập
           </h2>
           <span className="font- text-center text-sm font-medium text-gray-500/70">
