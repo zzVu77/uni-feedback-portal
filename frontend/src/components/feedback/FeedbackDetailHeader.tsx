@@ -26,7 +26,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   const handleDelete = async () => {
     await deleteFeedback(id);
     setTimeout(() => {
-      window.location.href = "/my-feedbacks";
+      window.location.href = "/student/my-feedbacks";
     }, 1000);
   };
   return (
@@ -45,7 +45,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           {type === "student" && currentStatus === "PENDING" && (
             //TODO: If status is PENDING, show edit button
             <div className="order-1 flex flex-row items-center gap-2 md:order-2">
-              <Link href={`/my-feedbacks/${id}/edit`}>
+              <Link href={`/student/my-feedbacks/${id}/edit`}>
                 <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
                   <SquarePen className="h-4 w-4 text-black" />
                   Sửa

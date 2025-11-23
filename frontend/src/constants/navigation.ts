@@ -18,19 +18,19 @@ export type NavigationItem = {
 export const studentNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   {
-    href: "/create-new-feedback",
+    href: "/student/create-new-feedback",
     label: "Gửi góp ý",
     icon: MessageSquareText,
   },
-  { href: "/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
+  { href: "/student/my-feedbacks", label: "Lịch sử góp ý ", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
 ];
 export const staffNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
-  { href: "/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
+  { href: "/staff/list-feedbacks", label: "Góp ý tiếp nhận", icon: History },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   {
-    href: "/announcement-management",
+    href: "/staff/announcement-management",
     label: "Quản lý thông báo",
     icon: Megaphone,
   },
@@ -41,15 +41,19 @@ export const adminNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   // { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
-  { href: "/feedbacks-management", label: "Góp ý tiếp nhận", icon: History },
+  {
+    href: "/admin/feedbacks-management",
+    label: "Góp ý tiếp nhận",
+    icon: History,
+  },
   // { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
   {
-    href: "/reported-comment-management",
+    href: "/admin/reported-comment-management",
     label: "Quản lý bình luận vi phạm",
     icon: MessageSquareWarning,
   },
   {
-    href: "/category-management",
+    href: "/admin/category-management",
     label: "Quản lý danh mục",
     icon: LayoutList,
   },

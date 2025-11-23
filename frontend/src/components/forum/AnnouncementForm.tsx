@@ -136,7 +136,7 @@ const AnnouncementForm = ({
   };
   const router = useRouter();
   const handleCancel = () => {
-    router.push("/announcement-management");
+    router.push("/staff/announcement-management");
   };
 
   return (

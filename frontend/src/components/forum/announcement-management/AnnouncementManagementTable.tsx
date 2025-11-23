@@ -67,7 +67,7 @@ export function AnnouncementManagementTable() {
           <Suspense fallback={null}>
             <Filter type="sort" items={sortOptions} />
           </Suspense>
-          <Link href="/announcement-management/create">
+          <Link href="/staff/announcement-management/create">
             <Button variant={"primary"} className="rounded-lg">
               <CirclePlus className="h-5 w-5" />
               Tạo thông báo mới
