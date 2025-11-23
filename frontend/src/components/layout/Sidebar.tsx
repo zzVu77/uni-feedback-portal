@@ -14,14 +14,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useLogout } from "@/hooks/queries/useAuthenticationQueries";
-
+import { useUser } from "@/context/UserContext";
+import { getRoleDisplayName } from "@/utils/getRoleDisplayName";
 type SidebarProps = {
   showOnMobile?: boolean;
   type?: "student" | "staff" | "admin";
+  fullName?: string;
 };
 export default function Sidebar({
   showOnMobile = false,
   type = "student",
+  fullName,
 }: SidebarProps) {
   let navigation: NavigationItem[];
   const pathname = usePathname();
@@ -39,6 +42,8 @@ export default function Sidebar({
       navigation = studentNavigation;
   }
   const { mutateAsync: logout, isPending } = useLogout();
+  const { setUser } = useUser();
+
   return (
     <div>
       {/* Sidebar Desktop */}
@@ -63,10 +68,10 @@ export default function Sidebar({
           </Avatar>
           <div className="flex flex-col items-center">
             <span className="text-[14px] font-medium text-white lg:text-[16px]">
-              Nguyễn Văn Vũ
+              {fullName}
             </span>
             <span className="text-muted/80 text-[12px] font-normal lg:text-[14px]">
-              (Sinh viên)
+              {getRoleDisplayName(type)}
             </span>
           </div>
         </div>
@@ -92,7 +97,11 @@ export default function Sidebar({
           </div>
           <div className="border-t border-white/20 p-2">
             <Button
-              onClick={() => logout()}
+              onClick={async () => {
+                await logout().then(() => {
+                  setUser(null);
+                });
+              }}
               disabled={isPending}
               className="text-neutral-dark-primary-800 flex w-full items-center justify-center bg-white hover:bg-gray-100"
             >
