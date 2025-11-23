@@ -1,28 +1,39 @@
-import { QueryNotificationsDto } from './dto/query-notifications.dto';
-import { PatchNotificationDto } from './dto/patch-notification.dto';
-import { BulkPatchNotificationsDto } from './dto/bulk-patch-notifications.dto';
+import { NotificationType } from '@prisma/client';
+import {
+  NotificationListResponseDto,
+  NotificationResponseDto,
+} from './dto/notification-response.dto';
 
 export interface NotificationsServiceContract {
-  list(
-    user_id: number,
-    query: QueryNotificationsDto,
-  ): Promise<{
-    items: Array<{
-      notification_id: number;
-      content: string;
-      notification_type: string;
-      is_read: boolean;
-      created_at: string;
-    }>;
-    total: number;
-  }>;
-  markOne(
-    notification_id: number,
-    user_id: number,
-    dto: PatchNotificationDto,
-  ): Promise<{ notification_id: number; is_read: boolean }>;
-  markBulk(
-    user_id: number,
-    dto: BulkPatchNotificationsDto,
-  ): Promise<{ success: true; affected: number }>;
+  createNotifications(params: {
+    userIds: string[];
+    content: string;
+    type: NotificationType;
+    targetId?: string;
+  }): Promise<NotificationResponseDto[]>;
+
+  markAsRead(params: {
+    ids?: string[];
+    all?: boolean;
+    type?: NotificationType[];
+    isRead?: boolean;
+    userId: string;
+  }): Promise<NotificationResponseDto[]>;
+
+  deleteNotifications(params: {
+    ids?: string[];
+    all?: boolean;
+    type?: NotificationType[];
+    userId: string;
+  }): Promise<{ deletedCount: number }>;
+
+  queryNotifications(params: {
+    userId: string;
+    page?: number;
+    pageSize?: number;
+    type?: NotificationType;
+    isRead?: boolean;
+    from?: Date;
+    to?: Date;
+  }): Promise<NotificationListResponseDto>;
 }
