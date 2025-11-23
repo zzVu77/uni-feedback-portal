@@ -2,6 +2,7 @@
 import { Loading } from "@/components/common/Loading";
 import ConversationSection from "@/components/conversation/ConversationSection";
 import FeedbackDetailHeader from "@/components/feedback/FeedbackDetailHeader";
+import StatusTimeLine from "@/components/feedback/StatusTimeline";
 import Wrapper from "@/components/shared/Wrapper";
 import { useGetMyFeedbackById } from "@/hooks/queries/useFeedbackQueries";
 import { useIsClient } from "@/hooks/useIsClient";
@@ -24,7 +25,7 @@ const Page = () => {
         <div className="col-span-1 w-full lg:col-span-2">
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
         </div>
-        {/* <StatusTimeLine /> */}
+        <StatusTimeLine statusHistory={feedback.statusHistory} />
         <ConversationSection
           currentFeedbackStatus={feedback.currentStatus}
           role="student"

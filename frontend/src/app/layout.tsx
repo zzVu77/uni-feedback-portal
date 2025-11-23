@@ -34,7 +34,7 @@ export default async function RootLayout({
   const user = token ? await getUserFromToken(token) : null;
   const userData: UserInfo | null = user
     ? {
-        id: user.id,
+        id: user.sub,
         fullName: user.fullName,
         role: user.role,
         departmentId: user.departmentId,
