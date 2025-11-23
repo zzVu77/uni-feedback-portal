@@ -1,17 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-
+import { useRouter, useSearchParams } from "next/navigation";
 import { ILoginPayload, login, logout } from "@/services/auth-service";
 import { toast } from "sonner";
 
 export const useLogin = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: (payload: ILoginPayload) => login(payload),
     retry: false,
     onSuccess: () => {
+      window.location.reload();
       toast.success("Đăng nhập thành công");
-      router.push("/");
+      const returnTo = searchParams.get("returnTo");
+      const redirectPath = returnTo || "/";
+      router.push(redirectPath);
     },
     onError: () => {
       toast.error("Email hoặc mật khẩu không chính xác");

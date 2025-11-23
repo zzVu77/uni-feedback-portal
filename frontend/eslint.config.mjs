@@ -31,7 +31,7 @@ export default tseslint.config(
   },
   {
     rules: {
-      "no-console": ["error", { allow: ["warn", "error"] }], // cấm console.log
+      "no-console": ["error", { allow: ["warn", "error"] }],
       "prettier/prettier": ["error", { endOfLine: "auto" }],
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unused-vars": [
@@ -40,6 +40,8 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-misused-promises": "warn",
+      "@typescript-eslint/no-unsafe-call": "warn",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
     },
   },
 );

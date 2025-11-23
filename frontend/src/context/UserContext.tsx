@@ -1,7 +1,12 @@
-// context/UserContext.tsx
 "use client";
 import { UserInfo } from "@/types";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
 type UserContextType = {
   user: UserInfo | null;
@@ -18,6 +23,10 @@ export const UserProvider = ({
   initialUser?: UserInfo | null;
 }) => {
   const [user, setUser] = useState<UserInfo | null>(initialUser);
+
+  useEffect(() => {
+    setUser(initialUser);
+  }, [initialUser]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
