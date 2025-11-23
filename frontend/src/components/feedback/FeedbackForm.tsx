@@ -160,7 +160,7 @@ const FeedbackForm = ({
     const payload = mapFormValuesToFeedbackParams(values);
     await onSubmit(payload);
     setTimeout(() => {
-      router.replace(`/my-feedbacks/${id}`);
+      router.replace(`/student/my-feedbacks/${id}`);
     }, 1000);
   });
 

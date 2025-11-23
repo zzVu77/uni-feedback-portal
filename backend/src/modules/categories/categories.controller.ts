@@ -27,6 +27,7 @@ import {
   CategoryParamDto,
   UpdateCategoryDto,
   UpdateCategoryStatusDto,
+  CategoryOptionResponseDto,
 } from './dto';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
@@ -72,6 +73,16 @@ export class CategoriesController {
     @Query() query: QueryCategoriesDto,
   ): Promise<CategoryListResponseDto> {
     return this.categoriesService.getAllCategories(query);
+  }
+  @Get('options')
+  @ApiOperation({ summary: 'Get a list of categories' })
+  @ApiResponse({
+    status: 200,
+    description: 'A list of categories.',
+    type: [CategoryOptionResponseDto],
+  })
+  getCategoryOptions(): Promise<CategoryOptionResponseDto[]> {
+    return this.categoriesService.getCategoryOptions();
   }
 
   @Patch(':categoryId')

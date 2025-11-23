@@ -136,7 +136,9 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
         const announcement = row.original;
         return (
           <div className="flex flex-row items-center justify-start gap-2">
-            <Link href={`/announcement-management/edit/${announcement.id}`}>
+            <Link
+              href={`/staff/announcement-management/edit/${announcement.id}`}
+            >
               <Button
                 variant="outline"
                 className="h-8 w-8 bg-blue-200/40 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-blue-200/80 hover:text-black/80"
@@ -152,7 +154,7 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
                 <Eye className="h-4 w-4" />
               </Button>
             </Link>
-            <Link href={`/my-feedbacks/${announcement.id}`}>
+            <Link href={`/student/my-feedbacks/${announcement.id}`}>
               <Button
                 variant="outline"
                 className="h-8 w-8 bg-red-200/40 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-red-200/80 hover:text-black/80"

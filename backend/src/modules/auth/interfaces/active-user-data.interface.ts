@@ -11,6 +11,8 @@ export interface ActiveUserData {
    */
   role: UserRole;
 
+  fullName: string;
+
   /**
    * The user's department ID (if applicable, e.g., for staff).
    */

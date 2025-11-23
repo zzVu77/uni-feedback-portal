@@ -15,6 +15,7 @@ import {
 import {
   CategoryDto,
   CategoryListResponseDto,
+  CategoryOptionResponseDto,
 } from './dto/category-response.dto';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
@@ -94,6 +95,18 @@ export class CategoriesService {
     }));
 
     return { results, total };
+  }
+
+  async getCategoryOptions(): Promise<CategoryOptionResponseDto[]> {
+    const categories = await this.prisma.categories.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return categories;
   }
 
   async getCategoryById(id: string): Promise<CategoryDto> {

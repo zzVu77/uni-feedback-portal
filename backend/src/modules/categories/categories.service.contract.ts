@@ -2,6 +2,7 @@ import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import {
   CategoryDto,
   CategoryListResponseDto,
+  CategoryOptionResponseDto,
   CreateCategoryDto,
   QueryCategoriesDto,
   UpdateCategoryDto,
@@ -15,6 +16,8 @@ export interface CategoriesServiceContract {
   ): Promise<CategoryDto>;
 
   getAllCategories(query: QueryCategoriesDto): Promise<CategoryListResponseDto>;
+
+  getCategoryOptions(): Promise<CategoryOptionResponseDto[]>;
 
   getCategoryById(id: string): Promise<CategoryDto>;
 

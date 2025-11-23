@@ -17,6 +17,7 @@ export class TokenService {
     const refreshTokenId = randomUUID();
     const accessTokenPayload: Partial<ActiveUserData> = {
       role: user.role,
+      fullName: user.fullName,
       ...(user.departmentId && { departmentId: user.departmentId }),
     };
 

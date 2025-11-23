@@ -2,6 +2,7 @@ import {
   CreateDepartmentDto,
   DepartmentDto,
   DepartmentListResponseDto,
+  DepartmentOptionResponseDto,
   QueryDepartmentsDto,
   UpdateDepartmentDto,
   UpdateDepartmentStatusDto,
@@ -17,6 +18,8 @@ export interface DepartmentsServiceContract {
   getAllDepartments(
     query: QueryDepartmentsDto,
   ): Promise<DepartmentListResponseDto>;
+
+  getDepartmentOptions(): Promise<DepartmentOptionResponseDto[]>;
 
   getDepartmentById(id: string): Promise<DepartmentDto>;
 
