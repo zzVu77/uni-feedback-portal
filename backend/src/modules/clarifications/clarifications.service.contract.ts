@@ -1,3 +1,4 @@
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import {
   CloseClarificationDto,
   CreateClarificationDto,
@@ -9,22 +10,26 @@ import {
 } from './dto/';
 
 export interface ClarificationsServiceContract {
-  CreateClarificationConversation(
+  createClarificationConversation(
     dto: CreateClarificationDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationDetailDto>;
-  GetAllClarificationsConversations(
+  getAllClarificationsConversations(
     query: QueryClarificationsDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationListResponseDto>;
-  GetClarificationConversationDetail(
+  getClarificationConversationDetail(
     conversationId: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationDetailDto>;
-  CreateMessage(dto: CreateMessageDto, userId: string): Promise<MessageDto>;
-  CloseClarification(
+  createMessage(
+    conversationId: string,
+    dto: CreateMessageDto,
+    actor: ActiveUserData,
+  ): Promise<MessageDto>;
+  closeClarificationConversation(
     conversationId: string,
     dto: CloseClarificationDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationDetailDto>;
 }

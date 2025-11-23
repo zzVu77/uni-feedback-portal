@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { DepartmentsModule } from './modules/departments/departments.module';
@@ -17,9 +18,13 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { MailModule } from './modules/mail/mail.module';
+import { RedisModule } from './modules/redis/redis.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    RedisModule,
     AuthModule,
     UsersModule,
     DepartmentsModule,
@@ -36,6 +41,7 @@ import { CommentModule } from './modules/comment/comment.module';
     DashboardModule,
     PrismaModule,
     CommentModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

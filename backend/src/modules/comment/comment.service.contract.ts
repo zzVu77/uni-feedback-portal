@@ -6,29 +6,30 @@ import {
   CreateCommentReportDto,
   QueryCommentsDto,
 } from './dto/';
-import { CommentReports, UserRole } from '@prisma/client';
+import { CommentReports } from '@prisma/client';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 export interface CommentServiceContract {
   // ===================== CREATE =====================
-  CreateForumPostComment(
+  createForumPostComment(
     dto: CreateCommentDto,
     postId: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<CommentDto>;
 
-  CreateAnnouncementComment(
+  createAnnouncementComment(
     dto: CreateCommentDto,
     announcementId: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<CommentDto>;
 
   // ===================== READ (GET) =====================
-  GetForumPostComments(
+  getForumPostComments(
     postId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto>;
 
-  GetAnnouncementComments(
+  getAnnouncementComments(
     announcementId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto>;
@@ -41,17 +42,14 @@ export interface CommentServiceContract {
   ): Promise<Record<string, number>>;
 
   // ===================== OTHER ACTIONS =====================
-  CreateCommentReport(
+  createCommentReport(
     commentId: string,
-    userId: string,
+    actor: ActiveUserData,
     dto: CreateCommentReportDto,
   ): Promise<CommentReports>;
 
-  DeleteComment(
+  deleteComment(
     commentId: string,
-    actor: {
-      id: string;
-      role: UserRole;
-    },
+    actor: ActiveUserData,
   ): Promise<CommentDeletedResponseDto>;
 }
