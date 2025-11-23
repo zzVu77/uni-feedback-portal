@@ -59,7 +59,7 @@ export function CategoryManagementTable() {
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
         </React.Suspense>
         <CategoryDialog mode="create" onSubmit={() => Promise.resolve()}>
-          <Button variant="primary" className="bg-green-500 hover:bg-green-500">
+          <Button variant="primary" className="">
             <PlusCircle className="mr-2 h-4 w-4" />
             Thêm Danh Mục
           </Button>
