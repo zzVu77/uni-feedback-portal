@@ -20,8 +20,8 @@ const Page = () => {
   if (isLoading || !feedback) return <Loading variant="spinner" />;
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
-    <Wrapper>
-      <div className="grid grid-cols-1 gap-x-4 gap-y-2 pb-3 lg:grid-cols-2">
+    <Wrapper classNames={{ container: "lg:px-4" }}>
+      <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2 pb-3 lg:grid-cols-2">
         <div className="col-span-1 w-full lg:col-span-2">
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
         </div>

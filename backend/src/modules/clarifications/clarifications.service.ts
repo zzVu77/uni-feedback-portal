@@ -122,7 +122,7 @@ export class ClarificationsService {
       await this.prisma.clarificationConversations.findUnique({
         where: { id: conversationId },
         include: {
-          feedback: { select: { userId: true } },
+          feedback: { select: { userId: true, isPrivate: true } },
           messages: {
             include: {
               user: { select: { id: true, fullName: true, role: true } },
@@ -157,7 +157,11 @@ export class ClarificationsService {
         id: msg.id,
         content: msg.content ?? 'Message not found',
         createdAt: msg.createdAt.toISOString(),
-        user: msg.user,
+        user:
+          conversation.feedback.isPrivate &&
+          msg.user.id === conversation.feedback.userId
+            ? { ...msg.user, fullName: 'Anonymous' }
+            : msg.user,
         attachments: msg.attachments,
       })),
     };

@@ -74,7 +74,7 @@ const formSchema = z.object({
     .optional(),
   description: z
     .string()
-    .min(1, { message: "Vui lòng nhập mô tả chi tiết." })
+    .min(10, { message: "Vui lòng nhập mô tả chi tiết. Tối thiểu 10 ký tự." })
     .max(5000, {
       message: "Tối đa 5000 ký tự.",
     }),
@@ -155,6 +155,9 @@ const FeedbackForm = ({
     await onSubmit(payload);
     form.reset();
     setIsSubmitDialogOpen(false);
+    setTimeout(() => {
+      router.replace(`/student/my-feedbacks`);
+    }, 1000);
   });
   const handleUpdateFeedback = form.handleSubmit(async (values) => {
     const payload = mapFormValuesToFeedbackParams(values);

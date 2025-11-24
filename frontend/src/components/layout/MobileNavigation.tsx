@@ -32,7 +32,7 @@ const MobileNavigation = ({ type = "student", fullName }: Props) => {
         <DrawerTrigger asChild>
           <Button
             variant="outline"
-            className="border-0 bg-transparent px-1 shadow-none"
+            className="border-0 bg-transparent px-1 shadow-none hover:bg-transparent"
           >
             <Menu className="text-white" />
           </Button>

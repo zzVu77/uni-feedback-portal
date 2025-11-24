@@ -26,11 +26,12 @@ const MessageItem = ({ content, user, createdAt }: Message) => {
   const { user: currentUser } = useUser();
   const config = MESSAGE_CONFIG[user.role] || MESSAGE_CONFIG.DEPARTMENT_STAFF;
   const { icon: Icon, iconClassName, bgStyle } = config;
+  const isCurrentUser = currentUser?.id === user.id;
   return (
     <div
       className={cn(
-        "flex w-full max-w-[90%] flex-col gap-1 px-2 py-4 shadow-xs",
-        currentUser?.id === user.id
+        "flex w-fit max-w-[90%] flex-col gap-1 px-2 py-4 shadow-xs",
+        isCurrentUser
           ? "bg-blue-primary-50 self-end rounded-tl-[6px] rounded-b-[6px]"
           : "bg-neutral-light-primary-200/30 self-start rounded-tr-[6px] rounded-b-[6px]",
       )}
@@ -40,7 +41,9 @@ const MessageItem = ({ content, user, createdAt }: Message) => {
         <div className={`rounded-full ${bgStyle} p-1`}>
           {Icon && <Icon className={`${iconClassName}`} />}
         </div>
-        <span className="text-[14px] font-medium">{user.fullName}</span>
+        <span className="text-[14px] font-medium">
+          {isCurrentUser ? "Bạn" : user.fullName}
+        </span>
         <span className="text-[11px] text-gray-500 before:mx-0.5 before:content-['•']">
           {new Date(createdAt).toLocaleString("vi-VN", {
             hour: "2-digit",
