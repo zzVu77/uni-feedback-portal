@@ -4,8 +4,9 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useState,
   useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 type UserContextType = {
@@ -28,10 +29,16 @@ export const UserProvider = ({
     setUser(initialUser);
   }, [initialUser]);
 
+  const contextValue = useMemo(
+    () => ({
+      user,
+      setUser,
+    }),
+    [user],
+  );
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
 };
 

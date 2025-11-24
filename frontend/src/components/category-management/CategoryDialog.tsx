@@ -137,7 +137,12 @@ export function CategoryDialog({
               >
                 Hủy
               </Button>
-              <Button type="submit" variant="primary" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                variant="primary"
+                className="bg-green-500 hover:bg-green-500"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (

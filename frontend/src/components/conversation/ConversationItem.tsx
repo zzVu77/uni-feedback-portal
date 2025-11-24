@@ -30,8 +30,7 @@ type ConversationItemProps = {
 const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
   const [replyText, setReplyText] = useState("");
   const [conversationId, setConversationId] = useState<string>("");
-
-  // NEW: Tạo ref để tham chiếu đến đáy của danh sách tin nhắn
+  // const { user } = useUser();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: conversationDetail } =
@@ -40,12 +39,11 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
     useCreateMessageInConversation(conversationId);
   const queryClient = useQueryClient();
 
-  // NEW: useEffect để tự động scroll mỗi khi conversationDetail thay đổi (có tin nhắn mới)
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [conversationDetail]); // Dependency là conversationDetail để kích hoạt khi fetch lại dữ liệu
+  }, [conversationDetail]);
 
   const handleSendReply = async () => {
     if (!replyText.trim()) return;
@@ -131,10 +129,14 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                     conversationDetail.messages.length > 0 ? (
                       <>
                         {conversationDetail.messages.map((message, index) => (
-                          <MessageItem key={index} {...message} />
+                          <MessageItem
+                            key={index}
+                            content={message.content}
+                            user={message.user}
+                            createdAt={message.createdAt}
+                            id={message.id}
+                          />
                         ))}
-                        {/* NEW: Thêm thẻ div rỗng ở cuối danh sách để làm mốc scroll */}
-                        {/* Chỉ render ref này nếu ID của accordion item khớp với conversationId đang chọn */}
                         {conversation.id === conversationId && (
                           <div ref={messagesEndRef} />
                         )}
