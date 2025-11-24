@@ -1,10 +1,20 @@
 import { useDeleteFeedbackById } from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackHeaderType } from "@/types";
-import { SquarePen, Trash2 } from "lucide-react";
+import {
+  Building2,
+  Calendar,
+  MapPin,
+  SquarePen,
+  Tag,
+  Trash2,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
+import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
 import Attachment from "./Attachment";
+
 type Props = {
   type: "student" | "staff";
   data: FeedbackHeaderType;
@@ -31,7 +41,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   };
   return (
     <>
-      <div className="flex w-full flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
+      <div className="flex w-full flex-col gap-4 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
         {/* Title */}
         <div className="flex flex-col items-start justify-between gap-1 md:flex-row lg:gap-4">
           <h1 className="order-2 text-[16px] font-bold text-black md:order-1 lg:text-[24px]">
@@ -64,34 +74,67 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
             </div>
           )}
         </div>
-        {/* Information */}
-        <ul className="text-neutral-dark-primary-500 flex list-inside list-disc flex-col gap-2 md:grid lg:flex lg:flex-row">
-          {type === "staff" ? (
-            <li className="text-[12px] font-normal xl:text-[14px]">
-              Người gửi:{" "}
-              {isPrivate ? "Ẩn danh" : data.student?.fullName || "Nguyễn Văn A"}
-            </li>
-          ) : (
-            <li className="text-[12px] font-normal xl:text-[14px]">
-              Phòng ban tiếp nhận:{" "}
-              {department.name || "Phòng Quản trị hệ thống"}
-            </li>
-          )}
 
-          <li className="text-[12px] font-normal xl:text-[14px]">
-            Ngày gửi: {new Date(createdAt).toLocaleDateString("vi-VN")}
-          </li>
-          <li className="text-[12px] font-normal xl:text-[14px]">
-            Danh mục: {category.name || "Cơ sở vật chất"}
-          </li>
-          {location && (
-            <li className="text-[12px] font-normal xl:text-[14px]">
-              Địa điểm: {location}
-            </li>
+        {/* Information */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Status Badge */}
+          <StatusBadge type={currentStatus as StatusBadgeProps["type"]} />
+          {/* 1. Date Badge */}
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1.5 rounded-md bg-slate-100 px-2.5 py-1 text-slate-600 hover:bg-slate-200"
+          >
+            <Calendar className="h-3.5 w-3.5" />
+            <span className="font-normal">
+              {new Date(createdAt).toLocaleDateString("vi-VN")}
+            </span>
+          </Badge>
+          {/* 2. Sender or Department Badge */}
+          {type === "staff" ? (
+            <Badge
+              variant="secondary"
+              className="text-bg-fuchsia-700 flex items-center gap-1.5 rounded-md bg-fuchsia-50 px-2.5 py-1 hover:bg-fuchsia-100"
+            >
+              <User className="h-3.5 w-3.5" />
+              <span className="font-normal">
+                {isPrivate
+                  ? "Ẩn danh"
+                  : data.student?.fullName || "Nguyễn Văn A"}
+              </span>
+            </Badge>
+          ) : (
+            <Badge
+              variant="secondary"
+              className="flex items-center gap-1.5 rounded-md bg-indigo-50 px-2.5 py-1 text-indigo-700 hover:bg-indigo-100"
+            >
+              <Building2 className="h-3.5 w-3.5" />
+              <span className="font-normal">
+                {department.name || "Phòng Quản trị hệ thống"}
+              </span>
+            </Badge>
           )}
-        </ul>
-        {/* Status Badge */}
-        <StatusBadge type={currentStatus as StatusBadgeProps["type"]} />
+          {/* 3. Category Badge */}
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1.5 rounded-md bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100"
+          >
+            <Tag className="h-3.5 w-3.5" />
+            <span className="font-normal">
+              {category.name || "Cơ sở vật chất"}
+            </span>
+          </Badge>
+
+          {/* 4. Location Badge (Conditional) */}
+          {location && (
+            <Badge
+              variant="secondary"
+              className="flex items-center gap-1.5 rounded-md bg-emerald-50 px-2.5 py-1 text-emerald-700 hover:bg-emerald-100"
+            >
+              <MapPin className="h-3.5 w-3.5" />
+              <span className="font-normal">{location}</span>
+            </Badge>
+          )}
+        </div>
         {/* Description */}
         <div>
           <h2 className="text-[18px] font-medium">Nội dung:</h2>
@@ -101,10 +144,12 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           </p>
         </div>
         {/* Attachments */}
-        <h2 className="mt-4 text-[18px] font-medium">Tệp đính kèm:</h2>
-        <Attachment />
-        <Attachment />
-        <Attachment />
+        <h2 className="mt-2 text-[18px] font-medium">Tệp đính kèm:</h2>
+        <div className="flex flex-col gap-2">
+          <Attachment />
+          <Attachment />
+          <Attachment />
+        </div>
       </div>
     </>
   );
