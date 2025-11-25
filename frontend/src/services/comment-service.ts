@@ -40,3 +40,6 @@ export const postCommentByAnnouncementID = async (
 export const deleteCommentById = async (id: string) => {
   await axiosInstance.delete(`${commentBaseUrl}/${id}`);
 };
+export const reportCommentById = async (id: string, reason: string) => {
+  await axiosInstance.post(`${commentBaseUrl}/report/${id}`, { reason });
+};

@@ -116,5 +116,6 @@ export const config = {
     "/admin/:path*",
     "/staff/:path*",
     "/forum/:path*",
+    "/notifications/:path*",
   ],
 };

@@ -14,6 +14,8 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { ReportDialog } from "./ReportDialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+// Import hook
+import { useReportComment } from "@/hooks/queries/useCommentQueries";
 
 interface CommentItemProps {
   comment: Comment;
@@ -35,6 +37,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyContent, setReplyContent] = useState<string>("");
 
+  // Integrate Report Mutation
+  const { mutateAsync: reportComment } = useReportComment();
+
   const handleSubmitReply = () => {
     if (!replyContent.trim()) return;
     onReplySubmit(comment.id, replyContent);
@@ -43,8 +48,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
   };
 
   const handleDelete = () => {
-    // Execute the delete callback passed from parent
     onDelete(comment.id);
+  };
+
+  // Handle report submission from dialog
+  const handleReportSubmit = async (reason: string) => {
+    await reportComment({ id: comment.id, reason });
   };
 
   const isAuthor = currentUser.id === comment.user.id;
@@ -97,7 +106,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
               <MessageSquareReply className="h-4 w-4" /> Trả lời
             </Button>
           )}
-          <ReportDialog onSubmit={() => Promise.resolve()}>
+
+          {/* Connected Report Dialog */}
+          <ReportDialog onSubmit={handleReportSubmit}>
             <Button
               className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
               variant="outline"
@@ -105,6 +116,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               <Flag className="h-4 w-4" /> Báo cáo
             </Button>
           </ReportDialog>
+
           {isAuthor && (
             <ConfirmationDialog
               title="Xác nhận xóa bình luận"
@@ -160,7 +172,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 key={reply.id}
                 comment={reply}
                 onReplySubmit={onReplySubmit}
-                onDelete={onDelete} // Recursively pass the delete handler
+                onDelete={onDelete}
                 currentUser={currentUser}
                 level={level + 1}
                 isLast={

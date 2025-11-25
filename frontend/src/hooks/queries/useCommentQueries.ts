@@ -8,6 +8,7 @@ import {
   getCommentsByPostID,
   postCommentByAnnouncementID,
   postCommentByPostID,
+  reportCommentById,
 } from "@/services/comment-service";
 import { CommentPayload } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -87,9 +88,7 @@ export const useCreateCommentByAnnouncementId = (announcementId: string) => {
   });
 };
 
-// --- SHARED DELETE HOOK ---
-
-// Updated to accept 'type' to determine which query to invalidate
+// Common Hooks
 export const useDeleteComment = (
   postId: string,
   type: "feedback" | "announcement",
@@ -99,7 +98,6 @@ export const useDeleteComment = (
     mutationFn: (id: string) => deleteCommentById(id),
     onSuccess: () => {
       toast.success("Xóa bình luận thành công!");
-
       // Determine the correct query key to invalidate based on type
       const queryKey =
         type === "feedback"
@@ -110,6 +108,20 @@ export const useDeleteComment = (
     },
     onError: () => {
       toast.error("Đã có lỗi xảy ra khi xóa bình luận.");
+    },
+    retry: false,
+  });
+};
+
+export const useReportComment = () => {
+  return useMutation({
+    mutationFn: (data: { id: string; reason: string }) =>
+      reportCommentById(data.id, data.reason),
+    onSuccess: () => {
+      toast.success("Thao tác thành công!");
+    },
+    onError: () => {
+      toast.error("Đã có lỗi xảy ra khi báo cáo bình luận.");
     },
     retry: false,
   });
