@@ -75,7 +75,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
             {comment.user.fullName}
           </span>
           <time className="text-[13px] font-normal text-gray-400 before:mx-1 before:content-['•']">
-            {comment.createdAt}
+            {new Date(comment.createdAt).toLocaleString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </time>
         </div>
       </div>

@@ -8,26 +8,43 @@ import CommentItem from "./CommentItem";
 import { Comment } from "@/types";
 import { useUser } from "@/context/UserContext";
 import {
-  useCreateComment,
+  useCreateCommentByAnnouncementId,
+  useCreateCommentByPostId,
   useDeleteComment,
 } from "@/hooks/queries/useCommentQueries";
 
 type Props = {
   postId: string;
   data: Comment[];
+  type: "feedback" | "announcement"; // Added type prop
 };
 
-const CommentSection: React.FC<Props> = ({ data, postId }) => {
+const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
   const comments = data || [];
   const [newComment, setNewComment] = useState<string>("");
   const { user } = useUser();
 
-  // Integration: Create Mutation
-  const { mutate: createComment, isPending: isCreating } =
-    useCreateComment(postId);
+  // 1. Feedback Hooks
+  const { mutate: createFeedbackComment, isPending: isCreatingFeedback } =
+    useCreateCommentByPostId(postId);
 
-  // Integration: Delete Mutation
-  const { mutate: deleteComment } = useDeleteComment(postId);
+  // 2. Announcement Hooks
+  const {
+    mutate: createAnnouncementComment,
+    isPending: isCreatingAnnouncement,
+  } = useCreateCommentByAnnouncementId(postId);
+
+  // 3. Delete Hook (handles invalidation based on type)
+  const { mutate: deleteComment } = useDeleteComment(postId, type);
+
+  // Select the active function and state based on props
+  const createComment =
+    type === "feedback" ? createFeedbackComment : createAnnouncementComment;
+
+  const isCreating =
+    type === "feedback" ? isCreatingFeedback : isCreatingAnnouncement;
+
+  // --- HANDLERS ---
 
   const handleNewCommentSubmit = () => {
     if (!newComment.trim()) return;
