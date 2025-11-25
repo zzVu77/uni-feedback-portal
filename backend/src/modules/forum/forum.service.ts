@@ -133,7 +133,7 @@ export class ForumService {
       ...(post.feedback.isPrivate
         ? {}
         : {
-            student: {
+            user: {
               id: post.feedback.user.id,
               fullName: post.feedback.user.fullName,
               email: post.feedback.user.email,
