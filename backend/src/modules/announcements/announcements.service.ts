@@ -93,8 +93,8 @@ export class AnnouncementsService {
         userName: item.user.fullName,
       },
       department: {
-        id: item.user.department.id,
-        name: item.user.department.name,
+        id: item.user.department?.id ?? 'null',
+        name: item.user.department?.name ?? 'null',
       },
     }));
 
@@ -133,8 +133,8 @@ export class AnnouncementsService {
         userName: announcement.user.fullName,
       },
       department: {
-        id: announcement.user.department.id,
-        name: announcement.user.department.name,
+        id: announcement.user.department?.id ?? 'null',
+        name: announcement.user.department?.name ?? 'null',
       },
       files: announcement.files.map((f) => ({
         fileName: f.fileName,
@@ -186,8 +186,8 @@ export class AnnouncementsService {
         userName: announcement.user.fullName,
       },
       department: {
-        id: announcement.user.department.id,
-        name: announcement.user.department.name,
+        id: announcement.user.department?.id ?? 'null',
+        name: announcement.user.department?.name ?? 'null',
       },
       files: announcement.files.map((f) => ({
         fileName: f.fileName,
@@ -276,8 +276,8 @@ export class AnnouncementsService {
       },
 
       department: {
-        id: updated.user.department.id,
-        name: updated.user.department.name,
+        id: updated.user.department?.id ?? 'null',
+        name: updated.user.department?.name ?? 'null',
       },
 
       files: updated.files.map((f) => ({

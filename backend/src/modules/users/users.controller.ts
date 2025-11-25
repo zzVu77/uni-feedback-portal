@@ -1,24 +1,18 @@
 // users.controller.ts
-import { Controller, Get, Param } from '@nestjs/common';
-import {
-  ApiOkResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { GetUserParamDto } from './dto/get-user-param.dto';
+import { Controller, Get } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserResponseDto } from './dto/user-response.dto';
 import { UsersService } from './users.service';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  //Get user by ID
-  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiOperation({ summary: 'Get user info' })
   @ApiOkResponse({ type: UserResponseDto })
-  @ApiParam({ name: 'userId', type: Number, description: 'ID of the user' })
-  @Get(':userId')
-  async getUser(@Param() params: GetUserParamDto): Promise<UserResponseDto> {
-    return this.usersService.getById(params.userId);
+  @Get('/me')
+  async getUser(@ActiveUser() actor: ActiveUserData): Promise<UserResponseDto> {
+    return this.usersService.getUser(actor);
   }
 }

@@ -1,38 +1,52 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from '@prisma/client';
 
 export class UserResponseDto {
-  @ApiProperty({ example: '1', description: 'Unique user identifier' })
+  @ApiProperty({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Unique ID of the user',
+  })
   id: string;
 
   @ApiProperty({
-    example: 'Nguyen Van A',
+    example: 'John Doe',
     description: 'Full name of the user',
-    nullable: true,
   })
-  fullName: string | null;
+  fullName: string;
 
   @ApiProperty({
-    example: 'user@example.com',
+    example: 'johndoe@example.com',
     description: 'Email address of the user',
   })
   email: string;
 
   @ApiProperty({
-    enum: ['STUDENT', 'DEPARTMENT_STAFF', 'ADMIN'],
-    description: 'Role of the user in the system',
-    example: 'STUDENT',
+    example: UserRole.STUDENT,
+    enum: UserRole,
+    description: 'Role of the user',
   })
-  role: 'STUDENT' | 'DEPARTMENT_STAFF' | 'ADMIN';
+  role: UserRole;
 
   @ApiProperty({
-    example: '2',
-    description: 'Department ID where the user belongs',
+    description: 'Department the user belongs to, optional',
+    example: {
+      id: '550e8400-e29b-41d4-a716-446655440001',
+      name: 'Information Technology Department',
+      email: 'it@example.com',
+      location: 'Main Building',
+    },
+    required: false,
   })
-  departmentId: string;
+  department?: {
+    id: string;
+    name: string;
+    email?: string;
+    location?: string | null;
+  };
 
   @ApiProperty({
-    example: '2025-09-22T12:34:56.000Z',
-    description: 'Timestamp when the user was created',
+    example: '2025-10-15T10:00:00Z',
+    description: 'Date when the user was created',
   })
   createdAt: string;
 }
