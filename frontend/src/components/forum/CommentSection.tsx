@@ -11,7 +11,7 @@ import { useCreateComment } from "@/hooks/queries/useCommentQueries";
 
 type Props = {
   postId: string; // Added postId to props to identify the post
-  data: Comment[] | [];
+  data: Comment[];
 };
 
 const CommentSection: React.FC<Props> = ({ data, postId }) => {
