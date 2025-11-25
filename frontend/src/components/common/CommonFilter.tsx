@@ -5,7 +5,10 @@ import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 
 export const CategorySelection = () => {
   const { data } = useCategoryOptionsData();
-  const categoryOptions = [{ label: "Tất cả", value: "all" }, ...(data || [])];
+  const categoryOptions = [
+    { label: "Danh mục", value: "all" },
+    ...(data || []),
+  ];
   return (
     <Suspense fallback={null}>
       <Filter type="category" items={categoryOptions} />
@@ -16,7 +19,7 @@ export const CategorySelection = () => {
 export const DepartmentSelection = () => {
   const { data } = useGetDepartmentOptions();
   const departmentOptions = [
-    { label: "Tất cả", value: "all" },
+    { label: "Phòng ban", value: "all" },
     ...(data || []),
   ];
   return (
@@ -26,9 +29,22 @@ export const DepartmentSelection = () => {
   );
 };
 
+export const SortBySelection = () => {
+  const sortByOptions = [
+    { label: "Sắp xếp", value: "all" },
+    { label: "Mới nhất", value: "new" },
+    { label: "Nổi bật", value: "top" },
+  ];
+  return (
+    <Suspense fallback={null}>
+      <Filter type="sortBy" items={sortByOptions} />
+    </Suspense>
+  );
+};
 const CommonFilter = {
   CategorySelection,
   DepartmentSelection,
+  SortBySelection,
 };
 
 export default CommonFilter;

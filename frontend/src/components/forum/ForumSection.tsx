@@ -1,6 +1,9 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
+import { useForumPostFilters } from "@/hooks/filters/useForumPostFilter";
 import { useGetAllAnnouncement } from "@/hooks/queries/useAnnouncementQueries";
+import { useGetAllForumPost } from "@/hooks/queries/useForumPostQueries";
 import { useUrlTabs } from "@/hooks/useUrlTabs";
 import { Megaphone, MessageCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,12 +11,8 @@ import { Suspense, useEffect } from "react";
 import CommonFilter from "../common/CommonFilter";
 import { Loading } from "../common/Loading";
 import SearchBar from "../common/SearchBar";
-import Filter from "../common/filter/Filter";
 import AnnouncementCard from "./AnnouncementCard";
 import PostCard from "./PostCard";
-import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
-import { useForumPostFilters } from "@/hooks/filters/useForumPostFilter";
-import { useGetAllForumPost } from "@/hooks/queries/useForumPostQueries";
 
 type ForumTab = "feedbacks" | "announcements";
 
@@ -54,12 +53,7 @@ export function ForumSection() {
   //   { label: "Cafeteria", value: "cafeteria" },
   //   { label: "Student Services", value: "student-services" },
   // ];
-  const sortOptions = [
-    { label: "Tất cả", value: "all" },
-    { label: "Mới nhất", value: "newest" },
-    { label: "Cũ nhất", value: "oldest" },
-    { label: "Phổ biến nhất", value: "library" },
-  ];
+
   return (
     <div>
       <Tabs
@@ -90,13 +84,14 @@ export function ForumSection() {
           </Suspense>
           <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
             {currentTabValue === "feedbacks" ? (
-              <CommonFilter.CategorySelection />
+              <>
+                <CommonFilter.CategorySelection />
+                <CommonFilter.DepartmentSelection />
+                <CommonFilter.SortBySelection />
+              </>
             ) : (
               <CommonFilter.DepartmentSelection />
             )}
-            <Suspense fallback={null}>
-              <Filter type="sort" items={sortOptions} />
-            </Suspense>
           </div>
         </div>
         <TabsContent
