@@ -32,11 +32,17 @@ export class FeedbackManagementService {
     const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
     const where: Prisma.FeedbacksWhereInput = {
-      departmentId: actor.departmentId,
+      OR: [
+        { departmentId: actor.departmentId },
+
+        {
+          forwardingLogs: {
+            some: { fromDepartmentId: actor.departmentId },
+          },
+        },
+      ],
     };
 
-    // optional filters
-    where.departmentId = actor.departmentId;
     if (status) {
       where.currentStatus = Object.values(FeedbackStatus).includes(
         status.toUpperCase() as FeedbackStatus,
@@ -72,6 +78,9 @@ export class FeedbackManagementService {
           department: { select: { id: true, name: true } },
           category: { select: { id: true, name: true } },
           user: { select: { id: true, fullName: true, email: true } },
+          forwardingLogs: {
+            select: { toDepartmentId: true, fromDepartmentId: true },
+          },
         },
       }),
       this.prisma.feedbacks.count({ where }),
@@ -86,6 +95,9 @@ export class FeedbackManagementService {
       department: f.department,
       category: f.category,
       createdAt: f.createdAt.toISOString(),
+      isForwarding: f.forwardingLogs.some(
+        (log) => log.fromDepartmentId === actor.departmentId,
+      ),
       ...(f.isPrivate
         ? {}
         : {
