@@ -52,11 +52,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
       className={cn(
         "flex w-full flex-col gap-1 bg-transparent py-2",
         !isLast && "border-b border-gray-200",
-        comment.user.role === "STAFF" && "rounded-md bg-green-100/50 p-2",
+        comment.user.role === "DEPARTMENT_STAFF" &&
+          "rounded-md bg-green-100/50 p-2",
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        {comment.user.role === "STAFF" && (
+        {comment.user.role === "DEPARTMENT_STAFF" && (
           <BadgeCheck className="h-5 w-5 text-green-500" />
         )}
         <div className="bg-neutral-light-primary-200 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">

@@ -5,7 +5,12 @@ export interface Comment {
   user: {
     id: string;
     fullName: string;
-    role: "STUDENT" | "STAFF";
+    role: "STUDENT" | "DEPARTMENT_STAFF" | "ADMIN";
   };
   replies: Comment[];
 }
+
+export type CommentPayload = {
+  content: string;
+  parentId?: string;
+};
