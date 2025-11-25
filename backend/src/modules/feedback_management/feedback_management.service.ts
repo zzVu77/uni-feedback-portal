@@ -316,7 +316,13 @@ export class FeedbackManagementService {
 
     const where: Prisma.FeedbacksWhereInput = {};
 
-    if (status) where.currentStatus = status;
+    if (status) {
+      where.currentStatus = Object.values(FeedbackStatus).includes(
+        status.toUpperCase() as FeedbackStatus,
+      )
+        ? (status.toUpperCase() as FeedbackStatus)
+        : undefined;
+    }
     if (departmentId) where.departmentId = departmentId;
     if (categoryId) where.categoryId = categoryId;
     if (from || to) {

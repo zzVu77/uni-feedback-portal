@@ -5,6 +5,7 @@ import {
   deleteFeedbackById,
   forwardStaffFeedbackById,
   getAllFeedbacks,
+  getAllFeedbacksOfAllDepartments,
   getAllStaffFeedbacks,
   getMyFeedbackById,
   getStaffFeedbackById,
@@ -29,12 +30,17 @@ export const FEEDBACK_QUERY_KEYS = {
     STAFF_FEEDBACKS: "staff-feedbacks",
     STAFF_FEEDBACK_DETAIL: "staff-feedback-detail",
   },
+  admin: {
+    ALL_DEPARTMENTS_FEEDBACKS: "admin-all-departments-feedbacks",
+  },
 };
 type FeedbackUpdateParams = {
   id: string;
   data: CreateFeedbackPayload;
 };
-// Hooks for student feedback queries
+
+// --- STUDENT HOOKS ---
+
 export const useGetFeedbacks = (filters: FeedbackFilter) => {
   return useQuery({
     queryKey: [FEEDBACK_QUERY_KEYS.student.MY_FEEDBACKS, filters],
@@ -43,6 +49,7 @@ export const useGetFeedbacks = (filters: FeedbackFilter) => {
     placeholderData: (previousData) => previousData,
   });
 };
+
 export const useGetMyFeedbackById = (
   id: string,
   options?: { enabled?: boolean },
@@ -55,6 +62,7 @@ export const useGetMyFeedbackById = (
     ...options,
   });
 };
+
 export const useCreateFeedback = () => {
   return useMutation({
     mutationFn: (data: CreateFeedbackPayload) => createNewFeedback(data),
@@ -67,6 +75,7 @@ export const useCreateFeedback = () => {
     },
   });
 };
+
 export const useUpdateFeedbackById = () => {
   return useMutation({
     mutationFn: (params: FeedbackUpdateParams) =>
@@ -80,6 +89,7 @@ export const useUpdateFeedbackById = () => {
     },
   });
 };
+
 export const useDeleteFeedbackById = () => {
   return useMutation({
     mutationFn: (id: string) => deleteFeedbackById(id),
@@ -92,7 +102,9 @@ export const useDeleteFeedbackById = () => {
     },
   });
 };
-// Hooks for staff feedback queries
+
+// --- STAFF HOOKS ---
+
 export const useGetStaffFeedbacks = (filters: FeedbackFilter) => {
   return useQuery({
     queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS, filters],
@@ -101,6 +113,7 @@ export const useGetStaffFeedbacks = (filters: FeedbackFilter) => {
     placeholderData: (previousData) => previousData,
   });
 };
+
 export const useGetStaffFeedbackById = (
   id: string,
   options?: { enabled?: boolean },
@@ -113,6 +126,7 @@ export const useGetStaffFeedbackById = (
     ...options,
   });
 };
+
 export const useUpdateStaffFeedbackStatusById = () => {
   return useMutation({
     mutationFn: (params: UpdateFeedbackStatusParams) =>
@@ -138,5 +152,15 @@ export const useForwardStaffFeedbackById = () => {
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
     },
+  });
+};
+
+// --- ADMIN HOOKS  ---
+export const useGetAllFeedbacksOfAllDepartments = (filters: FeedbackFilter) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.admin.ALL_DEPARTMENTS_FEEDBACKS, filters],
+    queryFn: () => getAllFeedbacksOfAllDepartments(filters),
+    retry: false,
+    placeholderData: (previousData) => previousData,
   });
 };

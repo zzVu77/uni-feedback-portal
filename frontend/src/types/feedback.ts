@@ -56,6 +56,16 @@ export type StaffFeedbackItem = Pick<
   FeedbackDetail,
   "id" | "subject" | "currentStatus" | "createdAt" | "category" | "student"
 >;
+export type AdminFeedbackItem = Pick<
+  FeedbackDetail,
+  | "id"
+  | "subject"
+  | "currentStatus"
+  | "createdAt"
+  | "category"
+  | "student"
+  | "department"
+>;
 export interface FeedbackFilter extends BaseFilter {
   status?: FeedbackStatus;
   categoryId?: string;

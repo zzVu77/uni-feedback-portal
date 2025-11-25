@@ -1,7 +1,7 @@
 "use client";
 import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { StaffFeedbackItem } from "@/types";
+import { AdminFeedbackItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
+export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
   {
     accessorKey: "subject",
     header: () => {
@@ -34,7 +34,6 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
       </div>
     ),
   },
-
   {
     accessorKey: "category",
     accessorFn: (row) => row.category.name,
@@ -49,6 +48,23 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     cell: ({ cell }) => {
       const categoryName = cell.getValue() as string;
       return <div className="capitalize">{categoryName}</div>;
+    },
+  },
+  // --- ĐÃ XÓA PHẦN KHAI BÁO CATEGORY BỊ LẶP Ở ĐÂY ---
+  {
+    accessorKey: "department",
+    accessorFn: (row) => row.department.name,
+    header: () => {
+      return (
+        <div className="flex items-center gap-2">
+          <LayoutDashboard className="h-3 w-3" />
+          Phòng ban
+        </div>
+      );
+    },
+    cell: ({ cell }) => {
+      const departmentName = cell.getValue() as string; // Sửa tên biến cho đúng ngữ cảnh
+      return <div className="capitalize">{departmentName}</div>;
     },
   },
   {
@@ -95,8 +111,8 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
       );
     },
     cell: ({ cell }) => {
-      const departmentName = cell.getValue() as string;
-      return <div className="capitalize">{departmentName}</div>;
+      const studentName = cell.getValue() as string; // Sửa tên biến cho đúng ngữ cảnh
+      return <div className="capitalize">{studentName}</div>;
     },
   },
   {

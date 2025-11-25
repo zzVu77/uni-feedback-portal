@@ -2,6 +2,7 @@ import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import React, { Suspense } from "react";
 import Filter from "./filter/Filter";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
+import { FeedbackStatus } from "@/constants/data";
 
 export const CategorySelection = () => {
   const { data } = useCategoryOptionsData();
@@ -41,10 +42,18 @@ export const SortBySelection = () => {
     </Suspense>
   );
 };
+export const StatusSelection = () => {
+  return (
+    <Suspense fallback={null}>
+      <Filter type="status" items={FeedbackStatus} />
+    </Suspense>
+  );
+};
 const CommonFilter = {
   CategorySelection,
   DepartmentSelection,
   SortBySelection,
+  StatusSelection,
 };
 
 export default CommonFilter;

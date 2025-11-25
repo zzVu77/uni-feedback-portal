@@ -8,6 +8,7 @@ import {
 } from "@/types";
 const studentFeedbackBaseUrl = "/feedbacks";
 const staffFeedbackBaseUrl = "/managements/staff/feedbacks";
+const adminFeedbackBaseUrl = "/managements/admin/feedbacks";
 // Feedback service functions for student
 export const getAllFeedbacks = async (
   filter: FeedbackFilter,
@@ -83,4 +84,16 @@ export const forwardStaffFeedbackById = async (
     toDepartmentId,
     note,
   });
+};
+// Feedback service functions for admin
+export const getAllFeedbacksOfAllDepartments = async (
+  filter: FeedbackFilter,
+): Promise<PaginatedResponse<FeedbackDetail>> => {
+  const response = await axiosInstance.get<PaginatedResponse<FeedbackDetail>>(
+    adminFeedbackBaseUrl,
+    {
+      params: filter,
+    },
+  );
+  return response;
 };
