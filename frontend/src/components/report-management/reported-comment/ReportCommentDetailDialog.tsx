@@ -51,7 +51,13 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                   <span className="text-lg font-bold text-blue-500/80">
                     Chi tiết bình luận
                   </span>
-                  <Link href={`forum/posts/${target.targetInfo.id}`}>
+                  <Link
+                    href={
+                      target.targetType === "FORUM_POST"
+                        ? `/forum/posts/${target.targetInfo.id}`
+                        : `/forum//announcements/${target.targetInfo.id}`
+                    }
+                  >
                     <ExternalLink className="h-5 w-5 text-blue-500/80" />
                   </Link>
                 </div>
@@ -113,13 +119,12 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                 <div className="flex flex-row items-center justify-start gap-2">
                   <MessageSquareReply className="h-5 w-5 text-green-500/80" />
                   <span className="text-lg font-bold text-green-500/80">
-                    Phản hồi của bạn
+                    Phản hồi từ quản trị viên
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 rounded-md bg-green-100/20 p-2 shadow-xs">
                   <span>
-                    {adminResponse ??
-                      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde, molestiae minima distinctio vero et, excepturi sed id cupiditate optio dolor error harum, adipisci quisquam ab mollitia quibusdam! Maiores, nam nemo."}
+                    {adminResponse ?? "Chưa có phản hồi từ quản trị viên."}
                   </span>
                 </div>
               </div>
