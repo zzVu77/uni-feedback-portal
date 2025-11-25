@@ -160,6 +160,7 @@ export class ForumService {
             description: true,
             location: true,
             currentStatus: true,
+            statusHistory: true,
             isPrivate: true,
             fileAttachments: {
               select: {
@@ -198,6 +199,10 @@ export class ForumService {
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
+    const resolvedStatus = post.feedback.statusHistory.find(
+      (h) => h.status === 'RESOLVED',
+    );
+    const officeResponse = resolvedStatus?.note ?? resolvedStatus?.message;
 
     return {
       id: post.id,
@@ -224,6 +229,7 @@ export class ForumService {
           fileName: f.fileName,
           fileUrl: f.fileUrl,
         })),
+        officeResponse,
       },
       ...(post.feedback.isPrivate
         ? {}

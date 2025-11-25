@@ -4,7 +4,14 @@ export class FeedbackForumDto extends OmitType(FeedbackDetail, [
   'statusHistory',
   'forwardingLogs',
   'createdAt',
-]) {}
+] as const) {
+  @ApiProperty({
+    description: 'Response from office handling the feedback',
+    example: 'This feedback has been processed by IT department.',
+    required: false,
+  })
+  officeResponse?: string;
+}
 
 export class FeedbackForumSummaryDto extends OmitType(FeedbackForumDto, [
   'fileAttachments',
