@@ -3,6 +3,7 @@ import {
   PaginatedResponse,
   ReportCommentDetail,
   ReportCommentFilter,
+  UpdateReportCommentPayload,
 } from "@/types";
 
 export const reportCommentBaseUrl = "/moderation/reports";
@@ -15,4 +16,12 @@ export const getAllReportComments = async (
     params: filter,
   });
   return response;
+};
+export const updateReportComment = async (
+  reportCommentId: string,
+  payload: UpdateReportCommentPayload,
+) => {
+  await axiosInstance.patch(`${reportCommentBaseUrl}/${reportCommentId}`, {
+    ...payload,
+  });
 };

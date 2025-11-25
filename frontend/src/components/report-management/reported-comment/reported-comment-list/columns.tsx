@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import {
   ArrowUpDown,
   Calendar,
@@ -26,6 +26,122 @@ import Link from "next/link";
 import ReportCommentDetailDialog from "../ReportCommentDetailDialog";
 import ConfirmationDialog from "@/components/common/ConfirmationDialog";
 import { ReportCommentDetail } from "@/types";
+import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
+import { cn } from "@/lib/utils";
+
+const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
+  const source = row.original;
+  const { mutate: updateReport } = useUpdateReportComment(source.id);
+
+  const isResolved = source.status === "RESOLVED";
+
+  const handleDelete = () => {
+    updateReport({ status: "RESOLVED", isDeleted: true });
+  };
+
+  const handleResolve = () => {
+    updateReport({ status: "RESOLVED", isDeleted: false });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-4 w-4 p-0">
+          <MoreHorizontalIcon className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Hành động</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem asChild>
+          <div
+            onClick={(e) => e.preventDefault()}
+            className="w-full cursor-pointer"
+          >
+            <ReportCommentDetailDialog data={source}>
+              <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-blue-500 shadow-none hover:bg-transparent hover:text-blue-600">
+                <Eye className="text-blue-primary-500 mr-2 h-4 w-4" />
+                Xem chi tiết
+              </Button>
+            </ReportCommentDetailDialog>
+          </div>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild disabled={isResolved}>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              if (isResolved) return;
+            }}
+            className={cn(
+              "w-full cursor-pointer text-red-500 hover:text-red-500",
+              isResolved && "cursor-not-allowed opacity-50",
+            )}
+          >
+            {isResolved ? (
+              <Button
+                disabled
+                className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-red-500 shadow-none hover:bg-transparent"
+              >
+                <Trash className="mr-2 h-4 w-4 hover:text-gray-400" />
+                Xóa bình luận
+              </Button>
+            ) : (
+              <ConfirmationDialog
+                title="Xác nhận xóa bình luận?"
+                description="Hành động này sẽ ẩn bình luận khỏi hệ thống. Bạn có muốn tiếp tục không?"
+                onConfirm={handleDelete}
+                confirmText="Đồng ý"
+              >
+                <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-red-500 shadow-none hover:bg-transparent">
+                  <Trash className="mr-2 h-4 w-4 text-red-500 hover:text-gray-400" />
+                  Xóa bình luận
+                </Button>
+              </ConfirmationDialog>
+            )}
+          </div>
+        </DropdownMenuItem>
+
+        {/* Không vi phạm */}
+        <DropdownMenuItem asChild disabled={isResolved}>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              if (isResolved) return;
+            }}
+            className={cn(
+              "w-full cursor-pointer text-green-500 hover:text-green-500",
+              isResolved && "cursor-not-allowed opacity-50",
+            )}
+          >
+            {isResolved ? (
+              <Button
+                disabled
+                className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-green-500 shadow-none hover:bg-transparent"
+              >
+                <Check className="mr-2 h-4 w-4 text-green-400" />
+                Không vi phạm
+              </Button>
+            ) : (
+              <ConfirmationDialog
+                title="Xác nhận bình luận này không vi phạm?"
+                description="Hành động này sẽ đánh dấu bình luận này là không vi phạm. Bạn có muốn tiếp tục không?"
+                onConfirm={handleResolve}
+                confirmText="Đồng ý"
+              >
+                <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-green-500 shadow-none hover:bg-transparent">
+                  <Check className="mr-2 h-4 w-4 text-green-400" />
+                  Không vi phạm
+                </Button>
+              </ConfirmationDialog>
+            )}
+          </div>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
   {
@@ -179,70 +295,6 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const source = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-4 w-4 p-0">
-              <MoreHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              className="text-red-500 hover:text-red-500"
-            >
-              <ReportCommentDetailDialog data={source}>
-                <Button className="border-none bg-transparent text-blue-500 shadow-none hover:bg-transparent">
-                  <Eye className="text-blue-primary-500" />
-                  Xem chi tiết
-                </Button>
-              </ReportCommentDetailDialog>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              className="text-red-500 hover:text-red-500"
-            >
-              <ConfirmationDialog
-                title="Xác nhận xóa bình luận?"
-                description="Hành động này sẽ ẩn bình luận khỏi hệ thống. Bạn có muốn tiếp tục không?"
-                onConfirm={() => {}}
-                confirmText="Đồng ý"
-              >
-                <Button className="border-none bg-transparent text-red-500 shadow-none hover:bg-transparent">
-                  <Trash className="text-red-500 hover:text-gray-400" />
-                  Xóa bình luận
-                </Button>
-              </ConfirmationDialog>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              className="text-red-500 hover:text-red-500"
-            >
-              <ConfirmationDialog
-                title="Xác nhận bình luận này không vi phạm?"
-                description="Hành động này sẽ đánh dấu bình luận này là không vi phạm. Bạn có muốn tiếp tục không?"
-                onConfirm={() => {}}
-                confirmText="Đồng ý"
-              >
-                <Button className="border-none bg-transparent text-green-500 shadow-none hover:bg-transparent">
-                  <Check className="text-green-400" />
-                  Không vi phạm
-                </Button>
-              </ConfirmationDialog>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ActionCell row={row} />,
   },
 ];

@@ -33,3 +33,8 @@ export type ReportCommentStatus = "PENDING" | "RESOLVED";
 export interface ReportCommentFilter extends BaseFilter {
   status?: ReportCommentStatus;
 }
+
+export type UpdateReportCommentPayload = {
+  status: "RESOLVED";
+  isDeleted: boolean;
+};
