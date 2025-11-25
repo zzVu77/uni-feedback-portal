@@ -1,18 +1,19 @@
+import { cn } from "@/lib/utils";
+import { Comment } from "@/types";
 import {
+  BadgeCheck,
   Flag,
-  User,
   MessageSquareReply,
   Send,
-  BadgeCheck,
   Trash2,
+  User,
 } from "lucide-react";
 import React, { useState } from "react";
+import ConfirmationDialog from "../common/ConfirmationDialog";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { ReportDialog } from "./ReportDialog";
-import { Comment } from "@/types";
-import { cn } from "@/lib/utils";
-import ConfirmationDialog from "../common/ConfirmationDialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface CommentItemProps {
   comment: Comment;
@@ -50,15 +51,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
   return (
     <div
       className={cn(
-        "flex w-full flex-col gap-1 bg-transparent py-2",
+        "flex w-full flex-col gap-1 rounded-lg bg-white px-2 py-2",
         !isLast && "border-b border-gray-200",
-        comment.user.role === "DEPARTMENT_STAFF" &&
-          "rounded-md bg-green-100/50 p-2",
       )}
     >
       <div className="flex flex-row items-center gap-2">
         {comment.user.role === "DEPARTMENT_STAFF" && (
-          <BadgeCheck className="h-5 w-5 text-green-500" />
+          <Tooltip>
+            <TooltipTrigger>
+              <BadgeCheck className="h-5 w-5 text-green-500" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-[10px]">Cán bộ nhà trường</p>
+            </TooltipContent>
+          </Tooltip>
         )}
         <div className="bg-neutral-light-primary-200 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
           <User className="text-neutral-dark-primary-700" />
@@ -113,6 +119,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <Textarea
               placeholder="Viết câu trả lời của bạn..."
               value={replyContent}
+              className="bg-white"
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setReplyContent(e.target.value)
               }
@@ -140,7 +147,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         )}
         {/* Render nested comments */}
         {comment.replies && comment.replies.length > 0 && (
-          <div className="mt-4 flex flex-col gap-2 pl-8">
+          <div className="mt-4 flex flex-col gap-2 px-2 pl-8">
             {comment.replies.map((reply) => (
               <CommentItem
                 key={reply.id}
