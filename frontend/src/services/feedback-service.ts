@@ -97,3 +97,11 @@ export const getAllFeedbacksOfAllDepartments = async (
   );
   return response;
 };
+export const getAdminFeedbackById = async (
+  id: string,
+): Promise<FeedbackDetail> => {
+  const response = await axiosInstance.get<FeedbackDetail>(
+    `${adminFeedbackBaseUrl}/${id}`,
+  );
+  return response;
+};

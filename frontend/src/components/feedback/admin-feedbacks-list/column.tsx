@@ -144,7 +144,7 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
     cell: ({ row }) => {
       const feedback = row.original;
       return (
-        <Link href={`/staff/list-feedbacks/${feedback.id}`}>
+        <Link href={`/admin/feedbacks-management/${feedback.id}`}>
           <Button
             variant="ghost"
             className="h-8 w-8 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-transparent hover:text-black/80"

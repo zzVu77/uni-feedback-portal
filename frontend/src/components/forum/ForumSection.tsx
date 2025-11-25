@@ -152,7 +152,7 @@ export function ForumSection() {
 
               {!hasNextForumPosts && forumPosts.length > 0 && (
                 <p className="pb-4 text-center text-sm text-gray-500">
-                  Đã hiển thị tất cả phản hồi.
+                  Đã hiển thị tất cả bài đăng.
                 </p>
               )}
               {forumPosts.length === 0 && (

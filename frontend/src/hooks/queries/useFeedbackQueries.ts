@@ -4,6 +4,7 @@ import {
   createNewFeedback,
   deleteFeedbackById,
   forwardStaffFeedbackById,
+  getAdminFeedbackById,
   getAllFeedbacks,
   getAllFeedbacksOfAllDepartments,
   getAllStaffFeedbacks,
@@ -32,6 +33,7 @@ export const FEEDBACK_QUERY_KEYS = {
   },
   admin: {
     ALL_DEPARTMENTS_FEEDBACKS: "admin-all-departments-feedbacks",
+    ADMIN_FEEDBACK_DETAIL: "admin-feedback-detail",
   },
 };
 type FeedbackUpdateParams = {
@@ -162,5 +164,18 @@ export const useGetAllFeedbacksOfAllDepartments = (filters: FeedbackFilter) => {
     queryFn: () => getAllFeedbacksOfAllDepartments(filters),
     retry: false,
     placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetAdminFeedbackById = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.admin.ADMIN_FEEDBACK_DETAIL, id],
+    queryFn: () => getAdminFeedbackById(id),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+    ...options,
   });
 };
