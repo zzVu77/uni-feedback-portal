@@ -13,7 +13,7 @@ export function useForumPostFilters(): ForumPostFilter {
     const title = params.get("q");
     const department = params.get("departmentId") || undefined;
     const categoryId = params.get("categoryId") || undefined;
-    const sortBy = params.get("sortBy") as ForumPostFilter["sortBy"] | "new";
+    const sortBy = params.get("sortBy") as ForumPostFilter["sortBy"];
     const parsedFilters: ForumPostFilter = { page, pageSize };
     if (title) parsedFilters.q = title;
     if (department) parsedFilters.departmentId = department || "";

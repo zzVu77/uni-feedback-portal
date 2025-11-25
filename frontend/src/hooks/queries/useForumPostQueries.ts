@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getAllForumPosts } from "@/services/forum-post-service";
+import {
+  getAllForumPosts,
+  getForumPostById,
+} from "@/services/forum-post-service";
 import { ForumPostFilter, ForumPostListItem, PaginatedResponse } from "@/types";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
@@ -15,6 +18,18 @@ export const useGetAllForumPost = (
     queryFn: () => getAllForumPosts(filters),
     retry: false,
     placeholderData: (previousData) => previousData,
+    ...options,
+  });
+};
+export const useGetForumPostById = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [FORUM_POST_QUERY_KEYS, id],
+    queryFn: () => getForumPostById(id),
+    placeholderData: (previousData) => previousData,
+    retry: false,
     ...options,
   });
 };

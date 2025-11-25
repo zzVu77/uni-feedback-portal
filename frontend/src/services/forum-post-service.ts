@@ -1,5 +1,10 @@
 import axiosInstance from "@/config/axiosConfig";
-import { ForumPostFilter, ForumPostListItem, PaginatedResponse } from "@/types";
+import {
+  ForumPostDetail,
+  ForumPostFilter,
+  ForumPostListItem,
+  PaginatedResponse,
+} from "@/types";
 
 export const forumPostBaseUrl = "/forum/posts";
 export const getAllForumPosts = async (
@@ -10,5 +15,13 @@ export const getAllForumPosts = async (
   >(forumPostBaseUrl, {
     params: filter,
   });
+  return response;
+};
+export const getForumPostById = async (
+  id: string,
+): Promise<ForumPostDetail> => {
+  const response = await axiosInstance.get<ForumPostDetail>(
+    `${forumPostBaseUrl}/${id}`,
+  );
   return response;
 };
