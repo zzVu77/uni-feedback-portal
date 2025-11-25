@@ -61,7 +61,7 @@ export class ModerationService {
         where,
         skip,
         take: pageSize,
-        orderBy: { createdAt: 'desc' },
+        orderBy: [{ status: 'desc' }, { createdAt: 'desc' }],
         include: {
           comment: {
             select: {
