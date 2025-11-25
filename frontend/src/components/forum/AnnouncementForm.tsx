@@ -87,6 +87,7 @@ type AnnouncementForm = {
   onSubmit: (values: CreateAnnouncementPayload) => Promise<void>;
   isPending?: boolean;
 };
+
 const AnnouncementForm = ({
   type = "create",
   initialData,
@@ -94,15 +95,19 @@ const AnnouncementForm = ({
   isPending,
 }: AnnouncementForm) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+
+  // State để quản lý key của Editor, dùng để ép re-render khi reset form
+  const [editorKey, setEditorKey] = useState(0);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: initialData?.title || "",
       content: initialData?.content || "",
-      // attachments: initialData?.attachments || [],
       attachments: [],
     },
   });
+
   const mapFormValuesToAnnouncementPayload = (
     values: z.infer<typeof formSchema>,
   ): CreateAnnouncementPayload => {
@@ -113,21 +118,29 @@ const AnnouncementForm = ({
     };
   };
   const { isDirty } = form.formState;
+
   const handleCreateAnnouncement = form.handleSubmit(async (values) => {
     const payload = mapFormValuesToAnnouncementPayload(values);
     await onSubmit(payload);
     setIsSubmitDialogOpen(false);
+
+    // Reset form và tăng key để force re-mount SunEditor
     form.reset();
+    setEditorKey((prev) => prev + 1);
   });
 
   const handleUpdateAnnouncement = form.handleSubmit(async (values) => {
     const payload = mapFormValuesToAnnouncementPayload(values);
     await onSubmit(payload);
   });
+
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
+    // Tăng key để force re-mount SunEditor về trạng thái rỗng
+    setEditorKey((prev) => prev + 1);
   };
+
   const handleAttemptSubmit = async () => {
     const isFormValid = await form.trigger();
     if (isFormValid) {
@@ -174,7 +187,9 @@ const AnnouncementForm = ({
                     <FormItem>
                       <FormLabel>Nội dung thông báo</FormLabel>
                       <FormControl>
+                        {/* Sử dụng key={editorKey} để reset editor */}
                         <SunEditor
+                          key={editorKey}
                           defaultValue={field.value}
                           onChange={(content) => {
                             const textContent = content
@@ -261,7 +276,7 @@ const AnnouncementForm = ({
               <Button
                 type="button"
                 variant={"cancel"}
-                onClick={handleCancel} // TODO: Implement cancel functionality ( back again to detail page )
+                onClick={handleCancel}
                 className="flex max-w-lg flex-row items-center gap-2 py-3"
               >
                 <X className="h-5 w-5" />
@@ -275,7 +290,7 @@ const AnnouncementForm = ({
               >
                 <Button
                   type="button"
-                  onClick={handleUpdateAnnouncement} // TODO: Implement update functionality
+                  onClick={handleUpdateAnnouncement}
                   variant={"primary"}
                   className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
                 >

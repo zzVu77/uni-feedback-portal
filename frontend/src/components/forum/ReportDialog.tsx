@@ -41,27 +41,37 @@ export const REPORT_REASONS = {
   OTHER: "Khác (vui lòng mô tả)",
 };
 
-const reportFormSchema = z.object({
-  reason: z.string().min(1, "Vui lòng chọn lý do báo cáo."),
-  description: z
-    .string()
-    .max(500, "Mô tả chỉ được tối đa 500 ký tự.")
-    .optional(),
-});
+// Updated Schema: Description is required only if reason is "OTHER"
+const reportFormSchema = z
+  .object({
+    reason: z.string().min(1, "Vui lòng chọn lý do báo cáo."),
+    description: z
+      .string()
+      .max(500, "Mô tả chỉ được tối đa 500 ký tự.")
+      .optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.reason === "OTHER" && !data.description?.trim()) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Vui lòng nhập mô tả chi tiết.",
+      path: ["description"],
+    },
+  );
 
 type ReportFormValues = z.infer<typeof reportFormSchema>;
 
 interface ReportDialogProps {
   children: React.ReactNode;
-  //   feedbackId: string;
-  onSubmit: (values: ReportFormValues) => Promise<void>;
+  // Changed logic: returns the final reason string to the parent
+  onSubmit: (reason: string) => Promise<void>;
 }
 
-export function ReportDialog({
-  children,
-  //   feedbackId,
-  onSubmit,
-}: ReportDialogProps) {
+export function ReportDialog({ children, onSubmit }: ReportDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -73,6 +83,9 @@ export function ReportDialog({
     },
   });
 
+  // Watch the reason field to conditionally render textarea
+  const selectedReason = form.watch("reason");
+
   React.useEffect(() => {
     if (open) {
       form.reset();
@@ -83,7 +96,19 @@ export function ReportDialog({
   const handleSubmit = async (values: ReportFormValues) => {
     try {
       setIsSubmitting(true);
-      await onSubmit(values);
+
+      // Logic: If "OTHER", use description. Else, use the predefined text value.
+      let finalReason = "";
+      if (values.reason === "OTHER") {
+        finalReason = values.description || "";
+      } else {
+        // Get the Vietnamese text corresponding to the key (e.g., "SPAM" -> "Spam hoặc quảng cáo")
+        finalReason =
+          REPORT_REASONS[values.reason as keyof typeof REPORT_REASONS];
+      }
+
+      await onSubmit(finalReason);
+
       setIsSubmitting(false);
       setOpen(false);
     } catch (error) {
@@ -138,25 +163,27 @@ export function ReportDialog({
               )}
             />
 
-            {/* Field: Mô tả chi tiết (Textarea) */}
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Mô tả chi tiết (Tùy chọn)</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Cung cấp thêm thông tin chi tiết (nếu cần)..."
-                      className="resize-none"
-                      {...field}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Conditionally render Textarea only if "OTHER" is selected */}
+            {selectedReason === "OTHER" && (
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mô tả chi tiết *</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Vui lòng mô tả lý do..."
+                        className="resize-none"
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <DialogFooter>
               <Button
@@ -169,13 +196,13 @@ export function ReportDialog({
               </Button>
               <Button
                 type="submit"
-                variant="destructive" // Màu đỏ cho hành động báo cáo
+                variant="destructive"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
-                  <Send className="mr-2 h-4 w-4" />
+                  <Send className="h-4 w-4" />
                 )}
                 Gửi báo cáo
               </Button>

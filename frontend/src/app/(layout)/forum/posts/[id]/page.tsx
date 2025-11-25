@@ -1,20 +1,52 @@
+"use client";
+import { Loading } from "@/components/common/Loading";
 import CommentSection from "@/components/forum/CommentSection";
 import FeedbackPostDetail from "@/components/forum/FeedbackPostDetail";
 import OfficialResponse from "@/components/forum/OfficialResponse";
 import Wrapper from "@/components/shared/Wrapper";
-import React from "react";
+import { useGetCommentsByPostId } from "@/hooks/queries/useCommentQueries";
+import { useGetForumPostById } from "@/hooks/queries/useForumPostQueries";
+import { useIsClient } from "@/hooks/useIsClient";
+import { useParams } from "next/navigation";
 
 const page = () => {
+  const params = useParams();
+  const id = params.id as string;
+
+  const isClient = useIsClient();
+  const { data: feedback, isLoading: isFeedbackLoading } = useGetForumPostById(
+    id,
+    {
+      enabled: isClient,
+    },
+  );
+
+  // Fetch comments
+  const { data: comments, isLoading: isCommentsLoading } =
+    useGetCommentsByPostId(id, {
+      enabled: isClient,
+    });
+
+  if (isFeedbackLoading || !feedback) return <Loading variant="spinner" />;
+
   return (
     <div className="w-full">
       <Wrapper>
-        <FeedbackPostDetail />
+        <FeedbackPostDetail data={feedback} />
         <OfficialResponse
           departmentName="Khoa đào tạo Quốc tế"
-          responseContent="Cảm ơn bạn đã góp ý. Chúng tôi hiện đang đánh giá tính khả thi của việc kéo dài thời gian hoạt động trong tuần thi cuối kỳ. Chúng tôi đang xem xét một chương trình thí điểm sẽ giữ cho tầng trệt mở cửa 24 giờ trong khi đóng cửa các tầng trên. Chúng tôi sẽ cập nhật cho mọi người về quyết định của mình vào cuối tháng."
+          responseContent="Cảm ơn bạn đã góp ý..."
           responseDate="20/11/2023"
         />
-        <CommentSection />
+        {isCommentsLoading || !comments ? (
+          <Loading variant="spinner" />
+        ) : (
+          <CommentSection
+            type="feedback"
+            postId={id}
+            data={comments?.results ?? []}
+          />
+        )}
       </Wrapper>
     </div>
   );

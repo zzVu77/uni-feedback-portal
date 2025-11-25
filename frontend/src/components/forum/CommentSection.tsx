@@ -6,99 +6,75 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import CommentItem from "./CommentItem";
 import { Comment } from "@/types";
+import { useUser } from "@/context/UserContext";
+import {
+  useCreateCommentByAnnouncementId,
+  useCreateCommentByPostId,
+  useDeleteComment,
+} from "@/hooks/queries/useCommentQueries";
 
-const mockCommentsData: Comment[] = [
-  {
-    id: "1",
-    user: {
-      id: "1",
-      fullName: "Nguyễn Văn Vũ",
-      role: "STUDENT",
-    },
-    createdAt: "20/10/2025",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae cumque omnis totam nam, illum illo voluptas!",
-    replies: [
-      {
-        id: "1.1",
-        user: {
-          id: "2",
-          fullName: "Trần Thị B",
-          role: "STAFF",
-        },
-        createdAt: "21/10/2025",
-        content: "Đây là một câu trả lời cho bình luận của anh Vũ.",
-        replies: [],
-      },
-    ],
-  },
-  {
-    id: "2",
-    user: {
-      id: "3",
-      fullName: "Lê Văn A",
-      role: "STUDENT",
-    },
-    createdAt: "22/10/2025",
-    content:
-      "Tempora nemo, delectus nam itaque rerum quod sunt, ut ea accusamus ex fugiat iste.",
-    replies: [],
-  },
-];
+type Props = {
+  postId: string;
+  data: Comment[];
+  type: "feedback" | "announcement"; // Added type prop
+};
 
-const CommentSection: React.FC = () => {
-  const [comments, setComments] = useState<Comment[]>(mockCommentsData);
+const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
+  const comments = data || [];
   const [newComment, setNewComment] = useState<string>("");
+  const { user } = useUser();
+
+  // 1. Feedback Hooks
+  const { mutate: createFeedbackComment, isPending: isCreatingFeedback } =
+    useCreateCommentByPostId(postId);
+
+  // 2. Announcement Hooks
+  const {
+    mutate: createAnnouncementComment,
+    isPending: isCreatingAnnouncement,
+  } = useCreateCommentByAnnouncementId(postId);
+
+  // 3. Delete Hook (handles invalidation based on type)
+  const { mutate: deleteComment } = useDeleteComment(postId, type);
+
+  // Select the active function and state based on props
+  const createComment =
+    type === "feedback" ? createFeedbackComment : createAnnouncementComment;
+
+  const isCreating =
+    type === "feedback" ? isCreatingFeedback : isCreatingAnnouncement;
+
+  // --- HANDLERS ---
 
   const handleNewCommentSubmit = () => {
     if (!newComment.trim()) return;
 
-    const newCommentObj: Comment = {
-      id: crypto.randomUUID(),
-      user: {
-        id: "1234",
-        fullName: "Người dùng (Bạn)",
-        role: "STUDENT",
+    createComment(
+      { content: newComment },
+      {
+        onSuccess: () => {
+          setNewComment("");
+        },
       },
-      createdAt: new Date().toLocaleDateString("vi-VN"),
-      content: newComment,
-      replies: [],
-    };
-
-    setComments([newCommentObj, ...comments]);
-    setNewComment("");
-  };
-
-  // handle reply submission
-  const handleReplySubmit = (parentId: string, content: string) => {
-    const newReplyObj: Comment = {
-      id: crypto.randomUUID(),
-      user: {
-        id: "1234",
-        fullName: "Người dùng (Bạn)",
-        role: "STUDENT",
-      },
-      createdAt: new Date().toLocaleDateString("vi-VN"),
-      content: content,
-      replies: [],
-    };
-
-    setComments((prevComments) =>
-      prevComments.map((comment) => {
-        // find parent comment id
-        if (comment.id === parentId) {
-          return {
-            ...comment,
-            replies: [...comment.replies, newReplyObj],
-          };
-        }
-        return comment;
-      }),
     );
   };
 
+  const handleReplySubmit = (parentId: string, content: string) => {
+    createComment(
+      { content: content, parentId: parentId },
+      {
+        onSuccess: () => {},
+      },
+    );
+  };
+
+  // Handler for deleting a comment
+  const handleDeleteComment = (commentId: string) => {
+    deleteComment(commentId);
+  };
+
   const totalComments = comments.reduce((count, comment) => {
-    return count + 1 + comment.replies.length;
+    return count + 1 + (comment.replies ? comment.replies.length : 0);
   }, 0);
 
   return (
@@ -114,10 +90,11 @@ const CommentSection: React.FC = () => {
           {/* Render list comment */}
           {comments.map((comment) => (
             <CommentItem
-              onDelete={() => {}}
+              // Pass the delete handler
+              onDelete={handleDeleteComment}
               currentUser={{
-                id: "1234",
-                role: "STUDENT",
+                id: user?.id || "",
+                role: user?.role || "STUDENT",
               }}
               key={comment.id}
               comment={comment}
@@ -147,9 +124,10 @@ const CommentSection: React.FC = () => {
           variant={"primary"}
           className="flex w-fit flex-row items-center gap-2 self-end py-3 shadow-md"
           onClick={handleNewCommentSubmit}
+          disabled={isCreating}
         >
           <Send className="h-5 w-5" />
-          Gửi
+          {isCreating ? "Đang gửi..." : "Gửi"}
         </Button>
       </div>
     </div>

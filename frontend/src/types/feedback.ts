@@ -1,7 +1,6 @@
 import { BaseFilter } from "./common-type";
 
 export type FeedbackStatus =
-  | ""
   | "PENDING"
   | "IN_PROGRESS"
   | "RESOLVED"
