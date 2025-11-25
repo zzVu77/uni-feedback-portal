@@ -18,3 +18,6 @@ export const postCommentByPostID = async (
     ...payload,
   });
 };
+export const deleteCommentById = async (id: string) => {
+  await axiosInstance.delete(`${commentBaseUrl}/${id}`);
+};

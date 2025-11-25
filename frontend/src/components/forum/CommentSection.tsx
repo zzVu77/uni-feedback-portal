@@ -7,47 +7,53 @@ import { Button } from "../ui/button";
 import CommentItem from "./CommentItem";
 import { Comment } from "@/types";
 import { useUser } from "@/context/UserContext";
-import { useCreateComment } from "@/hooks/queries/useCommentQueries";
+import {
+  useCreateComment,
+  useDeleteComment,
+} from "@/hooks/queries/useCommentQueries";
 
 type Props = {
-  postId: string; // Added postId to props to identify the post
+  postId: string;
   data: Comment[];
 };
 
 const CommentSection: React.FC<Props> = ({ data, postId }) => {
-  // Use data directly from props (server state) instead of local state
   const comments = data || [];
   const [newComment, setNewComment] = useState<string>("");
   const { user } = useUser();
 
-  // Integration: Use the mutation hook
-  const { mutate: createComment, isPending } = useCreateComment(postId);
+  // Integration: Create Mutation
+  const { mutate: createComment, isPending: isCreating } =
+    useCreateComment(postId);
+
+  // Integration: Delete Mutation
+  const { mutate: deleteComment } = useDeleteComment(postId);
 
   const handleNewCommentSubmit = () => {
     if (!newComment.trim()) return;
 
-    // Call API to create a new root comment
     createComment(
       { content: newComment },
       {
         onSuccess: () => {
-          setNewComment(""); // Clear input on success
+          setNewComment("");
         },
       },
     );
   };
 
-  // handle reply submission
   const handleReplySubmit = (parentId: string, content: string) => {
-    // Call API to create a reply (nested comment)
     createComment(
       { content: content, parentId: parentId },
       {
-        onSuccess: () => {
-          // Optionally handle success specifically for replies here
-        },
+        onSuccess: () => {},
       },
     );
+  };
+
+  // Handler for deleting a comment
+  const handleDeleteComment = (commentId: string) => {
+    deleteComment(commentId);
   };
 
   const totalComments = comments.reduce((count, comment) => {
@@ -67,7 +73,8 @@ const CommentSection: React.FC<Props> = ({ data, postId }) => {
           {/* Render list comment */}
           {comments.map((comment) => (
             <CommentItem
-              onDelete={() => {}} // Integration for delete can be added later
+              // Pass the delete handler
+              onDelete={handleDeleteComment}
               currentUser={{
                 id: user?.id || "",
                 role: user?.role || "STUDENT",
@@ -100,10 +107,10 @@ const CommentSection: React.FC<Props> = ({ data, postId }) => {
           variant={"primary"}
           className="flex w-fit flex-row items-center gap-2 self-end py-3 shadow-md"
           onClick={handleNewCommentSubmit}
-          disabled={isPending} // Disable button while submitting
+          disabled={isCreating}
         >
           <Send className="h-5 w-5" />
-          {isPending ? "Đang gửi..." : "Gửi"}
+          {isCreating ? "Đang gửi..." : "Gửi"}
         </Button>
       </div>
     </div>

@@ -43,6 +43,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   };
 
   const handleDelete = () => {
+    // Execute the delete callback passed from parent
     onDelete(comment.id);
   };
 
@@ -153,7 +154,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 key={reply.id}
                 comment={reply}
                 onReplySubmit={onReplySubmit}
-                onDelete={onDelete}
+                onDelete={onDelete} // Recursively pass the delete handler
                 currentUser={currentUser}
                 level={level + 1}
                 isLast={
