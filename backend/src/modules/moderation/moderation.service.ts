@@ -10,7 +10,12 @@ import {
   CommentReportDto,
   UpdateCommentReportDto,
 } from './dto';
-import { CommentTargetType, Prisma, UserRole } from '@prisma/client';
+import {
+  CommentTargetType,
+  Prisma,
+  ReportStatus,
+  UserRole,
+} from '@prisma/client';
 import { CommentService } from '../comment/comment.service';
 import { ForumService } from '../forum/forum.service';
 import { AnnouncementsService } from '../announcements/announcements.service';
@@ -43,7 +48,13 @@ export class ModerationService {
     const skip = (page - 1) * pageSize;
 
     const where: Prisma.CommentReportsWhereInput = {};
-    if (status) where.status = status;
+    if (status) {
+      where.status = Object.values(ReportStatus).includes(
+        status.toUpperCase() as ReportStatus,
+      )
+        ? (status.toUpperCase() as ReportStatus)
+        : undefined;
+    }
 
     const [items, total] = await Promise.all([
       this.prisma.commentReports.findMany({

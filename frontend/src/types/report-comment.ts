@@ -1,3 +1,5 @@
+import { BaseFilter } from "./common-type";
+
 export type ReportCommentDetail = {
   id: string;
   reason: string;
@@ -27,3 +29,7 @@ export type ReportCommentDetail = {
     };
   };
 };
+export type ReportCommentStatus = "PENDING" | "RESOLVED";
+export interface ReportCommentFilter extends BaseFilter {
+  status?: ReportCommentStatus;
+}

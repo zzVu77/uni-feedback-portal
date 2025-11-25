@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ReportedComment } from "@/types";
+import { ReportCommentDetail } from "@/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import {
   Calendar,
@@ -24,9 +24,18 @@ import Link from "next/link";
 import React from "react";
 type Props = {
   children: React.ReactNode;
-  data: ReportedComment;
+  data: ReportCommentDetail;
 };
 const ReportCommentDetailDialog = ({ children, data }: Props) => {
+  const {
+    reason,
+    status,
+    adminResponse,
+    createdAt,
+    comment,
+    reportedBy,
+    target,
+  } = data;
   return (
     <div>
       <Dialog>
@@ -42,7 +51,7 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                   <span className="text-lg font-bold text-blue-500/80">
                     Chi tiết bình luận
                   </span>
-                  <Link href={`forum/posts/${data.post.id}`}>
+                  <Link href={`forum/posts/${target.targetInfo.id}`}>
                     <ExternalLink className="h-5 w-5 text-blue-500/80" />
                   </Link>
                 </div>
@@ -50,19 +59,19 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                   {/* Comment detail */}
                   <div className="flex flex-row items-center justify-between">
                     <span className="text-[16px] font-medium">
-                      {data.comment.content}
+                      {comment.content}
                     </span>
                     <div className="flex flex-row items-center justify-start gap-0.5">
                       <Calendar className="h-4 w-4" />
                       <time className="text-[14px]">
-                        {new Date(data.comment.createdAt).toLocaleString("vi")}
+                        {new Date(comment.createdAt).toLocaleString("vi")}
                       </time>
                     </div>
                   </div>
                   <div className="flex flex-row items-center justify-start gap-0.5">
                     <User className="h-4 w-4 text-gray-500/80" />
                     <span className="text-[14px] font-medium text-gray-500/80">
-                      {data.comment.user.fullName}
+                      {comment.user.fullName}
                     </span>
                   </div>
                 </div>
@@ -76,20 +85,26 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 rounded-md bg-red-100/20 p-2 shadow-xs">
-                  <StatusBadge type={data.status} />
+                  <StatusBadge type={status} />
                   <p className="text-[14px]">
                     <span className="font-medium">Báo cáo bởi: </span>
-                    {data.reportedBy.fullName}
+                    {reportedBy.fullName}
                   </p>
                   <div className="flex flex-row items-center justify-start gap-0.5">
                     <span className="text-[14px] font-medium">Thời gian: </span>
                     <time className="text-[14px]">
-                      {new Date(data.createdAt).toLocaleString("vi")}
+                      {new Date(createdAt).toLocaleString("vi-VN", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </time>
                   </div>
                   <p className="text-[14px]">
                     <span className="font-medium">Lý do: </span>
-                    {data.reason}
+                    {reason}
                   </p>
                 </div>
               </div>
@@ -103,7 +118,7 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                 </div>
                 <div className="flex flex-col gap-2 rounded-md bg-green-100/20 p-2 shadow-xs">
                   <span>
-                    {data.adminResponse ??
+                    {adminResponse ??
                       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde, molestiae minima distinctio vero et, excepturi sed id cupiditate optio dolor error harum, adipisci quisquam ab mollitia quibusdam! Maiores, nam nemo."}
                   </span>
                 </div>
