@@ -12,6 +12,8 @@ import Filter from "../common/filter/Filter";
 import AnnouncementCard from "./AnnouncementCard";
 import PostCard from "./PostCard";
 import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
+import { useForumPostFilters } from "@/hooks/filters/useForumPostFilter";
+import { useGetAllForumPost } from "@/hooks/queries/useForumPostQueries";
 
 type ForumTab = "feedbacks" | "announcements";
 
@@ -25,8 +27,13 @@ export function ForumSection() {
     VALID_TABS,
     DEFAULT_TAB,
   );
-  const filters = useAnnouncementFilters();
-  const { data: announcements, isLoading } = useGetAllAnnouncement(filters);
+  const announcementFilters = useAnnouncementFilters();
+  const { data: announcements, isLoading } =
+    useGetAllAnnouncement(announcementFilters);
+
+  const forumPostFilters = useForumPostFilters();
+  const { data: forumPosts, isLoading: isForumPostsLoading } =
+    useGetAllForumPost(forumPostFilters);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -96,14 +103,10 @@ export function ForumSection() {
           value="feedbacks"
           className="flex h-screen w-full flex-col gap-4"
         >
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
+          {isForumPostsLoading && <Loading variant="spinner" />}
+          {forumPosts?.results.map((forumPost) => (
+            <PostCard key={forumPost.id} data={forumPost} />
+          ))}
         </TabsContent>
         <TabsContent
           value="announcements"

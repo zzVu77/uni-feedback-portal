@@ -1,3 +1,4 @@
+import { BaseFilter } from "./common-type";
 import { FeedbackStatus } from "./feedback";
 
 export type ForumPostDetail = {
@@ -33,6 +34,14 @@ export type ForumPostDetail = {
     fullName: string;
     email: string;
   };
+  commentsCount: number;
 };
 
 export type ForumPostListItem = Omit<ForumPostDetail, "fileAttachments">;
+export interface ForumPostFilter extends BaseFilter {
+  categoryId?: string;
+  departmentId?: string;
+  sortBy?: "top" | "new";
+  from?: string;
+  to?: string;
+}
