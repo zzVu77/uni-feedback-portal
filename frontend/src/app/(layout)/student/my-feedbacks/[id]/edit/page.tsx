@@ -9,21 +9,44 @@ import {
 import { useIsClient } from "@/hooks/useIsClient";
 import { CreateFeedbackPayload } from "@/types";
 import { mapFeedbackDetailToBodyParams } from "@/utils/mappers";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 const page = () => {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
   const isClient = useIsClient();
+
   const { mutateAsync: updateFeedback, isPending } = useUpdateFeedbackById();
   const { data: feedback, isLoading } = useGetMyFeedbackById(id, {
     enabled: isClient,
   });
+
+  // --- GUARD LOGIC ---
+  useEffect(() => {
+    if (feedback) {
+      if (feedback.currentStatus !== "PENDING") {
+        toast.error(
+          `Bạn chỉ có thể chỉnh sửa góp ý khi đang ở trạng thái "Đang chờ xử lý."`,
+        );
+        router.push(`/student/my-feedbacks/${id}`);
+      }
+    }
+  }, [feedback, router, id]);
+
   if (isLoading || !feedback) return <Loading variant="spinner" />;
+  // Prevent rendering the form momentarily while redirecting
+  if (feedback.currentStatus !== "PENDING") {
+    return <Loading variant="spinner" />;
+  }
+
   const initialData = mapFeedbackDetailToBodyParams(feedback);
   const handleSubmit = async (values: CreateFeedbackPayload) => {
     await updateFeedback({ id, data: values });
   };
+
   return (
     <Wrapper>
       <div className="h-full w-full">
