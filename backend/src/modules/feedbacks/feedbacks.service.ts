@@ -15,10 +15,14 @@ import {
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { ForumService } from '../forum/forum.service';
 
 @Injectable()
 export class FeedbacksService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly forumService: ForumService,
+  ) {}
 
   async getFeedbacks(
     query: QueryFeedbacksDto,
@@ -401,7 +405,7 @@ export class FeedbacksService {
         location: dto.location ?? null,
         departmentId: dto.departmentId,
         categoryId: dto.categoryId,
-        isPrivate: dto.isPrivate,
+        isPrivate: dto.isAnonymous,
         userId: actor.sub,
         fileAttachments: {
           create: dto.fileAttachments?.map((f) => ({
@@ -415,6 +419,9 @@ export class FeedbacksService {
         category: true,
       },
     });
+    if (dto.isPublic) {
+      await this.forumService.createForumPost(feedback.id, actor);
+    }
 
     return {
       id: feedback.id,

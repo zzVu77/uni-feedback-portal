@@ -281,6 +281,33 @@ export class ForumService {
       totalVotes,
     };
   }
+  async createForumPost(
+    feedbackId: string,
+    actor: ActiveUserData,
+  ): Promise<string> {
+    // Kiểm tra feedback tồn tại
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId, userId: actor.sub },
+      include: { forumPost: true },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
+    }
+
+    if (feedback.forumPost) {
+      throw new BadRequestException(
+        'Forum post for this feedback already exists',
+      );
+    }
+
+    const forumPost = await this.prisma.forumPosts.create({
+      data: { feedbackId },
+    });
+
+    return forumPost.id;
+  }
+
   async unvote(
     postId: string,
     actor: ActiveUserData,
