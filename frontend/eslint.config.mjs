@@ -38,10 +38,6 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-misused-promises": "warn",
-      "@typescript-eslint/no-unsafe-call": "warn",
-      "@typescript-eslint/no-unsafe-member-access": "warn",
     },
   },
 );
