@@ -121,6 +121,9 @@ export class FeedbacksService {
         department: {
           select: { id: true, name: true },
         },
+        forumPost: {
+          select: { id: true },
+        },
         category: {
           select: { id: true, name: true },
         },
@@ -175,6 +178,7 @@ export class FeedbacksService {
       location: feedback.location ? feedback.location : null,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
+      isPublic: feedback.forumPost ? true : false,
       createdAt: feedback.createdAt.toISOString(),
       department: {
         id: feedback.department.id,
@@ -284,7 +288,9 @@ export class FeedbacksService {
         });
       }
     }
-
+    if (dto.isPublic === false) {
+      await this.forumService.deleteByFeedbackId(feedbackId);
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fileAttachments, isPublic, ...updateData } = dto;
     const updatedFeedback = await this.prisma.feedbacks.update({
@@ -296,6 +302,9 @@ export class FeedbacksService {
         statusHistory: {
           select: { status: true, message: true, note: true, createdAt: true },
           orderBy: { createdAt: 'asc' },
+        },
+        forumPost: {
+          select: { id: true },
         },
         forwardingLogs: {
           select: {
@@ -313,9 +322,7 @@ export class FeedbacksService {
         },
       },
     });
-    if (dto.isPublic === false) {
-      await this.forumService.deleteByFeedbackId(feedbackId);
-    }
+
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: updatedFeedback.statusHistory,
       forwardingLogs: updatedFeedback.forwardingLogs.map((f) => ({
@@ -328,6 +335,7 @@ export class FeedbacksService {
     });
     return {
       id: updatedFeedback.id,
+      isPublic: updatedFeedback.forumPost ? true : false,
       subject: updatedFeedback.subject,
       description: updatedFeedback.description,
       location: updatedFeedback.location ? updatedFeedback.location : null,

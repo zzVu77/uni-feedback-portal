@@ -37,7 +37,11 @@ export class FeedbackDetail {
     description: 'Indicates if feedback is private',
   })
   isPrivate: boolean;
-
+  @ApiProperty({
+    example: false,
+    description: 'Indicates if feedback is public to forum posts',
+  })
+  isPublic: boolean;
   @ApiProperty({
     example: {
       id: '550e8400-e29b-41d4-a716-44665544001c',
@@ -137,6 +141,7 @@ export class FeedbackSummary extends OmitType(FeedbackDetail, [
   'description',
   'statusHistory',
   'fileAttachments',
+  'isPublic',
 ] as const) {}
 export class GetMyFeedbacksResponseDto {
   @ApiProperty({

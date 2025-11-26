@@ -195,6 +195,7 @@ export class FeedbackManagementService {
     });
     const result: FeedbackDetailDto = {
       id: feedback.id,
+      isPublic: feedback.forumPost ? true : false,
       subject: feedback.subject,
       description: feedback.description,
       location: feedback.location,
@@ -486,6 +487,7 @@ export class FeedbackManagementService {
     });
     const result: FeedbackDetailDto = {
       id: feedback.id,
+      isPublic: feedback.forumPost ? true : false,
       subject: feedback.subject,
       description: feedback.description,
       location: feedback.location,
