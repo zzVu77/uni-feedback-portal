@@ -95,9 +95,11 @@ export class FeedbackManagementService {
       department: f.department,
       category: f.category,
       createdAt: f.createdAt.toISOString(),
-      isForwarding: f.forwardingLogs.some(
-        (log) => log.fromDepartmentId === actor.departmentId,
-      ),
+      isForwarding:
+        f.department.id !== actor.departmentId &&
+        f.forwardingLogs.some(
+          (log) => log.fromDepartmentId === actor.departmentId,
+        ),
       ...(f.isPrivate
         ? {}
         : {
@@ -174,9 +176,11 @@ export class FeedbackManagementService {
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
-    const isForwarding = feedback.forwardingLogs.some(
-      (log) => log.fromDepartment.id === actor.departmentId,
-    );
+    const isForwarding =
+      feedback.department.id !== actor.departmentId &&
+      feedback.forwardingLogs.some(
+        (log) => log.fromDepartment.id === actor.departmentId,
+      );
 
     const result: FeedbackDetailDto = {
       id: feedback.id,
