@@ -142,10 +142,12 @@ const NewConversationForm = ({
 interface ConversationSectionProps {
   role: "student" | "staff";
   currentFeedbackStatus: string;
+  isForwarded?: boolean;
 }
 const ConversationSection = ({
   role,
   currentFeedbackStatus,
+  isForwarded = false,
 }: ConversationSectionProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const params = useParams();
@@ -246,7 +248,7 @@ const ConversationSection = ({
 
               {/* CREATE BUTTON */}
               {/* Only show when not in create mode AND (no conversations OR all are closed) */}
-              {canCreateNew && (
+              {canCreateNew && !isForwarded && (
                 <Button
                   variant="primary"
                   className="mx-auto w-fit bg-blue-600 text-white hover:bg-blue-700"

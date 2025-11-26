@@ -37,6 +37,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Forward, History, Send, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
+import { useUser } from "@/context/UserContext";
+import { useState } from "react";
 //Define cchema validation using Zod
 const updateStatusSchema = z.object({
   status: z.string().min(1, { message: "Vui lòng chọn trạng thái" }),
@@ -46,6 +49,7 @@ const forwardFeedbackSchema = z.object({
   toDepartmentId: z.string().min(1, { message: "Vui lòng chọn phòng ban" }),
   note: z.string().optional(),
 });
+
 // Infer the form values from the schema
 type UpdateStatusValues = z.infer<typeof updateStatusSchema>;
 type ForwardFeedbackValues = z.infer<typeof forwardFeedbackSchema>;
@@ -64,13 +68,6 @@ const statusOptions = [
     className: "text-green-500",
   },
   { label: "Từ chối", value: "REJECTED", icon: X, className: "text-red-500" },
-];
-
-const mockDepartments = [
-  { label: "Công nghệ thông tin", value: "IT" },
-  { label: "Hành chính nhân sự", value: "HR" },
-  { label: "Tài chính kế toán", value: "Finance" },
-  { label: "Marketing", value: "Marketing" },
 ];
 
 type StaffActionProps = {
@@ -137,14 +134,23 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
           ],
         }),
       ]);
-
       forwardForm.reset();
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Forward failed", error);
     }
   };
   const terminalStates = ["RESOLVED", "REJECTED"];
   const isFinished = terminalStates.includes(currentStatus);
+  const { user } = useUser();
+
+  const { data } = useGetDepartmentOptions();
+
+  const departmentOptions = data
+    ? data.filter((department) => department.value !== user?.departmentId)
+    : [];
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-md lg:w-auto">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
@@ -227,7 +233,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
         </ConfirmationDialog>
       </Form>
 
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button
             className="w-full bg-amber-400 hover:bg-amber-500"
@@ -269,7 +275,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {mockDepartments.map((item) => (
+                        {departmentOptions.map((item) => (
                           <SelectItem key={item.value} value={item.value}>
                             {item.label}
                           </SelectItem>
