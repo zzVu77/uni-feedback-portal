@@ -15,6 +15,7 @@ import {
   StatsOverviewDto,
   TopDepartmentStatsDto,
   FeedbackTrendDto,
+  TopInteractivePostDto,
 } from './dto/report-response.dto';
 
 @ApiTags('Admin Reports')
@@ -54,5 +55,14 @@ export class ReportsController {
   @ApiOperation({ summary: 'Get top 5 categories with most feedbacks' })
   async getTopCategories(@Query() query: ReportFilterDto) {
     return this.reportsService.getTopCategories(query);
+  }
+
+  @Get('top-interactive-posts')
+  @ApiOperation({
+    summary: 'Get top 5 forum posts with most interactions (votes + comments)',
+  })
+  @ApiResponse({ status: 200, type: [TopInteractivePostDto] })
+  async getTopInteractivePosts(@Query() query: ReportFilterDto) {
+    return this.reportsService.getTopInteractivePosts(query);
   }
 }

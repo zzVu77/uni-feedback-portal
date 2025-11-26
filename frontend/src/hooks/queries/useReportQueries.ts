@@ -5,6 +5,7 @@ import {
   getDepartmentStats,
   getFeedbackTrends,
   getTopCategories,
+  getTopInteractivePosts,
 } from "@/services/report-service";
 import { ReportFilter } from "@/types/report";
 
@@ -13,6 +14,7 @@ export const REPORT_QUERY_KEYS = {
   departments: "report-departments",
   trends: "report-trends",
   categories: "report-categories",
+  interactivePosts: "report-interactive-posts",
 };
 
 export const useGetStatsOverview = (filter: ReportFilter) => {
@@ -43,6 +45,14 @@ export const useGetTopCategories = (filter: ReportFilter) => {
   return useQuery({
     queryKey: [REPORT_QUERY_KEYS.categories, filter],
     queryFn: () => getTopCategories(filter),
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetTopInteractivePosts = (filter: ReportFilter) => {
+  return useQuery({
+    queryKey: [REPORT_QUERY_KEYS.interactivePosts, filter],
+    queryFn: () => getTopInteractivePosts(filter),
     placeholderData: (previousData) => previousData,
   });
 };

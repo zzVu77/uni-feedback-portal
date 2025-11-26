@@ -29,3 +29,19 @@ export class FeedbackTrendDto {
   @ApiProperty({ example: 5 })
   count: number;
 }
+export class TopInteractivePostDto {
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  forumPostId: string;
+
+  @ApiProperty({ example: 'Wifi thư viện tầng 5 quá yếu' })
+  title: string;
+
+  @ApiProperty({ example: 45 })
+  voteCount: number;
+
+  @ApiProperty({ example: 12 })
+  commentCount: number;
+
+  @ApiProperty({ example: 57, description: 'Total = Votes + Comments' })
+  totalInteractions: number;
+}

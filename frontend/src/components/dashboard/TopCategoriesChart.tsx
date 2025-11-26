@@ -40,7 +40,7 @@ export const TopCategoriesChart = ({ data, isLoading }: Props) => {
     );
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Danh mục hàng đầu</CardTitle>
         <CardDescription>Các vấn đề được phản ánh nhiều nhất</CardDescription>

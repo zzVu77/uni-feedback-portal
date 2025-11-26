@@ -31,3 +31,11 @@ export type TopCategoryDto = {
   categoryName: string;
   count: number;
 };
+// 5. Top Interactive Posts
+export type TopInteractivePostDto = {
+  forumPostId: string;
+  title: string;
+  voteCount: number;
+  commentCount: number;
+  totalInteractions: number;
+};

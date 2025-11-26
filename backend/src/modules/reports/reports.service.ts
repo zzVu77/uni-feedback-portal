@@ -9,6 +9,7 @@ import {
   StatsOverviewDto,
   TopDepartmentStatsDto,
   FeedbackTrendDto,
+  TopInteractivePostDto,
 } from './dto/report-response.dto';
 
 @Injectable()
@@ -153,5 +154,34 @@ export class ReportsService {
         categories.find((c) => c.id === r.categoryId)?.name || 'Unknown',
       count: r._count.id, // Truy cập vào .id thay vì ._all
     }));
+  }
+
+  // 5. Top bài đăng có tương tác cao nhất (Votes + Comments)
+  async getTopInteractivePosts(
+    dto: ReportFilterDto,
+  ): Promise<TopInteractivePostDto[]> {
+    const fromDate = dto.from ? new Date(dto.from) : new Date('2000-01-01');
+    const toDate = dto.to
+      ? new Date(new Date(dto.to).setDate(new Date(dto.to).getDate() + 1))
+      : new Date();
+
+    const result: any[] = await this.prisma.$queryRaw`
+      SELECT 
+        fp.id as "forumPostId",
+        f.subject as "title",
+        COUNT(DISTINCT v."userId")::int as "voteCount",
+        COUNT(DISTINCT c.id)::int as "commentCount",
+        (COUNT(DISTINCT v."userId") + COUNT(DISTINCT c.id))::int as "totalInteractions"
+      FROM "ForumPosts" fp
+      JOIN "Feedbacks" f ON fp."feedbackId" = f.id
+      LEFT JOIN "Votes" v ON fp.id = v."postId"
+      LEFT JOIN "Comments" c ON fp.id = c."targetId" AND c."targetType" = 'FORUM_POST'
+      WHERE f."createdAt" >= ${fromDate} AND f."createdAt" < ${toDate}
+      GROUP BY fp.id, f.subject
+      ORDER BY "totalInteractions" DESC
+      LIMIT 5;
+    `;
+
+    return result;
   }
 }

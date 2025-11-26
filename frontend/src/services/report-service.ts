@@ -6,6 +6,7 @@ import {
   TopDepartmentStatsDto,
   FeedbackTrendDto,
   TopCategoryDto,
+  TopInteractivePostDto,
 } from "@/types/report";
 
 const reportBaseUrl = "/admin/reports";
@@ -51,6 +52,17 @@ export const getTopCategories = async (
 ): Promise<TopCategoryDto[]> => {
   const response = await axiosInstance.get<TopCategoryDto[]>(
     `${reportBaseUrl}/categories`,
+    {
+      params: filter,
+    },
+  );
+  return response;
+};
+export const getTopInteractivePosts = async (
+  filter: ReportFilter,
+): Promise<TopInteractivePostDto[]> => {
+  const response = await axiosInstance.get<TopInteractivePostDto[]>(
+    `${reportBaseUrl}/top-interactive-posts`,
     {
       params: filter,
     },

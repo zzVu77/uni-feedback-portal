@@ -24,14 +24,14 @@ export const DepartmentPerformanceTable = ({ data, isLoading }: Props) => {
   const maxCount = data ? Math.max(...data.map((d) => d.feedbackCount)) : 100;
 
   return (
-    <Card className="h-full">
+    <Card className="h-full w-full">
       <CardHeader>
         <CardTitle>Hiệu suất phòng ban</CardTitle>
         <CardDescription>
           Số lượng tiếp nhận và thời gian xử lý trung bình
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="w-full">
         <div className="space-y-6">
           {data?.map((dept, index) => (
             <div key={index} className="flex items-center">
