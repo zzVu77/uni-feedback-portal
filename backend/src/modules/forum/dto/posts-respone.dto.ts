@@ -2,9 +2,16 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { FeedbackDetail } from 'src/modules/feedbacks/dto';
 export class FeedbackForumDto extends OmitType(FeedbackDetail, [
   'statusHistory',
-  'forwardingLogs',
+  // 'forwardingLogs',
   'createdAt',
-]) {}
+] as const) {
+  @ApiProperty({
+    description: 'Response from office handling the feedback',
+    example: 'This feedback has been processed by IT department.',
+    required: false,
+  })
+  officeResponse?: string;
+}
 
 export class FeedbackForumSummaryDto extends OmitType(FeedbackForumDto, [
   'fileAttachments',

@@ -71,11 +71,17 @@ export class CreateFeedbackDto {
 
   @ApiProperty({
     example: false,
-    description: 'Indicates whether the feedback is private.',
+    description:
+      'Indicates whether the feedback is private (student info not show).',
   })
   @IsBoolean()
-  isPrivate: boolean;
-
+  isAnonymous: boolean;
+  @ApiProperty({
+    example: false,
+    description: 'Indicates whether the feedback is public to forum.',
+  })
+  @IsBoolean()
+  isPublic: boolean;
   @ApiPropertyOptional({
     description: 'A list of attached files (if any).',
     type: [AttachmentDto],

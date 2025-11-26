@@ -15,13 +15,16 @@ class StudentInfo {
   @ApiProperty({ example: 'a@student.edu.vn' })
   email: string;
 }
-
 export class ListFeedbacksResponseDto {
   @ApiProperty({
     type: () => [FeedbackSummary],
-    description: 'List of feedbacks with optional student info',
+    description:
+      'List of feedbacks with optional student info and forwarding flag',
   })
-  results: (FeedbackSummary & { student?: StudentInfo })[];
+  results: (FeedbackSummary & {
+    student?: StudentInfo;
+    isForwarding?: boolean;
+  })[];
 
   @ApiProperty({ example: 42, description: 'Total number of feedbacks' })
   total: number;
@@ -48,6 +51,15 @@ export class FeedbackDetailDto extends FeedbackDetail {
     description: 'Forum post associated with this feedback (if any)',
   })
   forumPost?: ForumPost;
+
+  @ApiProperty({
+    example: true,
+    required: false,
+    nullable: true,
+    description:
+      'Indicates whether this feedback is part of a forwarding chain',
+  })
+  isForwarding?: boolean;
 }
 
 class DepartmentInfo {

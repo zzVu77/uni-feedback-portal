@@ -21,6 +21,7 @@ import {
   GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
@@ -32,11 +33,17 @@ export class FeedbackManagementService {
     const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
     const where: Prisma.FeedbacksWhereInput = {
-      departmentId: actor.departmentId,
+      OR: [
+        { departmentId: actor.departmentId },
+
+        {
+          forwardingLogs: {
+            some: { fromDepartmentId: actor.departmentId },
+          },
+        },
+      ],
     };
 
-    // optional filters
-    where.departmentId = actor.departmentId;
     if (status) {
       where.currentStatus = Object.values(FeedbackStatus).includes(
         status.toUpperCase() as FeedbackStatus,
@@ -72,6 +79,9 @@ export class FeedbackManagementService {
           department: { select: { id: true, name: true } },
           category: { select: { id: true, name: true } },
           user: { select: { id: true, fullName: true, email: true } },
+          forwardingLogs: {
+            select: { toDepartmentId: true, fromDepartmentId: true },
+          },
         },
       }),
       this.prisma.feedbacks.count({ where }),
@@ -86,6 +96,11 @@ export class FeedbackManagementService {
       department: f.department,
       category: f.category,
       createdAt: f.createdAt.toISOString(),
+      isForwarding:
+        f.department.id !== actor.departmentId &&
+        f.forwardingLogs.some(
+          (log) => log.fromDepartmentId === actor.departmentId,
+        ),
       ...(f.isPrivate
         ? {}
         : {
@@ -105,10 +120,19 @@ export class FeedbackManagementService {
   ): Promise<FeedbackDetailDto> {
     const { feedbackId } = params;
 
-    const feedback = await this.prisma.feedbacks.findUnique({
+    const feedback = await this.prisma.feedbacks.findFirst({
       where: {
         id: feedbackId,
-        departmentId: actor.departmentId,
+        OR: [
+          { departmentId: actor.departmentId },
+          {
+            forwardingLogs: {
+              some: {
+                fromDepartmentId: actor.departmentId,
+              },
+            },
+          },
+        ],
       },
       include: {
         user: true,
@@ -135,6 +159,7 @@ export class FeedbackManagementService {
             id: true,
             message: true,
             createdAt: true,
+            note: true,
             fromDepartment: {
               select: { id: true, name: true },
             },
@@ -153,7 +178,21 @@ export class FeedbackManagementService {
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
-
+    const isForwarding =
+      feedback.department.id !== actor.departmentId &&
+      feedback.forwardingLogs.some(
+        (log) => log.fromDepartment.id === actor.departmentId,
+      );
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: feedback.statusHistory,
+      forwardingLogs: feedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
     const result: FeedbackDetailDto = {
       id: feedback.id,
       subject: feedback.subject,
@@ -173,20 +212,23 @@ export class FeedbackManagementService {
           }),
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: feedback.department,
+      isForwarding,
       category: feedback.category,
-      statusHistory: feedback.statusHistory.map((h) => ({
-        status: h.status,
-        message: h.message,
-        note: h.note ?? null,
-        createdAt: h.createdAt.toISOString(),
-      })),
-      forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        id: log.id,
-        fromDepartment: log.fromDepartment,
-        toDepartment: log.toDepartment,
-        message: log.message,
-        createdAt: log.createdAt.toISOString(),
-      })),
+      statusHistory: unifiedTimeline,
+
+      // statusHistory: feedback.statusHistory.map((h) => ({
+      //   status: h.status,
+      //   message: h.message,
+      //   note: h.note ?? null,
+      //   createdAt: h.createdAt.toISOString(),
+      // })),
+      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
+      //   id: log.id,
+      //   fromDepartment: log.fromDepartment,
+      //   toDepartment: log.toDepartment,
+      //   message: log.message,
+      //   createdAt: log.createdAt.toISOString(),
+      // })),
       fileAttachments: feedback.fileAttachments,
     };
 
@@ -413,6 +455,7 @@ export class FeedbackManagementService {
             id: true,
             message: true,
             createdAt: true,
+            note: true,
             fromDepartment: {
               select: { id: true, name: true },
             },
@@ -431,7 +474,16 @@ export class FeedbackManagementService {
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
-
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: feedback.statusHistory,
+      forwardingLogs: feedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
     const result: FeedbackDetailDto = {
       id: feedback.id,
       subject: feedback.subject,
@@ -452,19 +504,20 @@ export class FeedbackManagementService {
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: feedback.department,
       category: feedback.category,
-      statusHistory: feedback.statusHistory.map((h) => ({
-        status: h.status,
-        message: h.message,
-        note: h.note ?? null,
-        createdAt: h.createdAt.toISOString(),
-      })),
-      forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        id: log.id,
-        fromDepartment: log.fromDepartment,
-        toDepartment: log.toDepartment,
-        message: log.message,
-        createdAt: log.createdAt.toISOString(),
-      })),
+      statusHistory: unifiedTimeline,
+      // statusHistory: feedback.statusHistory.map((h) => ({
+      //   status: h.status,
+      //   message: h.message,
+      //   note: h.note ?? null,
+      //   createdAt: h.createdAt.toISOString(),
+      // })),
+      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
+      //   id: log.id,
+      //   fromDepartment: log.fromDepartment,
+      //   toDepartment: log.toDepartment,
+      //   message: log.message,
+      //   createdAt: log.createdAt.toISOString(),
+      // })),
       fileAttachments: feedback.fileAttachments,
     };
 

@@ -59,10 +59,10 @@ model Users {
   password       String
   email          String   @unique
   role           UserRole
-  departmentId   String   @db.Uuid
+  departmentId   String?   @db.Uuid
   createdAt      DateTime @default(now())
 
-  department     Departments                   @relation(fields: [departmentId], references: [id])
+  department     Departments?                   @relation(fields: [departmentId], references: [id])
   feedbacks      Feedbacks[]
   votes          Votes[]
   comments       Comments[]

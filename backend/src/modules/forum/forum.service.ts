@@ -160,6 +160,7 @@ export class ForumService {
             description: true,
             location: true,
             currentStatus: true,
+            statusHistory: true,
             isPrivate: true,
             fileAttachments: {
               select: {
@@ -198,6 +199,10 @@ export class ForumService {
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
+    const resolvedStatus = post.feedback.statusHistory.find(
+      (h) => h.status === 'RESOLVED',
+    );
+    const officeResponse = resolvedStatus?.note ?? resolvedStatus?.message;
 
     return {
       id: post.id,
@@ -224,6 +229,7 @@ export class ForumService {
           fileName: f.fileName,
           fileUrl: f.fileUrl,
         })),
+        officeResponse,
       },
       ...(post.feedback.isPrivate
         ? {}
@@ -275,6 +281,33 @@ export class ForumService {
       totalVotes,
     };
   }
+  async createForumPost(
+    feedbackId: string,
+    actor: ActiveUserData,
+  ): Promise<string> {
+    // Kiểm tra feedback tồn tại
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId, userId: actor.sub },
+      include: { forumPost: true },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
+    }
+
+    if (feedback.forumPost) {
+      throw new BadRequestException(
+        'Forum post for this feedback already exists',
+      );
+    }
+
+    const forumPost = await this.prisma.forumPosts.create({
+      data: { feedbackId },
+    });
+
+    return forumPost.id;
+  }
+
   async unvote(
     postId: string,
     actor: ActiveUserData,

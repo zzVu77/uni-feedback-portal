@@ -1,5 +1,12 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { FeedbackStatus } from '@prisma/client';
+export type ExtendedStatus = FeedbackStatus | 'FORWARDED';
+export type UnifiedStatusTimeline = {
+  status: ExtendedStatus;
+  message: string;
+  note: string | null;
+  createdAt: string;
+}[];
 
 export class FeedbackDetail {
   @ApiProperty({
@@ -85,12 +92,7 @@ export class FeedbackDetail {
       },
     ],
   })
-  statusHistory: Array<{
-    status: string;
-    message: string;
-    note: string | null;
-    createdAt: string;
-  }>;
+  statusHistory: UnifiedStatusTimeline;
 
   @ApiProperty({
     description:
@@ -111,14 +113,13 @@ export class FeedbackDetail {
       },
     ],
   })
-  forwardingLogs: Array<{
-    id: string;
-    fromDepartment: { id: string; name: string };
-    toDepartment: { id: string; name: string };
-    message: string | null;
-    createdAt: string;
-  }>;
-
+  // forwardingLogs: Array<{
+  //   id: string;
+  //   fromDepartment: { id: string; name: string };
+  //   toDepartment: { id: string; name: string };
+  //   message: string | null;
+  //   createdAt: string;
+  // }>;
   @ApiProperty({
     description: 'List of attached files related to the feedback',
     example: [
@@ -135,7 +136,6 @@ export class FeedbackDetail {
 export class FeedbackSummary extends OmitType(FeedbackDetail, [
   'description',
   'statusHistory',
-  'forwardingLogs',
   'fileAttachments',
 ] as const) {}
 export class GetMyFeedbacksResponseDto {
