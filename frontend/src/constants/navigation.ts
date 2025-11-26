@@ -55,7 +55,5 @@ export const adminNavigation: NavigationItem[] = [
   },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   { href: "/notifications", label: "Thông báo", icon: Bell },
-  { href: "#6", label: "Thống kê", icon: ChartColumn },
-  // { href: "#4", label: "Tổng quan", icon: LayoutDashboard },
-  // { href: "#2", label: "Quản lý diễn đàn", icon: MessageCircle },
+  { href: "/admin/dashboard", label: "Thống kê", icon: ChartColumn },
 ];
