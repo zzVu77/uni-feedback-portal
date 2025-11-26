@@ -241,19 +241,12 @@ export class FeedbacksService {
         'Feedback can only be updated when in PENDING status.',
       );
     }
-    // if (dto.isAnonymous === true && dto.isPublic === true) {
-    //   throw new ForbiddenException(
-    //     'Feedback cannot be public when it is anonymous.',
-    //   );
-    // }
-    // if (
-    //   dto.isAnonymous === true &&
-    //   (feedback.forumPost || dto.isPublic === true)
-    // ) {
-    //   throw new ForbiddenException(
-    //     'Feedback cannot be public when it is anonymous.',
-    //   );
-    // }
+    if (dto.isAnonymous === true && dto.isPublic === true) {
+      throw new ForbiddenException(
+        'Feedback cannot be public when it is anonymous.',
+      );
+    }
+
     if (dto.departmentId) {
       const department = await this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
