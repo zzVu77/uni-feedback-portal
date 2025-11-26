@@ -78,7 +78,10 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
   }, 0);
 
   return (
-    <div className="flex w-full flex-col gap-4 rounded-xl bg-white px-4 py-3 shadow-md">
+    <div
+      id="comment-section"
+      className="flex w-full flex-col gap-4 rounded-xl bg-white px-4 py-3 shadow-md"
+    >
       <div className="flex flex-row items-center justify-start gap-2">
         <MessageCircle className="text-neutral-dark-primary-700 h-6 w-6" />
         <span className="text-neutral-dark-primary-700 text-[18px] font-medium">
