@@ -291,8 +291,15 @@ export class FeedbacksService {
     if (dto.isPublic === false) {
       await this.forumService.deleteByFeedbackId(feedbackId);
     }
+
+    const updateMapped = {
+      ...dto,
+      isPrivate:
+        dto.isAnonymous !== undefined ? dto.isAnonymous : feedback.isPrivate,
+    };
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { fileAttachments, isPublic, ...updateData } = dto;
+    const { fileAttachments, isPublic, ...updateData } = updateMapped;
     const updatedFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
