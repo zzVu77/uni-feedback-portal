@@ -21,6 +21,7 @@ import {
   GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
 @Injectable()
 export class FeedbackManagementService {
   constructor(private readonly prisma: PrismaService) {}
@@ -158,6 +159,7 @@ export class FeedbackManagementService {
             id: true,
             message: true,
             createdAt: true,
+            note: true,
             fromDepartment: {
               select: { id: true, name: true },
             },
@@ -181,7 +183,16 @@ export class FeedbackManagementService {
       feedback.forwardingLogs.some(
         (log) => log.fromDepartment.id === actor.departmentId,
       );
-
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: feedback.statusHistory,
+      forwardingLogs: feedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
     const result: FeedbackDetailDto = {
       id: feedback.id,
       subject: feedback.subject,
@@ -203,19 +214,21 @@ export class FeedbackManagementService {
       department: feedback.department,
       isForwarding,
       category: feedback.category,
-      statusHistory: feedback.statusHistory.map((h) => ({
-        status: h.status,
-        message: h.message,
-        note: h.note ?? null,
-        createdAt: h.createdAt.toISOString(),
-      })),
-      forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        id: log.id,
-        fromDepartment: log.fromDepartment,
-        toDepartment: log.toDepartment,
-        message: log.message,
-        createdAt: log.createdAt.toISOString(),
-      })),
+      statusHistory: unifiedTimeline,
+
+      // statusHistory: feedback.statusHistory.map((h) => ({
+      //   status: h.status,
+      //   message: h.message,
+      //   note: h.note ?? null,
+      //   createdAt: h.createdAt.toISOString(),
+      // })),
+      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
+      //   id: log.id,
+      //   fromDepartment: log.fromDepartment,
+      //   toDepartment: log.toDepartment,
+      //   message: log.message,
+      //   createdAt: log.createdAt.toISOString(),
+      // })),
       fileAttachments: feedback.fileAttachments,
     };
 
@@ -436,6 +449,7 @@ export class FeedbackManagementService {
             id: true,
             message: true,
             createdAt: true,
+            note: true,
             fromDepartment: {
               select: { id: true, name: true },
             },
@@ -454,7 +468,16 @@ export class FeedbackManagementService {
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
-
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: feedback.statusHistory,
+      forwardingLogs: feedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
     const result: FeedbackDetailDto = {
       id: feedback.id,
       subject: feedback.subject,
@@ -475,19 +498,20 @@ export class FeedbackManagementService {
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: feedback.department,
       category: feedback.category,
-      statusHistory: feedback.statusHistory.map((h) => ({
-        status: h.status,
-        message: h.message,
-        note: h.note ?? null,
-        createdAt: h.createdAt.toISOString(),
-      })),
-      forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        id: log.id,
-        fromDepartment: log.fromDepartment,
-        toDepartment: log.toDepartment,
-        message: log.message,
-        createdAt: log.createdAt.toISOString(),
-      })),
+      statusHistory: unifiedTimeline,
+      // statusHistory: feedback.statusHistory.map((h) => ({
+      //   status: h.status,
+      //   message: h.message,
+      //   note: h.note ?? null,
+      //   createdAt: h.createdAt.toISOString(),
+      // })),
+      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
+      //   id: log.id,
+      //   fromDepartment: log.fromDepartment,
+      //   toDepartment: log.toDepartment,
+      //   message: log.message,
+      //   createdAt: log.createdAt.toISOString(),
+      // })),
       fileAttachments: feedback.fileAttachments,
     };
 
