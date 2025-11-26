@@ -227,6 +227,9 @@ export class FeedbacksService {
 
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, userId: actor.sub },
+      include: {
+        forumPost: { select: { id: true } },
+      },
     });
 
     if (!feedback) {
@@ -238,7 +241,11 @@ export class FeedbacksService {
         'Feedback can only be updated when in PENDING status.',
       );
     }
-
+    if ((dto.isAnonymous === dto.isPublic) === true) {
+      throw new ForbiddenException(
+        'Feedback cannot be public when it is anonymous.',
+      );
+    }
     if (dto.departmentId) {
       const department = await this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -255,7 +262,6 @@ export class FeedbacksService {
         throw new NotFoundException('Category not found');
       }
     }
-
     if (dto.fileAttachments) {
       const existingFiles =
         await this.prisma.fileAttachmentForFeedback.findMany({
@@ -288,8 +294,14 @@ export class FeedbacksService {
         });
       }
     }
-    if (dto.isPublic === false) {
+    if (dto.isPublic === false && feedback.forumPost) {
       await this.forumService.deleteByFeedbackId(feedbackId);
+    } else if (
+      dto.isPublic === true &&
+      !feedback.forumPost &&
+      dto.isAnonymous === false
+    ) {
+      await this.forumService.createForumPost(feedbackId, actor);
     }
 
     const updateMapped = {
