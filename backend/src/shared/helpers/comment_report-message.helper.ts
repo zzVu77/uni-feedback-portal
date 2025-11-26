@@ -7,11 +7,11 @@ export function GenerateAdminResponse(
   switch (status) {
     case ReportStatus.RESOLVED:
       return isDeleted
-        ? 'The reported comment has been reviewed and removed.'
-        : 'The reported comment has been reviewed and found not to violate guidelines.';
+        ? 'Bình luận bị báo cáo đã được xem xét và xóa.'
+        : 'Bình luận bị báo cáo đã được xem xét và không phát hiện vi phạm.';
     case ReportStatus.PENDING:
-      return 'The report is pending review by the administration.';
+      return 'Báo cáo đang chờ được xem xét bởi quản trị viên.';
     default:
-      return 'System notice: report status updated.';
+      return 'Thông báo hệ thống: trạng thái báo cáo đã được cập nhật.';
   }
 }

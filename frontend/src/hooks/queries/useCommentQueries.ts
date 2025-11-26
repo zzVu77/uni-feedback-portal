@@ -120,8 +120,11 @@ export const useReportComment = () => {
     onSuccess: () => {
       toast.success("Thao tác thành công!");
     },
-    onError: () => {
-      toast.error("Đã có lỗi xảy ra khi báo cáo bình luận.");
+    onError: (error: any) => {
+      const status = error?.response?.status;
+      if (status === 400) {
+        toast.error("Bạn đã báo cáo bình luận này trước đó.");
+      } else toast.error("Đã có lỗi xảy ra khi báo cáo bình luận.");
     },
     retry: false,
   });

@@ -1,5 +1,5 @@
 export const FeedbackStatus = [
-  { label: "Tất cả", value: "all" },
+  { label: "Trạng thái", value: "all" },
 
   { label: "Đang chờ tiếp nhận", value: "pending" },
 

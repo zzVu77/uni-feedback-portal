@@ -9,6 +9,7 @@ import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   CreateCategoryDto,
   QueryCategoriesDto,
+  QueryCategoriesOptionDto,
   UpdateCategoryDto,
   UpdateCategoryStatusDto,
 } from './dto';
@@ -97,9 +98,13 @@ export class CategoriesService {
     return { results, total };
   }
 
-  async getCategoryOptions(): Promise<CategoryOptionResponseDto[]> {
+  async getCategoryOptions(
+    query: QueryCategoriesOptionDto,
+  ): Promise<CategoryOptionResponseDto[]> {
     const categories = await this.prisma.categories.findMany({
-      where: { isActive: true },
+      where: {
+        isActive: query.isActive === 'true' ? true : undefined,
+      },
       orderBy: { name: 'asc' },
       select: {
         id: true,

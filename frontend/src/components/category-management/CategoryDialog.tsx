@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Category } from "./category-table/columns";
+import { Category } from "@/types/category";
 
 const categoryFormSchema = z.object({
   name: z

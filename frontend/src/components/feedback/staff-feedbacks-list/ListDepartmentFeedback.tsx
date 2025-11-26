@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 
-import Filter from "@/components/common/filter/Filter";
+import CommonFilter from "@/components/common/CommonFilter";
 import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FeedbackStatus } from "@/constants/data";
 import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
 import { useGetStaffFeedbacks } from "@/hooks/queries/useFeedbackQueries";
 import { cn } from "@/lib/utils";
@@ -98,9 +97,8 @@ export function ListDepartmentFeedback() {
         <Suspense fallback={null}>
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
         </Suspense>
-        <Suspense fallback={null}>
-          <Filter type="status" items={FeedbackStatus} />
-        </Suspense>
+        <CommonFilter.StatusSelection />
+        <CommonFilter.CategorySelection />
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table className={cn(tableData.length === 0 && "h-[70vh]")}>

@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsBooleanString,
@@ -48,3 +48,8 @@ export class QueryCategoriesDto {
   @Min(1)
   pageSize?: number;
 }
+export class QueryCategoriesOptionDto extends OmitType(QueryCategoriesDto, [
+  'page',
+  'pageSize',
+  'q',
+] as const) {}

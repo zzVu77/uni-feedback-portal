@@ -13,11 +13,12 @@ export function useFeedbackFilters(): FeedbackFilter {
     const title = params.get("q");
     const status = params.get("status") || "";
     const department = params.get("departmentId") || undefined;
+    const category = params.get("categoryId") || undefined;
     const parsedFilters: FeedbackFilter = { page, pageSize };
     if (title) parsedFilters.q = title;
     if (status) parsedFilters.status = status as FeedbackStatus;
     if (department) parsedFilters.departmentId = department || "";
-
+    if (category) parsedFilters.categoryId = category || "";
     return parsedFilters;
   }, [searchParams]);
 

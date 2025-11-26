@@ -16,7 +16,7 @@ import { Button } from "../ui/button";
 import Attachment from "./Attachment";
 
 type Props = {
-  type: "student" | "staff";
+  type: "student" | "staff" | "admin";
   data: FeedbackHeaderType;
 };
 
@@ -90,7 +90,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
             </span>
           </Badge>
           {/* 2. Sender or Department Badge */}
-          {type === "staff" ? (
+          {(type === "staff" || type === "admin") && (
             <Badge
               variant="secondary"
               className="text-bg-fuchsia-700 flex items-center gap-1.5 rounded-md bg-fuchsia-50 px-2.5 py-1 hover:bg-fuchsia-100"
@@ -102,7 +102,8 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
                   : data.student?.fullName || "Nguyễn Văn A"}
               </span>
             </Badge>
-          ) : (
+          )}
+          {(type === "staff" || type === "student") && (
             <Badge
               variant="secondary"
               className="flex items-center gap-1.5 rounded-md bg-indigo-50 px-2.5 py-1 text-indigo-700 hover:bg-indigo-100"
@@ -123,7 +124,6 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
               {category.name || "Cơ sở vật chất"}
             </span>
           </Badge>
-
           {/* 4. Location Badge (Conditional) */}
           {location && (
             <Badge
