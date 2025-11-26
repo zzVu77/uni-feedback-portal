@@ -299,7 +299,8 @@ export class FeedbacksService {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { fileAttachments, isPublic, ...updateData } = updateMapped;
+    const { fileAttachments, isPublic, isAnonymous, ...updateData } =
+      updateMapped;
     const updatedFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
