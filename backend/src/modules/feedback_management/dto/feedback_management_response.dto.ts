@@ -51,6 +51,15 @@ export class FeedbackDetailDto extends FeedbackDetail {
     description: 'Forum post associated with this feedback (if any)',
   })
   forumPost?: ForumPost;
+
+  @ApiProperty({
+    example: true,
+    required: false,
+    nullable: true,
+    description:
+      'Indicates whether this feedback is part of a forwarding chain',
+  })
+  isForwarding?: boolean;
 }
 
 class DepartmentInfo {

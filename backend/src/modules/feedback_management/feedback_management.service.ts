@@ -117,10 +117,19 @@ export class FeedbackManagementService {
   ): Promise<FeedbackDetailDto> {
     const { feedbackId } = params;
 
-    const feedback = await this.prisma.feedbacks.findUnique({
+    const feedback = await this.prisma.feedbacks.findFirst({
       where: {
         id: feedbackId,
-        departmentId: actor.departmentId,
+        OR: [
+          { departmentId: actor.departmentId },
+          {
+            forwardingLogs: {
+              some: {
+                fromDepartmentId: actor.departmentId,
+              },
+            },
+          },
+        ],
       },
       include: {
         user: true,
@@ -165,6 +174,9 @@ export class FeedbackManagementService {
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+    const isForwarding = feedback.forwardingLogs.some(
+      (log) => log.fromDepartment.id === actor.departmentId,
+    );
 
     const result: FeedbackDetailDto = {
       id: feedback.id,
@@ -185,6 +197,7 @@ export class FeedbackManagementService {
           }),
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: feedback.department,
+      isForwarding,
       category: feedback.category,
       statusHistory: feedback.statusHistory.map((h) => ({
         status: h.status,
