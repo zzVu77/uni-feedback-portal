@@ -5,7 +5,7 @@ import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { FeedbackStatus } from "@/constants/data";
 
 export const CategorySelection = () => {
-  const { data } = useCategoryOptionsData();
+  const { data } = useCategoryOptionsData("all");
   const categoryOptions = [
     { label: "Danh mục", value: "all" },
     ...(data || []),

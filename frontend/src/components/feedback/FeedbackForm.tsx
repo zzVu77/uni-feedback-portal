@@ -112,7 +112,7 @@ const FeedbackForm = ({
   const params = useParams();
   const id = params.id as string; // chính xác luôn
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
-  const { data: categoryOptions } = useCategoryOptionsData();
+  const { data: categoryOptions } = useCategoryOptionsData("active");
   const { data: departmentOptions } = useDepartmentOptionsData();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

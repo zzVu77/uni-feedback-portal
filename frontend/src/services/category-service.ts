@@ -11,9 +11,14 @@ import {
 
 const categoryBaseUrl = "/categories";
 
-export const getCategoryOptions = async (): Promise<OptionType[]> => {
+export const getCategoryOptions = async (
+  isActive: boolean | undefined,
+): Promise<OptionType[]> => {
   const response = await axiosInstance.get<{ id: string; name: string }[]>(
     `${categoryBaseUrl}/options`,
+    {
+      params: { isActive },
+    },
   );
   return response.map((c) => ({ value: c.id, label: c.name }));
 };

@@ -21,10 +21,10 @@ export const CATEGORY_QUERY_KEYS = {
   ALL_CATEGORIES: "all-categories",
 };
 
-export const useGetCategoryOptions = () => {
+export const useGetCategoryOptions = (isActive: boolean | undefined) => {
   return useQuery({
-    queryKey: [CATEGORY_QUERY_KEYS.CATEGORY_OPTIONS],
-    queryFn: () => getCategoryOptions(),
+    queryKey: [CATEGORY_QUERY_KEYS.CATEGORY_OPTIONS, isActive],
+    queryFn: () => getCategoryOptions(isActive),
     placeholderData: (previousData) => previousData,
   });
 };
