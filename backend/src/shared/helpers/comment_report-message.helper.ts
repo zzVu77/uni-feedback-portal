@@ -8,7 +8,7 @@ export function GenerateAdminResponse(
     case ReportStatus.RESOLVED:
       return isDeleted
         ? 'Bình luận bị báo cáo đã được xem xét và xóa.'
-        : 'Bình luận bị báo cáo đã được xem xét và không vi phạm chính sách.';
+        : 'Bình luận bị báo cáo đã được xem xét và không phát hiện vi phạm.';
     case ReportStatus.PENDING:
       return 'Báo cáo đang chờ được xem xét bởi quản trị viên.';
     default:
