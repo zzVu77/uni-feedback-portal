@@ -6,11 +6,32 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { ForumPostDetail } from "@/types";
 import { cn } from "@/lib/utils";
+import {
+  useUnvoteForumPost,
+  useVoteForumPost,
+} from "@/hooks/queries/useForumPostQueries";
+import Link from "next/link";
+
 type Props = {
   data: ForumPostDetail;
+  commentsCount?: number;
 };
-const FeedbackPostDetail = ({ data }: Props) => {
-  const { feedback, createdAt, hasVoted, user, votes, commentsCount } = data;
+
+const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
+  const { id, feedback, createdAt, hasVoted, user, votes } = data;
+  const { mutate: vote, isPending: isVoting } = useVoteForumPost(id);
+  const { mutate: unvote, isPending: isUnvoting } = useUnvoteForumPost(id);
+
+  const isBusy = isVoting || isUnvoting;
+
+  const handleToggleVote = () => {
+    if (hasVoted) {
+      unvote();
+    } else {
+      vote();
+    }
+  };
+
   return (
     <div className="flex w-full flex-col gap-3 rounded-xl bg-white px-3 py-4 shadow-sm md:px-4">
       <div className="flex flex-row items-center justify-between">
@@ -60,25 +81,41 @@ const FeedbackPostDetail = ({ data }: Props) => {
       <div className="flex flex-row items-center gap-1"></div>
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-between gap-3">
+          {/* Vote Button */}
           <Button
-            className="hover:text-blue-primary-600 flex flex-row items-center gap-1 rounded-lg border-none shadow-none hover:bg-transparent"
-            variant="outline"
-          >
-            <ThumbsUp className="hover:text-blue-primary-600 h-4 w-4" />
-            {votes}
-          </Button>
-          <Button
+            onClick={handleToggleVote}
+            disabled={isBusy}
             className={cn(
+              "flex flex-row items-center gap-1 rounded-lg border-none shadow-none hover:bg-transparent",
               hasVoted
-                ? "hover:text-blue-primary-600"
-                : "hover:text-neutral-dark-primary-400",
-              "hover:text-blue-primary-600 flex flex-row items-center gap-1 rounded-lg border-none shadow-none hover:bg-transparent",
+                ? "text-blue-primary-600 hover:text-blue-primary-700"
+                : "text-neutral-dark-primary-400 hover:text-blue-primary-600",
+              isBusy && "cursor-not-allowed opacity-70",
             )}
             variant="outline"
           >
-            <MessageSquare className="hover:text-blue-primary-600 h-4 w-4" />
-            {commentsCount}
+            <ThumbsUp
+              className={cn(
+                "h-4 w-4 transition-all duration-200",
+                hasVoted ? "fill-current" : "",
+                isVoting ? "animate-pulse" : "",
+              )}
+            />
+            <span>{votes}</span>
           </Button>
+
+          <Link href={`#comment-section`}>
+            <Button
+              className={cn(
+                "hover:text-blue-primary-600 flex flex-row items-center gap-1 rounded-lg border-none shadow-none hover:bg-transparent",
+                "text-neutral-dark-primary-400",
+              )}
+              variant="outline"
+            >
+              <MessageSquare className="hover:text-blue-primary-600 h-4 w-4" />
+              {commentsCount}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

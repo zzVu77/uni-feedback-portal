@@ -32,7 +32,7 @@ const page = () => {
   return (
     <div className="w-full">
       <Wrapper>
-        <FeedbackPostDetail data={feedback} />
+        <FeedbackPostDetail data={feedback} commentsCount={comments?.total} />
         <OfficialResponse
           departmentName="Khoa đào tạo Quốc tế"
           responseContent="Cảm ơn bạn đã góp ý..."

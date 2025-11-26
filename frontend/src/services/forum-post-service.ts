@@ -25,3 +25,9 @@ export const getForumPostById = async (
   );
   return response;
 };
+export const voteForumPost = async (id: string): Promise<void> => {
+  await axiosInstance.post(`${forumPostBaseUrl}/${id}/vote`);
+};
+export const unvoteForumPost = async (id: string) => {
+  await axiosInstance.delete(`${forumPostBaseUrl}/${id}/vote`);
+};
