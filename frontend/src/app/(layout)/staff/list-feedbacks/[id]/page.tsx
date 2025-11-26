@@ -25,7 +25,8 @@ const Page = () => {
         <div className="col-span-1 flex w-full flex-col items-start justify-between gap-2 lg:col-span-2 lg:flex-row">
           <FeedbackDetailHeader type="staff" data={feedbackHeaderData} />
           {feedback.currentStatus !== "REJECTED" &&
-            feedback.currentStatus !== "RESOLVED" && (
+            feedback.currentStatus !== "RESOLVED" &&
+            feedback.isForwarding === false && (
               <StaffAction
                 feedbackId={id}
                 currentStatus={feedback.currentStatus}
@@ -35,6 +36,7 @@ const Page = () => {
         <StatusTimeLine statusHistory={feedback.statusHistory} />
         <ConversationSection
           role="staff"
+          isForwarded={feedback.isForwarding}
           currentFeedbackStatus={feedback.currentStatus}
         />
       </div>

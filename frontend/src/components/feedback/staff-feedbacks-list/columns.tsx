@@ -67,19 +67,23 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     },
     cell: ({ row }) => {
       const status = row.getValue("currentStatus");
+      const isForwarded = row.original.isForwarding;
       return (
-        <div className="capitalize">
-          <StatusBadge
-            type={
-              status as
-                | "PENDING"
-                | "IN_PROGRESS"
-                | "RESOLVED"
-                | "REJECTED"
-                | "CLOSED"
-            }
-          />
-        </div>
+        <>
+          <div className="flex flex-row items-center justify-start gap-1 capitalize">
+            <StatusBadge
+              type={
+                status as
+                  | "PENDING"
+                  | "IN_PROGRESS"
+                  | "RESOLVED"
+                  | "REJECTED"
+                  | "CLOSED"
+              }
+            />
+            {isForwarded && <StatusBadge type="FORWARDED" />}
+          </div>
+        </>
       );
     },
   },

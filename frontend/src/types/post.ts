@@ -28,6 +28,7 @@ export type ForumPostDetail = {
         fileUrl: string;
       },
     ];
+    officeResponse?: "Oke đã giải quyết";
   };
   user: {
     id: string;

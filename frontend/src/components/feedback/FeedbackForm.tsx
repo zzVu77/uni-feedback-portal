@@ -4,8 +4,8 @@ import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
 import { CreateFeedbackPayload } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RotateCcw, Save, Send, X } from "lucide-react";
-import { useState } from "react";
+import { Info, RotateCcw, Save, Send, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ConfirmationDialog from "../common/ConfirmationDialog";
@@ -43,6 +43,12 @@ import {
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { useRouter, useParams } from "next/navigation";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
@@ -78,7 +84,8 @@ const formSchema = z.object({
     .max(5000, {
       message: "Tối đa 5000 ký tự.",
     }),
-  isPrivate: z.boolean().optional(),
+  isAnonymous: z.boolean().optional(),
+  isPublic: z.boolean().optional(),
   attachments: z
     .array(z.instanceof(File))
     .optional()
@@ -122,7 +129,8 @@ const FeedbackForm = ({
       categoryId: initialData?.categoryId || "",
       departmentId: initialData?.departmentId || "",
       description: initialData?.description || "",
-      isPrivate: initialData?.isPrivate || false,
+      isAnonymous: initialData?.isAnonymous || false,
+      isPublic: initialData?.isPublic || false,
       // attachments: initialData?.attachments || [],
     },
   });
@@ -135,10 +143,17 @@ const FeedbackForm = ({
       departmentId: values.departmentId, // map tên đúng API
       location: values.location || "",
       description: values.description,
-      isPrivate: values.isPrivate || false,
+      isAnonymous: values.isAnonymous || false,
+      isPublic: values.isPublic || false,
       // attachments: values.attachments,
     };
   };
+  const isAnonymousWatched = form.watch("isAnonymous");
+  useEffect(() => {
+    if (isAnonymousWatched) {
+      form.setValue("isPublic", false);
+    }
+  }, [isAnonymousWatched, form]);
   const { isDirty } = form.formState;
   const handleResetForm = () => {
     form.reset();
@@ -182,7 +197,7 @@ const FeedbackForm = ({
               {/* Anonymous option */}
               <FormField
                 control={form.control}
-                name="isPrivate"
+                name="isAnonymous"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -195,7 +210,7 @@ const FeedbackForm = ({
                             <Switch
                               checked={field.value}
                               onCheckedChange={field.onChange}
-                              id="isPrivate"
+                              id="isAnonymous"
                               className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
                             />
                           </div>
@@ -234,6 +249,54 @@ const FeedbackForm = ({
                       </div>
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Public to forum option */}
+              <FormField
+                control={form.control}
+                name="isPublic"
+                render={({ field }) => (
+                  <FormItem className="mt-2 flex flex-row items-center space-y-0 space-x-3 px-2">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="isPublic"
+                        disabled={isAnonymousWatched} // Disable if isAnonymous is true
+                        className={`h-6 w-12 bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6 ${isAnonymousWatched ? "cursor-not-allowed opacity-50" : "cursor-pointer"} `}
+                      />
+                    </FormControl>
+
+                    {/* Label and Tooltip wrapper - Apply opacity if disabled */}
+                    <div
+                      className={`flex items-center gap-2 ${isAnonymousWatched ? "opacity-50" : ""}`}
+                    >
+                      <FormLabel
+                        htmlFor="isPublic"
+                        className="cursor-pointer text-[15px] font-medium text-gray-700"
+                      >
+                        Công khai trên diễn đàn
+                      </FormLabel>
+
+                      <TooltipProvider>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            {/* Hide tooltip info if disabled to reduce noise, or keep it based on preference */}
+                            <Info className="h-4 w-4 cursor-pointer text-gray-400 transition-colors hover:text-blue-500" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs bg-slate-800 p-2 text-center text-xs text-white">
+                            <p className="text-center">
+                              {
+                                isAnonymousWatched
+                                  ? "Không thể công khai khi gửi ẩn danh." // Message when disabled
+                                  : "Phản hồi sẽ được đăng lên diễn đàn cho phép tất cả sinh viên để thảo luận và chia sẻ ý kiến." // Standard message
+                              }
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                   </FormItem>
                 )}
               />

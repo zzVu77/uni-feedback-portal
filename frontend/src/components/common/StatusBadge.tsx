@@ -1,4 +1,10 @@
-import { CircleAlert, CircleCheckBig, CircleX, Loader } from "lucide-react";
+import {
+  CircleAlert,
+  CircleCheckBig,
+  CircleX,
+  Forward,
+  Loader,
+} from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +15,7 @@ export type StatusBadgeProps = {
     | "RESOLVED"
     | "REJECTED"
     | "CLOSED"
+    | "FORWARDED"
     | "OPENING";
 };
 
@@ -54,6 +61,12 @@ const STATUS_CONFIG = {
     badgeClassName:
       "text-green-primary-500 bg-green-primary-100 py-1 gap-0 rounded-3xl",
     iconClassName: "",
+  },
+  FORWARDED: {
+    text: "Được chuyển tiếp",
+    icon: Forward,
+    badgeClassName: "text-purple-800 bg-purple-200/60 hover:bg-purple-200 ",
+    iconClassName: "text-purple-800 animate-pulse",
   },
 };
 

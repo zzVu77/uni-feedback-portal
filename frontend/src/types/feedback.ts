@@ -27,26 +27,24 @@ export type FeedbackDetail = {
     note: string | null;
     createdAt: string;
   }[];
-  // Optional forwarding logs
-  forwardingLogs?: {
-    id: string;
-    fromDepartment: { id: string; name: string };
-    toDepartment: { id: string; name: string };
-    message: string | null;
-    createdAt: string;
-  }[];
+  isForwarding: boolean;
   // Optional file attachments
   fileAttachments?: {
     id: string;
     fileName: string;
     fileUrl: string;
   }[];
+  forumPost?: {
+    id: string;
+  };
   // For staff feedback view and can be null for private feedbacks
   student?: {
     id: string;
     fullName: string;
     email: string;
   };
+  //TODO: isPublic field is just temporarily added here, need to check and remove if not necessary
+  isPublic: boolean;
 };
 export type MyFeedbackHistoryItem = Pick<
   FeedbackDetail,
@@ -54,7 +52,13 @@ export type MyFeedbackHistoryItem = Pick<
 >;
 export type StaffFeedbackItem = Pick<
   FeedbackDetail,
-  "id" | "subject" | "currentStatus" | "createdAt" | "category" | "student"
+  | "id"
+  | "subject"
+  | "currentStatus"
+  | "createdAt"
+  | "category"
+  | "student"
+  | "isForwarding"
 >;
 export type AdminFeedbackItem = Pick<
   FeedbackDetail,
@@ -74,12 +78,13 @@ export interface FeedbackFilter extends BaseFilter {
   to?: string;
 }
 export type CreateFeedbackPayload = {
-  isPrivate: boolean;
+  isAnonymous: boolean;
   subject: string;
   location?: string | null;
   departmentId: string;
   categoryId: string;
   description: string;
+  isPublic: boolean;
   // attachments: string[];
 };
 export type UpdateFeedbackStatusParams = {

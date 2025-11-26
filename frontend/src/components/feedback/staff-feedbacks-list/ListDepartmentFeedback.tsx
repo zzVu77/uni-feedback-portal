@@ -93,7 +93,7 @@ export function ListDepartmentFeedback() {
 
   return (
     <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      <div className="flex w-full flex-row items-start justify-between gap-2 md:items-center">
+      <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-start">
         <Suspense fallback={null}>
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
         </Suspense>

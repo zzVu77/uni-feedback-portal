@@ -80,7 +80,7 @@ export const forwardStaffFeedbackById = async (
   toDepartmentId: string,
   note?: string,
 ) => {
-  await axiosInstance.post(`${staffFeedbackBaseUrl}/${id}/forwarding`, {
+  await axiosInstance.post(`${staffFeedbackBaseUrl}/${id}/forwardings`, {
     toDepartmentId,
     note,
   });

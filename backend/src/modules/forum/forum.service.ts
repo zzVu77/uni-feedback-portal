@@ -352,6 +352,12 @@ export class ForumService {
       totalVotes,
     };
   }
+  async deleteByFeedbackId(feedbackId: string): Promise<void> {
+    await this.prisma.forumPosts.delete({
+      where: { feedbackId },
+    });
+  }
+
   async getManyByIds(
     ids: string[],
   ): Promise<Record<string, { id: string; title: string; content: string }>> {

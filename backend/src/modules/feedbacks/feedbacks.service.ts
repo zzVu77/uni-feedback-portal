@@ -121,6 +121,9 @@ export class FeedbacksService {
         department: {
           select: { id: true, name: true },
         },
+        forumPost: {
+          select: { id: true },
+        },
         category: {
           select: { id: true, name: true },
         },
@@ -175,6 +178,7 @@ export class FeedbacksService {
       location: feedback.location ? feedback.location : null,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
+      isPublic: feedback.forumPost ? true : false,
       createdAt: feedback.createdAt.toISOString(),
       department: {
         id: feedback.department.id,
@@ -223,6 +227,9 @@ export class FeedbacksService {
 
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, userId: actor.sub },
+      include: {
+        forumPost: { select: { id: true } },
+      },
     });
 
     if (!feedback) {
@@ -232,6 +239,11 @@ export class FeedbacksService {
     if (feedback.currentStatus !== FeedbackStatus.PENDING) {
       throw new ForbiddenException(
         'Feedback can only be updated when in PENDING status.',
+      );
+    }
+    if (dto.isAnonymous === true && dto.isPublic === true) {
+      throw new ForbiddenException(
+        'Feedback cannot be public when it is anonymous.',
       );
     }
 
@@ -251,7 +263,6 @@ export class FeedbacksService {
         throw new NotFoundException('Category not found');
       }
     }
-
     if (dto.fileAttachments) {
       const existingFiles =
         await this.prisma.fileAttachmentForFeedback.findMany({
@@ -284,9 +295,25 @@ export class FeedbacksService {
         });
       }
     }
+    if (dto.isPublic === false && feedback.forumPost) {
+      await this.forumService.deleteByFeedbackId(feedbackId);
+    } else if (
+      dto.isPublic === true &&
+      !feedback.forumPost &&
+      dto.isAnonymous === false
+    ) {
+      await this.forumService.createForumPost(feedbackId, actor);
+    }
+
+    const updateMapped = {
+      ...dto,
+      isPrivate:
+        dto.isAnonymous !== undefined ? dto.isAnonymous : feedback.isPrivate,
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { fileAttachments, ...updateData } = dto;
+    const { fileAttachments, isPublic, isAnonymous, ...updateData } =
+      updateMapped;
     const updatedFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
@@ -296,6 +323,9 @@ export class FeedbacksService {
         statusHistory: {
           select: { status: true, message: true, note: true, createdAt: true },
           orderBy: { createdAt: 'asc' },
+        },
+        forumPost: {
+          select: { id: true },
         },
         forwardingLogs: {
           select: {
@@ -313,6 +343,7 @@ export class FeedbacksService {
         },
       },
     });
+
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: updatedFeedback.statusHistory,
       forwardingLogs: updatedFeedback.forwardingLogs.map((f) => ({
@@ -325,6 +356,7 @@ export class FeedbacksService {
     });
     return {
       id: updatedFeedback.id,
+      isPublic: updatedFeedback.forumPost ? true : false,
       subject: updatedFeedback.subject,
       description: updatedFeedback.description,
       location: updatedFeedback.location ? updatedFeedback.location : null,
