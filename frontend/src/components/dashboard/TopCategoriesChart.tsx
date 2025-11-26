@@ -48,7 +48,7 @@ export const TopCategoriesChart = ({ data, isLoading }: Props) => {
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={data || []} margin={{ top: 20 }}>
-            <CartesianGrid vertical={false} />
+            <CartesianGrid className="mt-10 py-10" vertical={false} />
             <XAxis
               dataKey="categoryName"
               tickLine={false}
@@ -62,11 +62,16 @@ export const TopCategoriesChart = ({ data, isLoading }: Props) => {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="count" fill="var(--color-count)" radius={8}>
+            <Bar
+              dataKey="count"
+              className="mt-10 py-10"
+              fill="var(--color-count)"
+              radius={8}
+            >
               <LabelList
-                position="top"
+                position="insideTop"
                 offset={12}
-                className="fill-foreground"
+                className="fill-white font-semibold"
                 fontSize={12}
               />
             </Bar>

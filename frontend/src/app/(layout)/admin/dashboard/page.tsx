@@ -91,7 +91,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* 3. Charts Row */}
-      <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-7">
+      <div className="grid w-full grid-cols-1 gap-6 pb-4 lg:grid-cols-7">
         <div className="col-span-1 lg:col-span-4">
           <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
         </div>
