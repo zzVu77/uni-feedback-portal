@@ -14,12 +14,10 @@ const page = () => {
   const id = params.id as string;
 
   const isClient = useIsClient();
-  const { data: feedback, isLoading: isFeedbackLoading } = useGetForumPostById(
-    id,
-    {
+  const { data: forumDetail, isLoading: isFeedbackLoading } =
+    useGetForumPostById(id, {
       enabled: isClient,
-    },
-  );
+    });
 
   // Fetch comments
   const { data: comments, isLoading: isCommentsLoading } =
@@ -27,17 +25,20 @@ const page = () => {
       enabled: isClient,
     });
 
-  if (isFeedbackLoading || !feedback) return <Loading variant="spinner" />;
+  if (isFeedbackLoading || !forumDetail) return <Loading variant="spinner" />;
 
   return (
     <div className="w-full">
       <Wrapper>
-        <FeedbackPostDetail data={feedback} />
-        <OfficialResponse
-          departmentName="Khoa đào tạo Quốc tế"
-          responseContent="Cảm ơn bạn đã góp ý..."
-          responseDate="20/11/2023"
-        />
+        <FeedbackPostDetail data={forumDetail} />
+        {forumDetail.feedback.officeResponse && (
+          <OfficialResponse
+            departmentName={forumDetail.feedback.department.name}
+            responseContent={forumDetail.feedback.officeResponse}
+            responseDate="20/11/2023"
+          />
+        )}
+
         {isCommentsLoading || !comments ? (
           <Loading variant="spinner" />
         ) : (
