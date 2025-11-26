@@ -286,7 +286,7 @@ export class FeedbacksService {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { fileAttachments, ...updateData } = dto;
+    const { fileAttachments, isPublic, ...updateData } = dto;
     const updatedFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
@@ -313,6 +313,9 @@ export class FeedbacksService {
         },
       },
     });
+    if (dto.isPublic === false) {
+      await this.forumService.deleteByFeedbackId(feedbackId);
+    }
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: updatedFeedback.statusHistory,
       forwardingLogs: updatedFeedback.forwardingLogs.map((f) => ({
