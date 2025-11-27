@@ -1,3 +1,4 @@
+import { Loading } from "@/components/common/Loading";
 import NotificationSection from "@/components/notification/NotificationSection";
 import Wrapper from "@/components/shared/Wrapper";
 import React, { Suspense } from "react";
@@ -5,7 +6,7 @@ import React, { Suspense } from "react";
 const page = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<div>Loading notifications...</div>}>
+      <Suspense fallback={<Loading variant="spinner" />}>
         <NotificationSection />
       </Suspense>
     </Wrapper>

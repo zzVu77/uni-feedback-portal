@@ -73,7 +73,7 @@ const NotificationSection = () => {
         </TabsTrigger>
       </TabsList>
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center md:justify-center lg:justify-start">
-        <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
+        <div className="flex w-full flex-row items-center justify-center gap-2 md:justify-end">
           <Suspense fallback={null}>
             <Filter type="notificationStatus" items={mockNotificationStatus} />
           </Suspense>
