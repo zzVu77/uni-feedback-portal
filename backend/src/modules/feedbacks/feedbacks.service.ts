@@ -406,7 +406,12 @@ export class FeedbacksService {
     // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
-        ...feedbackData,
+        subject: feedbackData.subject,
+        description: feedbackData.description,
+        location: feedbackData.location,
+        isPrivate: dto.isAnonymous ? true : false,
+        departmentId: feedbackData.departmentId,
+        categoryId: feedbackData.categoryId,
         userId: actor.sub,
       },
       include: {
