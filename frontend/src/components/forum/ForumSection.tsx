@@ -115,11 +115,11 @@ export function ForumSection() {
           </TabsTrigger>
         </TabsList>
 
-        <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-start">
+        <div className="flex w-full flex-wrap items-start justify-center gap-2 md:items-center md:justify-start xl:flex-row xl:flex-nowrap">
           <Suspense fallback={null}>
             <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
           </Suspense>
-          <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-start">
+          <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-center xl:w-fit">
             {currentTabValue === "feedbacks" ? (
               <>
                 <CommonFilter.CategorySelection />

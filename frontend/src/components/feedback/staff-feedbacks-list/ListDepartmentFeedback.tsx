@@ -93,12 +93,14 @@ export function ListDepartmentFeedback() {
 
   return (
     <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-start">
+      <div className="flex w-full flex-wrap items-start justify-center gap-2 md:items-center md:justify-start xl:flex-row xl:flex-nowrap">
         <Suspense fallback={null}>
           <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
         </Suspense>
-        <CommonFilter.StatusSelection />
-        <CommonFilter.CategorySelection />
+        <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-center xl:w-fit">
+          <CommonFilter.StatusSelection />
+          <CommonFilter.CategorySelection />
+        </div>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table className={cn(tableData.length === 0 && "h-[70vh]")}>
