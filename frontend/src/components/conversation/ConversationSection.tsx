@@ -27,7 +27,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import ConversationItem from "./ConversationItem";
-// --- Schema ---
+
+// --- Schema (Không còn attachments) ---
 const newConversationSchema = z.object({
   subject: z.string().min(1, "Vui lòng nhập tiêu đề cuộc trao đổi"),
   initialMessage: z.string().min(1, "Vui lòng nhập nội dung tin nhắn"),
@@ -37,7 +38,7 @@ type NewConversationFormValues = z.infer<typeof newConversationSchema>;
 
 interface NewConversationFormProps {
   onCancel: () => void;
-  onSubmit: (values: NewConversationFormValues) => Promise<void>;
+  onSubmit: (values: ConversationBodyParams) => Promise<void>;
   isPending: boolean;
 }
 
@@ -56,12 +57,23 @@ const NewConversationForm = ({
 
   const { isDirty } = form.formState;
 
+  // Handler submit đơn giản, không upload file
+  const handleFormSubmit = async (values: NewConversationFormValues) => {
+    // Payload chỉ gồm text
+    const payload: ConversationBodyParams = {
+      feedbackId: "", // Parent sẽ inject
+      subject: values.subject,
+      initialMessage: values.initialMessage,
+    };
+    await onSubmit(payload);
+  };
+
   return (
     <div className="w-full border-t border-neutral-200 px-2 py-4">
       <h3 className="mb-4 text-[16px] font-semibold">Cuộc hội thoại mới</h3>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleFormSubmit)}
           className="flex flex-col gap-4"
         >
           {/* Subject */}
@@ -138,7 +150,7 @@ const NewConversationForm = ({
   );
 };
 
-// --- Component: ConversationSection ---
+// --- Component: ConversationSection (Main) ---
 interface ConversationSectionProps {
   role: "student" | "staff";
   currentFeedbackStatus: string;
@@ -168,23 +180,23 @@ const ConversationSection = ({
     (c) => c.isClosed === true,
   );
 
-  // Logic to determine if "Create New Conversation" button should be shown
   const canCreateNew =
     (!hasConversations || allConversationsClosed) &&
     role === "staff" &&
     currentFeedbackStatus !== "RESOLVED" &&
     currentFeedbackStatus !== "REJECTED";
-  // Handler
+
   const { mutateAsync: closeConversation } = useCloseConversationById();
 
-  const handleCreateSubmit = async (values: NewConversationFormValues) => {
-    const payload: ConversationBodyParams = {
-      feedbackId,
-      subject: values.subject,
-      initialMessage: values.initialMessage,
+  // Handler Create: Inject feedbackId
+  const handleCreateSubmit = async (payload: ConversationBodyParams) => {
+    const finalPayload = {
+      ...payload,
+      feedbackId: feedbackId,
     };
+
     try {
-      await createConversation(payload);
+      await createConversation(finalPayload);
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: [CLARIFICATION_QUERY_KEYS, defaultFilters],
@@ -217,7 +229,6 @@ const ConversationSection = ({
 
       <ScrollArea className="mr-3 w-full flex-1 pr-3">
         <div className="flex flex-col gap-4 py-1">
-          {/* VIEW 1: CREATE FORM MODE */}
           {isCreating ? (
             <NewConversationForm
               onCancel={() => setIsCreating(false)}
@@ -225,10 +236,8 @@ const ConversationSection = ({
               isPending={isPending}
             />
           ) : (
-            /* VIEW 2: DISPLAY LIST OR EMPTY STATE */
             <>
               {!hasConversations ? (
-                // Empty State
                 <div className="flex flex-col items-center justify-center gap-3 py-10">
                   <MessageCircleMore className="h-12 w-12 text-neutral-400" />
                   <span className="text-center text-[15px] font-medium text-neutral-400">
@@ -236,7 +245,6 @@ const ConversationSection = ({
                   </span>
                 </div>
               ) : (
-                // List State
                 <div className="w-full pb-1">
                   <ConversationItem
                     data={conversations}
@@ -246,8 +254,6 @@ const ConversationSection = ({
                 </div>
               )}
 
-              {/* CREATE BUTTON */}
-              {/* Only show when not in create mode AND (no conversations OR all are closed) */}
               {canCreateNew && !isForwarded && (
                 <Button
                   variant="primary"

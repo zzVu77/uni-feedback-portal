@@ -1,4 +1,4 @@
-import { BaseFilter } from "./common-type";
+import { BaseFilter, FileAttachmentDto } from "./common-type";
 
 export type Message = {
   id: string;
@@ -9,12 +9,7 @@ export type Message = {
     role: "STUDENT" | "DEPARTMENT_STAFF";
   };
   createdAt: string;
-  //   attachments?: {
-  //     id: string;
-  //     messageId: string;
-  //     fileName: string;
-  //     fileUrl: string;
-  //   }[];
+  attachments?: FileAttachmentDto[];
 };
 export type ConversationDetail = {
   id: string;
@@ -32,11 +27,9 @@ export type ConversationBodyParams = {
   feedbackId: string;
   subject: string;
   initialMessage: string;
+  // attachments?: FileAttachmentDto[];
 };
 export type MessageBodyParams = {
   content: string;
-  attachments?: {
-    fileName: string;
-    fileUrl: string;
-  }[];
+  attachments?: FileAttachmentDto[];
 };

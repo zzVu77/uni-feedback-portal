@@ -1,4 +1,6 @@
-import { BaseFilter } from "./common-type";
+// types.ts (Update CreateAnnouncementPayload)
+
+import { BaseFilter, FileAttachmentDto } from "./common-type";
 
 export type AnnouncementDetailType = {
   id: string;
@@ -14,13 +16,18 @@ export type AnnouncementDetailType = {
     id: string;
     fileName: string;
     fileUrl: string;
+    fileType?: string;
+    fileSize?: number;
   }[];
 };
+
 export type AnnouncementListItem = Omit<AnnouncementDetailType, "files">;
+
 export type AnnouncementManagementItem = Pick<
   AnnouncementDetailType,
-  "id" | "title" | "createdAt"
+  "id" | "title" | "createdAt" | "content"
 >;
+
 export interface AnnouncementFilter extends BaseFilter {
   departmentId?: string;
 }
@@ -28,5 +35,7 @@ export interface AnnouncementFilter extends BaseFilter {
 export type CreateAnnouncementPayload = Pick<
   AnnouncementDetailType,
   "title" | "content"
-  //Todo: Add files when file upload is implemented
->;
+> & {
+  // Update: Add files field matching backend DTO expectation for creation/update
+  files?: FileAttachmentDto[];
+};

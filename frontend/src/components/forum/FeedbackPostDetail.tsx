@@ -63,12 +63,21 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
         {feedback.description}
       </span>
       {/* Attachments */}
-      <div className="flex flex-col gap-2">
-        <span className="mt-4 text-[18px] font-medium">Tệp đính kèm:</span>
-        <Attachment />
-        <Attachment />
-        <Attachment />
-      </div>
+
+      {feedback.fileAttachments && feedback.fileAttachments.length > 0 && (
+        <>
+          <h2 className="mt-2 text-[18px] font-medium">Tệp đính kèm:</h2>
+          <div className="flex flex-col gap-2">
+            {feedback.fileAttachments.map((attachment, index) => (
+              <Attachment
+                key={index}
+                fileName={attachment.fileName}
+                fileUrl={attachment.fileUrl}
+              />
+            ))}
+          </div>
+        </>
+      )}
       {/* Tags */}
       <div className="flex flex-row items-center justify-start gap-2">
         <InfoBadge type="CATEGORY" text={feedback.category.name} />

@@ -18,6 +18,7 @@ export const mapFeedbackDetailToHeader = (
     category: feedbackDetail.category,
     department: feedbackDetail.department,
     student: feedbackDetail.student,
+    fileAttachments: feedbackDetail.fileAttachments || [],
   };
 };
 
@@ -31,8 +32,7 @@ export const mapFeedbackDetailToBodyParams = (
     departmentId: feedbackDetail.department.id,
     categoryId: feedbackDetail.category.id,
     location: feedbackDetail.location,
-    //TODO: isPublic field is just temporarily added here, need to check and remove if not necessary
     isPublic: feedbackDetail.isPublic,
-    // attachments: feedbackDetail.fileAttachments?.map((file) => file.id) || [],
+    fileAttachments: feedbackDetail.fileAttachments || [],
   };
 };

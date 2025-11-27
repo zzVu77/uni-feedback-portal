@@ -108,14 +108,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
           )}
 
           {/* Connected Report Dialog */}
-          <ReportDialog onSubmit={handleReportSubmit}>
-            <Button
-              className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
-              variant="outline"
-            >
-              <Flag className="h-4 w-4" /> Báo cáo
-            </Button>
-          </ReportDialog>
+          {!isAuthor && (
+            <ReportDialog onSubmit={handleReportSubmit}>
+              <Button
+                className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
+                variant="outline"
+              >
+                <Flag className="h-4 w-4" /> Báo cáo
+              </Button>
+            </ReportDialog>
+          )}
 
           {isAuthor && (
             <ConfirmationDialog

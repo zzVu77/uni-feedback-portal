@@ -12,3 +12,15 @@ export type OptionType = {
   label: string;
   value: string;
 };
+export type PresignedUrlResponse = {
+  uploadUrl: string;
+  fileUrl: string;
+};
+
+export type FileAttachmentDto = {
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number;
+};
+export type FileAttachment = Omit<FileAttachmentDto, "fileType" | "fileSize">;

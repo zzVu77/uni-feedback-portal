@@ -36,7 +36,7 @@ export const createNewConversation = async (data: ConversationBodyParams) => {
 export const closeConversationById = async (id: string) => {
   await axiosInstance.patch(`${clarificationBaseUrl}/${id}`, {
     isClosed: true,
-    message: "Vấn đề đã được làm rõ. Đóng cuộc hội thoại này.",
+    message: "Vấn đề đã được làm rõ. Kết thúc cuộc hội thoại này.",
   });
 };
 

@@ -1,8 +1,8 @@
 import type { AnnouncementDetailType } from "@/types";
-import { Building2, CalendarFold } from "lucide-react";
-import Attachment from "../feedback/Attachment";
-import { Separator } from "../ui/separator";
 import DOMPurify from "dompurify";
+import { Building2, CalendarFold } from "lucide-react";
+import { Separator } from "../ui/separator";
+import Attachment from "../feedback/Attachment";
 type Props = {
   data: AnnouncementDetailType;
 };
@@ -42,13 +42,20 @@ const AnnouncementDetail = ({ data }: Props) => {
         {data.content || "No content available"}
       </span> */}
       {/* Attachments */}
-      {/* //TODO: Integrate loading files */}
-      <div className="flex flex-col gap-2">
-        <span className="mt-4 text-[18px] font-medium">Tệp đính kèm:</span>
-        <Attachment />
-        <Attachment />
-        <Attachment />
-      </div>
+      {data.files && data.files.length > 0 && (
+        <>
+          <h2 className="mt-2 text-[18px] font-medium">Tệp đính kèm:</h2>
+          <div className="flex flex-col gap-2">
+            {data.files.map((attachment, index) => (
+              <Attachment
+                key={index}
+                fileName={attachment.fileName}
+                fileUrl={attachment.fileUrl}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

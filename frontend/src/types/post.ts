@@ -1,4 +1,4 @@
-import { BaseFilter } from "./common-type";
+import { BaseFilter, FileAttachmentDto } from "./common-type";
 import { FeedbackStatus } from "./feedback";
 
 export type ForumPostDetail = {
@@ -21,14 +21,8 @@ export type ForumPostDetail = {
       name: string;
     };
     currentStatus: FeedbackStatus;
-    fileAttachments: [
-      {
-        id: string;
-        fileName: string;
-        fileUrl: string;
-      },
-    ];
-    officeResponse?: "Oke đã giải quyết";
+    fileAttachments: FileAttachmentDto[];
+    officeResponse?: string;
   };
   user: {
     id: string;

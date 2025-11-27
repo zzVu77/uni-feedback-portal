@@ -31,6 +31,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
     id,
     isPrivate,
     location,
+    fileAttachments,
   } = data;
   const { mutateAsync: deleteFeedback, isPending } = useDeleteFeedbackById();
   const handleDelete = async () => {
@@ -41,7 +42,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   };
   return (
     <>
-      <div className="flex w-full flex-col gap-4 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
+      <div className="flex h-full w-full flex-col gap-4 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
         {/* Title */}
         <div className="flex flex-col items-start justify-between gap-1 md:flex-row lg:gap-4">
           <h1 className="order-2 text-[16px] font-bold text-black md:order-1 lg:text-[24px]">
@@ -53,7 +54,6 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
            `}
           </h1>
           {type === "student" && currentStatus === "PENDING" && (
-            //TODO: If status is PENDING, show edit button
             <div className="order-1 flex flex-row items-center gap-2 md:order-2">
               <Link href={`/student/my-feedbacks/${id}/edit`}>
                 <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
@@ -144,12 +144,20 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           </p>
         </div>
         {/* Attachments */}
-        <h2 className="mt-2 text-[18px] font-medium">Tệp đính kèm:</h2>
-        <div className="flex flex-col gap-2">
-          <Attachment />
-          <Attachment />
-          <Attachment />
-        </div>
+        {fileAttachments && fileAttachments.length > 0 && (
+          <>
+            <h2 className="mt-2 text-[18px] font-medium">Tệp đính kèm:</h2>
+            <div className="flex flex-col gap-2">
+              {fileAttachments.map((attachment, index) => (
+                <Attachment
+                  key={index}
+                  fileName={attachment.fileName}
+                  fileUrl={attachment.fileUrl}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

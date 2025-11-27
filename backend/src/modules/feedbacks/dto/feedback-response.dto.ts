@@ -1,5 +1,6 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { FeedbackStatus } from '@prisma/client';
+import { FileAttachmentDto } from 'src/modules/uploads/dto/file-attachment.dto';
 export type ExtendedStatus = FeedbackStatus | 'FORWARDED';
 export type UnifiedStatusTimeline = {
   status: ExtendedStatus;
@@ -7,7 +8,6 @@ export type UnifiedStatusTimeline = {
   note: string | null;
   createdAt: string;
 }[];
-import { FileAttachmentDto } from 'src/modules/uploads/dto/file-attachment.dto';
 export class FeedbackDetail {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-44665544001c',
@@ -98,32 +98,6 @@ export class FeedbackDetail {
   })
   statusHistory: UnifiedStatusTimeline;
 
-  @ApiProperty({
-    description:
-      'Records of how the feedback was forwarded between departments, including department names',
-    example: [
-      {
-        id: '550e8400-e29b-41d4-a716-44665544001c',
-        fromDepartment: {
-          id: 2,
-          name: 'Support',
-        },
-        toDepartment: {
-          id: '550e8400-e29b-41d4-a716-44665544002c',
-          name: 'Technical',
-        },
-        message: 'Forwarded to technical department for investigation',
-        createdAt: '2025-10-15T14:00:00Z',
-      },
-    ],
-  })
-  // forwardingLogs: Array<{
-  //   id: string;
-  //   fromDepartment: { id: string; name: string };
-  //   toDepartment: { id: string; name: string };
-  //   message: string | null;
-  //   createdAt: string;
-  // }>;
   @ApiProperty({
     description: 'List of attached files related to the feedback',
     type: [FileAttachmentDto],

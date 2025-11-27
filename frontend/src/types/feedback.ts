@@ -1,4 +1,4 @@
-import { BaseFilter } from "./common-type";
+import { BaseFilter, FileAttachmentDto } from "./common-type";
 
 export type FeedbackStatus =
   | "PENDING"
@@ -29,11 +29,7 @@ export type FeedbackDetail = {
   }[];
   isForwarding: boolean;
   // Optional file attachments
-  fileAttachments?: {
-    id: string;
-    fileName: string;
-    fileUrl: string;
-  }[];
+  fileAttachments?: FileAttachmentDto[];
   forumPost?: {
     id: string;
   };
@@ -85,7 +81,7 @@ export type CreateFeedbackPayload = {
   categoryId: string;
   description: string;
   isPublic: boolean;
-  // attachments: string[];
+  fileAttachments?: FileAttachmentDto[];
 };
 export type UpdateFeedbackStatusParams = {
   id: string;
@@ -109,4 +105,5 @@ export type FeedbackHeaderType = Pick<
   | "category"
   | "department"
   | "student"
+  | "fileAttachments"
 >;
