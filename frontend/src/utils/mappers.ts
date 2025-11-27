@@ -32,7 +32,6 @@ export const mapFeedbackDetailToBodyParams = (
     departmentId: feedbackDetail.department.id,
     categoryId: feedbackDetail.category.id,
     location: feedbackDetail.location,
-    //TODO: isPublic field is just temporarily added here, need to check and remove if not necessary
     isPublic: feedbackDetail.isPublic,
     fileAttachments: feedbackDetail.fileAttachments || [],
   };
