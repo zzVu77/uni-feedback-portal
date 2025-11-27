@@ -13,12 +13,16 @@ import {
   ClarificationListResponseDto,
   MessageDto,
 } from './dto';
-import { Prisma, UserRole } from '@prisma/client';
+import { FileTargetType, Prisma, UserRole } from '@prisma/client';
+import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class ClarificationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
   async createClarificationConversation(
     dto: CreateClarificationDto,
@@ -38,32 +42,28 @@ export class ClarificationsService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    const conversation = await this.prisma.$transaction(async (tx) => {
-      const newConversation = await tx.clarificationConversations.create({
-        data: {
-          subject,
-          feedbackId,
-          userId: actor.sub,
+    const conversation = await this.prisma.clarificationConversations.create({
+      data: {
+        subject,
+        feedbackId,
+        userId: actor.sub,
+        messages: {
+          create: initialMessage
+            ? {
+                userId: actor.sub,
+                content: initialMessage,
+                // Không xử lý attachments ở đây nữa
+              }
+            : undefined,
         },
-      });
-
-      const messages = [];
-      if (initialMessage) {
-        const newMessage = await tx.messages.create({
-          data: {
-            conversationId: newConversation.id,
-            userId: actor.sub,
-            content: initialMessage,
-          },
+      },
+      include: {
+        messages: {
           include: {
             user: { select: { id: true, fullName: true, role: true } },
-            attachments: true,
           },
-        });
-        messages.push(newMessage);
-      }
-
-      return { ...newConversation, messages };
+        },
+      },
     });
 
     return {
@@ -76,7 +76,7 @@ export class ClarificationsService {
         content: msg.content ?? 'Message not found',
         createdAt: msg.createdAt.toISOString(),
         user: msg.user,
-        attachments: msg.attachments,
+        attachments: [],
       })),
     };
   }
@@ -126,7 +126,6 @@ export class ClarificationsService {
           messages: {
             include: {
               user: { select: { id: true, fullName: true, role: true } },
-              attachments: true,
             },
             orderBy: { createdAt: 'asc' },
           },
@@ -148,6 +147,13 @@ export class ClarificationsService {
       );
     }
 
+    const messageIds = conversation.messages.map((msg) => msg.id);
+    const attachmentsMap =
+      await this.uploadsService.getAttachmentsForManyTargets(
+        messageIds,
+        FileTargetType.MESSAGE,
+      );
+
     return {
       id: conversation.id,
       subject: conversation.subject,
@@ -162,7 +168,7 @@ export class ClarificationsService {
           msg.user.id === conversation.feedback.userId
             ? { ...msg.user, fullName: 'Anonymous' }
             : msg.user,
-        attachments: msg.attachments,
+        attachments: attachmentsMap[msg.id] || [],
       })),
     };
   }
@@ -208,27 +214,32 @@ export class ClarificationsService {
         conversationId,
         userId: actor.sub,
         content,
-        ...(attachments && {
-          attachments: {
-            create: attachments.map((file) => ({
-              fileName: file.fileName,
-              fileUrl: file.fileUrl,
-            })),
-          },
-        }),
       },
       include: {
         user: { select: { id: true, fullName: true, role: true } },
-        attachments: true,
       },
     });
+
+    if (attachments && attachments.length > 0) {
+      await this.uploadsService.updateAttachmentsForTarget(
+        message.id,
+        FileTargetType.MESSAGE,
+        attachments,
+      );
+    }
+
+    const messageAttachments =
+      await this.uploadsService.getAttachmentsForTarget(
+        message.id,
+        FileTargetType.MESSAGE,
+      );
 
     return {
       id: message.id,
       content: message.content ?? 'Message not found',
       createdAt: message.createdAt.toISOString(),
       user: message.user,
-      attachments: message.attachments,
+      attachments: messageAttachments,
     };
   }
 
@@ -277,13 +288,19 @@ export class ClarificationsService {
           messages: {
             include: {
               user: { select: { id: true, fullName: true, role: true } },
-              attachments: true,
             },
             orderBy: { createdAt: 'asc' },
           },
         },
       });
     });
+
+    const messageIds = updatedConversation.messages.map((msg) => msg.id);
+    const attachmentsMap =
+      await this.uploadsService.getAttachmentsForManyTargets(
+        messageIds,
+        FileTargetType.MESSAGE,
+      );
 
     return {
       id: updatedConversation.id,
@@ -295,7 +312,7 @@ export class ClarificationsService {
         content: msg.content ?? 'Message not found',
         createdAt: msg.createdAt.toISOString(),
         user: msg.user,
-        attachments: msg.attachments,
+        attachments: attachmentsMap[msg.id] || [],
       })),
     };
   }
