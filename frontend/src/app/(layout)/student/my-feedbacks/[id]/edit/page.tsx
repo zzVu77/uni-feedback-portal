@@ -10,10 +10,10 @@ import { useIsClient } from "@/hooks/useIsClient";
 import { CreateFeedbackPayload } from "@/types";
 import { mapFeedbackDetailToBodyParams } from "@/utils/mappers";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react"; // 1. Import useMemo
 import { toast } from "sonner";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
@@ -36,13 +36,18 @@ const page = () => {
     }
   }, [feedback, router, id]);
 
+  const initialData = useMemo(() => {
+    if (!feedback) return undefined;
+    return mapFeedbackDetailToBodyParams(feedback);
+  }, [feedback]);
+
   if (isLoading || !feedback) return <Loading variant="spinner" />;
+
   // Prevent rendering the form momentarily while redirecting
   if (feedback.currentStatus !== "PENDING") {
     return <Loading variant="spinner" />;
   }
 
-  const initialData = mapFeedbackDetailToBodyParams(feedback);
   const handleSubmit = async (values: CreateFeedbackPayload) => {
     await updateFeedback({ id, data: values });
   };
@@ -61,4 +66,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

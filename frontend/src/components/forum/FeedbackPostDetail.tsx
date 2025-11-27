@@ -65,9 +65,13 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
       {/* Attachments */}
       <div className="flex flex-col gap-2">
         <span className="mt-4 text-[18px] font-medium">Tệp đính kèm:</span>
-        <Attachment />
-        <Attachment />
-        <Attachment />
+        {feedback.fileAttachments?.map((attachment, index) => (
+          <Attachment
+            key={index}
+            fileName={attachment.fileName}
+            fileUrl={attachment.fileUrl}
+          />
+        ))}
       </div>
       {/* Tags */}
       <div className="flex flex-row items-center justify-start gap-2">

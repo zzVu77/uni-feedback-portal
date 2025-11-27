@@ -2,9 +2,18 @@
 "use client";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
-import { CreateFeedbackPayload } from "@/types";
+import { CreateFeedbackPayload, FileAttachmentDto } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Info, RotateCcw, Save, Send, X } from "lucide-react";
+import {
+  Info,
+  RotateCcw,
+  Save,
+  Send,
+  X,
+  Loader2,
+  FileText,
+  Trash2,
+} from "lucide-react"; // Thêm icon FileText, Trash2, Loader2
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -49,6 +58,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { uploadFileToCloud } from "@/services/upload-service"; // Import Service Upload
+import { toast } from "sonner"; // Import Toast
+import { sanitizeAttachment } from "@/utils/sanitizeAttachment";
+
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
@@ -59,6 +72,7 @@ const ACCEPTED_FILE_TYPES = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
   "text/plain", // .txt
 ];
+
 const formSchema = z.object({
   subject: z
     .string()
@@ -73,7 +87,6 @@ const formSchema = z.object({
 
   location: z
     .string()
-
     .max(100, {
       message: "Tối đa 100 ký tự.",
     })
@@ -112,15 +125,31 @@ const FeedbackForm = ({
   type = "edit",
   initialData,
   onSubmit,
-  isPending,
+  isPending: isMutationPending,
 }: FeedbackFormProps) => {
   const router = useRouter();
-
   const params = useParams();
-  const id = params.id as string; // chính xác luôn
+  const id = params.id as string;
+
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false); // State quản lý upload
+
+  const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
+
+  useEffect(() => {
+    if (initialData?.fileAttachments) {
+      setExistingFiles(initialData.fileAttachments);
+    }
+  }, [initialData]);
+
+  // Hàm xóa file cũ khỏi danh sách hiển thị
+  const handleRemoveExistingFile = (fileUrl: string) => {
+    setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
+  };
+
   const { data: categoryOptions } = useCategoryOptionsData("active");
   const { data: departmentOptions } = useDepartmentOptionsData();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -131,63 +160,147 @@ const FeedbackForm = ({
       description: initialData?.description || "",
       isAnonymous: initialData?.isAnonymous || false,
       isPublic: initialData?.isPublic || false,
-      // attachments: initialData?.attachments || [],
+      attachments: [], // Input file luôn bắt đầu là rỗng (chứa file mới)
     },
   });
+
   const mapFormValuesToFeedbackParams = (
     values: z.infer<typeof formSchema>,
   ): CreateFeedbackPayload => {
     return {
       subject: values.subject,
       categoryId: values.categoryId,
-      departmentId: values.departmentId, // map tên đúng API
+      departmentId: values.departmentId,
       location: values.location || "",
       description: values.description,
       isAnonymous: values.isAnonymous || false,
       isPublic: values.isPublic || false,
-      // attachments: values.attachments,
+      // fileAttachments sẽ được xử lý riêng
     };
   };
+
   const isAnonymousWatched = form.watch("isAnonymous");
+
   useEffect(() => {
     if (isAnonymousWatched) {
       form.setValue("isPublic", false);
     }
   }, [isAnonymousWatched, form]);
+
   const { isDirty } = form.formState;
+
+  // Check dirty
+  const isExistingFilesChanged =
+    type === "edit" &&
+    initialData?.fileAttachments &&
+    existingFiles.length !== initialData.fileAttachments.length;
+
+  const canSubmit = isDirty || isExistingFilesChanged;
+
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
+    // Reset lại cả danh sách file cũ về ban đầu
+    if (initialData?.fileAttachments) {
+      setExistingFiles(initialData.fileAttachments);
+    } else {
+      setExistingFiles([]);
+    }
   };
+
   const handleAttemptSubmit = async () => {
     const isFormValid = await form.trigger();
     if (isFormValid) {
       setIsSubmitDialogOpen(true);
     }
   };
+
+  // --- LOGIC CREATE FEEDBACK ---
   const handleSendFeedback = form.handleSubmit(async (values) => {
-    const payload = mapFormValuesToFeedbackParams(values);
-    await onSubmit(payload);
-    form.reset();
-    setIsSubmitDialogOpen(false);
-    setTimeout(() => {
-      router.replace(`/student/my-feedbacks`);
-    }, 1000);
+    setIsUploading(true);
+    try {
+      // 1. Upload new files
+      let uploadedAttachments: FileAttachmentDto[] = [];
+      if (values.attachments && values.attachments.length > 0) {
+        const rawAttachments = await Promise.all(
+          values.attachments.map((file) => uploadFileToCloud(file)),
+        );
+        // FIX: Encode URL for uploaded files
+        uploadedAttachments = rawAttachments.map(sanitizeAttachment);
+      }
+
+      // 2. Prepare payload
+      const payload = {
+        ...mapFormValuesToFeedbackParams(values),
+        fileAttachments: uploadedAttachments,
+      };
+
+      // 3. Submit
+      await onSubmit(payload);
+      form.reset();
+      setExistingFiles([]);
+      setIsSubmitDialogOpen(false);
+      setTimeout(() => {
+        router.replace(`/student/my-feedbacks`);
+      }, 1000);
+    } catch (error) {
+      console.error("Lỗi khi gửi góp ý:", error);
+      toast.error("Có lỗi xảy ra khi tải tệp lên hoặc gửi dữ liệu.");
+    } finally {
+      setIsUploading(false);
+    }
   });
+
+  // --- LOGIC UPDATE FEEDBACK ---
   const handleUpdateFeedback = form.handleSubmit(async (values) => {
-    const payload = mapFormValuesToFeedbackParams(values);
-    await onSubmit(payload);
-    setTimeout(() => {
-      router.replace(`/student/my-feedbacks/${id}`);
-    }, 1000);
+    setIsUploading(true);
+    try {
+      // 1. Upload new files
+      let newUploadedAttachments: FileAttachmentDto[] = [];
+      if (values.attachments && values.attachments.length > 0) {
+        const rawAttachments = await Promise.all(
+          values.attachments.map((file) => uploadFileToCloud(file)),
+        );
+        // FIX: Encode URL cho file mới upload
+        newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
+      }
+
+      // 2. Process existing files (also need to encode to be sure)
+      const processedExistingFiles = existingFiles
+        .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
+        .map(sanitizeAttachment);
+
+      // 3.Combine existing + new
+      const finalAttachments = [
+        ...processedExistingFiles,
+        ...newUploadedAttachments,
+      ];
+
+      const payload = {
+        ...mapFormValuesToFeedbackParams(values),
+        fileAttachments: finalAttachments,
+      };
+
+      await onSubmit(payload);
+      setTimeout(() => {
+        router.replace(`/student/my-feedbacks/${id}`);
+      }, 1000);
+    } catch (error) {
+      console.error("Lỗi cập nhật:", error);
+      toast.error("Có lỗi xảy ra khi cập nhật.");
+    } finally {
+      setIsUploading(false);
+    }
   });
+
+  const isPending = isMutationPending || isUploading;
 
   return (
     <>
       <Form {...form}>
         <form
           className="flex h-full flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
-          onSubmit={(e) => e.preventDefault()} // prevent default submit
+          onSubmit={(e) => e.preventDefault()}
         >
           <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
             {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
@@ -226,7 +339,6 @@ const FeedbackForm = ({
                             </span>
                             .
                           </p>
-
                           <p className="text-[14px] text-gray-700 italic">
                             Tuy nhiên, trong một số trường hợp đặc biệt,
                             <span className="font-medium text-amber-500">
@@ -263,12 +375,10 @@ const FeedbackForm = ({
                         checked={field.value}
                         onCheckedChange={field.onChange}
                         id="isPublic"
-                        disabled={isAnonymousWatched} // Disable if isAnonymous is true
+                        disabled={isAnonymousWatched}
                         className={`h-6 w-12 bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6 ${isAnonymousWatched ? "cursor-not-allowed opacity-50" : "cursor-pointer"} `}
                       />
                     </FormControl>
-
-                    {/* Label and Tooltip wrapper - Apply opacity if disabled */}
                     <div
                       className={`flex items-center gap-2 ${isAnonymousWatched ? "opacity-50" : ""}`}
                     >
@@ -278,20 +388,16 @@ const FeedbackForm = ({
                       >
                         Công khai trên diễn đàn
                       </FormLabel>
-
                       <TooltipProvider>
                         <Tooltip delayDuration={300}>
                           <TooltipTrigger asChild>
-                            {/* Hide tooltip info if disabled to reduce noise, or keep it based on preference */}
                             <Info className="h-4 w-4 cursor-pointer text-gray-400 transition-colors hover:text-blue-500" />
                           </TooltipTrigger>
                           <TooltipContent className="max-w-xs bg-slate-800 p-2 text-center text-xs text-white">
                             <p className="text-center">
-                              {
-                                isAnonymousWatched
-                                  ? "Không thể công khai khi gửi ẩn danh." // Message when disabled
-                                  : "Phản hồi sẽ được đăng lên diễn đàn cho phép tất cả sinh viên để thảo luận và chia sẻ ý kiến." // Standard message
-                              }
+                              {isAnonymousWatched
+                                ? "Không thể công khai khi gửi ẩn danh."
+                                : "Phản hồi sẽ được đăng lên diễn đàn cho phép tất cả sinh viên để thảo luận và chia sẻ ý kiến."}
                             </p>
                           </TooltipContent>
                         </Tooltip>
@@ -319,7 +425,6 @@ const FeedbackForm = ({
               />
               {/* Category Selection and Location Input */}
               <div className="flex w-full flex-col items-start justify-between gap-5 lg:flex-row">
-                {/* Category Selection */}
                 <FormField
                   control={form.control}
                   name="categoryId"
@@ -353,7 +458,6 @@ const FeedbackForm = ({
                     </FormItem>
                   )}
                 />
-                {/* Department Selection */}
                 <FormField
                   control={form.control}
                   name="departmentId"
@@ -387,7 +491,6 @@ const FeedbackForm = ({
                     </FormItem>
                   )}
                 />
-                {/* Location Input */}
                 <FormField
                   control={form.control}
                   name="location"
@@ -423,25 +526,79 @@ const FeedbackForm = ({
                   </FormItem>
                 )}
               />
-              {/* Attachments */}
-              <FormField
-                control={form.control}
-                name="attachments"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tệp đính kèm (nếu có)</FormLabel>
-                    <FormControl>
-                      <FileInput
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+
+              {/* --- FILE ATTACHMENTS SECTION --- */}
+              <div className="space-y-4">
+                {/* 1. Hiển thị danh sách file ĐÃ CÓ (Edit Mode) */}
+                {existingFiles.length > 0 && (
+                  <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p className="mb-2 text-sm font-medium text-gray-700">
+                      Tệp đính kèm hiện tại:
+                    </p>
+                    <div className="space-y-2">
+                      {existingFiles.map((file) => (
+                        <div
+                          key={file.fileUrl}
+                          className="flex items-center justify-between rounded-md border border-gray-100 bg-white p-2 text-sm shadow-sm"
+                        >
+                          <div className="flex items-center gap-2 overflow-hidden">
+                            <FileText className="h-4 w-4 flex-shrink-0 text-blue-500" />
+                            <a
+                              href={file.fileUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="truncate text-blue-600 hover:underline"
+                            >
+                              {file.fileName}
+                            </a>
+                            <span className="text-xs text-gray-400">
+                              ({(file.fileSize / 1024 / 1024).toFixed(2)} MB)
+                            </span>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
+                            onClick={() =>
+                              handleRemoveExistingFile(file.fileUrl)
+                            }
+                            disabled={isPending}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
-              />
+
+                {/* 2. Input Upload File MỚI */}
+                <FormField
+                  control={form.control}
+                  name="attachments"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {type === "edit" && existingFiles.length > 0
+                          ? "Thêm tệp đính kèm mới (nếu có)"
+                          : "Tệp đính kèm (nếu có)"}
+                      </FormLabel>
+                      <FormControl>
+                        <FileInput
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </ScrollArea>
+
+          {/* Buttons Area */}
           {type == "create" ? (
             <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
               <ConfirmationDialog
@@ -452,7 +609,7 @@ const FeedbackForm = ({
               >
                 <Button
                   type="button"
-                  disabled={!isDirty}
+                  disabled={!isDirty || isPending}
                   variant={"cancel"}
                   className="flex max-w-lg flex-row items-center gap-2 py-3"
                 >
@@ -463,13 +620,21 @@ const FeedbackForm = ({
 
               <Button
                 type="button"
-                disabled={!isDirty}
+                disabled={!isDirty || isPending}
                 variant={"primary"}
                 onClick={handleAttemptSubmit}
                 className="flex max-w-lg flex-row items-center gap-2 py-3 shadow-md"
               >
-                <Send className="h-5 w-5" />
-                Gửi góp ý
+                {isPending ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Send className="h-5 w-5" />
+                )}
+                {isUploading
+                  ? "Đang tải tệp..."
+                  : isPending
+                    ? "Đang gửi..."
+                    : "Gửi góp ý"}
               </Button>
             </div>
           ) : (
@@ -477,8 +642,11 @@ const FeedbackForm = ({
               <Button
                 type="button"
                 variant={"cancel"}
-                onClick={() => {}} // TODO: Implement cancel functionality ( back again to detail page )
+                onClick={() => {
+                  router.replace(`/student/my-feedbacks/${id}`);
+                }}
                 className="flex max-w-lg flex-row items-center gap-2 py-3"
+                disabled={isPending}
               >
                 <X className="h-5 w-5" />
                 Hủy
@@ -488,11 +656,19 @@ const FeedbackForm = ({
                 type="button"
                 variant={"primary"}
                 className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
-                disabled={isPending}
+                disabled={isPending || !canSubmit}
                 onClick={handleUpdateFeedback}
               >
-                <Save className="h-5 w-5" />
-                Cập nhật
+                {isPending ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Save className="h-5 w-5" />
+                )}
+                {isUploading
+                  ? "Đang tải tệp..."
+                  : isPending
+                    ? "Đang cập nhật..."
+                    : "Cập nhật"}
               </Button>
             </div>
           )}
@@ -505,7 +681,6 @@ const FeedbackForm = ({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Vui lòng xác nhận trước khi gửi</AlertDialogTitle>
-
             <AlertDialogDescription
               asChild
               className="space-y-2 text-sm leading-relaxed text-gray-600"
@@ -523,6 +698,7 @@ const FeedbackForm = ({
                   </span>
                   góp ý đã gửi.
                 </p>
+                {/* (Giữ nguyên phần mô tả dài như cũ) */}
                 <p className="text-[14px]">
                   Nếu bạn chọn gửi{" "}
                   <span className="text-blue-primary-600 font-medium">
@@ -557,12 +733,13 @@ const FeedbackForm = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Hủy</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleSendFeedback}
               disabled={isPending}
             >
-              Gửi
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isUploading ? "Đang xử lý..." : "Gửi"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

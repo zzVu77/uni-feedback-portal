@@ -1,8 +1,7 @@
 import type { AnnouncementDetailType } from "@/types";
-import { Building2, CalendarFold } from "lucide-react";
-import Attachment from "../feedback/Attachment";
-import { Separator } from "../ui/separator";
 import DOMPurify from "dompurify";
+import { Building2, CalendarFold } from "lucide-react";
+import { Separator } from "../ui/separator";
 type Props = {
   data: AnnouncementDetailType;
 };
@@ -45,9 +44,9 @@ const AnnouncementDetail = ({ data }: Props) => {
       {/* //TODO: Integrate loading files */}
       <div className="flex flex-col gap-2">
         <span className="mt-4 text-[18px] font-medium">Tệp đính kèm:</span>
+        {/* <Attachment />
         <Attachment />
-        <Attachment />
-        <Attachment />
+        <Attachment /> */}
       </div>
     </div>
   );
