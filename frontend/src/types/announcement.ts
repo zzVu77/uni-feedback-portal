@@ -25,7 +25,7 @@ export type AnnouncementListItem = Omit<AnnouncementDetailType, "files">;
 
 export type AnnouncementManagementItem = Pick<
   AnnouncementDetailType,
-  "id" | "title" | "createdAt"
+  "id" | "title" | "createdAt" | "content"
 >;
 
 export interface AnnouncementFilter extends BaseFilter {

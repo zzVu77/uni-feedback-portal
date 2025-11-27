@@ -26,7 +26,14 @@ export const ANNOUNCEMENT_QUERY_KEYS = {
   all: "announcements",
   detail: "announcement-detail",
 };
-
+export const useGetAnnouncements = (filters: AnnouncementFilter) => {
+  return useQuery({
+    queryKey: [ANNOUNCEMENT_QUERY_KEYS.all, filters],
+    queryFn: () => getAllAnnouncements(filters),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+  });
+};
 // Refactored to Infinite Query
 export const useGetInfiniteAnnouncements = (filters: AnnouncementFilter) => {
   return useInfiniteQuery<PaginatedResponse<AnnouncementListItem>>({

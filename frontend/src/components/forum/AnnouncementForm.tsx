@@ -225,7 +225,7 @@ const AnnouncementForm = ({
       };
       await onSubmit(payload);
       setTimeout(() => {
-        router.replace(`/staff/announcement-management/${initialData.id}`);
+        router.replace(`/staff/announcement-management/`);
       }, 1000);
     } catch (error) {
       console.error("Error updating announcement:", error);
