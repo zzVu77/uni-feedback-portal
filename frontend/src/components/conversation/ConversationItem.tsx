@@ -148,13 +148,8 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                   onClick={() => handleOnChangeConversation(conversation.id)}
                 >
                   <div className="flex w-full flex-col items-start gap-1">
-                    <div className="flex w-full items-center justify-between pr-2">
-                      <span className="text-[15px] font-semibold text-neutral-800">
-                        {conversation.subject ||
-                          "Request for additional information"}
-                      </span>
-
-                      <div className="flex items-center gap-2">
+                    <div className="flex w-full flex-col items-start justify-between gap-1 py-1">
+                      <div className="flex w-full flex-row items-center justify-between gap-2">
                         {conversation.isClosed ? (
                           <StatusBadge type="CLOSED" />
                         ) : (
@@ -181,6 +176,10 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                           </ConfirmationDialog>
                         )}
                       </div>
+                      <span className="text-[15px] font-semibold text-neutral-800">
+                        {conversation.subject ||
+                          "Request for additional information"}
+                      </span>
                     </div>
                   </div>
                 </AccordionTrigger>
