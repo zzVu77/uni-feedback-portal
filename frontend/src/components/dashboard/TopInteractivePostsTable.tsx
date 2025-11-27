@@ -40,7 +40,7 @@ export const TopInteractivePostsTable = ({ data, isLoading }: Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="w-full p-0">
-        <Table>
+        <Table className="w-full">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-[50%] pl-6">Chủ đề</TableHead>
@@ -48,7 +48,7 @@ export const TopInteractivePostsTable = ({ data, isLoading }: Props) => {
               <TableHead className="pr-6 text-right">Hành động</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="w-full">
             {data?.map((post) => (
               <TableRow key={post.forumPostId}>
                 <TableCell className="pl-6 font-medium">

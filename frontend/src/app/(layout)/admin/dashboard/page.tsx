@@ -52,21 +52,9 @@ export default function AdminDashboardPage() {
   return (
     <Wrapper>
       {/* Header */}
-      <div className="flex w-full flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
-            Thống kê
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Phân tích dữ liệu và đánh giá hiệu suất xử lý góp ý trong toàn hệ
-            thống.
-          </p>
-        </div>
-
+      <div className="flex w-full flex-col items-start justify-end gap-4 md:flex-row md:items-center">
         {/* Bộ lọc thời gian Custom - Month Range Picker */}
-        <div className="flex w-full items-center gap-2 md:w-auto">
-          <MonthRangePicker onUpdate={handleDateUpdate} />
-        </div>
+        <MonthRangePicker onUpdate={handleDateUpdate} />
       </div>
 
       {/* 1. Overview Cards */}
@@ -75,14 +63,14 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* 2. Tables Row */}
-      <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-7">
-        <div className="col-span-1 lg:col-span-4">
+      <div className="grid w-full grid-cols-1 gap-6 xl:grid-cols-8">
+        <div className="col-span-1 w-full lg:col-span-4">
           <DepartmentPerformanceTable
             data={departments}
             isLoading={loadingDepts}
           />
         </div>
-        <div className="col-span-1 lg:col-span-3">
+        <div className="col-span-1 w-full lg:col-span-4">
           <TopInteractivePostsTable
             data={interactivePosts}
             isLoading={loadingPosts}
@@ -91,11 +79,11 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* 3. Charts Row */}
-      <div className="grid w-full grid-cols-1 gap-6 pb-4 lg:grid-cols-7">
+      <div className="grid w-full grid-cols-1 gap-6 pb-4 lg:grid-cols-8">
         <div className="col-span-1 lg:col-span-4">
           <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
         </div>
-        <div className="col-span-1 h-full lg:col-span-3">
+        <div className="col-span-1 h-full lg:col-span-4">
           <TopCategoriesChart data={categories} isLoading={loadingCategories} />
         </div>
       </div>

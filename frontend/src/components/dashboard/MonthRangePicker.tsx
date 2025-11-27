@@ -95,7 +95,7 @@ export function MonthRangePicker({
       // But to let the user confirm visually, keep the popover open and update data immediately
     }
   };
-
+  const currentYear = new Date().getFullYear();
   // Apply changes when closing Popover or when user wants to see results
   React.useEffect(() => {
     onUpdate({
@@ -131,7 +131,7 @@ export function MonthRangePicker({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full justify-start border-blue-200 bg-blue-50 text-left font-normal text-blue-700 hover:bg-blue-100 md:w-[280px]",
+              "justify-start border-blue-200 bg-blue-50 text-left font-normal text-blue-700 hover:bg-blue-100 hover:text-blue-800",
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -151,6 +151,7 @@ export function MonthRangePicker({
             <div className="mb-4 flex items-center justify-between">
               <Button
                 variant="ghost"
+                disabled={viewYear === 1970}
                 size="icon"
                 className="h-7 w-7 hover:bg-slate-100"
                 onClick={() => setViewYear(viewYear - 1)}
@@ -161,6 +162,7 @@ export function MonthRangePicker({
                 Năm {viewYear}
               </div>
               <Button
+                disabled={viewYear === currentYear}
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 hover:bg-slate-100"
