@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { AnnouncementFileDto } from './announcement-file.dto';
+import { FileAttachmentDto } from 'src/modules/uploads/dto';
 export class UserInfo {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544000a' })
   id: string;
@@ -31,8 +31,8 @@ export class AnnouncementDetailDto {
   user: UserInfo;
   @ApiProperty({ type: DepartmentInfo })
   department: DepartmentInfo;
-  @ApiProperty({ type: [AnnouncementFileDto] })
-  files: AnnouncementFileDto[];
+  @ApiProperty({ type: [FileAttachmentDto] })
+  files: FileAttachmentDto[];
 }
 
 export class AnnouncementItemDto extends OmitType(AnnouncementDetailDto, [

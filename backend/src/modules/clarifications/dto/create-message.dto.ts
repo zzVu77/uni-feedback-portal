@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsOptional,
@@ -7,16 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-
-class AttachmentDto {
-  @ApiProperty({ example: 'screenshot.png' })
-  @IsString()
-  fileName: string;
-
-  @ApiProperty({ example: 'https://example.com/uploads/screenshot.png' })
-  @IsString()
-  fileUrl: string;
-}
+import { CreateFileAttachmentDto } from 'src/modules/uploads/dto';
 
 export class CreateMessageDto {
   @ApiPropertyOptional({
@@ -31,11 +22,11 @@ export class CreateMessageDto {
 
   @ApiPropertyOptional({
     description: 'A list of files attached to the message.',
-    type: [AttachmentDto],
+    type: [CreateFileAttachmentDto],
   })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => AttachmentDto)
-  attachments?: AttachmentDto[];
+  @Type(() => CreateFileAttachmentDto)
+  attachments?: CreateFileAttachmentDto[];
 }

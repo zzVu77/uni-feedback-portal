@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { FeedbackStatus, Prisma } from '@prisma/client';
+import { FileTargetType, Prisma, FeedbackStatus } from '@prisma/client';
 import {
   FeedbackDetailDto,
   ForwardingResponseDto,
@@ -20,11 +20,15 @@ import {
   GenerateForwardingMessage,
   GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
+import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
 @Injectable()
 export class FeedbackManagementService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
   async getAllStaffFeedbacks(
     query: QueryFeedbackByStaffDto,
@@ -169,9 +173,7 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
+        // Không include file ở đây
       },
     });
 
@@ -193,6 +195,11 @@ export class FeedbackManagementService {
         createdAt: f.createdAt,
       })),
     });
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      feedback.id,
+      FileTargetType.FEEDBACK,
+    );
+
     const result: FeedbackDetailDto = {
       id: feedback.id,
       isPublic: feedback.forumPost ? true : false,
@@ -216,21 +223,7 @@ export class FeedbackManagementService {
       isForwarding,
       category: feedback.category,
       statusHistory: unifiedTimeline,
-
-      // statusHistory: feedback.statusHistory.map((h) => ({
-      //   status: h.status,
-      //   message: h.message,
-      //   note: h.note ?? null,
-      //   createdAt: h.createdAt.toISOString(),
-      // })),
-      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
-      //   id: log.id,
-      //   fromDepartment: log.fromDepartment,
-      //   toDepartment: log.toDepartment,
-      //   message: log.message,
-      //   createdAt: log.createdAt.toISOString(),
-      // })),
-      fileAttachments: feedback.fileAttachments,
+      fileAttachments: fileAttachments,
     };
 
     return result;
@@ -466,9 +459,7 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
+        // Không include file ở đây
       },
     });
 
@@ -485,6 +476,11 @@ export class FeedbackManagementService {
         createdAt: f.createdAt,
       })),
     });
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      feedback.id,
+      FileTargetType.FEEDBACK,
+    );
+
     const result: FeedbackDetailDto = {
       id: feedback.id,
       isPublic: feedback.forumPost ? true : false,
@@ -507,20 +503,7 @@ export class FeedbackManagementService {
       department: feedback.department,
       category: feedback.category,
       statusHistory: unifiedTimeline,
-      // statusHistory: feedback.statusHistory.map((h) => ({
-      //   status: h.status,
-      //   message: h.message,
-      //   note: h.note ?? null,
-      //   createdAt: h.createdAt.toISOString(),
-      // })),
-      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
-      //   id: log.id,
-      //   fromDepartment: log.fromDepartment,
-      //   toDepartment: log.toDepartment,
-      //   message: log.message,
-      //   createdAt: log.createdAt.toISOString(),
-      // })),
-      fileAttachments: feedback.fileAttachments,
+      fileAttachments: fileAttachments,
     };
 
     return result;

@@ -1,13 +1,34 @@
-import { DeleteFileDto } from './dto/delete-file.dto';
-import { UploadFileResponseDto } from './dto/upload-file.dto';
+import { FileTargetType } from '@prisma/client';
+import {
+  CreateFileAttachmentDto,
+  GenerateUploadUrlDto,
+  GenerateUploadUrlResponseDto,
+} from './dto';
+import { FileAttachmentDto } from './dto/file-attachment.dto';
 
 export interface UploadsServiceContract {
-  upload(
-    // file: Express.Multer.File,
-    user_id: number,
-  ): Promise<UploadFileResponseDto>;
-  delete(
-    dto: DeleteFileDto,
-    actor: { user_id: number; role: 'Student' | 'DepartmentStaff' | 'Admin' },
-  ): Promise<{ success: true }>;
+  generateUploadUrl(
+    dto: GenerateUploadUrlDto,
+  ): Promise<GenerateUploadUrlResponseDto>;
+
+  getAttachmentsForTarget(
+    targetId: string,
+    targetType: FileTargetType,
+  ): Promise<FileAttachmentDto[]>;
+
+  getAttachmentsForManyTargets(
+    targetIds: string[],
+    targetType: FileTargetType,
+  ): Promise<Record<string, FileAttachmentDto[]>>;
+
+  updateAttachmentsForTarget(
+    targetId: string,
+    targetType: FileTargetType,
+    newFiles: CreateFileAttachmentDto[],
+  ): Promise<FileAttachmentDto[]>;
+
+  deleteAttachmentsForTarget(
+    targetId: string,
+    targetType: FileTargetType,
+  ): Promise<void>;
 }

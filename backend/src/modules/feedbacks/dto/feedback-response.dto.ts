@@ -7,7 +7,7 @@ export type UnifiedStatusTimeline = {
   note: string | null;
   createdAt: string;
 }[];
-
+import { FileAttachmentDto } from 'src/modules/uploads/dto/file-attachment.dto';
 export class FeedbackDetail {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-44665544001c',
@@ -126,15 +126,9 @@ export class FeedbackDetail {
   // }>;
   @ApiProperty({
     description: 'List of attached files related to the feedback',
-    example: [
-      {
-        id: '550e8400-e29b-41d4-a716-44665544001c',
-        fileName: 'screenshot.png',
-        fileUrl: 'https://example.com/files/screenshot.png',
-      },
-    ],
+    type: [FileAttachmentDto],
   })
-  fileAttachments: Array<{ id: string; fileName: string; fileUrl: string }>;
+  fileAttachments: FileAttachmentDto[];
 }
 
 export class FeedbackSummary extends OmitType(FeedbackDetail, [

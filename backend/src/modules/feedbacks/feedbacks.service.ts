@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma, FeedbackStatus } from '@prisma/client';
+import { Prisma, FeedbackStatus, FileTargetType } from '@prisma/client';
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
@@ -14,6 +14,7 @@ import {
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { ForumService } from '../forum/forum.service';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
@@ -23,6 +24,7 @@ export class FeedbacksService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly forumService: ForumService,
+    private readonly uploadsService: UploadsService,
   ) {}
 
   async getFeedbacks(
@@ -152,9 +154,7 @@ export class FeedbacksService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
+        // Không include fileAttachments ở đây
       },
     });
 
@@ -171,6 +171,11 @@ export class FeedbacksService {
         createdAt: f.createdAt,
       })),
     });
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      feedback.id,
+      FileTargetType.FEEDBACK,
+    );
+
     const result: FeedbackDetail = {
       id: feedback.id,
       subject: feedback.subject,
@@ -189,32 +194,8 @@ export class FeedbacksService {
         name: feedback.category.name,
       },
       statusHistory: unifiedTimeline,
-      // statusHistory: feedback.statusHistory.map((h) => ({
-      //   status: h.status,
-      //   message: h.message,
-      //   note: h.note,
-      //   createdAt: h.createdAt.toISOString(),
-      // })),
-      // forwardingLogs: feedback.forwardingLogs.map((log) => ({
-      //   id: log.id,
-      //   fromDepartment: {
-      //     id: log.fromDepartment.id,
-      //     name: log.fromDepartment.name,
-      //   },
-      //   toDepartment: {
-      //     id: log.toDepartment.id,
-      //     name: log.toDepartment.name,
-      //   },
-      //   message: log.message,
-      //   createdAt: log.createdAt.toISOString(),
-      // })),
-      fileAttachments: feedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      fileAttachments: fileAttachments,
     };
-
     return result;
   }
 
@@ -263,38 +244,7 @@ export class FeedbacksService {
         throw new NotFoundException('Category not found');
       }
     }
-    if (dto.fileAttachments) {
-      const existingFiles =
-        await this.prisma.fileAttachmentForFeedback.findMany({
-          where: { feedbackId: feedbackId },
-        });
 
-      const newFileUrls = dto.fileAttachments.map((f) => f.fileUrl);
-
-      const filesToDelete = existingFiles.filter(
-        (f) => !newFileUrls.includes(f.fileUrl),
-      );
-
-      const filesToAdd = dto.fileAttachments.filter(
-        (f) => !existingFiles.some((e) => e.fileUrl === f.fileUrl),
-      );
-
-      if (filesToDelete.length > 0) {
-        await this.prisma.fileAttachmentForFeedback.deleteMany({
-          where: { id: { in: filesToDelete.map((f) => f.id) } },
-        });
-      }
-
-      if (filesToAdd.length > 0) {
-        await this.prisma.fileAttachmentForFeedback.createMany({
-          data: filesToAdd.map((f) => ({
-            feedbackId: feedbackId,
-            fileName: f.fileName,
-            fileUrl: f.fileUrl,
-          })),
-        });
-      }
-    }
     if (dto.isPublic === false && feedback.forumPost) {
       await this.forumService.deleteByFeedbackId(feedbackId);
     } else if (
@@ -314,14 +264,31 @@ export class FeedbacksService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fileAttachments, isPublic, isAnonymous, ...updateData } =
       updateMapped;
-    const updatedFeedback = await this.prisma.feedbacks.update({
+    // Handle file attachments update using UploadsService
+    const updateFileAttachments =
+      await this.uploadsService.updateAttachmentsForTarget(
+        feedbackId,
+        FileTargetType.FEEDBACK,
+        dto.fileAttachments ?? [],
+      );
+
+    const updateFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
       include: {
-        department: { select: { id: true, name: true } },
-        category: { select: { id: true, name: true } },
+        department: {
+          select: { id: true, name: true },
+        },
+        category: {
+          select: { id: true, name: true },
+        },
         statusHistory: {
-          select: { status: true, message: true, note: true, createdAt: true },
+          select: {
+            status: true,
+            message: true,
+            note: true,
+            createdAt: true,
+          },
           orderBy: { createdAt: 'asc' },
         },
         forumPost: {
@@ -338,15 +305,12 @@ export class FeedbacksService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
       },
     });
 
     const unifiedTimeline = mergeStatusAndForwardLogs({
-      statusHistory: updatedFeedback.statusHistory,
-      forwardingLogs: updatedFeedback.forwardingLogs.map((f) => ({
+      statusHistory: updateFeedback.statusHistory,
+      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
         fromDept: f.fromDepartment,
         toDept: f.toDepartment,
         message: f.message,
@@ -355,47 +319,24 @@ export class FeedbacksService {
       })),
     });
     return {
-      id: updatedFeedback.id,
-      isPublic: updatedFeedback.forumPost ? true : false,
-      subject: updatedFeedback.subject,
-      description: updatedFeedback.description,
-      location: updatedFeedback.location ? updatedFeedback.location : null,
-      currentStatus: updatedFeedback.currentStatus,
-      isPrivate: updatedFeedback.isPrivate,
-      createdAt: updatedFeedback.createdAt.toISOString(),
+      id: updateFeedback.id,
+      isPublic: updateFeedback.forumPost ? true : false,
+      subject: updateFeedback.subject,
+      description: updateFeedback.description,
+      location: updateFeedback.location ? updateFeedback.location : null,
+      currentStatus: updateFeedback.currentStatus,
+      isPrivate: updateFeedback.isPrivate,
+      createdAt: updateFeedback.createdAt.toISOString(),
       department: {
-        id: updatedFeedback.department.id,
-        name: updatedFeedback.department.name,
+        id: updateFeedback.department.id,
+        name: updateFeedback.department.name,
       },
       category: {
-        id: updatedFeedback.category.id,
-        name: updatedFeedback.category.name,
+        id: updateFeedback.category.id,
+        name: updateFeedback.category.name,
       },
       statusHistory: unifiedTimeline,
-      // statusHistory: updatedFeedback.statusHistory.map((h) => ({
-      //   status: h.status,
-      //   message: h.message,
-      //   note: h.note,
-      //   createdAt: h.createdAt.toISOString(),
-      // })),
-      // forwardingLogs: updatedFeedback.forwardingLogs.map((log) => ({
-      //   id: log.id,
-      //   fromDepartment: {
-      //     id: log.fromDepartment.id,
-      //     name: log.fromDepartment.name,
-      //   },
-      //   toDepartment: {
-      //     id: log.toDepartment.id,
-      //     name: log.toDepartment.name,
-      //   },
-      //   message: log.message,
-      //   createdAt: log.createdAt.toISOString(),
-      // })),
-      fileAttachments: updatedFeedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      fileAttachments: updateFileAttachments,
     };
   }
 
@@ -418,6 +359,12 @@ export class FeedbacksService {
         'Feedback can only be deleted when in PENDING status.',
       );
     }
+
+    // Xóa file đính kèm trước
+    await this.uploadsService.deleteAttachmentsForTarget(
+      feedbackId,
+      FileTargetType.FEEDBACK,
+    );
 
     await this.prisma.feedbacks.delete({
       where: { id: feedbackId, userId: actor.sub },
@@ -454,21 +401,13 @@ export class FeedbacksService {
       );
     }
 
+    const { fileAttachments, ...feedbackData } = dto;
+
+    // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
-        subject: dto.subject,
-        description: dto.description,
-        location: dto.location ?? null,
-        departmentId: dto.departmentId,
-        categoryId: dto.categoryId,
-        isPrivate: dto.isAnonymous,
+        ...feedbackData,
         userId: actor.sub,
-        fileAttachments: {
-          create: dto.fileAttachments?.map((f) => ({
-            fileName: f.fileName,
-            fileUrl: f.fileUrl,
-          })),
-        },
       },
       include: {
         department: true,
@@ -479,6 +418,16 @@ export class FeedbacksService {
       await this.forumService.createForumPost(feedback.id, actor);
     }
 
+    // Create attachments using UploadsService
+    if (fileAttachments && fileAttachments.length > 0) {
+      await this.uploadsService.updateAttachmentsForTarget(
+        feedback.id,
+        FileTargetType.FEEDBACK,
+        fileAttachments,
+      );
+    }
+
+    // Return summary
     return {
       id: feedback.id,
       subject: feedback.subject,

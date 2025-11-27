@@ -8,22 +8,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-
-class AttachmentDto {
-  @ApiProperty({
-    example: 'screenshot.png',
-    description: 'The name of the attached file uploaded by the user.',
-  })
-  @IsString()
-  fileName: string;
-
-  @ApiProperty({
-    example: 'https://example.com/uploads/screenshot.png',
-    description: 'The full URL path to access the uploaded attachment.',
-  })
-  @IsString()
-  fileUrl: string;
-}
+import { CreateFileAttachmentDto } from 'src/modules/uploads/dto';
 
 export class CreateFeedbackDto {
   @ApiProperty({
@@ -84,17 +69,11 @@ export class CreateFeedbackDto {
   isPublic: boolean;
   @ApiPropertyOptional({
     description: 'A list of attached files (if any).',
-    type: [AttachmentDto],
-    example: [
-      {
-        fileName: 'error_screenshot.png',
-        fileUrl: 'https://example.com/files/error_screenshot.png',
-      },
-    ],
+    type: [CreateFileAttachmentDto],
   })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => AttachmentDto)
-  fileAttachments?: AttachmentDto[];
+  @Type(() => CreateFileAttachmentDto)
+  fileAttachments?: CreateFileAttachmentDto[];
 }

@@ -37,6 +37,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
     "@prisma/client": "^6.16.1",
+    "@supabase/supabase-js": "^2.84.0",
     "@upstash/redis": "^1.35.6",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -47,6 +48,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.1",
+    "uuid": "^13.0.0",
     "zod": "^4.1.9"
   },
   "devDependencies": {
@@ -62,6 +64,7 @@
     "@types/node": "^22.10.7",
     "@types/nodemailer": "^7.0.3",
     "@types/supertest": "^6.0.2",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
     "eslint": "^9.36.0",
@@ -69,6 +72,7 @@
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
     "jest": "^30.0.0",
+    "magic-string": "^0.30.21",
     "prettier": "^3.4.2",
     "prisma": "^6.16.1",
     "source-map-support": "^0.5.21",
