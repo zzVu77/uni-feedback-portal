@@ -1101,22 +1101,29 @@ VALUES (
         '550e8400-e29b-41d4-a716-446655440011'
     );
 
--- Inserting notifications
+-- ===================================================================
+-- NOTIFICATIONS – Dummy data (đủ các loại thông báo trong enum)
+-- ===================================================================
+
 INSERT INTO
     "Notifications" (
         "id",
         "userId",
         "content",
         "notificationType",
+        "targetId",
         "isRead",
         "createdAt"
     )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440053',
+VALUES
+    -- 1. Student nhận thông báo feedback đã được submit thành công
+    (
+        '550e8400-e29b-41d4-a716-446655440101',
         '550e8400-e29b-41d4-a716-446655440009',
-        'Your feedback on projector issue was received.',
-        'FEEDBACK_NOTIFICATION',
-        true,
+        'Phản hồi của bạn "Máy chiếu phòng 101 bị hỏng" đã được gửi thành công.',
+        'FEEDBACK_SUBMITTED_NOTIFICATION',
+        '550e8400-e29b-41d4-a716-446655440012',
+        false,
         '2025-09-02 09:05:00'
     ),
     (
@@ -1255,3 +1262,137 @@ VALUES -- File Attachment cho Feedbacks (3 file)
         'application/pdf',
         150000
     );
+
+= = = = = = =
+
+-- 2. Staff IT nhận thông báo có feedback mới thuộc phòng ban mình
+(
+    '550e8400-e29b-41d4-a716-446655440102',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Có phản hồi mới: "Máy chiếu phòng 101 bị hỏng" (John Doe).',
+    'NEW_FEEDBACK_RECEIVED',
+    '550e8400-e29b-41d4-a716-446655440012',
+    false,
+    '2025-09-02 09:06:00'
+),
+
+-- 3. Feedback được chuyển tiếp (forward) tới phòng ban khác
+(
+    '550e8400-e29b-41d4-a716-446655440103',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Phản hồi "Máy chiếu phòng 101 bị hỏng" đã được chuyển tới đội hỗ trợ kỹ thuật.',
+    'FEEDBACK_FORWARDED_TO_YOU',
+    '550e8400-e29b-41d4-a716-446655440012',
+    false,
+    '2025-09-02 09:35:00'
+),
+
+-- 4. Feedback đang được xử lý
+(
+    '550e8400-e29b-41d4-a716-446655440104',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Phản hồi của bạn đang được xử lý.',
+    'FEEDBACK_PROCESSING_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-446655440012',
+    false,
+    '2025-09-02 10:00:00'
+),
+
+-- 5. Feedback đã được giải quyết
+(
+    '550e8400-e29b-41d4-a716-446655440105',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Phản hồi "Chất lượng thức ăn căng tin" đã được giải quyết. Cảm ơn bạn!',
+    'FEEDBACK_RESOLVED_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-446655440014',
+    true,
+    '2025-09-03 15:05:00'
+),
+
+-- 6. Có bình luận mới trên bài đăng forum (liên quan feedback)
+(
+    '550e8400-e29b-41d4-a716-446655440106',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Có bình luận mới từ Alice Brown trên bài đăng của bạn.',
+    'COMMENT_FORUM_POST_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    false,
+    '2025-09-02 09:26:00'
+),
+
+-- 7. Có reply bình luận
+(
+    '550e8400-e29b-41d4-a716-446655440107',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'John Doe đã trả lời bình luận của bạn.',
+    'REPLY_COMMENT_FORUM_POST_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-446655440060',
+    false,
+    '2025-09-02 09:41:00'
+),
+
+-- 8. Ai đó vote bài đăng forum của bạn
+(
+    '550e8400-e29b-41d4-a716-446655440108',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Bài đăng của bạn nhận được 1 lượt ủng hộ mới.',
+    'VOTE_FORUM_POST_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-44665544002e',
+    true,
+    '2025-09-02 09:16:00'
+),
+
+-- 9. Có tin nhắn mới trong cuộc trò chuyện làm rõ
+(
+    '550e8400-e29b-41d4-a716-446655440109',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Nhân viên đã trả lời trong cuộc trò chuyện làm rõ phản hồi của bạn.',
+    'MESSAGE_NEW_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-44665544003e',
+    false,
+    '2025-09-02 10:21:00'
+),
+
+-- 10. Admin nhận thông báo có báo cáo bình luận mới
+(
+    '550e8400-e29b-41d4-a716-44665544010a',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Có báo cáo bình luận mới cần xem xét (bài căng tin).',
+    'NEW_COMMENT_REPORT_FOR_ADMIN',
+    '550e8400-e29b-41d4-a716-44665544003b',
+    false,
+    '2025-09-03 09:21:00'
+),
+
+-- 11. Người báo cáo nhận kết quả xử lý báo cáo
+(
+    '550e8400-e29b-41d4-a716-44665544010b',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Báo cáo bình luận của bạn đã được xử lý – không vi phạm.',
+    'REPORT_RESOLVED_NO_VIOLATION',
+    '550e8400-e29b-41d4-a716-44665544003b',
+    true,
+    '2025-09-04 15:00:00'
+),
+
+-- 12. Thông báo hệ thống / thông báo chung
+(
+    '550e8400-e29b-41d4-a716-44665544010c',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Hệ thống sẽ bảo trì từ 02:00–04:00 ngày 10/09/2025.',
+    'SYSTEM_ANNOUNCEMENT_NOTIFICATION',
+    NULL,
+    true,
+    '2025-09-05 12:05:00'
+),
+
+-- 13. Thông báo có announcement mới
+(
+    '550e8400-e29b-41d4-a716-44665544010d',
+    '550e8400-e29b-41d4-a716-446655440009',
+    'Thông báo mới: Menu căng tin được cập nhật từ tuần tới.',
+    'NEW_ANNOUNCEMENT_NOTIFICATION',
+    '550e8400-e29b-41d4-a716-44665544004e',
+    false,
+    '2025-09-06 10:01:00'
+);

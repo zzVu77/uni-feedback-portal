@@ -17,12 +17,42 @@ datasource db {
 // ================================
 
 enum NotificationType {
-  VOTE_NOTIFICATION
-  REPORT_NOTIFICATION
-  COMMENT_NOTIFICATION
-  MESSAGE_NOTIFICATION
-  FEEDBACK_NOTIFICATION
-  ANNOUNCEMENT_NOTIFICATION
+  // User-facing notifications about forum posts (related to feedback)
+  VOTE_FORUM_POST_NOTIFICATION
+  COMMENT_FORUM_POST_NOTIFICATION
+  REPLY_COMMENT_FORUM_POST_NOTIFICATION
+
+  // User-facing notifications about announcements
+  NEW_ANNOUNCEMENT_NOTIFICATION
+  VOTE_ANNOUNCEMENT_NOTIFICATION
+  COMMENT_ANNOUNCEMENT_NOTIFICATION
+  REPLY_COMMENT_ANNOUNCEMENT_NOTIFICATION
+
+  // User-facing notifications about reports
+  REPORT_SUBMITTED_CONFIRMATION
+  REPORT_RESOLVED_VIOLATION
+  REPORT_RESOLVED_NO_VIOLATION
+  YOUR_COMMENT_WAS_DELETED
+
+  // User-facing notifications about clarifications/messages
+  MESSAGE_NEW_NOTIFICATION
+
+  // User-facing notifications about feedback lifecycle
+  FEEDBACK_SUBMITTED_NOTIFICATION
+  FEEDBACK_PROCESSING_NOTIFICATION
+  FEEDBACK_RESOLVED_NOTIFICATION
+  FEEDBACK_REJECTED_NOTIFICATION
+
+  // Department staff notifications
+  NEW_FEEDBACK_RECEIVED
+  FEEDBACK_FORWARDED_TO_YOU
+
+  // Admin notifications
+  NEW_COMMENT_REPORT_FOR_ADMIN
+
+  // General/System notifications
+  ADMIN_NOTIFICATION
+  SYSTEM_ANNOUNCEMENT_NOTIFICATION
 }
 
 enum FeedbackStatus {
@@ -258,15 +288,15 @@ model Announcements {
 
   user  Users           @relation(fields: [userId], references: [id])
 }
-
 model Notifications {
   id                String            @id @default(uuid()) @db.Uuid
   userId            String            @db.Uuid
   content           String
   notificationType  NotificationType
+  targetId          String?           @db.Uuid // ID of the related entity (e.g., feedback, comment, announcement)
   isRead            Boolean           @default(false)
   createdAt         DateTime          @default(now())
-  relatedEntityId   String?          @db.Uuid 
+
   user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
