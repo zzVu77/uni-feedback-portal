@@ -66,16 +66,17 @@ const CommentItem: React.FC<CommentItemProps> = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        {comment.user.role === "DEPARTMENT_STAFF" && (
-          <Tooltip>
-            <TooltipTrigger>
-              <BadgeCheck className="h-5 w-5 text-green-500" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="text-[10px]">Cán bộ nhà trường</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
+        {comment.user.role === "DEPARTMENT_STAFF" ||
+          (comment.user.role === "ADMIN" && (
+            <Tooltip>
+              <TooltipTrigger>
+                <BadgeCheck className="h-5 w-5 text-green-500" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-[10px]">Cán bộ nhà trường</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
         <div className="bg-neutral-light-primary-200 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
           <User className="text-neutral-dark-primary-700" />
         </div>
