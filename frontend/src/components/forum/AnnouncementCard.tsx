@@ -29,14 +29,19 @@ const AnnouncementCard = ({
       </h3>
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex h-5 items-center space-x-1 text-sm">
-          <div className="flex flex-row items-center gap-1">
-            <div className="bg-yellow-primary-100 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
-              <Building2 className="text-yellow-primary-200" />
+          <Link
+            href={`/department/${announcement.department.id}`}
+            className="hover:text-red-400 hover:underline"
+          >
+            <div className="flex flex-row items-center gap-1">
+              <div className="bg-yellow-primary-100 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
+                <Building2 className="text-yellow-primary-200" />
+              </div>
+              <span className="text-[11px] font-medium text-black/70 hover:text-red-400 md:text-[14px]">
+                {announcement.department.name}
+              </span>
             </div>
-            <span className="text-[11px] font-medium text-black/70 md:text-[14px]">
-              {announcement.department.name}
-            </span>
-          </div>
+          </Link>
           <Separator orientation="vertical" />
           <span className="text-neutral-dark-primary-400 text-[11px] md:text-[14px]">
             {new Date(announcement.createdAt).toLocaleDateString("vi-VN", {
