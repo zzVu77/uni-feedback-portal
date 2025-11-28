@@ -3,8 +3,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { NotificationsService } from '../notifications.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { NotificationType, UserRole } from '@prisma/client';
+import { FeedbackStatus, NotificationType, UserRole } from '@prisma/client';
 import { FeedbackCreatedEvent } from '../../feedbacks/events/feedback-created.event';
+import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/events/feedback-status-updated.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -39,9 +40,75 @@ export class NotificationEventListener {
     }
   }
 
+  /**
+   * Handle 'feedback.status_updated' event
+   * Triggered when staff updates feedback status
+   */
+  @OnEvent('feedback.status_updated', { async: true })
+  async handleFeedbackStatusUpdatedEvent(payload: FeedbackStatusUpdatedEvent) {
+    this.logger.log(
+      `[Notification] Processing status update for Feedback ID: ${payload.feedbackId} to ${payload.status}`,
+    );
+
+    try {
+      const notificationType = this.mapStatusToNotificationType(payload.status);
+
+      // Nếu trạng thái không nằm trong danh sách cần thông báo thì bỏ qua (ví dụ: quay lại PENDING)
+      if (!notificationType) {
+        return;
+      }
+
+      const content = this.generateStatusMessage(
+        payload.status,
+        payload.subject,
+      );
+
+      await this.notificationsService.createNotifications({
+        userIds: [payload.userId], // Gửi cho sinh viên tạo feedback
+        content: content,
+        type: notificationType,
+        targetId: payload.feedbackId,
+      });
+    } catch (error) {
+      this.logger.error(
+        `[Notification] Failed to notify status update for feedback ${payload.feedbackId}`,
+        error.stack,
+      );
+    }
+  }
   // ==========================================
   // HELPER METHODS
   // ==========================================
+  private mapStatusToNotificationType(
+    status: FeedbackStatus,
+  ): NotificationType | null {
+    switch (status) {
+      case FeedbackStatus.IN_PROGRESS:
+        return NotificationType.FEEDBACK_PROCESSING_NOTIFICATION;
+      case FeedbackStatus.RESOLVED:
+        return NotificationType.FEEDBACK_RESOLVED_NOTIFICATION;
+      case FeedbackStatus.REJECTED:
+        return NotificationType.FEEDBACK_REJECTED_NOTIFICATION;
+      default:
+        return null; // Ignore PENDING or other statuses if any
+    }
+  }
+
+  private generateStatusMessage(
+    status: FeedbackStatus,
+    subject: string,
+  ): string {
+    switch (status) {
+      case FeedbackStatus.IN_PROGRESS:
+        return `Your feedback "${subject}" is now being processed.`;
+      case FeedbackStatus.RESOLVED:
+        return `Your feedback "${subject}" has been resolved.`;
+      case FeedbackStatus.REJECTED:
+        return `Your feedback "${subject}" has been rejected.`;
+      default:
+        return `Your feedback "${subject}" status has been updated.`;
+    }
+  }
 
   private async notifyStudent(payload: FeedbackCreatedEvent) {
     await this.notificationsService.createNotifications({
