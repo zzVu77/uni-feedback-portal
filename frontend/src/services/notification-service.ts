@@ -2,17 +2,20 @@ import axiosInstance from "@/config/axiosConfig";
 import {
   MarkAsReadPayload,
   NotificationDetails,
+  NotificationFilter,
   PaginatedResponse,
 } from "@/types";
 
 const notificationBaseUrl = "/notifications";
-export const getAllNotifications = async (): Promise<
-  PaginatedResponse<NotificationDetails>
-> => {
-  const response =
-    await axiosInstance.get<PaginatedResponse<NotificationDetails>>(
-      notificationBaseUrl,
-    );
+
+export const getAllNotifications = async (
+  filter: NotificationFilter,
+): Promise<PaginatedResponse<NotificationDetails>> => {
+  const response = await axiosInstance.get<
+    PaginatedResponse<NotificationDetails>
+  >(notificationBaseUrl, {
+    params: filter,
+  });
   return response;
 };
 
