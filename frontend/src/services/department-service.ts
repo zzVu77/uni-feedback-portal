@@ -1,5 +1,5 @@
 import axiosInstance from "@/config/axiosConfig";
-import { OptionType } from "@/types";
+import { DepartmentDetail, OptionType } from "@/types";
 
 const departmentBaseUrl = "/departments";
 export const getDepartmentOptions = async (): Promise<OptionType[]> => {
@@ -7,4 +7,12 @@ export const getDepartmentOptions = async (): Promise<OptionType[]> => {
     `${departmentBaseUrl}/options`,
   );
   return response.map((d) => ({ value: d.id, label: d.name }));
+};
+export const getDepartmentDetailInfo = async (
+  departmentId: string,
+): Promise<DepartmentDetail> => {
+  const response = await axiosInstance.get<DepartmentDetail>(
+    `${departmentBaseUrl}/${departmentId}`,
+  );
+  return response;
 };

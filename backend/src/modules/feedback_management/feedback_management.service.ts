@@ -4,30 +4,33 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { FileTargetType, Prisma, FeedbackStatus } from '@prisma/client';
-import {
-  FeedbackDetailDto,
-  ForwardingResponseDto,
-  ListFeedbacksResponseDto,
-  UpdateFeedbackStatusDto,
-  UpdateFeedbackStatusResponseDto,
-  CreateForwardingDto,
-  QueryFeedbackByStaffDto,
-} from './dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { FeedbackStatus, FileTargetType, Prisma } from '@prisma/client';
 import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   GenerateForwardingMessage,
   GenerateStatusUpdateMessage,
 } from 'src/shared/helpers/feedback-message.helper';
-import { UploadsService } from '../uploads/uploads.service';
-import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { UploadsService } from '../uploads/uploads.service';
+import {
+  CreateForwardingDto,
+  FeedbackDetailDto,
+  ForwardingResponseDto,
+  ListFeedbacksResponseDto,
+  QueryFeedbackByStaffDto,
+  UpdateFeedbackStatusDto,
+  UpdateFeedbackStatusResponseDto,
+} from './dto';
+import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
 @Injectable()
 export class FeedbackManagementService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadsService: UploadsService,
+    private readonly eventEmitter: EventEmitter2, // [Injection]
   ) {}
 
   async getAllStaffFeedbacks(
@@ -235,6 +238,7 @@ export class FeedbackManagementService {
   ): Promise<UpdateFeedbackStatusResponseDto> {
     const { feedbackId } = params;
 
+    // Cần đảm bảo feedback tồn tại và lấy userId, subject để bắn event
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
       include: { department: true },
@@ -262,6 +266,15 @@ export class FeedbackManagementService {
         note: dto.note ?? null,
       },
     });
+
+    // [New Logic] Emit Event: Feedback Status Updated
+    const event = new FeedbackStatusUpdatedEvent({
+      feedbackId: feedback.id,
+      userId: feedback.userId, // Student ID
+      subject: feedback.subject,
+      status: dto.status, // New Status
+    });
+    this.eventEmitter.emit('feedback.status_updated', event);
 
     return {
       feedbackId: updatedFeedback.id,

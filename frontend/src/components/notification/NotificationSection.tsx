@@ -1,13 +1,20 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Suspense, useEffect } from "react";
-import Filter from "../common/filter/Filter";
-import NotificationItem from "./NotificationItem";
+import { useNotificationFilters } from "@/hooks/filters/useNotificationFilter"; // Import new filter hook
+import { useGetInfiniteNotifications } from "@/hooks/queries/useNotificationQueries"; // Import new query hook
 import { useUrlTabs } from "@/hooks/useUrlTabs";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea } from "../ui/scroll-area";
 import { BellDot, MessageCircle, MessageSquareText } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { useInView } from "react-intersection-observer"; // Import Intersection Observer
+import Filter from "../common/filter/Filter";
+import { Loading } from "../common/Loading";
+import { ScrollArea } from "../ui/scroll-area";
+import NotificationItem from "./NotificationItem";
+
 type NotificationTab = "all" | "feedback" | "forum";
+
 const NotificationSection = () => {
   const TAB_PARAM_NAME = "tab";
   const VALID_TABS = ["all", "feedback", "forum"] as const;
@@ -22,6 +29,30 @@ const NotificationSection = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const filters = useNotificationFilters();
+
+  const {
+    data,
+    isFetching, // Initial load or filter change
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage, // Loading more data
+  } = useGetInfiniteNotifications(filters);
+
+  // 3. Flatten pages into a single array
+  const notifications = data?.pages.flatMap((page) => page.results) || [];
+
+  // 4. Ref for intersection observer
+  const { ref, inView } = useInView();
+
+  // 5. Trigger fetch next page when scrolling to bottom
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
+
+  // Handle URL Params for Tabs (Keep existing logic)
   useEffect(() => {
     const urlTab = searchParams.get(TAB_PARAM_NAME);
     if (!urlTab || !VALID_TABS.includes(urlTab as NotificationTab)) {
@@ -41,6 +72,33 @@ const NotificationSection = () => {
     { label: "Mới nhất", value: "newest" },
     { label: "Cũ nhất", value: "oldest" },
   ];
+
+  // Helper to render the list and loading state
+  const renderNotificationList = () => (
+    <div className="flex h-[65vh] flex-col gap-3 px-2 lg:h-[76vh]">
+      {notifications.map((notification) => (
+        <NotificationItem key={notification.id} {...notification} />
+      ))}
+
+      {/* Loading trigger element */}
+      <div ref={ref} className="flex w-full justify-center py-1">
+        {isFetchingNextPage && <Loading variant="spinner" />}
+      </div>
+
+      {!hasNextPage && notifications.length > 0 && (
+        <p className="pb-4 text-center text-sm text-gray-500">
+          Đã hiển thị tất cả thông báo.
+        </p>
+      )}
+
+      {!isFetching && notifications.length === 0 && (
+        <p className="mt-10 text-center text-gray-500">
+          Chưa có thông báo nào.
+        </p>
+      )}
+    </div>
+  );
+
   return (
     <Tabs
       className="flex w-full flex-col gap-4 pb-2"
@@ -72,6 +130,7 @@ const NotificationSection = () => {
           Diễn đàn
         </TabsTrigger>
       </TabsList>
+
       <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center md:justify-center lg:justify-start">
         <div className="flex w-full flex-row items-center justify-center gap-2 md:justify-end">
           <Suspense fallback={null}>
@@ -83,178 +142,44 @@ const NotificationSection = () => {
         </div>
       </div>
 
+      {/* Since the API filters data based on the URL 'tab' param via useNotificationFilters,
+        we can reuse the same render logic for all TabsContent. 
+        The hook automatically refetches when the tab changes.
+      */}
+
       <TabsContent value="all" className="flex h-screen w-full flex-col gap-4">
         <ScrollArea className="overflow-y-auto pr-1">
-          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
-            <NotificationItem
-              isRead={false}
-              type="ADMIN_NOTIFICATION"
-              time="2025-05-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="COMMENT_POST_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_PROCESSING_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RECEIVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_REJECTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RESOLVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="FEEDBACK_SUBMITTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_NEW_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_SYSTEM_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="REPORT_COMMENT_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-          </div>
+          {isFetching && !isFetchingNextPage ? (
+            <Loading variant="spinner" />
+          ) : (
+            renderNotificationList()
+          )}
         </ScrollArea>
       </TabsContent>
+
       <TabsContent
         value="feedback"
         className="flex h-screen w-full flex-col gap-4"
       >
         <ScrollArea className="overflow-y-auto pr-1">
-          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
-            <NotificationItem
-              isRead={false}
-              type="ADMIN_NOTIFICATION"
-              time="2025-05-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="COMMENT_POST_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_PROCESSING_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RECEIVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_REJECTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RESOLVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="FEEDBACK_SUBMITTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_NEW_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_SYSTEM_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="REPORT_COMMENT_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-          </div>
+          {isFetching && !isFetchingNextPage ? (
+            <Loading variant="spinner" />
+          ) : (
+            renderNotificationList()
+          )}
         </ScrollArea>
       </TabsContent>
+
       <TabsContent
         value="forum"
         className="flex h-screen w-full flex-col gap-4"
       >
         <ScrollArea className="overflow-y-auto pr-1">
-          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
-            <NotificationItem
-              isRead={false}
-              type="ADMIN_NOTIFICATION"
-              time="2025-05-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="COMMENT_POST_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_PROCESSING_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RECEIVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_REJECTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RESOLVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="FEEDBACK_SUBMITTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_NEW_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_SYSTEM_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="REPORT_COMMENT_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-          </div>
+          {isFetching && !isFetchingNextPage ? (
+            <Loading variant="spinner" />
+          ) : (
+            renderNotificationList()
+          )}
         </ScrollArea>
       </TabsContent>
     </Tabs>

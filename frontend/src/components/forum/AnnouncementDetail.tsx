@@ -3,6 +3,7 @@ import DOMPurify from "dompurify";
 import { Building2, CalendarFold } from "lucide-react";
 import { Separator } from "../ui/separator";
 import Attachment from "../feedback/Attachment";
+import Link from "next/link";
 type Props = {
   data: AnnouncementDetailType;
 };
@@ -15,14 +16,19 @@ const AnnouncementDetail = ({ data }: Props) => {
         {data.title || "Extended Library Hours During Finals Week"}
       </h2>
       <div className="flex h-5 items-center space-x-1 text-sm">
-        <div className="flex flex-row items-center gap-1">
-          <div className="bg-yellow-primary-100 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
-            <Building2 className="text-yellow-primary-200" />
+        <Link
+          href={`/department/${data.department.id}`}
+          className="hover:text-red-400 hover:underline"
+        >
+          <div className="flex flex-row items-center gap-1">
+            <div className="bg-yellow-primary-100 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
+              <Building2 className="text-yellow-primary-200 hover:text-red-400" />
+            </div>
+            <span className="text-[16px] font-normal text-black/60 hover:text-red-400 md:text-[14px]">
+              {data.department.name || "Khoa Đào tạo Quốc tế"}
+            </span>
           </div>
-          <span className="text-[16px] font-normal text-black/60 md:text-[14px]">
-            {data.department.name || "Khoa Đào tạo Quốc tế"}
-          </span>
-        </div>
+        </Link>
         <Separator orientation="vertical" />
         <CalendarFold className="text-neutral-dark-primary-400 h-4 w-4" />
         <span className="text-neutral-dark-primary-400 text-[11px] font-light md:text-[14px]">

@@ -144,7 +144,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                 key={conversation.id}
               >
                 <AccordionTrigger
-                  className="cursor-pointer bg-neutral-50 px-4 py-3 text-left transition-colors hover:bg-neutral-100 hover:no-underline"
+                  className="cursor-pointer bg-neutral-50 px-4 py-1 text-left transition-colors hover:bg-neutral-100 hover:no-underline"
                   onClick={() => handleOnChangeConversation(conversation.id)}
                 >
                   <div className="flex w-full flex-col items-start gap-1">
@@ -228,7 +228,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                                 onClick={() => handleRemoveFile(idx)}
                                 className="text-neutral-400 hover:text-red-500"
                               >
-                                <X className="h-3 w-3" />
+                                <X className="h-3 w-3 cursor-pointer" />
                               </button>
                             </div>
                           ))}
