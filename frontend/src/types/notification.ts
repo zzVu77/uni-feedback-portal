@@ -1,3 +1,5 @@
+import { BaseFilter } from "./common-type";
+
 export type TypeOfNotification =
   // Vote notification
   | "VOTE_FORUM_POST_NOTIFICATION"
@@ -41,4 +43,10 @@ export interface MarkAsReadPayload {
   ids?: string[];
   all?: boolean;
   isRead?: boolean;
+}
+export interface NotificationFilter extends BaseFilter {
+  tab?: string;
+  status?: string;
+  sort?: string;
+  type?: string;
 }
