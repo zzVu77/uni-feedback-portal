@@ -23,15 +23,20 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import ReportCommentDetailDialog from "../ReportCommentDetailDialog";
 import ConfirmationDialog from "@/components/common/ConfirmationDialog";
 import { ReportCommentDetail } from "@/types";
 import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
 import { cn } from "@/lib/utils";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
   const source = row.original;
   const { mutate: updateReport } = useUpdateReportComment(source.id);
+
+  // Hooks for URL manipulation
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const isResolved = source.status === "RESOLVED";
 
@@ -41,6 +46,14 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
 
   const handleResolve = () => {
     updateReport({ status: "RESOLVED", isDeleted: false });
+  };
+
+  // Hàm xử lý khi bấm Xem chi tiết -> Đẩy lên URL
+  const handleViewDetail = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("id", source.id);
+    params.set("open", "true");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -56,15 +69,16 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
 
         <DropdownMenuItem asChild>
           <div
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => {
+              e.preventDefault();
+              handleViewDetail();
+            }}
             className="w-full cursor-pointer"
           >
-            <ReportCommentDetailDialog data={source}>
-              <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-blue-500 shadow-none hover:bg-transparent hover:text-blue-600">
-                <Eye className="text-blue-primary-500 mr-2 h-4 w-4" />
-                Xem chi tiết
-              </Button>
-            </ReportCommentDetailDialog>
+            <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-blue-500 shadow-none hover:bg-transparent hover:text-blue-600">
+              <Eye className="text-blue-primary-500 mr-2 h-4 w-4" />
+              Xem chi tiết
+            </Button>
           </div>
         </DropdownMenuItem>
 

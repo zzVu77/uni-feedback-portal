@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { formatDistanceToNow } from "../../utils/formatDistanceToNow";
+import { generateNotificationUrl } from "@/utils/generateNotificationUrl";
+import { useUser } from "@/context/UserContext";
 
 const STYLE_GREEN = {
   iconClassName: "text-green-600/60",
@@ -261,9 +263,14 @@ const NotificationItem = ({
     backgroundClassName,
     defaultDescription,
   } = config;
-
+  const { user } = useUser();
+  const notificationUrl = generateNotificationUrl(
+    notificationType,
+    targetId,
+    user?.role || "STUDENT",
+  );
   return (
-    <Link href={`/notification/${targetId}`} key={id}>
+    <Link href={notificationUrl} key={id}>
       <div
         className={cn(
           "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",

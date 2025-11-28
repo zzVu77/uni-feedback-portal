@@ -23,14 +23,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { reportedCommentsColumns } from "./columns";
 import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useGetAllReportComments } from "@/hooks/queries/useReportCommentQueries"; // Make sure path is correct
+import { useGetAllReportComments } from "@/hooks/queries/useReportCommentQueries";
 import { cn } from "@/lib/utils";
 import { Loading } from "@/components/common/Loading";
 import { useReportCommentFilters } from "@/hooks/filters/useReportCommentFilter";
+import ReportCommentDetailDialog from "../ReportCommentDetailDialog";
 
 export function ReportedCommentTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -64,6 +65,25 @@ export function ReportedCommentTable() {
       ? Math.ceil(reportData.total / filters?.pageSize)
       : 0;
   }, [reportData?.total, filters.pageSize]);
+
+  // --- LOGIC XỬ LÝ DIALOG TỪ URL ---
+  const detailId = searchParams.get("id");
+  const isOpenParam = searchParams.get("open") === "true";
+
+  // Tìm report tương ứng trong list hiện tại (tableData)
+  const selectedReport = useMemo(() => {
+    if (!detailId || !tableData.length) return null;
+    return tableData.find((item) => item.id === detailId);
+  }, [detailId, tableData]);
+
+  // Hàm xử lý đóng Dialog: Xóa params khỏi URL
+  const handleCloseDialog = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("id");
+    params.delete("open");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+  // ---------------------------------
 
   // --- Table Configuration ---
   const table = useReactTable({
@@ -105,7 +125,7 @@ export function ReportedCommentTable() {
   // Mock data for filters (Keep UI consistent)
   const mockStatus = [
     { label: "Tất cả", value: "all" },
-    { label: "Đang chờ tiếp nhận", value: "pending" }, // Updated value to match API enum usually
+    { label: "Đang chờ tiếp nhận", value: "pending" },
     { label: "Đã xử lý", value: "resolved" },
   ];
 
@@ -200,6 +220,17 @@ export function ReportedCommentTable() {
             </Button>
           </div>
         </div>
+      )}
+
+      {/* Dialog hiển thị khi URL có ID hợp lệ và nằm trong tableData */}
+      {selectedReport && isOpenParam && (
+        <ReportCommentDetailDialog
+          data={selectedReport}
+          open={true}
+          onOpenChange={(open) => {
+            if (!open) handleCloseDialog();
+          }}
+        />
       )}
     </div>
   );
