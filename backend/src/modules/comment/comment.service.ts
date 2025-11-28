@@ -22,6 +22,7 @@ import {
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CommentCreatedEvent } from './events/comment-created.event';
+import { CommentReportCreatedEvent } from './events/comment-report-created.event';
 
 @Injectable()
 export class CommentService {
@@ -266,12 +267,7 @@ export class CommentService {
       where: { id: commentId, deletedAt: null },
       select: {
         id: true,
-        content: true,
-        createdAt: true,
-        deletedAt: true,
-        targetType: true,
-        targetId: true,
-        user: { select: { id: true, fullName: true } },
+        // ...
       },
     });
 
@@ -295,9 +291,18 @@ export class CommentService {
         user: { select: { id: true, fullName: true } },
       },
     });
+
+    // [New Logic] Emit Event: Report Created
+    const event = new CommentReportCreatedEvent({
+      reportId: report.id,
+      commentId: report.commentId,
+      reporterId: report.userId,
+      reason: report.reason || undefined,
+    });
+    this.eventEmitter.emit('comment.report_created', event);
+
     return report;
   }
-
   async deleteComment(
     commentId: string,
     actor: ActiveUserData,

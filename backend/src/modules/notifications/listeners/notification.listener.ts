@@ -14,6 +14,7 @@ import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/even
 import { ClarificationMessageSentEvent } from 'src/modules/clarifications/events/clarification-message-sent.event';
 import { ClarificationCreatedEvent } from 'src/modules/clarifications/events/clarification-created.event';
 import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.event';
+import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -245,6 +246,57 @@ export class NotificationEventListener {
       type: NotificationType.COMMENT_FORUM_POST_NOTIFICATION,
       targetId: payload.targetId,
     });
+  }
+  // ============================================
+  // HANDLER: COMMENT REPORT CREATED (To Admins)
+  // ============================================
+  @OnEvent('comment.report_created', { async: true })
+  async handleCommentReportCreated(payload: CommentReportCreatedEvent) {
+    this.logger.log(
+      `[Notification] Processing report creation for Comment ID: ${payload.commentId}`,
+    );
+
+    try {
+      // 1. Tìm tất cả Admin trong hệ thống
+      const admins = await this.prisma.users.findMany({
+        where: { role: UserRole.ADMIN },
+        select: { id: true },
+      });
+
+      if (!admins || admins.length === 0) {
+        this.logger.warn(
+          '[Notification] No admins found to receive report notification.',
+        );
+        return;
+      }
+
+      const adminIds = admins.map((admin) => admin.id);
+
+      // 2. Tạo nội dung thông báo
+      // Ví dụ: "New report submitted for a comment. Reason: Offensive content..."
+      const reasonText = payload.reason
+        ? ` Reason: "${payload.reason.length > 30 ? payload.reason.substring(0, 30) + '...' : payload.reason}"`
+        : '';
+
+      const content = `New comment report received.${reasonText}`;
+
+      // 3. Gửi thông báo
+      await this.notificationsService.createNotifications({
+        userIds: adminIds,
+        content: content,
+        type: NotificationType.NEW_COMMENT_REPORT_FOR_ADMIN,
+        targetId: payload.commentId, // Link đến comment bị report để Admin bấm vào xem
+      });
+
+      this.logger.log(
+        `[Notification] Sent report notification to ${adminIds.length} admins.`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to notify admins about report ${payload.reportId}`,
+        error.stack,
+      );
+    }
   }
 
   // ==========================================
