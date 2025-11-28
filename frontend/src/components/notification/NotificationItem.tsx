@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { cn } from "@/lib/utils";
+import { NotificationDetails } from "@/types";
 import {
   Bell,
   CheckCircle,
@@ -14,133 +16,244 @@ import {
   ThumbsUp,
   XCircle,
 } from "lucide-react";
+import Link from "next/link";
 import { formatDistanceToNow } from "../../utils/formatDistanceToNow";
-import { TypeOfNotification } from "@/types";
-type NotificationType = {
-  type: TypeOfNotification;
-  title?: string;
-  description?: string;
-  isRead?: boolean;
-  time: string;
+
+const STYLE_GREEN = {
+  iconClassName: "text-green-600/60",
+  backgroundClassName: "bg-green-100/80",
 };
 
+const STYLE_BLUE = {
+  iconClassName: "text-blue-600/60",
+  backgroundClassName: "bg-blue-100/80",
+};
+
+const STYLE_PURPLE = {
+  iconClassName: "text-purple-700/60",
+  backgroundClassName: "bg-purple-100/80",
+};
+
+const STYLE_PURPLE_LIGHT = {
+  iconClassName: "text-purple-600/60",
+  backgroundClassName: "bg-purple-100/80",
+};
+
+const STYLE_RED = {
+  iconClassName: "text-red-600/60",
+  backgroundClassName: "bg-red-100/80",
+};
+
+const STYLE_YELLOW = {
+  iconClassName: "text-yellow-600/70",
+  backgroundClassName: "bg-yellow-50/80",
+};
+
+const STYLE_GREEN_FEEDBACK = {
+  iconClassName: "text-green-600/70",
+  backgroundClassName: "bg-green-100/80",
+};
+
+const STYLE_BLUE_FEEDBACK = {
+  iconClassName: "text-blue-600/70",
+  backgroundClassName: "bg-blue-100/80",
+};
+
+const STYLE_BLUE_ADMIN = {
+  iconClassName: "text-blue-800/70",
+  backgroundClassName: "bg-blue-50/80",
+};
+
+const STYLE_SYSTEM = {
+  iconClassName: "text-gray-700/60",
+  backgroundClassName: "bg-gray-100/80",
+};
 export const NOTIFICATION_CONFIG = {
-  VOTE_POST_NOTIFICATION: {
+  // -----------------------------
+  // 👍 VOTE (GREEN)
+  // -----------------------------
+  VOTE_FORUM_POST_NOTIFICATION: {
     title: "Bài viết của bạn được thích",
     icon: ThumbsUp,
-    iconClassName: "text-green-600/60",
-    backgroundClassName: "bg-green-100/80",
+    ...STYLE_GREEN,
     defaultDescription: "Ai đó vừa thích bài viết của bạn.",
   },
-  VOTE_COMMENT_NOTIFICATION: {
-    title: "Bình luận của bạn được thích",
+
+  VOTE_ANNOUNCEMENT_NOTIFICATION: {
+    title: "Thông báo của bạn được thích",
     icon: ThumbsUp,
-    iconClassName: "text-green-600/60",
-    backgroundClassName: "bg-green-100/80",
-    defaultDescription: "Ai đó vừa thích bình luận của bạn.",
+    ...STYLE_GREEN,
+    defaultDescription: "Ai đó vừa thích thông báo của bạn.",
   },
-  COMMENT_POST_NOTIFICATION: {
+
+  // -----------------------------
+  // 💬 COMMENT / REPLY (BLUE)
+  // -----------------------------
+  COMMENT_FORUM_POST_NOTIFICATION: {
     title: "Bình luận mới trong bài viết",
     icon: MessageCircleMore,
-    iconClassName: "text-blue-600/60",
-    backgroundClassName: "bg-blue-100/80",
+    ...STYLE_BLUE,
     defaultDescription: "Có người vừa bình luận vào bài viết của bạn.",
   },
-  REPLY_COMMENT_NOTIFICATION: {
+
+  REPLY_COMMENT_FORUM_POST_NOTIFICATION: {
     title: "Phản hồi mới trong bình luận",
     icon: MessageSquareReply,
-    iconClassName: "text-blue-600/60",
-    backgroundClassName: "bg-blue-100/80",
+    ...STYLE_BLUE,
     defaultDescription: "Có người vừa trả lời bình luận của bạn.",
   },
 
-  REPORT_COMMENT_NOTIFICATION: {
-    title: "Bình luận bị báo cáo",
-    icon: MessageCircleWarning,
-    iconClassName: "text-red-600/60",
-    backgroundClassName: "bg-red-100/80",
-    defaultDescription: "Bình luận của bạn đã bị người dùng khác báo cáo.",
+  COMMENT_ANNOUNCEMENT_NOTIFICATION: {
+    title: "Bình luận mới trong thông báo",
+    icon: MessageCircleMore,
+    ...STYLE_BLUE,
+    defaultDescription: "Có người vừa bình luận vào thông báo của bạn.",
   },
 
+  REPLY_COMMENT_ANNOUNCEMENT_NOTIFICATION: {
+    title: "Phản hồi mới trong thông báo",
+    icon: MessageSquareReply,
+    ...STYLE_BLUE,
+    defaultDescription: "Có người vừa trả lời bình luận của bạn.",
+  },
+
+  // -----------------------------
+  // 📢 ANNOUNCEMENTS (PURPLE)
+  // -----------------------------
+  NEW_ANNOUNCEMENT_NOTIFICATION: {
+    title: "Thông báo mới",
+    icon: Bell,
+    ...STYLE_PURPLE,
+    defaultDescription: "Bạn có một thông báo mới từ hệ thống.",
+  },
+
+  // -----------------------------
+  // 🚨 REPORT (RED)
+  // -----------------------------
+  REPORT_SUBMITTED_CONFIRMATION: {
+    title: "Báo cáo đã được gửi",
+    icon: MessageCircleWarning,
+    ...STYLE_RED,
+    defaultDescription: "Báo cáo của bạn đã được tiếp nhận.",
+  },
+
+  REPORT_RESOLVED_VIOLATION: {
+    title: "Báo cáo hợp lệ",
+    icon: CheckCircle,
+    ...STYLE_RED,
+    defaultDescription: "Báo cáo của bạn đã được xác nhận vi phạm.",
+  },
+
+  REPORT_RESOLVED_NO_VIOLATION: {
+    title: "Không phát hiện vi phạm",
+    icon: XCircle,
+    ...STYLE_RED,
+    defaultDescription: "Nội dung bạn báo cáo không vi phạm.",
+  },
+
+  YOUR_COMMENT_WAS_DELETED: {
+    title: "Bình luận đã bị xóa",
+    icon: ShieldAlert,
+    ...STYLE_RED,
+    defaultDescription: "Bình luận của bạn bị xóa do vi phạm hướng dẫn.",
+  },
+
+  // -----------------------------
+  // ✉️ MESSAGES (PURPLE LIGHT)
+  // -----------------------------
   MESSAGE_NEW_NOTIFICATION: {
     title: "Tin nhắn mới",
     icon: MessageSquareText,
-    iconClassName: "text-purple-600/60",
-    backgroundClassName: "bg-purple-100/80",
-    defaultDescription: "Bạn có một tin nhắn mới từ người dùng khác.",
+    ...STYLE_PURPLE_LIGHT,
+    defaultDescription: "Bạn có một tin nhắn mới.",
   },
 
-  MESSAGE_SYSTEM_NOTIFICATION: {
-    title: "Tin nhắn hệ thống",
-    icon: Bell,
-    iconClassName: "text-purple-700/60",
-    backgroundClassName: "bg-purple-50/80",
-    defaultDescription: "Bạn nhận được thông báo từ hệ thống.",
-  },
-
+  // -----------------------------
+  // 📝 FEEDBACK LIFECYCLE
+  // -----------------------------
   FEEDBACK_SUBMITTED_NOTIFICATION: {
     title: "Góp ý đã được gửi",
     icon: Send,
-    iconClassName: "text-yellow-500/70",
-    backgroundClassName: "bg-yellow-50/80",
-    defaultDescription: "Góp ý của bạn đã được gửi đến hệ thống.",
+    ...STYLE_YELLOW,
+    defaultDescription: "Bạn đã gửi góp ý thành công.",
   },
-  FEEDBACK_RECEIVED_NOTIFICATION: {
-    title: "Góp ý được tiếp nhận",
-    icon: CheckCircle,
-    iconClassName: "text-yellow-600/70",
-    backgroundClassName: "bg-yellow-100/80",
-    defaultDescription: "Phòng ban đã tiếp nhận góp ý của bạn.",
-  },
+
   FEEDBACK_PROCESSING_NOTIFICATION: {
     title: "Góp ý đang được xử lý",
     icon: Hourglass,
-    iconClassName: "text-blue-600/70",
-    backgroundClassName: "bg-blue-100/80",
-    defaultDescription: "Góp ý của bạn đang trong quá trình xử lý.",
+    ...STYLE_BLUE_FEEDBACK,
+    defaultDescription: "Góp ý của bạn đang được xử lý.",
   },
+
   FEEDBACK_RESOLVED_NOTIFICATION: {
     title: "Góp ý đã được xử lý",
     icon: CheckCircle,
-    iconClassName: "text-green-600/70",
-    backgroundClassName: "bg-green-100/80",
-    defaultDescription: "Phòng ban đã xử lý và phản hồi góp ý của bạn.",
+    ...STYLE_GREEN_FEEDBACK,
+    defaultDescription: "Góp ý của bạn đã được phản hồi.",
   },
+
   FEEDBACK_REJECTED_NOTIFICATION: {
     title: "Góp ý bị từ chối",
     icon: XCircle,
-    iconClassName: "text-red-600/70",
-    backgroundClassName: "bg-red-100/80",
-    defaultDescription: "Góp ý của bạn không được chấp nhận xử lý.",
-  },
-  FEEDBACK_COMMENT_NOTIFICATION: {
-    title: "Phản hồi mới trong góp ý",
-    icon: MessageCircle,
-    iconClassName: "text-yellow-600/70",
-    backgroundClassName: "bg-yellow-100/80",
-    defaultDescription: "Có phản hồi mới về góp ý bạn đã gửi.",
+    ...STYLE_RED,
+    defaultDescription: "Góp ý của bạn không được chấp nhận.",
   },
 
-  // ⚙️ --- SYSTEM NOTIFICATIONS ---
-  SYSTEM_ANNOUNCEMENT_NOTIFICATION: {
-    title: "Thông báo từ hệ thống",
-    icon: Bell,
-    iconClassName: "text-gray-700/60",
-    backgroundClassName: "bg-gray-100/80",
-    defaultDescription: "Có thông báo quan trọng từ hệ thống.",
+  // -----------------------------
+  // 🏢 DEPARTMENT STAFF
+  // -----------------------------
+  NEW_FEEDBACK_RECEIVED: {
+    title: "Có góp ý mới",
+    icon: MessageCircle,
+    ...STYLE_BLUE_ADMIN,
+    defaultDescription: "Bạn vừa nhận một góp ý mới từ người dùng.",
   },
+
+  FEEDBACK_FORWARDED_TO_YOU: {
+    title: "Góp ý được chuyển đến bạn",
+    icon: MessageCircleMore,
+    ...STYLE_BLUE_ADMIN,
+    defaultDescription: "Một góp ý đã được chuyển đến bạn để xử lý.",
+  },
+
+  // -----------------------------
+  // 🔧 ADMIN
+  // -----------------------------
+  NEW_COMMENT_REPORT_FOR_ADMIN: {
+    title: "Báo cáo bình luận mới",
+    icon: ShieldAlert,
+    ...STYLE_BLUE_ADMIN,
+    defaultDescription: "Có một báo cáo bình luận cần được xem xét.",
+  },
+
   ADMIN_NOTIFICATION: {
     title: "Thông báo từ quản trị viên",
     icon: ShieldAlert,
-    iconClassName: "text-blue-800/70",
-    backgroundClassName: "bg-blue-50/80",
-    defaultDescription: "Bạn nhận được thông báo trực tiếp từ quản trị viên.",
+    ...STYLE_BLUE_ADMIN,
+    defaultDescription: "Quản trị viên vừa gửi thông báo đến bạn.",
+  },
+
+  // -----------------------------
+  // 🖥️ SYSTEM
+  // -----------------------------
+  SYSTEM_ANNOUNCEMENT_NOTIFICATION: {
+    title: "Thông báo hệ thống",
+    icon: Bell,
+    ...STYLE_SYSTEM,
+    defaultDescription: "Bạn nhận được thông báo từ hệ thống.",
   },
 };
 
-const NotificationItem = ({ type, isRead, time }: NotificationType) => {
+const NotificationItem = ({
+  content,
+  isRead,
+  createdAt,
+  notificationType,
+  targetId,
+  id,
+}: NotificationDetails) => {
   const config =
-    NOTIFICATION_CONFIG[type] ||
+    NOTIFICATION_CONFIG[notificationType] ||
     NOTIFICATION_CONFIG.SYSTEM_ANNOUNCEMENT_NOTIFICATION;
   const {
     icon: Icon,
@@ -151,36 +264,38 @@ const NotificationItem = ({ type, isRead, time }: NotificationType) => {
   } = config;
 
   return (
-    <div
-      className={cn(
-        "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
-        isRead ? "bg-white" : "bg-blue-primary-100/40",
-      )}
-    >
-      <div className="flex w-full flex-row items-center justify-start gap-2">
-        <div
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-full",
-            backgroundClassName,
-          )}
-        >
-          {Icon && <Icon className={`${iconClassName} font-bold`} />}
+    <Link href={`/notification/${targetId}`} key={id}>
+      <div
+        className={cn(
+          "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
+          isRead ? "bg-white" : "bg-blue-primary-100/40",
+        )}
+      >
+        <div className="flex w-full flex-row items-center justify-start gap-2">
+          <div
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-full",
+              backgroundClassName,
+            )}
+          >
+            {Icon && <Icon className={`${iconClassName} font-bold`} />}
+          </div>
+          <div className="w-full">
+            {/* Title */}
+            <h4 className="text-[16px] font-medium">
+              {title ?? "Notification Title"}
+            </h4>
+            {/* Description */}
+            <p className="mt-1 text-sm text-gray-600">
+              {content ?? defaultDescription}
+            </p>
+          </div>
         </div>
-        <div className="w-full">
-          {/* Title */}
-          <h4 className="text-[16px] font-medium">
-            {title ?? "Notification Title"}
-          </h4>
-          {/* Description */}
-          <p className="mt-1 text-sm text-gray-600">
-            {defaultDescription ?? " This is a notification."}
-          </p>
+        <div className="block w-20 text-right text-xs text-gray-500">
+          {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
         </div>
       </div>
-      <div className="block w-20 text-right text-xs text-gray-500">
-        {formatDistanceToNow(new Date(time), { addSuffix: true })}
-      </div>
-    </div>
+    </Link>
   );
 };
 

@@ -1,12 +1,14 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetAllNotifications } from "@/hooks/queries/useNotificationQueries";
+import { useUrlTabs } from "@/hooks/useUrlTabs";
+import { BellDot, MessageCircle, MessageSquareText } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import Filter from "../common/filter/Filter";
-import NotificationItem from "./NotificationItem";
-import { useUrlTabs } from "@/hooks/useUrlTabs";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Loading } from "../common/Loading";
 import { ScrollArea } from "../ui/scroll-area";
-import { BellDot, MessageCircle, MessageSquareText } from "lucide-react";
+import NotificationItem from "./NotificationItem";
 type NotificationTab = "all" | "feedback" | "forum";
 const NotificationSection = () => {
   const TAB_PARAM_NAME = "tab";
@@ -41,6 +43,7 @@ const NotificationSection = () => {
     { label: "Mới nhất", value: "newest" },
     { label: "Cũ nhất", value: "oldest" },
   ];
+  const { data: notifications, isFetching } = useGetAllNotifications();
   return (
     <Tabs
       className="flex w-full flex-col gap-4 pb-2"
@@ -85,58 +88,15 @@ const NotificationSection = () => {
 
       <TabsContent value="all" className="flex h-screen w-full flex-col gap-4">
         <ScrollArea className="overflow-y-auto pr-1">
-          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
-            <NotificationItem
-              isRead={false}
-              type="ADMIN_NOTIFICATION"
-              time="2025-05-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="COMMENT_POST_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_PROCESSING_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RECEIVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_REJECTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={true}
-              type="FEEDBACK_RESOLVED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="FEEDBACK_SUBMITTED_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_NEW_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="MESSAGE_SYSTEM_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-            <NotificationItem
-              isRead={false}
-              type="REPORT_COMMENT_NOTIFICATION"
-              time="2023-03-01T12:00:00Z"
-            />
-          </div>
+          {isFetching ? (
+            <Loading variant="spinner" />
+          ) : (
+            <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
+              {notifications?.results.map((notification) => (
+                <NotificationItem key={notification.id} {...notification} />
+              ))}
+            </div>
+          )}
         </ScrollArea>
       </TabsContent>
       <TabsContent
@@ -144,7 +104,7 @@ const NotificationSection = () => {
         className="flex h-screen w-full flex-col gap-4"
       >
         <ScrollArea className="overflow-y-auto pr-1">
-          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
+          {/* <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
             <NotificationItem
               isRead={false}
               type="ADMIN_NOTIFICATION"
@@ -195,7 +155,7 @@ const NotificationSection = () => {
               type="REPORT_COMMENT_NOTIFICATION"
               time="2023-03-01T12:00:00Z"
             />
-          </div>
+          </div> */}
         </ScrollArea>
       </TabsContent>
       <TabsContent
@@ -203,7 +163,7 @@ const NotificationSection = () => {
         className="flex h-screen w-full flex-col gap-4"
       >
         <ScrollArea className="overflow-y-auto pr-1">
-          <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
+          {/* <div className="flex h-[65vh] flex-col gap-4 px-2 lg:h-[76vh]">
             <NotificationItem
               isRead={false}
               type="ADMIN_NOTIFICATION"
@@ -254,7 +214,7 @@ const NotificationSection = () => {
               type="REPORT_COMMENT_NOTIFICATION"
               time="2023-03-01T12:00:00Z"
             />
-          </div>
+          </div> */}
         </ScrollArea>
       </TabsContent>
     </Tabs>
