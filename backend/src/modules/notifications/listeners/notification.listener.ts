@@ -53,7 +53,6 @@ export class NotificationEventListener {
     try {
       const notificationType = this.mapStatusToNotificationType(payload.status);
 
-      // Nếu trạng thái không nằm trong danh sách cần thông báo thì bỏ qua (ví dụ: quay lại PENDING)
       if (!notificationType) {
         return;
       }
@@ -64,7 +63,7 @@ export class NotificationEventListener {
       );
 
       await this.notificationsService.createNotifications({
-        userIds: [payload.userId], // Gửi cho sinh viên tạo feedback
+        userIds: [payload.userId],
         content: content,
         type: notificationType,
         targetId: payload.feedbackId,
