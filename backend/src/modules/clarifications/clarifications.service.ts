@@ -4,6 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { EventEmitter2 } from '@nestjs/event-emitter'; // [Import 1]
 import {
   CloseClarificationDto,
   CreateClarificationDto,
@@ -16,12 +17,16 @@ import {
 import { FileTargetType, Prisma, UserRole } from '@prisma/client';
 import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+// [Import 2] Import Events
+import { ClarificationCreatedEvent } from './events/clarification-created.event';
+import { ClarificationMessageSentEvent } from './events/clarification-message-sent.event';
 
 @Injectable()
 export class ClarificationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadsService: UploadsService,
+    private readonly eventEmitter: EventEmitter2, // [Injection]
   ) {}
 
   async createClarificationConversation(
@@ -35,6 +40,7 @@ export class ClarificationsService {
         `Only department staff can start a clarification conversation.`,
       );
     }
+    // Need to fetch feedback to get the Student ID
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
     });
@@ -46,13 +52,12 @@ export class ClarificationsService {
       data: {
         subject,
         feedbackId,
-        userId: actor.sub,
+        userId: actor.sub, // Staff ID
         messages: {
           create: initialMessage
             ? {
                 userId: actor.sub,
                 content: initialMessage,
-                // Không xử lý attachments ở đây nữa
               }
             : undefined,
         },
@@ -65,6 +70,15 @@ export class ClarificationsService {
         },
       },
     });
+
+    // [New Logic] Emit Event: Conversation Created
+    // Notify the student that a clarification request has been started
+    const event = new ClarificationCreatedEvent({
+      conversationId: conversation.id,
+      studentId: feedback.userId, // Send to Student
+      subject: conversation.subject,
+    });
+    this.eventEmitter.emit('clarification.created', event);
 
     return {
       id: conversation.id,
@@ -81,6 +95,7 @@ export class ClarificationsService {
     };
   }
 
+  // ... (Keep getAllClarificationsConversations and getClarificationConversationDetail as is)
   async getAllClarificationsConversations(
     query: QueryClarificationsDto,
     actor: ActiveUserData,
@@ -184,10 +199,14 @@ export class ClarificationsService {
       throw new ForbiddenException('Message must have content or attachments.');
     }
 
+    // Need both conversation.userId (Staff) and feedback.userId (Student)
     const conversation =
       await this.prisma.clarificationConversations.findUnique({
         where: { id: conversationId },
-        include: { feedback: { select: { userId: true } } },
+        include: {
+          feedback: { select: { userId: true } },
+          // Ensure we select userId of the conversation creator (Staff)
+        },
       });
 
     if (!conversation) {
@@ -200,10 +219,19 @@ export class ClarificationsService {
       throw new ForbiddenException('This conversation is closed.');
     }
 
-    if (
-      conversation.userId !== actor.sub &&
-      conversation.feedback.userId !== actor.sub
-    ) {
+    const staffId = conversation.userId; // The staff who started the chat
+    const studentId = conversation.feedback.userId; // The student owner
+
+    // Validate permission and determine recipient
+    let recipientId: string;
+
+    if (actor.sub === staffId) {
+      // Sender is Staff -> Recipient is Student
+      recipientId = studentId;
+    } else if (actor.sub === studentId) {
+      // Sender is Student -> Recipient is Staff
+      recipientId = staffId;
+    } else {
       throw new ForbiddenException(
         'You are not authorized to post in this conversation.',
       );
@@ -228,6 +256,15 @@ export class ClarificationsService {
       );
     }
 
+    // [New Logic] Emit Event: Message Sent
+    const event = new ClarificationMessageSentEvent({
+      conversationId: conversationId,
+      senderId: actor.sub,
+      recipientId: recipientId, // Logic determined above
+      content: content ? content : 'Sent an attachment',
+    });
+    this.eventEmitter.emit('clarification.message_sent', event);
+
     const messageAttachments =
       await this.uploadsService.getAttachmentsForTarget(
         message.id,
@@ -243,6 +280,7 @@ export class ClarificationsService {
     };
   }
 
+  // ... (Keep closeClarificationConversation as is)
   async closeClarificationConversation(
     conversationId: string,
     dto: CloseClarificationDto,

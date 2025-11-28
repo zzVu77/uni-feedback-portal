@@ -228,7 +228,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                                 onClick={() => handleRemoveFile(idx)}
                                 className="text-neutral-400 hover:text-red-500"
                               >
-                                <X className="h-3 w-3" />
+                                <X className="h-3 w-3 cursor-pointer" />
                               </button>
                             </div>
                           ))}

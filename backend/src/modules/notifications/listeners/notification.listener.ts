@@ -6,6 +6,8 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { FeedbackStatus, NotificationType, UserRole } from '@prisma/client';
 import { FeedbackCreatedEvent } from '../../feedbacks/events/feedback-created.event';
 import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/events/feedback-status-updated.event';
+import { ClarificationMessageSentEvent } from 'src/modules/clarifications/events/clarification-message-sent.event';
+import { ClarificationCreatedEvent } from 'src/modules/clarifications/events/clarification-created.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -71,6 +73,60 @@ export class NotificationEventListener {
     } catch (error) {
       this.logger.error(
         `[Notification] Failed to notify status update for feedback ${payload.feedbackId}`,
+        error.stack,
+      );
+    }
+  }
+  // ============================================
+  // HANDLER: CLARIFICATION CREATED
+  // ============================================
+  @OnEvent('clarification.created', { async: true })
+  async handleClarificationCreated(payload: ClarificationCreatedEvent) {
+    this.logger.log(
+      `[Notification] Processing clarification.created for conversation: ${payload.conversationId}`,
+    );
+    try {
+      await this.notificationsService.createNotifications({
+        userIds: [payload.studentId],
+        content: `Department Staff requested clarification: "${payload.subject}".`,
+        type: NotificationType.MESSAGE_NEW_NOTIFICATION,
+        targetId: payload.conversationId,
+      });
+    } catch (error) {
+      this.logger.error(
+        `Failed to notify student about clarification ${payload.conversationId}`,
+        error.stack,
+      );
+    }
+  }
+
+  // ============================================
+  // HANDLER: MESSAGE SENT (2-WAY)
+  // ============================================
+  @OnEvent('clarification.message_sent', { async: true })
+  async handleClarificationMessageSent(payload: ClarificationMessageSentEvent) {
+    this.logger.log(
+      `[Notification] Processing message sent in conversation: ${payload.conversationId} to user ${payload.recipientId}`,
+    );
+
+    try {
+      // Logic xác định người nhận đã được xử lý ở Service,
+      // Listener chỉ việc gửi thông báo đến recipientId đó.
+
+      const previewContent =
+        payload.content.length > 50
+          ? payload.content.substring(0, 50) + '...'
+          : payload.content;
+
+      await this.notificationsService.createNotifications({
+        userIds: [payload.recipientId],
+        content: `New message: "${previewContent}"`,
+        type: NotificationType.MESSAGE_NEW_NOTIFICATION,
+        targetId: payload.conversationId,
+      });
+    } catch (error) {
+      this.logger.error(
+        `Failed to notify new message in conversation ${payload.conversationId}`,
         error.stack,
       );
     }
