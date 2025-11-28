@@ -20,10 +20,15 @@ import {
   UserRole,
 } from '@prisma/client';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CommentCreatedEvent } from './events/comment-created.event';
 
 @Injectable()
 export class CommentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly eventEmitter: EventEmitter2, // [Injection]
+  ) {}
 
   async createForumPostComment(
     dto: CreateCommentDto,
@@ -98,6 +103,16 @@ export class CommentService {
         user: true,
       },
     });
+
+    const event = new CommentCreatedEvent({
+      commentId: comment.id,
+      userId: comment.userId,
+      content: comment.content,
+      targetId: comment.targetId,
+      targetType: comment.targetType,
+      parentId: comment.parentId,
+    });
+    this.eventEmitter.emit('comment.created', event);
 
     return {
       id: comment.id,

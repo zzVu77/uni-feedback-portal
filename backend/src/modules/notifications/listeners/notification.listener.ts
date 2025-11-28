@@ -3,11 +3,17 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { NotificationsService } from '../notifications.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { FeedbackStatus, NotificationType, UserRole } from '@prisma/client';
+import {
+  CommentTargetType,
+  FeedbackStatus,
+  NotificationType,
+  UserRole,
+} from '@prisma/client';
 import { FeedbackCreatedEvent } from '../../feedbacks/events/feedback-created.event';
 import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/events/feedback-status-updated.event';
 import { ClarificationMessageSentEvent } from 'src/modules/clarifications/events/clarification-message-sent.event';
 import { ClarificationCreatedEvent } from 'src/modules/clarifications/events/clarification-created.event';
+import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -110,8 +116,8 @@ export class NotificationEventListener {
     );
 
     try {
-      // Logic xác định người nhận đã được xử lý ở Service,
-      // Listener chỉ việc gửi thông báo đến recipientId đó.
+      // Logic to determine the recipient has been handled in the Service,
+      // Listener only sends notification to that recipientId.
 
       const previewContent =
         payload.content.length > 50
@@ -131,9 +137,124 @@ export class NotificationEventListener {
       );
     }
   }
+  // ============================================
+  // HANDLER: COMMENT CREATED
+  // ============================================
+  @OnEvent('comment.created', { async: true })
+  async handleCommentCreated(payload: CommentCreatedEvent) {
+    this.logger.log(
+      `[Notification] Processing comment.created for ID: ${payload.commentId}`,
+    );
+
+    try {
+      // CASE 1: THIS IS A REPLY (Reply to comment)
+      if (payload.parentId) {
+        await this.handleReplyNotification(payload);
+        return;
+      }
+
+      // CASE 2: THIS IS A ROOT COMMENT (Root Comment)
+      if (payload.targetType === CommentTargetType.ANNOUNCEMENT) {
+        await this.handleAnnouncementCommentNotification(payload);
+      } else if (payload.targetType === CommentTargetType.FORUM_POST) {
+        await this.handleForumPostCommentNotification(payload);
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to process notification for comment ${payload.commentId}`,
+        error.stack,
+      );
+    }
+  }
+
+  // --- Logic : Handle Reply ---
+  private async handleReplyNotification(payload: CommentCreatedEvent) {
+    // The calling function `handleCommentCreated` already ensures parentId is not null.
+    // We add a check here for type safety and to handle any unexpected cases.
+    if (!payload.parentId) return;
+
+    const parentComment = await this.prisma.comments.findUnique({
+      where: { id: payload.parentId },
+      select: { userId: true },
+    });
+
+    if (!parentComment) return;
+
+    // Do not notify if user replies to their own comment
+    if (parentComment.userId === payload.userId) return;
+
+    // Determine notification type based on targetType
+    const type =
+      payload.targetType === CommentTargetType.FORUM_POST
+        ? NotificationType.REPLY_COMMENT_FORUM_POST_NOTIFICATION
+        : NotificationType.REPLY_COMMENT_ANNOUNCEMENT_NOTIFICATION;
+
+    await this.notificationsService.createNotifications({
+      userIds: [parentComment.userId],
+      content: `Someone replied to your comment: "${this.previewContent(payload.content)}"`,
+      type: type,
+      targetId: payload.targetId, // Link to Post/Announcement
+    });
+  }
+
+  // --- Logic : Handle Announcement Comment ---
+  private async handleAnnouncementCommentNotification(
+    payload: CommentCreatedEvent,
+  ) {
+    // Find Announcement to get owner (creator of announcement)
+    const announcement = await this.prisma.announcements.findUnique({
+      where: { id: payload.targetId },
+      select: { userId: true, title: true },
+    });
+
+    if (!announcement) return;
+
+    // Do not notify if user comments on their own announcement
+    if (announcement.userId === payload.userId) return;
+
+    await this.notificationsService.createNotifications({
+      userIds: [announcement.userId],
+      content: `New comment on your announcement "${announcement.title}": "${this.previewContent(payload.content)}"`,
+      type: NotificationType.COMMENT_ANNOUNCEMENT_NOTIFICATION,
+      targetId: payload.targetId,
+    });
+  }
+
+  // --- Logic : Handle Forum Post Comment ---
+  private async handleForumPostCommentNotification(
+    payload: CommentCreatedEvent,
+  ) {
+    //Find ForumPost -> Feedback -> User (Student)
+    const post = await this.prisma.forumPosts.findUnique({
+      where: { id: payload.targetId },
+      include: {
+        feedback: {
+          select: { userId: true, subject: true },
+        },
+      },
+    });
+
+    if (!post || !post.feedback) return;
+
+    // Do not notify if user comments on their own post
+    if (post.feedback.userId === payload.userId) return;
+
+    await this.notificationsService.createNotifications({
+      userIds: [post.feedback.userId],
+      content: `New comment on your post "${post.feedback.subject}": "${this.previewContent(payload.content)}"`,
+      type: NotificationType.COMMENT_FORUM_POST_NOTIFICATION,
+      targetId: payload.targetId,
+    });
+  }
+
   // ==========================================
   // HELPER METHODS
   // ==========================================
+  // Helper to preview content
+  private previewContent(content: string): string {
+    return content.length > 50 ? content.substring(0, 50) + '...' : content;
+  }
+
   private mapStatusToNotificationType(
     status: FeedbackStatus,
   ): NotificationType | null {
