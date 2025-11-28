@@ -20,6 +20,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
 import { RedisModule } from './modules/redis/redis.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { RedisModule } from './modules/redis/redis.module';
     PrismaModule,
     CommentModule,
     MailModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
