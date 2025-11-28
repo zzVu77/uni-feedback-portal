@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/features/department/components/DepartmentHeader.tsx
+"use client";
 import React from "react";
 import {
   Building2,
@@ -15,19 +16,38 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DepartmentDetail } from "@/types";
+import { useUser } from "@/context/UserContext";
+import Link from "next/link";
+import { toast } from "sonner";
 
 interface Props {
   department: DepartmentDetail;
 }
 
 export const DepartmentHeader: React.FC<Props> = ({ department }) => {
+  const { user } = useUser();
+
+  const handleShare = () => {
+    if (typeof window !== "undefined") {
+      const currentUrl = window.location.href;
+      navigator.clipboard
+        .writeText(currentUrl)
+        .then(() => {
+          toast.success("Đã sao chép liên kết vào bộ nhớ tạm!");
+        })
+        .catch(() => {
+          toast.error("Không thể sao chép liên kết. Vui lòng thử lại.");
+        });
+    }
+  };
+
   return (
     <Card className="border-none shadow-sm">
       <CardContent className="px-0 pt-0">
-        <div className="flex flex-col items-end justify-between gap-4 bg-white px-6 pt-6 pb-6 lg:flex-row">
+        <div className="flex flex-col items-end justify-between gap-4 bg-white px-6 py-2 lg:flex-row">
           <div className="flex w-full flex-col items-center gap-4 lg:flex-row lg:gap-8">
             {/* Avatar */}
-            <div className="flex h-24 w-24 items-center justify-center rounded-2xl border-4 border-white bg-white shadow-lg sm:h-32 sm:w-32">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full border-none bg-zinc-100/50 shadow-lg sm:h-32 sm:w-32">
               <Building2 className="h-12 w-12 text-blue-900 sm:h-16 sm:w-16" />
             </div>
 
@@ -49,26 +69,27 @@ export const DepartmentHeader: React.FC<Props> = ({ department }) => {
                     <XCircle className="mr-1 h-3 w-3" /> Ngưng hoạt động
                   </Badge>
                 )}
-                <span className="text-gray-300">|</span>
-                <span className="font-semibold text-blue-700">
-                  {department.feedbackCount} thông báo
-                </span>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex w-full flex-row items-center justify-center gap-2 lg:justify-end">
-            <Button variant="outline" size="sm">
-              <Share2 className="mr-2 h-4 w-4" /> Chia sẻ
-            </Button>
-            <Button
-              size="sm"
-              className="bg-red-500 text-white shadow-red-600/20 hover:bg-red-600/80"
-            >
-              Gửi góp ý
-            </Button>
-          </div>
+          {user && user.role === "STUDENT" && (
+            <div className="flex w-full flex-row items-center justify-center gap-2 lg:justify-end">
+              <Button variant="outline" size="sm" onClick={handleShare}>
+                <Share2 className="mr-2 h-4 w-4" /> Chia sẻ
+              </Button>
+
+              <Link href={`/student/create-new-feedback`}>
+                <Button
+                  size="sm"
+                  className="bg-red-500 text-white shadow-red-600/20 hover:bg-red-600/80"
+                >
+                  Gửi góp ý
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
         <Separator className="my-2" />
         {/* Description */}
@@ -118,6 +139,7 @@ export const DepartmentHeader: React.FC<Props> = ({ department }) => {
     </Card>
   );
 };
+
 const ContactItem = ({ icon, label, content, colorClass }: any) => (
   <div className="group flex items-start gap-3">
     <div

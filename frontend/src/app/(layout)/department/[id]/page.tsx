@@ -1,4 +1,5 @@
 "use client";
+import { DepartmentAnnouncementList } from "@/components/department/DepartmentAnnouncementList";
 import { DepartmentHeader } from "@/components/department/DepartmentHeader";
 import { DepartmentSkeleton } from "@/components/department/DepartmentSkeleton";
 import { Button } from "@/components/ui/button";
@@ -34,7 +35,7 @@ const DepartmentDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-10">
+    <div className="min-h-full bg-slate-50/50 py-2">
       <div className="px-4">
         <div className="flex w-full flex-col gap-4">
           <DepartmentHeader department={department} />
@@ -44,10 +45,7 @@ const DepartmentDetailPage = () => {
                 Thông báo từ Khoa/Phòng
               </h2>
             </div>
-            {/* 
-              <div className="min-h-[200px] rounded-xl border border-gray-100 bg-white shadow-sm">
-                <AnnouncementList departmentId={department.id} />
-              </div> */}
+            <DepartmentAnnouncementList departmentId={department.id} />
           </div>
         </div>
       </div>
