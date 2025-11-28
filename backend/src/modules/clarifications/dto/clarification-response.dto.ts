@@ -1,28 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { Type } from 'class-transformer';
-
+import { FileAttachmentDto } from 'src/modules/uploads/dto';
 // --- Reusable Sub-DTOs ---
-
-class MessageAttachmentDto {
-  @ApiProperty({
-    description: "The attachment's unique ID.",
-    example: '550e8400-e29b-41d4-a716-446655440050',
-  })
-  id: string;
-
-  @ApiProperty({
-    description: 'The name of the attached file.',
-    example: 'log_file.txt',
-  })
-  fileName: string;
-
-  @ApiProperty({
-    description: 'The URL to access the file.',
-    example: 'https://example.com/uploads/log_file.txt',
-  })
-  fileUrl: string;
-}
 
 class MessageAuthorDto {
   @ApiProperty({
@@ -91,8 +71,8 @@ export class MessageDto {
   @ApiProperty({ type: MessageAuthorDto })
   user: MessageAuthorDto;
 
-  @ApiProperty({ type: [MessageAttachmentDto] })
-  attachments: MessageAttachmentDto[];
+  @ApiProperty({ type: [FileAttachmentDto] })
+  attachments: FileAttachmentDto[];
 }
 
 export class ClarificationListItemDto {

@@ -1,32 +1,68 @@
-import { Controller } from '@nestjs/common';
+// src/modules/reports/reports.controller.ts
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { UserRole } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard'; // Giả sử bạn có guard này
+import { ReportFilterDto } from './dto/report-filter.dto';
 import { ReportsService } from './reports.service';
+import {
+  StatsOverviewDto,
+  TopDepartmentStatsDto,
+  FeedbackTrendDto,
+  TopInteractivePostDto,
+} from './dto/report-response.dto';
 
-@Controller('reports')
+@ApiTags('Admin Reports')
+@ApiBearerAuth()
+@UseGuards(RolesGuard)
+@Roles(UserRole.ADMIN) // Chỉ Admin mới xem được
+@Controller('admin/reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
-  // @Post()
-  // create(@Body() createReportDto: CreateReportDto) {
-  //   return this.reportsService.create(createReportDto);
-  // }
+  @Get('overview')
+  @ApiOperation({
+    summary: 'Get general feedback statistics (Counts by status)',
+  })
+  @ApiResponse({ status: 200, type: StatsOverviewDto })
+  async getOverview(@Query() query: ReportFilterDto) {
+    return this.reportsService.getGeneralOverview(query);
+  }
 
-  // @Get()
-  // findAll() {
-  //   return this.reportsService.findAll();
-  // }
+  @Get('departments')
+  @ApiOperation({
+    summary: 'Get performance stats by department (Volume & Resolution Time)',
+  })
+  @ApiResponse({ status: 200, type: [TopDepartmentStatsDto] })
+  async getDepartmentStats(@Query() query: ReportFilterDto) {
+    return this.reportsService.getTopDepartments(query);
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.reportsService.findOne(+id);
-  // }
+  @Get('trends')
+  @ApiOperation({ summary: 'Get feedback volume trends over time' })
+  @ApiResponse({ status: 200, type: [FeedbackTrendDto] })
+  async getTrends(@Query() query: ReportFilterDto) {
+    return this.reportsService.getFeedbackTrends(query);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateReportDto: UpdateReportDto) {
-  //   return this.reportsService.update(+id, updateReportDto);
-  // }
+  @Get('categories')
+  @ApiOperation({ summary: 'Get top 5 categories with most feedbacks' })
+  async getTopCategories(@Query() query: ReportFilterDto) {
+    return this.reportsService.getTopCategories(query);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.reportsService.remove(+id);
-  // }
+  @Get('top-interactive-posts')
+  @ApiOperation({
+    summary: 'Get top 5 forum posts with most interactions (votes + comments)',
+  })
+  @ApiResponse({ status: 200, type: [TopInteractivePostDto] })
+  async getTopInteractivePosts(@Query() query: ReportFilterDto) {
+    return this.reportsService.getTopInteractivePosts(query);
+  }
 }

@@ -17,12 +17,42 @@ datasource db {
 // ================================
 
 enum NotificationType {
-  VOTE_NOTIFICATION
-  REPORT_NOTIFICATION
-  COMMENT_NOTIFICATION
-  MESSAGE_NOTIFICATION
-  FEEDBACK_NOTIFICATION
-  ANNOUNCEMENT_NOTIFICATION
+  // User-facing notifications about forum posts (related to feedback)
+  VOTE_FORUM_POST_NOTIFICATION
+  COMMENT_FORUM_POST_NOTIFICATION
+  REPLY_COMMENT_FORUM_POST_NOTIFICATION
+
+  // User-facing notifications about announcements
+  NEW_ANNOUNCEMENT_NOTIFICATION
+  VOTE_ANNOUNCEMENT_NOTIFICATION
+  COMMENT_ANNOUNCEMENT_NOTIFICATION
+  REPLY_COMMENT_ANNOUNCEMENT_NOTIFICATION
+
+  // User-facing notifications about reports
+  REPORT_SUBMITTED_CONFIRMATION
+  REPORT_RESOLVED_VIOLATION
+  REPORT_RESOLVED_NO_VIOLATION
+  YOUR_COMMENT_WAS_DELETED
+
+  // User-facing notifications about clarifications/messages
+  MESSAGE_NEW_NOTIFICATION
+
+  // User-facing notifications about feedback lifecycle
+  FEEDBACK_SUBMITTED_NOTIFICATION
+  FEEDBACK_PROCESSING_NOTIFICATION
+  FEEDBACK_RESOLVED_NOTIFICATION
+  FEEDBACK_REJECTED_NOTIFICATION
+
+  // Department staff notifications
+  NEW_FEEDBACK_RECEIVED
+  FEEDBACK_FORWARDED_TO_YOU
+
+  // Admin notifications
+  NEW_COMMENT_REPORT_FOR_ADMIN
+
+  // General/System notifications
+  ADMIN_NOTIFICATION
+  SYSTEM_ANNOUNCEMENT_NOTIFICATION
 }
 
 enum FeedbackStatus {
@@ -48,6 +78,13 @@ enum CommentTargetType {
   ANNOUNCEMENT
 }
 
+// Thêm Enum mới cho các loại đính kèm file
+enum FileTargetType {
+  FEEDBACK
+  MESSAGE
+  ANNOUNCEMENT
+}
+
 
 // ================================
 // MODELS
@@ -59,10 +96,10 @@ model Users {
   password       String
   email          String   @unique
   role           UserRole
-  departmentId   String   @db.Uuid
+  departmentId   String?   @db.Uuid
   createdAt      DateTime @default(now())
 
-  department     Departments                   @relation(fields: [departmentId], references: [id])
+  department     Departments?                   @relation(fields: [departmentId], references: [id])
   feedbacks      Feedbacks[]
   votes          Votes[]
   comments       Comments[]
@@ -107,7 +144,7 @@ model Feedbacks {
   id              String            @id @default(uuid()) @db.Uuid
   subject         String
   description     String
-  location       String? 
+  location        String?
   currentStatus   FeedbackStatus    @default(PENDING)
   isPrivate       Boolean           @default(false)
   userId          String            @db.Uuid
@@ -122,7 +159,6 @@ model Feedbacks {
   forwardingLogs  ForwardingLogs[]
   forumPost       ForumPosts?
   conversations   ClarificationConversations[]
-  fileAttachments FileAttachmentForFeedback[]
 }
 
 model FeedbackStatusHistory {
@@ -225,35 +261,23 @@ model Messages {
 
   conversation ClarificationConversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   user         Users                     @relation(fields: [userId], references: [id])
-  attachments  FileAttachmentForMessage[] 
 }
 
-model FileAttachmentForMessage {
-  id        String   @id @default(uuid()) @db.Uuid
-  messageId String   @db.Uuid
-  fileName  String
-  fileUrl   String
+model FileAttachments {
+  id         String         @id @default(uuid()) @db.Uuid
+  targetId   String         @db.Uuid
+  targetType FileTargetType
 
-  message Messages @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  fileName String
+  fileUrl  String
+  fileType String
+  fileSize Int
+
+  createdAt DateTime @default(now())
+
+  @@index([targetId, targetType])
 }
 
-model FileAttachmentForFeedback {
-  id         String  @id @default(uuid()) @db.Uuid
-  feedbackId String  @db.Uuid
-  fileName   String
-  fileUrl    String
-
-  feedback Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
-}
-
-model FileAttachmentForAnnouncement {
-  id             String  @id @default(uuid()) @db.Uuid
-  announcementId String  @db.Uuid
-  fileName       String
-  fileUrl        String
-
-  announcement Announcements @relation(fields: [announcementId], references: [id], onDelete: Cascade)
-}
 
 model Announcements {
   id         String   @id @default(uuid()) @db.Uuid
@@ -262,18 +286,17 @@ model Announcements {
   createdAt  DateTime @default(now())
   userId     String   @db.Uuid
 
-  user  Users                        @relation(fields: [userId], references: [id])
-  files FileAttachmentForAnnouncement[]
+  user  Users           @relation(fields: [userId], references: [id])
 }
-
 model Notifications {
   id                String            @id @default(uuid()) @db.Uuid
   userId            String            @db.Uuid
   content           String
   notificationType  NotificationType
+  targetId          String?           @db.Uuid // ID of the related entity (e.g., feedback, comment, announcement)
   isRead            Boolean           @default(false)
   createdAt         DateTime          @default(now())
-  relatedEntityId   String?          @db.Uuid 
+
   user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

@@ -1,6 +1,19 @@
-import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ModerationService } from './moderation.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CommentReportDto,
   CommentReportParamDto,
@@ -8,53 +21,67 @@ import {
   QueryCommentReportsDto,
   UpdateCommentReportDto,
 } from './dto';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '@prisma/client';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
+@ApiTags('Moderation')
+@ApiBearerAuth()
+@UseGuards(RolesGuard)
+@Roles(UserRole.ADMIN)
 @Controller('moderation/reports')
 export class ModerationController {
   constructor(private readonly moderationService: ModerationService) {}
 
-  actor = {
-    role: 'ADMIN',
-    id: '550e8400-e29b-41d4-a716-446655440008',
-  } as const;
   @Get('/:commentReportId')
-  @ApiOperation({ summary: 'Get comment report details (admin)' })
+  @ApiOperation({ summary: 'Get comment report details (Admin only)' })
   @ApiResponse({
     status: 200,
     description: 'Comment report details',
     type: CommentReportDto,
   })
-  async GetCommentReportDetail(@Param() params: CommentReportParamDto) {
-    return this.moderationService.GetReportDetail(
+  async getCommentReportDetail(
+    @Param() params: CommentReportParamDto,
+    @ActiveUser() actor: ActiveUserData,
+  ) {
+    return this.moderationService.getCommentReportDetail(
       params.commentReportId,
-      this.actor,
+      actor,
     );
   }
   @Get()
-  @ApiOperation({ summary: 'Get all comment reports (admin)' })
+  @ApiOperation({ summary: 'Get all comment reports (Admin only)' })
   @ApiResponse({
     status: 200,
     description: 'List of comment reports',
     type: CommentReportResponseDto,
   })
-  async GetCommentReports(@Query() query: QueryCommentReportsDto) {
-    return this.moderationService.GetReports(query, this.actor);
+  async getCommentReports(
+    @Query() query: QueryCommentReportsDto,
+    @ActiveUser() actor: ActiveUserData,
+  ) {
+    return this.moderationService.getCommentReports(query, actor);
   }
   @Patch('/:commentReportId')
-  @ApiOperation({ summary: 'Update comment report status or response (admin)' })
+  @ApiOperation({
+    summary: 'Update comment report status or response (Admin only)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Report updated successfully',
     type: CommentReportDto,
   })
-  async UpdateCommentReport(
+  async updateCommentReport(
     @Param() params: CommentReportParamDto,
     @Body() dto: UpdateCommentReportDto,
+    @ActiveUser() actor: ActiveUserData,
   ) {
-    return this.moderationService.UpdateReport(
+    return this.moderationService.updateCommentReport(
       params.commentReportId,
       dto,
-      this.actor,
+      actor,
     );
   }
 }

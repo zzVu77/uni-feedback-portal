@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma, FeedbackStatus } from '@prisma/client';
+import { Prisma, FeedbackStatus, FileTargetType } from '@prisma/client';
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
@@ -14,14 +14,22 @@ import {
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { UploadsService } from '../uploads/uploads.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { ForumService } from '../forum/forum.service';
+import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
 
 @Injectable()
 export class FeedbacksService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly forumService: ForumService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
-  async getMyFeedbacks(
+  async getFeedbacks(
     query: QueryFeedbacksDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<GetMyFeedbacksResponseDto> {
     const {
       page = 1,
@@ -35,10 +43,19 @@ export class FeedbacksService {
     } = query;
 
     const whereClause: Prisma.FeedbacksWhereInput = {
-      userId,
-      ...(status && { currentStatus: status }),
-      ...(categoryId && { categoryId }),
-      ...(departmentId && { departmentId }),
+      userId: actor.sub,
+      ...(status && {
+        currentStatus:
+          status.toUpperCase() in FeedbackStatus
+            ? (status.toUpperCase() as FeedbackStatus)
+            : undefined,
+      }),
+      ...(categoryId && {
+        categoryId: categoryId == 'all' ? undefined : categoryId,
+      }),
+      ...(departmentId && {
+        departmentId: departmentId == 'all' ? undefined : departmentId,
+      }),
       ...(from || to
         ? {
             createdAt: {
@@ -56,50 +73,58 @@ export class FeedbacksService {
         ],
       }),
     };
-    // console.log('whereClause', whereClause);
 
-    const [items, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where: whereClause,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          subject: true,
-          location: true,
-          currentStatus: true,
-          isPrivate: true,
-          department: {
-            select: { id: true, name: true },
+    try {
+      const [items, total] = await Promise.all([
+        this.prisma.feedbacks.findMany({
+          where: whereClause,
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            subject: true,
+            location: true,
+            currentStatus: true,
+            isPrivate: true,
+            department: {
+              select: { id: true, name: true },
+            },
+            category: { select: { id: true, name: true } },
+            createdAt: true,
           },
-          category: { select: { id: true, name: true } },
-          createdAt: true,
-        },
-      }),
-      this.prisma.feedbacks.count({ where: whereClause }),
-    ]);
-
-    return {
-      results: items.map((item) => ({
-        ...item,
-        location: item.location ? item.location : null,
-        createdAt: item.createdAt.toISOString(),
-      })),
-      total,
-    };
+        }),
+        this.prisma.feedbacks.count({ where: whereClause }),
+      ]);
+      return {
+        results: items
+          ? items.map((item) => ({
+              ...item,
+              location: item.location ? item.location : null,
+              createdAt: item.createdAt.toISOString(),
+            }))
+          : [],
+        total,
+      };
+    } catch (error) {
+      throw new Error('Error fetching feedbacks:', { cause: error });
+    }
   }
+
   async getFeedbackDetail(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId: userId },
+      where: { id: feedbackId, userId: actor.sub },
       include: {
         department: {
           select: { id: true, name: true },
+        },
+        forumPost: {
+          select: { id: true },
         },
         category: {
           select: { id: true, name: true },
@@ -117,7 +142,9 @@ export class FeedbacksService {
           select: {
             id: true,
             message: true,
+            note: true,
             createdAt: true,
+
             fromDepartment: {
               select: { id: true, name: true },
             },
@@ -127,17 +154,28 @@ export class FeedbacksService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
+        // Không include fileAttachments ở đây
       },
     });
 
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: feedback.statusHistory,
+      forwardingLogs: feedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      feedback.id,
+      FileTargetType.FEEDBACK,
+    );
 
-    // 🏗️ Map data to FeedbackDetail DTO
     const result: FeedbackDetail = {
       id: feedback.id,
       subject: feedback.subject,
@@ -145,6 +183,7 @@ export class FeedbacksService {
       location: feedback.location ? feedback.location : null,
       currentStatus: feedback.currentStatus,
       isPrivate: feedback.isPrivate,
+      isPublic: feedback.forumPost ? true : false,
       createdAt: feedback.createdAt.toISOString(),
       department: {
         id: feedback.department.id,
@@ -154,59 +193,41 @@ export class FeedbacksService {
         id: feedback.category.id,
         name: feedback.category.name,
       },
-      statusHistory: feedback.statusHistory.map((h) => ({
-        status: h.status,
-        message: h.message,
-        note: h.note,
-        createdAt: h.createdAt.toISOString(),
-      })),
-      forwardingLogs: feedback.forwardingLogs.map((log) => ({
-        id: log.id,
-        fromDepartment: {
-          id: log.fromDepartment.id,
-          name: log.fromDepartment.name,
-        },
-        toDepartment: {
-          id: log.toDepartment.id,
-          name: log.toDepartment.name,
-        },
-        message: log.message,
-        createdAt: log.createdAt.toISOString(),
-      })),
-      fileAttachments: feedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      statusHistory: unifiedTimeline,
+      fileAttachments: fileAttachments,
     };
-
     return result;
   }
 
   async updateFeedback(
     params: FeedbackParamDto,
     dto: UpdateFeedbackDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
-    // Find the existing feedback
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
+      include: {
+        forumPost: { select: { id: true } },
+      },
     });
 
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    // Check if feedback is in PENDING status
     if (feedback.currentStatus !== FeedbackStatus.PENDING) {
       throw new ForbiddenException(
         'Feedback can only be updated when in PENDING status.',
       );
     }
+    if (dto.isAnonymous === true && dto.isPublic === true) {
+      throw new ForbiddenException(
+        'Feedback cannot be public when it is anonymous.',
+      );
+    }
 
-    // Validate department and category if they are being updated
     if (dto.departmentId) {
       const department = await this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -224,123 +245,109 @@ export class FeedbacksService {
       }
     }
 
-    // Handle file attachments update
-    if (dto.fileAttachments) {
-      const existingFiles =
-        await this.prisma.fileAttachmentForFeedback.findMany({
-          where: { feedbackId: feedbackId },
-        });
-
-      const newFileUrls = dto.fileAttachments.map((f) => f.fileUrl);
-
-      // Identify files to delete
-      const filesToDelete = existingFiles.filter(
-        (f) => !newFileUrls.includes(f.fileUrl),
-      );
-
-      // Identify files to add
-      const filesToAdd = dto.fileAttachments.filter(
-        (f) => !existingFiles.some((e) => e.fileUrl === f.fileUrl),
-      );
-
-      if (filesToDelete.length > 0) {
-        await this.prisma.fileAttachmentForFeedback.deleteMany({
-          where: { id: { in: filesToDelete.map((f) => f.id) } },
-        });
-      }
-
-      if (filesToAdd.length > 0) {
-        await this.prisma.fileAttachmentForFeedback.createMany({
-          data: filesToAdd.map((f) => ({
-            feedbackId: feedbackId,
-            fileName: f.fileName,
-            fileUrl: f.fileUrl,
-          })),
-        });
-      }
+    if (dto.isPublic === false && feedback.forumPost) {
+      await this.forumService.deleteByFeedbackId(feedbackId);
+    } else if (
+      dto.isPublic === true &&
+      !feedback.forumPost &&
+      dto.isAnonymous === false
+    ) {
+      await this.forumService.createForumPost(feedbackId, actor);
     }
 
-    // Update feedback scalar fields
+    const updateMapped = {
+      ...dto,
+      isPrivate:
+        dto.isAnonymous !== undefined ? dto.isAnonymous : feedback.isPrivate,
+    };
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { fileAttachments, ...updateData } = dto;
-    const updatedFeedback = await this.prisma.feedbacks.update({
+    const { fileAttachments, isPublic, isAnonymous, ...updateData } =
+      updateMapped;
+    // Handle file attachments update using UploadsService
+    const updateFileAttachments =
+      await this.uploadsService.updateAttachmentsForTarget(
+        feedbackId,
+        FileTargetType.FEEDBACK,
+        dto.fileAttachments ?? [],
+      );
+
+    const updateFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateData,
       include: {
-        department: { select: { id: true, name: true } },
-        category: { select: { id: true, name: true } },
+        department: {
+          select: { id: true, name: true },
+        },
+        category: {
+          select: { id: true, name: true },
+        },
         statusHistory: {
-          select: { status: true, message: true, note: true, createdAt: true },
+          select: {
+            status: true,
+            message: true,
+            note: true,
+            createdAt: true,
+          },
           orderBy: { createdAt: 'asc' },
+        },
+        forumPost: {
+          select: { id: true },
         },
         forwardingLogs: {
           select: {
             id: true,
             message: true,
             createdAt: true,
+            note: true,
             fromDepartment: { select: { id: true, name: true } },
             toDepartment: { select: { id: true, name: true } },
           },
           orderBy: { createdAt: 'asc' },
         },
-        fileAttachments: {
-          select: { id: true, fileName: true, fileUrl: true },
-        },
       },
     });
 
-    // Return detail
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: updateFeedback.statusHistory,
+      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
     return {
-      id: updatedFeedback.id,
-      subject: updatedFeedback.subject,
-      description: updatedFeedback.description,
-      location: updatedFeedback.location ? updatedFeedback.location : null,
-      currentStatus: updatedFeedback.currentStatus,
-      isPrivate: updatedFeedback.isPrivate,
-      createdAt: updatedFeedback.createdAt.toISOString(),
+      id: updateFeedback.id,
+      isPublic: updateFeedback.forumPost ? true : false,
+      subject: updateFeedback.subject,
+      description: updateFeedback.description,
+      location: updateFeedback.location ? updateFeedback.location : null,
+      currentStatus: updateFeedback.currentStatus,
+      isPrivate: updateFeedback.isPrivate,
+      createdAt: updateFeedback.createdAt.toISOString(),
       department: {
-        id: updatedFeedback.department.id,
-        name: updatedFeedback.department.name,
+        id: updateFeedback.department.id,
+        name: updateFeedback.department.name,
       },
       category: {
-        id: updatedFeedback.category.id,
-        name: updatedFeedback.category.name,
+        id: updateFeedback.category.id,
+        name: updateFeedback.category.name,
       },
-      statusHistory: updatedFeedback.statusHistory.map((h) => ({
-        status: h.status,
-        message: h.message,
-        note: h.note,
-        createdAt: h.createdAt.toISOString(),
-      })),
-      forwardingLogs: updatedFeedback.forwardingLogs.map((log) => ({
-        id: log.id,
-        fromDepartment: {
-          id: log.fromDepartment.id,
-          name: log.fromDepartment.name,
-        },
-        toDepartment: {
-          id: log.toDepartment.id,
-          name: log.toDepartment.name,
-        },
-        message: log.message,
-        createdAt: log.createdAt.toISOString(),
-      })),
-      fileAttachments: updatedFeedback.fileAttachments.map((a) => ({
-        id: a.id,
-        fileName: a.fileName,
-        fileUrl: a.fileUrl,
-      })),
+      statusHistory: unifiedTimeline,
+      fileAttachments: updateFileAttachments,
     };
   }
 
   async deleteFeedback(
     params: FeedbackParamDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<void> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
 
     if (!feedback) {
@@ -353,16 +360,21 @@ export class FeedbacksService {
       );
     }
 
+    // Xóa file đính kèm trước
+    await this.uploadsService.deleteAttachmentsForTarget(
+      feedbackId,
+      FileTargetType.FEEDBACK,
+    );
+
     await this.prisma.feedbacks.delete({
-      where: { id: feedbackId, userId },
+      where: { id: feedbackId, userId: actor.sub },
     });
   }
 
   async createFeedback(
     dto: CreateFeedbackDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<FeedbackSummary> {
-    // Check if department and category exist
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -378,29 +390,47 @@ export class FeedbacksService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
+    if (category.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback under an inactive category.',
+      );
+    }
+    if (department.isActive === false) {
+      throw new ForbiddenException(
+        'You cannot create feedback to an inactive department.',
+      );
+    }
+
+    const { fileAttachments, ...feedbackData } = dto;
 
     // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
-        subject: dto.subject,
-        description: dto.description,
-        location: dto.location ?? null,
-        departmentId: dto.departmentId,
-        categoryId: dto.categoryId,
-        isPrivate: dto.isPrivate,
-        userId: userId,
-        fileAttachments: {
-          create: dto.fileAttachments?.map((f) => ({
-            fileName: f.fileName,
-            fileUrl: f.fileUrl,
-          })),
-        },
+        subject: feedbackData.subject,
+        description: feedbackData.description,
+        location: feedbackData.location,
+        isPrivate: dto.isAnonymous ? true : false,
+        departmentId: feedbackData.departmentId,
+        categoryId: feedbackData.categoryId,
+        userId: actor.sub,
       },
       include: {
         department: true,
         category: true,
       },
     });
+    if (dto.isPublic) {
+      await this.forumService.createForumPost(feedback.id, actor);
+    }
+
+    // Create attachments using UploadsService
+    if (fileAttachments && fileAttachments.length > 0) {
+      await this.uploadsService.updateAttachmentsForTarget(
+        feedback.id,
+        FileTargetType.FEEDBACK,
+        fileAttachments,
+      );
+    }
 
     // Return summary
     return {

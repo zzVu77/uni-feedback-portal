@@ -1,1211 +1,209 @@
--- Inserting departments
-INSERT INTO
-    "Departments" (
-        "id",
-        "name",
-        "email",
-        "description",
-        "location",
-        "phone",
-        "isActive",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440000',
-        'IT Department',
-        'it.support@university.edu',
-        'Handles all technical infrastructure, network, and software support.',
-        'Building A, Room 101',
-        '123-456-7890',
-        true,
-        '2025-09-01 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440001',
-        'Human Resources',
-        'hr@university.edu',
-        'Manages employee relations, payroll, and benefits.',
-        'Building B, Room 205',
-        '123-456-7891',
-        true,
-        '2025-09-01 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440002',
-        'Academic Affairs',
-        'academic.affairs@university.edu',
-        'Oversees curriculum, course scheduling, and faculty matters.',
-        'Building C, Room 310',
-        '123-456-7892',
-        true,
-        '2025-09-01 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440003',
-        'Student Services',
-        'student.services@university.edu',
-        'Provides support for student life, including housing, counseling, and activities.',
-        'Building D, Room 100',
-        '123-456-7893',
-        true,
-        '2025-09-01 09:00:00'
-    );
+-- =================================================================
+-- CLEAN UP (Xóa dữ liệu cũ nếu có để tránh lỗi trùng lặp)
+-- =================================================================
+TRUNCATE TABLE "FileAttachments", "Messages", "ClarificationConversations", 
+"CommentReports", "Comments", "Votes", "ForumPosts", "ForwardingLogs", 
+"FeedbackStatusHistory", "Feedbacks", "Announcements", "Users", 
+"Departments", "Categories", "RefreshTokens", "Notifications" CASCADE;
 
--- Inserting categories
-INSERT INTO
-    "Categories" ("id", "name")
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440004',
-        'Infrastructure'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440005',
-        'Academic'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440006',
-        'Administrative'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440007',
-        'Events'
-    );
+-- =================================================================
+-- STEP 1: CATEGORIES & DEPARTMENTS (Giữ nguyên vì ID đã chuẩn Hex)
+-- =================================================================
+INSERT INTO "Categories" ("id", "name", "isActive") VALUES
+('c0000000-0000-0000-0000-000000000001', 'Cơ sở vật chất', true),
+('c0000000-0000-0000-0000-000000000002', 'Đào tạo & Học vụ', true),
+('c0000000-0000-0000-0000-000000000003', 'Hoạt động ngoại khóa', true),
+('c0000000-0000-0000-0000-000000000004', 'Tác phong giảng viên', true),
+('c0000000-0000-0000-0000-000000000005', 'Học phí & Tài chính', true),
+('c0000000-0000-0000-0000-000000000006', 'An ninh trật tự', true),
+('c0000000-0000-0000-0000-000000000007', 'Góp ý khác', true);
 
--- Inserting users (passwords are placeholders, should be hashed in production)
-INSERT INTO
-    "Users" (
-        "id",
-        "fullName",
-        "password",
-        "email",
-        "role",
-        "departmentId",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440008',
-        'Admin User',
-        'hashed_password_1',
-        'admin@university.edu',
-        'ADMIN',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '2025-09-01 10:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440009',
-        'John Doe',
-        'hashed_password_2',
-        'john.doe@university.edu',
-        'STUDENT',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '2025-09-01 10:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000a',
-        'Jane Smith',
-        'hashed_password_3',
-        'jane.smith@university.edu',
-        'DEPARTMENT_STAFF',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '2025-09-01 10:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000b',
-        'Alice Brown',
-        'hashed_password_4',
-        'alice.brown@university.edu',
-        'STUDENT',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '2025-09-01 10:45:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000c',
-        'Bob Wilson',
-        'hashed_password_5',
-        'bob.wilson@university.edu',
-        'DEPARTMENT_STAFF',
-        '550e8400-e29b-41d4-a716-446655440001',
-        '2025-09-01 11:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000d',
-        'Clara Davis',
-        'hashed_password_6',
-        'clara.davis@university.edu',
-        'STUDENT',
-        '550e8400-e29b-41d4-a716-446655440003',
-        '2025-09-01 11:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000e',
-        'David Johnson',
-        'hashed_password_7',
-        'david.johnson@university.edu',
-        'STUDENT',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '2025-09-05 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000f',
-        'Emma Thompson',
-        'hashed_password_8',
-        'emma.thompson@university.edu',
-        'DEPARTMENT_STAFF',
-        '550e8400-e29b-41d4-a716-446655440001',
-        '2025-09-05 09:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440010',
-        'Frank Lee',
-        'hashed_password_9',
-        'frank.lee@university.edu',
-        'STUDENT',
-        '550e8400-e29b-41d4-a716-446655440003',
-        '2025-09-05 09:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440011',
-        'Grace Kim',
-        'hashed_password_10',
-        'grace.kim@university.edu',
-        'DEPARTMENT_STAFF',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '2025-09-05 09:45:00'
-    );
+INSERT INTO "Departments" ("id", "name", "email", "createdAt") VALUES
+('d0000000-0000-0000-0000-000000000001', 'Phòng Thanh tra giáo dục', 'thanhtra@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000002', 'Phòng Quan hệ doanh nghiệp', 'qhdn@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000003', 'Phòng Khoa học & Công nghệ', 'khcn@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000004', 'Phòng Quan hệ quốc tế', 'qhqt@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000005', 'Phòng Thiết bị – Vật tư', 'tbvt@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000006', 'Phòng Quản trị chiến lược', 'chienluoc@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000007', 'Phòng Đảm bảo chất lượng', 'qa@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000008', 'Phòng Tổ chức Hành chính', 'tchc@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000009', 'Phòng Quản trị cơ sở vật chất', 'qtcsvc@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000010', 'Phòng Tuyển sinh và CTSV', 'ctsv@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000011', 'Phòng Kế hoạch – Tài chính', 'khtc@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000012', 'Phòng Đào tạo', 'pdt@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000013', 'Phòng Truyền thông', 'pr@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000014', 'Khoa Xây dựng', 'khoaxaydung@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000015', 'Khoa CN Hóa học & Thực phẩm', 'khoahoa@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000016', 'Khoa Công nghệ Thông tin', 'fit@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000017', 'Khoa Cơ khí động lực', 'ckdl@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000018', 'Khoa CN May & Thời trang', 'maythoitrang@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000019', 'Khoa Điện – Điện tử', 'feee@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000020', 'Khoa Cơ khí Chế tạo máy', 'ckm@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000021', 'Khoa Lý luận chính trị', 'llct@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000022', 'Khoa Khoa học cơ bản', 'khcb@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000023', 'Khoa In & Truyền thông', 'inbaochi@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000024', 'Khoa Ngoại ngữ', 'kngoangu@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000025', 'Khoa Kinh tế', 'kinhte@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000026', 'Khoa Đào tạo chất lượng cao', 'clc@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000027', 'Trung tâm Dịch vụ sinh viên', 'dichvusv@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000028', 'Trung tâm Dạy học số', 'elearning@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000029', 'Trung tâm Thông tin – Máy tính', 'ttmt@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000030', 'TT GD Thể chất và Quốc phòng', 'gdtcqp@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000031', 'Viện Sư phạm kỹ thuật', 'spkt@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000032', 'Đoàn trường & Hội Sinh viên', 'doanthanhnien@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000033', 'Trạm Y tế', 'yte@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000034', 'Thư viện', 'thuvien@uni.edu.vn', NOW()),
+('d0000000-0000-0000-0000-000000000035', 'Ban Quản lý ký túc xá', 'ktx@uni.edu.vn', NOW());
 
--- Inserting feedbacks
-INSERT INTO
-    "Feedbacks" (
-        "id",
-        "subject",
-        "description",
-        "location",
-        "currentStatus",
-        "isPrivate",
-        "userId",
-        "departmentId",
-        "categoryId",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440012',
-        'Broken classroom projector',
-        'The projector in Room 101 is not working.',
-        'Room 101',
-        'PENDING',
-        false,
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440004',
-        '2025-09-02 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440013',
-        'Course registration issue',
-        'Unable to register for CS101 due to system error.',
-        NULL,
-        'IN_PROGRESS',
-        true,
-        '550e8400-e29b-41d4-a716-44665544000b',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440005',
-        '2025-09-02 10:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440014',
-        'Cafeteria food quality',
-        'Food quality in cafeteria needs improvement.',
-        'Cafeteria',
-        'RESOLVED',
-        false,
-        '550e8400-e29b-41d4-a716-44665544000d',
-        '550e8400-e29b-41d4-a716-446655440003',
-        '550e8400-e29b-41d4-a716-446655440006',
-        '2025-09-03 08:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440015',
-        'Wi-Fi connectivity',
-        'Wi-Fi is unstable in the library.',
-        'Library',
-        'PENDING',
-        false,
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440004',
-        '2025-09-04 14:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440016',
-        'Library lighting issue',
-        'Some lights in the library are flickering.',
-        'Library',
-        'PENDING',
-        false,
-        '550e8400-e29b-41d4-a716-44665544000e',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440004',
-        '2025-09-05 10:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440017',
-        'Scholarship application problem',
-        'System rejects valid applications.',
-        NULL,
-        'IN_PROGRESS',
-        true,
-        '550e8400-e29b-41d4-a716-446655440010',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440005',
-        '2025-09-05 10:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440018',
-        'Parking space shortage',
-        'Insufficient parking spaces during morning.',
-        'Parking Lot A',
-        'PENDING',
-        false,
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-446655440003',
-        '550e8400-e29b-41d4-a716-446655440006',
-        '2025-09-06 08:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440019',
-        'Event announcement missing',
-        'No announcement for upcoming seminar.',
-        NULL,
-        'RESOLVED',
-        false,
-        '550e8400-e29b-41d4-a716-44665544000b',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440007',
-        '2025-09-06 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544001a',
-        'Computer lab software update',
-        'Need latest software in Lab 202.',
-        'Lab 202',
-        'IN_PROGRESS',
-        false,
-        '550e8400-e29b-41d4-a716-44665544000e',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440004',
-        '2025-09-06 11:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544001b',
-        'Cafeteria menu feedback',
-        'Request for more vegetarian options.',
-        'Cafeteria',
-        'PENDING',
-        true,
-        '550e8400-e29b-41d4-a716-44665544000d',
-        '550e8400-e29b-41d4-a716-446655440003',
-        '550e8400-e29b-41d4-a716-446655440006',
-        '2025-09-06 12:00:00'
-    );
+-- =================================================================
+-- STEP 2: USERS (Admin, Staff, Students)
+-- FIX: Dùng ID Hex hợp lệ (a... cho Admin, b... cho Staff, e... cho Student)
+-- =================================================================
 
--- Inserting feedback status history
-INSERT INTO
-    "FeedbackStatusHistory" (
-        "id",
-        "feedbackId",
-        "status",
-        "message",
-        "note",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544001c',
-        '550e8400-e29b-41d4-a716-446655440012',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        NULL,
-        '2025-09-02 09:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544001d',
-        '550e8400-e29b-41d4-a716-446655440013',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        'Initial submission note.',
-        '2025-09-02 10:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544001e',
-        '550e8400-e29b-41d4-a716-446655440013',
-        'IN_PROGRESS',
-        'Feedback is being processed by the department.',
-        NULL,
-        '2025-09-02 12:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544001f',
-        '550e8400-e29b-41d4-a716-446655440014',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        NULL,
-        '2025-09-03 08:35:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440020',
-        '550e8400-e29b-41d4-a716-446655440014',
-        'RESOLVED',
-        'Feedback has been resolved.',
-        'Addressed with vendor.',
-        '2025-09-03 15:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440021',
-        '550e8400-e29b-41d4-a716-446655440015',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        NULL,
-        '2025-09-04 14:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440022',
-        '550e8400-e29b-41d4-a716-446655440016',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        'Lighting issue reported.',
-        '2025-09-05 10:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440023',
-        '550e8400-e29b-41d4-a716-446655440017',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        NULL,
-        '2025-09-05 10:35:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440024',
-        '550e8400-e29b-41d4-a716-446655440017',
-        'IN_PROGRESS',
-        'Feedback is being processed by the department.',
-        'Investigating system.',
-        '2025-09-05 11:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440025',
-        '550e8400-e29b-41d4-a716-446655440019',
-        'PENDING',
-        'Feedback has been successfully submitted to the department.',
-        NULL,
-        '2025-09-06 09:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440026',
-        '550e8400-e29b-41d4-a716-446655440019',
-        'RESOLVED',
-        'Feedback has been resolved.',
-        'Announcement posted.',
-        '2025-09-06 10:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440027',
-        '550e8400-e29b-41d4-a716-44665544001a',
-        'IN_PROGRESS',
-        'Feedback is being processed by the department.',
-        NULL,
-        '2025-09-06 11:15:00'
-    );
+-- Admin (a000...)
+INSERT INTO "Users" ("id", "fullName", "password", "email", "role", "departmentId", "createdAt") VALUES
+('a0000000-0000-0000-0000-999999999999', 'Quản Trị Viên Hệ Thống', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'admin@uni.edu.vn', 'ADMIN', NULL, NOW());
 
--- Inserting forwarding logs
-INSERT INTO
-    "ForwardingLogs" (
-        "id",
-        "feedbackId",
-        "fromDepartmentId",
-        "toDepartmentId",
-        "userId",
-        "message",
-        "note",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440028',
-        '550e8400-e29b-41d4-a716-446655440012',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-44665544000a',
-        'Forwarded to IT support team for inspection.',
-        'Urgent: Projector critical for classes.',
-        '2025-09-02 09:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440029',
-        '550e8400-e29b-41d4-a716-446655440013',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440008',
-        'Forwarded to registrar for system check.',
-        NULL,
-        '2025-09-02 10:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544002a',
-        '550e8400-e29b-41d4-a716-446655440015',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-44665544000a',
-        'Forwarded to network team.',
-        'Check network logs for details.',
-        '2025-09-04 14:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544002b',
-        '550e8400-e29b-41d4-a716-446655440016',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440011',
-        'Forwarded to library maintenance team.',
-        NULL,
-        '2025-09-05 10:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544002c',
-        '550e8400-e29b-41d4-a716-446655440017',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440002',
-        '550e8400-e29b-41d4-a716-446655440008',
-        'Forwarded to scholarship office.',
-        'High priority: Affects multiple students.',
-        '2025-09-05 10:40:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544002d',
-        '550e8400-e29b-41d4-a716-44665544001a',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-44665544000a',
-        'Forwarded to computer lab admin.',
-        NULL,
-        '2025-09-06 11:10:00'
-    );
--- Inserting forum posts
-INSERT INTO
-    "ForumPosts" (
-        "id",
-        "feedbackId",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '550e8400-e29b-41d4-a716-446655440012',
-        '2025-09-02 09:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544002f',
-        '550e8400-e29b-41d4-a716-446655440014',
-        '2025-09-03 08:40:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440030',
-        '550e8400-e29b-41d4-a716-446655440015',
-        '2025-09-04 14:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440031',
-        '550e8400-e29b-41d4-a716-446655440016',
-        '2025-09-05 10:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440032',
-        '550e8400-e29b-41d4-a716-446655440018',
-        '2025-09-06 08:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440033',
-        '550e8400-e29b-41d4-a716-44665544001a',
-        '2025-09-06 11:05:00'
-    );
+-- Staff (b000...)
+INSERT INTO "Users" ("id", "fullName", "password", "email", "role", "departmentId", "createdAt") VALUES
+('b0000000-0000-0000-0000-000000000001', 'Cán bộ Thanh tra', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.thanhtra@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000001', NOW()),
+('b0000000-0000-0000-0000-000000000009', 'Cán bộ Quản trị CSVC', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.qtcsvc@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000009', NOW()),
+('b0000000-0000-0000-0000-000000000010', 'Chuyên viên CTSV', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ctsv@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000010', NOW()),
+('b0000000-0000-0000-0000-000000000011', 'Kế toán viên', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.khtc@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000011', NOW()),
+('b0000000-0000-0000-0000-000000000012', 'Giáo vụ Đào tạo', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.pdt@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000012', NOW()),
+('b0000000-0000-0000-0000-000000000016', 'Giáo vụ Khoa CNTT', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.fit@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000016', NOW()),
+('b0000000-0000-0000-0000-000000000027', 'NV Dịch vụ sinh viên', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.dvsv@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000027', NOW()),
+('b0000000-0000-0000-0000-000000000028', 'NV Dạy học số', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.elearning@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000028', NOW()),
+('b0000000-0000-0000-0000-000000000029', 'Kỹ thuật viên TTMT', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ttmt@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000029', NOW()),
+('b0000000-0000-0000-0000-000000000030', 'Giảng viên GDTC', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.gdtc@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000030', NOW()),
+('b0000000-0000-0000-0000-000000000034', 'Thủ thư Thư viện', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.thuvien@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000034', NOW()),
+('b0000000-0000-0000-0000-000000000035', 'Quản lý KTX', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ktx@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000035', NOW());
 
--- Inserting votes
-INSERT INTO
-    "Votes" (
-        "userId",
-        "postId",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '2025-09-02 09:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000b',
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '2025-09-02 09:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000d',
-        '550e8400-e29b-41d4-a716-44665544002f',
-        '2025-09-03 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-446655440030',
-        '2025-09-04 14:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000b',
-        '550e8400-e29b-41d4-a716-446655440030',
-        '2025-09-04 14:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-446655440031',
-        '2025-09-05 10:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000b',
-        '550e8400-e29b-41d4-a716-446655440032',
-        '2025-09-06 08:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544000e',
-        '550e8400-e29b-41d4-a716-446655440033',
-        '2025-09-06 11:10:00'
-    );
+-- Students (e000... - viết tắt Education, vì 'stud' chứa s,t,u là sai hex)
+INSERT INTO "Users" ("id", "fullName", "password", "email", "role", "departmentId", "createdAt") VALUES
+('e0000000-0000-0000-0000-000000000001', 'Nguyễn Văn An', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv01@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000002', 'Trần Thị Bích', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv02@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000003', 'Lê Hoàng Cường', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv03@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000004', 'Phạm Minh Dũng', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv04@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000005', 'Hoàng Thu Trang', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv05@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000006', 'Vũ Văn Long', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv06@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000010', 'Ngô Văn Kiên', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv10@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000011', 'Dương Thị Lan', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv11@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000012', 'Lý Văn Nam', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv12@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000013', 'Trịnh Thu Nga', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv13@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000014', 'Mai Văn Phúc', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv14@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000015', 'Đinh Thị Quyên', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv15@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000016', 'Lâm Văn Sơn', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv16@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000017', 'Phan Thanh Tâm', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv17@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000020', 'Hà Văn Tùng', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv20@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000021', 'Trương Thị Uyên', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv21@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000022', 'Nguyễn Đức Vinh', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv22@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000030', 'Đỗ Văn Giang', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv30@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000031', 'Ngô Thị Hà', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv31@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000032', 'Dương Văn Hải', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv32@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000033', 'Lý Thị Hạnh', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv33@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000040', 'Vương Văn Lâm', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv40@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000041', 'Hà Thị Linh', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv41@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000042', 'Trương Văn Lộc', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv42@st.uni.edu.vn', 'STUDENT', NULL, NOW()),
+('e0000000-0000-0000-0000-000000000043', 'Nguyễn Thị Lý', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'sv43@st.uni.edu.vn', 'STUDENT', NULL, NOW());
 
--- Inserting comments
--- Inserting comments: 7 gốc + 21 reply (student discussion) + 6 official staff responses
-INSERT INTO
-    "Comments" (
-        "id",
-        "postId",
-        "userId",
-        "parentId",
-        "content",
-        "createdAt"
-    )
-VALUES
-    -- Comment gốc 1 (Projector - post 44002e)
-    (
-        '550e8400-e29b-41d4-a716-446655440034',
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '550e8400-e29b-41d4-a716-44665544000b',
-        NULL,
-        'I faced the same issue in Room 101 yesterday!',
-        '2025-09-02 09:25:00'
-    ),
-    -- 3 reply (sinh viên bàn tán)
-    (
-        '550e8400-e29b-41d4-a716-446655440060',
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '550e8400-e29b-41d4-a716-446655440009',
-        '550e8400-e29b-41d4-a716-446655440034',
-        'Yeah, I was there too! The screen went black mid-lecture.',
-        '2025-09-02 09:40:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440061',
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '550e8400-e29b-41d4-a716-44665544000e',
-        '550e8400-e29b-41d4-a716-446655440034',
-        'We have a group presentation tomorrow... this is bad.',
-        '2025-09-02 09:45:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440062',
-        '550e8400-e29b-41d4-a716-44665544002e',
-        '550e8400-e29b-41d4-a716-44665544000d',
-        '550e8400-e29b-41d4-a716-446655440034',
-        'Anyone know if they’re fixing it today?',
-        '2025-09-02 09:50:00'
-    ),
+-- =================================================================
+-- STEP 3: FEEDBACKS
+-- Users refs: e000...
+-- =================================================================
+INSERT INTO "Feedbacks" ("id", "userId", "departmentId", "categoryId", "subject", "description", "location", "currentStatus", "isPrivate", "createdAt") VALUES
+('f0000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000001', 'd0000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000001', 'Máy lạnh phòng A302 chảy nước', 'Máy lạnh phía trên bảng chảy nước tong tỏng xuống bàn giáo viên.', 'Phòng A302', 'RESOLVED', false, '2025-09-05 08:30:00'),
+('f0000000-0000-0000-0000-000000000002', 'e0000000-0000-0000-0000-000000000002', 'd0000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000001', 'Bàn ghế gãy chân tại sảnh C', 'Có 2 cái ghế đá ở sảnh C bị gãy chân.', 'Sảnh C', 'RESOLVED', false, '2025-09-06 09:15:00'),
+('f0000000-0000-0000-0000-000000000003', 'e0000000-0000-0000-0000-000000000003', 'd0000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000001', 'Đèn hành lang khu B tối om', 'Buổi tối đi học về khu B rất tối.', 'Hành lang B2', 'RESOLVED', false, '2025-09-10 18:00:00'),
+('f0000000-0000-0000-0000-000000000004', 'e0000000-0000-0000-0000-000000000004', 'd0000000-0000-0000-0000-000000000035', 'c0000000-0000-0000-0000-000000000001', 'Ký túc xá mất nước liên tục', 'Phòng 405 KTX khu A mất nước 2 ngày nay chưa có lại.', 'KTX Khu A', 'RESOLVED', false, '2025-09-12 07:00:00'),
+('f0000000-0000-0000-0000-000000000005', 'e0000000-0000-0000-0000-000000000005', 'd0000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000001', 'Thang máy tòa nhà Trung tâm bị kẹt', 'Thang máy số 2 hay bị rung lắc.', 'Tòa nhà Trung tâm', 'IN_PROGRESS', false, '2025-09-20 10:00:00'),
+('f0000000-0000-0000-0000-000000000006', 'e0000000-0000-0000-0000-000000000010', 'd0000000-0000-0000-0000-000000000012', 'c0000000-0000-0000-0000-000000000002', 'Không đăng ký được môn Lập trình Web', 'Hệ thống báo lớp đầy dù sĩ số mới 30/60.', 'Hệ thống Đăng ký', 'RESOLVED', false, '2025-10-01 08:00:00'),
+('f0000000-0000-0000-0000-000000000007', 'e0000000-0000-0000-0000-000000000011', 'd0000000-0000-0000-0000-000000000012', 'c0000000-0000-0000-0000-000000000002', 'Trùng lịch thi môn Toán cao cấp', 'Em bị trùng lịch thi môn Toán và môn Triết.', NULL, 'IN_PROGRESS', true, '2025-10-05 09:30:00'),
+('f0000000-0000-0000-0000-000000000008', 'e0000000-0000-0000-0000-000000000012', 'd0000000-0000-0000-0000-000000000012', 'c0000000-0000-0000-0000-000000000002', 'Xin mở thêm lớp Tiếng Anh 3', 'Hiện tại các lớp Anh 3 đã full.', NULL, 'REJECTED', false, '2025-10-10 14:00:00'),
+('f0000000-0000-0000-0000-000000000011', 'e0000000-0000-0000-0000-000000000020', 'd0000000-0000-0000-0000-000000000011', 'c0000000-0000-0000-0000-000000000005', 'Học phí bị tính sai', 'Em đã đóng tiền nhưng hệ thống vẫn báo nợ.', NULL, 'IN_PROGRESS', true, '2025-10-28 09:00:00'),
+('f0000000-0000-0000-0000-000000000014', 'e0000000-0000-0000-0000-000000000030', 'd0000000-0000-0000-0000-000000000029', 'c0000000-0000-0000-0000-000000000001', 'Wifi thư viện không kết nối được', 'Tầng 4 thư viện wifi rất yếu.', 'Thư viện Tầng 4', 'PENDING', false, '2025-11-20 14:00:00'),
+('f0000000-0000-0000-0000-000000000016', 'e0000000-0000-0000-0000-000000000032', 'd0000000-0000-0000-0000-000000000028', 'c0000000-0000-0000-0000-000000000002', 'Lỗi nộp bài trên LMS', 'Hệ thống LMS báo lỗi 500 khi upload file.', 'Hệ thống LMS', 'PENDING', false, '2025-11-25 20:00:00'),
+('f0000000-0000-0000-0000-000000000017', 'e0000000-0000-0000-0000-000000000040', 'd0000000-0000-0000-0000-000000000027', 'c0000000-0000-0000-0000-000000000006', 'Mất mũ bảo hiểm ở nhà xe', 'Em gửi xe ở bãi xe sinh viên bị mất mũ bảo hiểm.', 'Nhà xe SV', 'REJECTED', false, '2025-11-10 16:00:00');
 
--- Comment gốc 2
-(
-    '550e8400-e29b-41d4-a716-446655440035',
-    '550e8400-e29b-41d4-a716-44665544002e',
-    '550e8400-e29b-41d4-a716-44665544000d',
-    NULL,
-    'Please fix this soon, it affects our classes.',
-    '2025-09-02 09:30:00'
-),
--- 3 reply
-(
-    '550e8400-e29b-41d4-a716-446655440063',
-    '550e8400-e29b-41d4-a716-44665544002e',
-    '550e8400-e29b-41d4-a716-44665544000b',
-    '550e8400-e29b-41d4-a716-446655440035',
-    'I had to use my phone to show slides last week!',
-    '2025-09-02 10:00:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440064',
-    '550e8400-e29b-41d4-a716-44665544002e',
-    '550e8400-e29b-41d4-a716-446655440009',
-    '550e8400-e29b-41d4-a716-446655440035',
-    'This happens every semester in Room 101...',
-    '2025-09-02 10:05:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440065',
-    '550e8400-e29b-41d4-a716-44665544002e',
-    '550e8400-e29b-41d4-a716-44665544000e',
-    '550e8400-e29b-41d4-a716-446655440035',
-    'Hope they replace it, not just restart...',
-    '2025-09-02 10:10:00'
-),
+-- =================================================================
+-- STEP 4: FORUM POSTS
+-- Fix ID: fp... -> 3000... (Số 3 đại diện cho Post)
+-- =================================================================
+INSERT INTO "ForumPosts" ("id", "feedbackId", "createdAt") VALUES
+('30000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', '2025-09-05 08:30:00'),
+('30000000-0000-0000-0000-000000000014', 'f0000000-0000-0000-0000-000000000014', '2025-11-20 14:00:00'),
+('30000000-0000-0000-0000-000000000016', 'f0000000-0000-0000-0000-000000000016', '2025-11-25 20:00:00');
 
--- Comment gốc 3 (Cafeteria - post 44002f)
-(
-    '550e8400-e29b-41d4-a716-446655440036',
-    '550e8400-e29b-41d4-a716-44665544002f',
-    '550e8400-e29b-41d4-a716-446655440009',
-    NULL,
-    'The food quality has been poor for weeks.',
-    '2025-09-03 09:10:00'
-),
--- 3 reply
-(
-    '550e8400-e29b-41d4-a716-446655440066',
-    '550e8400-e29b-41d4-a716-44665544002f',
-    '550e8400-e29b-41d4-a716-44665544000d',
-    '550e8400-e29b-41d4-a716-446655440036',
-    'The rice is always undercooked!',
-    '2025-09-03 09:30:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440067',
-    '550e8400-e29b-41d4-a716-44665544002f',
-    '550e8400-e29b-41d4-a716-44665544000b',
-    '550e8400-e29b-41d4-a716-446655440036',
-    'I stopped eating there after last Monday.',
-    '2025-09-03 09:35:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440068',
-    '550e8400-e29b-41d4-a716-44665544002f',
-    '550e8400-e29b-41d4-a716-44665544000e',
-    '550e8400-e29b-41d4-a716-446655440036',
-    'We need more vegetarian options too.',
-    '2025-09-03 09:40:00'
-),
+-- =================================================================
+-- STEP 5: STATUS HISTORY
+-- Fix ID: fh... -> 1000...
+-- =================================================================
+INSERT INTO "FeedbackStatusHistory" ("id", "feedbackId", "status", "message", "note", "createdAt") VALUES
+('10000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'IN_PROGRESS', 'Đã tiếp nhận phản ánh.', NULL, '2025-09-05 10:00:00'),
+('10000000-0000-0000-0000-000000000002', 'f0000000-0000-0000-0000-000000000001', 'RESOLVED', 'Đã vệ sinh máy lạnh.', 'Hoàn thành', '2025-09-07 14:00:00');
 
--- Comment gốc 4 (Wi-Fi - post 440030)
-(
-    '550e8400-e29b-41d4-a716-446655440037',
-    '550e8400-e29b-41d4-a716-446655440030',
-    '550e8400-e29b-41d4-a716-44665544000b',
-    NULL,
-    'Wi-Fi issues are worst during peak hours.',
-    '2025-09-04 14:25:00'
-),
--- 3 reply
-(
-    '550e8400-e29b-41d4-a716-446655440069',
-    '550e8400-e29b-41d4-a716-446655440030',
-    '550e8400-e29b-41d4-a716-446655440009',
-    '550e8400-e29b-41d4-a716-446655440037',
-    'Can’t even load Moodle from 12–2 PM.',
-    '2025-09-04 14:40:00'
-),
-(
-    '550e8400-e29b-41d4-a716-44665544006a',
-    '550e8400-e29b-41d4-a716-446655440030',
-    '550e8400-e29b-41d4-a716-44665544000e',
-    '550e8400-e29b-41d4-a716-446655440037',
-    'I use mobile data every day now.',
-    '2025-09-04 14:45:00'
-),
-(
-    '550e8400-e29b-41d4-a716-44665544006b',
-    '550e8400-e29b-41d4-a716-446655440030',
-    '550e8400-e29b-41d4-a716-44665544000d',
-    '550e8400-e29b-41d4-a716-446655440037',
-    'Same in the lab, drops every 5 minutes.',
-    '2025-09-04 14:50:00'
-),
+-- =================================================================
+-- STEP 6: FORWARDING LOGS
+-- Fix ID: fl... -> 2000...
+-- Staff User ID: b000...
+-- =================================================================
+INSERT INTO "ForwardingLogs" ("id", "feedbackId", "fromDepartmentId", "toDepartmentId", "userId", "message", "note", "createdAt") VALUES
+('20000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000011', 'd0000000-0000-0000-0000-000000000010', 'd0000000-0000-0000-0000-000000000011', 'b0000000-0000-0000-0000-000000000010', 'Chuyển phòng KHTC xử lý.', 'Nộp nhầm', '2025-10-28 09:30:00');
 
--- Comment gốc 5 (Library lighting - post 440031)
-(
-    '550e8400-e29b-41d4-a716-446655440038',
-    '550e8400-e29b-41d4-a716-446655440031',
-    '550e8400-e29b-41d4-a716-446655440010',
-    NULL,
-    'Flickering lights affect reading.',
-    '2025-09-05 10:20:00'
-),
--- 3 reply
-(
-    '550e8400-e29b-41d4-a716-44665544006c',
-    '550e8400-e29b-41d4-a716-446655440031',
-    '550e8400-e29b-41d4-a716-44665544000d',
-    '550e8400-e29b-41d4-a716-446655440038',
-    'It’s like a disco in the study area!',
-    '2025-09-05 10:35:00'
-),
-(
-    '550e8400-e29b-41d4-a716-44665544006d',
-    '550e8400-e29b-41d4-a716-446655440031',
-    '550e8400-e29b-41d4-a716-44665544000b',
-    '550e8400-e29b-41d4-a716-446655440038',
-    'Gives me a headache after 30 mins.',
-    '2025-09-05 10:40:00'
-),
-(
-    '550e8400-e29b-41d4-a716-44665544006e',
-    '550e8400-e29b-41d4-a716-446655440031',
-    '550e8400-e29b-41d4-a716-44665544009',
-    '550e8400-e29b-41d4-a716-446655440038',
-    'I moved to the 1st floor, better there.',
-    '2025-09-05 10:45:00'
-),
+-- =================================================================
+-- STEP 7: COMMENTS
+-- Fix ID: cmt... -> 4000...
+-- Target ID: 3000... (ForumPost)
+-- =================================================================
+INSERT INTO "Comments" ("id", "targetId", "targetType", "userId", "parentId", "content", "createdAt") VALUES
+('40000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 'FORUM_POST', 'e0000000-0000-0000-0000-000000000005', NULL, 'Xác nhận nhé, ướt hết vở.', '2025-09-05 09:00:00'),
+('40000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000014', 'FORUM_POST', 'e0000000-0000-0000-0000-000000000015', NULL, 'Wifi chán thực sự.', '2025-11-20 14:15:00'),
+('40000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000014', 'FORUM_POST', 'e0000000-0000-0000-0000-000000000017', NULL, 'Dùng 4G đi, kêu ca làm gì.', '2025-11-20 15:00:00');
 
--- Comment gốc 6 (Parking - post 440032)
-(
-    '550e8400-e29b-41d4-a716-446655440039',
-    '550e8400-e29b-41d4-a716-446655440032',
-    '550e8400-e29b-41d4-a716-446655440009',
-    NULL,
-    'Parking is always full in mornings.',
-    '2025-09-06 08:15:00'
-),
--- 3 reply
-(
-    '550e8400-e29b-41d4-a716-44665544006f',
-    '550e8400-e29b-41d4-a716-446655440032',
-    '550e8400-e29b-41d4-a716-44665544000e',
-    '550e8400-e29b-41d4-a716-446655440039',
-    'I circle for 20 mins every day!',
-    '2025-09-06 08:30:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440070',
-    '550e8400-e29b-41d4-a716-446655440032',
-    '550e8400-e29b-41d4-a716-44665544000d',
-    '550e8400-e29b-41d4-a716-446655440039',
-    'Even at 7:45 AM, no spot.',
-    '2025-09-06 08:35:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440071',
-    '550e8400-e29b-41d4-a716-446655440032',
-    '550e8400-e29b-41d4-a716-44665544000b',
-    '550e8400-e29b-41d4-a716-446655440039',
-    'I park at the mall and walk now.',
-    '2025-09-06 08:40:00'
-),
+-- =================================================================
+-- STEP 8: VOTES
+-- =================================================================
+INSERT INTO "Votes" ("userId", "postId", "createdAt") VALUES
+('e0000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000001', NOW()),
+('e0000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', NOW());
 
--- Comment gốc 7 (Software Lab - post 440033)
-(
-    '550e8400-e29b-41d4-a716-44665544003a',
-    '550e8400-e29b-41d4-a716-446655440033',
-    '550e8400-e29b-41d4-a716-44665544000e',
-    NULL,
-    'Software in Lab 202 is outdated.',
-    '2025-09-06 11:15:00'
-),
--- 3 reply
-(
-    '550e8400-e29b-41d4-a716-446655440072',
-    '550e8400-e29b-41d4-a716-446655440033',
-    '550e8400-e29b-41d4-a716-446655440009',
-    '550e8400-e29b-41d4-a716-44665544003a',
-    'Still on Python 3.8? We need 3.11!',
-    '2025-09-06 11:25:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440073',
-    '550e8400-e29b-41d4-a716-446655440033',
-    '550e8400-e29b-41d4-a716-44665544000b',
-    '550e8400-e29b-41d4-a716-44665544003a',
-    'VS Code keeps crashing on my project.',
-    '2025-09-06 11:30:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440074',
-    '550e8400-e29b-41d4-a716-446655440033',
-    '550e8400-e29b-41d4-a716-44665544000d',
-    '550e8400-e29b-41d4-a716-44665544003a',
-    'I use my laptop instead, lab is useless.',
-    '2025-09-06 11:35:00'
-),
+-- =================================================================
+-- STEP 9: REPORTS
+-- Fix ID: rpt... -> 5000...
+-- Comment ID: 4000...
+-- =================================================================
+INSERT INTO "CommentReports" ("id", "commentId", "userId", "reason", "status", "adminResponse", "createdAt") VALUES
+('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000005', 'e0000000-0000-0000-0000-000000000015', 'Ngôn từ toxic.', 'PENDING', NULL, '2025-11-20 16:00:00');
 
--- 6 OFFICIAL STAFF RESPONSES (same format)
-(
-    '550e8400-e29b-41d4-a716-446655440075',
-    '550e8400-e29b-41d4-a716-44665544002e',
-    '550e8400-e29b-41d4-a716-44665544000a',
-    NULL,
-    'We have noted your feedback regarding the projector in Room 101 and will address it promptly. Rest assured, the issue is being handled.',
-    '2025-09-02 14:00:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440076',
-    '550e8400-e29b-41d4-a716-44665544002f',
-    '550e8400-e29b-41d4-a716-44665544000c',
-    NULL,
-    'We have noted your feedback about cafeteria food quality and will address it with the vendor. Rest assured, improvements are in progress.',
-    '2025-09-03 12:00:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440077',
-    '550e8400-e29b-41d4-a716-446655440030',
-    '550e8400-e29b-41d4-a716-44665544000a',
-    NULL,
-    'We have noted your feedback on Wi-Fi connectivity and will address it with the network team. Rest assured, we are working on a solution.',
-    '2025-09-05 09:00:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440078',
-    '550e8400-e29b-41d4-a716-446655440031',
-    '550e8400-e29b-41d4-a716-446655440011',
-    NULL,
-    'We have noted your feedback about library lighting and will address it with maintenance. Rest assured, the issue is under review.',
-    '2025-09-05 15:00:00'
-),
-(
-    '550e8400-e29b-41d4-a716-446655440079',
-    '550e8400-e29b-41d4-a716-446655440032',
-    '550e8400-e29b-41d4-a716-446655440008',
-    NULL,
-    'We have noted your feedback on parking availability and will address it with campus planning. Rest assured, additional solutions are being explored.',
-    '2025-09-09 08:00:00'
-),
-(
-    '550e8400-e29b-41d4-a716-44665544007a',
-    '550e8400-e29b-41d4-a716-446655440033',
-    '550e8400-e29b-41d4-a716-44665544000a',
-    NULL,
-    'We have noted your feedback on Lab 202 software and will address it with the IT team. Rest assured, an update is being prepared.',
-    '2025-09-07 09:00:00'
-);
+-- =================================================================
+-- STEP 10: ANNOUNCEMENTS
+-- Fix ID: ann... -> 6000...
+-- Staff User ID: b000...
+-- =================================================================
+INSERT INTO "Announcements" ("id", "title", "content", "userId", "createdAt") VALUES
+('60000000-0000-0000-0000-000000000001', 'Thông báo học bổng', 'Nội dung thông báo...', 'b0000000-0000-0000-0000-000000000010', '2025-11-01 08:00:00'),
+('60000000-0000-0000-0000-000000000002', 'Lịch đăng ký môn học', 'Nội dung đăng ký...', 'b0000000-0000-0000-0000-000000000012', '2025-11-10 09:00:00'),
+('60000000-0000-0000-0000-000000000003', 'Bảo trì hệ thống', 'Nội dung bảo trì...', 'b0000000-0000-0000-0000-000000000029', '2025-11-23 16:00:00');
 
--- Inserting comment reports
-INSERT INTO
-    "CommentReports" (
-        "id",
-        "commentId",
-        "userId",
-        "reason",
-        "status",
-        "adminResponse",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544003b',
-        '550e8400-e29b-41d4-a716-446655440036',
-        '550e8400-e29b-41d4-a716-44665544000b',
-        'Inappropriate tone',
-        'PENDING',
-        NULL,
-        '2025-09-03 09:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544003c',
-        '550e8400-e29b-41d4-a716-446655440037',
-        '550e8400-e29b-41d4-a716-44665544000d',
-        'Off-topic comment',
-        'RESOLVED',
-        'Comment reviewed, no action needed.',
-        '2025-09-04 14:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544003d',
-        '550e8400-e29b-41d4-a716-446655440039',
-        '550e8400-e29b-41d4-a716-44665544000f',
-        'Duplicate comment',
-        'PENDING',
-        NULL,
-        '2025-09-06 08:25:00'
-    );
+-- =================================================================
+-- STEP 11: CONVERSATIONS & MESSAGES
+-- Fix Conv ID: conv... -> 7000...
+-- Fix Msg ID: msg... -> 8000...
+-- =================================================================
+INSERT INTO "ClarificationConversations" ("id", "subject", "feedbackId", "isClosed", "userId", "createdAt") VALUES
+('70000000-0000-0000-0000-000000000001', 'Yêu cầu minh chứng', 'f0000000-0000-0000-0000-000000000007', true, 'e0000000-0000-0000-0000-000000000011', '2025-10-05 10:00:00');
 
--- Inserting clarification conversations
-INSERT INTO
-    "ClarificationConversations" (
-        "id",
-        "subject",
-        "feedbackId",
-        "isClosed",
-        "userId",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544003e',
-        'Clarification on Course Registration Issue',
-        '550e8400-e29b-41d4-a716-446655440013',
-        false,
-        '550e8400-e29b-41d4-a716-44665544000b',
-        '2025-09-02 10:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544003f',
-        'Follow-up on Cafeteria Food Quality',
-        '550e8400-e29b-41d4-a716-446655440014',
-        true,
-        '550e8400-e29b-41d4-a716-44665544000d',
-        '2025-09-03 08:45:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440040',
-        'Details needed for Scholarship Application Problem',
-        '550e8400-e29b-41d4-a716-446655440017',
-        false,
-        '550e8400-e29b-41d4-a716-446655440010',
-        '2025-09-05 10:40:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440041',
-        'Regarding Cafeteria Menu Feedback',
-        '550e8400-e29b-41d4-a716-44665544001b',
-        false,
-        '550e8400-e29b-41d4-a716-44665544000d',
-        '2025-09-06 12:05:00'
-    );
+INSERT INTO "Messages" ("id", "conversationId", "userId", "content", "createdAt") VALUES
+('80000000-0000-0000-0000-000000000001', '70000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000012', 'Gửi ảnh minh chứng đi em.', '2025-10-05 10:00:00'),
+('80000000-0000-0000-0000-000000000002', '70000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000011', 'Dạ đây ạ.', '2025-10-05 10:15:00');
 
--- Inserting messages
-INSERT INTO
-    "Messages" (
-        "id",
-        "conversationId",
-        "userId",
-        "content",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440042',
-        '550e8400-e29b-41d4-a716-44665544003e',
-        '550e8400-e29b-41d4-a716-44665544000b',
-        'Can you specify which course caused the error?',
-        '2025-09-02 10:15:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440043',
-        '550e8400-e29b-41d4-a716-44665544003e',
-        '550e8400-e29b-41d4-a716-446655440008',
-        'It was CS101, error code 503.',
-        '2025-09-02 10:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440044',
-        '550e8400-e29b-41d4-a716-44665544003f',
-        '550e8400-e29b-41d4-a716-44665544000d',
-        'Can you confirm if the vendor was changed?',
-        '2025-09-03 08:50:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440045',
-        '550e8400-e29b-41d4-a716-44665544003f',
-        '550e8400-e29b-41d4-a716-44665544000c',
-        'Yes, new vendor contract signed.',
-        '2025-09-03 09:00:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440046',
-        '550e8400-e29b-41d4-a716-446655440040',
-        '550e8400-e29b-41d4-a716-446655440010',
-        'Scholarship application shows error for valid entries.',
-        '2025-09-05 10:45:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440047',
-        '550e8400-e29b-41d4-a716-446655440040',
-        '550e8400-e29b-41d4-a716-446655440008',
-        'We are checking the system logs.',
-        '2025-09-05 10:50:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440048',
-        '550e8400-e29b-41d4-a716-446655440041',
-        '550e8400-e29b-41d4-a716-44665544000d',
-        'Please add more vegetarian meals.',
-        '2025-09-06 12:10:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440049',
-        '550e8400-e29b-41d4-a716-446655440041',
-        '550e8400-e29b-41d4-a716-44665544000c',
-        'Cafeteria team notified.',
-        '2025-09-06 12:20:00'
-    );
+-- =================================================================
+-- STEP 12: FILE ATTACHMENTS
+-- Fix ID: fa... -> 9000...
+-- =================================================================
+INSERT INTO "FileAttachments" ("id", "targetId", "targetType", "fileName", "fileUrl", "fileType", "fileSize", "createdAt") VALUES
+('90000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'FEEDBACK', 'may-lanh.jpg', 'https://storage.u.edu/1.jpg', 'image/jpeg', 204800, '2025-09-05 08:30:00'),
+('90000000-0000-0000-0000-000000000020', '60000000-0000-0000-0000-000000000001', 'ANNOUNCEMENT', 'ke-hoach.pdf', 'https://storage.u.edu/2.pdf', 'application/pdf', 2000, '2025-11-01 08:00:00'),
+('90000000-0000-0000-0000-000000000030', '80000000-0000-0000-0000-000000000002', 'MESSAGE', 'anh.jpg', 'https://storage.u.edu/3.jpg', 'image/jpeg', 102400, '2025-10-05 10:15:00');
 
--- Inserting file attachments for messages
-INSERT INTO
-    "FileAttachmentForMessage" (
-        "id",
-        "messageId",
-        "fileName",
-        "fileUrl"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544005b',
-        '550e8400-e29b-41d4-a716-446655440043',
-        'error_screenshot.png',
-        'https://example.com/files/error_screenshot.png'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544005c',
-        '550e8400-e29b-41d4-a716-446655440046',
-        'application_error.jpg',
-        'https://example.com/files/application_error.jpg'
-    );
 
--- Inserting file attachments for feedback
-INSERT INTO
-    "FileAttachmentForFeedback" (
-        "id",
-        "feedbackId",
-        "fileName",
-        "fileUrl"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544004a',
-        '550e8400-e29b-41d4-a716-446655440012',
-        'projector_issue.jpg',
-        'https://example.com/files/projector_issue.jpg'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544004b',
-        '550e8400-e29b-41d4-a716-446655440015',
-        'wifi_log.txt',
-        'https://example.com/files/wifi_log.txt'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544004c',
-        '550e8400-e29b-41d4-a716-446655440017',
-        'scholarship_error.png',
-        'https://example.com/files/scholarship_error.png'
-    );
-
--- Inserting announcements
-INSERT INTO
-    "Announcements" (
-        "id",
-        "title",
-        "content",
-        "createdAt",
-        "userId"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-44665544004d',
-        'System Maintenance',
-        'Scheduled maintenance on 2025-09-10.',
-        '2025-09-05 12:00:00',
-        '550e8400-e29b-41d4-a716-446655440008'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544004e',
-        'New Cafeteria Menu',
-        'Updated menu starting next week.',
-        '2025-09-06 10:00:00',
-        '550e8400-e29b-41d4-a716-44665544000c'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544004f',
-        'Parking Update',
-        'Additional parking spots available.',
-        '2025-09-06 08:30:00',
-        '550e8400-e29b-41d4-a716-44665544000c'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440050',
-        'Library Lighting Fixed',
-        'All library lights repaired.',
-        '2025-09-05 11:00:00',
-        '550e8400-e29b-41d4-a716-446655440011'
-    );
-
--- Inserting file attachments for announcements
-INSERT INTO
-    "FileAttachmentForAnnouncement" (
-        "id",
-        "announcementId",
-        "fileName",
-        "fileUrl"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440051',
-        '550e8400-e29b-41d4-a716-44665544004e',
-        'new_menu.pdf',
-        'https://example.com/files/new_menu.pdf'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440052',
-        '550e8400-e29b-41d4-a716-446655440050',
-        'lighting_report.pdf',
-        'https://example.com/files/lighting_report.pdf'
-    );
-
--- Inserting notifications
-INSERT INTO
-    "Notifications" (
-        "id",
-        "userId",
-        "content",
-        "notificationType",
-        "isRead",
-        "createdAt"
-    )
-VALUES (
-        '550e8400-e29b-41d4-a716-446655440053',
-        '550e8400-e29b-41d4-a716-446655440009',
-        'Your feedback on projector issue was received.',
-        'FEEDBACK_NOTIFICATION',
-        true,
-        '2025-09-02 09:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440054',
-        '550e8400-e29b-41d4-a716-44665544000b',
-        'Your comment on Wi-Fi post was reported.',
-        'COMMENT_NOTIFICATION',
-        false,
-        '2025-09-04 14:30:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440055',
-        '550e8400-e29b-41d4-a716-44665544000d',
-        'New announcement: New Cafeteria Menu.',
-        'MESSAGE_NOTIFICATION',
-        true,
-        '2025-09-06 10:05:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440056',
-        '550e8400-e29b-41d4-a716-446655440009',
-        'Your feedback on Wi-Fi was upvoted.',
-        'VOTE_NOTIFICATION',
-        false,
-        '2025-09-04 14:20:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440057',
-        '550e8400-e29b-41d4-a716-44665544000e',
-        'Your feedback on library lighting was received.',
-        'FEEDBACK_NOTIFICATION',
-        true,
-        '2025-09-05 10:06:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440058',
-        '550e8400-e29b-41d4-a716-446655440010',
-        'Scholarship system issue under investigation.',
-        'FEEDBACK_NOTIFICATION',
-        false,
-        '2025-09-05 10:45:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-446655440059',
-        '550e8400-e29b-41d4-a716-446655440009',
-        'Your comment on parking post was reported.',
-        'COMMENT_NOTIFICATION',
-        false,
-        '2025-09-06 08:25:00'
-    ),
-    (
-        '550e8400-e29b-41d4-a716-44665544005a',
-        '550e8400-e29b-41d4-a716-44665544000d',
-        'Cafeteria team responded to your request.',
-        'MESSAGE_NOTIFICATION',
-        true,
-        '2025-09-06 12:20:00'
-    );

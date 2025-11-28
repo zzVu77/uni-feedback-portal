@@ -8,7 +8,6 @@ import {
   Building2,
   CalendarClock,
   ChevronRight,
-  History,
   LayoutDashboard,
   Loader,
   TextInitial,
@@ -245,7 +244,7 @@ export const myFeedbacksHistoryColumns: ColumnDef<MyFeedbackHistoryItem>[] = [
     cell: ({ row }) => {
       const feedback = row.original;
       return (
-        <Link href={`/my-feedbacks/${feedback.id}`}>
+        <Link href={`/student/my-feedbacks/${feedback.id}`}>
           <Button
             variant="ghost"
             className="h-8 w-8 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-transparent hover:text-black/80"

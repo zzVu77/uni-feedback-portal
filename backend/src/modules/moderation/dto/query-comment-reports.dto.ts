@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsOptional, Min } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ReportStatus } from '@prisma/client';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, Min } from 'class-validator';
 
 export class QueryCommentReportsDto {
   @ApiPropertyOptional({ description: 'Page number', example: 1 })
@@ -23,6 +23,5 @@ export class QueryCommentReportsDto {
     enum: ReportStatus,
   })
   @IsOptional()
-  @IsEnum(ReportStatus)
   status?: ReportStatus;
 }

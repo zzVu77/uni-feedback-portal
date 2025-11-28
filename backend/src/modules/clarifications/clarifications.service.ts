@@ -13,61 +13,57 @@ import {
   ClarificationListResponseDto,
   MessageDto,
 } from './dto';
-import { Prisma, UserRole } from '@prisma/client';
+import { FileTargetType, Prisma, UserRole } from '@prisma/client';
+import { UploadsService } from '../uploads/uploads.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class ClarificationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
-  async CreateClarificationConversation(
+  async createClarificationConversation(
     dto: CreateClarificationDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationDetailDto> {
     const { feedbackId, subject, initialMessage } = dto;
-    const user = await this.prisma.users.findUnique({
-      where: { id: userId },
-    });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found.`);
-    }
-    if (user.role !== UserRole.DEPARTMENT_STAFF) {
+
+    if (actor.role !== UserRole.DEPARTMENT_STAFF) {
       throw new ForbiddenException(
         `Only department staff can start a clarification conversation.`,
       );
     }
     const feedback = await this.prisma.feedbacks.findUnique({
-      where: { id: feedbackId },
+      where: { id: feedbackId, departmentId: actor.departmentId },
     });
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    const conversation = await this.prisma.$transaction(async (tx) => {
-      const newConversation = await tx.clarificationConversations.create({
-        data: {
-          subject,
-          feedbackId,
-          userId,
+    const conversation = await this.prisma.clarificationConversations.create({
+      data: {
+        subject,
+        feedbackId,
+        userId: actor.sub,
+        messages: {
+          create: initialMessage
+            ? {
+                userId: actor.sub,
+                content: initialMessage,
+                // Không xử lý attachments ở đây nữa
+              }
+            : undefined,
         },
-      });
-
-      const messages = [];
-      if (initialMessage) {
-        const newMessage = await tx.messages.create({
-          data: {
-            conversationId: newConversation.id,
-            userId,
-            content: initialMessage,
-          },
+      },
+      include: {
+        messages: {
           include: {
             user: { select: { id: true, fullName: true, role: true } },
-            attachments: true,
           },
-        });
-        messages.push(newMessage);
-      }
-
-      return { ...newConversation, messages };
+        },
+      },
     });
 
     return {
@@ -80,21 +76,21 @@ export class ClarificationsService {
         content: msg.content ?? 'Message not found',
         createdAt: msg.createdAt.toISOString(),
         user: msg.user,
-        attachments: msg.attachments,
+        attachments: [],
       })),
     };
   }
 
-  async GetAllClarificationsConversations(
+  async getAllClarificationsConversations(
     query: QueryClarificationsDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationListResponseDto> {
     const { page = 1, pageSize = 10, feedbackId, isClosed } = query;
 
     const where: Prisma.ClarificationConversationsWhereInput = {
-      OR: [{ userId }, { feedback: { userId } }],
+      OR: [{ userId: actor.sub }, { feedback: { userId: actor.sub } }],
       ...(feedbackId && { feedbackId }),
-      ...(isClosed && { isClosed: isClosed === 'true' }),
+      ...(isClosed !== undefined && { isClosed: isClosed === 'true' }),
     };
 
     const [items, total] = await this.prisma.$transaction([
@@ -118,19 +114,18 @@ export class ClarificationsService {
     };
   }
 
-  async GetClarificationConversationDetail(
+  async getClarificationConversationDetail(
     conversationId: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationDetailDto> {
     const conversation =
       await this.prisma.clarificationConversations.findUnique({
         where: { id: conversationId },
         include: {
-          feedback: { select: { userId: true } },
+          feedback: { select: { userId: true, isPrivate: true } },
           messages: {
             include: {
               user: { select: { id: true, fullName: true, role: true } },
-              attachments: true,
             },
             orderBy: { createdAt: 'asc' },
           },
@@ -144,13 +139,20 @@ export class ClarificationsService {
     }
 
     if (
-      conversation.userId !== userId &&
-      conversation.feedback.userId !== userId
+      conversation.userId !== actor.sub &&
+      conversation.feedback.userId !== actor.sub
     ) {
       throw new ForbiddenException(
         'You are not authorized to view this conversation.',
       );
     }
+
+    const messageIds = conversation.messages.map((msg) => msg.id);
+    const attachmentsMap =
+      await this.uploadsService.getAttachmentsForManyTargets(
+        messageIds,
+        FileTargetType.MESSAGE,
+      );
 
     return {
       id: conversation.id,
@@ -161,16 +163,20 @@ export class ClarificationsService {
         id: msg.id,
         content: msg.content ?? 'Message not found',
         createdAt: msg.createdAt.toISOString(),
-        user: msg.user,
-        attachments: msg.attachments,
+        user:
+          conversation.feedback.isPrivate &&
+          msg.user.id === conversation.feedback.userId
+            ? { ...msg.user, fullName: 'Anonymous' }
+            : msg.user,
+        attachments: attachmentsMap[msg.id] || [],
       })),
     };
   }
 
-  async CreateMessage(
+  async createMessage(
     conversationId: string,
     dto: CreateMessageDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<MessageDto> {
     const { content, attachments } = dto;
 
@@ -195,8 +201,8 @@ export class ClarificationsService {
     }
 
     if (
-      conversation.userId !== userId &&
-      conversation.feedback.userId !== userId
+      conversation.userId !== actor.sub &&
+      conversation.feedback.userId !== actor.sub
     ) {
       throw new ForbiddenException(
         'You are not authorized to post in this conversation.',
@@ -206,36 +212,41 @@ export class ClarificationsService {
     const message = await this.prisma.messages.create({
       data: {
         conversationId,
-        userId,
+        userId: actor.sub,
         content,
-        ...(attachments && {
-          attachments: {
-            create: attachments.map((file) => ({
-              fileName: file.fileName,
-              fileUrl: file.fileUrl,
-            })),
-          },
-        }),
       },
       include: {
         user: { select: { id: true, fullName: true, role: true } },
-        attachments: true,
       },
     });
+
+    if (attachments && attachments.length > 0) {
+      await this.uploadsService.updateAttachmentsForTarget(
+        message.id,
+        FileTargetType.MESSAGE,
+        attachments,
+      );
+    }
+
+    const messageAttachments =
+      await this.uploadsService.getAttachmentsForTarget(
+        message.id,
+        FileTargetType.MESSAGE,
+      );
 
     return {
       id: message.id,
       content: message.content ?? 'Message not found',
       createdAt: message.createdAt.toISOString(),
       user: message.user,
-      attachments: message.attachments,
+      attachments: messageAttachments,
     };
   }
 
-  async CloseClarificationConversation(
+  async closeClarificationConversation(
     conversationId: string,
     dto: CloseClarificationDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<ClarificationDetailDto> {
     const conversation =
       await this.prisma.clarificationConversations.findUnique({
@@ -248,14 +259,27 @@ export class ClarificationsService {
       );
     }
 
-    if (conversation.userId !== userId) {
+    if (conversation.userId !== actor.sub) {
       throw new ForbiddenException(
         'Only the initiator can close this conversation.',
       );
     }
 
-    const updatedConversation =
-      await this.prisma.clarificationConversations.update({
+    // use transaction to ensure atomicity
+    const updatedConversation = await this.prisma.$transaction(async (tx) => {
+      // 1. if there's a message, create it first
+      if (dto.message) {
+        await tx.messages.create({
+          data: {
+            conversationId: conversationId,
+            userId: actor.sub,
+            content: dto.message,
+          },
+        });
+      }
+
+      // 2.then update the conversation to closed
+      return await tx.clarificationConversations.update({
         where: { id: conversationId },
         data: {
           isClosed: dto.isClosed,
@@ -264,12 +288,19 @@ export class ClarificationsService {
           messages: {
             include: {
               user: { select: { id: true, fullName: true, role: true } },
-              attachments: true,
             },
             orderBy: { createdAt: 'asc' },
           },
         },
       });
+    });
+
+    const messageIds = updatedConversation.messages.map((msg) => msg.id);
+    const attachmentsMap =
+      await this.uploadsService.getAttachmentsForManyTargets(
+        messageIds,
+        FileTargetType.MESSAGE,
+      );
 
     return {
       id: updatedConversation.id,
@@ -281,7 +312,7 @@ export class ClarificationsService {
         content: msg.content ?? 'Message not found',
         createdAt: msg.createdAt.toISOString(),
         user: msg.user,
-        attachments: msg.attachments,
+        attachments: attachmentsMap[msg.id] || [],
       })),
     };
   }

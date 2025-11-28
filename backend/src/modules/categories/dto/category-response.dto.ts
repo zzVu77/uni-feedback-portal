@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
 export class CategoryDto {
@@ -41,3 +41,7 @@ export class CategoryListResponseDto {
   })
   total: number;
 }
+export class CategoryOptionResponseDto extends PickType(CategoryDto, [
+  'id',
+  'name',
+] as const) {}

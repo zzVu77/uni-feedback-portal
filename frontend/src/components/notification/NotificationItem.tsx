@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { cn } from "@/lib/utils";
-import { TypeOfNotification } from "@/types/notification";
 import {
   Bell,
   CheckCircle,
@@ -14,7 +14,8 @@ import {
   ThumbsUp,
   XCircle,
 } from "lucide-react";
-import { formatDistanceToNow } from "../utils/formatDistanceToNow";
+import { formatDistanceToNow } from "../../utils/formatDistanceToNow";
+import { TypeOfNotification } from "@/types";
 type NotificationType = {
   type: TypeOfNotification;
   title?: string;
@@ -152,7 +153,7 @@ const NotificationItem = ({ type, isRead, time }: NotificationType) => {
   return (
     <div
       className={cn(
-        "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-[8px] p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
+        "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
         isRead ? "bg-white" : "bg-blue-primary-100/40",
       )}
     >

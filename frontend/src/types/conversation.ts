@@ -1,0 +1,35 @@
+import { BaseFilter, FileAttachmentDto } from "./common-type";
+
+export type Message = {
+  id: string;
+  content: string;
+  user: {
+    id: string;
+    fullName: string;
+    role: "STUDENT" | "DEPARTMENT_STAFF";
+  };
+  createdAt: string;
+  attachments?: FileAttachmentDto[];
+};
+export type ConversationDetail = {
+  id: string;
+  subject: string;
+  isClosed: boolean;
+  createdAt: string;
+  messages: Message[];
+};
+export type ConversationSummary = Omit<ConversationDetail, "messages">;
+export type ConversationFilter = Omit<BaseFilter, "limit" | "q"> & {
+  feedbackId?: string;
+  isClosed?: boolean;
+};
+export type ConversationBodyParams = {
+  feedbackId: string;
+  subject: string;
+  initialMessage: string;
+  // attachments?: FileAttachmentDto[];
+};
+export type MessageBodyParams = {
+  content: string;
+  attachments?: FileAttachmentDto[];
+};

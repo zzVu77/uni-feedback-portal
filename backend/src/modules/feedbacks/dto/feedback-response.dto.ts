@@ -1,6 +1,13 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { FeedbackStatus } from '@prisma/client';
-
+import { FileAttachmentDto } from 'src/modules/uploads/dto/file-attachment.dto';
+export type ExtendedStatus = FeedbackStatus | 'FORWARDED';
+export type UnifiedStatusTimeline = {
+  status: ExtendedStatus;
+  message: string;
+  note: string | null;
+  createdAt: string;
+}[];
 export class FeedbackDetail {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-44665544001c',
@@ -30,7 +37,11 @@ export class FeedbackDetail {
     description: 'Indicates if feedback is private',
   })
   isPrivate: boolean;
-
+  @ApiProperty({
+    example: false,
+    description: 'Indicates if feedback is public to forum posts',
+  })
+  isPublic: boolean;
   @ApiProperty({
     example: {
       id: '550e8400-e29b-41d4-a716-44665544001c',
@@ -85,60 +96,21 @@ export class FeedbackDetail {
       },
     ],
   })
-  statusHistory: Array<{
-    status: string;
-    message: string;
-    note: string | null;
-    createdAt: string;
-  }>;
-
-  @ApiProperty({
-    description:
-      'Records of how the feedback was forwarded between departments, including department names',
-    example: [
-      {
-        id: '550e8400-e29b-41d4-a716-44665544001c',
-        fromDepartment: {
-          id: 2,
-          name: 'Support',
-        },
-        toDepartment: {
-          id: '550e8400-e29b-41d4-a716-44665544002c',
-          name: 'Technical',
-        },
-        message: 'Forwarded to technical department for investigation',
-        createdAt: '2025-10-15T14:00:00Z',
-      },
-    ],
-  })
-  forwardingLogs: Array<{
-    id: string;
-    fromDepartment: { id: string; name: string };
-    toDepartment: { id: string; name: string };
-    message: string | null;
-    createdAt: string;
-  }>;
+  statusHistory: UnifiedStatusTimeline;
 
   @ApiProperty({
     description: 'List of attached files related to the feedback',
-    example: [
-      {
-        id: '550e8400-e29b-41d4-a716-44665544001c',
-        fileName: 'screenshot.png',
-        fileUrl: 'https://example.com/files/screenshot.png',
-      },
-    ],
+    type: [FileAttachmentDto],
   })
-  fileAttachments: Array<{ id: string; fileName: string; fileUrl: string }>;
+  fileAttachments: FileAttachmentDto[];
 }
 
 export class FeedbackSummary extends OmitType(FeedbackDetail, [
   'description',
   'statusHistory',
-  'forwardingLogs',
   'fileAttachments',
+  'isPublic',
 ] as const) {}
-// Response DTO for querying user's feedbacks with pagination
 export class GetMyFeedbacksResponseDto {
   @ApiProperty({
     type: [FeedbackSummary],

@@ -1,0 +1,38 @@
+import {
+  CreateFeedbackPayload,
+  FeedbackDetail,
+  FeedbackHeaderType,
+} from "@/types/feedback";
+
+export const mapFeedbackDetailToHeader = (
+  feedbackDetail: FeedbackDetail,
+): FeedbackHeaderType => {
+  return {
+    id: feedbackDetail.id,
+    subject: feedbackDetail.subject,
+    description: feedbackDetail.description,
+    location: feedbackDetail.location,
+    currentStatus: feedbackDetail.currentStatus,
+    isPrivate: feedbackDetail.isPrivate,
+    createdAt: feedbackDetail.createdAt,
+    category: feedbackDetail.category,
+    department: feedbackDetail.department,
+    student: feedbackDetail.student,
+    fileAttachments: feedbackDetail.fileAttachments || [],
+  };
+};
+
+export const mapFeedbackDetailToBodyParams = (
+  feedbackDetail: FeedbackDetail,
+): CreateFeedbackPayload => {
+  return {
+    isAnonymous: feedbackDetail.isPrivate,
+    subject: feedbackDetail.subject,
+    description: feedbackDetail.description,
+    departmentId: feedbackDetail.department.id,
+    categoryId: feedbackDetail.category.id,
+    location: feedbackDetail.location,
+    isPublic: feedbackDetail.isPublic,
+    fileAttachments: feedbackDetail.fileAttachments || [],
+  };
+};

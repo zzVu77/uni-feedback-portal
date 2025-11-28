@@ -8,7 +8,7 @@ import {
   Delete,
   Query,
   HttpCode,
-  // UseGuards, // You would uncomment this when you implement authentication
+  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import {
@@ -18,7 +18,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserPayload } from 'src/shared/interfaces/user-payload.interface';
 import { UserRole } from '@prisma/client';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import {
@@ -28,22 +27,24 @@ import {
   CategoryParamDto,
   UpdateCategoryDto,
   UpdateCategoryStatusDto,
+  CategoryOptionResponseDto,
+  QueryCategoriesOptionDto,
 } from './dto';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('Categories')
 @ApiBearerAuth()
 @Controller('categories')
-// @UseGuards(AuthGuard)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  private readonly dummyUser: UserPayload = {
-    userId: '550e8400-e29b-41d4-a716-44665544000a',
-    role: UserRole.ADMIN,
-  };
-
   @Post()
-  @ApiOperation({ summary: 'Create a new category' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Create a new category (Admin only)' })
   @ApiBody({ type: CreateCategoryDto })
   @ApiResponse({
     status: 201,
@@ -52,11 +53,11 @@ export class CategoriesController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request. Invalid data.' })
   @ApiResponse({ status: 403, description: 'Forbidden resource.' })
-  CreateCategory(
+  createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
+    @ActiveUser() user: ActiveUserData,
   ): Promise<CategoryDto> {
-    const user = this.dummyUser;
-    return this.categoriesService.CreateCategory(createCategoryDto, user);
+    return this.categoriesService.createCategory(createCategoryDto, user);
   }
 
   @Get()
@@ -69,26 +70,28 @@ export class CategoriesController {
     description: 'A list of categories.',
     type: CategoryListResponseDto,
   })
-  GetAllCategories(
+  getAllCategories(
     @Query() query: QueryCategoriesDto,
   ): Promise<CategoryListResponseDto> {
-    return this.categoriesService.GetAllCategories(query);
+    return this.categoriesService.getAllCategories(query);
+  }
+  @Get('options')
+  @ApiOperation({ summary: 'Get a list of categories' })
+  @ApiResponse({
+    status: 200,
+    description: 'A list of categories.',
+    type: [CategoryOptionResponseDto],
+  })
+  getCategoryOptions(
+    @Query() query: QueryCategoriesOptionDto,
+  ): Promise<CategoryOptionResponseDto[]> {
+    return this.categoriesService.getCategoryOptions(query);
   }
 
-  // @Get(':categoryId')
-  // @ApiOperation({ summary: 'Get a single category by ID' })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Category details retrieved successfully.',
-  //   type: CategoryDto,
-  // })
-  // @ApiResponse({ status: 404, description: 'Category not found.' })
-  // GetCategoryById(@Param() params: CategoryParamDto): Promise<CategoryDto> {
-  //   return this.categoriesService.GetCategoryById(params.categoryId);
-  // }
-
   @Patch(':categoryId')
-  @ApiOperation({ summary: 'Update a category' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Update a category (Admin only)' })
   @ApiBody({ type: UpdateCategoryDto })
   @ApiResponse({
     status: 200,
@@ -97,13 +100,12 @@ export class CategoriesController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden resource.' })
   @ApiResponse({ status: 404, description: 'Category not found.' })
-  UpdateCategory(
+  updateCategory(
     @Param() params: CategoryParamDto,
     @Body() updateCategoryDto: UpdateCategoryDto,
-    // @AuthUser() user: UserPayload,
+    @ActiveUser() user: ActiveUserData,
   ): Promise<CategoryDto> {
-    const user = this.dummyUser; // Using dummy user for now
-    return this.categoriesService.UpdateCategory(
+    return this.categoriesService.updateCategory(
       params.categoryId,
       updateCategoryDto,
       user,
@@ -111,10 +113,10 @@ export class CategoriesController {
   }
 
   @Patch(':categoryId/status')
-  // @UseGuards(RolesGuard)
-  // @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({
-    summary: 'Activate or deactivate a category',
+    summary: 'Activate or deactivate a category (Admin only)',
     description: 'Updates the active status of a category.',
   })
   @ApiBody({ type: UpdateCategoryStatusDto })
@@ -125,13 +127,12 @@ export class CategoriesController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden resource.' })
   @ApiResponse({ status: 404, description: 'Category not found.' })
-  UpdateCategoryStatus(
+  updateCategoryStatus(
     @Param() params: CategoryParamDto,
     @Body() updateStatusDto: UpdateCategoryStatusDto,
-    // @AuthUser() user: UserPayload,
+    @ActiveUser() user: ActiveUserData,
   ): Promise<CategoryDto> {
-    const user = this.dummyUser;
-    return this.categoriesService.UpdateCategoryStatus(
+    return this.categoriesService.updateCategoryStatus(
       params.categoryId,
       updateStatusDto,
       user,
@@ -139,10 +140,11 @@ export class CategoriesController {
   }
 
   @Delete(':categoryId')
-  // @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @HttpCode(204)
   @ApiOperation({
-    summary: 'Permanently delete a category (Hard Delete)',
+    summary: 'Permanently delete a category (Admin only)',
     description:
       'Permanently deletes a category from the database. This action will fail if the category is associated with any feedbacks.',
   })
@@ -155,11 +157,10 @@ export class CategoriesController {
     description: 'Forbidden to hard-delete a category that is in use.',
   })
   @ApiResponse({ status: 404, description: 'Category not found.' })
-  HardDeleteCategory(
+  hardDeleteCategory(
     @Param() params: CategoryParamDto,
-    // @AuthUser() user: UserPayload,
+    @ActiveUser() user: ActiveUserData,
   ): Promise<void> {
-    const user = this.dummyUser; // Using dummy user for now
-    return this.categoriesService.DeleteCategory(params.categoryId, user);
+    return this.categoriesService.deleteCategory(params.categoryId, user);
   }
 }

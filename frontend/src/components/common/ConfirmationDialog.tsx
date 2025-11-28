@@ -1,4 +1,5 @@
 // components/common/ConfirmationDialog.tsx
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,13 +11,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import React from "react";
+import React, { useState } from "react";
 
 interface ConfirmationDialogProps {
   children: React.ReactNode;
   title: string;
   description: string;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void> | void;
   confirmText?: string;
   cancelText?: string;
 }
@@ -29,8 +30,14 @@ const ConfirmationDialog = ({
   confirmText = "Xác nhận",
   cancelText = "Hủy",
 }: ConfirmationDialogProps) => {
+  const [open, setOpen] = useState(false);
+  const handleConfirm = async () => {
+    await onConfirm?.();
+    setOpen(false);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       {/* 'children' is the trigger element for the dialog */}
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
@@ -39,8 +46,13 @@ const ConfirmationDialog = ({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel variant={"cancel"}>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction variant={"primary"} onClick={onConfirm}>
+          <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-500 hover:text-white">
+            {cancelText}
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-blue-600 hover:bg-blue-500"
+            onClick={() => void handleConfirm()}
+          >
             {confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>

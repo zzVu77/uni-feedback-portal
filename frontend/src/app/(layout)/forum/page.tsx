@@ -1,3 +1,4 @@
+import { Loading } from "@/components/common/Loading";
 import { ForumSection } from "@/components/forum/ForumSection";
 import Wrapper from "@/components/shared/Wrapper";
 import { Suspense } from "react";
@@ -5,9 +6,11 @@ import { Suspense } from "react";
 const Page = () => {
   return (
     <Wrapper>
-      <Suspense fallback={<div>Loading forum...</div>}>
-        <ForumSection />
-      </Suspense>
+      <div className="w-full">
+        <Suspense fallback={<Loading variant="spinner" />}>
+          <ForumSection />
+        </Suspense>
+      </div>
     </Wrapper>
   );
 };

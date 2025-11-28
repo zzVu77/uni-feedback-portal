@@ -18,7 +18,8 @@ export type FilterType =
   | "department"
   | "category"
   | "sort"
-  | "notificationStatus";
+  | "notificationStatus"
+  | "sortBy";
 
 export const filtersConfig: Record<FilterType, FilterDefinition> = {
   status: {
@@ -27,12 +28,12 @@ export const filtersConfig: Record<FilterType, FilterDefinition> = {
     icon: Hourglass,
   },
   department: {
-    param: "department",
+    param: "departmentId",
     placeholder: "Phòng ban",
     icon: Building,
   },
   category: {
-    param: "category",
+    param: "categoryId",
     placeholder: "Danh mục",
     icon: LayoutGrid,
   },
@@ -45,5 +46,10 @@ export const filtersConfig: Record<FilterType, FilterDefinition> = {
     param: "isRead",
     placeholder: "Trạng thái",
     icon: BellDot,
+  },
+  sortBy: {
+    param: "sortBy",
+    placeholder: "Sắp xếp",
+    icon: ArrowDownNarrowWide,
   },
 };

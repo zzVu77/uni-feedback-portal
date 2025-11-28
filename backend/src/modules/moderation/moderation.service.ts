@@ -10,11 +10,17 @@ import {
   CommentReportDto,
   UpdateCommentReportDto,
 } from './dto';
-import { CommentTargetType, Prisma } from '@prisma/client';
+import {
+  CommentTargetType,
+  Prisma,
+  ReportStatus,
+  UserRole,
+} from '@prisma/client';
 import { CommentService } from '../comment/comment.service';
 import { ForumService } from '../forum/forum.service';
 import { AnnouncementsService } from '../announcements/announcements.service';
 import { GenerateAdminResponse } from 'src/shared/helpers/comment_report-message.helper';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Injectable()
 export class ModerationService {
   constructor(
@@ -23,28 +29,39 @@ export class ModerationService {
     private readonly forumService: ForumService,
     private readonly announcementService: AnnouncementsService,
   ) {}
-  async GetReports(
-    query: QueryCommentReportsDto,
-    actor: { role: 'ADMIN'; id: string },
-  ): Promise<CommentReportResponseDto> {
-    if (actor.role !== 'ADMIN') {
+
+  private _ensureIsAdmin(actor: ActiveUserData) {
+    if (actor.role !== UserRole.ADMIN) {
       throw new ForbiddenException(
         'You do not have permission to perform this action.',
       );
     }
+  }
+
+  async getCommentReports(
+    query: QueryCommentReportsDto,
+    actor: ActiveUserData,
+  ): Promise<CommentReportResponseDto> {
+    this._ensureIsAdmin(actor);
 
     const { page = 1, pageSize = 10, status } = query;
     const skip = (page - 1) * pageSize;
 
     const where: Prisma.CommentReportsWhereInput = {};
-    if (status) where.status = status;
+    if (status) {
+      where.status = Object.values(ReportStatus).includes(
+        status.toUpperCase() as ReportStatus,
+      )
+        ? (status.toUpperCase() as ReportStatus)
+        : undefined;
+    }
 
     const [items, total] = await Promise.all([
       this.prisma.commentReports.findMany({
         where,
         skip,
         take: pageSize,
-        orderBy: { createdAt: 'desc' },
+        orderBy: [{ status: 'desc' }, { createdAt: 'desc' }],
         include: {
           comment: {
             select: {
@@ -125,15 +142,12 @@ export class ModerationService {
     };
   }
 
-  async GetReportDetail(
+  async getCommentReportDetail(
     commentReportId: string,
-    actor: { role: 'ADMIN'; id: string },
+    actor: ActiveUserData,
   ): Promise<CommentReportDto> {
-    if (actor.role !== 'ADMIN') {
-      throw new ForbiddenException('Access denied: Admin privileges required.');
-    }
+    this._ensureIsAdmin(actor);
 
-    // === 1. Lấy report chi tiết + quan hệ comment, user ===
     const report = await this.prisma.commentReports.findUnique({
       where: { id: commentReportId },
       include: {
@@ -156,11 +170,9 @@ export class ModerationService {
       throw new NotFoundException(`Report not found`);
     }
 
-    // === 2. Lấy targetInfo từ service tương ứng ===
     const { targetId, targetType } = report.comment;
     const targetInfo = await this.getTargetInfo(targetId, targetType);
 
-    // === 3. Map dữ liệu sang DTO ===
     const mappedReport: CommentReportDto = {
       id: report.id,
       reason: report.reason ?? null,
@@ -197,16 +209,13 @@ export class ModerationService {
     return mappedReport;
   }
 
-  async UpdateReport(
+  async updateCommentReport(
     id: string,
     dto: UpdateCommentReportDto,
-    actor: { role: 'ADMIN'; id: string },
+    actor: ActiveUserData,
   ): Promise<CommentReportDto> {
-    if (actor.role !== 'ADMIN') {
-      throw new ForbiddenException(
-        'You do not have permission to perform this action.',
-      );
-    }
+    this._ensureIsAdmin(actor);
+
     const report = await this.prisma.commentReports.findUnique({
       where: { id },
       include: {
@@ -220,7 +229,7 @@ export class ModerationService {
     const isDeleting = dto.isDeleted === true;
 
     if (isDeleting && report.comment) {
-      await this.commentService.DeleteComment(report.comment.id, actor);
+      await this.commentService.deleteComment(report.comment.id, actor);
     }
 
     const adminResponse = GenerateAdminResponse(dto.status, isDeleting);

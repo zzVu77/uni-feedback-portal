@@ -121,7 +121,6 @@ export const FileInput = ({ value = [], onChange }: FileInputProps) => {
               className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm"
             >
               <div className="flex items-center gap-3">
-                {/* THAY THẾ Ở ĐÂY */}
                 <FileTypeIcon fileName={file.name} />
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-gray-800">

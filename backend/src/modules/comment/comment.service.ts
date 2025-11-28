@@ -19,15 +19,16 @@ import {
   ReportStatus,
   UserRole,
 } from '@prisma/client';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class CommentService {
   constructor(private prisma: PrismaService) {}
 
-  async CreateForumPostComment(
+  async createForumPostComment(
     dto: CreateCommentDto,
     postId: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<CommentDto> {
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
@@ -40,14 +41,14 @@ export class CommentService {
       dto,
       postId,
       CommentTargetType.FORUM_POST,
-      userId,
+      actor.sub,
     );
   }
 
-  async CreateAnnouncementComment(
+  async createAnnouncementComment(
     dto: CreateCommentDto,
     announcementId: string,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<CommentDto> {
     const announcement = await this.prisma.announcements.findUnique({
       where: { id: announcementId },
@@ -60,7 +61,7 @@ export class CommentService {
       dto,
       announcementId,
       CommentTargetType.ANNOUNCEMENT,
-      userId,
+      actor.sub,
     );
   }
 
@@ -111,7 +112,7 @@ export class CommentService {
     };
   }
 
-  async GetForumPostComments(
+  async getForumPostComments(
     postId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto> {
@@ -122,7 +123,7 @@ export class CommentService {
     );
   }
 
-  async GetAnnouncementComments(
+  async getAnnouncementComments(
     announcementId: string,
     query: QueryCommentsDto,
   ): Promise<CommentsResponseDto> {
@@ -241,9 +242,9 @@ export class CommentService {
     );
   }
 
-  async CreateCommentReport(
+  async createCommentReport(
     commentId: string,
-    userId: string,
+    actor: ActiveUserData,
     dto: CreateCommentReportDto,
   ): Promise<CommentReports> {
     const comment = await this.prisma.comments.findFirst({
@@ -262,7 +263,7 @@ export class CommentService {
     if (!comment) throw new NotFoundException('Comment not found');
 
     const existing = await this.prisma.commentReports.findFirst({
-      where: { commentId, userId },
+      where: { commentId, userId: actor.sub },
     });
     if (existing) {
       throw new BadRequestException('You have already reported this comment.');
@@ -271,7 +272,7 @@ export class CommentService {
     const report = await this.prisma.commentReports.create({
       data: {
         commentId,
-        userId,
+        userId: actor.sub,
         reason: dto.reason,
         status: ReportStatus.PENDING,
       },
@@ -282,12 +283,9 @@ export class CommentService {
     return report;
   }
 
-  async DeleteComment(
+  async deleteComment(
     commentId: string,
-    actor: {
-      id: string;
-      role: UserRole;
-    },
+    actor: ActiveUserData,
   ): Promise<CommentDeletedResponseDto> {
     const comment = await this.prisma.comments.findUnique({
       where: { id: commentId },
@@ -300,7 +298,7 @@ export class CommentService {
       throw new NotFoundException('Comment not found');
     }
 
-    if (actor.role === UserRole.STUDENT && comment.user.id !== actor.id) {
+    if (actor.role === UserRole.STUDENT && comment.user.id !== actor.sub) {
       throw new ForbiddenException(
         'You are not allowed to delete this comment',
       );
@@ -309,7 +307,7 @@ export class CommentService {
 
     const updatedComment = await this.prisma.comments.update({
       where: { id: commentId },
-      data: { deletedAt: now, deletedBy: actor.id },
+      data: { deletedAt: now, deletedBy: actor.sub },
       include: {
         user: { select: { id: true, fullName: true } },
       },

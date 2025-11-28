@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
 import * as React from "react";
@@ -5,14 +6,7 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { VariantProps } from "class-variance-authority";
-interface AlertDialogActionProps
-  extends React.ComponentProps<typeof AlertDialogPrimitive.Action>,
-    Pick<VariantProps<typeof buttonVariants>, "variant"> {}
 
-interface AlertDialogCancelProps
-  extends React.ComponentProps<typeof AlertDialogPrimitive.Cancel>,
-    Pick<VariantProps<typeof buttonVariants>, "variant"> {}
 function AlertDialog({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
@@ -127,12 +121,11 @@ function AlertDialogDescription({
 
 function AlertDialogAction({
   className,
-  variant,
   ...props
-}: AlertDialogActionProps) {
+}: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
   return (
     <AlertDialogPrimitive.Action
-      className={cn(buttonVariants({ variant }), className)}
+      className={cn(buttonVariants(), className)}
       {...props}
     />
   );
@@ -140,15 +133,11 @@ function AlertDialogAction({
 
 function AlertDialogCancel({
   className,
-  variant,
   ...props
-}: AlertDialogCancelProps) {
+}: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
   return (
     <AlertDialogPrimitive.Cancel
-      className={cn(
-        buttonVariants(variant ? { variant } : { variant: "outline" }),
-        className,
-      )}
+      className={cn(buttonVariants({ variant: "outline" }), className)}
       {...props}
     />
   );

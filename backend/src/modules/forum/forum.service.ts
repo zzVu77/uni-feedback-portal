@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import { Prisma } from '@prisma/client';
+import { FileTargetType, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   GetPostsResponseDto,
@@ -10,15 +10,18 @@ import {
   VoteResponseDto,
 } from './dto';
 import { CommentService } from '../comment/comment.service';
+import { UploadsService } from '../uploads/uploads.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Injectable()
 export class ForumService {
   constructor(
     private readonly prisma: PrismaService,
     private commentService: CommentService,
+    private readonly uploadsService: UploadsService,
   ) {}
   async getListPosts(
     query: QueryPostsDto,
-    userId: string,
+    actor: ActiveUserData,
   ): Promise<GetPostsResponseDto> {
     const {
       page = 1,
@@ -31,10 +34,8 @@ export class ForumService {
       q,
     } = query;
 
-    // pagination
     const skip = (page - 1) * pageSize;
     const take = pageSize;
-    // WHERE condition
     const whereClause: Prisma.ForumPostsWhereInput = {
       feedback: {
         ...(categoryId && { categoryId }),
@@ -53,10 +54,9 @@ export class ForumService {
         : {}),
     };
 
-    // ORDER BY
     let orderBy: Prisma.ForumPostsOrderByWithRelationInput = {
       createdAt: 'desc',
-    }; // default sort: new
+    };
     if (sortBy === 'top') {
       orderBy = {
         votes: {
@@ -102,7 +102,7 @@ export class ForumService {
             },
           },
           votes: {
-            select: { userId: true }, // to check if actorId has voted
+            select: { userId: true },
           },
           _count: { select: { votes: true } },
         },
@@ -135,21 +135,23 @@ export class ForumService {
       ...(post.feedback.isPrivate
         ? {}
         : {
-            student: {
+            user: {
               id: post.feedback.user.id,
               fullName: post.feedback.user.fullName,
               email: post.feedback.user.email,
             },
           }),
       commentsCount: commentCountMap[post.id] ?? 0,
-      hasVoted: post.votes.some((vote) => vote.userId === userId),
+      hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
     }));
 
     return { results: mappedItems, total };
   }
 
-  async getPostDetail(postId: string, userId: string): Promise<PostDetailDto> {
-    // Fetch the post with relations
+  async getPostDetail(
+    postId: string,
+    actor: ActiveUserData,
+  ): Promise<PostDetailDto> {
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
       include: {
@@ -160,14 +162,9 @@ export class ForumService {
             description: true,
             location: true,
             currentStatus: true,
+            statusHistory: true,
             isPrivate: true,
-            fileAttachments: {
-              select: {
-                id: true,
-                fileName: true,
-                fileUrl: true,
-              },
-            },
+            // Không include fileAttachments ở đây
             user: {
               select: {
                 id: true,
@@ -190,7 +187,7 @@ export class ForumService {
           },
         },
         votes: {
-          select: { userId: true }, // to check if actorId has voted
+          select: { userId: true },
         },
       },
     });
@@ -198,12 +195,22 @@ export class ForumService {
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
+    const resolvedStatus = post.feedback.statusHistory.find(
+      (h) => h.status === 'RESOLVED',
+    );
+    const officeResponse = resolvedStatus?.note ?? resolvedStatus?.message;
+
+    // Lấy file đính kèm bằng UploadsService
+    const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
+      post.feedback.id,
+      FileTargetType.FEEDBACK,
+    );
 
     return {
       id: post.id,
       createdAt: post.createdAt.toISOString(),
       votes: post.votes.length,
-      hasVoted: post.votes.some((vote) => vote.userId === userId),
+      hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
       feedback: {
         id: post.feedback.id,
         subject: post.feedback.subject,
@@ -219,16 +226,13 @@ export class ForumService {
           name: post.feedback.department.name,
         },
         currentStatus: post.feedback.currentStatus,
-        fileAttachments: post.feedback.fileAttachments.map((f) => ({
-          id: f.id,
-          fileName: f.fileName,
-          fileUrl: f.fileUrl,
-        })),
+        officeResponse,
+        fileAttachments: fileAttachments,
       },
       ...(post.feedback.isPrivate
         ? {}
         : {
-            student: {
+            user: {
               id: post.feedback.user.id,
               fullName: post.feedback.user.fullName,
               email: post.feedback.user.email,
@@ -236,7 +240,7 @@ export class ForumService {
           }),
     };
   }
-  async vote(postId: string, userId: string): Promise<VoteResponseDto> {
+  async vote(postId: string, actor: ActiveUserData): Promise<VoteResponseDto> {
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
     });
@@ -245,11 +249,10 @@ export class ForumService {
       throw new NotFoundException('Post not found');
     }
 
-    // Kiểm tra user đã vote chưa
     const existingVote = await this.prisma.votes.findUnique({
       where: {
         userId_postId: {
-          userId,
+          userId: actor.sub,
           postId: postId,
         },
       },
@@ -259,15 +262,13 @@ export class ForumService {
       throw new BadRequestException('User already voted this post');
     }
 
-    // Tạo vote mới
     await this.prisma.votes.create({
       data: {
-        userId,
+        userId: actor.sub,
         postId: postId,
       },
     });
 
-    // Đếm lại tổng vote
     const totalVotes = await this.prisma.votes.count({
       where: { postId: postId },
     });
@@ -278,7 +279,37 @@ export class ForumService {
       totalVotes,
     };
   }
-  async unvote(postId: string, userId: string): Promise<VoteResponseDto> {
+  async createForumPost(
+    feedbackId: string,
+    actor: ActiveUserData,
+  ): Promise<string> {
+    // Kiểm tra feedback tồn tại
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId, userId: actor.sub },
+      include: { forumPost: true },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
+    }
+
+    if (feedback.forumPost) {
+      throw new BadRequestException(
+        'Forum post for this feedback already exists',
+      );
+    }
+
+    const forumPost = await this.prisma.forumPosts.create({
+      data: { feedbackId },
+    });
+
+    return forumPost.id;
+  }
+
+  async unvote(
+    postId: string,
+    actor: ActiveUserData,
+  ): Promise<VoteResponseDto> {
     const post = await this.prisma.forumPosts.findUnique({
       where: { id: postId },
     });
@@ -287,11 +318,10 @@ export class ForumService {
       throw new NotFoundException('Post not found');
     }
 
-    // Kiểm tra xem user đã vote chưa
     const existingVote = await this.prisma.votes.findUnique({
       where: {
         userId_postId: {
-          userId,
+          userId: actor.sub,
           postId: postId,
         },
       },
@@ -301,17 +331,15 @@ export class ForumService {
       throw new BadRequestException('User has not voted this post yet');
     }
 
-    // Xóa vote
     await this.prisma.votes.delete({
       where: {
         userId_postId: {
-          userId,
+          userId: actor.sub,
           postId: postId,
         },
       },
     });
 
-    // Đếm lại tổng vote
     const totalVotes = await this.prisma.votes.count({
       where: { postId: postId },
     });
@@ -322,6 +350,12 @@ export class ForumService {
       totalVotes,
     };
   }
+  async deleteByFeedbackId(feedbackId: string): Promise<void> {
+    await this.prisma.forumPosts.delete({
+      where: { feedbackId },
+    });
+  }
+
   async getManyByIds(
     ids: string[],
   ): Promise<Record<string, { id: string; title: string; content: string }>> {
