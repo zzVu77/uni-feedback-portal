@@ -22,12 +22,23 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
+
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   data: ReportCommentDetail;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
-const ReportCommentDetailDialog = ({ children, data }: Props) => {
+
+const ReportCommentDetailDialog = ({
+  children,
+  data,
+  open,
+  onOpenChange,
+}: Props) => {
   const {
+    id,
     reason,
     status,
     adminResponse,
@@ -36,12 +47,30 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
     reportedBy,
     target,
   } = data;
+
+  const { mutate: updateReport } = useUpdateReportComment(id);
+  const isResolved = status === "RESOLVED";
+
+  const handleDelete = () => {
+    updateReport({ status: "RESOLVED", isDeleted: true });
+    if (onOpenChange) {
+      onOpenChange(false);
+    }
+  };
+
+  const handleResolve = () => {
+    updateReport({ status: "RESOLVED", isDeleted: false });
+    if (onOpenChange) {
+      onOpenChange(false);
+    }
+  };
+
   return (
     <div>
-      <Dialog>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        {children && <DialogTrigger asChild>{children}</DialogTrigger>}
         <DialogContent className="py-2 lg:h-[80vh] lg:w-full">
-          <DialogTitle></DialogTitle>
+          <DialogTitle className="sr-only">Chi tiết báo cáo</DialogTitle>
           <ScrollArea className="w-full overflow-y-auto pr-1">
             <div className="flex h-[60vh] flex-col gap-4 px-2">
               {/* Comment Detail */}
@@ -57,6 +86,7 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
                         ? `/forum/posts/${target.targetInfo.id}`
                         : `/forum//announcements/${target.targetInfo.id}`
                     }
+                    target="_blank"
                   >
                     <ExternalLink className="h-5 w-5 text-blue-500/80" />
                   </Link>
@@ -131,31 +161,42 @@ const ReportCommentDetailDialog = ({ children, data }: Props) => {
             </div>
           </ScrollArea>
           <DialogFooter>
-            <ConfirmationDialog
-              title="Xác nhận bình luận này không vi phạm?"
-              description="Hành động này sẽ đánh dấu bình luận này là không vi phạm. Bạn có muốn tiếp tục không?"
-              onConfirm={() => {}}
-              confirmText="Đồng ý"
-            >
+            {isResolved ? (
               <Button
-                variant="primary"
-                className="bg-green-500 hover:bg-green-600"
+                variant="outline"
+                onClick={() => onOpenChange && onOpenChange(false)}
               >
-                <Check className="h-4 w-4" />
-                Không vi phạm
+                Đóng
               </Button>
-            </ConfirmationDialog>
-            <ConfirmationDialog
-              title="Xác nhận xóa bình luận?"
-              description="Hành động này sẽ ẩn bình luận khỏi hệ thống. Bạn có muốn tiếp tục không?"
-              onConfirm={() => {}}
-              confirmText="Đồng ý"
-            >
-              <Button variant="cancel">
-                <Trash className="h-4 w-4" />
-                Xóa bình luận
-              </Button>
-            </ConfirmationDialog>
+            ) : (
+              <>
+                <ConfirmationDialog
+                  title="Xác nhận bình luận này không vi phạm?"
+                  description="Hành động này sẽ đánh dấu bình luận này là không vi phạm. Bạn có muốn tiếp tục không?"
+                  onConfirm={handleResolve}
+                  confirmText="Đồng ý"
+                >
+                  <Button
+                    variant="default"
+                    className="bg-green-500 hover:bg-green-600"
+                  >
+                    <Check className="mr-2 h-4 w-4" />
+                    Không vi phạm
+                  </Button>
+                </ConfirmationDialog>
+                <ConfirmationDialog
+                  title="Xác nhận xóa bình luận?"
+                  description="Hành động này sẽ ẩn bình luận khỏi hệ thống. Bạn có muốn tiếp tục không?"
+                  onConfirm={handleDelete}
+                  confirmText="Đồng ý"
+                >
+                  <Button variant="destructive">
+                    <Trash className="mr-2 h-4 w-4" />
+                    Xóa bình luận
+                  </Button>
+                </ConfirmationDialog>
+              </>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

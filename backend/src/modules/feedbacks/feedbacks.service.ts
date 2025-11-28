@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Prisma, FeedbackStatus, FileTargetType } from '@prisma/client';
+import { EventEmitter2 } from '@nestjs/event-emitter'; // [Import 1] Import EventEmitter
 import {
   FeedbackSummary,
   GetMyFeedbacksResponseDto,
@@ -18,6 +19,8 @@ import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { ForumService } from '../forum/forum.service';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
+// [Import 2] Import the event definition
+import { FeedbackCreatedEvent } from './events/feedback-created.event';
 
 @Injectable()
 export class FeedbacksService {
@@ -25,6 +28,7 @@ export class FeedbacksService {
     private readonly prisma: PrismaService,
     private readonly forumService: ForumService,
     private readonly uploadsService: UploadsService,
+    private readonly eventEmitter: EventEmitter2, // [Injection] Inject EventEmitter2
   ) {}
 
   async getFeedbacks(
@@ -115,7 +119,7 @@ export class FeedbacksService {
     params: FeedbackParamDto,
     actor: ActiveUserData,
   ): Promise<FeedbackDetail> {
-    const { feedbackId } = params;
+    const { feedbackId } = params; //
 
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, userId: actor.sub },
@@ -154,7 +158,6 @@ export class FeedbacksService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        // Không include fileAttachments ở đây
       },
     });
 
@@ -264,7 +267,7 @@ export class FeedbacksService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fileAttachments, isPublic, isAnonymous, ...updateData } =
       updateMapped;
-    // Handle file attachments update using UploadsService
+
     const updateFileAttachments =
       await this.uploadsService.updateAttachmentsForTarget(
         feedbackId,
@@ -360,7 +363,6 @@ export class FeedbacksService {
       );
     }
 
-    // Xóa file đính kèm trước
     await this.uploadsService.deleteAttachmentsForTarget(
       feedbackId,
       FileTargetType.FEEDBACK,
@@ -431,6 +433,16 @@ export class FeedbacksService {
         fileAttachments,
       );
     }
+
+    // [New Logic] Emit Event: Feedback Created
+    // This allows the Notification module to handle notifications asynchronously without blocking this response.
+    const feedbackCreatedEvent = new FeedbackCreatedEvent({
+      feedbackId: feedback.id,
+      userId: actor.sub,
+      departmentId: feedback.departmentId,
+      subject: feedback.subject,
+    });
+    this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
 
     // Return summary
     return {
