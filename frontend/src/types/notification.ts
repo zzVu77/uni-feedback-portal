@@ -37,3 +37,8 @@ export type NotificationDetails = {
   isRead: boolean;
   createdAt: string;
 };
+export interface MarkAsReadPayload {
+  ids?: string[];
+  all?: boolean;
+  isRead?: boolean;
+}

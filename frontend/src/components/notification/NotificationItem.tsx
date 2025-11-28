@@ -20,6 +20,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "../../utils/formatDistanceToNow";
 import { generateNotificationUrl } from "@/utils/generateNotificationUrl";
 import { useUser } from "@/context/UserContext";
+import { useMarkNotificationAsRead } from "@/hooks/queries/useNotificationQueries";
 
 const STYLE_GREEN = {
   iconClassName: "text-green-600/60",
@@ -269,8 +270,14 @@ const NotificationItem = ({
     targetId,
     user?.role || "STUDENT",
   );
+  const { mutate: markAsRead } = useMarkNotificationAsRead();
+  const handleItemClick = () => {
+    if (!isRead) {
+      markAsRead({ ids: [id] });
+    }
+  };
   return (
-    <Link href={notificationUrl} key={id}>
+    <Link href={notificationUrl} key={id} onClick={handleItemClick}>
       <div
         className={cn(
           "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
