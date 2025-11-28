@@ -245,7 +245,6 @@ export const NOTIFICATION_CONFIG = {
 };
 
 const NotificationItem = ({
-  content,
   isRead,
   createdAt,
   notificationType,
@@ -286,9 +285,7 @@ const NotificationItem = ({
               {title ?? "Notification Title"}
             </h4>
             {/* Description */}
-            <p className="mt-1 text-sm text-gray-600">
-              {content ?? defaultDescription}
-            </p>
+            <p className="mt-1 text-sm text-gray-600">{defaultDescription}</p>
           </div>
         </div>
         <div className="block w-20 text-right text-xs text-gray-500">
