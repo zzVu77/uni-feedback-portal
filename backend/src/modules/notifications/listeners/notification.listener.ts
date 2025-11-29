@@ -15,6 +15,7 @@ import { ClarificationMessageSentEvent } from 'src/modules/clarifications/events
 import { ClarificationCreatedEvent } from 'src/modules/clarifications/events/clarification-created.event';
 import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.event';
 import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
+import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -294,6 +295,51 @@ export class NotificationEventListener {
     } catch (error) {
       this.logger.error(
         `Failed to notify admins about report ${payload.reportId}`,
+        error.stack,
+      );
+    }
+  }
+
+  // ============================================
+  // NEW HANDLER: VOTE FORUM POST
+  // ============================================
+  @OnEvent('forum.post_voted', { async: true })
+  async handleForumPostVoted(payload: ForumPostVotedEvent) {
+    this.logger.log(
+      `[Notification] Processing vote for Post ID: ${payload.postId} by User: ${payload.userId}`,
+    );
+
+    try {
+      // 1. Get Post Detail to find the Owner (Student)
+      const post = await this.prisma.forumPosts.findUnique({
+        where: { id: payload.postId },
+        include: {
+          feedback: {
+            select: {
+              userId: true,
+              subject: true,
+            },
+          },
+        },
+      });
+
+      if (!post || !post.feedback) return;
+
+      // 2. Anti-spam check: Do not notify if user votes for their own post
+      if (post.feedback.userId === payload.userId) {
+        return;
+      }
+
+      // 3. Create Notification
+      await this.notificationsService.createNotifications({
+        userIds: [post.feedback.userId],
+        content: `Someone voted for your post: "${this.previewContent(post.feedback.subject)}"`,
+        type: NotificationType.VOTE_FORUM_POST_NOTIFICATION,
+        targetId: payload.postId,
+      });
+    } catch (error) {
+      this.logger.error(
+        `Failed to notify vote for post ${payload.postId}`,
         error.stack,
       );
     }
