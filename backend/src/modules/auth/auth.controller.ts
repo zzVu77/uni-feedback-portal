@@ -131,7 +131,7 @@ export class AuthController {
       maxAge: accessTokenMaxAge,
       path: '/',
       sameSite: 'strict',
-      domain: isProduction ? process.env.FRONTEND_URL : undefined,
+      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
@@ -139,7 +139,7 @@ export class AuthController {
       maxAge: refreshTokenMaxAge,
       path: '/',
       sameSite: 'strict',
-      domain: isProduction ? process.env.FRONTEND_URL : undefined,
+      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
     });
   }
 }
