@@ -8,11 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
-  const allowedOrigins = [
-    'http://localhost:3000',
-    process.env.FRONTEND_URL,
-    '*',
-  ];
+  const allowedOrigins = ['http://localhost:3000', process.env.FRONTEND_URL];
   app.enableCors({
     origin: allowedOrigins,
     credentials: true,

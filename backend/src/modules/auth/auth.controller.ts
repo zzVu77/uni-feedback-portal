@@ -131,6 +131,7 @@ export class AuthController {
       maxAge: accessTokenMaxAge,
       path: '/',
       sameSite: 'strict',
+      domain: isProduction ? process.env.FRONTEND_URL : undefined,
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
@@ -138,6 +139,7 @@ export class AuthController {
       maxAge: refreshTokenMaxAge,
       path: '/',
       sameSite: 'strict',
+      domain: isProduction ? process.env.FRONTEND_URL : undefined,
     });
   }
 }
