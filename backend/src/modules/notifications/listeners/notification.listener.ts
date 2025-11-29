@@ -285,7 +285,7 @@ export class NotificationEventListener {
         userIds: adminIds,
         content: content,
         type: NotificationType.NEW_COMMENT_REPORT_FOR_ADMIN,
-        targetId: payload.commentId, // Link đến comment bị report để Admin bấm vào xem
+        targetId: payload.reportId,
       });
 
       this.logger.log(
