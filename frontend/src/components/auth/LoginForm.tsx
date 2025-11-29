@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // Import Link
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -85,7 +87,16 @@ export function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mật khẩu</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Mật khẩu</FormLabel>
+                    {/* Link to the new Forgot Password Page */}
+                    <Link
+                      href="/forgot-password"
+                      className="text-blue-primary-600 text-sm font-medium hover:underline"
+                    >
+                      Quên mật khẩu?
+                    </Link>
+                  </div>
                   <FormControl>
                     <Input type="password" placeholder="********" {...field} />
                   </FormControl>
