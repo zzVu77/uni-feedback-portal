@@ -130,7 +130,6 @@ export class AuthController {
       secure: isProduction,
       maxAge: accessTokenMaxAge,
       path: '/',
-      sameSite: 'strict',
       domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
@@ -138,7 +137,6 @@ export class AuthController {
       secure: isProduction,
       maxAge: refreshTokenMaxAge,
       path: '/',
-      sameSite: 'strict',
       domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
     });
   }
