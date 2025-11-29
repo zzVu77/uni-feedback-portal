@@ -77,6 +77,7 @@ export class ClarificationsService {
       conversationId: conversation.id,
       studentId: feedback.userId, // Send to Student
       subject: conversation.subject,
+      feedbackId: feedback.id,
     });
     this.eventEmitter.emit('clarification.created', event);
 
@@ -262,6 +263,7 @@ export class ClarificationsService {
       senderId: actor.sub,
       recipientId: recipientId, // Logic determined above
       content: content ? content : 'Sent an attachment',
+      feedbackId: conversation.feedbackId,
     });
     this.eventEmitter.emit('clarification.message_sent', event);
 

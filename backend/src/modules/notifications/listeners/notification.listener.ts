@@ -97,7 +97,7 @@ export class NotificationEventListener {
         userIds: [payload.studentId],
         content: `Department Staff requested clarification: "${payload.subject}".`,
         type: NotificationType.MESSAGE_NEW_NOTIFICATION,
-        targetId: payload.conversationId,
+        targetId: payload.feedbackId,
       });
     } catch (error) {
       this.logger.error(
@@ -129,7 +129,7 @@ export class NotificationEventListener {
         userIds: [payload.recipientId],
         content: `New message: "${previewContent}"`,
         type: NotificationType.MESSAGE_NEW_NOTIFICATION,
-        targetId: payload.conversationId,
+        targetId: payload.feedbackId,
       });
     } catch (error) {
       this.logger.error(
