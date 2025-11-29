@@ -174,7 +174,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
       return (
         <div className="flex flex-col gap-1">
           <p
-            className="text-blue-primary-500 max-w-[250px] truncate text-[13px] font-semibold capitalize lg:max-w-sm"
+            className="text-blue-primary-500 max-w-[150px] truncate text-[13px] font-semibold capitalize"
             title={comment.content}
           >
             {comment.content}

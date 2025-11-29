@@ -46,7 +46,6 @@ export interface MarkAsReadPayload {
 }
 export interface NotificationFilter extends BaseFilter {
   tab?: string;
-  status?: string;
-  sort?: string;
+  isRead?: string;
   type?: string;
 }

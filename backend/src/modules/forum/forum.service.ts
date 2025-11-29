@@ -12,12 +12,15 @@ import {
 import { CommentService } from '../comment/comment.service';
 import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ForumPostVotedEvent } from './events/forum-post-voted.event';
 @Injectable()
 export class ForumService {
   constructor(
     private readonly prisma: PrismaService,
     private commentService: CommentService,
     private readonly uploadsService: UploadsService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
   async getListPosts(
     query: QueryPostsDto,
@@ -268,6 +271,13 @@ export class ForumService {
         postId: postId,
       },
     });
+
+    // [New Logic] Emit Event: Post Voted
+    const event = new ForumPostVotedEvent({
+      postId: postId,
+      userId: actor.sub,
+    });
+    this.eventEmitter.emit('forum.post_voted', event);
 
     const totalVotes = await this.prisma.votes.count({
       where: { postId: postId },

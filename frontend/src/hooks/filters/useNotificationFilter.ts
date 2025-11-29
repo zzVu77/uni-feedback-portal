@@ -9,9 +9,9 @@ export const useNotificationFilters = (): NotificationFilter => {
     return {
       page: Number(searchParams.get("page")) || 1,
       pageSize: Number(searchParams.get("pageSize")) || 10,
-      //   tab: searchParams.get("tab") || "all",
-      //   status: searchParams.get("notificationStatus") || "all",
-      //   sort: searchParams.get("sort") || "newest",
+      type: searchParams.get("tab") || "all",
+      isRead: searchParams.get("isRead") || "all",
+      // sort: searchParams.get("sort") || "newest",
     };
   }, [searchParams]);
 
