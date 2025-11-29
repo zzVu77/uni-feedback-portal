@@ -117,5 +117,6 @@ export const config = {
     "/staff/:path*",
     "/forum/:path*",
     "/notifications/:path*",
+    "/change-password/:path*",
   ],
 };
