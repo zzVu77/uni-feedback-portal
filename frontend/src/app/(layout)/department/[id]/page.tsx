@@ -35,7 +35,7 @@ const DepartmentDetailPage = () => {
   }
 
   return (
-    <div className="min-h-full bg-slate-50/50 py-2">
+    <div className="min-h-full bg-slate-50/50">
       <div className="px-4">
         <div className="flex w-full flex-col gap-4">
           <DepartmentHeader department={department} />
