@@ -64,13 +64,8 @@ const NotificationSection = () => {
 
   const mockNotificationStatus = [
     { label: "Tất cả", value: "all" },
-    { label: "Đã đọc", value: "read" },
-    { label: "Chưa đọc", value: "unread" },
-  ];
-  const sortOptions = [
-    { label: "Tất cả", value: "all" },
-    { label: "Mới nhất", value: "newest" },
-    { label: "Cũ nhất", value: "oldest" },
+    { label: "Đã đọc", value: "true" },
+    { label: "Chưa đọc", value: "false" },
   ];
 
   // Helper to render the list and loading state
@@ -135,9 +130,6 @@ const NotificationSection = () => {
         <div className="flex w-full flex-row items-center justify-center gap-2 md:justify-end">
           <Suspense fallback={null}>
             <Filter type="notificationStatus" items={mockNotificationStatus} />
-          </Suspense>
-          <Suspense fallback={null}>
-            <Filter type="sort" items={sortOptions} />
           </Suspense>
         </div>
       </div>
