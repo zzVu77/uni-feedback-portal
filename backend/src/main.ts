@@ -11,6 +11,7 @@ async function bootstrap() {
   const allowedOrigins = [
     'http://localhost:3000',
     'https://uniportal.vucoder77.id.vn',
+    'https://uni-feedback-portal-frontend.vercel.app',
   ];
   app.enableCors({
     origin: allowedOrigins,
