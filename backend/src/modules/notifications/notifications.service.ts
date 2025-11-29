@@ -6,9 +6,31 @@ import {
   NotificationResponseDto,
 } from './dto/notification-response.dto';
 import { Prisma, Notifications } from '@prisma/client';
+import { GroupNotiFilter } from './dto';
 @Injectable()
 export class NotificationsService {
   constructor(private readonly prisma: PrismaService) {}
+  private readonly FEEDBACK_TYPES: NotificationType[] = [
+    NotificationType.FEEDBACK_SUBMITTED_NOTIFICATION,
+    NotificationType.FEEDBACK_PROCESSING_NOTIFICATION,
+    NotificationType.FEEDBACK_RESOLVED_NOTIFICATION,
+    NotificationType.FEEDBACK_REJECTED_NOTIFICATION,
+    NotificationType.NEW_FEEDBACK_RECEIVED,
+    NotificationType.FEEDBACK_FORWARDED_TO_YOU,
+    NotificationType.MESSAGE_NEW_NOTIFICATION,
+  ];
+  private readonly FORUM_TYPES: NotificationType[] = [
+    NotificationType.VOTE_FORUM_POST_NOTIFICATION,
+    NotificationType.COMMENT_FORUM_POST_NOTIFICATION,
+    NotificationType.REPLY_COMMENT_FORUM_POST_NOTIFICATION,
+    NotificationType.NEW_COMMENT_REPORT_FOR_ADMIN,
+  ];
+  private readonly ANNOUNCEMENT_TYPES: NotificationType[] = [
+    NotificationType.NEW_ANNOUNCEMENT_NOTIFICATION,
+    NotificationType.COMMENT_ANNOUNCEMENT_NOTIFICATION,
+    NotificationType.REPLY_COMMENT_ANNOUNCEMENT_NOTIFICATION,
+    NotificationType.NEW_COMMENT_REPORT_FOR_ADMIN,
+  ];
 
   // ============================================
   // CREATE NOTIFICATIONS
@@ -128,7 +150,7 @@ export class NotificationsService {
     userId: string;
     page?: number;
     pageSize?: number;
-    type?: NotificationType;
+    type?: GroupNotiFilter; // Changed from NotificationType to GroupNotiFilter
     isRead?: boolean;
     from?: Date;
     to?: Date;
@@ -136,16 +158,29 @@ export class NotificationsService {
     const { userId, page = 1, pageSize = 20, type, isRead, from, to } = params;
 
     const where: Prisma.NotificationsWhereInput = { userId };
-    const total = await this.prisma.notifications.count({ where });
+    const normalizedType = type?.toUpperCase();
+    // Filter by Group Type
+    if (normalizedType && normalizedType !== 'ALL') {
+      const mappedTypes = this.getNotificationTypesByGroup(
+        normalizedType as GroupNotiFilter,
+      );
+      if (mappedTypes.length > 0) {
+        where.notificationType = { in: mappedTypes };
+      }
+    }
 
-    if (type) where.notificationType = type;
     if (isRead !== undefined) where.isRead = isRead;
+
     if (from || to) {
       where.createdAt = {};
       if (from) where.createdAt.gte = from;
       if (to) where.createdAt.lte = to;
     }
 
+    // Get Total count for pagination
+    const total = await this.prisma.notifications.count({ where });
+
+    // Get Data
     const notifications: Notifications[] =
       await this.prisma.notifications.findMany({
         where,
@@ -157,7 +192,23 @@ export class NotificationsService {
     const results: NotificationResponseDto[] = notifications.map((n) =>
       this.toDto(n),
     );
+
     return { results, total };
+  }
+
+  // Helper to map GroupFilter to NotificationType[]
+  private getNotificationTypesByGroup(
+    group: GroupNotiFilter,
+  ): NotificationType[] {
+    switch (group) {
+      case 'FEEDBACK':
+        return this.FEEDBACK_TYPES;
+      case 'FORUM':
+        return this.FORUM_TYPES;
+      // You can add ANNOUNCEMENT here if you add it to the DTO Enum later
+      default:
+        return [];
+    }
   }
   // ============================================
   // HELPER - map Prisma notification -> DTO

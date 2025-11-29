@@ -1,14 +1,6 @@
-import {
-  IsBoolean,
-  IsEnum,
-  IsInt,
-  IsISO8601,
-  IsOptional,
-  Min,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { NotificationType } from '@prisma/client';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsISO8601, IsOptional, Min } from 'class-validator';
 
 export class QueryNotificationsDto {
   @ApiPropertyOptional({
@@ -30,11 +22,12 @@ export class QueryNotificationsDto {
 
   @ApiPropertyOptional({
     description: 'Filter by notification type',
-    enum: NotificationType,
+    enum: ['ALL', 'FORUM', 'FEEDBACK', 'VIOLATION'],
+    default: 'ALL',
   })
   @IsOptional()
-  @IsEnum(NotificationType)
-  type?: NotificationType;
+  // @IsEnum(['ALL', 'FORUM', 'FEEDBACK', 'VIOLATION'])
+  type?: GroupNotiFilter;
 
   @ApiPropertyOptional({ description: 'Filter by read status' })
   @IsOptional()
@@ -54,3 +47,5 @@ export class QueryNotificationsDto {
   @IsISO8601()
   to?: Date;
 }
+
+export type GroupNotiFilter = 'ALL' | 'FORUM' | 'FEEDBACK' | 'VIOLATION';
