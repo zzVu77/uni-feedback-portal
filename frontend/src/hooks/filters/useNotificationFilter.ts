@@ -10,7 +10,7 @@ export const useNotificationFilters = (): NotificationFilter => {
       page: Number(searchParams.get("page")) || 1,
       pageSize: Number(searchParams.get("pageSize")) || 10,
       type: searchParams.get("tab") || "all",
-      // status: searchParams.get("notificationStatus") || "all",
+      isRead: searchParams.get("isRead") || "all",
       // sort: searchParams.get("sort") || "newest",
     };
   }, [searchParams]);

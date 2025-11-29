@@ -170,6 +170,7 @@ export class NotificationsService {
     }
 
     if (isRead !== undefined) where.isRead = isRead;
+    else if (isRead === 'all') where.isRead = true;
 
     if (from || to) {
       where.createdAt = {};

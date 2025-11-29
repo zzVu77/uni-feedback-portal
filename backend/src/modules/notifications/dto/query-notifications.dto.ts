@@ -1,7 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsISO8601, IsOptional, Min } from 'class-validator';
-
+import { Transform, Type } from 'class-transformer';
+import { IsEnum, IsInt, IsISO8601, IsOptional, Min } from 'class-validator';
+export enum GroupNotiFilterEnum {
+  ALL = 'ALL',
+  FORUM = 'FORUM',
+  FEEDBACK = 'FEEDBACK',
+  VIOLATION = 'VIOLATION',
+}
 export class QueryNotificationsDto {
   @ApiPropertyOptional({
     description: 'Page number for pagination',
@@ -26,13 +33,18 @@ export class QueryNotificationsDto {
     default: 'ALL',
   })
   @IsOptional()
-  // @IsEnum(['ALL', 'FORUM', 'FEEDBACK', 'VIOLATION'])
+  @Transform(({ value }): string => (value ? value.toUpperCase() : value))
+  @IsEnum(GroupNotiFilterEnum)
   type?: GroupNotiFilter;
 
   @ApiPropertyOptional({ description: 'Filter by read status' })
   @IsOptional()
-  @Type(() => Boolean)
-  @IsBoolean()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    if (value === 'all') return undefined;
+    return value;
+  })
   isRead?: boolean;
 
   @ApiPropertyOptional({ description: 'Filter from date (ISO8601)' })
