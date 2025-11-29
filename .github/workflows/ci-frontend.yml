@@ -1,0 +1,45 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: ["dev", "main", "frontend"]
+    paths:
+      - "frontend/**"
+      - "package.json"
+      - "package-lock.json"
+  pull_request:
+    branches: ["dev", "main", "frontend"]
+    paths:
+      - "frontend/**"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  build_frontend:
+    name: Frontend - TypeCheck, Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client (For Types)
+        run: npx prisma generate --schema=backend/prisma/schema.prisma
+
+      - name: Type Check Frontend
+        run: npm run type-check --workspace=frontend
+
+      - name: Lint Frontend
+        run: npm run lint --workspace=frontend
+
+      - name: Build Frontend
+        run: npm run build --workspace=frontend

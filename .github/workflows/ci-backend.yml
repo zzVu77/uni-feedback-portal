@@ -1,0 +1,47 @@
+name: Backend CI
+
+on:
+  push:
+    branches: ["dev", "main"]
+    paths:
+      - "backend/**"
+      - "package.json"
+      - "package-lock.json"
+      - "prisma/**"
+  pull_request:
+    branches: ["dev", "main"]
+    paths:
+      - "backend/**"
+      - "package.json"
+      - "package-lock.json"
+      - "prisma/**"
+
+jobs:
+  build_backend:
+    name: Backend - TypeCheck, Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema=backend/prisma/schema.prisma
+
+      - name: Type Check Backend
+        run: npm run type-check --workspace=backend
+
+      - name: Lint Backend
+        run: npm run lint --workspace=backend
+
+      - name: Build Backend
+        run: npm run build --workspace=backend
