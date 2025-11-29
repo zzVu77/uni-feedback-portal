@@ -10,7 +10,7 @@ Ensure Docker is running and start the database container.
 npm run db:up
 ```
 
-### 2. Schema Changes & Migrations
+### 2. Schema Changes&Migrations
 
 **A. For simple, non-destructive changes (e.g., adding a new field):**
 Create a new migration file.
