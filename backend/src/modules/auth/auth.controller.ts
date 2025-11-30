@@ -123,6 +123,7 @@ export class AuthController {
       httpOnly: true,
     };
     response.clearCookie('refreshToken', cookieOptions);
+    response.clearCookie('accessToken', cookieOptions);
     return { message: 'Logout successful' };
   }
 
