@@ -115,8 +115,14 @@ export class AuthController {
     if (refreshToken) {
       await this.authService.Logout(refreshToken);
     }
-    response.clearCookie('accessToken', { path: '/' });
-    response.clearCookie('refreshToken', { path: '/' });
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      path: '/',
+      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      secure: isProduction,
+      httpOnly: true,
+    };
+    response.clearCookie('refreshToken', cookieOptions);
     return { message: 'Logout successful' };
   }
 
