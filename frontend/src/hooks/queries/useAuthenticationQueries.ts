@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { useUser } from "@/context/UserContext";
 import {
   forgotPassword,
   IForgotPasswordPayload,
@@ -10,9 +11,8 @@ import {
   logout,
   resetPassword,
 } from "@/services/auth-service";
-import { toast } from "sonner";
-import { useUser } from "@/context/UserContext";
 import { getUrlByRole } from "@/utils/getUrlByRole";
+import { toast } from "sonner";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -34,13 +34,12 @@ export const useLogin = () => {
   });
 };
 export const useLogout = () => {
-  const router = useRouter();
   return useMutation({
     mutationFn: () => logout(),
     retry: false,
     onSuccess: () => {
       toast.success("Đăng xuất thành công");
-      router.push("/login");
+      window.location.href = "/login";
     },
     onError: () => {
       toast.error("Đăng xuất thất bại");
