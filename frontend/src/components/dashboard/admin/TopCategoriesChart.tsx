@@ -39,7 +39,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface Props {
-  data?: (TopCategoryDto & { categoryId?: string })[];
+  data?: TopCategoryDto[];
   isLoading: boolean;
 }
 
