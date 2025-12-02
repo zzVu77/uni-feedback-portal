@@ -64,13 +64,10 @@ export class ReportsService {
     return result;
   }
 
-  // 2. Top phòng ban & Thời gian xử lý trung bình (Advanced Query)
+  // 2. Top performing Departments
   async getTopDepartments(
     dto: ReportFilterDto,
   ): Promise<TopDepartmentStatsDto[]> {
-    // Lưu ý: Prisma Model map xuống DB thường có dấu "" nếu dùng Postgres
-    // Query này tính số lượng feedback và thời gian trung bình (tính bằng giờ) từ lúc tạo đến lúc RESOLVED
-
     const fromDate = dto.from ? new Date(dto.from) : new Date('2000-01-01');
     const toDate = dto.to
       ? new Date(new Date(dto.to).setDate(new Date(dto.to).getDate() + 1))
@@ -79,7 +76,10 @@ export class ReportsService {
     const rawData: any[] = await this.prisma.$queryRaw`
       SELECT 
         d.name as "departmentName",
+        d.id as "departmentId",
         COUNT(f.id)::int as "feedbackCount",
+        COUNT(CASE WHEN f."currentStatus" IN ('PENDING', 'IN_PROGRESS') THEN 1 END)::int as "unresolvedCount",
+        COUNT(CASE WHEN f."currentStatus" IN ('RESOLVED', 'REJECTED') THEN 1 END)::int as "resolvedCount",
         COALESCE(
           AVG(
             EXTRACT(EPOCH FROM (h."createdAt" - f."createdAt")) / 3600
@@ -98,7 +98,7 @@ export class ReportsService {
     return rawData;
   }
 
-  // 3. Biểu đồ xu hướng theo ngày (Line Chart)
+  // 3. Feedback Trends (Line Chart)
   async getFeedbackTrends(dto: ReportFilterDto): Promise<FeedbackTrendDto[]> {
     const fromDate = dto.from
       ? new Date(dto.from)
@@ -125,22 +125,20 @@ export class ReportsService {
   async getTopCategories(dto: ReportFilterDto) {
     const where = this.getDateFilter(dto);
 
-    // Thay đổi: Dùng id thay vì _all để tránh lỗi TypeScript
     const result = await this.prisma.feedbacks.groupBy({
       by: ['categoryId'],
       where,
       _count: {
-        id: true, // Đếm số lượng ID thay vì dùng _all
+        id: true,
       },
       orderBy: {
         _count: {
-          id: 'desc', // Sắp xếp giảm dần theo số lượng ID
+          id: 'desc',
         },
       },
       take: 5,
     });
 
-    // Lấy danh sách ID để query tên category
     const categoryIds = result.map((r) => r.categoryId);
 
     const categories = await this.prisma.categories.findMany({
@@ -149,10 +147,10 @@ export class ReportsService {
     });
 
     return result.map((r) => ({
-      // Tìm tên category tương ứng, nếu không thấy thì để Unknown
       categoryName:
         categories.find((c) => c.id === r.categoryId)?.name || 'Unknown',
-      count: r._count.id, // Truy cập vào .id thay vì ._all
+      count: r._count.id,
+      categoryId: r.categoryId,
     }));
   }
 
