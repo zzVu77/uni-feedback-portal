@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { ReportFilter } from "@/types/report";
 import {
   useGetDepartmentStats,
@@ -16,24 +16,36 @@ import { TopInteractivePostsTable } from "@/components/dashboard/admin/TopIntera
 import { FeedbackTrendChart } from "@/components/dashboard/admin/FeedbackTrendChart";
 import { TopCategoriesChart } from "@/components/dashboard/admin/TopCategoriesChart";
 import { DepartmentPerformanceRadial } from "@/components/dashboard/admin/DepartmentPerformanceRadial";
-
-const getDefaultFilter = (): ReportFilter => {
-  const now = new Date();
-  return {
-    from: format(startOfMonth(now), "yyyy-MM-dd"),
-    to: format(endOfMonth(now), "yyyy-MM-dd"),
-  };
-};
+// IMPORT MỚI
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function AdminDashboardPage() {
-  const [filter, setFilter] = useState<ReportFilter>(getDefaultFilter());
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  // Callback to handle date range updates
-  const handleDateUpdate = useCallback((newRange: ReportFilter) => {
-    setFilter(newRange);
-  }, []);
+  const filter = useMemo((): ReportFilter => {
+    const fromParam = searchParams.get("from");
+    const toParam = searchParams.get("to");
+    const now = new Date();
 
-  // Fetching data
+    return {
+      from: fromParam || format(startOfMonth(now), "yyyy-MM-dd"),
+      to: toParam || format(endOfMonth(now), "yyyy-MM-dd"),
+    };
+  }, [searchParams]);
+
+  const handleDateUpdate = useCallback(
+    (newRange: ReportFilter) => {
+      const params = new URLSearchParams(searchParams);
+      if (newRange.from) params.set("from", newRange.from);
+      if (newRange.to) params.set("to", newRange.to);
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
   const { data: overview, isLoading: loadingOverview } =
     useGetStatsOverview(filter);
   const { data: trends, isLoading: loadingTrends } =
@@ -49,8 +61,11 @@ export default function AdminDashboardPage() {
     <Wrapper>
       {/* Header */}
       <div className="flex w-full flex-col items-start justify-end gap-4 md:flex-row md:items-center">
-        {/* Custom time filter - Month Range Picker */}
-        <MonthRangePicker onUpdate={handleDateUpdate} />
+        <MonthRangePicker
+          onUpdate={handleDateUpdate}
+          defaultFrom={filter.from}
+          defaultTo={filter.to}
+        />
       </div>
 
       {/* 1. Overview Cards */}

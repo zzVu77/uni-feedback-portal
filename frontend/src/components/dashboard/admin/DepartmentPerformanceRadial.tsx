@@ -214,7 +214,7 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
         )}
       </CardContent>
 
-      <CardFooter className="flex-col gap-4 border-t pt-4 text-xs">
+      <CardFooter className="flex-col gap-3 border-t pt-1 text-xs">
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-muted-foreground flex items-center gap-4">
             <div className="flex items-center gap-1">
@@ -248,7 +248,7 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
         </div>
 
         {totalPages > 1 && (
-          <div className="mt-2 flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between py-1">
             <div className="text-muted-foreground">
               Hiển thị {paginatedData.length} / {totalItems} kết quả
             </div>
