@@ -1,14 +1,5 @@
-// app/(admin)/dashboard/page.tsx
 "use client";
-
-import React, { useState, useCallback } from "react";
-import { StatsOverviewCards } from "@/components/dashboard/StatsOverviewCards";
-import { FeedbackTrendChart } from "@/components/dashboard/FeedbackTrendChart";
-import { TopCategoriesChart } from "@/components/dashboard/TopCategoriesChart";
-import { DepartmentPerformanceTable } from "@/components/dashboard/DepartmentPerformanceTable";
-import { TopInteractivePostsTable } from "@/components/dashboard/TopInteractivePostsTable";
-import { MonthRangePicker } from "@/components/dashboard/MonthRangePicker"; // Import component mới
-
+import React, { useCallback, useMemo } from "react";
 import { ReportFilter } from "@/types/report";
 import {
   useGetDepartmentStats,
@@ -19,25 +10,42 @@ import {
 } from "@/hooks/queries/useReportQueries";
 import { startOfMonth, endOfMonth, format } from "date-fns";
 import Wrapper from "@/components/shared/Wrapper";
-
-// Hàm helper để lấy tháng hiện tại làm mặc định
-const getDefaultFilter = (): ReportFilter => {
-  const now = new Date();
-  return {
-    from: format(startOfMonth(now), "yyyy-MM-dd"), // Ngày 1 của tháng
-    to: format(endOfMonth(now), "yyyy-MM-dd"), // Ngày cuối của tháng
-  };
-};
+import { MonthRangePicker } from "@/components/dashboard/admin/MonthRangePicker";
+import { StatsOverviewCards } from "@/components/dashboard/admin/StatsOverviewCards";
+import { TopInteractivePostsTable } from "@/components/dashboard/admin/TopInteractivePostsTable";
+import { FeedbackTrendChart } from "@/components/dashboard/admin/FeedbackTrendChart";
+import { TopCategoriesChart } from "@/components/dashboard/admin/TopCategoriesChart";
+import { DepartmentPerformanceRadial } from "@/components/dashboard/admin/DepartmentPerformanceRadial";
+// IMPORT MỚI
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function AdminDashboardPage() {
-  const [filter, setFilter] = useState<ReportFilter>(getDefaultFilter());
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  // Callback để update filter khi chọn từ Calendar
-  const handleDateUpdate = useCallback((newRange: ReportFilter) => {
-    setFilter(newRange);
-  }, []);
+  const filter = useMemo((): ReportFilter => {
+    const fromParam = searchParams.get("from");
+    const toParam = searchParams.get("to");
+    const now = new Date();
 
-  // Fetching data
+    return {
+      from: fromParam || format(startOfMonth(now), "yyyy-MM-dd"),
+      to: toParam || format(endOfMonth(now), "yyyy-MM-dd"),
+    };
+  }, [searchParams]);
+
+  const handleDateUpdate = useCallback(
+    (newRange: ReportFilter) => {
+      const params = new URLSearchParams(searchParams);
+      if (newRange.from) params.set("from", newRange.from);
+      if (newRange.to) params.set("to", newRange.to);
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
   const { data: overview, isLoading: loadingOverview } =
     useGetStatsOverview(filter);
   const { data: trends, isLoading: loadingTrends } =
@@ -53,8 +61,11 @@ export default function AdminDashboardPage() {
     <Wrapper>
       {/* Header */}
       <div className="flex w-full flex-col items-start justify-end gap-4 md:flex-row md:items-center">
-        {/* Bộ lọc thời gian Custom - Month Range Picker */}
-        <MonthRangePicker onUpdate={handleDateUpdate} />
+        <MonthRangePicker
+          onUpdate={handleDateUpdate}
+          defaultFrom={filter.from}
+          defaultTo={filter.to}
+        />
       </div>
 
       {/* 1. Overview Cards */}
@@ -63,14 +74,14 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* 2. Tables Row */}
-      <div className="grid w-full grid-cols-1 gap-6 xl:grid-cols-8">
-        <div className="col-span-1 w-full lg:col-span-4">
-          <DepartmentPerformanceTable
+      <div className="grid w-full grid-cols-1 gap-4">
+        <div className="col-span-1 w-full">
+          <DepartmentPerformanceRadial
             data={departments}
             isLoading={loadingDepts}
           />
         </div>
-        <div className="col-span-1 w-full lg:col-span-4">
+        <div className="col-span-1 w-full">
           <TopInteractivePostsTable
             data={interactivePosts}
             isLoading={loadingPosts}
@@ -79,7 +90,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* 3. Charts Row */}
-      <div className="grid w-full grid-cols-1 gap-6 pb-4 lg:grid-cols-8">
+      <div className="grid w-full grid-cols-1 gap-4 pb-4 lg:grid-cols-8">
         <div className="col-span-1 lg:col-span-4">
           <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
         </div>
