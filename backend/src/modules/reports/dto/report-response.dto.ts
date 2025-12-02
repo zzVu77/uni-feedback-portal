@@ -17,8 +17,16 @@ export class StatsOverviewDto {
 export class TopDepartmentStatsDto {
   @ApiProperty({ example: 'IT Department' })
   departmentName: string;
+
   @ApiProperty({ example: 45 })
   feedbackCount: number;
+
+  @ApiProperty({ example: 30 })
+  resolvedCount: number;
+
+  @ApiProperty({ example: 15 })
+  unresolvedCount: number;
+
   @ApiProperty({ example: 24.5, description: 'Average hours to resolve' })
   avgResolutionTimeHours: number;
 }

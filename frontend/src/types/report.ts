@@ -17,6 +17,8 @@ export type StatsOverviewDto = {
 export type TopDepartmentStatsDto = {
   departmentName: string;
   feedbackCount: number;
+  resolvedCount: number;
+  unresolvedCount: number;
   avgResolutionTimeHours: number;
 };
 

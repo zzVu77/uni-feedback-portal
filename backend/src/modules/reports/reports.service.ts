@@ -68,9 +68,6 @@ export class ReportsService {
   async getTopDepartments(
     dto: ReportFilterDto,
   ): Promise<TopDepartmentStatsDto[]> {
-    // Lưu ý: Prisma Model map xuống DB thường có dấu "" nếu dùng Postgres
-    // Query này tính số lượng feedback và thời gian trung bình (tính bằng giờ) từ lúc tạo đến lúc RESOLVED
-
     const fromDate = dto.from ? new Date(dto.from) : new Date('2000-01-01');
     const toDate = dto.to
       ? new Date(new Date(dto.to).setDate(new Date(dto.to).getDate() + 1))
@@ -80,6 +77,10 @@ export class ReportsService {
       SELECT 
         d.name as "departmentName",
         COUNT(f.id)::int as "feedbackCount",
+        
+        COUNT(CASE WHEN f."currentStatus" IN ('PENDING', 'IN_PROGRESS') THEN 1 END)::int as "unresolvedCount",
+        COUNT(CASE WHEN f."currentStatus" IN ('RESOLVED', 'REJECTED') THEN 1 END)::int as "resolvedCount",
+        
         COALESCE(
           AVG(
             EXTRACT(EPOCH FROM (h."createdAt" - f."createdAt")) / 3600

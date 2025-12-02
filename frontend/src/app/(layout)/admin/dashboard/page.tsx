@@ -2,12 +2,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { StatsOverviewCards } from "@/components/dashboard/StatsOverviewCards";
-import { FeedbackTrendChart } from "@/components/dashboard/FeedbackTrendChart";
-import { TopCategoriesChart } from "@/components/dashboard/TopCategoriesChart";
-import { DepartmentPerformanceTable } from "@/components/dashboard/DepartmentPerformanceTable";
-import { TopInteractivePostsTable } from "@/components/dashboard/TopInteractivePostsTable";
-import { MonthRangePicker } from "@/components/dashboard/MonthRangePicker"; // Import component mới
+// Import component mới
 
 import { ReportFilter } from "@/types/report";
 import {
@@ -19,6 +14,12 @@ import {
 } from "@/hooks/queries/useReportQueries";
 import { startOfMonth, endOfMonth, format } from "date-fns";
 import Wrapper from "@/components/shared/Wrapper";
+import { MonthRangePicker } from "@/components/dashboard/admin/MonthRangePicker";
+import { StatsOverviewCards } from "@/components/dashboard/admin/StatsOverviewCards";
+import { TopInteractivePostsTable } from "@/components/dashboard/admin/TopInteractivePostsTable";
+import { FeedbackTrendChart } from "@/components/dashboard/admin/FeedbackTrendChart";
+import { TopCategoriesChart } from "@/components/dashboard/admin/TopCategoriesChart";
+import { DepartmentPerformanceRadial } from "@/components/dashboard/admin/DepartmentPerformanceRadial";
 
 // Hàm helper để lấy tháng hiện tại làm mặc định
 const getDefaultFilter = (): ReportFilter => {
@@ -63,14 +64,14 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* 2. Tables Row */}
-      <div className="grid w-full grid-cols-1 gap-6 xl:grid-cols-8">
-        <div className="col-span-1 w-full lg:col-span-4">
-          <DepartmentPerformanceTable
+      <div className="grid w-full grid-cols-1 gap-4">
+        <div className="col-span-1 w-full">
+          <DepartmentPerformanceRadial
             data={departments}
             isLoading={loadingDepts}
           />
         </div>
-        <div className="col-span-1 w-full lg:col-span-4">
+        <div className="col-span-1 w-full">
           <TopInteractivePostsTable
             data={interactivePosts}
             isLoading={loadingPosts}
@@ -79,7 +80,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* 3. Charts Row */}
-      <div className="grid w-full grid-cols-1 gap-6 pb-4 lg:grid-cols-8">
+      <div className="grid w-full grid-cols-1 gap-4 pb-4 lg:grid-cols-8">
         <div className="col-span-1 lg:col-span-4">
           <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
         </div>
