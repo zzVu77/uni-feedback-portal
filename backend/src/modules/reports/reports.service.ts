@@ -160,7 +160,9 @@ export class ReportsService {
   async getTopInteractivePosts(
     dto: ReportFilterDto,
   ): Promise<TopInteractivePostDto[]> {
-    const fromDate = dto.from ? new Date(dto.from) : new Date('2000-01-01');
+    const fromDate = dto.from
+      ? new Date(dto.from)
+      : new Date(new Date().setDate(new Date().getDate() - 30));
     const toDate = dto.to
       ? new Date(new Date(dto.to).setDate(new Date(dto.to).getDate() + 1))
       : new Date();
@@ -176,7 +178,7 @@ export class ReportsService {
       JOIN "Feedbacks" f ON fp."feedbackId" = f.id
       LEFT JOIN "Votes" v ON fp.id = v."postId"
       LEFT JOIN "Comments" c ON fp.id = c."targetId" AND c."targetType" = 'FORUM_POST'
-      WHERE f."createdAt" >= ${fromDate} AND f."createdAt" < ${toDate}
+      WHERE fp."createdAt" >= ${fromDate} AND fp."createdAt" < ${toDate}
       GROUP BY fp.id, f.subject
       ORDER BY "totalInteractions" DESC
       LIMIT 5;
