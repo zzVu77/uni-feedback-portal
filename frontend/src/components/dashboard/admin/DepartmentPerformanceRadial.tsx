@@ -1,6 +1,7 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {
   Card,
   CardContent,
@@ -16,12 +17,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { TopDepartmentStatsDto } from "@/types/report";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { cn } from "@/lib/utils";
 
-// Cấu hình màu sắc
+// Cấu hình màu sắc Chart
 const chartConfig = {
   resolved: {
     label: "Đã xử lý",
@@ -40,6 +40,13 @@ interface Props {
   isLoading: boolean;
 }
 
+const getPerformanceColor = (hours: number) => {
+  if (hours === 0) return "fill-slate-400/80";
+  if (hours <= 24) return "fill-emerald-400/80";
+  if (hours <= 72) return "fill-amber-400/80";
+  return "fill-rose-400/80";
+};
+
 const SingleDeptChart = ({ dept }: { dept: TopDepartmentStatsDto }) => {
   const chartData = [
     {
@@ -48,6 +55,8 @@ const SingleDeptChart = ({ dept }: { dept: TopDepartmentStatsDto }) => {
       unresolved: dept.unresolvedCount,
     },
   ];
+
+  const performanceColor = getPerformanceColor(dept.avgResolutionTimeHours);
 
   return (
     <div className="flex flex-col items-center rounded-lg p-2 transition-colors hover:bg-slate-50">
@@ -59,7 +68,7 @@ const SingleDeptChart = ({ dept }: { dept: TopDepartmentStatsDto }) => {
       </div>
       <ChartContainer
         config={chartConfig}
-        className="mx-auto aspect-square w-full max-w-[160px]"
+        className="mx-auto aspect-square w-full max-w-40"
       >
         <RadialBarChart
           data={chartData}
@@ -80,7 +89,7 @@ const SingleDeptChart = ({ dept }: { dept: TopDepartmentStatsDto }) => {
                       <tspan
                         x={viewBox.cx}
                         y={(viewBox.cy || 0) - 16}
-                        className="fill-foreground text-xl font-bold"
+                        className={cn("text-xl font-bold", performanceColor)}
                       >
                         {dept.avgResolutionTimeHours.toFixed(1)}h
                       </tspan>
@@ -121,19 +130,14 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Logic filter & pagination
   const { paginatedData, totalPages, totalItems } = useMemo(() => {
     if (!data) return { paginatedData: [], totalPages: 0, totalItems: 0 };
 
-    // 1. Filter by name
     const filtered = data.filter((dept) =>
       dept.departmentName.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    // 2. Calculate pagination
     const total = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-
-    // 3. Slice data for current page
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     const sliced = filtered.slice(start, end);
@@ -145,7 +149,6 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
     };
   }, [data, searchTerm, currentPage]);
 
-  // Reset to page 1 when search term changes
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
@@ -176,7 +179,6 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
             </CardDescription>
           </div>
 
-          {/* Search Bar */}
           <div className="relative w-full md:w-[250px]">
             <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
             <Input
@@ -206,8 +208,7 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
       </CardContent>
 
       <CardFooter className="flex-col gap-4 border-t pt-4 text-xs">
-        {/* Legend */}
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-muted-foreground flex items-center gap-4">
             <div className="flex items-center gap-1">
               <div className="h-2 w-2 rounded-full bg-[hsl(221.2,83.2%,53.3%)]"></div>
@@ -218,12 +219,27 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
               <span>Chưa xử lý</span>
             </div>
           </div>
-          <div className="text-muted-foreground hidden italic sm:block">
-            *Tâm: Thời gian xử lý trung bình (giờ)
+
+          <div className="text-muted-foreground flex flex-wrap items-center gap-3 text-[10px]">
+            <div className="flex items-center gap-1">
+              <div className="h-2 w-2 rounded-full bg-slate-400"></div>
+              <span>N/A</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+              <span>&lt;24h (Tốt)</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="h-2 w-2 rounded-full bg-amber-500"></div>
+              <span>24-72h (TB)</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="h-2 w-2 rounded-full bg-rose-500"></div>
+              <span>&gt;72h (Kém)</span>
+            </div>
           </div>
         </div>
 
-        {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="mt-2 flex w-full items-center justify-between">
             <div className="text-muted-foreground">
