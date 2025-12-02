@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { TopDepartmentStatsDto } from "@/types/report";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 // Cấu hình màu sắc Chart
 const chartConfig = {
@@ -201,7 +202,13 @@ export function DepartmentPerformanceRadial({ data, isLoading }: Props) {
         ) : (
           <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
             {paginatedData.map((dept, index) => (
-              <SingleDeptChart key={index} dept={dept} />
+              <Link
+                key={index}
+                className="cursor-pointer"
+                href={`/admin/feedbacks-management?departmentId=${dept.departmentId}`}
+              >
+                <SingleDeptChart dept={dept} />
+              </Link>
             ))}
           </div>
         )}

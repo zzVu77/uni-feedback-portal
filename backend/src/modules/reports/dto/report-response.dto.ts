@@ -15,6 +15,9 @@ export class StatsOverviewDto {
 }
 
 export class TopDepartmentStatsDto {
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  departmentId: string;
+
   @ApiProperty({ example: 'IT Department' })
   departmentName: string;
 

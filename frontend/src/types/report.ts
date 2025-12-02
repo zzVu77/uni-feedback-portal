@@ -15,6 +15,7 @@ export type StatsOverviewDto = {
 
 // 2. Top Department Stats
 export type TopDepartmentStatsDto = {
+  departmentId: string;
   departmentName: string;
   feedbackCount: number;
   resolvedCount: number;
@@ -30,6 +31,7 @@ export type FeedbackTrendDto = {
 
 // 4. Top Categories
 export type TopCategoryDto = {
+  categoryId: string;
   categoryName: string;
   count: number;
 };

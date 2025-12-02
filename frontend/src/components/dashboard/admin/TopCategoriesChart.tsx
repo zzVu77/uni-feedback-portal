@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 "use client";
+
+import { useRouter } from "next/navigation"; // 1. Import router
 import {
   Bar,
   BarChart,
@@ -37,11 +39,13 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface Props {
-  data?: TopCategoryDto[];
+  data?: (TopCategoryDto & { categoryId?: string })[];
   isLoading: boolean;
 }
 
 export const TopCategoriesChart = ({ data, isLoading }: Props) => {
+  const router = useRouter(); // 2. Init router
+
   if (isLoading)
     return (
       <div className="h-[300px] w-full animate-pulse rounded-xl bg-gray-100" />
@@ -91,6 +95,13 @@ export const TopCategoriesChart = ({ data, isLoading }: Props) => {
               fill="var(--color-count)"
               radius={4}
               barSize={32}
+              className="cursor-pointer"
+              onClick={(entry: any) => {
+                const id = entry.categoryId || entry.id;
+                if (id) {
+                  router.push(`/admin/feedbacks-management?categoryId=${id}`);
+                }
+              }}
             >
               <LabelList
                 dataKey="count"
