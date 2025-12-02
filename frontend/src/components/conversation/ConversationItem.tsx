@@ -27,6 +27,8 @@ import StatusBadge from "../common/StatusBadge";
 import MessageItem from "./MessageItem";
 // Import Upload Helper
 import { uploadFileToCloud } from "@/services/upload-service";
+import { io } from "socket.io-client"; // Thêm import socket.io-client
+import { useUser } from "@/context/UserContext";
 
 type ConversationItemProps = {
   data: ConversationSummary[];
@@ -49,12 +51,32 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
   const { mutateAsync: createMessageInConversation } =
     useCreateMessageInConversation(conversationId);
   const queryClient = useQueryClient();
+  const { user } = useUser();
+  const userId = user?.id;
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [conversationDetail]);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:8080", {
+      query: { userId },
+      transports: ["websocket"],
+    });
+    newSocket.on("clarification.message_sent", async (event) => {
+      if (event.conversationId === conversationId) {
+        await queryClient.invalidateQueries({
+          queryKey: [CLARIFICATION_QUERY_KEYS, conversationId],
+        });
+      }
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [conversationId]);
 
   const handleSendReply = async () => {
     if (!replyText.trim() && selectedFiles.length === 0) return;
