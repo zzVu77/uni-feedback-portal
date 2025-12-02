@@ -1,9 +1,5 @@
-// app/(admin)/dashboard/page.tsx
 "use client";
-
 import React, { useState, useCallback } from "react";
-// Import component mới
-
 import { ReportFilter } from "@/types/report";
 import {
   useGetDepartmentStats,
@@ -21,19 +17,18 @@ import { FeedbackTrendChart } from "@/components/dashboard/admin/FeedbackTrendCh
 import { TopCategoriesChart } from "@/components/dashboard/admin/TopCategoriesChart";
 import { DepartmentPerformanceRadial } from "@/components/dashboard/admin/DepartmentPerformanceRadial";
 
-// Hàm helper để lấy tháng hiện tại làm mặc định
 const getDefaultFilter = (): ReportFilter => {
   const now = new Date();
   return {
-    from: format(startOfMonth(now), "yyyy-MM-dd"), // Ngày 1 của tháng
-    to: format(endOfMonth(now), "yyyy-MM-dd"), // Ngày cuối của tháng
+    from: format(startOfMonth(now), "yyyy-MM-dd"),
+    to: format(endOfMonth(now), "yyyy-MM-dd"),
   };
 };
 
 export default function AdminDashboardPage() {
   const [filter, setFilter] = useState<ReportFilter>(getDefaultFilter());
 
-  // Callback để update filter khi chọn từ Calendar
+  // Callback to handle date range updates
   const handleDateUpdate = useCallback((newRange: ReportFilter) => {
     setFilter(newRange);
   }, []);
@@ -54,7 +49,7 @@ export default function AdminDashboardPage() {
     <Wrapper>
       {/* Header */}
       <div className="flex w-full flex-col items-start justify-end gap-4 md:flex-row md:items-center">
-        {/* Bộ lọc thời gian Custom - Month Range Picker */}
+        {/* Custom time filter - Month Range Picker */}
         <MonthRangePicker onUpdate={handleDateUpdate} />
       </div>
 

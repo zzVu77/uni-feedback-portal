@@ -1,10 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-// src/components/dashboard/TopCategoriesChart.tsx
-"use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, LabelList } from "recharts";
+"use client";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  LabelList,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -20,11 +25,14 @@ import {
 } from "@/components/ui/chart";
 import { TopCategoryDto } from "@/types/report";
 
-// Config color to Blue (Tailwind blue-600 approx)
+// Config color
 const chartConfig = {
   count: {
     label: "Số lượng",
-    color: "hsl(221.2 83.2% 53.3%)", // Blue 600
+    color: "hsl(221.2 83.2% 53.3%)",
+  },
+  label: {
+    color: "hsl(var(--foreground))",
   },
 } satisfies ChartConfig;
 
@@ -47,31 +55,48 @@ export const TopCategoriesChart = ({ data, isLoading }: Props) => {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={data || []} margin={{ top: 20 }}>
-            <CartesianGrid className="mt-10 py-10" vertical={false} />
-            <XAxis
+          <BarChart
+            accessibilityLayer
+            data={data || []}
+            layout="vertical"
+            margin={{
+              right: 30,
+              left: 10,
+            }}
+          >
+            <CartesianGrid horizontal={false} strokeDasharray="3 3" />
+
+            <YAxis
               dataKey="categoryName"
+              type="category"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              width={140}
+              tick={{ fontSize: 13, fill: "hsl(var(--foreground))" }}
               tickFormatter={(value) =>
-                value.length > 10 ? `${value.slice(0, 10)}...` : value
+                value.length > 20 ? `${value.slice(0, 20)}...` : value
               }
             />
+
+            <XAxis dataKey="count" type="number" hide />
+
             <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              cursor={{ fill: "transparent" }}
+              content={<ChartTooltipContent indicator="line" />}
             />
+
             <Bar
               dataKey="count"
-              className="mt-10 py-10"
+              layout="vertical"
               fill="var(--color-count)"
-              radius={8}
+              radius={4}
+              barSize={32}
             >
               <LabelList
-                position="insideTop"
-                offset={12}
-                className="fill-white font-semibold"
+                dataKey="count"
+                position="right"
+                offset={10}
+                className="fill-foreground font-bold"
                 fontSize={12}
               />
             </Bar>
