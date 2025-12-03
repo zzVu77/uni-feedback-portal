@@ -20,6 +20,7 @@ import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 // [Import 2] Import Events
 import { ClarificationCreatedEvent } from './events/clarification-created.event';
 import { ClarificationMessageSentEvent } from './events/clarification-message-sent.event';
+import { formatDateTime } from 'src/shared/helpers/format-datetime.helper';
 
 @Injectable()
 export class ClarificationsService {
@@ -177,7 +178,7 @@ export class ClarificationsService {
       createdAt: conversation.createdAt.toISOString(),
       messages: conversation.messages.map((msg) => ({
         id: msg.id,
-        content: msg.content ?? 'Message not found',
+        content: msg.content ?? null,
         createdAt: msg.createdAt.toISOString(),
         user:
           conversation.feedback.isPrivate &&
@@ -242,7 +243,7 @@ export class ClarificationsService {
       data: {
         conversationId,
         userId: actor.sub,
-        content,
+        content: content ?? null,
       },
       include: {
         user: { select: { id: true, fullName: true, role: true } },
@@ -308,15 +309,17 @@ export class ClarificationsService {
     // use transaction to ensure atomicity
     const updatedConversation = await this.prisma.$transaction(async (tx) => {
       // 1. if there's a message, create it first
-      if (dto.message) {
-        await tx.messages.create({
-          data: {
-            conversationId: conversationId,
-            userId: actor.sub,
-            content: dto.message,
-          },
-        });
-      }
+      await tx.messages.create({
+        data: {
+          conversationId: conversationId,
+          userId: actor.sub,
+          content:
+            dto.message ??
+            actor.fullName +
+              ' closed the conversation at.' +
+              formatDateTime(new Date().toISOString()),
+        },
+      });
 
       // 2.then update the conversation to closed
       return await tx.clarificationConversations.update({
