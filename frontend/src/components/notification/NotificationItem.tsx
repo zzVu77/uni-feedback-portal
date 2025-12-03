@@ -170,6 +170,18 @@ export const NOTIFICATION_CONFIG = {
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Bạn có một tin nhắn mới.",
   },
+  CLARIFICATION_NEW_NOTIFICATION: {
+    title: "Yêu cầu làm rõ mới",
+    icon: MessageSquareText,
+    ...STYLE_PURPLE_LIGHT,
+    defaultDescription: "Bạn có một yêu cầu làm rõ mới.",
+  },
+  CLARIFICATION_CLOSED_NOTIFICATION: {
+    title: "Yêu cầu làm rõ đã đóng",
+    icon: MessageSquareText,
+    ...STYLE_PURPLE_LIGHT,
+    defaultDescription: "Yêu cầu làm rõ của bạn đã được đóng.",
+  },
 
   // -----------------------------
   // 📝 FEEDBACK LIFECYCLE

@@ -18,7 +18,7 @@ import { FileTargetType, Prisma, UserRole } from '@prisma/client';
 import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 // [Import 2] Import Events
-import { ClarificationCreatedEvent } from './events/clarification-created.event';
+import { ClarificationEvent } from './events/clarification.event';
 import { ClarificationMessageSentEvent } from './events/clarification-message-sent.event';
 
 @Injectable()
@@ -73,7 +73,7 @@ export class ClarificationsService {
 
     // [New Logic] Emit Event: Conversation Created
     // Notify the student that a clarification request has been started
-    const event = new ClarificationCreatedEvent({
+    const event = new ClarificationEvent({
       conversationId: conversation.id,
       studentId: feedback.userId, // Send to Student
       subject: conversation.subject,
@@ -304,6 +304,14 @@ export class ClarificationsService {
         'Only the initiator can close this conversation.',
       );
     }
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { id: conversation.feedbackId, departmentId: actor.departmentId },
+    });
+    if (!feedback) {
+      throw new NotFoundException(
+        `Feedback with ID ${conversation.feedbackId} not found.`,
+      );
+    }
 
     // use transaction to ensure atomicity
     const updatedConversation = await this.prisma.$transaction(async (tx) => {
@@ -334,6 +342,14 @@ export class ClarificationsService {
         },
       });
     });
+
+    const event = new ClarificationEvent({
+      conversationId: updatedConversation.id,
+      studentId: feedback.userId, // Send to Student
+      subject: updatedConversation.subject,
+      feedbackId: updatedConversation.feedbackId,
+    });
+    this.eventEmitter.emit('clarification.closed', event);
 
     const messageIds = updatedConversation.messages.map((msg) => msg.id);
     const attachmentsMap =
