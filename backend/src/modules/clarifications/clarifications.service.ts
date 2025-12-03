@@ -316,7 +316,7 @@ export class ClarificationsService {
           content:
             dto.message ??
             actor.fullName +
-              ' closed the conversation at.' +
+              ' closed the conversation at: ' +
               formatDateTime(new Date().toISOString()),
         },
       });
