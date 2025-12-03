@@ -60,3 +60,10 @@ export class NotificationListResponseDto {
   })
   total: number;
 }
+export class NotificationUnreadCountResponseDto {
+  @ApiProperty({
+    description: 'Total number of unread notifications',
+    example: 5,
+  })
+  unreadCount: number;
+}
