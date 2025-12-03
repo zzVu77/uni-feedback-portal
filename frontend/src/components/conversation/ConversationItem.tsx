@@ -59,11 +59,11 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [conversationDetail]);
-
+  const socketUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8080";
   useEffect(() => {
-    const newSocket = io("http://localhost:8080", {
+    const newSocket = io(socketUrl, {
       query: { userId },
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
     newSocket.on("clarification.message_sent", async (event) => {
       if (event.conversationId === conversationId) {

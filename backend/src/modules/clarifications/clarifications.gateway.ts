@@ -3,7 +3,12 @@ import { Server, Socket } from 'socket.io';
 import { ClarificationCreatedEvent } from './events/clarification-created.event';
 import { ClarificationMessageSentEvent } from './events/clarification-message-sent.event';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({
+  cors: {
+    origin: ['http://localhost:3000', 'https://uniportal.vucoder77.id.vn'],
+    credentials: true,
+  },
+})
 export class ClarificationsGateway {
   @WebSocketServer()
   server: Server;
