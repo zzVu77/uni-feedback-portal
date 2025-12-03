@@ -27,6 +27,8 @@ import StatusBadge from "../common/StatusBadge";
 import MessageItem from "./MessageItem";
 // Import Upload Helper
 import { uploadFileToCloud } from "@/services/upload-service";
+import { io } from "socket.io-client"; // Thêm import socket.io-client
+import { useUser } from "@/context/UserContext";
 
 type ConversationItemProps = {
   data: ConversationSummary[];
@@ -49,12 +51,32 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
   const { mutateAsync: createMessageInConversation } =
     useCreateMessageInConversation(conversationId);
   const queryClient = useQueryClient();
+  const { user } = useUser();
+  const userId = user?.id;
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [conversationDetail]);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:8080", {
+      query: { userId },
+      transports: ["websocket"],
+    });
+    newSocket.on("clarification.message_sent", async (event) => {
+      if (event.conversationId === conversationId) {
+        await queryClient.invalidateQueries({
+          queryKey: [CLARIFICATION_QUERY_KEYS, conversationId],
+        });
+      }
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [conversationId]);
 
   const handleSendReply = async () => {
     if (!replyText.trim() && selectedFiles.length === 0) return;
@@ -184,7 +206,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full flex-col border-t border-neutral-100 bg-white p-0">
-                  <div className="flex max-h-[300px] flex-col gap-4 overflow-y-auto px-4 py-4">
+                  <div className="flex max-h-[200px] flex-col gap-4 overflow-y-auto px-4 py-4">
                     {conversationDetail &&
                     conversationDetail.messages &&
                     conversationDetail.messages.length > 0 ? (

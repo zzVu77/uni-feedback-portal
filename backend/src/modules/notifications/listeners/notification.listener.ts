@@ -16,6 +16,7 @@ import { ClarificationCreatedEvent } from 'src/modules/clarifications/events/cla
 import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.event';
 import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
 import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
+import { ClarificationsGateway } from 'src/modules/clarifications/clarifications.gateway';
 
 @Injectable()
 export class NotificationEventListener {
@@ -24,6 +25,7 @@ export class NotificationEventListener {
   constructor(
     private readonly notificationsService: NotificationsService,
     private readonly prisma: PrismaService,
+    private readonly clarificationsGateway: ClarificationsGateway,
   ) {}
 
   /**
@@ -132,6 +134,12 @@ export class NotificationEventListener {
         type: NotificationType.MESSAGE_NEW_NOTIFICATION,
         targetId: payload.feedbackId,
       });
+
+      // [WebSocket] Send realtime message to recipient
+      this.clarificationsGateway.notifyClarificationMessage(
+        payload.recipientId,
+        payload,
+      );
     } catch (error) {
       this.logger.error(
         `Failed to notify new message in conversation ${payload.conversationId}`,
