@@ -206,7 +206,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full flex-col border-t border-neutral-100 bg-white p-0">
-                  <div className="flex max-h-[300px] flex-col gap-4 overflow-y-auto px-4 py-4">
+                  <div className="flex max-h-[200px] flex-col gap-4 overflow-y-auto px-4 py-4">
                     {conversationDetail &&
                     conversationDetail.messages &&
                     conversationDetail.messages.length > 0 ? (
