@@ -12,7 +12,7 @@ import {
 import { FeedbackCreatedEvent } from '../../feedbacks/events/feedback-created.event';
 import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/events/feedback-status-updated.event';
 import { ClarificationMessageSentEvent } from 'src/modules/clarifications/events/clarification-message-sent.event';
-import { ClarificationCreatedEvent } from 'src/modules/clarifications/events/clarification-created.event';
+import { ClarificationEvent } from 'src/modules/clarifications/events/clarification.event';
 import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.event';
 import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
 import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
@@ -89,7 +89,7 @@ export class NotificationEventListener {
   // HANDLER: CLARIFICATION CREATED
   // ============================================
   @OnEvent('clarification.created', { async: true })
-  async handleClarificationCreated(payload: ClarificationCreatedEvent) {
+  async handleClarificationCreated(payload: ClarificationEvent) {
     this.logger.log(
       `[Notification] Processing clarification.created for conversation: ${payload.conversationId}`,
     );
@@ -97,7 +97,29 @@ export class NotificationEventListener {
       await this.notificationsService.createNotifications({
         userIds: [payload.studentId],
         content: `Department Staff requested clarification: "${payload.subject}".`,
-        type: NotificationType.MESSAGE_NEW_NOTIFICATION,
+        type: NotificationType.CLARIFICATION_NEW_NOTIFICATION,
+        targetId: payload.feedbackId,
+      });
+    } catch (error) {
+      this.logger.error(
+        `Failed to notify student about clarification ${payload.conversationId}`,
+        error.stack,
+      );
+    }
+  }
+  // ============================================
+  // HANDLER: CLARIFICATION CLOSED
+  // ============================================
+  @OnEvent('clarification.closed', { async: true })
+  async handleClarificationClosed(payload: ClarificationEvent) {
+    this.logger.log(
+      `[Notification] Processing clarification.closed for conversation: ${payload.conversationId}`,
+    );
+    try {
+      await this.notificationsService.createNotifications({
+        userIds: [payload.studentId],
+        content: `Department Staff closed clarification: "${payload.subject}".`,
+        type: NotificationType.CLARIFICATION_CLOSED_NOTIFICATION,
         targetId: payload.feedbackId,
       });
     } catch (error) {
