@@ -17,6 +17,8 @@ export type TypeOfNotification =
   | "YOUR_COMMENT_WAS_DELETED"
   // User-facing notifications about clarifications/messages
   | "MESSAGE_NEW_NOTIFICATION"
+  | "CLARIFICATION_NEW_NOTIFICATION"
+  | "CLARIFICATION_CLOSED_NOTIFICATION"
   // User-facing notifications about feedback lifecycle
   | "FEEDBACK_SUBMITTED_NOTIFICATION"
   | "FEEDBACK_PROCESSING_NOTIFICATION"

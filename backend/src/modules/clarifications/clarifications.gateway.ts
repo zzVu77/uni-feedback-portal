@@ -1,7 +1,8 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ClarificationCreatedEvent } from './events/clarification-created.event';
+
 import { ClarificationMessageSentEvent } from './events/clarification-message-sent.event';
+import { ClarificationEvent } from './events/clarification.event';
 
 @WebSocketGateway({
   cors: {
@@ -22,7 +23,7 @@ export class ClarificationsGateway {
     }
   }
 
-  notifyClarificationCreated(userId: string, event: ClarificationCreatedEvent) {
+  notifyClarificationCreated(userId: string, event: ClarificationEvent) {
     this.server.to(userId).emit('clarification.created', event);
   }
 
