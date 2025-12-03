@@ -63,7 +63,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
   useEffect(() => {
     const newSocket = io(socketUrl, {
       query: { userId },
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
     newSocket.on("clarification.message_sent", async (event) => {
       if (event.conversationId === conversationId) {
