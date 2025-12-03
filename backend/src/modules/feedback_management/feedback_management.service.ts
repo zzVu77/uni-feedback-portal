@@ -331,6 +331,7 @@ export class FeedbackManagementService {
       where: { id: feedbackId },
       data: {
         departmentId: dto.toDepartmentId,
+        currentStatus: FeedbackStatus.IN_PROGRESS,
       },
     });
     return {
