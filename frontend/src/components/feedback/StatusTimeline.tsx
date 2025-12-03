@@ -9,7 +9,7 @@ const StatusTimeLine = ({
   statusHistory: FeedbackDetail["statusHistory"];
 }) => {
   return (
-    <div className="flex max-h-[580px] min-h-[250px] flex-col items-start justify-start gap-4 rounded-xl bg-white px-8 py-4 shadow-xs">
+    <div className="flex max-h-[650px] min-h-[250px] flex-col items-start justify-start gap-4 rounded-xl bg-white px-8 py-4 shadow-xs">
       {/* Timeline header */}
       <div className="flex flex-row items-center gap-1">
         <History className="text-neutral-dark-primary-700 h-6 w-6" />
@@ -34,7 +34,7 @@ const StatusTimeLine = ({
             </div>
           </div>
         ) : (
-          <div className="w-full px-6 pt-4">
+          <div className="h-full max-h-[50vh] w-full px-6 pt-4">
             <ol className="relative border-l border-blue-400">
               {statusHistory.map((item, index) => (
                 <TimeLineItem

@@ -220,7 +220,7 @@ const ConversationSection = ({
   };
 
   return (
-    <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
+    <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
       {/* Header */}
       <div className="flex flex-row items-center gap-2 border-b border-transparent pb-2">
         <MessageCircleMore className="h-6 w-6 text-neutral-700" />
@@ -228,7 +228,7 @@ const ConversationSection = ({
       </div>
 
       <ScrollArea className="mr-3 w-full flex-1 pr-3">
-        <div className="flex flex-col gap-4 py-1">
+        <div className="flex h-full max-h-[650px] flex-col gap-4 py-1">
           {isCreating ? (
             <NewConversationForm
               onCancel={() => setIsCreating(false)}
@@ -245,7 +245,7 @@ const ConversationSection = ({
                   </span>
                 </div>
               ) : (
-                <div className="w-full pb-1">
+                <div className="h-full max-h-[50vh] w-full">
                   <ConversationItem
                     data={conversations}
                     role={role}
