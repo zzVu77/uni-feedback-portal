@@ -76,7 +76,7 @@ export const NOTIFICATION_CONFIG = {
   // 👍 VOTE (GREEN)
   // -----------------------------
   VOTE_FORUM_POST_NOTIFICATION: {
-    title: "Bài viết của bạn được thích",
+    title: "Thông báo mới từ bài đăng trên diễn đàn",
     icon: ThumbsUp,
     ...STYLE_GREEN,
     defaultDescription: "Ai đó vừa thích bài viết của bạn.",
@@ -93,14 +93,14 @@ export const NOTIFICATION_CONFIG = {
   // 💬 COMMENT / REPLY (BLUE)
   // -----------------------------
   COMMENT_FORUM_POST_NOTIFICATION: {
-    title: "Bình luận mới trong bài viết",
+    title: "Bình luận mới trong bài đăng",
     icon: MessageCircleMore,
     ...STYLE_BLUE,
-    defaultDescription: "Có người vừa bình luận vào bài viết của bạn.",
+    defaultDescription: "Có người vừa bình luận vào bài đăng của bạn.",
   },
 
   REPLY_COMMENT_FORUM_POST_NOTIFICATION: {
-    title: "Phản hồi mới trong bình luận",
+    title: "Phản hồi mới trong bình luận từ bài đăng",
     icon: MessageSquareReply,
     ...STYLE_BLUE,
     defaultDescription: "Có người vừa trả lời bình luận của bạn.",
@@ -114,7 +114,7 @@ export const NOTIFICATION_CONFIG = {
   },
 
   REPLY_COMMENT_ANNOUNCEMENT_NOTIFICATION: {
-    title: "Phản hồi mới trong thông báo",
+    title: "Phản hồi mới trong bình luận từ thông báo",
     icon: MessageSquareReply,
     ...STYLE_BLUE,
     defaultDescription: "Có người vừa trả lời bình luận của bạn.",
@@ -165,19 +165,19 @@ export const NOTIFICATION_CONFIG = {
   // ✉️ MESSAGES (PURPLE LIGHT)
   // -----------------------------
   MESSAGE_NEW_NOTIFICATION: {
-    title: "Tin nhắn mới",
+    title: "Tin nhắn mới từ góp ý",
     icon: MessageSquareText,
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Bạn có một tin nhắn mới.",
   },
   CLARIFICATION_NEW_NOTIFICATION: {
-    title: "Yêu cầu làm rõ mới",
+    title: "Có yêu cầu trao đổi từ góp ý",
     icon: MessageSquareText,
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Bạn có một yêu cầu làm rõ mới.",
   },
   CLARIFICATION_CLOSED_NOTIFICATION: {
-    title: "Yêu cầu làm rõ đã đóng",
+    title: "Yêu cầu trao đổi đã được đóng ở góp ý",
     icon: MessageSquareText,
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Yêu cầu làm rõ của bạn đã được đóng.",
@@ -194,21 +194,21 @@ export const NOTIFICATION_CONFIG = {
   },
 
   FEEDBACK_PROCESSING_NOTIFICATION: {
-    title: "Góp ý đang được xử lý",
+    title: "Thông báo cập nhật trạng thái mới từ góp ý",
     icon: Hourglass,
     ...STYLE_BLUE_FEEDBACK,
     defaultDescription: "Góp ý của bạn đang được xử lý.",
   },
 
   FEEDBACK_RESOLVED_NOTIFICATION: {
-    title: "Góp ý đã được xử lý",
+    title: "Thông báo cập nhật trạng thái mới từ góp ý",
     icon: CheckCircle,
     ...STYLE_GREEN_FEEDBACK,
     defaultDescription: "Góp ý của bạn đã được phản hồi.",
   },
 
   FEEDBACK_REJECTED_NOTIFICATION: {
-    title: "Góp ý bị từ chối",
+    title: "Thông báo cập nhật trạng thái mới từ góp ý",
     icon: XCircle,
     ...STYLE_RED,
     defaultDescription: "Góp ý của bạn không được chấp nhận.",
@@ -265,6 +265,8 @@ const NotificationItem = ({
   notificationType,
   targetId,
   id,
+  content,
+  title: messageTitle,
 }: NotificationDetails) => {
   const config =
     NOTIFICATION_CONFIG[notificationType] ||
@@ -307,11 +309,14 @@ const NotificationItem = ({
           </div>
           <div className="w-full">
             {/* Title */}
-            <h4 className="text-[16px] font-medium">
-              {title ?? "Notification Title"}
-            </h4>
+            <span className="text-[14px]">
+              {title + " "}{" "}
+              <span className="font-medium">{`"${messageTitle}"`}</span>
+            </span>
             {/* Description */}
-            <p className="mt-1 text-sm text-gray-600">{defaultDescription}</p>
+            <p className="mt-1 text-sm text-gray-600">
+              {content ?? defaultDescription}
+            </p>
           </div>
         </div>
         <div className="block w-20 text-right text-xs text-gray-500">

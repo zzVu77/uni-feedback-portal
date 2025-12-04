@@ -294,7 +294,7 @@ model Notifications {
   id                String            @id @default(uuid()) @db.Uuid
   userId            String            @db.Uuid
   content           String
-  title             String 
+  title            String @default("Thông báo mới")
   notificationType  NotificationType
   targetId          String?           @db.Uuid // ID of the related entity (e.g., feedback, comment, announcement)
   isRead            Boolean           @default(false)

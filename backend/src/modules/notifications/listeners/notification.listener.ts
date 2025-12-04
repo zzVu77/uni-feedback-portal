@@ -254,7 +254,7 @@ export class NotificationEventListener {
     );
     await this.notificationsService.createNotifications({
       userIds: [announcement.userId],
-      content: `Có bình luận mới trên thông báo "${announcement.title}": "${this.previewContent(payload.content)}"`,
+      content: `Nội dung bình luận: "${this.previewContent(payload.content)}"`,
       type: NotificationType.COMMENT_ANNOUNCEMENT_NOTIFICATION,
       targetId: payload.targetId,
       title: targetInfo.title,
@@ -285,7 +285,7 @@ export class NotificationEventListener {
     );
     await this.notificationsService.createNotifications({
       userIds: [post.feedback.userId],
-      content: `Có bình luận mới trên bài viết "${post.feedback.subject}": "${this.previewContent(payload.content)}"`,
+      content: `Có bình luận mới trên bài đăng: "${this.previewContent(payload.content)}"`,
       type: NotificationType.COMMENT_FORUM_POST_NOTIFICATION,
       targetId: payload.targetId,
       title: targetInfo.title,
@@ -381,7 +381,7 @@ export class NotificationEventListener {
       // 3. Create Notification
       await this.notificationsService.createNotifications({
         userIds: [post.feedback.userId],
-        content: `Bài viết "${this.previewContent(post.feedback.subject)}" của bạn vừa được thích.`,
+        content: `Bài viết "${this.previewContent(post.feedback.subject)}" của bạn vừa có 1 lượt ủng hộ.`,
         type: NotificationType.VOTE_FORUM_POST_NOTIFICATION,
         targetId: payload.postId,
         title: post.feedback.subject,

@@ -21,6 +21,7 @@ import { ForumService } from '../forum/forum.service';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
 // [Import 2] Import the event definition
 import { FeedbackCreatedEvent } from './events/feedback-created.event';
+import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
 
 @Injectable()
 export class FeedbacksService {
@@ -433,6 +434,17 @@ export class FeedbacksService {
         fileAttachments,
       );
     }
+
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedback.id,
+        status: 'PENDING',
+        message: GenerateStatusUpdateMessage(
+          feedback.department.name,
+          'PENDING',
+        ),
+      },
+    });
 
     // [New Logic] Emit Event: Feedback Created
     // This allows the Notification module to handle notifications asynchronously without blocking this response.
