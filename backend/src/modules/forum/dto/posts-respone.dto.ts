@@ -8,14 +8,21 @@ export class FeedbackForumDto extends OmitType(FeedbackDetail, [
 ] as const) {
   @ApiProperty({
     description: 'Response from office handling the feedback',
-    example: 'This feedback has been processed by IT department.',
+    example: {
+      content: 'This feedback has been processed by IT department.',
+      createdAt: '2025-09-26T08:45:00.000Z',
+    },
     required: false,
   })
-  officeResponse?: string;
+  officialResponse: {
+    content: string;
+    createdAt: string;
+  } | null;
 }
 
 export class FeedbackForumSummaryDto extends OmitType(FeedbackForumDto, [
   'fileAttachments',
+  'officialResponse',
 ] as const) {}
 class UserInfo {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
