@@ -58,6 +58,7 @@ export class NotificationsController {
       content: dto.content,
       type: dto.type,
       targetId: dto.targetId,
+      title: dto.title,
     });
   }
 

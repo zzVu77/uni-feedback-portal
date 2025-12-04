@@ -3,6 +3,7 @@ export class ClarificationMessageSentEvent {
   senderId: string;
   recipientId: string;
   content: string;
+  subject: string;
   feedbackId: string;
 
   constructor(partial: Partial<ClarificationMessageSentEvent>) {
