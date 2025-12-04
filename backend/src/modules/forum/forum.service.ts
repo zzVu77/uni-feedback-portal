@@ -201,7 +201,12 @@ export class ForumService {
     const resolvedStatus = post.feedback.statusHistory.find(
       (h) => h.status === 'RESOLVED',
     );
-    const officeResponse = resolvedStatus?.note ?? resolvedStatus?.message;
+    const officialResponse = resolvedStatus
+      ? {
+          content: resolvedStatus.note ?? resolvedStatus.message,
+          createdAt: resolvedStatus.createdAt.toISOString(),
+        }
+      : null;
 
     // Lấy file đính kèm bằng UploadsService
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
@@ -229,7 +234,7 @@ export class ForumService {
           name: post.feedback.department.name,
         },
         currentStatus: post.feedback.currentStatus,
-        officeResponse,
+        officialResponse,
         fileAttachments: fileAttachments,
       },
       ...(post.feedback.isPrivate

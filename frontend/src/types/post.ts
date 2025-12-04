@@ -22,7 +22,10 @@ export type ForumPostDetail = {
     };
     currentStatus: FeedbackStatus;
     fileAttachments: FileAttachmentDto[];
-    officeResponse?: string;
+    officialResponse: {
+      content: string;
+      createdAt: string;
+    } | null;
   };
   user: {
     id: string;
