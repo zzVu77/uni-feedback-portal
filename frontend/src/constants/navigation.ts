@@ -35,7 +35,7 @@ export const staffNavigation: NavigationItem[] = [
     icon: Megaphone,
   },
   { href: "/notifications", label: "Thông báo", icon: Bell },
-  { href: "#6", label: "Thống kê", icon: ChartColumn },
+  { href: "/staff/dashboard", label: "Thống kê", icon: ChartColumn },
   { href: "/change-password", label: "Đổi mật khẩu", icon: KeyRound },
 ];
 export const adminNavigation: NavigationItem[] = [
