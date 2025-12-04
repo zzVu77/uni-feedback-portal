@@ -6,6 +6,11 @@ import {
   getFeedbackTrends,
   getTopCategories,
   getTopInteractivePosts,
+  getStaffFeedbackTrends,
+  getStaffPerformance,
+  getStaffTopCategories,
+  getStaffStatsOverview,
+  getStaffRadarChart,
 } from "@/services/report-service";
 import { ReportFilter } from "@/types/report";
 
@@ -15,6 +20,12 @@ export const REPORT_QUERY_KEYS = {
   trends: "report-trends",
   categories: "report-categories",
   interactivePosts: "report-interactive-posts",
+
+  staffOverview: "staff-report-overview",
+  staffCategories: "staff-report-categories",
+  staffTrends: "staff-report-trends",
+  staffPerformance: "staff-report-performance",
+  staffRadar: "staff-report-radar",
 };
 
 export const useGetStatsOverview = (filter: ReportFilter) => {
@@ -54,5 +65,44 @@ export const useGetTopInteractivePosts = (filter: ReportFilter) => {
     queryKey: [REPORT_QUERY_KEYS.interactivePosts, filter],
     queryFn: () => getTopInteractivePosts(filter),
     placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetStaffStatsOverview = (filter: ReportFilter) => {
+  return useQuery({
+    queryKey: [REPORT_QUERY_KEYS.staffOverview, filter],
+    queryFn: () => getStaffStatsOverview(filter),
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetStaffTopCategories = (filter: ReportFilter) => {
+  return useQuery({
+    queryKey: [REPORT_QUERY_KEYS.staffCategories, filter],
+    queryFn: () => getStaffTopCategories(filter),
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetStaffFeedbackTrends = (filter: ReportFilter) => {
+  return useQuery({
+    queryKey: [REPORT_QUERY_KEYS.staffTrends, filter],
+    queryFn: () => getStaffFeedbackTrends(filter),
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetStaffPerformance = (filter: ReportFilter) => {
+  return useQuery({
+    queryKey: [REPORT_QUERY_KEYS.staffPerformance, filter],
+    queryFn: () => getStaffPerformance(filter),
+    placeholderData: (previousData) => previousData,
+  });
+};
+export const useGetStaffRadarChart = (filter: ReportFilter) => {
+  return useQuery({
+    queryKey: [REPORT_QUERY_KEYS.staffRadar, filter],
+    queryFn: () => getStaffRadarChart(filter),
+    placeholderData: (previousData) => previousData, // Giữ data cũ khi đổi năm để tránh layout shift
   });
 };

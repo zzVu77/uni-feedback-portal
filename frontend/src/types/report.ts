@@ -43,3 +43,9 @@ export type TopInteractivePostDto = {
   commentCount: number;
   totalInteractions: number;
 };
+
+export type RadarStatsDto = {
+  month: string;
+  resolved: number;
+  unresolved: number;
+};

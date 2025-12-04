@@ -56,3 +56,13 @@ export class TopInteractivePostDto {
   @ApiProperty({ example: 57, description: 'Total = Votes + Comments' })
   totalInteractions: number;
 }
+export class RadarStatsDto {
+  @ApiProperty({ example: 'January' })
+  month: string;
+
+  @ApiProperty({ example: 120, description: 'Resolved + Rejected' })
+  resolved: number;
+
+  @ApiProperty({ example: 50, description: 'Pending + In Progress' })
+  unresolved: number;
+}
