@@ -27,7 +27,13 @@ const OfficialResponse = ({
             {departmentName ?? "Khoa Đào tạo quốc tế"}
           </span>
           <time className="text-sm font-normal text-gray-400">
-            {responseDate ?? "20/10/2025"}
+            {new Date(responseDate).toLocaleString("vi-VN", {
+              hour: "2-digit",
+              minute: "2-digit",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
           </time>
         </div>
       </div>
