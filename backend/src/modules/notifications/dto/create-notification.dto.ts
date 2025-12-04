@@ -32,7 +32,11 @@ export class CreateNotificationsDto {
   @IsEnum(NotificationType)
   type: NotificationType;
 
-  @ApiProperty({ description: 'The ID related to the notification' })
+  @ApiProperty({ description: 'The ID of the related entity' })
   @IsUUID()
-  targetId?: string;
+  targetId: string | null;
+
+  @ApiProperty({ description: 'The title of the related entity' })
+  @IsString()
+  title: string;
 }
