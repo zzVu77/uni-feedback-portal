@@ -147,7 +147,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
   const { data } = useGetDepartmentOptions();
 
   const departmentOptions = data
-    ? data.filter((department) => department.value !== user?.departmentId)
+    ? data.filter((department) => department.value !== user?.department?.id)
     : [];
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

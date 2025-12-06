@@ -34,13 +34,11 @@ export const useGetAnnouncements = (filters: AnnouncementFilter) => {
     placeholderData: (previousData) => previousData,
   });
 };
-// Refactored to Infinite Query
 export const useGetInfiniteAnnouncements = (filters: AnnouncementFilter) => {
   return useInfiniteQuery<PaginatedResponse<AnnouncementListItem>>({
     queryKey: [ANNOUNCEMENT_QUERY_KEYS.all, filters],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
-      // Merge pageParam with existing filters
       return await getAllAnnouncements({
         ...filters,
         page: pageParam as number,
@@ -48,10 +46,12 @@ export const useGetInfiniteAnnouncements = (filters: AnnouncementFilter) => {
       });
     },
     getNextPageParam: (lastPage, allPages) => {
-      // Calculate loaded items count
-      const loadedItems = allPages.flatMap((page) => page.results).length;
+      if (!lastPage || !lastPage.results) return undefined;
 
-      // Check if there are more items to load
+      const loadedItems = allPages.flatMap(
+        (page) => page?.results ?? [],
+      ).length;
+
       if (loadedItems < lastPage.total) {
         return allPages.length + 1;
       }

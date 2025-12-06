@@ -3,8 +3,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
 import { useForumPostFilters } from "@/hooks/filters/useForumPostFilter";
-// Import the NEW infinite hooks defined above (please update the path)
-
 import { useUrlTabs } from "@/hooks/useUrlTabs";
 import { Megaphone, MessageCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
