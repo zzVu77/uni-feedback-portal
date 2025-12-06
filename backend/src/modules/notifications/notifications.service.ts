@@ -201,7 +201,15 @@ export class NotificationsService {
 
     return { results, total };
   }
-
+  // ============================================
+  // GET QUANTITY UNREAD NOTIFICATIONS
+  // ============================================
+  async getUnreadCount(userId: string): Promise<number> {
+    const count = await this.prisma.notifications.count({
+      where: { userId, isRead: false },
+    });
+    return count;
+  }
   // Helper to map GroupFilter to NotificationType[]
   private getNotificationTypesByGroup(
     group: GroupNotiFilter,
