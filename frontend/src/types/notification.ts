@@ -52,3 +52,6 @@ export interface NotificationFilter extends BaseFilter {
   isRead?: string;
   type?: string;
 }
+export type UnreadNotificationCount = {
+  unreadCount: number;
+};
