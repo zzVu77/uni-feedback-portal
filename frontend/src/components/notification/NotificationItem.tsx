@@ -165,19 +165,19 @@ export const NOTIFICATION_CONFIG = {
   // ✉️ MESSAGES (PURPLE LIGHT)
   // -----------------------------
   MESSAGE_NEW_NOTIFICATION: {
-    title: "Tin nhắn mới từ góp ý",
+    title: "Tin nhắn mới từ yêu cầu trao đổi",
     icon: MessageSquareText,
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Bạn có một tin nhắn mới.",
   },
   CLARIFICATION_NEW_NOTIFICATION: {
-    title: "Có yêu cầu trao đổi từ góp ý",
+    title: "Có 1 yêu cầu trao đổi mới từ phòng ban:",
     icon: MessageSquareText,
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Bạn có một yêu cầu làm rõ mới.",
   },
   CLARIFICATION_CLOSED_NOTIFICATION: {
-    title: "Yêu cầu trao đổi đã được đóng ở góp ý",
+    title: "Yêu cầu trao đổi đã được đóng",
     icon: MessageSquareText,
     ...STYLE_PURPLE_LIGHT,
     defaultDescription: "Yêu cầu làm rõ của bạn đã được đóng.",
@@ -294,27 +294,31 @@ const NotificationItem = ({
     <Link href={notificationUrl} key={id} onClick={handleItemClick}>
       <div
         className={cn(
-          "flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
+          "flex w-full cursor-pointer flex-row items-start justify-between gap-0.5 rounded-xl p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
           isRead ? "bg-white" : "bg-blue-primary-100/40",
         )}
       >
         <div className="flex w-full flex-row items-center justify-start gap-2">
           <div
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-full",
+              "flex h-8 w-8 items-center justify-center rounded-full lg:h-10 lg:w-10",
               backgroundClassName,
             )}
           >
-            {Icon && <Icon className={`${iconClassName} font-bold`} />}
+            {Icon && (
+              <Icon
+                className={`${iconClassName} h-4 w-4 font-bold lg:h-5 lg:w-5`}
+              />
+            )}
           </div>
           <div className="w-full">
             {/* Title */}
-            <span className="text-[14px]">
+            <span className="text-xs lg:text-sm">
               {title + " "}{" "}
               <span className="font-medium">{`"${messageTitle}"`}</span>
             </span>
             {/* Description */}
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-xs text-gray-600 lg:text-sm">
               {content ?? defaultDescription}
             </p>
           </div>

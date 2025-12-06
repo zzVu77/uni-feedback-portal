@@ -99,7 +99,7 @@ export class NotificationEventListener {
     try {
       await this.notificationsService.createNotifications({
         userIds: [payload.studentId],
-        content: `Đại diện phòng ban đã gửi yêu cầu làm rõ: "${payload.subject}".`,
+        content: `Đại diện phòng ban đã gửi 1 yêu cầu trao đổi: "${payload.subject}".`,
         type: NotificationType.CLARIFICATION_NEW_NOTIFICATION,
         targetId: payload.feedbackId,
         title: payload.subject,
