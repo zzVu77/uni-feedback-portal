@@ -25,6 +25,7 @@ import {
   UpdateFeedbackStatusResponseDto,
 } from './dto';
 import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
+import { FeedbackForwardingEvent } from './events/feedback-forwarding.event';
 @Injectable()
 export class FeedbackManagementService {
   constructor(
@@ -288,6 +289,7 @@ export class FeedbackManagementService {
   ): Promise<ForwardingResponseDto> {
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
+      include: { department: true },
     });
 
     if (!feedback) {
@@ -334,6 +336,21 @@ export class FeedbackManagementService {
         currentStatus: FeedbackStatus.IN_PROGRESS,
       },
     });
+    const event = new FeedbackForwardingEvent({
+      feedback: {
+        id: feedback.id,
+        subject: feedback.subject,
+      },
+      sender: {
+        senderId: actor.sub,
+        departmentName: feedback.department.name,
+      },
+      recipient: {
+        departmentId: dto.toDepartmentId,
+        departmentName: toDepartment.name,
+      },
+    });
+    this.eventEmitter.emit('feedback.forwarded', event);
     return {
       forwardingLogId: forwarding.id,
       feedbackId: forwarding.feedbackId,
