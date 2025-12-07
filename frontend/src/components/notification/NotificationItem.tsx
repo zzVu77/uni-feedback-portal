@@ -235,7 +235,7 @@ export const NOTIFICATION_CONFIG = {
   // 🔧 ADMIN
   // -----------------------------
   NEW_COMMENT_REPORT_FOR_ADMIN: {
-    title: "Báo cáo bình luận mới",
+    title: "Báo cáo bình luận mới từ bài đăng",
     icon: ShieldAlert,
     ...STYLE_BLUE_ADMIN,
     defaultDescription: "Có một báo cáo bình luận cần được xem xét.",

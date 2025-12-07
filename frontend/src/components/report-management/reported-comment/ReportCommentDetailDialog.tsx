@@ -69,13 +69,13 @@ const ReportCommentDetailDialog = ({
     <div>
       <Dialog open={open} onOpenChange={onOpenChange}>
         {children && <DialogTrigger asChild>{children}</DialogTrigger>}
-        <DialogContent className="py-2 lg:h-[80vh] lg:w-full">
+        <DialogContent className="px-2 py-2 lg:h-[80vh] lg:w-full">
           <DialogTitle className="sr-only">Chi tiết báo cáo</DialogTitle>
           <ScrollArea className="w-full overflow-y-auto pr-1">
             <div className="flex h-[60vh] flex-col gap-4 px-2">
               {/* Comment Detail */}
               <div className="flex flex-col gap-2">
-                <div className="flex flex-row items-center justify-start gap-2">
+                <div className="flex flex-row items-center justify-start gap-2 py-4">
                   <MessageSquare className="h-5 w-5 text-blue-500/80" />
                   <span className="text-lg font-bold text-blue-500/80">
                     Chi tiết bình luận
