@@ -50,7 +50,7 @@ export function AnnouncementManagementTable() {
 
   // 1. Get User Context to retrieve departmentId
   const { user } = useUser();
-  const departmentId = user?.departmentId ?? undefined;
+  const departmentId = user?.department?.id ?? undefined;
 
   // 2. Handle URL Search Params for pagination & filtering
   const router = useRouter();
