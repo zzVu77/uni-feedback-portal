@@ -230,6 +230,12 @@ export const NOTIFICATION_CONFIG = {
     ...STYLE_BLUE_ADMIN,
     defaultDescription: "Một góp ý đã được chuyển đến bạn để xử lý.",
   },
+  FEEDBACK_FORWARDED: {
+    title: "Góp ý được chuyển đến phòng ban khác",
+    icon: MessageCircleMore,
+    ...STYLE_BLUE_ADMIN,
+    defaultDescription: "Góp ý đã được chuyển đến phòng ban khác để xử lý.",
+  },
 
   // -----------------------------
   // 🔧 ADMIN
