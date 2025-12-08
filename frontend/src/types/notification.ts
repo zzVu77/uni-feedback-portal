@@ -27,6 +27,7 @@ export type TypeOfNotification =
   // Department staff notifications
   | "NEW_FEEDBACK_RECEIVED"
   | "FEEDBACK_FORWARDED_TO_YOU"
+  | "FEEDBACK_FORWARDED"
   // Admin notifications
   | "NEW_COMMENT_REPORT_FOR_ADMIN"
   // General/System notifications
