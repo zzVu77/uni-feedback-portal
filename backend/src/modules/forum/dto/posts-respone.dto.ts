@@ -56,7 +56,7 @@ export class PostDetailDto {
     description: 'Information about the user who created the post',
     type: UserInfo,
   })
-  user?: UserInfo | null;
+  user: UserInfo;
 
   @ApiProperty({
     description: 'Total number of votes',
