@@ -41,9 +41,10 @@ const chartConfig = {
 interface Props {
   data?: TopCategoryDto[];
   isLoading: boolean;
+  type?: "admin" | "staff";
 }
 
-export const TopCategoriesChart = ({ data, isLoading }: Props) => {
+export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
   const router = useRouter(); // 2. Init router
 
   if (isLoading)
@@ -99,7 +100,9 @@ export const TopCategoriesChart = ({ data, isLoading }: Props) => {
               onClick={(entry: any) => {
                 const id = entry.categoryId || entry.id;
                 if (id) {
-                  router.push(`/admin/feedbacks-management?categoryId=${id}`);
+                  router.push(
+                    `/${type === "staff" ? "staff/list-feedbacks" : "admin/feedbacks-management"}?categoryId=${id}`,
+                  );
                 }
               }}
             >

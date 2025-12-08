@@ -31,11 +31,11 @@ const page = () => {
     <div className="w-full">
       <Wrapper>
         <FeedbackPostDetail data={forumDetail} />
-        {forumDetail.feedback.officeResponse && (
+        {forumDetail.feedback.officialResponse !== null && (
           <OfficialResponse
             departmentName={forumDetail.feedback.department.name}
-            responseContent={forumDetail.feedback.officeResponse}
-            responseDate="20/11/2023"
+            responseContent={forumDetail.feedback.officialResponse.content}
+            responseDate={forumDetail.feedback.officialResponse.createdAt}
           />
         )}
 

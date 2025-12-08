@@ -5,21 +5,21 @@ export function GenerateStatusUpdateMessage(
 ): string {
   switch (status) {
     case FeedbackStatus.PENDING:
-      return `Phản hồi hiện đang chờ xử lý tại bộ phận ${departmentName}.`;
+      return `Cảm ơn bạn đã gửi phản góp ý đến bộ phận ${departmentName}. Chúng tôi sẽ cố gắng xử lý góp ý của bạn trong thời gian sớm nhất.`;
 
     case FeedbackStatus.IN_PROGRESS:
-      return `Phản hồi đang được bộ phận ${departmentName} xử lý.`;
+      return `Góp ý đang được bộ phận ${departmentName} xử lý.`;
 
     case FeedbackStatus.RESOLVED:
-      return `Phản hồi đã được bộ phận ${departmentName} giải quyết.`;
+      return `Góp ý đã được bộ phận ${departmentName} giải quyết.`;
 
     case FeedbackStatus.REJECTED:
-      return `Phản hồi đã bị bộ phận ${departmentName} từ chối.`;
+      return `Góp ý đã bị bộ phận ${departmentName} từ chối.`;
 
     default:
-      return `Trạng thái phản hồi đã được cập nhật tại bộ phận ${departmentName}.`;
+      return `Trạng thái Góp ý đã được cập nhật tại bộ phận ${departmentName}.`;
   }
 }
 export function GenerateForwardingMessage(departmentName: string): string {
-  return `Phản hồi đã được chuyển tiếp đến bộ phận ${departmentName} để xử lý tiếp.`;
+  return `Góp ý đã được chuyển tiếp đến bộ phận ${departmentName} để xử lý tiếp.`;
 }

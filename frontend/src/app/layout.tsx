@@ -1,13 +1,12 @@
 import { Toaster } from "@/components/ui/sonner";
+import { UserProvider } from "@/context/UserContext";
 import QueryProvider from "@/lib/QueryProvider";
+import { UserInfo } from "@/types"; // Đảm bảo bạn đã export type này từ file types
 import { Check, Info, X } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { cookies } from "next/headers";
-import { getUserFromToken } from "@/utils/server/auth.server";
-import { UserInfo } from "@/types";
-import { UserProvider } from "@/context/UserContext";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +24,31 @@ export const metadata: Metadata = {
     "Cổng thông tin góp ý dành cho sinh viên và giảng viên Trường Đại học Sư phạm Kỹ thuật TP.HCM",
 };
 
+const getMe = async (token: string): Promise<UserInfo | null> => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  try {
+    const res = await fetch(`${baseUrl}/users/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `accessToken=${token}`,
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const data = await res.json();
+    return data as UserInfo;
+  } catch (error) {
+    console.error("Failed to fetch user info:", error);
+    return null;
+  }
+};
+// --- Root Layout Component ---
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -32,15 +56,8 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
-  const user = token ? await getUserFromToken(token) : null;
-  const userData: UserInfo | null = user
-    ? {
-        id: user.sub,
-        fullName: user.fullName,
-        role: user.role,
-        departmentId: user.departmentId,
-      }
-    : null;
+  const userData = token ? await getMe(token) : null;
+
   return (
     <html lang="en">
       <body

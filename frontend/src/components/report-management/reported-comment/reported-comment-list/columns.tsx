@@ -276,9 +276,12 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
               : `/forum//announcements/${source.target.targetInfo.id}`
           }
         >
-          <span className="text-blue-primary-500 text-[13px] capitalize italic underline">
+          <div
+            title={source.target.targetInfo.title}
+            className="text-blue-primary-500 max-w-[250px] truncate text-[13px] capitalize italic underline"
+          >
             {source.target.targetInfo.title}
-          </span>
+          </div>
         </Link>
       );
     },

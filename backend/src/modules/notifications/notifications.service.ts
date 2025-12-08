@@ -41,9 +41,10 @@ export class NotificationsService {
     userIds: string[];
     content: string;
     type: NotificationType;
-    targetId?: string;
+    targetId: string | null;
+    title: string;
   }): Promise<NotificationResponseDto[]> {
-    const { userIds, content, type, targetId } = params;
+    const { userIds, content, type, targetId, title } = params;
     let finalUserIds = userIds;
     const broadcastTypes: NotificationType[] = [
       NotificationType.NEW_ANNOUNCEMENT_NOTIFICATION,
@@ -67,6 +68,7 @@ export class NotificationsService {
       content,
       notificationType: type,
       targetId,
+      title,
     }));
 
     await this.prisma.notifications.createMany({
@@ -80,6 +82,7 @@ export class NotificationsService {
         content,
         notificationType: type,
         targetId,
+        title,
       },
       orderBy: {
         createdAt: 'desc',
@@ -198,7 +201,15 @@ export class NotificationsService {
 
     return { results, total };
   }
-
+  // ============================================
+  // GET QUANTITY UNREAD NOTIFICATIONS
+  // ============================================
+  async getUnreadCount(userId: string): Promise<number> {
+    const count = await this.prisma.notifications.count({
+      where: { userId, isRead: false },
+    });
+    return count;
+  }
   // Helper to map GroupFilter to NotificationType[]
   private getNotificationTypesByGroup(
     group: GroupNotiFilter,
@@ -222,7 +233,8 @@ export class NotificationsService {
       userId: n.userId,
       content: n.content,
       notificationType: n.notificationType,
-      targetId: n.targetId || undefined,
+      targetId: n.targetId,
+      title: n.title,
       isRead: n.isRead,
       createdAt: n.createdAt,
     };

@@ -52,7 +52,11 @@ const MessageItem = ({
           {Icon && <Icon className={`${iconClassName}`} />}
         </div>
         <span className="text-[13px] font-semibold text-neutral-800">
-          {isCurrentUser ? "Bạn" : user.fullName}
+          {isCurrentUser
+            ? "Bạn"
+            : user.fullName === "Anonymous"
+              ? "Ẩn danh"
+              : user.fullName}
         </span>
         <span className="text-[10px] text-gray-400 before:mx-1 before:content-['•']">
           {new Date(createdAt).toLocaleString("vi-VN", {
