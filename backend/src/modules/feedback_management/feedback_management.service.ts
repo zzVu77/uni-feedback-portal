@@ -25,6 +25,7 @@ import {
   UpdateFeedbackStatusResponseDto,
 } from './dto';
 import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
+import { RawFeedbackJoinedRow } from './types/raw-feedbacks-joined-row';
 @Injectable()
 export class FeedbackManagementService {
   constructor(
@@ -355,7 +356,7 @@ export class FeedbackManagementService {
   ): Promise<ListFeedbacksResponseDto> {
     const {
       page = 1,
-      pageSize = 10,
+      pageSize = 12,
       status,
       departmentId,
       categoryId,
@@ -364,65 +365,97 @@ export class FeedbackManagementService {
       q,
     } = query;
 
-    const where: Prisma.FeedbacksWhereInput = {};
+    // Sử dụng raw query để order theo status custom và join bảng liên quan
+    let whereClause = 'WHERE 1=1';
+    type SqlParam = string | number | boolean | Date | null;
+
+    const params: SqlParam[] = [];
 
     if (status) {
-      where.currentStatus = Object.values(FeedbackStatus).includes(
-        status.toUpperCase() as FeedbackStatus,
-      )
-        ? (status.toUpperCase() as FeedbackStatus)
-        : undefined;
+      whereClause += ' AND f."currentStatus" = ?';
+      params.push(status.toUpperCase());
     }
-    if (departmentId) where.departmentId = departmentId;
-    if (categoryId) where.categoryId = categoryId;
-    if (from || to) {
-      where.createdAt = {};
-      if (from) where.createdAt.gte = new Date(from);
-      if (to) {
-        where.createdAt.lt = new Date(
-          new Date(to).setDate(new Date(to).getDate() + 1),
-        );
-      }
+    if (departmentId) {
+      whereClause += ' AND f."departmentId" = ?';
+      params.push(departmentId);
     }
-
+    if (categoryId) {
+      whereClause += ' AND f."categoryId" = ?';
+      params.push(categoryId);
+    }
+    if (from) {
+      whereClause += ' AND f."createdAt" >= ?';
+      params.push(new Date(from));
+    }
+    if (to) {
+      whereClause += ' AND f."createdAt" < ?';
+      params.push(new Date(new Date(to).setDate(new Date(to).getDate() + 1)));
+    }
     if (q) {
-      where.OR = [
-        { subject: { contains: q, mode: 'insensitive' } },
-        { description: { contains: q, mode: 'insensitive' } },
-      ];
+      whereClause += ' AND (f."subject" ILIKE ? OR f."description" ILIKE ?)';
+      params.push(`%${q}%`, `%${q}%`);
     }
 
-    const [feedbacks, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          department: { select: { id: true, name: true } },
-          category: { select: { id: true, name: true } },
-          user: { select: { id: true, fullName: true, email: true } },
-        },
-      }),
-      this.prisma.feedbacks.count({ where }),
-    ]);
+    // Raw query join Department, Category, User
+    const rawResults = await this.prisma.$queryRawUnsafe<
+      RawFeedbackJoinedRow[]
+    >(
+      `
+      SELECT
+        f.*,
+        d."name" as "departmentName",
+        c."name" as "categoryName",
+        u."id" as "studentId",
+        u."fullName" as "studentFullName",
+        u."email" as "studentEmail"
+      FROM "Feedbacks" f
+      LEFT JOIN "Departments" d ON f."departmentId" = d."id"
+      LEFT JOIN "Categories" c ON f."categoryId" = c."id"
+      LEFT JOIN "Users" u ON u."id" = f."userId"
+      ${whereClause}
+      ORDER BY CASE
+        WHEN f."currentStatus" = 'PENDING' THEN 1
+        WHEN f."currentStatus" = 'IN_PROGRESS' THEN 2
+        WHEN f."currentStatus" = 'RESOLVED' THEN 3
+        WHEN f."currentStatus" = 'REJECTED' THEN 4
+        ELSE 5
+      END, f."createdAt" DESC
+      OFFSET ${(page - 1) * pageSize}
+      LIMIT ${pageSize}
+      `,
+      ...params,
+    );
+    console.log(rawResults);
 
-    const results = feedbacks.map((f) => ({
+    // Đếm tổng số kết quả
+    const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
+      `
+  SELECT COUNT(*) as count
+  FROM "Feedbacks" f
+  ${whereClause}
+  `,
+      ...params,
+    );
+
+    const total = Number(result.count);
+
+    // Map lại kết quả cho đúng DTO
+    const results = rawResults.map((f) => ({
       id: f.id,
       subject: f.subject,
-      location: f.location ? f.location : null,
+      location: f.location,
       currentStatus: f.currentStatus,
       isPrivate: f.isPrivate,
-      department: f.department,
-      category: f.category,
-      createdAt: f.createdAt.toISOString(),
+      department: { id: f.departmentId, name: f.departmentName },
+      category: { id: f.categoryId, name: f.categoryName },
+      createdAt: new Date(f.createdAt).toISOString(),
       ...(f.isPrivate
-        ? {}
+        ? null
         : {
             student: {
-              id: f.user.id,
-              fullName: f.user.fullName,
-              email: f.user.email,
+              id: f.studentId,
+              fullName: f.studentFullName,
+              email: f.studentEmail,
             },
           }),
     }));
