@@ -263,6 +263,7 @@ export class ClarificationsService {
       senderId: actor.sub,
       recipientId: recipientId, // Logic determined above
       content: content ? content : 'Sent an attachment',
+      subject: conversation.subject,
       feedbackId: conversation.feedbackId,
     });
     this.eventEmitter.emit('clarification.message_sent', event);

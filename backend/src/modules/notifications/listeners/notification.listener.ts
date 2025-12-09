@@ -17,6 +17,7 @@ import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.
 import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
 import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
 import { ClarificationsGateway } from 'src/modules/clarifications/clarifications.gateway';
+import { FeedbackForwardingEvent } from 'src/modules/feedback_management/events/feedback-forwarding.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -79,10 +80,51 @@ export class NotificationEventListener {
         content: content,
         type: notificationType,
         targetId: payload.feedbackId,
+        title: payload.subject,
       });
     } catch (error) {
       this.logger.error(
         `[Notification] Failed to notify status update for feedback ${payload.feedbackId}`,
+        error.stack,
+      );
+    }
+  }
+  /**
+   * Handle 'feedback.status_updated' event
+   * Triggered when staff updates feedback status
+   */
+  @OnEvent('feedback.forwarded', { async: true })
+  async handleFeedbackForwardingEvent(payload: FeedbackForwardingEvent) {
+    this.logger.log(
+      `[Notification] Processing Forwarding Feedback from department: ${payload.sender.departmentName} to ${payload.recipient.departmentName}`,
+    );
+
+    try {
+      //send notification to sender department staff
+      await this.notificationsService.createNotifications({
+        userIds: [payload.sender.senderId],
+        content: `Góp ý "${payload.feedback.subject}" đã được chuyển từ phòng ban của bạn đến phòng ban ${payload.recipient.departmentName}.`,
+        type: NotificationType.FEEDBACK_FORWARDED,
+        targetId: payload.feedback.id,
+        title: payload.feedback.subject,
+      });
+      //find all department staff of specific recipient department
+      const recipientDepartmentStaff = await this.prisma.users.findMany({
+        where: { departmentId: payload.recipient.departmentId },
+        select: { id: true },
+      });
+
+      //send notification to recipient department staff
+      await this.notificationsService.createNotifications({
+        userIds: recipientDepartmentStaff.map((staff) => staff.id),
+        content: `Góp ý "${payload.feedback.subject}" đã được chuyển từ phòng ban ${payload.sender.departmentName} đến phòng ban của bạn.`,
+        type: NotificationType.FEEDBACK_FORWARDED_TO_YOU,
+        targetId: payload.feedback.id,
+        title: payload.feedback.subject,
+      });
+    } catch (error) {
+      this.logger.error(
+        `[Notification] Failed to notify forwarding for feedback ${payload.feedback.id}`,
         error.stack,
       );
     }
@@ -98,9 +140,10 @@ export class NotificationEventListener {
     try {
       await this.notificationsService.createNotifications({
         userIds: [payload.studentId],
-        content: `Department Staff requested clarification: "${payload.subject}".`,
+        content: `Đại diện phòng ban đã gửi 1 yêu cầu trao đổi: "${payload.subject}".`,
         type: NotificationType.CLARIFICATION_NEW_NOTIFICATION,
         targetId: payload.feedbackId,
+        title: payload.subject,
       });
     } catch (error) {
       this.logger.error(
@@ -120,9 +163,10 @@ export class NotificationEventListener {
     try {
       await this.notificationsService.createNotifications({
         userIds: [payload.studentId],
-        content: `Department Staff closed clarification: "${payload.subject}".`,
+        content: `Yêu cầu làm rõ "${payload.subject}" đã được đóng.`,
         type: NotificationType.CLARIFICATION_CLOSED_NOTIFICATION,
         targetId: payload.feedbackId,
+        title: payload.subject,
       });
     } catch (error) {
       this.logger.error(
@@ -142,9 +186,6 @@ export class NotificationEventListener {
     );
 
     try {
-      // Logic to determine the recipient has been handled in the Service,
-      // Listener only sends notification to that recipientId.
-
       const previewContent =
         payload.content.length > 50
           ? payload.content.substring(0, 50) + '...'
@@ -152,12 +193,12 @@ export class NotificationEventListener {
 
       await this.notificationsService.createNotifications({
         userIds: [payload.recipientId],
-        content: `New message: "${previewContent}"`,
+        content: `Bạn có tin nhắn mới: "${previewContent}"`,
         type: NotificationType.MESSAGE_NEW_NOTIFICATION,
         targetId: payload.feedbackId,
+        title: payload.subject,
       });
 
-      // [WebSocket] Send realtime message to recipient
       this.clarificationsGateway.notifyClarificationMessage(
         payload.recipientId,
         payload,
@@ -215,6 +256,10 @@ export class NotificationEventListener {
     // Do not notify if user replies to their own comment
     if (parentComment.userId === payload.userId) return;
 
+    const targetInfo = await this.getTargetInfo(
+      payload.targetId,
+      payload.targetType,
+    );
     // Determine notification type based on targetType
     const type =
       payload.targetType === CommentTargetType.FORUM_POST
@@ -223,9 +268,10 @@ export class NotificationEventListener {
 
     await this.notificationsService.createNotifications({
       userIds: [parentComment.userId],
-      content: `Someone replied to your comment: "${this.previewContent(payload.content)}"`,
+      content: `Có người vừa trả lời bình luận của bạn: "${this.previewContent(payload.content)}"`,
       type: type,
       targetId: payload.targetId, // Link to Post/Announcement
+      title: targetInfo.title,
     });
   }
 
@@ -243,12 +289,16 @@ export class NotificationEventListener {
 
     // Do not notify if user comments on their own announcement
     if (announcement.userId === payload.userId) return;
-
+    const targetInfo = await this.getTargetInfo(
+      payload.targetId,
+      payload.targetType,
+    );
     await this.notificationsService.createNotifications({
       userIds: [announcement.userId],
-      content: `New comment on your announcement "${announcement.title}": "${this.previewContent(payload.content)}"`,
+      content: `Nội dung bình luận: "${this.previewContent(payload.content)}"`,
       type: NotificationType.COMMENT_ANNOUNCEMENT_NOTIFICATION,
       targetId: payload.targetId,
+      title: targetInfo.title,
     });
   }
 
@@ -270,12 +320,16 @@ export class NotificationEventListener {
 
     // Do not notify if user comments on their own post
     if (post.feedback.userId === payload.userId) return;
-
+    const targetInfo = await this.getTargetInfo(
+      payload.targetId,
+      payload.targetType,
+    );
     await this.notificationsService.createNotifications({
       userIds: [post.feedback.userId],
-      content: `New comment on your post "${post.feedback.subject}": "${this.previewContent(payload.content)}"`,
+      content: `Có bình luận mới trên bài đăng: "${this.previewContent(payload.content)}"`,
       type: NotificationType.COMMENT_FORUM_POST_NOTIFICATION,
       targetId: payload.targetId,
+      title: targetInfo.title,
     });
   }
   // ============================================
@@ -306,17 +360,22 @@ export class NotificationEventListener {
       // 2. Tạo nội dung thông báo
       // Ví dụ: "New report submitted for a comment. Reason: Offensive content..."
       const reasonText = payload.reason
-        ? ` Reason: "${payload.reason.length > 30 ? payload.reason.substring(0, 30) + '...' : payload.reason}"`
+        ? ` Lý do: "${payload.reason.length > 30 ? payload.reason.substring(0, 30) + '...' : payload.reason}"`
         : '';
 
-      const content = `New comment report received.${reasonText}`;
+      const content = `Có báo cáo mới về bình luận.${reasonText}`;
 
+      const targetInfo = await this.getTargetInfo(
+        payload.targetId,
+        payload.targetType as CommentTargetType,
+      );
       // 3. Gửi thông báo
       await this.notificationsService.createNotifications({
         userIds: adminIds,
         content: content,
         type: NotificationType.NEW_COMMENT_REPORT_FOR_ADMIN,
         targetId: payload.reportId,
+        title: targetInfo.title,
       });
 
       this.logger.log(
@@ -363,9 +422,10 @@ export class NotificationEventListener {
       // 3. Create Notification
       await this.notificationsService.createNotifications({
         userIds: [post.feedback.userId],
-        content: `Someone voted for your post: "${this.previewContent(post.feedback.subject)}"`,
+        content: `Bài viết "${this.previewContent(post.feedback.subject)}" của bạn vừa có 1 lượt ủng hộ.`,
         type: NotificationType.VOTE_FORUM_POST_NOTIFICATION,
         targetId: payload.postId,
+        title: post.feedback.subject,
       });
     } catch (error) {
       this.logger.error(
@@ -404,22 +464,23 @@ export class NotificationEventListener {
   ): string {
     switch (status) {
       case FeedbackStatus.IN_PROGRESS:
-        return `Your feedback "${subject}" is now being processed.`;
+        return `Góp ý "${subject}" của bạn đang được xử lý.`;
       case FeedbackStatus.RESOLVED:
-        return `Your feedback "${subject}" has been resolved.`;
+        return `Góp ý "${subject}" của bạn đã được giải quyết.`;
       case FeedbackStatus.REJECTED:
-        return `Your feedback "${subject}" has been rejected.`;
+        return `Góp ý "${subject}" của bạn đã bị từ chối.`;
       default:
-        return `Your feedback "${subject}" status has been updated.`;
+        return `Trạng thái góp ý "${subject}" của bạn đã được cập nhật.`;
     }
   }
 
   private async notifyStudent(payload: FeedbackCreatedEvent) {
     await this.notificationsService.createNotifications({
-      userIds: [payload.userId], // The student who created the feedback
-      content: `Your feedback "${payload.subject}" has been successfully submitted.`,
+      userIds: [payload.userId],
+      content: `Góp ý "${payload.subject}" của bạn đã được gửi thành công.`,
       type: NotificationType.FEEDBACK_SUBMITTED_NOTIFICATION,
       targetId: payload.feedbackId,
+      title: payload.subject,
     });
   }
 
@@ -446,13 +507,55 @@ export class NotificationEventListener {
     // STEP C: Batch create notifications using existing service
     await this.notificationsService.createNotifications({
       userIds: staffIds,
-      content: `New feedback received: "${payload.subject}".`,
+      content: `Bạn vừa nhận được một góp ý mới: "${payload.subject}".`,
       type: NotificationType.NEW_FEEDBACK_RECEIVED,
       targetId: payload.feedbackId,
+      title: payload.subject,
     });
 
     this.logger.log(
       `[Notification] Sent notifications to ${staffIds.length} staff members of Department ${payload.departmentId}`,
     );
+  }
+
+  private async getTargetInfo(
+    targetId: string,
+    targetType: CommentTargetType,
+  ): Promise<{ title: string }> {
+    switch (targetType) {
+      case CommentTargetType.ANNOUNCEMENT: {
+        const announcement = await this.prisma.announcements.findUnique({
+          where: { id: targetId },
+          select: { title: true },
+        });
+
+        if (!announcement) {
+          throw new Error(`Announcement ${targetId} not found`);
+        }
+
+        return { title: announcement.title };
+      }
+
+      case CommentTargetType.FORUM_POST: {
+        const post = await this.prisma.forumPosts.findUnique({
+          where: { id: targetId },
+          select: {
+            feedback: {
+              select: { subject: true },
+            },
+          },
+        });
+
+        if (!post || !post.feedback) {
+          throw new Error(`Forum post ${targetId} not found`);
+        }
+
+        return { title: post.feedback.subject };
+      }
+
+      default:
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        throw new Error(`Invalid target type: ${targetType}`);
+    }
   }
 }

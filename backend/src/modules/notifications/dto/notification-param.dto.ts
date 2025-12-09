@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class NotificationParamDto {
   @ApiProperty({
     description: 'The ID of the notification (UUID)',
     type: String,
   })
-  @IsUUID()
+  // @IsUUID()
+  @IsString()
   id: string;
 }

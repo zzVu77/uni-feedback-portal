@@ -16,11 +16,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useLogout } from "@/hooks/queries/useAuthenticationQueries";
 import { useUser } from "@/context/UserContext";
 import { getRoleDisplayName } from "@/utils/getRoleDisplayName";
+import { useGetUnreadNotificationCount } from "@/hooks/queries/useNotificationQueries";
+
 type SidebarProps = {
   showOnMobile?: boolean;
   type?: "student" | "staff" | "admin";
   fullName?: string;
 };
+
 export default function Sidebar({
   showOnMobile = false,
   type = "student",
@@ -28,6 +31,9 @@ export default function Sidebar({
 }: SidebarProps) {
   let navigation: NavigationItem[];
   const pathname = usePathname();
+
+  const { data: unreadCount } = useGetUnreadNotificationCount();
+
   switch (type) {
     case "student":
       navigation = studentNavigation;
@@ -78,22 +84,46 @@ export default function Sidebar({
 
         <div className="flex h-full flex-col justify-between border-t border-white/20">
           <div className="flex flex-col gap-2">
-            {navigation.map(({ href, label, icon: Icon }) => (
-              <Link key={href} href={href}>
-                <Button
-                  variant="ghost"
-                  className={cn(
-                    "hover:text-neutral-dark-primary-800 w-full justify-start rounded-none text-[13px] text-white hover:bg-white lg:text-[14px]",
-                    pathname === href
-                      ? "text-neutral-dark-primary-800 bg-white font-semibold"
-                      : "",
-                  )}
-                >
-                  <Icon className="mr-2 h-4 w-4" />
-                  {label}
-                </Button>
-              </Link>
-            ))}
+            {navigation.map(({ href, label, icon: Icon }) => {
+              const isNotificationItem = href === "/notifications";
+              const showBadge =
+                isNotificationItem &&
+                unreadCount &&
+                unreadCount.unreadCount > 0;
+              const displayCount =
+                unreadCount && unreadCount.unreadCount > 99
+                  ? "99+"
+                  : unreadCount?.unreadCount;
+
+              return (
+                <Link key={href} href={href}>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "hover:text-neutral-dark-primary-800 w-full justify-start rounded-none text-[13px] text-white hover:bg-white lg:text-[14px]",
+                      pathname === href
+                        ? "text-neutral-dark-primary-800 bg-white font-semibold"
+                        : "",
+                    )}
+                  >
+                    <Icon className="mr-2 h-4 w-4" />
+                    {label}
+
+                    {/* Hiển thị Badge nếu là item thông báo và có số lượng > 0 */}
+                    {showBadge && (
+                      <span
+                        className={cn(
+                          "ml-auto flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white",
+                          pathname === href ? "bg-red-600" : "bg-red-500",
+                        )}
+                      >
+                        {displayCount}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
+              );
+            })}
           </div>
           <div className="border-t border-white/20 p-2">
             <Button

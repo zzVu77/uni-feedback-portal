@@ -3,8 +3,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
 import { useForumPostFilters } from "@/hooks/filters/useForumPostFilter";
-// Import the NEW infinite hooks defined above (please update the path)
-
 import { useUrlTabs } from "@/hooks/useUrlTabs";
 import { Megaphone, MessageCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -142,7 +140,10 @@ export function ForumSection() {
           ) : (
             <>
               {forumPosts.map((forumPost) => (
-                <PostCard key={forumPost.id} data={forumPost} />
+                <PostCard
+                  key={forumPost.id + forumPost.feedback.id}
+                  data={forumPost}
+                />
               ))}
 
               {/* Loading trigger element */}
@@ -175,7 +176,7 @@ export function ForumSection() {
             <>
               {announcements.map((announcement) => (
                 <AnnouncementCard
-                  key={announcement.id}
+                  key={announcement.id + announcement.title}
                   announcement={announcement}
                 />
               ))}

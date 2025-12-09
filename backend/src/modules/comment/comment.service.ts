@@ -267,7 +267,8 @@ export class CommentService {
       where: { id: commentId, deletedAt: null },
       select: {
         id: true,
-        // ...
+        targetId: true,
+        targetType: true,
       },
     });
 
@@ -298,6 +299,8 @@ export class CommentService {
       commentId: report.commentId,
       reporterId: report.userId,
       reason: report.reason || undefined,
+      targetId: comment.targetId,
+      targetType: comment.targetType,
     });
     this.eventEmitter.emit('comment.report_created', event);
 

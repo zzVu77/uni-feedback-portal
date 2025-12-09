@@ -27,6 +27,7 @@ export type TypeOfNotification =
   // Department staff notifications
   | "NEW_FEEDBACK_RECEIVED"
   | "FEEDBACK_FORWARDED_TO_YOU"
+  | "FEEDBACK_FORWARDED"
   // Admin notifications
   | "NEW_COMMENT_REPORT_FOR_ADMIN"
   // General/System notifications
@@ -35,6 +36,7 @@ export type TypeOfNotification =
 export type NotificationDetails = {
   id: string;
   // userId: string;
+  title: string;
   content: string;
   notificationType: TypeOfNotification;
   targetId: string;
@@ -51,3 +53,6 @@ export interface NotificationFilter extends BaseFilter {
   isRead?: string;
   type?: string;
 }
+export type UnreadNotificationCount = {
+  unreadCount: number;
+};

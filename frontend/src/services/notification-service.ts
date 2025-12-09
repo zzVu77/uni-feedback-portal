@@ -4,6 +4,7 @@ import {
   NotificationDetails,
   NotificationFilter,
   PaginatedResponse,
+  UnreadNotificationCount,
 } from "@/types";
 
 const notificationBaseUrl = "/notifications";
@@ -28,3 +29,10 @@ export const markNotificationsAsRead = async (
   );
   return response;
 };
+export const getUnreadNotificationCount =
+  async (): Promise<UnreadNotificationCount> => {
+    const response = await axiosInstance.get<UnreadNotificationCount>(
+      `${notificationBaseUrl}/unread-count`,
+    );
+    return response;
+  };

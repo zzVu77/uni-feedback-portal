@@ -24,6 +24,7 @@ import {
   QueryNotificationsDto,
   NotificationListResponseDto,
   DeleteNotificationsDto,
+  NotificationUnreadCountResponseDto,
 } from './dto';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
@@ -58,6 +59,7 @@ export class NotificationsController {
       content: dto.content,
       type: dto.type,
       targetId: dto.targetId,
+      title: dto.title,
     });
   }
 
@@ -131,5 +133,23 @@ export class NotificationsController {
       from: query.from,
       to: query.to,
     });
+  }
+  // ============================================
+  // GET QUANTITY UNREAD NOTIFICATIONS
+  // ============================================
+  @Get('unread-count')
+  @ApiOperation({ summary: 'Get quantity of unread notifications' })
+  @ApiResponse({
+    status: 200,
+    description: 'Quantity of unread notifications',
+    type: NotificationUnreadCountResponseDto,
+  })
+  async getUnreadCount(
+    @ActiveUser() user: ActiveUserData,
+  ): Promise<NotificationUnreadCountResponseDto> {
+    const unreadCount = await this.notificationsService.getUnreadCount(
+      user.sub,
+    );
+    return { unreadCount };
   }
 }

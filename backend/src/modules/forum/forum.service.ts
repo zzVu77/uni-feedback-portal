@@ -135,15 +135,11 @@ export class ForumService {
         },
         currentStatus: post.feedback.currentStatus,
       },
-      ...(post.feedback.isPrivate
-        ? {}
-        : {
-            user: {
-              id: post.feedback.user.id,
-              fullName: post.feedback.user.fullName,
-              email: post.feedback.user.email,
-            },
-          }),
+      user: {
+        id: post.feedback.user.id,
+        fullName: post.feedback.user.fullName,
+        email: post.feedback.user.email,
+      },
       commentsCount: commentCountMap[post.id] ?? 0,
       hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
     }));
@@ -201,7 +197,12 @@ export class ForumService {
     const resolvedStatus = post.feedback.statusHistory.find(
       (h) => h.status === 'RESOLVED',
     );
-    const officeResponse = resolvedStatus?.note ?? resolvedStatus?.message;
+    const officialResponse = resolvedStatus
+      ? {
+          content: resolvedStatus.note ?? resolvedStatus.message,
+          createdAt: resolvedStatus.createdAt.toISOString(),
+        }
+      : null;
 
     // Lấy file đính kèm bằng UploadsService
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
@@ -229,18 +230,15 @@ export class ForumService {
           name: post.feedback.department.name,
         },
         currentStatus: post.feedback.currentStatus,
-        officeResponse,
+        officialResponse,
         fileAttachments: fileAttachments,
       },
-      ...(post.feedback.isPrivate
-        ? {}
-        : {
-            user: {
-              id: post.feedback.user.id,
-              fullName: post.feedback.user.fullName,
-              email: post.feedback.user.email,
-            },
-          }),
+
+      user: {
+        id: post.feedback.user.id,
+        fullName: post.feedback.user.fullName,
+        email: post.feedback.user.email,
+      },
     };
   }
   async vote(postId: string, actor: ActiveUserData): Promise<VoteResponseDto> {

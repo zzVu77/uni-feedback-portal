@@ -95,7 +95,11 @@ export default function AdminDashboardPage() {
           <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
         </div>
         <div className="col-span-1 h-full lg:col-span-4">
-          <TopCategoriesChart data={categories} isLoading={loadingCategories} />
+          <TopCategoriesChart
+            data={categories}
+            isLoading={loadingCategories}
+            type="admin"
+          />
         </div>
       </div>
     </Wrapper>

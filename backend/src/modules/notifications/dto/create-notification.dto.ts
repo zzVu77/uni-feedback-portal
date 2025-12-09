@@ -4,7 +4,6 @@ import {
   IsNotEmpty,
   IsString,
   IsArray,
-  IsUUID,
   IsOptional,
 } from 'class-validator';
 import { NotificationType } from '@prisma/client';
@@ -15,7 +14,7 @@ export class CreateNotificationsDto {
     type: [String],
   })
   @IsArray()
-  @IsUUID('all', { each: true })
+  @IsString({ each: true })
   @IsOptional()
   @IsNotEmpty({ each: true })
   userIds?: string[];
@@ -32,7 +31,11 @@ export class CreateNotificationsDto {
   @IsEnum(NotificationType)
   type: NotificationType;
 
-  @ApiProperty({ description: 'The ID related to the notification' })
-  @IsUUID()
-  targetId?: string;
+  @ApiProperty({ description: 'The ID of the related entity' })
+  @IsString()
+  targetId: string | null;
+
+  @ApiProperty({ description: 'The title of the related entity' })
+  @IsString()
+  title: string;
 }
