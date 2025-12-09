@@ -135,15 +135,11 @@ export class ForumService {
         },
         currentStatus: post.feedback.currentStatus,
       },
-      ...(post.feedback.isPrivate
-        ? {}
-        : {
-            user: {
-              id: post.feedback.user.id,
-              fullName: post.feedback.user.fullName,
-              email: post.feedback.user.email,
-            },
-          }),
+      user: {
+        id: post.feedback.user.id,
+        fullName: post.feedback.user.fullName,
+        email: post.feedback.user.email,
+      },
       commentsCount: commentCountMap[post.id] ?? 0,
       hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
     }));
@@ -237,15 +233,12 @@ export class ForumService {
         officialResponse,
         fileAttachments: fileAttachments,
       },
-      ...(post.feedback.isPrivate
-        ? {}
-        : {
-            user: {
-              id: post.feedback.user.id,
-              fullName: post.feedback.user.fullName,
-              email: post.feedback.user.email,
-            },
-          }),
+
+      user: {
+        id: post.feedback.user.id,
+        fullName: post.feedback.user.fullName,
+        email: post.feedback.user.email,
+      },
     };
   }
   async vote(postId: string, actor: ActiveUserData): Promise<VoteResponseDto> {
