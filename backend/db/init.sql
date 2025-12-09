@@ -5687,6 +5687,128 @@ VALUES
     'c0000000-0000-0000-0000-000000000002',
     '2025-10-31 09:45:00'
 );
+-- ==================== Department 001 – Phòng Thanh tra giáo dục ====================
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Cải thiện dịch vụ căng tin trường học',
+    "description" = 'Hiện tại chất lượng món ăn ở căng tin rất kém: cơm khô, thức ăn ít, giá lại cao (35–40k/phần). Nhiều ngày đồ ăn bị ôi thiu, nhà vệ sinh bẩn, không có chỗ ngồi vào giờ cao điểm. Mong Ban Quản lý dịch vụ sinh viên sớm có biện pháp cải thiện rõ rệt trong thời gian tới.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000034';
+-- 2025-12-01
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Máy tính phòng lab quá cũ, không đáp ứng được nhu cầu học tập',
+    "description" = 'Các phòng lab máy tính (đặc biệt tòa C) vẫn đang dùng máy cấu hình thấp từ năm 2015–2016, chạy phần mềm đồ họa, lập trình nặng (AutoCAD, Android Studio, Visual Studio, v.v.) cực kỳ chậm và hay treo. Sinh viên ngành CNTT, Đồ họa phải mang laptop cá nhân vào lab mới làm được bài. Đề nghị Phòng Thiết bị – Vật tư sớm thay mới toàn bộ trong năm 2026.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000035';
+-- 2025-12-02
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Nền tảng học trực tuyến cần được nâng cấp gấp',
+    "description" = 'Hệ thống LMS hiện tại thường xuyên bị lag, video bài giảng giật, nộp bài tập hay báo lỗi 502. Đặc biệt vào giờ cao điểm gần như không truy cập được. Mong Trung tâm Dạy học số nâng cấp server và chuyển sang nền tảng ổn định hơn (Moodle, Canvas, hoặc Google Classroom) ngay trong kỳ 2 năm học này.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000036';
+-- 2025-12-03
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Mong tổ chức sự kiện mùa đông/Noel hoành tráng hơn',
+    "description" = 'Năm nay trường vẫn chưa có kế hoạch tổ chức đêm Noel hay countdown 2026. Sinh viên rất mong có cây thông lớn, sân khấu ngoài trời, bắn pháo hoa mini, hội chợ đồ ăn và biểu diễn âm nhạc như các năm trước dịch. Đề nghị Đoàn Thanh niên và Hội Sinh viên lên kế hoạch sớm.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000037';
+-- 2025-12-05
+
+-- ==================== Department 002 – Phòng Quan hệ doanh nghiệp ====================
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Sinh viên năm cuối vẫn chưa có chỗ thực tập bắt buộc',
+    "description" = 'Kỳ thực tập bắt buộc sắp tới (tháng 1–3/2026) nhưng đến nay Phòng Quan hệ doanh nghiệp vẫn chưa công bố danh sách công ty tiếp nhận. Nhiều bạn đang rất lo lắng vì phải tự tìm mà doanh nghiệp yêu cầu giấy giới thiệu của trường. Mong phòng hỗ trợ danh sách và thư giới thiệu sớm nhất có thể.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000065';
+-- 2025-12-01
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Cần thêm 1 đợt Job Fair lớn vào cuối tháng 12',
+    "description" = 'Năm nay chỉ có 1 ngày hội việc làm vào tháng 4, quá ít. Sinh viên năm cuối đang cần cơ hội phỏng vấn gấp trước khi ra trường. Mong phòng mời thêm các tập đoàn lớn (FPT, VNG, VinGroup, Shopee, Tiki…) tổ chức Job Fair cuối năm.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000066';
+-- 2025-12-02
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Thông tin học bổng doanh nghiệp năm 2026 vẫn chưa có',
+    "description" = 'Đã bước sang tháng 12 nhưng vẫn chưa thấy thông báo học bổng từ doanh nghiệp (FPT, Viettel, VinGroup, v.v.). Nhiều bạn đang cần để hoàn thành hồ sơ tài chính cho kỳ 2. Rất mong phòng sớm cập nhật danh sách và deadline.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000067';
+-- 2025-12-03
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Mong có thêm chương trình kết nối với startup',
+    "description" = 'Nhiều sinh viên muốn thực tập/startup ở các công ty công nghệ mới (Fintech, AI, Blockchain) nhưng không biết liên hệ ở đâu. Đề nghị phòng làm cầu nối với các startup/incubator tại TP.HCM (ví dụ: Vietnam Silicon Valley, Saigon Innovation Hub…).'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000068';
+-- 2025-12-05
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Cần sớm có kế hoạch hội thảo tuyển dụng & thực tập 2026',
+    "description" = 'Tháng 12 rồi mà vẫn chưa thấy lịch hội thảo hướng nghiệp, workshop CV, mock interview cho năm 2026. Sinh viên năm 3–4 đang rất cần chuẩn bị hồ sơ sớm. Mong phòng lên kế hoạch và công bố trước Tết.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000069';
+-- 2025-12-06
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Mong có chương trình thực tập trao đổi quốc tế',
+    "description" = 'Một số trường bạn đã có chương trình thực tập 3–6 tháng tại Singapore, Malaysia, Nhật Bản với hỗ trợ chi phí. Trường mình cũng nên triển khai để sinh viên có cơ hội trải nghiệm môi trường làm việc quốc tế.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000070';
+-- 2025-12-07
+
+-- ==================== Department 003 – Phòng Khoa học & Công nghệ ====================
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Chưa có kế hoạch chi tiết cho đề tài NCKH sinh viên 2026',
+    "description" = 'Tháng 12 rồi nhưng vẫn chưa thấy thông báo đợt đề tài NCKH sinh viên cấp trường năm 2026. Nhiều nhóm đã có ý tưởng và muốn đăng ký sớm để chuẩn bị kinh phí, mentor. Mong phòng sớm công bố thể lệ và lịch nộp hồ sơ.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000096';
+-- 2025-12-01
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Mong tổ chức lại cuộc thi Ý tưởng Khởi nghiệp sinh viên 2026',
+    "description" = 'Hai năm nay trường chưa tổ chức Startup Day/Ý tưởng Khởi nghiệp. Nhiều nhóm có dự án tốt nhưng không có sân chơi để trình bày và gọi vốn. Đề nghị phòng KH&CN phối hợp Đoàn Thanh niên tổ chức lại trong năm 2026 với giải thưởng hấp dẫn.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000097';
+-- 2025-12-02
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Cần tăng mức thưởng cho sinh viên có bài báo Q1',
+    "description" = 'Hiện tại mức thưởng cho bài báo Q1 chỉ 10–15 triệu, quá thấp so với công sức và chi phí bỏ ra. Các trường bạn thưởng 50–100 triệu/bài. Đề nghị phòng xem xét tăng mức thưởng để khuyến khích sinh viên công bố quốc tế.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000098';
+-- 2025-12-04
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Mong sớm có phòng lab chuyên sâu về AI & IoT',
+    "description" = 'Ngành CNTT đang phát triển rất mạnh về AI, Machine Learning, IoT nhưng trường mình vẫn chưa có phòng lab riêng với GPU mạnh (RTX 4080/4090). Sinh viên phải dùng Colab hoặc tự mua máy. Rất cần đầu tư phòng lab chuyên sâu trong năm 2026.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000099';
+-- 2025-12-05
+
+UPDATE "Feedbacks"
+SET
+    "subject" = 'Cần tổ chức lại Hội nghị NCKH sinh viên năm 2026',
+    "description" = 'Đã 2 năm trường không tổ chức hội nghị NCKH sinh viên. Đây là cơ hội rất tốt để các nhóm trình bày kết quả nghiên cứu. Mong phòng KH&CN lên kế hoạch tổ chức vào tháng 4–5/2026 với sự tham gia của các trường bạn.'
+WHERE
+    "id" = 'f0000000-0000-0000-0000-000000000100';
+-- 2025-12-07
 -- =================================================================
 -- STEP 4: FORUM POSTS
 -- Fix ID: fp... -> 3000... (Số 3 đại diện cho Post)
@@ -11629,89 +11751,487 @@ Call/Zalo ngay: 0377.xxx.888.999 để được tư vấn miễn phí!!!',
 -- Fix Conv ID: conv... -> 7000...
 -- Fix Msg ID: msg... -> 8000...
 -- =================================================================
-INSERT INTO
-    "ClarificationConversations" (
-        "id",
-        "subject",
-        "feedbackId",
-        "isClosed",
-        "userId",
-        "createdAt"
-    )
-VALUES (
-        '70000000-0000-0000-0000-000000000001',
-        'Yêu cầu minh chứng',
-        'f0000000-0000-0000-0000-000000000007',
-        true,
-        'e0000000-0000-0000-0000-000000000011',
-        '2025-10-05 10:00:00'
-    );
-
-INSERT INTO
-    "Messages" (
-        "id",
-        "conversationId",
-        "userId",
-        "content",
-        "createdAt"
-    )
-VALUES (
-        '80000000-0000-0000-0000-000000000001',
-        '70000000-0000-0000-0000-000000000001',
-        'b0000000-0000-0000-0000-000000000012',
-        'Gửi ảnh minh chứng đi em.',
-        '2025-10-05 10:00:00'
-    ),
-    (
-        '80000000-0000-0000-0000-000000000002',
-        '70000000-0000-0000-0000-000000000001',
-        'e0000000-0000-0000-0000-000000000011',
-        'Dạ đây ạ.',
-        '2025-10-05 10:15:00'
-    );
-
 -- =================================================================
--- STEP 12: FILE ATTACHMENTS
--- Fix ID: fa... -> 9000...
+-- 1. ClarificationConversations (10 cái – đã sửa đúng userId)
 -- =================================================================
-INSERT INTO
-    "FileAttachments" (
-        "id",
-        "targetId",
-        "targetType",
-        "fileName",
-        "fileUrl",
-        "fileType",
-        "fileSize",
-        "createdAt"
-    )
-VALUES (
-        '90000000-0000-0000-0000-000000000001',
-        'f0000000-0000-0000-0000-000000000001',
-        'FEEDBACK',
-        'may-lanh.jpg',
-        'https://storage.u.edu/1.jpg',
-        'image/jpeg',
-        204800,
-        '2025-09-05 08:30:00'
-    ),
-    (
-        '90000000-0000-0000-0000-000000000020',
-        '60000000-0000-0000-0000-000000000001',
-        'ANNOUNCEMENT',
-        'ke-hoach.pdf',
-        'https://storage.u.edu/2.pdf',
-        'application/pdf',
-        2000,
-        '2025-11-01 08:00:00'
-    ),
-    (
-        '90000000-0000-0000-0000-000000000030',
-        '80000000-0000-0000-0000-000000000002',
-        'MESSAGE',
-        'anh.jpg',
-        'https://storage.u.edu/3.jpg',
-        'image/jpeg',
-        102400,
-        '2025-10-05 10:15:00'
-    );
+-- =================================================================
+-- ClarificationConversations – CHỈ STAFF MỞ CONVERSATION
+-- -- =================================================================
+-- INSERT INTO
+--     "ClarificationConversations" (
+--         "id",
+--         "subject",
+--         "feedbackId",
+--         "isClosed",
+--         "userId",
+--         "createdAt"
+--     )
+-- VALUES
+--     -- 1. Căng tin → Phòng Dịch vụ sinh viên
+--     (
+--         '70000000-0000-0000-0000-000000000001',
+--         'Yêu cầu bổ sung ảnh căng tin',
+--         'f0000000-0000-0000-0000-000000000034',
+--         true,
+--         'b0000000-0000-0000-0000-000000000027',
+--         '2025-12-02 09:00:00'
+--     ),
+
+-- -- 2. Máy lab cũ → Phòng Quản trị CSVC
+-- (
+--     '70000000-0000-0000-0000-000000000002',
+--     'Xác nhận cấu hình máy lab',
+--     'f0000000-0000-0000-0000-000000000035',
+--     true,
+--     'b0000000-0000-0000-0000-000000000009',
+--     '2025-12-03 10:30:00'
+-- ),
+
+-- -- 3. Lỗi LMS → Trung tâm Dạy học số
+-- (
+--     '70000000-0000-0000-0000-000000000003',
+--     'Yêu cầu video minh chứng lỗi LMS',
+--     'f0000000-0000-0000-0000-000000000036',
+--     true,
+--     'b0000000-0000-0000-0000-000000000028',
+--     '2025-12-04 14:00:00'
+-- ),
+
+-- -- -- 4. Chỗ thực tập → Phòng Quan hệ doanh nghiệp
+-- -- (
+-- --     '70000000-0000-0000-0000-000000000004',
+-- --     'Gửi danh sách công ty mong muốn thực tập',
+-- --     'f0000000-0000-0000-0000-000000000065',
+-- --     true,
+-- --     'b0000000-0000-0000-0000-000000000002',
+-- --     '2025-12-02 11:15:00'
+-- -- ),
+
+-- -- 5. Job Fair → Phòng Quan hệ doanh nghiệp
+-- -- (
+-- --     '70000000-0000-0000-0000-000000000005',
+-- --     'Gợi ý công ty tham gia Job Fair',
+-- --     'f0000000-0000-0000-0000-000000000066',
+-- --     true,
+-- --     'b0000000-0000-0000-0000-000000000002',
+-- --     '2025-12-03 09:45:00'
+-- -- ),
+
+-- -- 6. Đề tài NCKH → Phòng Khoa học & Công nghệ (giả sử dùng staff chung KH&CN)
+-- (
+--     '70000000-0000-0000-0000-000000000006',
+--     'Gửi đề cương đề tài NCKH',
+--     'f0000000-0000-0000-0000-000000000096',
+--     true,
+--     'b0000000-0000-0000-0000-000000000005',
+--     '2025-12-02 15:20:00'
+-- ),
+
+-- -- 7. Bài báo Q1 → Phòng Khoa học & Công nghệ
+-- (
+--     '70000000-0000-0000-0000-000000000007',
+--     'Gửi link bài báo Q1',
+--     'f0000000-0000-0000-0000-000000000098',
+--     true,
+--     'b0000000-0000-0000-0000-000000000005',
+--     '2025-12-05 10:10:00'
+-- ),
+
+-- -- 8. Lab AI → Phòng Khoa học & Công nghệ
+-- (
+--     '70000000-0000-0000-0000-000000000008',
+--     'Gửi ảnh hiện trạng lab AI',
+--     'f0000000-0000-0000-0000-000000000099',
+--     true,
+--     'b0000000-0000-0000-0000-000000000005',
+--     '2025-12-06 11:30:00'
+-- ),
+
+-- -- 9. Hội nghị NCKH → Phòng Khoa học & Công nghệ
+-- (
+--     '70000000-0000-0000-0000-000000000009',
+--     'Gửi ảnh sự kiện NCKH cũ',
+--     'f0000000-0000-0000-0000-000000000100',
+--     true,
+--     'b0000000-0000-0000-0000-000000000005',
+--     '2025-12-07 14:00:00'
+-- ),
+
+-- -- 10. Sự kiện Noel → Phòng CTSV
+-- (
+--     '70000000-0000-0000-0000-000000000010',
+--     'Gửi ảnh Noel năm ngoái',
+--     'f0000000-0000-0000-0000-000000000037',
+--     true,
+--     'b0000000-0000-0000-0000-000000000010',
+--     '2025-12-06 09:00:00'
+-- );
+-- -- =================================================================
+-- -- 2. Messages (đúng staff + student)
+-- -- =================================================================
+-- INSERT INTO
+--     "Messages" (
+--         "id",
+--         "conversationId",
+--         "userId",
+--         "content",
+--         "createdAt"
+--     )
+-- VALUES
+--     -- Conv 001 – Căng tin (staff DVSV)
+--     (
+--         '80000000-0000-0000-0000-000000000001',
+--         '70000000-0000-0000-0000-000000000001',
+--         'b0000000-0000-0000-0000-000000000027',
+--         'Chào bạn, bạn gửi thêm ảnh chụp tình trạng căng tin giúp mình nhé?',
+--         '2025-12-02 09:05:00'
+--     ),
+--     (
+--         '80000000-0000-0000-0000-000000000002',
+--         '70000000-0000-0000-0000-000000000001',
+--         'e0000000-0000-0000-0000-000000000004',
+--         'Dạ đây ạ, chụp giờ trưa hôm qua.',
+--         '2025-12-02 09:10:00'
+--     ),
+--     (
+--         '80000000-0000-0000-0000-000000000003',
+--         '70000000-0000-0000-0000-000000000001',
+--         'b0000000-0000-0000-0000-000000000027',
+--         'Cảm ơn em, mình đã chuyển lên Ban Quản lý dịch vụ.',
+--         '2025-12-02 09:30:00'
+--     ),
+
+-- -- Conv 002 – Máy lab (staff Thiết bị CSVC)
+-- (
+--     '80000000-0000-0000-0000-000000000004',
+--     '70000000-0000-0000-0000-000000000002',
+--     'b0000000-0000-0000-0000-000000000009',
+--     'Bạn cho mình biết cấu hình máy hiện tại (CPU/RAM/VGA) nhé.',
+--     '2025-12-03 10:35:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000005',
+--     '70000000-0000-0000-0000-000000000002',
+--     'e0000000-0000-0000-0000-000000000005',
+--     'Dạ em gửi ảnh chụp thông số ạ.',
+--     '2025-12-03 10:40:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000006',
+--     '70000000-0000-0000-0000-000000000002',
+--     'b0000000-0000-0000-0000-000000000009',
+--     'Cảm ơn, mình sẽ đề xuất thay mới quý 1/2026.',
+--     '2025-12-03 11:00:00'
+-- ),
+
+-- -- Conv 003 – LMS (staff Dạy học số)
+-- (
+--     '80000000-0000-0000-0000-000000000007',
+--     '70000000-0000-0000-0000-000000000003',
+--     'b0000000-0000-0000-0000-000000000028',
+--     'Bạn gửi video hoặc ảnh lỗi LMS giúp mình được không?',
+--     '2025-12-04 14:05:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000008',
+--     '70000000-0000-0000-0000-000000000003',
+--     'e0000000-0000-0000-0000-000000000043',
+--     'Dạ đây video quay màn hình lúc bị lỗi ạ.',
+--     '2025-12-04 14:10:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000009',
+--     '70000000-0000-0000-0000-000000000003',
+--     'b0000000-0000-0000-0000-000000000028',
+--     'Cảm ơn bạn, đã chuyển đội kỹ thuật xử lý gấp.',
+--     '2025-12-04 14:30:00'
+-- ),
+
+-- -- -- Conv 004 – Thực tập (staff QHDN)
+-- -- (
+-- --     '80000000-0000-0000-0000-000000000010',
+-- --     '70000000-0000-0000-0000-000000000004',
+-- --     'b0000000-0000-0000-0000-000000000002',
+-- --     'Bạn gửi danh sách công ty mong muốn thực tập giúp mình nhé.',
+-- --     '2025-12-02 11:20:00'
+-- -- ),
+-- -- (
+-- --     '80000000-0000-0000-0000-000000000011',
+-- --     '70000000-0000-0000-0000-000000000004',
+-- --     'e0000000-0000-0000-0000-000000000032',
+-- --     'Dạ em gửi file Excel ạ.',
+-- --     '2025-12-02 11:25:00'
+-- -- ),
+-- -- (
+-- --     '80000000-0000-0000-0000-000000000012',
+-- --     '70000000-0000-0000-0000-000000000004',
+-- --     'b0000000-0000-0000-0000-000000000002',
+-- --     'OK, mình sẽ gửi thư giới thiệu trong tuần này.',
+-- --     '2025-12-02 11:45:00'
+-- -- ),
+
+-- -- Conv 005 – Job Fair (staff QHDN)
+-- -- (
+-- --     '80000000-0000-0000-0000-000000000013',
+-- --     '70000000-0000-0000-0000-000000000005',
+-- --     'b0000000-0000-0000-0000-000000000002',
+-- --     'Bạn muốn mời thêm công ty nào tham gia Job Fair cuối năm?',
+-- --     '2025-12-03 09:50:00'
+-- -- ),
+-- (
+--     '80000000-0000-0000-0000-000000000014',
+--     '70000000-0000-0000-0000-000000000005',
+--     'e0000000-0000-0000-0000-000000000022',
+--     'Em muốn có FPT, VNG, Shopee, Tiki ạ.',
+--     '2025-12-03 09:55:00'
+-- ),
+-- -- (
+-- --     '80000000-0000-0000-0000-000000000015',
+-- --     '70000000-0000-0000-0000-000000000005',
+-- --     'b0000000-0000-0000-0000-000000000002',
+-- --     'Đã ghi nhận, cảm ơn góp ý!',
+-- --     '2025-12-03 10:10:00'
+-- -- ),
+
+-- -- Conv 006 – Đề tài NCKH (staff KH&CN)
+-- (
+--     '80000000-0000-0000-0000-000000000016',
+--     '70000000-0000-0000-0000-000000000006',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Bạn gửi đề cương đề tài giúp mình nhé.',
+--     '2025-12-02 15:25:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000017',
+--     '70000000-0000-0000-0000-000000000006',
+--     'e0000000-0000-0000-0000-000000000015',
+--     'Dạ đây file PDF ạ.',
+--     '2025-12-02 15:30:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000018',
+--     '70000000-0000-0000-0000-000000000006',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Cảm ơn, mình duyệt và phản hồi sớm.',
+--     '2025-12-02 15:45:00'
+-- ),
+
+-- -- Conv 007 – Bài báo Q1 (staff KH&CN)
+-- (
+--     '80000000-0000-0000-0000-000000000019',
+--     '70000000-0000-0000-0000-000000000007',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Chúc mừng bài Q1! Gửi link DOI và file PDF nhé.',
+--     '2025-12-05 10:15:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000020',
+--     '70000000-0000-0000-0000-000000000007',
+--     'e0000000-0000-0000-0000-000000000031',
+--     'Dạ đây ạ, cảm ơn thầy/cô.',
+--     '2025-12-05 10:20:00'
+-- ),
+
+-- -- Conv 008 – Lab AI (staff KH&CN)
+-- (
+--     '80000000-0000-0000-0000-000000000021',
+--     '70000000-0000-0000-0000-000000000008',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Bạn chụp ảnh lab hiện tại gửi mình giúp nhé.',
+--     '2025-12-06 11:35:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000022',
+--     '70000000-0000-0000-0000-000000000008',
+--     'e0000000-0000-0000-0000-000000000040',
+--     'Dạ đây 2 ảnh chụp lab ạ.',
+--     '2025-12-06 11:40:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000023',
+--     '70000000-0000-0000-0000-000000000008',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Cảm ơn, mình sẽ đề xuất mua thêm GPU.',
+--     '2025-12-06 12:00:00'
+-- ),
+
+-- -- Conv 009 – Hội nghị NCKH (staff KH&CN)
+-- (
+--     '80000000-0000-0000-0000-000000000024',
+--     '70000000-0000-0000-0000-000000000009',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Bạn gửi ảnh hội nghị NCKH năm trước giúp mình nhé.',
+--     '2025-12-07 14:05:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000025',
+--     '70000000-0000-0000-0000-000000000009',
+--     'e0000000-0000-0000-0000-000000000004',
+--     'Dạ đây ảnh chụp năm 2023 ạ.',
+--     '2025-12-07 14:10:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000026',
+--     '70000000-0000-0000-0000-000000000009',
+--     'b0000000-0000-0000-0000-000000000005',
+--     'Cảm ơn, mình sẽ lên kế hoạch tổ chức lại 2026.',
+--     '2025-12-07 14:30:00'
+-- ),
+
+-- -- Conv 010 – Sự kiện Noel (staff CTSV)
+-- (
+--     '80000000-0000-0000-0000-000000000027',
+--     '70000000-0000-0000-0000-000000000010',
+--     'b0000000-0000-0000-0000-000000000010',
+--     'Bạn gửi ảnh cây thông Noel năm ngoái giúp mình nhé.',
+--     '2025-12-06 09:05:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000028',
+--     '70000000-0000-0000-0000-000000000010',
+--     'e0000000-0000-0000-0000-000000000040',
+--     'Dạ đây ạ, năm ngoái đẹp lắm.',
+--     '2025-12-06 09:10:00'
+-- ),
+-- (
+--     '80000000-0000-0000-0000-000000000029',
+--     '70000000-0000-0000-0000-000000000010',
+--     'b0000000-0000-0000-0000-000000000010',
+--     'Cảm ơn, mình sẽ cố gắng làm hoành tráng hơn năm nay!',
+--     '2025-12-06 09:30:00'
+-- );
+
+-- -- =================================================================
+-- -- 3. FileAttachments (đính kèm vào đúng message của sinh viên)
+-- -- =================================================================
+-- INSERT INTO
+--     "FileAttachments" (
+--         "id",
+--         "targetId",
+--         "targetType",
+--         "fileName",
+--         "fileUrl",
+--         "fileType",
+--         "fileSize",
+--         "createdAt"
+--     )
+-- VALUES (
+--         '90000000-0000-0000-0000-000000000001',
+--         '80000000-0000-0000-0000-000000000002',
+--         'MESSAGE',
+--         'cantin_dirty_01.jpg',
+--         '/uploads/cantin_dirty_01.jpg',
+--         'image/jpeg',
+--         1859421,
+--         '2025-12-02 09:10:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000002',
+--         '80000000-0000-0000-0000-000000000002',
+--         'MESSAGE',
+--         'cantin_dirty_02.jpg',
+--         '/uploads/cantin_dirty_02.jpg',
+--         'image/jpeg',
+--         2048156,
+--         '2025-12-02 09:10:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000003',
+--         '80000000-0000-0000-0000-000000000005',
+--         'MESSAGE',
+--         'lab_config_2025.png',
+--         '/uploads/lab_config_2025.png',
+--         'image/png',
+--         892341,
+--         '2025-12-03 10:40:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000004',
+--         '80000000-0000-0000-0000-000000000008',
+--         'MESSAGE',
+--         'lms_error_recording.mp4',
+--         '/uploads/lms_error_20251204.mp4',
+--         'video/mp4',
+--         12456789,
+--         '2025-12-04 14:10:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000005',
+--         '80000000-0000-0000-0000-000000000011',
+--         'MESSAGE',
+--         'danh_sach_cong_ty_thuc_tap.xlsx',
+--         '/uploads/danh_sach_cong_ty.xlsx',
+--         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+--         45678,
+--         '2025-12-02 11:25:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000006',
+--         '80000000-0000-0000-0000-000000000017',
+--         'MESSAGE',
+--         'de_cuong_nckh_2026.pdf',
+--         '/uploads/de_cuong_nckh_2026.pdf',
+--         'application/pdf',
+--         1876543,
+--         '2025-12-02 15:30:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000007',
+--         '80000000-0000-0000-0000-000000000020',
+--         'MESSAGE',
+--         'bai_bao_Q1_2025.pdf',
+--         '/uploads/bai_bao_Q1_2025.pdf',
+--         'application/pdf',
+--         3456789,
+--         '2025-12-05 10:20:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000008',
+--         '80000000-0000-0000-0000-000000000022',
+--         'MESSAGE',
+--         'lab_ai_hien_trang_01.jpg',
+--         '/uploads/lab_ai_01.jpg',
+--         'image/jpeg',
+--         2154321,
+--         '2025-12-06 11:40:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000009',
+--         '80000000-0000-0000-0000-000000000022',
+--         'MESSAGE',
+--         'lab_ai_hien_trang_02.jpg',
+--         '/uploads/lab_ai_02.jpg',
+--         'image/jpeg',
+--         1987654,
+--         '2025-12-06 11:40:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000010',
+--         '80000000-0000-0000-0000-000000000025',
+--         'MESSAGE',
+--         'hoi_nghi_nckh_2023.jpg',
+--         '/uploads/hoi_nghi_nckh_2023.jpg',
+--         'image/jpeg',
+--         2876543,
+--         '2025-12-07 14:10:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000011',
+--         '80000000-0000-0000-0000-000000000028',
+--         'MESSAGE',
+--         'noel_2024_cay_thong.jpg',
+--         '/uploads/noel_2024_1.jpg',
+--         'image/jpeg',
+--         3987654,
+--         '2025-12-06 09:10:00'
+--     ),
+--     (
+--         '90000000-0000-0000-0000-000000000012',
+--         '80000000-0000-0000-0000-000000000028',
+--         'MESSAGE',
+--         'noel_2024_san_khau.jpg',
+--         '/uploads/noel_2024_2.jpg',
+--         'image/jpeg',
+--         4123456,
+--         '2025-12-06 09:10:00'
+--     );
