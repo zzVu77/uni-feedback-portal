@@ -412,7 +412,7 @@ INSERT INTO
 VALUES (
         'a0000000-0000-0000-0000-999999999999',
         'Quản Trị Viên Hệ Thống',
-        '$2a$10$sUDmvo5VWjB4fRRSJdrDIOXDw4qOHG2KPnDLgTgvyhlNJVma/XBZm',
+        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
         'admin@uni.edu.vn',
         'ADMIN',
         NULL,
@@ -433,7 +433,7 @@ INSERT INTO
 VALUES (
         'b0000000-0000-0000-0000-000000000001',
         'Cán bộ Thanh tra',
-        '$2a$10$sUDmvo5VWjB4fRRSJdrDIOXDw4qOHG2KPnDLgTgvyhlNJVma/XBZm',
+        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
         'staff.thanhtra@uni.edu.vn',
         'DEPARTMENT_STAFF',
         'd0000000-0000-0000-0000-000000000001',
@@ -442,7 +442,7 @@ VALUES (
     (
         'b0000000-0000-0000-0000-000000000009',
         'Cán bộ Quản trị CSVC',
-        '$2a$10$sUDmvo5VWjB4fRRSJdrDIOXDw4qOHG2KPnDLgTgvyhlNJVma/XBZm',
+        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
         'staff.qtcsvc@uni.edu.vn',
         'DEPARTMENT_STAFF',
         'd0000000-0000-0000-0000-000000000009',
@@ -451,7 +451,7 @@ VALUES (
     (
         'b0000000-0000-0000-0000-000000000010',
         'Chuyên viên CTSV',
-        '$2a$10$sUDmvo5VWjB4fRRSJdrDIOXDw4qOHG2KPnDLgTgvyhlNJVma/XBZm',
+        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
         'staff.ctsv@uni.edu.vn',
         'DEPARTMENT_STAFF',
         'd0000000-0000-0000-0000-000000000010',
