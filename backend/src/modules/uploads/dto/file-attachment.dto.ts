@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsString, IsUrl, IsUUID } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
 export class FileAttachmentDto {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-44665544004a',
     description: 'Unique ID of the file attachment',
   })
-  @IsUUID()
+  @IsString()
   id: string;
 
   @ApiProperty({
