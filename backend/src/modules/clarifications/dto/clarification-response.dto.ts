@@ -60,7 +60,7 @@ export class MessageDto {
     description: 'The text content of the message.',
     example: 'Could you please provide the error code?',
   })
-  content?: string;
+  content?: string | null;
 
   @ApiProperty({
     description: 'The timestamp when the message was created.',
