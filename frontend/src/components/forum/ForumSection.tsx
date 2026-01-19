@@ -140,7 +140,10 @@ export function ForumSection() {
           ) : (
             <>
               {forumPosts.map((forumPost) => (
-                <PostCard key={forumPost.id} data={forumPost} />
+                <PostCard
+                  key={forumPost.id + forumPost.feedback.id}
+                  data={forumPost}
+                />
               ))}
 
               {/* Loading trigger element */}
@@ -173,7 +176,7 @@ export function ForumSection() {
             <>
               {announcements.map((announcement) => (
                 <AnnouncementCard
-                  key={announcement.id}
+                  key={announcement.id + announcement.title}
                   announcement={announcement}
                 />
               ))}

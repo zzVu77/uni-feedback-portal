@@ -17,6 +17,7 @@ import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.
 import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
 import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
 import { ClarificationsGateway } from 'src/modules/clarifications/clarifications.gateway';
+import { FeedbackForwardingEvent } from 'src/modules/feedback_management/events/feedback-forwarding.event';
 
 @Injectable()
 export class NotificationEventListener {
@@ -84,6 +85,46 @@ export class NotificationEventListener {
     } catch (error) {
       this.logger.error(
         `[Notification] Failed to notify status update for feedback ${payload.feedbackId}`,
+        error.stack,
+      );
+    }
+  }
+  /**
+   * Handle 'feedback.status_updated' event
+   * Triggered when staff updates feedback status
+   */
+  @OnEvent('feedback.forwarded', { async: true })
+  async handleFeedbackForwardingEvent(payload: FeedbackForwardingEvent) {
+    this.logger.log(
+      `[Notification] Processing Forwarding Feedback from department: ${payload.sender.departmentName} to ${payload.recipient.departmentName}`,
+    );
+
+    try {
+      //send notification to sender department staff
+      await this.notificationsService.createNotifications({
+        userIds: [payload.sender.senderId],
+        content: `Góp ý "${payload.feedback.subject}" đã được chuyển từ phòng ban của bạn đến phòng ban ${payload.recipient.departmentName}.`,
+        type: NotificationType.FEEDBACK_FORWARDED,
+        targetId: payload.feedback.id,
+        title: payload.feedback.subject,
+      });
+      //find all department staff of specific recipient department
+      const recipientDepartmentStaff = await this.prisma.users.findMany({
+        where: { departmentId: payload.recipient.departmentId },
+        select: { id: true },
+      });
+
+      //send notification to recipient department staff
+      await this.notificationsService.createNotifications({
+        userIds: recipientDepartmentStaff.map((staff) => staff.id),
+        content: `Góp ý "${payload.feedback.subject}" đã được chuyển từ phòng ban ${payload.sender.departmentName} đến phòng ban của bạn.`,
+        type: NotificationType.FEEDBACK_FORWARDED_TO_YOU,
+        targetId: payload.feedback.id,
+        title: payload.feedback.subject,
+      });
+    } catch (error) {
+      this.logger.error(
+        `[Notification] Failed to notify forwarding for feedback ${payload.feedback.id}`,
         error.stack,
       );
     }

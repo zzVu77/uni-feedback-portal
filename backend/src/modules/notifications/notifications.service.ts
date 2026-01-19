@@ -20,6 +20,7 @@ export class NotificationsService {
     NotificationType.MESSAGE_NEW_NOTIFICATION,
     NotificationType.CLARIFICATION_NEW_NOTIFICATION,
     NotificationType.CLARIFICATION_CLOSED_NOTIFICATION,
+    NotificationType.FEEDBACK_FORWARDED,
   ];
   private readonly FORUM_TYPES: NotificationType[] = [
     NotificationType.VOTE_FORUM_POST_NOTIFICATION,

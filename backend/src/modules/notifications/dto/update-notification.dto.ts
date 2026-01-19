@@ -5,7 +5,8 @@ import {
   IsBoolean,
   IsEnum,
   IsOptional,
-  IsUUID,
+  // IsUUID,
+  IsString,
 } from 'class-validator';
 import { NotificationType } from '@prisma/client';
 
@@ -16,7 +17,7 @@ export class UpdateNotificationsDto {
   })
   @IsOptional()
   @IsArray()
-  @IsUUID('all', { each: true })
+  @IsString({ each: true })
   ids?: string[];
 
   @ApiPropertyOptional({
