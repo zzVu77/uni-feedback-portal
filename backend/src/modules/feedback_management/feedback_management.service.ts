@@ -404,8 +404,8 @@ export class FeedbackManagementService {
       params.push(`%${q}%`, `%${q}%`);
     }
 
-    console.log('Where Clause', whereClause);
-    console.log('Params', params);
+    // console.log('Where Clause', whereClause);
+    // console.log('Params', params);
     // Raw query join Department, Category, User
     try {
       const rawResults = await this.prisma.$queryRawUnsafe<
