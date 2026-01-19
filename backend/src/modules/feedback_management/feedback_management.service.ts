@@ -371,36 +371,47 @@ export class FeedbackManagementService {
 
     const params: SqlParam[] = [];
 
+    // helper tạo placeholder $1, $2, ...
+    const nextParam = () => `$${params.length + 1}`;
+
     if (status) {
-      whereClause += ' AND f."currentStatus" = ?';
+      whereClause += ` AND f."currentStatus" = ${nextParam()}::"FeedbackStatus"`;
       params.push(status.toUpperCase());
     }
+
     if (departmentId) {
-      whereClause += ' AND f."departmentId" = ?';
+      whereClause += ` AND f."departmentId" = ${nextParam()}::"uuid"`;
       params.push(departmentId);
     }
+
     if (categoryId) {
-      whereClause += ' AND f."categoryId" = ?';
+      whereClause += ` AND f."categoryId" = ${nextParam()}::"uuid"`;
       params.push(categoryId);
     }
+
     if (from) {
-      whereClause += ' AND f."createdAt" >= ?';
+      whereClause += ` AND f."createdAt" >= ${nextParam()}`;
       params.push(new Date(from));
     }
+
     if (to) {
-      whereClause += ' AND f."createdAt" < ?';
+      whereClause += ` AND f."createdAt" < ${nextParam()}`;
       params.push(new Date(new Date(to).setDate(new Date(to).getDate() + 1)));
     }
+
     if (q) {
-      whereClause += ' AND (f."subject" ILIKE ? OR f."description" ILIKE ?)';
+      whereClause += ` AND (f."subject" ILIKE ${nextParam()} OR f."description" ILIKE ${nextParam()})`;
       params.push(`%${q}%`, `%${q}%`);
     }
 
+    console.log('Where Clause', whereClause);
+    console.log('Params', params);
     // Raw query join Department, Category, User
-    const rawResults = await this.prisma.$queryRawUnsafe<
-      RawFeedbackJoinedRow[]
-    >(
-      `
+    try {
+      const rawResults = await this.prisma.$queryRawUnsafe<
+        RawFeedbackJoinedRow[]
+      >(
+        `
       SELECT
         f.*,
         d."name" as "departmentName",
@@ -423,44 +434,48 @@ export class FeedbackManagementService {
       OFFSET ${(page - 1) * pageSize}
       LIMIT ${pageSize}
       `,
-      ...params,
-    );
-    console.log(rawResults);
+        ...params,
+      );
+      // console.log(rawResults);
 
-    // Đếm tổng số kết quả
-    const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
-      `
+      // Đếm tổng số kết quả
+      const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
+        `
   SELECT COUNT(*) as count
   FROM "Feedbacks" f
   ${whereClause}
   `,
-      ...params,
-    );
+        ...params,
+      );
 
-    const total = Number(result.count);
+      const total = Number(result.count);
 
-    // Map lại kết quả cho đúng DTO
-    const results = rawResults.map((f) => ({
-      id: f.id,
-      subject: f.subject,
-      location: f.location,
-      currentStatus: f.currentStatus,
-      isPrivate: f.isPrivate,
-      department: { id: f.departmentId, name: f.departmentName },
-      category: { id: f.categoryId, name: f.categoryName },
-      createdAt: new Date(f.createdAt).toISOString(),
-      ...(f.isPrivate
-        ? null
-        : {
-            student: {
-              id: f.studentId,
-              fullName: f.studentFullName,
-              email: f.studentEmail,
-            },
-          }),
-    }));
+      // Map lại kết quả cho đúng DTO
+      const results = rawResults.map((f) => ({
+        id: f.id,
+        subject: f.subject,
+        location: f.location,
+        currentStatus: f.currentStatus,
+        isPrivate: f.isPrivate,
+        department: { id: f.departmentId, name: f.departmentName },
+        category: { id: f.categoryId, name: f.categoryName },
+        createdAt: new Date(f.createdAt).toISOString(),
+        ...(f.isPrivate
+          ? null
+          : {
+              student: {
+                id: f.studentId,
+                fullName: f.studentFullName,
+                email: f.studentEmail,
+              },
+            }),
+      }));
 
-    return { results, total };
+      return { results, total };
+    } catch (error) {
+      console.error('Error executing raw query:', error);
+      throw new BadRequestException('Invalid query parameters');
+    }
   }
   async getFeedbackDetail(
     params: FeedbackParamDto,
