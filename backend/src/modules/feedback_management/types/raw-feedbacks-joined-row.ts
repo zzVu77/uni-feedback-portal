@@ -8,4 +8,7 @@ export type RawFeedbackJoinedRow = FeedbackBase & {
   studentId: string;
   studentFullName: string;
   studentEmail: string;
+
+  // voteCount: number;
+  // commentCount: number;
 };

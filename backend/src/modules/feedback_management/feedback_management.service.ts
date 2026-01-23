@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FeedbackStatus, FileTargetType, Prisma } from '@prisma/client';
-import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
+import {
+  FeedbackParamDto,
+  FeedbackSortOption,
+  QueryFeedbacksDto,
+} from 'src/modules/feedbacks/dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   GenerateForwardingMessage,
@@ -380,6 +384,7 @@ export class FeedbackManagementService {
       from,
       to,
       q,
+      sort = FeedbackSortOption.STATUS,
     } = query;
 
     // Sử dụng raw query để order theo status custom và join bảng liên quan
@@ -420,7 +425,47 @@ export class FeedbackManagementService {
       whereClause += ` AND (f."subject" ILIKE ${nextParam()} OR f."description" ILIKE ${nextParam()})`;
       params.push(`%${q}%`, `%${q}%`);
     }
+    // ======================
+    // SORT LOGIC
+    // ======================
+    let joinClause = '';
+    const orderByParts: string[] = [];
 
+    // Base: STATUS ORDER (luôn có)
+    const statusOrderExpr = `
+    CASE
+      WHEN f."currentStatus" = 'PENDING' THEN 1
+      WHEN f."currentStatus" = 'IN_PROGRESS' THEN 2
+      WHEN f."currentStatus" = 'RESOLVED' THEN 3
+      WHEN f."currentStatus" = 'REJECTED' THEN 4
+      ELSE 5
+    END
+  `;
+
+    // HOT = thêm trọng số
+    if (sort === FeedbackSortOption.HOT) {
+      joinClause = `
+      LEFT JOIN "ForumPosts" fp ON fp."feedbackId" = f."id"
+      LEFT JOIN "Votes" v ON v."postId" = fp."id"
+      LEFT JOIN "Comments" cm
+        ON cm."targetId" = fp."id"
+       AND cm."targetType" = 'FORUM_POST'
+    `;
+
+      orderByParts.push(`
+      (COUNT(DISTINCT v."userId") * 2 + COUNT(DISTINCT cm."id")) DESC
+    `);
+    }
+
+    // Base sort luôn đứng sau
+    orderByParts.push(`
+    ${statusOrderExpr},
+    f."createdAt" DESC
+  `);
+
+    const orderByClause = `
+    ORDER BY ${orderByParts.join(',')}
+  `;
     // console.log('Where Clause', whereClause);
     // console.log('Params', params);
     // Raw query join Department, Category, User
@@ -440,20 +485,27 @@ export class FeedbackManagementService {
       LEFT JOIN "Departments" d ON f."departmentId" = d."id"
       LEFT JOIN "Categories" c ON f."categoryId" = c."id"
       LEFT JOIN "Users" u ON u."id" = f."userId"
+      ${joinClause}
       ${whereClause}
-      ORDER BY CASE
-        WHEN f."currentStatus" = 'PENDING' THEN 1
-        WHEN f."currentStatus" = 'IN_PROGRESS' THEN 2
-        WHEN f."currentStatus" = 'RESOLVED' THEN 3
-        WHEN f."currentStatus" = 'REJECTED' THEN 4
-        ELSE 5
-      END, f."createdAt" DESC
+      GROUP BY f."id", d."name", c."name", u."id" 
+      ${orderByClause}
       OFFSET ${(page - 1) * pageSize}
       LIMIT ${pageSize}
       `,
         ...params,
       );
       // console.log(rawResults);
+      // rawResults.forEach((f) => {
+      //   const voteCount = Number(f.voteCount);
+      //   const commentCount = Number(f.commentCount);
+
+      //   console.log({
+      //     id: f.id,
+      //     voteCount,
+      //     commentCount,
+      //     hotScore: voteCount * 2 + commentCount,
+      //   });
+      // });
 
       // Đếm tổng số kết quả
       const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
