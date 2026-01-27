@@ -10,6 +10,7 @@ import {
   AnnouncementListResponseDto,
   CreateAnnouncementDto,
   QueryAnnouncementsDto,
+  QueryStaffAnnouncementsDto,
   UpdateAnnouncementDto,
 } from './dto';
 import { UploadsService } from '../uploads/uploads.service';
@@ -306,5 +307,125 @@ export class AnnouncementsService {
         'This action is only allowed for Department Staff.',
       );
     }
+  }
+  async getStaffAnnouncements(
+    query: QueryStaffAnnouncementsDto,
+    actor: ActiveUserData,
+  ): Promise<AnnouncementListResponseDto> {
+    const { page = 1, pageSize = 10, q, from, to } = query;
+
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+
+    // Build dynamic WHERE condition
+    const where: Prisma.AnnouncementsWhereInput = {};
+    // console.log('Actor:', actor);
+    where.userId = actor.sub;
+    if (q) {
+      where.OR = [
+        { title: { contains: q, mode: 'insensitive' } },
+        { content: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+
+    if (from || to) {
+      where.createdAt = {};
+      if (from) where.createdAt.gte = new Date(from);
+      if (to)
+        where.createdAt.lt = new Date(
+          new Date(to).setDate(new Date(to).getDate() + 1),
+        );
+    }
+
+    // Query data + total count
+    const [items, total] = await Promise.all([
+      this.prisma.announcements.findMany({
+        where,
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              department: {
+                select: { id: true, name: true },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.announcements.count({ where }),
+    ]);
+
+    // Map to DTO
+    const mappedItems = items.map((item) => ({
+      id: item.id,
+      title: item.title,
+      content: item.content,
+      createdAt: item.createdAt,
+      user: {
+        id: item.user.id,
+        userName: item.user.fullName,
+      },
+      department: {
+        id: item.user.department?.id ?? 'null',
+        name: item.user.department?.name ?? 'null',
+      },
+    }));
+
+    return { results: mappedItems, total };
+  }
+
+  async getStaffAnnouncementDetail(
+    id: string,
+    actor: ActiveUserData,
+  ): Promise<AnnouncementDetailDto> {
+    const announcement = await this.prisma.announcements.findUnique({
+      where: { id, userId: actor.sub },
+      include: {
+        user: {
+          select: {
+            id: true, // Thêm id của user
+            fullName: true,
+            department: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        // Không include files ở đây nữa
+      },
+    });
+    if (!announcement) {
+      throw new NotFoundException(
+        `Announcement with id ${id} not found or you do not have permission to access it`,
+      );
+    }
+
+    // Lấy file đính kèm bằng UploadsService
+    const files = await this.uploadsService.getAttachmentsForTarget(
+      id,
+      FileTargetType.ANNOUNCEMENT,
+    );
+
+    return {
+      id: announcement.id,
+      title: announcement.title,
+      content: announcement.content,
+      createdAt: announcement.createdAt,
+      user: {
+        id: announcement.userId,
+        userName: announcement.user.fullName,
+      },
+      department: {
+        id: announcement.user.department?.id ?? 'null',
+        name: announcement.user.department?.name ?? 'null',
+      },
+      files: files,
+    };
   }
 }
