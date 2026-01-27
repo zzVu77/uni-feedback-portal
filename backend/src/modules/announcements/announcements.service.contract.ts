@@ -5,9 +5,18 @@ import {
   QueryAnnouncementsDto,
   CreateAnnouncementDto,
   UpdateAnnouncementDto,
+  QueryStaffAnnouncementsDto,
 } from './dto/';
 
 export interface AnnouncementsServiceContract {
+  getStaffAnnouncements(
+    query: QueryStaffAnnouncementsDto,
+    actor: ActiveUserData,
+  ): Promise<AnnouncementListResponseDto>;
+  getStaffAnnouncementDetail(
+    id: string,
+    actor: ActiveUserData,
+  ): Promise<AnnouncementDetailDto>;
   getAnnouncements(
     query: QueryAnnouncementsDto,
   ): Promise<AnnouncementListResponseDto>;
