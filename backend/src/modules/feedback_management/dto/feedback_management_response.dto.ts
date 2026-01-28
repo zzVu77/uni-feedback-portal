@@ -22,7 +22,7 @@ export class ListFeedbacksResponseDto {
       'List of feedbacks with optional student info and forwarding flag',
   })
   results: (FeedbackSummary & {
-    student?: StudentInfo;
+    student?: StudentInfo | null;
     isForwarding?: boolean;
   })[];
 
