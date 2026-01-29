@@ -22,6 +22,7 @@ import {
   AnnouncementParamDto,
   CreateAnnouncementDto,
   QueryAnnouncementsDto,
+  QueryStaffAnnouncementsDto,
   UpdateAnnouncementDto,
 } from './dto';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -36,6 +37,42 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) {}
 
+  //STAFF
+  @Get('staff')
+  @ApiOkResponse({
+    description: 'List announcements',
+    type: AnnouncementListResponseDto,
+  })
+  @ApiOperation({ summary: 'Get all announcements (Authenticated users only)' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  getStaffAnnouncements(
+    @Query() query: QueryStaffAnnouncementsDto,
+    @ActiveUser() user: ActiveUserData,
+  ): Promise<AnnouncementListResponseDto> {
+    return this.announcementsService.getStaffAnnouncements(query, user);
+  }
+
+  @Get('staff/:id')
+  @ApiOkResponse({
+    description: 'Get announcement detail by ID',
+    type: AnnouncementDetailDto,
+  })
+  @ApiOperation({
+    summary: 'Get announcement detail by ID (Authenticated users only)',
+  })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  getStaffAnnouncementDetail(
+    @Param() params: AnnouncementParamDto,
+    @ActiveUser() user: ActiveUserData,
+  ): Promise<AnnouncementDetailDto> {
+    return this.announcementsService.getStaffAnnouncementDetail(
+      params.id,
+      user,
+    );
+  }
+  //GENERAL
   @Get()
   @ApiOkResponse({
     description: 'List announcements',
