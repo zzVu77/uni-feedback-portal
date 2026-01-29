@@ -296,7 +296,9 @@ const AnnouncementForm = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tiêu đề thông báo</FormLabel>
+                    <FormLabel>
+                      Tiêu đề thông báo<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Nhập tiêu đề thông báo" {...field} />
                     </FormControl>
@@ -311,7 +313,10 @@ const AnnouncementForm = ({
                   name="content"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nội dung thông báo</FormLabel>
+                      <FormLabel>
+                        Nội dung thông báo
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         {/* Sử dụng key={editorKey} để reset editor */}
                         <SunEditor
