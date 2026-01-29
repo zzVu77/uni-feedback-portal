@@ -10,10 +10,9 @@ Closes #
 
 -
 
-## 🧪 How to test?
+## 📸 Screenshot at your local?
 
-1.
-2.
+- TBC
 
 ## ⚠️ Breaking changes?
 
