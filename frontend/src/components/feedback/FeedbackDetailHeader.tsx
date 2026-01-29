@@ -10,6 +10,7 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
+import ConfirmationDialog from "../common/ConfirmationDialog";
 import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
 import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
@@ -61,16 +62,21 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
                   Sửa
                 </Button>
               </Link>
-              <Button
-                className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
-                onClick={() => {
-                  void handleDelete();
-                }}
-                disabled={isPending}
+              <ConfirmationDialog
+                title="Xác nhận xóa"
+                description="Bạn có chắc chắn muốn xóa phản hồi này không? Hành động này không thể hoàn tác."
+                onConfirm={handleDelete}
+                confirmText="Xóa"
+                cancelText="Hủy"
               >
-                <Trash2 className="h-4 w-4 text-white" />
-                Xóa
-              </Button>
+                <Button
+                  className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
+                  disabled={isPending}
+                >
+                  <Trash2 className="h-4 w-4 text-white" />
+                  Xóa
+                </Button>
+              </ConfirmationDialog>
             </div>
           )}
         </div>
