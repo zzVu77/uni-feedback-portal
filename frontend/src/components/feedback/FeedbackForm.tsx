@@ -412,7 +412,9 @@ const FeedbackForm = ({
                 name="subject"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tiêu đề góp ý</FormLabel>
+                    <FormLabel>
+                      Tiêu đề góp ý<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Mô tả ngắn gọn tiêu đề bạn muốn góp ý"
@@ -430,7 +432,9 @@ const FeedbackForm = ({
                   name="categoryId"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Danh mục góp ý</FormLabel>
+                      <FormLabel>
+                        Danh mục góp ý<span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -463,7 +467,10 @@ const FeedbackForm = ({
                   name="departmentId"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Phòng ban tiếp nhận</FormLabel>
+                      <FormLabel>
+                        Phòng ban tiếp nhận
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -515,7 +522,9 @@ const FeedbackForm = ({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Mô tả chi tiết</FormLabel>
+                    <FormLabel>
+                      Mô tả chi tiết<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Mô tả chi tiết vấn đề bạn muốn góp ý"
