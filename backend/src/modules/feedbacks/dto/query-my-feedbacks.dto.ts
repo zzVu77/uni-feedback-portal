@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 export enum FeedbackSortOption {
-  HOT = 'hot',
+  TRENDING = 'trending',
   STATUS = 'status',
 }
 export class QueryFeedbacksDto {
@@ -82,7 +82,7 @@ export class QueryFeedbacksDto {
 
   @ApiPropertyOptional({
     enum: FeedbackSortOption,
-    example: FeedbackSortOption.HOT,
+    example: FeedbackSortOption.TRENDING,
     description: 'Sort feedbacks by a specific option',
   })
   @IsOptional()

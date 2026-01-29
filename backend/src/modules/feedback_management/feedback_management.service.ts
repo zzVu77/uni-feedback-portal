@@ -27,9 +27,9 @@ import {
   QueryFeedbackByStaffDto,
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
+  RawFeedbackJoinedRow,
 } from './dto';
 import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
-import { RawFeedbackJoinedRow } from './types/raw-feedbacks-joined-row';
 import { FeedbackForwardingEvent } from './events/feedback-forwarding.event';
 @Injectable()
 export class FeedbackManagementService {
@@ -443,7 +443,7 @@ export class FeedbackManagementService {
   `;
 
     // HOT = thêm trọng số
-    if (sort === FeedbackSortOption.HOT) {
+    if (sort === FeedbackSortOption.TRENDING) {
       joinClause = `
       LEFT JOIN "ForumPosts" fp ON fp."feedbackId" = f."id"
       LEFT JOIN "Votes" v ON v."postId" = fp."id"
