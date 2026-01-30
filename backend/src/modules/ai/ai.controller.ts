@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { AiService } from './ai.service';
-import { check } from 'zod';
 import { CheckToxicDto } from './dto/CheckToxic.dto';
+import { ToxicResponseDto } from './dto/toxic-response.dto';
 
 @Controller('ai')
 export class AiController {
@@ -32,7 +32,7 @@ export class AiController {
     return this.aiService.remove(+id);
   }
   @Post('check-toxic')
-  checkToxicity(@Body() checkToxicDto: CheckToxicDto) {
+  checkToxicity(@Body() checkToxicDto: CheckToxicDto): Promise<ToxicResponseDto> {
     return this.aiService.checkToxicity(checkToxicDto.content);
   }
 }
