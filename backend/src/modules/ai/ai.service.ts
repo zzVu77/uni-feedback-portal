@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { boolean } from 'zod';
-import is from 'zod/v4/locales/is.js';
 import { GoogleGenAI } from "@google/genai";
+import { ToxicResponseDto } from './dto/toxic-response.dto';
 
 @Injectable()
 export class AiService {
@@ -24,7 +23,7 @@ export class AiService {
   remove(id: number) {
     return `This action removes a #${id} ai`;
   }
-  async checkToxicity(content: string) {
+  async checkToxicity(content: string): Promise<ToxicResponseDto> {
     // check keywords for toxicity
     const toxicKeywords = [
       "ngu", "óc chó", "óc heo", "đần", "dốt",
@@ -99,7 +98,8 @@ export class AiService {
     });
    
     const responseText = (await model).text;
-    const result = JSON.parse(responseText||'{"toxic": false}');
+    const parsed = JSON.parse(responseText||'{"toxic": false}') as {toxic: boolean};
+    const result: ToxicResponseDto = { isToxic: parsed.toxic };
     return result;
   }
 
