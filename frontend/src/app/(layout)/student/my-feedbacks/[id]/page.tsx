@@ -34,8 +34,8 @@ const Page = () => {
     return (
       <div className="flex h-full w-full grow flex-col items-center justify-center">
         <EmptyState
-          title="Không tìm thấy phản hồi"
-          description={`Chúng tôi không tìm thấy phản hồi với ID: ${id}. Vui lòng kiểm tra lại hoặc quay lại danh sách phản hồi của bạn.`}
+          title="Không tìm thấy góp ý"
+          description={`Chúng tôi không tìm thấy góp ý với ID: ${id}. Vui lòng kiểm tra lại hoặc quay lại danh sách góp ý của bạn.`}
           backLink="/student/my-feedbacks"
           backLabel="Quay lại danh sách"
           errorCode={404}
