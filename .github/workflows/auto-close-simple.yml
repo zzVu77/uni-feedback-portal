@@ -1,0 +1,28 @@
+name: Simple Auto Close
+on:
+  pull_request:
+    types: [closed]
+    branches: [main, dev]
+
+jobs:
+  close-issues:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+    steps:
+      - name: Scan and Close Issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_ID: ${{ github.event.pull_request.number }}
+        run: |
+          # 1. Lấy danh sách commit messages trong PR
+          # 2. Lọc tìm chữ "fix #...", "close #..."
+          # 3. Lấy số issue và thực hiện lệnh close ngay lập tức
+
+          gh pr view $PR_ID --json commits --jq '.commits[].messageHeadline + " " + .commits[].messageBody' \
+          | grep -iE "(close|fix|resolve)(s|d)? #\d+" \
+          | grep -oE "#\d+" \
+          | sort -u \
+          | xargs -I {} gh issue close {} --comment "Tự động đóng khi merge vào Main" || true
