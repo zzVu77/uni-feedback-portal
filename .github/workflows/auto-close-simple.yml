@@ -3,7 +3,7 @@ name: Auto Close Issues (Strict Regex)
 on:
   pull_request:
     types: [closed]
-    branches: [main]
+    branches: [main, dev]
 
 jobs:
   close-issues-strict:
