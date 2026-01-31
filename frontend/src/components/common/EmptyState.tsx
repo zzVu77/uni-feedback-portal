@@ -84,12 +84,11 @@ const EmptyState: React.FC<EmptyStateProps> = ({
           )}
 
           {backLink && (
-            <Link
-              href={backLink}
-              className="group inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-none"
-            >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              {backLabel}
+            <Link href={backLink}>
+              <Button className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none">
+                <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                {backLabel}
+              </Button>
             </Link>
           )}
         </div>
