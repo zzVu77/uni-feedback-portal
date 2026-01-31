@@ -3,7 +3,7 @@ name: Auto Close Issues (Strict Regex)
 on:
   pull_request:
     types: [closed]
-    branches: [main, dev]
+    branches: [main]
 
 jobs:
   close-issues-strict:
@@ -12,16 +12,19 @@ jobs:
     permissions:
       issues: write
       pull-requests: read
+      contents: read # Cần quyền đọc để checkout code
     steps:
+      # --- BƯỚC QUAN TRỌNG VỪA THÊM VÀO ---
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # ------------------------------------
+
       - name: Scan Commits and Close Issues
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_ID: ${{ github.event.pull_request.number }}
         run: |
-          # LOGIC AN TOÀN:
-          # Bước 1 (grep -iEo): Chỉ lấy các chuỗi khớp mẫu: "issuse #123" hoặc "fix #123".
-          #                     Nó sẽ BỎ QUA các chuỗi chỉ có số như "(#111)" vì thiếu từ khóa phía trước.
-          # Bước 2 (grep -oE):  Từ kết quả "issuse #123", cắt lấy "#123".
+          # Checkout xong thì folder hiện tại mới là git repo, lệnh gh mới hiểu context
 
           gh pr view $PR_ID --json commits --jq '.commits[].messageHeadline + " " + .commits[].messageBody' \
           | grep -iEo "(issuse|issue|fix|close|resolve)[a-z]*\s+#\d+" \
