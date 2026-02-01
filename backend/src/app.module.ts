@@ -21,6 +21,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     CommentModule,
     MailModule,
     EventEmitterModule.forRoot(),
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
