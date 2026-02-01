@@ -28,7 +28,7 @@ export class AiService {
           if (isToxicAI) {
             return true;
           }
-      } catch (error) {
+      } catch{
           return false;
       }
     }
