@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import {
+  IsIn,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class GenerateUploadUrlDto {
   @ApiProperty({
@@ -16,9 +24,22 @@ export class GenerateUploadUrlDto {
   })
   @IsString()
   @IsNotEmpty()
+  @IsIn(['image/png', 'image/jpeg', 'application/pdf'], {
+    message: 'File type is not allowed',
+  })
   fileType: string;
-}
 
+  @ApiProperty({
+    example: 245678,
+    description: 'File size in bytes.',
+  })
+  @IsInt()
+  @Min(1)
+  @Max(5 * 1024 * 1024, {
+    message: 'File size must be less than 5MB',
+  })
+  fileSize: number;
+}
 export class GenerateUploadUrlResponseDto {
   @ApiProperty({
     description:
