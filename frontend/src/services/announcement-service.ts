@@ -50,7 +50,7 @@ export const getAnnouncementByIdForStaff = async (
 export const createAnnouncement = async (
   payload: CreateAnnouncementPayload,
 ) => {
-  await axiosInstance.post(announcementBaseUrl, {
+  await axiosInstance.post(announcementStaffBaseUrl, {
     ...payload,
   });
 };
@@ -58,10 +58,10 @@ export const updateAnnouncementById = async (
   id: string,
   payload: CreateAnnouncementPayload,
 ) => {
-  await axiosInstance.patch(`${announcementBaseUrl}/${id}`, {
+  await axiosInstance.patch(`${announcementStaffBaseUrl}/${id}`, {
     ...payload,
   });
 };
 export const deleteAnnouncementById = async (id: string) => {
-  await axiosInstance.delete(`${announcementBaseUrl}/${id}`);
+  await axiosInstance.delete(`${announcementStaffBaseUrl}/${id}`);
 };
