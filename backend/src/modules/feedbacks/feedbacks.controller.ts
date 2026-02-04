@@ -142,4 +142,9 @@ export class FeedbacksController {
   ): Promise<void> {
     return this.feedbacksService.deleteFeedback(params, user);
   }
+
+  @Get('/feedback-toxic/:jobId')
+  getToxicJobStatus(@Param('jobId') jobId: string) {
+    return this.feedbacksService.getToxicJobStatus(jobId);
+  }
 }
