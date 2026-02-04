@@ -3,7 +3,7 @@ import { Loading } from "@/components/common/Loading";
 import AnnouncementDetail from "@/components/forum/AnnouncementDetail";
 import CommentSection from "@/components/forum/CommentSection";
 import Wrapper from "@/components/shared/Wrapper";
-import { useGetAnnouncementById } from "@/hooks/queries/useAnnouncementQueries";
+import { useGetAnnouncementByIdForAuthenticatedUsers } from "@/hooks/queries/useAnnouncementQueries";
 import { useGetCommentsByAnnouncementId } from "@/hooks/queries/useCommentQueries";
 import { useIsClient } from "@/hooks/useIsClient";
 import { useParams } from "next/navigation";
@@ -13,7 +13,7 @@ const page = () => {
   const id = params.id as string;
   const isClient = useIsClient();
   const { data: announcement, isLoading: isAnnouncementLoading } =
-    useGetAnnouncementById(id, {
+    useGetAnnouncementByIdForAuthenticatedUsers(id, {
       enabled: isClient,
     });
   // Fetch comments

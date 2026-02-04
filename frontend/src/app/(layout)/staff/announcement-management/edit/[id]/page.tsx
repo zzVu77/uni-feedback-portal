@@ -4,7 +4,7 @@ import { Loading } from "@/components/common/Loading";
 import AnnouncementForm from "@/components/forum/AnnouncementForm";
 import Wrapper from "@/components/shared/Wrapper";
 import {
-  useGetAnnouncementById,
+  useGetAnnouncementByIdForStaff,
   useUpdateAnnouncementById,
 } from "@/hooks/queries/useAnnouncementQueries"; // Adjust path if needed
 import { useIsClient } from "@/hooks/useIsClient";
@@ -17,7 +17,7 @@ const page = () => {
   const id = params.id as string;
   const isClient = useIsClient();
 
-  const { data: announcement, isLoading } = useGetAnnouncementById(id, {
+  const { data: announcement, isLoading } = useGetAnnouncementByIdForStaff(id, {
     enabled: isClient,
   });
 

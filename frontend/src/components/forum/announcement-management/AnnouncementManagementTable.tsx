@@ -24,8 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useUser } from "@/context/UserContext"; // Import User Context
-import { useGetAnnouncements } from "@/hooks/queries/useAnnouncementQueries"; // Import query hook
+import { useGetAllAnnouncementsForStaff } from "@/hooks/queries/useAnnouncementQueries"; // Import query hook
 import { cn } from "@/lib/utils";
 import { AnnouncementFilter } from "@/types";
 import { ChevronLeft, ChevronRight, CirclePlus, SearchX } from "lucide-react";
@@ -49,8 +48,6 @@ export function AnnouncementManagementTable() {
     React.useState<VisibilityState>({});
 
   // 1. Get User Context to retrieve departmentId
-  const { user } = useUser();
-  const departmentId = user?.department?.id ?? undefined;
 
   // 2. Handle URL Search Params for pagination & filtering
   const router = useRouter();
@@ -63,16 +60,15 @@ export function AnnouncementManagementTable() {
       page: Number(searchParams.get("page")) || 1,
       pageSize: Number(searchParams.get("pageSize")) || 10,
       q: searchParams.get("q") || undefined,
-      departmentId: departmentId,
     };
-  }, [searchParams, departmentId]);
+  }, [searchParams]);
 
   // 3. Fetch Data using React Query
   const {
     data: announcements,
     isFetching,
     isError,
-  } = useGetAnnouncements(filters);
+  } = useGetAllAnnouncementsForStaff(filters);
 
   const tableData = React.useMemo(
     () => (isError ? [] : (announcements?.results ?? [])),
