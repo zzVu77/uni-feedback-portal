@@ -12,8 +12,10 @@ import { FeedbackCreatedEvent } from './events/feedback-created.event';
 import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
 import { FileTargetType } from '@prisma/client';
 import {
+    CreateFeedbackDto,
   FeedbackSummary
 }   from './dto';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Processor('feedback-toxic')
 export class FeedbackToxicProcessor extends WorkerHost {
     constructor(
@@ -25,7 +27,10 @@ export class FeedbackToxicProcessor extends WorkerHost {
     ) {
         super();
     }
-    async process(job: Job): Promise<FeedbackSummary> {
+    async process(job: Job<{
+        dto: CreateFeedbackDto;
+        actor: ActiveUserData;
+    },FeedbackSummary>): Promise<FeedbackSummary> {
         const { dto, actor } = job.data;
         const { fileAttachments, ...feedbackData } = dto;
         const isToxic = await this.aiService.checkToxicity(dto.description);
