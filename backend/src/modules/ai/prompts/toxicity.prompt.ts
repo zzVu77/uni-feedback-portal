@@ -8,6 +8,12 @@ export const toxicityPrompt = (description: string) => `
       - Threat
       - Hate speech
       - Profanity
+      - Spam or advertising, including:
+            + Product/service promotion
+            + Selling, seeding, affiliate or MLM content
+            + Call-to-action phrases (buy now, inbox, contact, click link, register…)
+            + “Make money online”, “easy job high salary”, investment scams
+            + Links, phone numbers, or contact platforms (Zalo, Facebook, Telegram, etc.)
       Yêu cầu OUTPUT (CỰC KỲ QUAN TRỌNG):
       - Chỉ trả về MỘT object JSON hợp lệ
       - KHÔNG markdown
@@ -56,5 +62,42 @@ export const toxicKeywords =  [
 
         "vcl", "vkl", "đm", "dm",
         "clgt", "cc",
-        "vl", "đcm"
+        "vl", "đcm",
+
+
+        "mua ngay", "giá sốc", "sale", "giảm giá",
+        "khuyến mãi", "ưu đãi", "flash sale",
+        "xả hàng", "thanh lý", "rẻ nhất",
+        "bán gấp", "order ngay", "chốt đơn",
+
+
+        "inbox", "ib", "liên hệ ngay",
+        "đăng ký ngay", "tham gia ngay",
+        "click link", "bấm link", "xem link",
+
+
+        "kiếm tiền online", "việc nhẹ lương cao",
+        "thu nhập thụ động", "làm tại nhà",
+        "không cần vốn", "cam kết lợi nhuận",
+        "hoàn tiền 100%", "bao đậu",
+
+
+        "review có tâm", "đảm bảo uy tín",
+        "đã dùng và thấy rất tốt",
+        "khách đông mỗi ngày",
+        "ai cần thì liên hệ",
+
+  
+        "đầu tư sinh lời", "lãi ngày",
+        "nhân 2 tài khoản", "nhân tiền",
+        "chơi là thắng", "cam kết không lỗ",
+
+
+        "http://", "https://", "www.",
+        ".com", ".net", ".vn",
+        "zalo.me", "facebook.com", "t.me",
+
+
+        "spam", "quảng cáo",
+        "up bài", "đẩy bài",
 ];
