@@ -22,6 +22,7 @@ import { MailModule } from './modules/mail/mail.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AiModule } from './modules/ai/ai.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -46,6 +47,12 @@ import { AiModule } from './modules/ai/ai.module';
     MailModule,
     EventEmitterModule.forRoot(),
     AiModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
