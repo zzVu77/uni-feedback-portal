@@ -13,7 +13,6 @@ export const toxicityPrompt = (description: string) => `
             + Selling, seeding, affiliate or MLM content
             + Call-to-action phrases (buy now, inbox, contact, click link, register…)
             + “Make money online”, “easy job high salary”, investment scams
-            + Links, phone numbers, or contact platforms (Zalo, Facebook, Telegram, etc.)
       Yêu cầu OUTPUT (CỰC KỲ QUAN TRỌNG):
       - Chỉ trả về MỘT object JSON hợp lệ
       - KHÔNG markdown
@@ -71,21 +70,11 @@ export const toxicKeywords =  [
         "bán gấp", "order ngay", "chốt đơn",
 
 
-        "inbox", "ib", "liên hệ ngay",
-        "đăng ký ngay", "tham gia ngay",
-        "click link", "bấm link", "xem link",
-
-
         "kiếm tiền online", "việc nhẹ lương cao",
         "thu nhập thụ động", "làm tại nhà",
         "không cần vốn", "cam kết lợi nhuận",
         "hoàn tiền 100%", "bao đậu",
 
-
-        "review có tâm", "đảm bảo uy tín",
-        "đã dùng và thấy rất tốt",
-        "khách đông mỗi ngày",
-        "ai cần thì liên hệ",
 
   
         "đầu tư sinh lời", "lãi ngày",
@@ -93,11 +82,81 @@ export const toxicKeywords =  [
         "chơi là thắng", "cam kết không lỗ",
 
 
-        "http://", "https://", "www.",
-        ".com", ".net", ".vn",
-        "zalo.me", "facebook.com", "t.me",
+        "https://shopee.vn/", "https://tiki.vn/",
+        "https://lazada.vn/", "https://fahasa.com/",
+        "https://thegioididong.com/", "https://cellphones.com.vn/",
 
 
         "spam", "quảng cáo",
         "up bài", "đẩy bài",
+
+
+        "stupid", "idiot", "dumb", "moron", "loser",
+        "trash", "scumbag", "worthless", "pathetic",
+        "piece of shit", "piece of crap",
+        "brain dead", "low iq",
+
+
+        "no one needs you",
+        "you are nothing",
+        "you are useless",
+        "waste of space",
+        "you don't matter",
+
+        
+        "i hate these people",
+        "those people are",
+        "you people are",
+        "disgusting group",
+
+
+        "i will kill you",
+        "i'll beat you",
+        "i'll destroy you",
+        "watch your back",
+        "you better be careful",
+        "i'm coming for you",
+
+
+        "i will track you",
+        "i'm watching you",
+        "spam messages",
+        "mental harassment",
+        "public shaming",
+        "leak your information",
+        "post your private info",
+
+
+         "fuck", "fucking",
+         "shit", "bullshit",
+         "asshole", "bitch",
+         "motherfucker",
+         "wtf", "omfg",
+
+
+         "buy now",
+         "limited offer",
+         "best price",
+         "huge discount",
+         "flash sale",
+         "order now",
+         "click here",
+         "contact us",
+         "inbox me",
+
+
+         "make money online",
+         "easy money",
+         "work from home",
+         "passive income",
+         "no investment needed",
+         "guaranteed profit",
+         "100% refund",
+         "risk free",
+         "double your money",
+
+         
+         "advertisement",
+         "promoted post",
+         "boost post",
 ];
