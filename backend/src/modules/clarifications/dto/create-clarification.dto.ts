@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
 
 export class CreateClarificationDto {
   @ApiProperty({
     description: 'The ID of the feedback this conversation is related to.',
     example: '550e8400-e29b-41d4-a716-446655440013',
   })
-  @IsString()
+  @IsUUID('loose')
   feedbackId: string;
 
   @ApiProperty({
