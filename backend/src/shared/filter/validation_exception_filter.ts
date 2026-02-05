@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   ArgumentsHost,
   BadRequestException,
@@ -10,7 +5,9 @@ import {
   ExceptionFilter,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-
+type BadRequestResponse = {
+  message?: string | string[];
+};
 @Catch(BadRequestException)
 export class ValidationExceptionFilter implements ExceptionFilter {
   catch(exception: BadRequestException, host: ArgumentsHost) {
@@ -18,12 +15,14 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const exceptionResponse = exception.getResponse() as any;
+    console.log(exception.getResponse());
+    const exceptionResponse = exception.getResponse() as BadRequestResponse;
+    console.log('exceptionResponse:', exceptionResponse);
     const messages = exceptionResponse?.message ?? [];
 
     const hasParams = Object.keys(request.params || {}).length > 0;
     const hasQuery = Object.keys(request.query || {}).length > 0;
-    const hasBody = Object.keys(request.body || {}).length > 0;
+    // const hasBody = Object.keys(request.body || {}).length > 0;
 
     /**
      * CASE 1: Param invalid → 404
