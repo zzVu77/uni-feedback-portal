@@ -29,7 +29,7 @@ export class AiService {
             return true;
           }
       } catch{
-          return false;
+          throw new Error('Error parsing AI response for toxicity check.');
       }
     }
     return false;
