@@ -419,7 +419,7 @@ export class FeedbacksService {
   async getToxicJobStatus(jobId: string) {
     const job = await this.feedbackToxicQueue.getJob(jobId);
     if (!job) {
-      throw new NotFoundException('Job không tồn tại');
+      throw new NotFoundException('job not found');
     }
     const state = await job.getState();
     switch (state) {
