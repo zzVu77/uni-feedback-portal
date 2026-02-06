@@ -26,12 +26,14 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
       );
     },
     cell: ({ row }) => (
-      <div
-        className="max-w-[250px] truncate font-medium text-slate-900 capitalize lg:max-w-sm"
-        title={row.getValue("subject")}
-      >
-        {row.getValue("subject")}
-      </div>
+      <Link href={`/admin/feedbacks-management/${row.original.id}`}>
+        <div
+          className="max-w-[250px] truncate font-medium text-slate-900 capitalize hover:text-blue-600 lg:max-w-sm"
+          title={row.getValue("subject")}
+        >
+          {row.getValue("subject")}
+        </div>
+      </Link>
     ),
   },
   {
