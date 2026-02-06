@@ -15,21 +15,36 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    console.log(exception.getResponse());
+    // console.log(exception.getResponse());qqq
     const exceptionResponse = exception.getResponse() as BadRequestResponse;
-    console.log('exceptionResponse:', exceptionResponse);
+    // console.log('exceptionResponse:', exceptionResponse);
     const messages = exceptionResponse?.message ?? [];
 
+    if (request.method !== 'GET') {
+      return response.status(400).json({
+        statusCode: 400,
+        message: messages,
+      });
+    }
     const hasParams = Object.keys(request.params || {}).length > 0;
     const hasQuery = Object.keys(request.query || {}).length > 0;
     // const hasBody = Object.keys(request.body || {}).length > 0;
 
     /**
-     * CASE 1: Param invalid → 404
+     * CASE 1: Query invalid → 200 []
      */
-    console.log('hasParams:', hasParams);
-    console.log('hasQuery:', hasQuery);
-    console.log('messages:', messages);
+    if (hasQuery) {
+      return response.status(200).json({
+        results: [],
+        total: 0,
+      });
+    }
+    /**
+     * CASE 2: Param invalid → 404
+     */
+    // console.log('hasParams:', hasParams);
+    // console.log('hasQuery:', hasQuery);
+    // console.log('messages:', messages);
     if (hasParams) {
       return response.status(404).json({
         statusCode: 404,
@@ -39,38 +54,11 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     }
 
     /**
-     * CASE 2: Query invalid → 200 []
-     */
-    if (hasQuery) {
-      return response.status(200).json({
-        result: [],
-        total: 0,
-      });
-    }
-
-    /**
-     * CASE 3: Body invalid → giữ 400
+     * CASE 3: Body invalid → keep 400
      */
     return response.status(400).json({
       statusCode: 400,
       message: messages,
     });
   }
-
-  //   private isParamError(messages: string[]): boolean {
-  //     return messages.some(
-  //       (msg) =>
-  //         msg.toLowerCase().includes('uuid') ||
-  //         msg.toLowerCase().includes('param'),
-  //     );
-  //   }
-
-  //   private isQueryError(messages: string[]): boolean {
-  //     return messages.some(
-  //       (msg) =>
-  //         msg.toLowerCase().includes('page') ||
-  //         msg.toLowerCase().includes('limit') ||
-  //         msg.toLowerCase().includes('query'),
-  //     );
-  //   }
 }
