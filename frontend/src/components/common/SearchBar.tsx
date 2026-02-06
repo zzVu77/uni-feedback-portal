@@ -4,7 +4,15 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 
-const SearchBar = ({ placeholder }: { placeholder: string }) => {
+import { cn } from "@/lib/utils";
+
+const SearchBar = ({
+  placeholder,
+  className,
+}: {
+  placeholder: string;
+  className?: string;
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
@@ -30,15 +38,20 @@ const SearchBar = ({ placeholder }: { placeholder: string }) => {
   // };
 
   return (
-    <div className="flex w-full flex-row items-center justify-start gap-1">
-      <div className="relative h-auto w-full">
-        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+    <div
+      className={cn(
+        "flex w-full flex-row items-center justify-start gap-1 rounded-lg border-none bg-transparent",
+        className,
+      )}
+    >
+      <div className="relative h-auto w-full border-none bg-transparent">
+        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 bg-transparent" />
         <Input
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           type="text"
           placeholder={placeholder ?? "Tìm kiếm..."}
-          className="bg-background w-full rounded-lg pl-10 shadow-sm"
+          className="w-full rounded-lg bg-transparent pl-10 shadow-sm"
         />
       </div>
       {/* <Button

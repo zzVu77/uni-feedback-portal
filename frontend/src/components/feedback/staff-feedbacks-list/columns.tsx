@@ -27,7 +27,7 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     },
     cell: ({ row }) => (
       <div
-        className="max-w-[250px] truncate capitalize lg:max-w-sm"
+        className="max-w-[250px] truncate font-medium text-slate-900 capitalize lg:max-w-sm"
         title={row.getValue("subject")}
       >
         {row.getValue("subject")}
@@ -48,7 +48,9 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     },
     cell: ({ cell }) => {
       const categoryName = cell.getValue() as string;
-      return <div className="capitalize">{categoryName}</div>;
+      return (
+        <div className="text-sm text-slate-600 capitalize">{categoryName}</div>
+      );
     },
   },
   {
@@ -57,11 +59,13 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-4 h-8 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <Loader className="h-3 w-3" />
+          <Loader className="mr-2 h-3 w-3" />
           Trạng thái
-          <ArrowUpDown className="h-3 w-3" />
+          <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
@@ -99,8 +103,10 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
       );
     },
     cell: ({ cell }) => {
-      const departmentName = cell.getValue() as string;
-      return <div className="capitalize">{departmentName}</div>;
+      const studentName = cell.getValue() as string;
+      return (
+        <div className="text-sm text-slate-500 capitalize">{studentName}</div>
+      );
     },
   },
   {
@@ -109,18 +115,20 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-4 h-8 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <CalendarClock className="h-3 w-3" />
+          <CalendarClock className="mr-2 h-3 w-3" />
           Ngày gửi
-          <ArrowUpDown className="h-3 w-3" />
+          <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ cell }) => {
       const createdAt = cell.getValue() as string;
       return (
-        <time className="capitalize">
+        <time className="text-sm text-slate-500 capitalize">
           {new Date(createdAt).toLocaleString("vi-VN")}
         </time>
       );
