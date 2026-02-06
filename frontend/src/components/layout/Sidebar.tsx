@@ -65,7 +65,7 @@ export default function Sidebar({
             alt="Logo UTE"
             height={100}
             width={100}
-            className="brightness-0 invert"
+            className=""
           />
         </div>
         <div className="flex flex-row items-center gap-3 px-6 py-4">
@@ -104,18 +104,13 @@ export default function Sidebar({
                   <Button
                     variant="ghost"
                     className={cn(
-                      "h-auto w-full justify-start px-4 py-3 text-[13px] transition-all duration-200 lg:text-[14px]",
+                      "hobv h-auto w-full justify-start px-4 py-3 text-[13px] transition-all duration-200 hover:bg-white/10 lg:text-[14px]",
                       isActive
-                        ? "rounded-md bg-white/10 font-semibold text-white shadow-sm"
+                        ? "rounded-md bg-white/10 font-semibold text-white shadow-sm hover:bg-white/10 hover:text-white"
                         : "rounded-md text-slate-400 hover:bg-white/5 hover:text-white",
                     )}
                   >
-                    <Icon
-                      className={cn(
-                        "mr-3 h-4 w-4",
-                        isActive ? "text-white" : "text-slate-400",
-                      )}
-                    />
+                    <Icon className={cn("mr-3 h-4 w-4")} />
                     {label}
 
                     {/* Hiển thị Badge nếu là item thông báo và có số lượng > 0 */}
