@@ -75,7 +75,7 @@ export function MyFeedbacksHistoryTable() {
                 key={feedback.id}
                 className="group block h-full"
               >
-                <Card className="flex h-full flex-col justify-between rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
+                <Card className="flex h-full flex-col justify-between gap-2 rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
                   <CardHeader className="space-y-3 pb-3">
                     <div className="flex flex-col items-start justify-between gap-3">
                       <div className="flex-shrink-0">

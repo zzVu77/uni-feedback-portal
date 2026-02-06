@@ -57,7 +57,11 @@ export function ListDepartmentFeedback() {
       ? Math.ceil(feedbacks.total / filters?.pageSize)
       : 0;
   }, [feedbacks?.total, filters.pageSize]);
-
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPage));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
   const table = useReactTable({
     data: tableData,
     columns: staffFeedbackColumns,
@@ -93,14 +97,14 @@ export function ListDepartmentFeedback() {
 
   return (
     <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-      <div className="flex w-full flex-shrink-0 flex-wrap items-start justify-center gap-4 md:items-center md:justify-start xl:flex-row xl:flex-nowrap">
+      <div className="flex w-full flex-shrink-0 flex-wrap items-start justify-center gap-4 md:items-center md:justify-between xl:flex-row xl:flex-nowrap">
         <Suspense fallback={null}>
           <SearchBar
             placeholder="Tìm kiếm theo tiêu đề..."
             className="w-full bg-white shadow-sm xl:max-w-xs"
           />
         </Suspense>
-        <div className="flex w-full flex-wrap items-start justify-center gap-3 md:flex-row md:flex-nowrap md:items-center md:justify-center xl:w-fit">
+        <div className="flex w-full flex-wrap items-start justify-center gap-3 md:w-auto md:flex-row md:flex-nowrap md:items-center">
           <CommonFilter.StatusSelection />
           <CommonFilter.CategorySelection />
         </div>
@@ -167,26 +171,29 @@ export function ListDepartmentFeedback() {
           </TableBody>
         </Table>
       </div>
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-end space-x-2">
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight />
-            </Button>
-          </div>
+      {pageCount > 1 && (
+        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page - 1)}
+            disabled={filters.page <= 1}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-slate-600">
+            Trang {filters.page} / {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page + 1)}
+            disabled={filters.page >= pageCount}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>
