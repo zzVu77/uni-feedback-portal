@@ -1,47 +1,32 @@
 "use client";
-import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
-import {
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import * as React from "react"; // <-- 2. Import React đầy đủ
-
 import CommonFilter from "@/components/common/CommonFilter";
 import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
+import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
 import { useGetFeedbacks } from "@/hooks/queries/useFeedbackQueries";
-import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
+import {
+  Building2,
+  CalendarClock,
+  ChevronLeft,
+  ChevronRight,
+  SearchX,
+  Tag,
+} from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
 import { Suspense } from "react";
-import { myFeedbacksHistoryColumns } from "./columns";
 
 export function MyFeedbacksHistoryTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-
   const filters = useFeedbackFilters();
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -49,66 +34,24 @@ export function MyFeedbacksHistoryTable() {
 
   const tableData = React.useMemo(
     () => (isError ? [] : (feedbacks?.results ?? [])),
-    [feedbacks],
+    [feedbacks, isError],
   );
+
   const pageCount = React.useMemo(() => {
     return feedbacks?.total
       ? Math.ceil(feedbacks.total / filters?.pageSize)
       : 0;
   }, [feedbacks?.total, filters.pageSize]);
 
-  const table = useReactTable({
-    data: tableData,
-    columns: myFeedbacksHistoryColumns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    // Pagination
-    manualPagination: true,
-    pageCount: pageCount,
-    onPaginationChange: (updater) => {
-      if (typeof updater === "function") {
-        const newPagination = updater(table.getState().pagination);
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("page", String(newPagination.pageIndex + 1));
-        params.set("pageSize", String(newPagination.pageSize));
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      }
-    },
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      pagination: {
-        pageIndex: filters.page - 1,
-        pageSize: filters.pageSize,
-      },
-    },
-  });
-
-  // if (isError) {
-  //   return (
-  //     <div className="flex h-screen w-full flex-col items-center justify-center gap-4 rounded-md bg-white p-4 text-red-500">
-  //       Đã xảy ra lỗi khi tải dữ liệu
-  //       <Button
-  //         variant="destructive"
-  //         onClick={() => {
-  //           router.replace(pathname);
-  //         }}
-  //       >
-  //         Thử lại
-  //       </Button>
-  //     </div>
-  //   );
-  // }
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPage));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <div className="relative flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-      <div className="flex w-full flex-shrink-0 flex-wrap items-start justify-center gap-4 md:items-center md:justify-start xl:flex-row xl:flex-nowrap">
+      <div className="flex w-full flex-shrink-0 flex-wrap items-start justify-center gap-4 md:items-center md:justify-between xl:flex-row xl:flex-nowrap">
         <Suspense fallback={null}>
           <SearchBar
             placeholder="Tìm kiếm theo tiêu đề..."
@@ -116,92 +59,124 @@ export function MyFeedbacksHistoryTable() {
           />
         </Suspense>
 
-        <div className="flex w-full flex-wrap items-start justify-center gap-3 md:flex-row md:flex-nowrap md:items-center md:justify-center xl:w-fit">
+        <div className="flex w-full flex-wrap items-start justify-center gap-3 md:w-auto md:flex-row md:flex-nowrap md:items-center">
           <CommonFilter.DepartmentSelection />
           <CommonFilter.StatusSelection />
           <CommonFilter.CategorySelection />
         </div>
       </div>
-      <div className="flex-1 overflow-auto rounded-xl border border-slate-100">
-        <Table
-          className={cn("min-w-[1000px]", tableData.length === 0 && "h-full")}
-        >
-          <TableHeader className="sticky top-0 z-10 bg-slate-50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="h-12 px-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  className="group border-b border-slate-50 transition-colors hover:bg-slate-50/80"
-                  key={row.id}
-                  data-state={row.getIsSelected()}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4 py-4">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={myFeedbacksHistoryColumns.length}
-                  className="h-24 font-medium"
-                >
-                  {!isFetching && (
-                    <div className="flex flex-col items-center justify-center gap-2 text-center text-slate-500">
-                      <SearchX className="h-8 w-8 text-slate-300" />
-                      <span>Không có dữ liệu để hiển thị</span>
+
+      <div className="flex-1 overflow-y-auto pr-2">
+        {tableData.length > 0 ? (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {tableData.map((feedback) => (
+              <Link
+                href={`/student/my-feedbacks/${feedback.id}`}
+                key={feedback.id}
+                className="group block h-full"
+              >
+                <Card className="flex h-full flex-col justify-between rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
+                  <CardHeader className="space-y-3 pb-3">
+                    <div className="flex flex-col items-start justify-between gap-3">
+                      <div className="flex-shrink-0">
+                        <StatusBadge
+                          type={
+                            feedback.currentStatus as
+                              | "PENDING"
+                              | "IN_PROGRESS"
+                              | "RESOLVED"
+                              | "REJECTED"
+                              | "CLOSED"
+                          }
+                        />
+                      </div>
+                      <h3
+                        className="line-clamp-2 text-lg font-bold text-slate-800 transition-colors group-hover:text-blue-600"
+                        title={feedback.subject}
+                      >
+                        {feedback.subject}
+                      </h3>
                     </div>
-                  )}
-                  {isFetching && <Loading variant="spinner" />}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-end space-x-2">
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight />
-            </Button>
+                  </CardHeader>
+                  <CardContent className="space-y-3 pb-4">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-2 rounded-md border border-slate-100 bg-slate-50 px-2.5 py-1.5">
+                        <Building2 className="h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
+                        <span
+                          className="truncate text-xs font-medium text-slate-600"
+                          title={feedback.department.name}
+                        >
+                          {feedback.department.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 rounded-md border border-slate-100 bg-slate-50 px-2.5 py-1.5">
+                        <Tag className="h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
+                        <span
+                          className="truncate text-xs font-medium text-slate-600"
+                          title={feedback.category.name}
+                        >
+                          {feedback.category.name}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="border-t border-slate-100 pt-3">
+                    <div className="flex w-full items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-slate-400">
+                        <CalendarClock className="h-3.5 w-3.5" />
+                        <time>
+                          {new Date(feedback.createdAt).toLocaleString("vi-VN")}
+                        </time>
+                      </div>
+                      <div className="flex items-center text-xs font-medium text-blue-600 opacity-0 transition-all group-hover:opacity-100">
+                        Chi tiết
+                        <ChevronRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </div>
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))}
           </div>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-center text-slate-500">
+            {!isFetching ? (
+              <>
+                <SearchX className="h-12 w-12 text-slate-300" />
+                <span className="text-lg font-medium">
+                  Không có dữ liệu để hiển thị
+                </span>
+              </>
+            ) : (
+              <Loading variant="spinner" />
+            )}
+          </div>
+        )}
+      </div>
+
+      {pageCount > 1 && (
+        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page - 1)}
+            disabled={filters.page <= 1}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-slate-600">
+            Trang {filters.page} / {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page + 1)}
+            disabled={filters.page >= pageCount}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>
