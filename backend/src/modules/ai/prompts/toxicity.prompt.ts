@@ -58,8 +58,8 @@ export const toxicKeywords =  [
         "bóc phốt", "bêu xấu",
 
 
-        "vcl", "vkl", "đm", "dm",
-        "clgt", "cc",
+        "vcl", "vkl", "đm",
+        "clgt",
         "vl", "đcm",
 
 
