@@ -1,9 +1,6 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, UnrecoverableError } from 'bullmq';
 import { AiService } from '../ai/ai.service';
-import {
-  ForbiddenException,
-} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ForumService } from '../forum/forum.service';
 import { UploadsService } from '../uploads/uploads.service';
@@ -15,16 +12,18 @@ import { CreateFeedbackDto, FeedbackSummary} from './dto';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Processor('feedback-toxic')
 export class FeedbackToxicProcessor extends WorkerHost {
-    constructor(
-        private readonly aiService: AiService,
-        private readonly prisma: PrismaService,
-        private readonly forumService: ForumService,
-        private readonly uploadsService: UploadsService,
-        private readonly eventEmitter: EventEmitter2,
-    ) {
-        super();
-    }
-    async process(job: Job<{
+  constructor(
+    private readonly aiService: AiService,
+    private readonly prisma: PrismaService,
+    private readonly forumService: ForumService,
+    private readonly uploadsService: UploadsService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {
+    super();
+  }
+  async process(
+    job: Job<
+      {
         dto: CreateFeedbackDto;
         actor: ActiveUserData;
     },FeedbackSummary>): Promise<FeedbackSummary> {
@@ -57,54 +56,53 @@ export class FeedbackToxicProcessor extends WorkerHost {
             await this.forumService.createForumPost(feedback.id, actor);
             }
 
-            // Create attachments using UploadsService
-            if (fileAttachments && fileAttachments.length > 0) {
-            await this.uploadsService.updateAttachmentsForTarget(
-                feedback.id,
-                FileTargetType.FEEDBACK,
-                fileAttachments,
-            );
-            }
+      // Create attachments using UploadsService
+      if (fileAttachments && fileAttachments.length > 0) {
+        await this.uploadsService.updateAttachmentsForTarget(
+          feedback.id,
+          FileTargetType.FEEDBACK,
+          fileAttachments,
+        );
+      }
 
-            await this.prisma.feedbackStatusHistory.create({
-            data: {
-                feedbackId: feedback.id,
-                status: 'PENDING',
-                message: GenerateStatusUpdateMessage(
-                feedback.department.name,
-                'PENDING',
-                ),
-            },
-            });
+      await this.prisma.feedbackStatusHistory.create({
+        data: {
+          feedbackId: feedback.id,
+          status: 'PENDING',
+          message: GenerateStatusUpdateMessage(
+            feedback.department.name,
+            'PENDING',
+          ),
+        },
+      });
 
-            // [New Logic] Emit Event: Feedback Created
-            // This allows the Notification module to handle notifications asynchronously without blocking this response.
-            const feedbackCreatedEvent = new FeedbackCreatedEvent({
-                feedbackId: feedback.id,
-                userId: actor.sub,
-                departmentId: feedback.departmentId,
-                subject: feedback.subject,
-            });
-            this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
+      // [New Logic] Emit Event: Feedback Created
+      // This allows the Notification module to handle notifications asynchronously without blocking this response.
+      const feedbackCreatedEvent = new FeedbackCreatedEvent({
+        feedbackId: feedback.id,
+        userId: actor.sub,
+        departmentId: feedback.departmentId,
+        subject: feedback.subject,
+      });
+      this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
 
-            // Return summary
-            return {
-                id: feedback.id,
-                subject: feedback.subject,
-                location: feedback.location ? feedback.location : null,
-                currentStatus: feedback.currentStatus,
-                isPrivate: feedback.isPrivate,
-                department: {
-                    id: feedback.department.id,
-                    name: feedback.department.name,
-                },
-                category: {
-                    id: feedback.category.id,
-                    name: feedback.category.name,
-                },
-                createdAt: feedback.createdAt.toISOString(),
-            };
-        }
+      // Return summary
+      return {
+        id: feedback.id,
+        subject: feedback.subject,
+        location: feedback.location ? feedback.location : null,
+        currentStatus: feedback.currentStatus,
+        isPrivate: feedback.isPrivate,
+        department: {
+          id: feedback.department.id,
+          name: feedback.department.name,
+        },
+        category: {
+          id: feedback.category.id,
+          name: feedback.category.name,
+        },
+        createdAt: feedback.createdAt.toISOString(),
+      };
     }
+  }
 }
-

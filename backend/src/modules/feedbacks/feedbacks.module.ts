@@ -14,7 +14,7 @@ import { FeedbackToxicProcessor } from './feedbacks.processor';
     AiModule,
     BullModule.registerQueue({
       name: 'feedback-toxic',
-    })
+    }),
   ],
   controllers: [FeedbacksController],
   providers: [FeedbacksService, FeedbackToxicProcessor],

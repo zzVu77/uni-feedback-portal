@@ -370,10 +370,7 @@ export class FeedbacksService {
     });
   }
 
-  async createFeedback(
-    dto: CreateFeedbackDto,
-    actor: ActiveUserData,
-  ){
+  async createFeedback(dto: CreateFeedbackDto, actor: ActiveUserData) {
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -400,7 +397,8 @@ export class FeedbacksService {
       );
     }
 
-    const job = await this.feedbackToxicQueue.add('feedbackToxicItem', 
+    const job = await this.feedbackToxicQueue.add(
+      'feedbackToxicItem',
       {
         dto: dto,
         actor: actor,
@@ -413,8 +411,7 @@ export class FeedbacksService {
     return {
       jobId: job.id,   
       status: 'PENDING',
-    }
-
+    };
   }
   async getToxicJobStatus(jobId: string) {
     const job = await this.feedbackToxicQueue.getJob(jobId);
@@ -438,7 +435,5 @@ export class FeedbacksService {
           status: 'PENDING',
         };
     }
-
-
   }
 }
