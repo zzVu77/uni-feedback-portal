@@ -406,12 +406,12 @@ export class FeedbacksService {
         actor: actor,
       },
       {
-        attempts: 5, 
+        attempts: 3, 
         backoff: 5000, 
       }
     );
     return {
-      JobId: job.id,   
+      jobId: job.id,   
       status: 'PENDING',
     }
 
