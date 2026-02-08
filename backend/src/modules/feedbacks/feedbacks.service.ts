@@ -5,9 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Prisma, FeedbackStatus, FileTargetType } from '@prisma/client';
-import { EventEmitter2 } from '@nestjs/event-emitter'; // [Import 1] Import EventEmitter
 import {
-  FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryFeedbacksDto,
   FeedbackDetail,
@@ -19,17 +17,15 @@ import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { ForumService } from '../forum/forum.service';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
-// [Import 2] Import the event definition
-import { FeedbackCreatedEvent } from './events/feedback-created.event';
-import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
-
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 @Injectable()
 export class FeedbacksService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly forumService: ForumService,
     private readonly uploadsService: UploadsService,
-    private readonly eventEmitter: EventEmitter2, // [Injection] Inject EventEmitter2
+    @InjectQueue('feedback-toxic') private readonly feedbackToxicQueue: Queue,
   ) {}
 
   async getFeedbacks(
@@ -374,10 +370,7 @@ export class FeedbacksService {
     });
   }
 
-  async createFeedback(
-    dto: CreateFeedbackDto,
-    actor: ActiveUserData,
-  ): Promise<FeedbackSummary> {
+  async createFeedback(dto: CreateFeedbackDto, actor: ActiveUserData) {
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -404,74 +397,43 @@ export class FeedbacksService {
       );
     }
 
-    const { fileAttachments, ...feedbackData } = dto;
-
-    // Create new feedback
-    const feedback = await this.prisma.feedbacks.create({
-      data: {
-        subject: feedbackData.subject,
-        description: feedbackData.description,
-        location: feedbackData.location,
-        isPrivate: dto.isAnonymous ? true : false,
-        departmentId: feedbackData.departmentId,
-        categoryId: feedbackData.categoryId,
-        userId: actor.sub,
+    const job = await this.feedbackToxicQueue.add(
+      'feedbackToxicItem',
+      {
+        dto: dto,
+        actor: actor,
       },
-      include: {
-        department: true,
-        category: true,
-      },
-    });
-    if (dto.isPublic) {
-      await this.forumService.createForumPost(feedback.id, actor);
-    }
-
-    // Create attachments using UploadsService
-    if (fileAttachments && fileAttachments.length > 0) {
-      await this.uploadsService.updateAttachmentsForTarget(
-        feedback.id,
-        FileTargetType.FEEDBACK,
-        fileAttachments,
-      );
-    }
-
-    await this.prisma.feedbackStatusHistory.create({
-      data: {
-        feedbackId: feedback.id,
-        status: 'PENDING',
-        message: GenerateStatusUpdateMessage(
-          feedback.department.name,
-          'PENDING',
-        ),
-      },
-    });
-
-    // [New Logic] Emit Event: Feedback Created
-    // This allows the Notification module to handle notifications asynchronously without blocking this response.
-    const feedbackCreatedEvent = new FeedbackCreatedEvent({
-      feedbackId: feedback.id,
-      userId: actor.sub,
-      departmentId: feedback.departmentId,
-      subject: feedback.subject,
-    });
-    this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
-
-    // Return summary
+      {
+        attempts: 3, 
+        backoff: 5000, 
+      }
+    );
     return {
-      id: feedback.id,
-      subject: feedback.subject,
-      location: feedback.location ? feedback.location : null,
-      currentStatus: feedback.currentStatus,
-      isPrivate: feedback.isPrivate,
-      department: {
-        id: feedback.department.id,
-        name: feedback.department.name,
-      },
-      category: {
-        id: feedback.category.id,
-        name: feedback.category.name,
-      },
-      createdAt: feedback.createdAt.toISOString(),
+      jobId: job.id,   
+      status: 'PENDING',
     };
+  }
+  async getToxicJobStatus(jobId: string) {
+    const job = await this.feedbackToxicQueue.getJob(jobId);
+    if (!job) {
+      throw new NotFoundException('job not found');
+    }
+    const state = await job.getState();
+    switch (state) {
+      case 'completed':
+        await this.feedbackToxicQueue.remove(jobId);
+        return {
+          status: 'APPROVED',
+        };
+      case 'failed':
+        await this.feedbackToxicQueue.remove(jobId);
+        return {
+          status: 'REJECTED',
+        };
+      default:
+        return {
+          status: 'PENDING',
+        };
+    }
   }
 }
