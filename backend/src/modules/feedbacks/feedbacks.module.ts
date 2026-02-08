@@ -8,7 +8,10 @@ import { BullModule } from '@nestjs/bullmq';
 import { FeedbackToxicProcessor } from './feedbacks.processor';
 
 @Module({
-  imports: [UploadsModule, ForumModule, AiModule,
+  imports: [
+    UploadsModule, 
+    ForumModule, 
+    AiModule,
     BullModule.registerQueue({
       name: 'feedback-toxic',
     })
