@@ -52,7 +52,7 @@ import { BullModule } from '@nestjs/bullmq';
         host: 'localhost',
         port: 6379,
       },
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
