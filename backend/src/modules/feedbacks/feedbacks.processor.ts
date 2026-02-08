@@ -1,5 +1,5 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Job } from 'bullmq';
+import { Job, UnrecoverableError } from 'bullmq';
 import { AiService } from '../ai/ai.service';
 import {
   ForbiddenException,
@@ -11,10 +11,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FeedbackCreatedEvent } from './events/feedback-created.event';
 import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
 import { FileTargetType } from '@prisma/client';
-import {
-    CreateFeedbackDto,
-  FeedbackSummary
-}   from './dto';
+import { CreateFeedbackDto, FeedbackSummary} from './dto';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Processor('feedback-toxic')
 export class FeedbackToxicProcessor extends WorkerHost {
@@ -35,7 +32,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
         const { fileAttachments, ...feedbackData } = dto;
         const isToxic = await this.aiService.checkToxicity(dto.description);
         if (isToxic) {
-            throw new ForbiddenException(
+            throw new UnrecoverableError(
                 'Feedback description contains toxic content. Please modify and try again.',
             );
         }
