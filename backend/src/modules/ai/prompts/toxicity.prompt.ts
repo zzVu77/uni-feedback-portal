@@ -42,7 +42,7 @@ export const toxicKeywords =  [
         "chẳng ai cần mày",
         "đồ ăn hại", "cặn bã xã hội",
 
-        "ghét bọn", "lũ", "tụi",
+        "ghét bọn",
         "đồ mọi", "đồ rẻ rách",
         "loại này nên biến đi",
         "không đáng tồn tại",
