@@ -406,8 +406,8 @@ export class FeedbacksService {
         actor: actor,
       },
       {
-        attempts: 5, //Job fail → tự chạy lại , chạy lại tối đa 5 lần
-        backoff: 5000, // Nếu job fail → đợi một thời gian rồi mới thử lại
+        attempts: 5, 
+        backoff: 5000, 
       }
     );
     return {
