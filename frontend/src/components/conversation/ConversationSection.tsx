@@ -30,7 +30,7 @@ import {
   MessageCircleMore,
   Plus,
   Send,
-  UserCog,
+  User,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -323,7 +323,7 @@ const ConversationSection = ({
                         {role === "student" ? (
                           <Building2 className="h-5 w-5" />
                         ) : (
-                          <UserCog className="h-5 w-5" />
+                          <User className="h-5 w-5" />
                         )}
                       </div>
 
