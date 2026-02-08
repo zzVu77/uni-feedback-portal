@@ -53,10 +53,9 @@ export const toxicKeywords =  [
         "coi chừng tao",
         "liệu hồn",
 
-        "ám ảnh", "theo dõi",
+        "ám ảnh", 
         "spam tin nhắn", "khủng bố tinh thần",
         "bóc phốt", "bêu xấu",
-        "đăng thông tin riêng",
 
 
         "vcl", "vkl", "đm", "dm",
@@ -73,12 +72,11 @@ export const toxicKeywords =  [
         "kiếm tiền online", "việc nhẹ lương cao",
         "thu nhập thụ động", "làm tại nhà",
         "không cần vốn", "cam kết lợi nhuận",
-        "hoàn tiền 100%", "bao đậu",
+        "hoàn tiền 100%",
 
 
   
-        "đầu tư sinh lời", "lãi ngày",
-        "nhân 2 tài khoản", "nhân tiền",
+        "đầu tư sinh lời", "lãi ngày","nhân tiền",
         "chơi là thắng", "cam kết không lỗ",
 
 
