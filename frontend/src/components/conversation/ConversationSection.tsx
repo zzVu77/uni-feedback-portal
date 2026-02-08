@@ -20,7 +20,12 @@ import {
   useGetClarificationsDetailById,
 } from "@/hooks/queries/useClarificationQueries";
 import { createMessageInConversation } from "@/services/clarification-service";
-import { ConversationBodyParams } from "@/types";
+import { uploadFileToCloud } from "@/services/upload-service";
+import {
+  ConversationBodyParams,
+  FileAttachmentDto,
+  MessageBodyParams,
+} from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -195,8 +200,8 @@ const ConversationSection = ({
 
   // Mutation for Sending Message (Generic)
   const { mutateAsync: sendMessage } = useMutation({
-    mutationFn: ({ id, content }: { id: string; content: string }) =>
-      createMessageInConversation(id, { content }),
+    mutationFn: ({ id, params }: { id: string; params: MessageBodyParams }) =>
+      createMessageInConversation(id, params),
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: [CLARIFICATION_QUERY_KEYS, selectedConversationId],
@@ -237,9 +242,26 @@ const ConversationSection = ({
     }
   };
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (content: string, file?: File | null) => {
     if (!selectedConversationId) return;
-    await sendMessage({ id: selectedConversationId, content });
+
+    let uploadedAttachments: FileAttachmentDto[] = [];
+    if (file) {
+      const uploadedFile = await uploadFileToCloud(file);
+      uploadedAttachments = [
+        {
+          fileName: uploadedFile.fileName,
+          fileUrl: encodeURI(uploadedFile.fileUrl.trim()),
+          fileType: uploadedFile.fileType,
+          fileSize: Number(uploadedFile.fileSize),
+        },
+      ];
+    }
+
+    await sendMessage({
+      id: selectedConversationId,
+      params: { content, attachments: uploadedAttachments },
+    });
   };
 
   const handleCloseConversation = async () => {

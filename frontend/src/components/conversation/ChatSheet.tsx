@@ -2,8 +2,14 @@
 
 import { useUser } from "@/context/UserContext";
 import { Message } from "@/types/conversation";
-import { CheckCircle, SendHorizontal } from "lucide-react";
-import React, { useEffect, useRef } from "react";
+import {
+  CheckCircle,
+  FileIcon,
+  Paperclip,
+  SendHorizontal,
+  X,
+} from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
@@ -20,7 +26,7 @@ interface ChatSheetProps {
   isOpen: boolean;
   onClose: (open: boolean) => void;
   messages: Message[];
-  onSendMessage: (content: string) => Promise<void>;
+  onSendMessage: (content: string, file?: File | null) => Promise<void>;
   threadTitle: string;
   role: "student" | "staff";
   isConversationOpen: boolean;
@@ -38,9 +44,11 @@ const ChatSheet = ({
   onCloseConversation,
 }: ChatSheetProps) => {
   const { user } = useUser();
-  const [inputValue, setInputValue] = React.useState("");
-  const [isSending, setIsSending] = React.useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSending, setIsSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -54,13 +62,22 @@ const ChatSheet = ({
     }
   }, [messages, isOpen]);
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+    // Reset value to allow selecting the same file again if needed
+    e.target.value = "";
+  };
+
   const handleSend = async () => {
-    if (!inputValue.trim() || isSending) return;
+    if ((!inputValue.trim() && !selectedFile) || isSending) return;
 
     setIsSending(true);
     try {
-      await onSendMessage(inputValue);
+      await onSendMessage(inputValue, selectedFile);
       setInputValue("");
+      setSelectedFile(null);
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {
@@ -145,6 +162,46 @@ const ChatSheet = ({
                         }`}
                       >
                         {msg.content}
+
+                        {/* Attachments rendering */}
+                        {msg.attachments && msg.attachments.length > 0 && (
+                          <div className="mt-2 flex flex-col gap-2">
+                            {msg.attachments.map((file, idx) => {
+                              const isImage =
+                                /\.(jpg|jpeg|png|webp|gif)$/i.test(
+                                  file.fileUrl,
+                                );
+                              return (
+                                <a
+                                  key={idx}
+                                  href={file.fileUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`flex items-center gap-2 rounded-md border p-2 transition-colors hover:bg-black/5 ${
+                                    isMe
+                                      ? "border-white/20 bg-white/20"
+                                      : "border-slate-200 bg-white"
+                                  }`}
+                                >
+                                  {isImage ? (
+                                    <img
+                                      src={file.fileUrl}
+                                      alt={file.fileName}
+                                      className="max-w-full rounded-md object-cover lg:max-w-[200px]"
+                                    />
+                                  ) : (
+                                    <>
+                                      <FileIcon className="h-4 w-4 shrink-0" />
+                                      <span className="truncate text-xs font-medium underline">
+                                        {file.fileName || "Xem tệp đính kèm"}
+                                      </span>
+                                    </>
+                                  )}
+                                </a>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
                       <span className="px-1 text-[10px] text-slate-400">
                         {new Date(msg.createdAt).toLocaleTimeString("vi-VN", {
@@ -162,7 +219,39 @@ const ChatSheet = ({
 
         {isConversationOpen ? (
           <div className="border-t border-slate-200 bg-slate-50 p-4">
+            {/* File Preview Chip */}
+            {selectedFile && (
+              <div className="mb-2 flex w-fit items-center gap-2 rounded-md bg-slate-100 px-3 py-1.5">
+                <FileIcon className="h-3.5 w-3.5 text-slate-500" />
+                <span className="max-w-[150px] truncate text-xs font-medium text-slate-700">
+                  {selectedFile.name}
+                </span>
+                <button
+                  onClick={() => setSelectedFile(null)}
+                  className="ml-1 text-slate-400 hover:text-red-500"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+
             <div className="flex items-end gap-2">
+              <input
+                type="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isSending}
+                className="h-11 w-11 shrink-0 text-slate-500 hover:bg-slate-200 hover:text-blue-600"
+              >
+                <Paperclip className="h-5 w-5" />
+              </Button>
+
               <Textarea
                 placeholder="Nhập tin nhắn..."
                 value={inputValue}
@@ -173,7 +262,7 @@ const ChatSheet = ({
               />
               <Button
                 size="icon"
-                disabled={!inputValue.trim() || isSending}
+                disabled={(!inputValue.trim() && !selectedFile) || isSending}
                 onClick={() => void handleSend()}
                 className="h-11 w-11 shrink-0 bg-blue-600 hover:bg-blue-700"
               >
