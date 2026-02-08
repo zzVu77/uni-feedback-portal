@@ -17,16 +17,27 @@ import {
   useCloseConversationById,
   useCreateNewConversation,
   useGetAllClarificationsByFeedbackId,
+  useGetClarificationsDetailById,
 } from "@/hooks/queries/useClarificationQueries";
+import { createMessageInConversation } from "@/services/clarification-service";
 import { ConversationBodyParams } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, MessageCircleMore, Send } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Building2,
+  ChevronRight,
+  Loader2,
+  MessageCircleMore,
+  Plus,
+  Send,
+  UserCog,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import ConversationItem from "./ConversationItem";
+import StatusBadge from "../common/StatusBadge";
+import ChatSheet from "./ChatSheet";
 
 // --- Schema (Không còn attachments) ---
 const newConversationSchema = z.object({
@@ -162,6 +173,10 @@ const ConversationSection = ({
   isForwarded = false,
 }: ConversationSectionProps) => {
   const [isCreating, setIsCreating] = useState(false);
+  const [selectedConversationId, setSelectedConversationId] = useState<
+    string | null
+  >(null);
+
   const params = useParams();
   const feedbackId = params.id as string;
 
@@ -173,12 +188,26 @@ const ConversationSection = ({
   const { mutateAsync: createConversation, isPending } =
     useCreateNewConversation();
 
+  // Query for Selected Conversation Details
+  const { data: conversationDetail } = useGetClarificationsDetailById(
+    selectedConversationId || "",
+  );
+
+  // Mutation for Sending Message (Generic)
+  const { mutateAsync: sendMessage } = useMutation({
+    mutationFn: ({ id, content }: { id: string; content: string }) =>
+      createMessageInConversation(id, { content }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: [CLARIFICATION_QUERY_KEYS, selectedConversationId],
+      });
+    },
+  });
+
   // Derived State
   const conversations = listConversation?.results || [];
   const hasConversations = conversations.length > 0;
-  const allConversationsClosed = conversations.every(
-    (c) => c.isClosed === true,
-  );
+  const allConversationsClosed = conversations.every((c) => c.isClosed);
 
   const canCreateNew =
     (!hasConversations || allConversationsClosed) &&
@@ -208,27 +237,55 @@ const ConversationSection = ({
     }
   };
 
-  const handleCloseConversation = async (id: string) => {
+  const handleSendMessage = async (content: string) => {
+    if (!selectedConversationId) return;
+    await sendMessage({ id: selectedConversationId, content });
+  };
+
+  const handleCloseConversation = async () => {
+    if (!selectedConversationId) return;
     try {
-      await closeConversation(id);
-      await queryClient.invalidateQueries({
-        queryKey: [CLARIFICATION_QUERY_KEYS, defaultFilters],
-      });
+      await closeConversation(selectedConversationId);
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [CLARIFICATION_QUERY_KEYS, defaultFilters],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [CLARIFICATION_QUERY_KEYS, selectedConversationId],
+        }),
+      ]);
     } catch (error) {
       console.error("Failed to close conversation:", error);
     }
   };
 
+  const selectedConversation = conversations.find(
+    (c) => c.id === selectedConversationId,
+  );
+
   return (
     <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
       {/* Header */}
-      <div className="flex flex-row items-center gap-2 border-b border-transparent pb-2">
-        <MessageCircleMore className="h-6 w-6 text-neutral-700" />
-        <h2 className="text-[18px] font-medium text-neutral-700">Trao đổi</h2>
+      <div className="flex flex-row items-center justify-between border-b border-transparent pb-2">
+        <div className="flex flex-row items-center gap-2">
+          <MessageCircleMore className="h-6 w-6 text-neutral-700" />
+          <h2 className="text-[18px] font-medium text-neutral-700">Trao đổi</h2>
+        </div>
+        {canCreateNew && !isForwarded && !isCreating && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsCreating(true)}
+            className="flex items-center gap-1 border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100"
+          >
+            <Plus className="h-4 w-4" />
+            Mới
+          </Button>
+        )}
       </div>
 
-      <ScrollArea className="mr-3 w-full flex-1 pr-3">
-        <div className="flex h-full max-h-[650px] flex-col gap-4 py-1">
+      <ScrollArea className="w-full overflow-y-auto">
+        <div className="flex h-full max-h-[50vh] flex-col gap-4 py-1 pr-4">
           {isCreating ? (
             <NewConversationForm
               onCancel={() => setIsCreating(false)}
@@ -239,35 +296,87 @@ const ConversationSection = ({
             <>
               {!hasConversations ? (
                 <div className="flex flex-col items-center justify-center gap-3 py-10">
-                  <MessageCircleMore className="h-12 w-12 text-neutral-400" />
+                  <MessageCircleMore className="h-6 w-6 text-neutral-400" />
                   <span className="text-center text-[15px] font-medium text-neutral-400">
-                    Chưa có cuộc trao đổi nào được tạo.
+                    Chưa có cuộc trao đổi nào.
                   </span>
+                  {canCreateNew && !isForwarded && (
+                    <Button
+                      variant="primary"
+                      className="bg-blue-600 text-white hover:bg-blue-700"
+                      onClick={() => setIsCreating(true)}
+                    >
+                      Bắt đầu hội thoại mới
+                    </Button>
+                  )}
                 </div>
               ) : (
-                <div className="h-full max-h-[50vh] w-full">
-                  <ConversationItem
-                    data={conversations}
-                    role={role}
-                    onClose={(id: string) => handleCloseConversation(id)}
-                  />
-                </div>
-              )}
+                <div className="flex flex-col gap-3">
+                  {conversations.map((conv) => (
+                    <div
+                      key={conv.id}
+                      onClick={() => setSelectedConversationId(conv.id)}
+                      className="group flex cursor-pointer items-start gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-400 hover:shadow-md"
+                    >
+                      {/* Left Icon */}
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600">
+                        {role === "student" ? (
+                          <Building2 className="h-5 w-5" />
+                        ) : (
+                          <UserCog className="h-5 w-5" />
+                        )}
+                      </div>
 
-              {canCreateNew && !isForwarded && (
-                <Button
-                  variant="primary"
-                  className="mx-auto w-fit bg-blue-600 text-white hover:bg-blue-700"
-                  onClick={() => setIsCreating(true)}
-                >
-                  <MessageCircleMore className="mr-2 h-4 w-4" />
-                  Yêu cầu trao đổi
-                </Button>
+                      {/* Content */}
+                      <div className="flex flex-1 flex-col gap-1">
+                        <div className="flex items-start justify-between">
+                          <h3 className="line-clamp-1 font-semibold text-slate-900">
+                            {conv.subject}
+                          </h3>
+                          <span className="shrink-0 text-xs text-slate-400">
+                            {new Date(conv.createdAt).toLocaleDateString(
+                              "vi-VN",
+                            )}
+                          </span>
+                        </div>
+                        <p className="line-clamp-1 text-sm text-slate-500">
+                          Nhấn để xem chi tiết cuộc trao đổi...
+                        </p>
+                        <div className="mt-1 flex items-center gap-2">
+                          <StatusBadge
+                            type={conv.isClosed ? "CLOSED" : "OPENING"}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Action Arrow */}
+                      <div className="flex h-full items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+                        <ChevronRight className="h-5 w-5 text-slate-400 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </>
           )}
         </div>
       </ScrollArea>
+
+      {/* Chat Sheet Integration */}
+      {selectedConversationId && (
+        <ChatSheet
+          isOpen={!!selectedConversationId}
+          onClose={(open) => {
+            if (!open) setSelectedConversationId(null);
+          }}
+          messages={conversationDetail?.messages || []}
+          onSendMessage={handleSendMessage}
+          threadTitle={conversationDetail?.subject || "Cuộc hội thoại"}
+          role={role}
+          isConversationOpen={!selectedConversation?.isClosed}
+          onCloseConversation={handleCloseConversation}
+        />
+      )}
     </div>
   );
 };
