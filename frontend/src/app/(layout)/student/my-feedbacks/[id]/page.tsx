@@ -72,18 +72,16 @@ const Page = () => {
 
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
-    <Wrapper classNames={{ container: "lg:px-4 py-8" }}>
-      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="flex flex-col gap-y-6 lg:col-span-8">
+    <Wrapper classNames={{ container: "lg:px-4" }}>
+      <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2 pb-3 lg:grid-cols-2">
+        <div className="col-span-1 w-full lg:col-span-2">
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
-          <ConversationSection
-            currentFeedbackStatus={feedback.currentStatus}
-            role="student"
-          />
         </div>
-        <div className="lg:col-span-4">
-          <StatusTimeLine statusHistory={feedback.statusHistory} />
-        </div>
+        <StatusTimeLine statusHistory={feedback.statusHistory} />
+        <ConversationSection
+          currentFeedbackStatus={feedback.currentStatus}
+          role="student"
+        />
       </div>
     </Wrapper>
   );
