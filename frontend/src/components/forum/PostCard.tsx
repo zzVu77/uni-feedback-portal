@@ -5,12 +5,17 @@ import StatusBadge from "../common/StatusBadge";
 import { Separator } from "../ui/separator";
 import { ForumPostListItem } from "@/types";
 import { cn } from "@/lib/utils";
+import { useMemo } from "react";
+import { stripHtml } from "@/utils/stripHtml";
 type Props = {
   data: ForumPostListItem;
 };
 const PostCard = ({ data }: Props) => {
   const { feedback, createdAt, hasVoted, user, votes, commentsCount, id } =
     data;
+  const previewContent = useMemo(() => {
+    return stripHtml(feedback.description);
+  }, [feedback.description]);
   return (
     <div className="flex w-full flex-col gap-3 rounded-xl bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
       <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:justify-between md:gap-0">
@@ -24,7 +29,7 @@ const PostCard = ({ data }: Props) => {
       </div>
       {/* Post Short Content */}
       <h3 className="lg:text-md text-neutral-dark-primary-600 line-clamp-2 text-sm font-normal">
-        {data.feedback.description}
+        {previewContent}
       </h3>
       {/* Tags */}
       <div className="flex flex-wrap items-center justify-start gap-2 md:flex-row">

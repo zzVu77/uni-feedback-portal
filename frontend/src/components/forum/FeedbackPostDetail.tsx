@@ -11,7 +11,7 @@ import {
   useVoteForumPost,
 } from "@/hooks/queries/useForumPostQueries";
 import Link from "next/link";
-
+import DOMPurify from "dompurify";
 type Props = {
   data: ForumPostDetail;
   commentsCount?: number;
@@ -21,7 +21,7 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
   const { id, feedback, createdAt, hasVoted, user, votes } = data;
   const { mutate: vote, isPending: isVoting } = useVoteForumPost(id);
   const { mutate: unvote, isPending: isUnvoting } = useUnvoteForumPost(id);
-
+  const safeContent = DOMPurify.sanitize(data.feedback.description || "");
   const isBusy = isVoting || isUnvoting;
 
   const handleToggleVote = () => {
@@ -59,9 +59,10 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
         </span>
       </div>
       {/* Post Short Content */}
-      <span className="text-md font-normal text-black/80">
-        {feedback.description}
-      </span>
+      <div
+        className="prose prose-neutral prose-headings:font-semibold prose-a:text-blue-600 prose-img:rounded-lg max-w-none"
+        dangerouslySetInnerHTML={{ __html: safeContent }}
+      />
       {/* Attachments */}
 
       {feedback.fileAttachments && feedback.fileAttachments.length > 0 && (
