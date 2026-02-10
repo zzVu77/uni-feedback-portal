@@ -9,7 +9,6 @@ import {
   RotateCcw,
   Save,
   Send,
-  X,
   Loader2,
   FileText,
   Trash2,
@@ -19,6 +18,7 @@ import {
   LayoutGrid,
   AlignLeft,
   Paperclip,
+  ArrowLeft,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -444,11 +444,11 @@ const FeedbackForm = ({
               {/* Right Column (Sidebar) */}
               <div className="flex h-full flex-col gap-4 xl:col-span-4">
                 {/* Classification Group */}
-                <div className="flex h-full flex-col gap-6 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
+                <div className="flex h-full flex-col gap-6 rounded-xl border border-slate-200 bg-white py-4 shadow-sm">
                   <div className="border-b border-slate-100 px-6 pb-6">
                     <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
                       <LayoutGrid className="h-5 w-5 text-purple-500" />
-                      Phân loại & Địa điểm
+                      Thông tin liên quan
                     </div>
                   </div>
                   <div className="flex flex-col gap-6 px-6">
@@ -548,11 +548,11 @@ const FeedbackForm = ({
                 </div>
 
                 {/* Settings Group */}
-                <div className="flex h-full flex-col gap-2 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
+                <div className="flex h-full flex-col gap-2 rounded-xl border border-slate-200 bg-white py-4 shadow-sm">
                   <div className="border-b border-slate-100 px-6 pb-6">
                     <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
                       <AlignLeft className="h-5 w-5 text-orange-500" />
-                      Cài đặt hiển thị
+                      Quyền riêng tư
                     </div>
                   </div>
                   <div className="flex flex-col gap-6 px-6">
@@ -711,15 +711,15 @@ const FeedbackForm = ({
                   <>
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="primary"
                       onClick={() => {
                         router.replace(`/student/my-feedbacks/${id}`);
                       }}
-                      className="gap-2 border-slate-300 text-slate-600 hover:bg-slate-50"
+                      className="gap-2 border-blue-300 text-white"
                       disabled={isPending}
                     >
-                      <X className="h-4 w-4" />
-                      Hủy bỏ
+                      <ArrowLeft className="h-4 w-4" />
+                      Quay lại
                     </Button>
 
                     <Button
