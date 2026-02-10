@@ -102,14 +102,14 @@ export function ListAllFeedbacks() {
 
   return (
     <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-      <div className="flex w-full flex-shrink-0 flex-wrap items-start justify-center gap-4 md:items-center md:justify-between xl:flex-row xl:flex-nowrap">
+      <div className="flex w-full flex-shrink-0 flex-col gap-4 md:flex-row md:items-center md:justify-between xl:flex-nowrap">
         <Suspense fallback={null}>
           <SearchBar
             placeholder="Tìm kiếm theo tiêu đề..."
             className="w-full bg-white shadow-sm xl:max-w-xs"
           />
         </Suspense>
-        <div className="flex w-full flex-wrap items-start justify-center gap-3 md:w-auto md:flex-row md:flex-nowrap md:items-center">
+        <div className="flex w-full items-center gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:w-auto md:flex-row md:flex-nowrap md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
           <CommonFilter.DepartmentSelection />
           <CommonFilter.StatusSelection />
           <CommonFilter.CategorySelection />

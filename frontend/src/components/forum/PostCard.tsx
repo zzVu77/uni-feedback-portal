@@ -13,10 +13,10 @@ const PostCard = ({ data }: Props) => {
     data;
   return (
     <div className="flex w-full flex-col gap-3 rounded-xl bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:justify-between md:gap-0">
         {/* Post Title */}
         <Link href={`/forum/posts/${id}`}>
-          <h2 className="text-md hover:text-blue-primary-300 max-w-[200px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
+          <h2 className="text-md hover:text-blue-primary-300 max-w-[300px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
             {feedback.subject}
           </h2>
         </Link>
@@ -27,7 +27,7 @@ const PostCard = ({ data }: Props) => {
         {data.feedback.description}
       </h3>
       {/* Tags */}
-      <div className="flex flex-row items-center justify-start gap-2">
+      <div className="flex flex-wrap items-center justify-start gap-2 md:flex-row">
         <InfoBadge type="CATEGORY" text={feedback.category.name} />
         <InfoBadge type="DEPARTMENT" text={feedback.department.name} />
         {feedback.location && (
