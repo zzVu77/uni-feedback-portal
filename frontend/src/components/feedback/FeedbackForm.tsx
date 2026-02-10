@@ -2,26 +2,33 @@
 "use client";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
+import { cn } from "@/lib/utils";
+import { uploadFileToCloud } from "@/services/upload-service";
 import { CreateFeedbackPayload, FileAttachmentDto } from "@/types";
+import { sanitizeAttachment } from "@/utils/sanitizeAttachment";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  AlignLeft,
+  ArrowLeft,
+  Check,
+  ChevronsUpDown,
+  FileText,
+  Ghost,
   Info,
+  LayoutGrid,
+  Loader2,
+  MapPin,
+  Paperclip,
   RotateCcw,
   Save,
   Send,
-  Loader2,
-  FileText,
-  Trash2,
-  MapPin,
-  Ghost,
   ShieldAlert,
-  LayoutGrid,
-  AlignLeft,
-  Paperclip,
-  ArrowLeft,
+  Trash2,
 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { FileInput } from "../common/FileInput";
@@ -37,6 +44,14 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import {
   Form,
   FormControl,
   FormField,
@@ -45,22 +60,10 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { ScrollArea } from "../ui/scroll-area";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
-import { useRouter, useParams } from "next/navigation";
-import { uploadFileToCloud } from "@/services/upload-service";
-import { toast } from "sonner";
-import { sanitizeAttachment } from "@/utils/sanitizeAttachment";
-import { ScrollArea } from "../ui/scroll-area";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
@@ -133,6 +136,8 @@ const FeedbackForm = ({
 
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false); // State quản lý upload
+  const [openCategory, setOpenCategory] = useState(false);
+  const [openDepartment, setOpenDepartment] = useState(false);
 
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
 
@@ -147,8 +152,8 @@ const FeedbackForm = ({
     setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
   };
 
-  const { data: categoryOptions } = useCategoryOptionsData("active");
-  const { data: departmentOptions } = useDepartmentOptionsData();
+  const { data: categoryOptions = [] } = useCategoryOptionsData("active");
+  const { data: departmentOptions = [] } = useDepartmentOptionsData();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -456,33 +461,73 @@ const FeedbackForm = ({
                       control={form.control}
                       name="categoryId"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                           <FormLabel className="font-semibold text-slate-700">
                             Danh mục<span className="text-red-500">*</span>
                           </FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
+                          <Popover
+                            open={openCategory}
+                            onOpenChange={setOpenCategory}
+                          >
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    "w-full justify-between bg-slate-50 font-normal hover:bg-slate-100",
+                                    !field.value && "text-slate-500",
+                                  )}
+                                >
+                                  {field.value
+                                    ? categoryOptions.find(
+                                        (option) =>
+                                          option.value === field.value,
+                                      )?.label
+                                    : "Chọn danh mục"}
+                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-[--radix-popover-trigger-width] p-0"
+                              align="start"
                             >
-                              <SelectTrigger className="w-full bg-slate-50 focus:ring-blue-500">
-                                <SelectValue placeholder="Chọn danh mục" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectGroup>
-                                  <SelectLabel>Danh mục</SelectLabel>
-                                  {categoryOptions.map((option) => (
-                                    <SelectItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                              <Command>
+                                <CommandInput placeholder="Tìm kiếm danh mục..." />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Không tìm thấy danh mục.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {categoryOptions.map((option) => (
+                                      <CommandItem
+                                        key={option.value}
+                                        value={option.label}
+                                        onSelect={() => {
+                                          form.setValue(
+                                            "categoryId",
+                                            option.value,
+                                          );
+                                          setOpenCategory(false);
+                                        }}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            option.value === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0",
+                                          )}
+                                        />
+                                        {option.label}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -491,33 +536,73 @@ const FeedbackForm = ({
                       control={form.control}
                       name="departmentId"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                           <FormLabel className="font-semibold text-slate-700">
                             Phòng ban<span className="text-red-500">*</span>
                           </FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
+                          <Popover
+                            open={openDepartment}
+                            onOpenChange={setOpenDepartment}
+                          >
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    "w-full justify-between bg-slate-50 font-normal hover:bg-slate-100",
+                                    !field.value && "text-slate-500",
+                                  )}
+                                >
+                                  {field.value
+                                    ? departmentOptions.find(
+                                        (option) =>
+                                          option.value === field.value,
+                                      )?.label
+                                    : "Chọn phòng ban"}
+                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-[--radix-popover-trigger-width] p-0"
+                              align="start"
                             >
-                              <SelectTrigger className="w-full bg-slate-50 focus:ring-blue-500">
-                                <SelectValue placeholder="Chọn phòng ban" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectGroup>
-                                  <SelectLabel>Phòng ban</SelectLabel>
-                                  {departmentOptions.map((option) => (
-                                    <SelectItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                              <Command>
+                                <CommandInput placeholder="Tìm kiếm phòng ban..." />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Không tìm thấy phòng ban.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {departmentOptions.map((option) => (
+                                      <CommandItem
+                                        key={option.value}
+                                        value={option.label}
+                                        onSelect={() => {
+                                          form.setValue(
+                                            "departmentId",
+                                            option.value,
+                                          );
+                                          setOpenDepartment(false);
+                                        }}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            option.value === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0",
+                                          )}
+                                        />
+                                        {option.label}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -762,13 +847,16 @@ const FeedbackForm = ({
             >
               <div>
                 <p>
-                  Sau khi nhấn{" "}
-                  <span className="font-medium text-blue-600">“Gửi”</span>, bạn
-                  sẽ{" "}
-                  <span className="font-semibold text-red-600">
-                    không thể chỉnh sửa
+                  Góp ý của bạn sẽ được gửi đến phòng ban liên quan để tiếp nhận
+                  và xử lý. Bạn vẫn có thể{" "}
+                  <span className="font-semibold text-emerald-600">
+                    chỉnh sửa
                   </span>{" "}
-                  góp ý này nữa.
+                  hoặc{" "}
+                  <span className="font-semibold text-red-600">hủy bỏ</span> góp
+                  ý này trong mục{" "}
+                  <span className="font-medium">"Góp ý của tôi"</span> trước khi
+                  góp ý được tiếp nhận xử lý.
                 </p>
                 <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-500">
                   <p className="mb-1 font-semibold text-slate-700">
