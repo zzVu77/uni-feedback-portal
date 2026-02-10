@@ -13,7 +13,13 @@ import {
   Loader2,
   FileText,
   Trash2,
-} from "lucide-react"; // Thêm icon FileText, Trash2, Loader2
+  MapPin,
+  Ghost,
+  ShieldAlert,
+  LayoutGrid,
+  AlignLeft,
+  Paperclip,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,7 +45,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -52,15 +57,10 @@ import {
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { useRouter, useParams } from "next/navigation";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
-import { uploadFileToCloud } from "@/services/upload-service"; // Import Service Upload
-import { toast } from "sonner"; // Import Toast
+import { uploadFileToCloud } from "@/services/upload-service";
+import { toast } from "sonner";
 import { sanitizeAttachment } from "@/utils/sanitizeAttachment";
+import { ScrollArea } from "../ui/scroll-area";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
@@ -142,7 +142,7 @@ const FeedbackForm = ({
     }
   }, [initialData]);
 
-  // Hàm xóa file cũ khỏi danh sách hiển thị
+  // Remove existing file handler
   const handleRemoveExistingFile = (fileUrl: string) => {
     setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
   };
@@ -160,7 +160,7 @@ const FeedbackForm = ({
       description: initialData?.description || "",
       isAnonymous: initialData?.isAnonymous || false,
       isPublic: initialData?.isPublic || false,
-      attachments: [], // Input file luôn bắt đầu là rỗng (chứa file mới)
+      attachments: [],
     },
   });
 
@@ -175,7 +175,6 @@ const FeedbackForm = ({
       description: values.description,
       isAnonymous: values.isAnonymous || false,
       isPublic: values.isPublic || false,
-      // fileAttachments sẽ được xử lý riêng
     };
   };
 
@@ -200,7 +199,7 @@ const FeedbackForm = ({
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
-    // Reset lại cả danh sách file cũ về ban đầu
+    // Reset existing files to initial data
     if (initialData?.fileAttachments) {
       setExistingFiles(initialData.fileAttachments);
     } else {
@@ -299,456 +298,504 @@ const FeedbackForm = ({
     <>
       <Form {...form}>
         <form
-          className="flex h-full flex-col gap-2 rounded-xl bg-white px-4 py-4 shadow-md lg:px-8 lg:py-4"
+          className="h-full w-full py-2"
           onSubmit={(e) => e.preventDefault()}
         >
-          <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
-            {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
-          </h2>
-          <ScrollArea className="overflow-y-auto pr-1">
-            <div className="flex h-[76vh] flex-col gap-4 px-2">
-              {/* Anonymous option */}
-              <FormField
-                control={form.control}
-                name="isAnonymous"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="bg-neutral-light-primary-200/40 flex flex-row items-center justify-between gap-4 rounded-xl px-5 py-2 shadow-sm">
-                        <div className="flex flex-col gap-2">
-                          <div className="flex w-full flex-row items-center justify-between gap-4 lg:justify-start">
-                            <p className="text-[15px] font-medium lg:text-[16px]">
-                              Ẩn danh
-                            </p>
-                            <Switch
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                              id="isAnonymous"
-                              className="h-6 w-12 cursor-pointer bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6"
-                            />
-                          </div>
-                          <p className="text-[14px]">
-                            Nếu bạn chọn gửi{" "}
-                            <span className="text-blue-primary-600 font-medium">
-                              Ẩn danh
-                            </span>
-                            , thông tin cá nhân của bạn sẽ
-                            <span className="font-medium text-green-700">
-                              {" "}
-                              không hiển thị với các phòng ban xử lý
-                            </span>
-                            .
-                          </p>
-                          <p className="text-[14px] text-gray-700 italic">
-                            Tuy nhiên, trong một số trường hợp đặc biệt,
-                            <span className="font-medium text-amber-500">
-                              {" "}
-                              ban quản trị cấp cao{" "}
-                            </span>
-                            vẫn có thể truy cập thông tin này để đảm bảo
-                            <span className="font-medium text-pink-500">
-                              {" "}
-                              tính minh bạch
-                            </span>{" "}
-                            và
-                            <span className="text-purple-primary-500 font-medium">
-                              {" "}
-                              an toàn
-                            </span>
-                            .
-                          </p>
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Public to forum option */}
-              <FormField
-                control={form.control}
-                name="isPublic"
-                render={({ field }) => (
-                  <FormItem className="mt-2 flex flex-row items-center space-y-0 space-x-3 px-2">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="isPublic"
-                        disabled={isAnonymousWatched}
-                        className={`h-6 w-12 bg-gray-300 shadow-sm data-[state=checked]:bg-blue-600 [&>span]:h-5 [&>span]:w-5 [&>span]:bg-white data-[state=checked]:[&>span]:translate-x-6 ${isAnonymousWatched ? "cursor-not-allowed opacity-50" : "cursor-pointer"} `}
-                      />
-                    </FormControl>
-                    <div
-                      className={`flex items-center gap-2 ${isAnonymousWatched ? "opacity-50" : ""}`}
-                    >
-                      <FormLabel
-                        htmlFor="isPublic"
-                        className="cursor-pointer text-[15px] font-medium text-gray-700"
-                      >
-                        Công khai trên diễn đàn
-                      </FormLabel>
-                      <TooltipProvider>
-                        <Tooltip delayDuration={300}>
-                          <TooltipTrigger asChild>
-                            <Info className="h-4 w-4 cursor-pointer text-gray-400 transition-colors hover:text-blue-500" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs bg-slate-800 p-2 text-center text-xs text-white">
-                            <p className="text-center">
-                              {isAnonymousWatched
-                                ? "Không thể công khai khi gửi ẩn danh."
-                                : "Phản hồi sẽ được đăng lên diễn đàn cho phép tất cả sinh viên để thảo luận và chia sẻ ý kiến."}
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              {/* Subject Field */}
-              <FormField
-                control={form.control}
-                name="subject"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Tiêu đề góp ý<span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Mô tả ngắn gọn tiêu đề bạn muốn góp ý"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Category Selection and Location Input */}
-              <div className="flex w-full flex-col items-start justify-between gap-5 lg:flex-row">
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>
-                        Danh mục góp ý<span className="text-red-500">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Chọn danh mục" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Danh mục</SelectLabel>
-                              {categoryOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="departmentId"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>
-                        Phòng ban tiếp nhận
-                        <span className="text-red-500">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Chọn phòng ban " />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Phòng ban</SelectLabel>
-                              {departmentOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Địa điểm cụ thể (nếu có)</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="w-full"
-                          placeholder="Ví dụ: Tầng 2, Phòng A101"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              {/* Description Field */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Mô tả chi tiết<span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Mô tả chi tiết vấn đề bạn muốn góp ý"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* --- FILE ATTACHMENTS SECTION --- */}
-              <div className="space-y-4">
-                {/* 1. Hiển thị danh sách file ĐÃ CÓ (Edit Mode) */}
-                {existingFiles.length > 0 && (
-                  <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                    <p className="mb-2 text-sm font-medium text-gray-700">
-                      Tệp đính kèm hiện tại:
-                    </p>
-                    <div className="space-y-2">
-                      {existingFiles.map((file) => (
-                        <div
-                          key={file.fileUrl}
-                          className="flex items-center justify-between rounded-md border border-gray-100 bg-white p-2 text-sm shadow-sm"
-                        >
-                          <div className="flex items-center gap-2 overflow-hidden">
-                            <FileText className="h-4 w-4 flex-shrink-0 text-blue-500" />
-                            <a
-                              href={file.fileUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="truncate text-blue-600 hover:underline"
-                            >
-                              {file.fileName}
-                            </a>
-                            <span className="text-xs text-gray-400">
-                              ({(file.fileSize / 1024 / 1024).toFixed(2)} MB)
-                            </span>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
-                            onClick={() =>
-                              handleRemoveExistingFile(file.fileUrl)
-                            }
-                            disabled={isPending}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
+          {/* Header Area */}
+          <div className="mb-4">
+            <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">
+              {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
+            </h1>
+            <p className="mt-1 text-slate-500">
+              Hãy đóng góp ý kiến để xây dựng môi trường học tập tốt hơn.
+            </p>
+          </div>
+          <ScrollArea className="w-full overflow-y-auto pr-1">
+            <div className="flex h-full flex-col gap-6 xl:grid xl:grid-cols-12 xl:gap-4">
+              {/* Left Column (Main Content) */}
+              <div className="h-full lg:col-span-8">
+                <div className="flex h-full flex-col gap-6 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
+                  <div className="border-b border-slate-100 px-6 pb-4">
+                    <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
+                      <FileText className="h-5 w-5 text-blue-500" />
+                      Chi tiết góp ý
                     </div>
                   </div>
-                )}
+                  <div className="space-y-6 px-6 pt-0">
+                    {/* Subject Field */}
+                    <FormField
+                      control={form.control}
+                      name="subject"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-slate-700">
+                            Tiêu đề góp ý<span className="text-red-500">*</span>
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Mô tả ngắn gọn tiêu đề bạn muốn góp ý"
+                              className="w-full bg-slate-50 focus-visible:ring-blue-500"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* 2. Input Upload File MỚI */}
-                <FormField
-                  control={form.control}
-                  name="attachments"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {type === "edit" && existingFiles.length > 0
-                          ? "Thêm tệp đính kèm mới (nếu có)"
-                          : "Tệp đính kèm (nếu có)"}
+                    {/* Description Field */}
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-slate-700">
+                            Mô tả chi tiết
+                            <span className="text-red-500">*</span>
+                          </FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Mô tả chi tiết vấn đề bạn muốn góp ý"
+                              className="min-h-[200px] w-full bg-slate-50 focus-visible:ring-blue-500"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* --- FILE ATTACHMENTS SECTION --- */}
+                    <div className="space-y-4">
+                      <FormLabel className="flex items-center gap-2 font-semibold text-slate-700">
+                        <Paperclip className="h-4 w-4" /> Tệp đính kèm
                       </FormLabel>
-                      <FormControl>
-                        <FileInput
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+
+                      {/* 1. Display Existing Files (Edit Mode) */}
+                      {existingFiles.length > 0 && (
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                          <p className="mb-3 text-sm font-medium text-slate-700">
+                            Tệp hiện tại:
+                          </p>
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            {existingFiles.map((file) => (
+                              <div
+                                key={file.fileUrl}
+                                className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
+                              >
+                                <div className="flex min-w-0 items-center gap-2.5">
+                                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-blue-50 text-blue-600">
+                                    <FileText className="h-4 w-4" />
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <a
+                                      href={file.fileUrl}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="block truncate text-sm font-medium text-slate-700 hover:text-blue-600"
+                                    >
+                                      {file.fileName}
+                                    </a>
+                                    <p className="text-xs text-slate-400">
+                                      {(file.fileSize / 1024 / 1024).toFixed(2)}{" "}
+                                      MB
+                                    </p>
+                                  </div>
+                                </div>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
+                                  onClick={() =>
+                                    handleRemoveExistingFile(file.fileUrl)
+                                  }
+                                  disabled={isPending}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 2. Input Upload File MỚI */}
+                      <FormField
+                        control={form.control}
+                        name="attachments"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <FileInput
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column (Sidebar) */}
+              <div className="flex h-full flex-col gap-4 xl:col-span-4">
+                {/* Classification Group */}
+                <div className="flex h-full flex-col gap-6 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
+                  <div className="border-b border-slate-100 px-6 pb-6">
+                    <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
+                      <LayoutGrid className="h-5 w-5 text-purple-500" />
+                      Phân loại & Địa điểm
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-6 px-6">
+                    <FormField
+                      control={form.control}
+                      name="categoryId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-slate-700">
+                            Danh mục<span className="text-red-500">*</span>
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full bg-slate-50 focus:ring-blue-500">
+                                <SelectValue placeholder="Chọn danh mục" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Danh mục</SelectLabel>
+                                  {categoryOptions.map((option) => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="departmentId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-slate-700">
+                            Phòng ban<span className="text-red-500">*</span>
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full bg-slate-50 focus:ring-blue-500">
+                                <SelectValue placeholder="Chọn phòng ban" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Phòng ban</SelectLabel>
+                                  {departmentOptions.map((option) => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="location"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="font-semibold text-slate-700">
+                            Địa điểm (nếu có)
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <MapPin className="absolute top-2.5 left-3 h-4 w-4 text-slate-400" />
+                              <Input
+                                className="w-full bg-slate-50 pl-9 focus-visible:ring-blue-500"
+                                placeholder="VD: Tầng 2, Phòng A101"
+                                {...field}
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Settings Group */}
+                <div className="flex h-full flex-col gap-2 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
+                  <div className="border-b border-slate-100 px-6 pb-6">
+                    <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
+                      <AlignLeft className="h-5 w-5 text-orange-500" />
+                      Cài đặt hiển thị
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-6 px-6">
+                    {/* Anonymous Option */}
+                    <FormField
+                      control={form.control}
+                      name="isAnonymous"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="flex items-center justify-between rounded-lg border border-slate-100 p-3 shadow-sm">
+                            <div className="space-y-0.5">
+                              <FormLabel className="flex items-center gap-2 text-base font-semibold text-slate-800">
+                                <Ghost className="h-4 w-4 text-slate-500" />
+                                Gửi ẩn danh
+                              </FormLabel>
+                              <p className="text-xs text-slate-500">
+                                Ẩn thông tin cá nhân của bạn
+                              </p>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </div>
+                          {/* Warning Animation */}
+                          {field.value && (
+                            <div className="animate-in fade-in slide-in-from-top-2 mt-3">
+                              <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                                <div className="mb-1 flex items-center gap-2 font-semibold">
+                                  <ShieldAlert className="h-4 w-4" />
+                                  Lưu ý quan trọng
+                                </div>
+                                <p className="text-xs leading-relaxed text-amber-700">
+                                  Thông tin sẽ ẩn với phòng ban xử lý, nhưng{" "}
+                                  <span className="font-bold">
+                                    Ban quản trị
+                                  </span>{" "}
+                                  vẫn có thể truy cập để đảm bảo an toàn & minh
+                                  bạch.
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Public Option */}
+                    <FormField
+                      control={form.control}
+                      name="isPublic"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div
+                            className={`flex items-center justify-between rounded-lg border border-slate-100 p-3 shadow-sm ${isAnonymousWatched ? "bg-slate-50 opacity-60" : ""}`}
+                          >
+                            <div className="space-y-0.5">
+                              <div className="flex items-center gap-2">
+                                <FormLabel className="text-base font-semibold text-slate-800">
+                                  Công khai
+                                </FormLabel>
+                              </div>
+                              <p className="text-xs text-slate-500">
+                                Đăng lên diễn đàn sinh viên
+                              </p>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                disabled={isAnonymousWatched}
+                              />
+                            </FormControl>
+                          </div>
+
+                          {/* Warning Animation / Info Section */}
+                          {isAnonymousWatched ? (
+                            <div className="animate-in fade-in slide-in-from-top-2 mt-3">
+                              <div className="rounded-md border border-slate-200 bg-blue-50 p-3 text-sm text-slate-600">
+                                <div className="mb-1 flex items-center gap-2 font-semibold text-blue-800">
+                                  <Info className="h-4 w-4" />
+                                  Lưu ý
+                                </div>
+                                <p className="text-xs leading-relaxed text-blue-700">
+                                  Không thể công khai khi đang ở chế độ ẩn danh.
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            field.value && (
+                              <div className="animate-in fade-in slide-in-from-top-2 mt-3">
+                                <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800">
+                                  <div className="mb-1 flex items-center gap-2 font-semibold">
+                                    <Info className="h-4 w-4" />
+                                    Chế độ công khai
+                                  </div>
+                                  <p className="text-xs leading-relaxed text-blue-700">
+                                    Phản hồi sẽ được đăng lên diễn đàn để mọi
+                                    người cùng thảo luận.
+                                  </p>
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sticky Footer Buttons */}
+            <div className="py-4">
+              <div className="mx-auto flex items-center justify-center gap-4 lg:justify-end lg:px-0">
+                {type === "create" ? (
+                  <>
+                    <ConfirmationDialog
+                      title="Xác nhận làm mới?"
+                      description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập."
+                      onConfirm={handleResetForm}
+                      confirmText="Đồng ý"
+                    >
+                      <Button
+                        type="button"
+                        disabled={!isDirty || isPending}
+                        variant="outline"
+                        className="gap-2 border-slate-300 text-slate-600 hover:bg-slate-50"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                        Làm mới
+                      </Button>
+                    </ConfirmationDialog>
+
+                    <Button
+                      type="button"
+                      disabled={!isDirty || isPending}
+                      onClick={handleAttemptSubmit}
+                      className="gap-2 bg-blue-600 text-white shadow-md hover:bg-blue-700"
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                      {isUploading
+                        ? "Đang tải tệp..."
+                        : isPending
+                          ? "Đang gửi..."
+                          : "Gửi góp ý"}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        router.replace(`/student/my-feedbacks/${id}`);
+                      }}
+                      className="gap-2 border-slate-300 text-slate-600 hover:bg-slate-50"
+                      disabled={isPending}
+                    >
+                      <X className="h-4 w-4" />
+                      Hủy bỏ
+                    </Button>
+
+                    <Button
+                      type="button"
+                      className="gap-2 bg-emerald-600 text-white shadow-md hover:bg-emerald-700"
+                      disabled={isPending || !canSubmit}
+                      onClick={handleUpdateFeedback}
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Save className="h-4 w-4" />
+                      )}
+                      {isUploading
+                        ? "Đang tải tệp..."
+                        : isPending
+                          ? "Đang cập nhật..."
+                          : "Lưu thay đổi"}
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </ScrollArea>
-
-          {/* Buttons Area */}
-          {type == "create" ? (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
-              <ConfirmationDialog
-                title="Xác nhận làm mới biểu mẫu?"
-                description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
-                onConfirm={handleResetForm}
-                confirmText="Đồng ý"
-              >
-                <Button
-                  type="button"
-                  disabled={!isDirty || isPending}
-                  variant={"cancel"}
-                  className="flex max-w-lg flex-row items-center gap-2 py-3"
-                >
-                  <RotateCcw className="h-5 w-5" />
-                  Làm mới
-                </Button>
-              </ConfirmationDialog>
-
-              <Button
-                type="button"
-                disabled={!isDirty || isPending}
-                variant={"primary"}
-                onClick={handleAttemptSubmit}
-                className="flex max-w-lg flex-row items-center gap-2 py-3 shadow-md"
-              >
-                {isPending ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  <Send className="h-5 w-5" />
-                )}
-                {isUploading
-                  ? "Đang tải tệp..."
-                  : isPending
-                    ? "Đang gửi..."
-                    : "Gửi góp ý"}
-              </Button>
-            </div>
-          ) : (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
-              <Button
-                type="button"
-                variant={"cancel"}
-                onClick={() => {
-                  router.replace(`/student/my-feedbacks/${id}`);
-                }}
-                className="flex max-w-lg flex-row items-center gap-2 py-3"
-                disabled={isPending}
-              >
-                <X className="h-5 w-5" />
-                Hủy
-              </Button>
-
-              <Button
-                type="button"
-                variant={"primary"}
-                className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
-                disabled={isPending || !canSubmit}
-                onClick={handleUpdateFeedback}
-              >
-                {isPending ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  <Save className="h-5 w-5" />
-                )}
-                {isUploading
-                  ? "Đang tải tệp..."
-                  : isPending
-                    ? "Đang cập nhật..."
-                    : "Cập nhật"}
-              </Button>
-            </div>
-          )}
         </form>
       </Form>
+
       <AlertDialog
         open={isSubmitDialogOpen}
         onOpenChange={setIsSubmitDialogOpen}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-xl">
           <AlertDialogHeader>
-            <AlertDialogTitle>Vui lòng xác nhận trước khi gửi</AlertDialogTitle>
+            <AlertDialogTitle className="text-xl text-slate-800">
+              Xác nhận gửi góp ý
+            </AlertDialogTitle>
             <AlertDialogDescription
               asChild
-              className="space-y-2 text-sm leading-relaxed text-gray-600"
+              className="space-y-3 text-sm leading-relaxed text-slate-600"
             >
               <div>
                 <p>
                   Sau khi nhấn{" "}
-                  <span className="text-blue-primary-600 font-medium">
-                    “Gửi”
-                  </span>
-                  , bạn sẽ
+                  <span className="font-medium text-blue-600">“Gửi”</span>, bạn
+                  sẽ{" "}
                   <span className="font-semibold text-red-600">
-                    {" "}
-                    không thể chỉnh sửa hoặc hủy bỏ{" "}
-                  </span>
-                  góp ý đã gửi.
-                </p>
-                {/* (Giữ nguyên phần mô tả dài như cũ) */}
-                <p className="text-[14px]">
-                  Nếu bạn chọn gửi{" "}
-                  <span className="text-blue-primary-600 font-medium">
-                    Ẩn danh
-                  </span>
-                  , thông tin cá nhân của bạn sẽ
-                  <span className="font-medium text-green-700">
-                    {" "}
-                    không hiển thị với các phòng ban xử lý
-                  </span>
-                  .
-                </p>
-                <p className="text-[14px] text-gray-700 italic">
-                  Tuy nhiên, trong một số trường hợp đặc biệt,
-                  <span className="font-medium text-amber-500">
-                    {" "}
-                    ban quản trị cấp cao{" "}
-                  </span>
-                  vẫn có thể truy cập thông tin này để đảm bảo
-                  <span className="font-medium text-pink-500">
-                    {" "}
-                    tính minh bạch
+                    không thể chỉnh sửa
                   </span>{" "}
-                  và
-                  <span className="text-purple-primary-500 font-medium">
-                    {" "}
-                    an toàn
-                  </span>
-                  .
+                  góp ý này nữa.
                 </p>
+                <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-500">
+                  <p className="mb-1 font-semibold text-slate-700">
+                    Chính sách ẩn danh:
+                  </p>
+                  <ul className="list-inside list-disc space-y-1">
+                    <li>Thông tin cá nhân được ẩn với các phòng ban xử lý.</li>
+                    <li>
+                      Ban quản trị cấp cao có thể truy xuất khi cần thiết để đảm
+                      bảo an toàn.
+                    </li>
+                  </ul>
+                </div>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>Hủy</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending} className="rounded-lg">
+              Xem lại
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleSendFeedback}
               disabled={isPending}
+              className="rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isUploading ? "Đang xử lý..." : "Gửi"}
+              {isUploading ? "Đang xử lý..." : "Xác nhận gửi"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
