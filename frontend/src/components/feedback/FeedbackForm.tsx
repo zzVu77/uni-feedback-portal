@@ -25,10 +25,12 @@ import {
   ShieldAlert,
   Trash2,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import "suneditor/dist/css/suneditor.min.css";
 import { z } from "zod";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { FileInput } from "../common/FileInput";
@@ -63,7 +65,13 @@ import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ScrollArea } from "../ui/scroll-area";
 import { Switch } from "../ui/switch";
-import { Textarea } from "../ui/textarea";
+
+const SunEditor = dynamic(() => import("suneditor-react"), {
+  ssr: false,
+  loading: () => (
+    <p className="text-sm text-slate-500">Đang tải trình soạn thảo...</p>
+  ),
+});
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_FILE_TYPES = [
@@ -138,6 +146,7 @@ const FeedbackForm = ({
   const [isUploading, setIsUploading] = useState(false); // State quản lý upload
   const [openCategory, setOpenCategory] = useState(false);
   const [openDepartment, setOpenDepartment] = useState(false);
+  const [editorKey, setEditorKey] = useState(0);
 
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
 
@@ -210,6 +219,7 @@ const FeedbackForm = ({
     } else {
       setExistingFiles([]);
     }
+    setEditorKey((prev) => prev + 1);
   };
 
   const handleAttemptSubmit = async () => {
@@ -243,6 +253,7 @@ const FeedbackForm = ({
       await onSubmit(payload);
       form.reset();
       setExistingFiles([]);
+      setEditorKey((prev) => prev + 1);
       setIsSubmitDialogOpen(false);
       setTimeout(() => {
         router.replace(`/student/my-feedbacks`);
@@ -359,10 +370,30 @@ const FeedbackForm = ({
                             <span className="text-red-500">*</span>
                           </FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Mô tả chi tiết vấn đề bạn muốn góp ý"
-                              className="min-h-[200px] w-full bg-slate-50 focus-visible:ring-blue-500"
-                              {...field}
+                            <SunEditor
+                              key={editorKey}
+                              defaultValue={field.value}
+                              onChange={(content) => {
+                                const textContent = content
+                                  .replace(/<[^>]+>/g, "")
+                                  .trim();
+                                if (!textContent) {
+                                  field.onChange("");
+                                } else {
+                                  field.onChange(content);
+                                }
+                              }}
+                              height="auto"
+                              setOptions={{
+                                minHeight: "200px",
+                                buttonList: [
+                                  ["undo", "redo"],
+                                  ["font", "fontSize", "formatBlock"],
+                                  ["bold", "italic", "underline", "strike"],
+                                  ["list", "link"],
+                                  ["removeFormat"],
+                                ],
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -852,10 +883,9 @@ const FeedbackForm = ({
                   <span className="font-semibold text-emerald-600">
                     chỉnh sửa
                   </span>{" "}
-                  hoặc{" "}
-                  <span className="font-semibold text-red-600">hủy bỏ</span> góp
-                  ý này trong mục{" "}
-                  <span className="font-medium">"Góp ý của tôi"</span> trước khi
+                  hoặc <span className="font-semibold text-red-600">xóa</span>{" "}
+                  góp ý này trong mục{" "}
+                  <span className="font-medium">"Lịch sử góp ý"</span> trước khi
                   góp ý được tiếp nhận xử lý.
                 </p>
                 <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-500">

@@ -15,6 +15,7 @@ import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
 import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
 import Attachment from "./Attachment";
+import DOMPurify from "dompurify";
 
 type Props = {
   type: "student" | "staff" | "admin";
@@ -144,10 +145,14 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
         {/* Description */}
         <div>
           <h2 className="text-[18px] font-medium">Nội dung:</h2>
-          <p className="text-[13px] font-normal text-black lg:text-[14px]">
-            {description ||
-              " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-          </p>
+          <div
+            className="text-[13px] font-normal text-black lg:text-[14px]"
+            dangerouslySetInnerHTML={{
+              __html:
+                DOMPurify.sanitize(description) ||
+                " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            }}
+          />
         </div>
         {/* Attachments */}
         {fileAttachments && fileAttachments.length > 0 && (
