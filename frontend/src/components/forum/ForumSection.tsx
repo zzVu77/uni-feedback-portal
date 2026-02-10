@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAnnouncementFilters } from "@/hooks/filters/useAnnouncementFilter";
 import { useForumPostFilters } from "@/hooks/filters/useForumPostFilter";
 import { useUrlTabs } from "@/hooks/useUrlTabs";
-import { Megaphone, MessageCircle } from "lucide-react";
+import { Megaphone, MessageCircle, ListFilter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import { useInView } from "react-intersection-observer"; // Import Intersection Observer
@@ -15,6 +15,16 @@ import AnnouncementCard from "./AnnouncementCard";
 import PostCard from "./PostCard";
 import { useGetInfiniteAnnouncements } from "@/hooks/queries/useAnnouncementQueries";
 import { useGetInfiniteForumPosts } from "@/hooks/queries/useForumPostQueries";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 type ForumTab = "feedbacks" | "announcements";
 
@@ -113,14 +123,16 @@ export function ForumSection() {
           </TabsTrigger>
         </TabsList>
 
-        <div className="flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between xl:flex-nowrap">
+        <div className="flex w-full items-center gap-3">
           <Suspense fallback={null}>
             <SearchBar
               placeholder="Tìm kiếm theo tiêu đề..."
-              className="w-full xl:max-w-xs"
+              className="flex-1"
             />
           </Suspense>
-          <div className="flex w-full items-center gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:w-auto md:flex-row md:flex-nowrap md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
+
+          {/* Desktop Filters */}
+          <div className="hidden items-center gap-3 md:flex">
             {currentTabValue === "feedbacks" ? (
               <>
                 <CommonFilter.CategorySelection />
@@ -130,6 +142,91 @@ export function ForumSection() {
             ) : (
               <CommonFilter.DepartmentSelection />
             )}
+          </div>
+
+          {/* Mobile Filter Drawer */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <ListFilter className="h-4 w-4" />
+                  Bộ lọc
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="rounded-t-xl px-6 pb-8">
+                <SheetHeader className="px-0 text-left">
+                  <SheetTitle className="text-lg font-bold text-slate-800">
+                    Bộ lọc tìm kiếm
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col gap-6 py-4">
+                  {currentTabValue === "feedbacks" ? (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="ml-1 text-sm font-medium text-slate-700">
+                          Danh mục
+                        </span>
+                        <div className="w-full [&>button]:w-full">
+                          <CommonFilter.CategorySelection />
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="ml-1 text-sm font-medium text-slate-700">
+                          Phòng ban
+                        </span>
+                        <div className="w-full [&>button]:w-full">
+                          <CommonFilter.DepartmentSelection />
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="ml-1 text-sm font-medium text-slate-700">
+                          Sắp xếp theo
+                        </span>
+                        <div className="w-full [&>button]:w-full">
+                          <CommonFilter.SortBySelection />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-col gap-1.5">
+                      <span className="ml-1 text-sm font-medium text-slate-700">
+                        Phòng ban
+                      </span>
+                      <div className="w-full [&>button]:w-full">
+                        <CommonFilter.DepartmentSelection />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <SheetFooter className="flex-row items-center gap-3 px-0 pt-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-10 flex-1 bg-red-400 text-white"
+                    onClick={() => {
+                      const params = new URLSearchParams(
+                        searchParams.toString(),
+                      );
+                      params.delete("categoryId");
+                      params.delete("departmentId");
+                      params.delete("sortBy");
+                      params.delete("q");
+                      params.delete("page");
+                      router.replace(`?${params.toString()}`, {
+                        scroll: false,
+                      });
+                    }}
+                  >
+                    Xóa bộ lọc
+                  </Button>
+                  <SheetClose asChild>
+                    <Button className="h-10 flex-[2] bg-blue-600 hover:bg-blue-700">
+                      Xem kết quả
+                    </Button>
+                  </SheetClose>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
 
