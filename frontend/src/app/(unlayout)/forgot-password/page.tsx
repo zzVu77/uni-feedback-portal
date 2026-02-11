@@ -114,7 +114,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-2">
           <div className="text-center">
             <h2 className="text-2xl font-bold tracking-wider text-slate-900 uppercase">
               {step === 1 ? "Quên mật khẩu" : "Đặt lại mật khẩu"}
