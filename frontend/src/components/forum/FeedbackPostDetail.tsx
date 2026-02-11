@@ -141,23 +141,6 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
           </Link>
         </div>
       </div>
-
-      {/* Mobile Sticky Action Bar */}
-      <div className="fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between border-t border-slate-100 bg-white/80 p-4 backdrop-blur-lg md:hidden">
-        <Button
-          onClick={handleToggleVote}
-          disabled={isBusy}
-          className={cn(
-            "flex flex-1 items-center justify-center gap-2 rounded-full py-6 font-bold shadow-lg transition-all active:scale-95",
-            hasVoted
-              ? "bg-blue-600 text-white shadow-blue-200"
-              : "bg-slate-900 text-white shadow-slate-200",
-          )}
-        >
-          <ThumbsUp className={cn("h-5 w-5", hasVoted && "fill-current")} />
-          <span>{votes} Thích</span>
-        </Button>
-      </div>
     </div>
   );
 };
