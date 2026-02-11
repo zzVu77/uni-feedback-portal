@@ -40,7 +40,14 @@ export function MyFeedbacksHistoryTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { data: feedbacks, isFetching, isError } = useGetFeedbacks(filters);
+  const {
+    data: feedbacks,
+    isFetching,
+    isError,
+  } = useGetFeedbacks({
+    ...filters,
+    pageSize: 12,
+  });
 
   const tableData = React.useMemo(
     () => (isError ? [] : (feedbacks?.results ?? [])),
