@@ -8,7 +8,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FileText,
+  Info,
   Loader2,
+  Paperclip,
   RotateCcw,
   Save,
   Send,
@@ -126,17 +128,15 @@ const AnnouncementForm = ({
   const [editorKey, setEditorKey] = useState(0);
 
   // State to manage EXISTING files (for Edit mode)
-  // We map the initialData.files structure to FileAttachmentDto structure
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
 
-  // Sync initialData to existingFiles only when initialData ID changes (to avoid re-sync on parent re-renders)
+  // Sync initialData to existingFiles only when initialData ID changes
   useEffect(() => {
     if (initialData?.files) {
-      // Map AnnouncementDetailType files to FileAttachmentDto
       const mappedFiles = initialData.files.map((f: any) => ({
         fileName: f.fileName,
         fileUrl: f.fileUrl,
-        fileType: f.fileType || "", // Handle potential missing fields
+        fileType: f.fileType || "",
         fileSize: f.fileSize || 0,
       }));
       setExistingFiles(mappedFiles);
@@ -148,7 +148,7 @@ const AnnouncementForm = ({
     defaultValues: {
       title: initialData?.title || "",
       content: initialData?.content || "",
-      attachments: [], // Always empty initially, for new files
+      attachments: [],
     },
   });
 
@@ -167,7 +167,6 @@ const AnnouncementForm = ({
   const handleCreateAnnouncement = form.handleSubmit(async (values) => {
     setIsUploading(true);
     try {
-      // 1. Upload NEW files
       let uploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
@@ -176,17 +175,13 @@ const AnnouncementForm = ({
         uploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
 
-      // 2. Prepare Payload
       const payload: CreateAnnouncementPayload = {
         ...mapFormValuesToAnnouncementPayload(values),
         files: uploadedAttachments,
       };
 
-      // 3. Submit
       await onSubmit(payload);
-
       setIsSubmitDialogOpen(false);
-      // Reset form and increase key to force re-mount SunEditor
       form.reset();
       setExistingFiles([]);
       setEditorKey((prev) => prev + 1);
@@ -202,7 +197,6 @@ const AnnouncementForm = ({
   const handleUpdateAnnouncement = form.handleSubmit(async (values) => {
     setIsUploading(true);
     try {
-      // 1. Upload NEW files
       let newUploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
@@ -211,12 +205,10 @@ const AnnouncementForm = ({
         newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
 
-      // 2. Process EXISTING files (sanitize and filter)
       const processedExistingFiles = existingFiles
         .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
         .map(sanitizeAttachment);
 
-      // 3. Merge files
       const finalFiles = [...processedExistingFiles, ...newUploadedAttachments];
 
       const payload: CreateAnnouncementPayload = {
@@ -238,7 +230,6 @@ const AnnouncementForm = ({
   const handleResetForm = () => {
     form.reset();
     form.clearErrors();
-    // Reset existing files to initial state
     if (initialData?.files) {
       const mappedFiles = initialData.files.map((f: any) => ({
         fileName: f.fileName,
@@ -276,236 +267,266 @@ const AnnouncementForm = ({
     type === "edit" &&
     initialData?.files &&
     existingFiles.length !== initialData.files.length;
-  // const canSubmit = isDirty || isExistingFilesChanged;
 
   return (
     <>
       <Form {...form}>
         <form
-          className="rounded-xlbg-white flex h-full flex-col gap-2 px-4 py-4 shadow-md lg:px-8 lg:py-4"
-          onSubmit={(e) => e.preventDefault()} // prevent default submit
+          className="h-full w-full py-2"
+          onSubmit={(e) => e.preventDefault()}
         >
-          <h2 className="mb-2 text-[20px] font-semibold lg:text-[28px]">
-            {type === "edit" ? "Chỉnh sửa thông báo" : "Tạo thông báo mới"}
-          </h2>
+          {/* Header Area */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">
+              {type === "edit" ? "Chỉnh sửa thông báo" : "Tạo thông báo mới"}
+            </h1>
+            <p className="mt-1 text-sm text-slate-500 md:text-base">
+              Hãy đảm bảo thông tin được trình bày đầy đủ, rõ ràng và chính xác
+              để sinh viên có thể tiếp cận và hiểu nội dung thông báo một cách
+              nhanh chóng.
+            </p>
+          </div>
+
           <ScrollArea className="w-full overflow-y-auto pr-1">
-            <div className="flex h-[76vh] flex-col gap-4 px-2">
-              {/* Subject Field */}
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Tiêu đề thông báo<span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nhập tiêu đề thông báo" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div>
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Nội dung thông báo
-                        <span className="text-red-500">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        {/* Sử dụng key={editorKey} để reset editor */}
-                        <SunEditor
-                          key={editorKey}
-                          defaultValue={field.value}
-                          onChange={(content) => {
-                            const textContent = content
-                              .replace(/<[^>]+>/g, "")
-                              .trim();
-                            if (!textContent) {
-                              field.onChange("");
-                            } else {
-                              field.onChange(content);
-                            }
-                          }}
-                          height="auto"
-                          setOptions={{
-                            minHeight: "200px",
-                            buttonList: [
-                              ["undo", "redo"],
-                              ["font", "fontSize", "formatBlock"],
-                              ["bold", "italic", "underline", "strike"],
-                              ["list", "link"],
-                              ["removeFormat"],
-                              ["codeView", "fullScreen"],
-                            ],
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Attachments Section */}
-              <div className="space-y-4">
-                {/* 1. Display EXISTING files (Edit Mode) */}
-                {existingFiles.length > 0 && (
-                  <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                    <p className="mb-2 text-sm font-medium text-gray-700">
-                      Tệp đính kèm hiện tại:
-                    </p>
-                    <div className="space-y-2">
-                      {existingFiles.map((file) => (
-                        <div
-                          key={file.fileUrl}
-                          className="flex items-center justify-between rounded-md border border-gray-100 bg-white p-2 text-sm shadow-sm"
-                        >
-                          <div className="flex items-center gap-2 overflow-hidden">
-                            <FileText className="h-4 w-4 shrink-0 text-blue-500" />
-                            <a
-                              href={file.fileUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="truncate text-blue-600 hover:underline"
-                            >
-                              {file.fileName}
-                            </a>
-                            {/* Check if size exists before dividing */}
-                            {file.fileSize ? (
-                              <span className="text-xs text-gray-400">
-                                (
-                                {(Number(file.fileSize) / 1024 / 1024).toFixed(
-                                  2,
-                                )}{" "}
-                                MB)
-                              </span>
-                            ) : null}
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
-                            onClick={() =>
-                              handleRemoveExistingFile(file.fileUrl)
-                            }
-                            disabled={isPending}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
+            <div className="flex h-full flex-col gap-6">
+              {/* Main Content Card */}
+              <div className="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
+                <div className="border-b border-slate-100 px-6 pb-4">
+                  <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
+                    <FileText className="h-5 w-5 text-blue-500" />
+                    Nội dung thông báo
                   </div>
-                )}
+                </div>
 
-                {/* 2. New File Input */}
-                <FormField
-                  control={form.control}
-                  name="attachments"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {type === "edit" && existingFiles.length > 0
-                          ? "Thêm tệp đính kèm mới (nếu có)"
-                          : "Tệp đính kèm (nếu có)"}
-                      </FormLabel>
-                      <FormControl>
-                        <FileInput
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="space-y-6 px-6 pt-0">
+                  {/* Title Field */}
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold text-slate-700">
+                          Tiêu đề thông báo
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Nhập tiêu đề thông báo"
+                            className="h-11 w-full bg-slate-50 focus-visible:ring-blue-500"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Content Field */}
+                  <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold text-slate-700">
+                          Nội dung chi tiết
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <SunEditor
+                            key={editorKey}
+                            defaultValue={field.value}
+                            onChange={(content) => {
+                              const textContent = content
+                                .replace(/<[^>]+>/g, "")
+                                .trim();
+                              if (!textContent) {
+                                field.onChange("");
+                              } else {
+                                field.onChange(content);
+                              }
+                            }}
+                            height="auto"
+                            setOptions={{
+                              minHeight: "300px",
+                              buttonList: [
+                                ["undo", "redo"],
+                                ["font", "fontSize", "formatBlock"],
+                                ["bold", "italic", "underline", "strike"],
+                                ["list", "link"],
+                                ["removeFormat"],
+                                ["codeView", "fullScreen"],
+                              ],
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Attachments Section */}
+                  <div className="space-y-4 pt-4">
+                    <FormLabel className="flex items-center gap-2 font-semibold text-slate-700">
+                      <Paperclip className="h-4 w-4" /> Tệp đính kèm
+                    </FormLabel>
+
+                    {/* 1. Display EXISTING files (Edit Mode) */}
+                    {existingFiles.length > 0 && (
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p className="mb-3 text-sm font-medium text-slate-700">
+                          Tệp hiện tại:
+                        </p>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {existingFiles.map((file) => (
+                            <div
+                              key={file.fileUrl}
+                              className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
+                            >
+                              <div className="flex min-w-0 items-center gap-2.5">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-blue-50 text-blue-600">
+                                  <FileText className="h-4 w-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <a
+                                    href={file.fileUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="block truncate text-sm font-medium text-slate-700 hover:text-blue-600"
+                                  >
+                                    {file.fileName}
+                                  </a>
+                                  {file.fileSize ? (
+                                    <p className="text-xs text-slate-400">
+                                      {(
+                                        Number(file.fileSize) /
+                                        1024 /
+                                        1024
+                                      ).toFixed(2)}{" "}
+                                      MB
+                                    </p>
+                                  ) : null}
+                                </div>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
+                                onClick={() =>
+                                  handleRemoveExistingFile(file.fileUrl)
+                                }
+                                disabled={isPending}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 2. New File Input */}
+                    <FormField
+                      control={form.control}
+                      name="attachments"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <FileInput
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="py-6">
+              <div className="flex items-center justify-center gap-4 lg:justify-end">
+                {type === "create" ? (
+                  <>
+                    <ConfirmationDialog
+                      title="Xác nhận làm mới?"
+                      description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập."
+                      onConfirm={handleResetForm}
+                      confirmText="Đồng ý"
+                    >
+                      <Button
+                        type="button"
+                        disabled={!isDirty || isPending}
+                        variant="outline"
+                        className="h-11 gap-2 border-slate-300 text-slate-600 hover:bg-slate-50"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                        Làm mới
+                      </Button>
+                    </ConfirmationDialog>
+
+                    <Button
+                      type="button"
+                      disabled={!isDirty || isPending}
+                      onClick={handleAttemptSubmit}
+                      className="h-11 gap-2 rounded-lg bg-blue-600 px-8 text-white shadow-md hover:bg-blue-700"
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                      {isUploading
+                        ? "Đang tải tệp..."
+                        : isPending
+                          ? "Đang tạo..."
+                          : "Đăng thông báo"}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCancel}
+                      className="h-11 gap-2 border-slate-300 text-slate-600"
+                    >
+                      <X className="h-4 w-4" />
+                      Hủy bỏ
+                    </Button>
+                    <ConfirmationDialog
+                      title="Xác nhận cập nhật?"
+                      description="Hành động này sẽ làm thay đổi thông báo đã đăng. Bạn có muốn tiếp tục không?"
+                      onConfirm={handleUpdateAnnouncement}
+                      confirmText="Đồng ý"
+                    >
+                      <Button
+                        type="button"
+                        disabled={
+                          isPending || (!isDirty && !isExistingFilesChanged)
+                        }
+                        className="h-11 gap-2 rounded-lg bg-emerald-600 px-8 text-white shadow-md hover:bg-emerald-700"
+                      >
+                        {isPending ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Save className="h-4 w-4" />
+                        )}
+                        {isUploading
+                          ? "Đang tải tệp..."
+                          : isPending
+                            ? "Đang cập nhật..."
+                            : "Lưu thay đổi"}
+                      </Button>
+                    </ConfirmationDialog>
+                  </>
+                )}
               </div>
             </div>
           </ScrollArea>
-
-          {type == "create" ? (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
-              <ConfirmationDialog
-                title="Xác nhận làm mới biểu mẫu?"
-                description="Hành động này sẽ xóa toàn bộ thông tin bạn đã nhập. Bạn có muốn tiếp tục không?"
-                onConfirm={handleResetForm}
-                confirmText="Đồng ý"
-              >
-                <Button
-                  type="button"
-                  disabled={!isDirty || isPending}
-                  variant={"cancel"}
-                  className="flex max-w-lg flex-row items-center gap-2 py-3"
-                >
-                  <RotateCcw className="h-5 w-5" />
-                  Làm mới
-                </Button>
-              </ConfirmationDialog>
-
-              <Button
-                type="button"
-                disabled={!isDirty || isPending}
-                variant={"primary"}
-                onClick={handleAttemptSubmit}
-                className="flex max-w-lg flex-row items-center gap-2 py-3 shadow-md"
-              >
-                {isPending ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  <Send className="h-5 w-5" />
-                )}
-                {isUploading
-                  ? "Đang tải tệp..."
-                  : isPending
-                    ? "Đang tạo..."
-                    : "Tạo"}
-              </Button>
-            </div>
-          ) : (
-            <div className="border-neutral-light-primary-300 flex flex-row items-center justify-center gap-4 border-t pt-2 lg:justify-end">
-              <Button
-                type="button"
-                variant={"cancel"}
-                onClick={handleCancel}
-                className="flex max-w-lg flex-row items-center gap-2 py-3"
-              >
-                <X className="h-5 w-5" />
-                Hủy
-              </Button>
-              <ConfirmationDialog
-                title="Bạn có chắc chắn muốn cập nhật thông báo này?"
-                description="Hành động này sẽ làm thay đổi thông báo cũ. Bạn có muốn tiếp tục không?"
-                onConfirm={handleUpdateAnnouncement}
-                confirmText="Đồng ý"
-              >
-                <Button
-                  type="button"
-                  // Disable if pending or no changes (checking dirty + files change)
-                  disabled={isPending || (!isDirty && !isExistingFilesChanged)}
-                  variant={"primary"}
-                  className="bg-green-primary-400 hover:bg-green-primary-500 flex max-w-lg flex-row items-center gap-2 py-3"
-                >
-                  {isPending ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <Save className="h-5 w-5" />
-                  )}
-                  {isUploading
-                    ? "Đang tải tệp..."
-                    : isPending
-                      ? "Đang cập nhật..."
-                      : "Cập nhật"}
-                </Button>
-              </ConfirmationDialog>
-            </div>
-          )}
         </form>
       </Form>
 
@@ -513,25 +534,42 @@ const AnnouncementForm = ({
         open={isSubmitDialogOpen}
         onOpenChange={setIsSubmitDialogOpen}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-xl">
           <AlertDialogHeader>
-            <AlertDialogTitle>Vui lòng xác nhận trước khi gửi</AlertDialogTitle>
-
+            <AlertDialogTitle className="text-xl text-slate-800">
+              Xác nhận đăng thông báo
+            </AlertDialogTitle>
             <AlertDialogDescription
               asChild
-              className="space-y-2 text-sm leading-relaxed text-gray-600"
+              className="space-y-3 text-sm leading-relaxed text-slate-600"
             >
-              <span>Bạn có chắc chắn muốn đăng thông báo này không?</span>
+              <div>
+                <p>
+                  Thông báo này sẽ được đăng công khai trên diễn đàn và sinh
+                  viên có thể tiếp cận ngay lập tức. Bạn vẫn có thể chỉnh sửa
+                  nội dung sau khi đăng.
+                </p>
+                <div className="flex items-start gap-3 rounded-lg bg-blue-50 p-4 text-xs text-blue-700">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0" />
+                  <p>
+                    Lưu ý: Nội dung thông báo nên rõ ràng, súc tích và đính kèm
+                    đầy đủ các tệp tin liên quan để sinh viên dễ dàng theo dõi.
+                  </p>
+                </div>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>Hủy</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending} className="rounded-lg">
+              Hủy
+            </AlertDialogCancel>
             <AlertDialogAction
               disabled={isPending}
               onClick={handleCreateAnnouncement}
+              className="rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isUploading ? "Đang xử lý..." : "Có"}
+              {isUploading ? "Đang xử lý..." : "Xác nhận đăng"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
