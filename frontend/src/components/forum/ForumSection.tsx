@@ -32,6 +32,8 @@ import { Loading } from "../common/Loading";
 import SearchBar from "../common/SearchBar";
 import AnnouncementCard from "./AnnouncementCard";
 import PostCard from "./PostCard";
+import { useUser } from "@/context/UserContext";
+import { cn } from "@/lib/utils";
 
 type ForumTab = "feedbacks" | "announcements";
 
@@ -99,7 +101,7 @@ export function ForumSection() {
       router.replace(`?${newSearchParams.toString()}`, { scroll: false });
     }
   }, [router, searchParams]);
-
+  const { user } = useUser();
   return (
     <div className="flex min-h-screen w-full flex-col gap-0 bg-slate-50/50">
       {/* 1. Header Section */}
@@ -425,11 +427,25 @@ export function ForumSection() {
 
               {/* CTA */}
               <Button
-                className="w-full rounded-xl bg-blue-600 py-6 text-base font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/30"
-                onClick={() => router.push("/student/create-new-feedback")}
+                className={cn(
+                  "w-full rounded-xl bg-blue-600 py-6 text-base font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/30",
+                  user?.role === "STUDENT" &&
+                    currentTabValue === "feedbacks" &&
+                    "",
+                  user?.role === "DEPARTMENT_STAFF" &&
+                    currentTabValue === "announcements" &&
+                    "",
+                )}
+                onClick={() => {
+                  if (user?.role === "STUDENT") {
+                    router.push("/student/create-new-feedback");
+                  } else {
+                    router.push("/staff/announcement-management/create");
+                  }
+                }}
               >
                 <Plus className="mr-2 h-5 w-5" />
-                Gửi góp ý
+                {user?.role === "STUDENT" ? "Gửi góp ý" : "Tạo thông báo"}
               </Button>
             </div>
           </div>
