@@ -28,10 +28,19 @@ import {
 import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
 import { useGetAllFeedbacksOfAllDepartments } from "@/hooks/queries/useFeedbackQueries";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
+import { ChevronLeft, ChevronRight, SearchX, ListFilter } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { adminFeedbackColumns } from "./column";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 export function ListAllFeedbacks() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -62,7 +71,11 @@ export function ListAllFeedbacks() {
       ? Math.ceil(adminData.total / filters?.pageSize)
       : 0;
   }, [adminData?.total, filters.pageSize]);
-
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPage));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
   const table = useReactTable({
     data: tableData,
     columns: adminFeedbackColumns,
@@ -97,25 +110,105 @@ export function ListAllFeedbacks() {
   });
 
   return (
-    <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      <div className="flex w-full flex-wrap items-start justify-center gap-2 md:items-center md:justify-start xl:flex-row xl:flex-nowrap">
+    <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+      <div className="flex w-full flex-shrink-0 items-center gap-3">
         <Suspense fallback={null}>
-          <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
+          <SearchBar
+            placeholder="Tìm kiếm theo tiêu đề..."
+            className="flex-1 bg-white shadow-sm"
+          />
         </Suspense>
-        <div className="flex w-full flex-wrap items-start justify-center gap-2 md:flex-row md:flex-nowrap md:items-center md:justify-center xl:w-fit">
+
+        {/* Desktop Filters */}
+        <div className="hidden items-center gap-3 md:flex">
           <CommonFilter.DepartmentSelection />
           <CommonFilter.StatusSelection />
           <CommonFilter.CategorySelection />
         </div>
+
+        {/* Mobile Filter Drawer */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <ListFilter className="h-4 w-4" />
+                Bộ lọc
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-xl px-6 pb-8">
+              <SheetHeader className="px-0 text-left">
+                <SheetTitle className="text-lg font-bold text-slate-800">
+                  Bộ lọc tìm kiếm
+                </SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col gap-6 py-4">
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Phòng ban
+                  </span>
+                  <div className="w-full [&>button]:w-full">
+                    <CommonFilter.DepartmentSelection />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Trạng thái
+                  </span>
+                  <div className="w-full [&>button]:w-full">
+                    <CommonFilter.StatusSelection />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Danh mục
+                  </span>
+                  <div className="w-full [&>button]:w-full">
+                    <CommonFilter.CategorySelection />
+                  </div>
+                </div>
+              </div>
+              <SheetFooter className="flex-row items-center gap-3 px-0 pt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1 rounded-xl bg-red-400 text-white"
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.delete("departmentId");
+                    params.delete("status");
+                    params.delete("categoryId");
+                    params.delete("q");
+                    params.delete("page");
+                    router.replace(`${pathname}?${params.toString()}`, {
+                      scroll: false,
+                    });
+                  }}
+                >
+                  Xóa bộ lọc
+                </Button>
+                <SheetClose asChild>
+                  <Button className="h-10 flex-[2] bg-blue-600 hover:bg-blue-700">
+                    Xem kết quả
+                  </Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table className={cn(tableData.length === 0 && "h-[70vh]")}>
-          <TableHeader className="bg-neutral-light-primary-200/60">
+      <div className="flex-1 overflow-auto rounded-xl border border-slate-100">
+        <Table
+          className={cn("min-w-[1000px]", tableData.length === 0 && "h-full")}
+        >
+          <TableHeader className="sticky top-0 z-10 bg-slate-50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="h-12 px-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -132,12 +225,12 @@ export function ListAllFeedbacks() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="hover:bg-blue-primary-100/40 text-xs lg:text-[13px]"
+                  className="group border-b border-slate-50 transition-colors hover:bg-slate-50/80"
                   key={row.id}
                   data-state={row.getIsSelected()}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="px-4 py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -153,9 +246,9 @@ export function ListAllFeedbacks() {
                   className="h-24 font-medium text-red-500"
                 >
                   {!isAdminFetching && (
-                    <div className="flex flex-row items-center justify-center gap-2 text-center">
-                      <SearchX />
-                      Không có dữ liệu để hiển thị
+                    <div className="flex flex-col items-center justify-center gap-2 text-center text-slate-500">
+                      <SearchX className="h-8 w-8 text-slate-300" />
+                      <span>Không có dữ liệu để hiển thị</span>
                     </div>
                   )}
                   {isAdminFetching && <Loading variant="spinner" />}
@@ -165,26 +258,29 @@ export function ListAllFeedbacks() {
           </TableBody>
         </Table>
       </div>
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-end space-x-2">
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight />
-            </Button>
-          </div>
+      {pageCount > 1 && (
+        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page - 1)}
+            disabled={filters.page <= 1}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-slate-600">
+            Trang {filters.page} / {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page + 1)}
+            disabled={filters.page >= pageCount}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>

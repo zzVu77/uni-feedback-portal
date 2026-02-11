@@ -13,6 +13,7 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 
+import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +33,6 @@ import { cn } from "@/lib/utils";
 import { CreateCategoryPayload } from "@/types/category";
 import { ChevronLeft, ChevronRight, PlusCircle, SearchX } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Loading } from "../../common/Loading";
 import { CategoryDialog } from "../CategoryDialog";
 import { categoryColumns } from "./columns";
 
@@ -76,6 +76,12 @@ export function CategoryManagementTable() {
     await createCategory(values);
   };
 
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPage));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   // --- Table Configuration ---
   const table = useReactTable({
     data: tableData,
@@ -114,27 +120,37 @@ export function CategoryManagementTable() {
   });
 
   return (
-    <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
+    <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+      <div className="flex w-full flex-shrink-0 items-center gap-3">
         <React.Suspense fallback={null}>
-          <SearchBar placeholder="Tìm kiếm theo tên danh mục..." />
+          <SearchBar
+            placeholder="Tìm kiếm danh mục..."
+            className="flex-1 bg-white shadow-sm"
+          />
         </React.Suspense>
+
         <CategoryDialog mode="create" onSubmit={handleCreateCategory}>
-          <Button variant="primary" className="">
+          <Button className="bg-blue-600 text-white hover:bg-blue-700">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Thêm Danh Mục
+            <span className="hidden sm:inline">Thêm Danh Mục</span>
+            <span className="sm:hidden">Thêm</span>
           </Button>
         </CategoryDialog>
       </div>
 
-      <div className="overflow-hidden rounded-md border">
-        <Table className={cn(tableData.length === 0 && "h-[70vh]")}>
-          <TableHeader className="bg-neutral-light-primary-200/60">
+      <div className="flex-1 overflow-auto rounded-xl border border-slate-100">
+        <Table
+          className={cn("min-w-[800px]", tableData.length === 0 && "h-full")}
+        >
+          <TableHeader className="sticky top-0 z-10 bg-slate-50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="h-12 px-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -151,12 +167,12 @@ export function CategoryManagementTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="hover:bg-blue-primary-100/40 text-xs lg:text-[13px]"
+                  className="group border-b border-slate-50 transition-colors hover:bg-slate-50/80"
                   key={row.id}
                   data-state={row.getIsSelected()}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="px-4 py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -169,12 +185,12 @@ export function CategoryManagementTable() {
               <TableRow>
                 <TableCell
                   colSpan={categoryColumns.length}
-                  className="h-24 font-medium text-red-500"
+                  className="h-24 font-medium"
                 >
                   {!isFetching && (
-                    <div className="flex flex-row items-center justify-center gap-2 text-center">
-                      <SearchX />
-                      Không có dữ liệu để hiển thị
+                    <div className="flex flex-col items-center justify-center gap-2 text-center text-slate-500">
+                      <SearchX className="h-8 w-8 text-slate-300" />
+                      <span>Không có dữ liệu để hiển thị</span>
                     </div>
                   )}
                   {isFetching && <Loading variant="spinner" />}
@@ -185,26 +201,29 @@ export function CategoryManagementTable() {
         </Table>
       </div>
 
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-end space-x-2">
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight />
-            </Button>
-          </div>
+      {pageCount > 1 && (
+        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page - 1)}
+            disabled={filters.page <= 1}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-slate-600">
+            Trang {filters.page} / {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page + 1)}
+            disabled={filters.page >= pageCount}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>

@@ -1,46 +1,58 @@
-import { BadgeCheck, Building2 } from "lucide-react";
+import { BadgeCheck, Building2, Calendar } from "lucide-react";
 import React from "react";
+
 type Props = {
   departmentName: string;
   responseDate: string;
   responseContent: string;
 };
+
 const OfficialResponse = ({
   departmentName,
   responseDate,
   responseContent,
 }: Props) => {
   return (
-    <div className="border-green-primary-200/20 bg-green-primary-100/50 flex w-full flex-col gap-3 rounded-xl border px-4 py-2 shadow-sm">
-      <div className="flex w-full flex-row items-center justify-start gap-1">
-        <BadgeCheck className="h-5 w-5 text-green-500" />
-        <span className="text-lg font-medium tracking-wide text-green-500/80">
-          Phản hồi từ nhà trường
-        </span>
-      </div>
-      <div className="flex flex-row items-center justify-start gap-2">
-        <div className="bg-green-primary-200/50 flex h-10 w-10 flex-row items-center justify-center rounded-full p-2">
-          <Building2 className="text-green-500" />
+    <div className="my-2 w-full rounded-2xl border border-emerald-100 bg-emerald-50/40 p-6 md:p-8">
+      <div className="flex flex-col gap-6">
+        {/* Header Section */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <Building2 className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-base font-bold text-slate-900">
+                {departmentName}
+              </span>
+              <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                <Calendar className="h-3.5 w-3.5" />
+                <span>
+                  {new Date(responseDate).toLocaleString("vi-VN", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex w-fit items-center gap-1.5 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-bold tracking-wider text-emerald-700 uppercase shadow-sm">
+            <BadgeCheck className="h-4 w-4" />
+            Phản hồi chính thức
+          </div>
         </div>
-        <div className="flex flex-col gap-0.5">
-          <span className="text-green-primary-300/80 text-[16px] font-semibold">
-            {departmentName ?? "Khoa Đào tạo quốc tế"}
-          </span>
-          <time className="text-sm font-normal text-gray-400">
-            {new Date(responseDate).toLocaleString("vi-VN", {
-              hour: "2-digit",
-              minute: "2-digit",
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })}
-          </time>
+
+        {/* Content Section */}
+        <div className="prose prose-slate max-w-none">
+          <p className="text-lg leading-relaxed text-slate-800 italic">
+            {responseContent}
+          </p>
         </div>
       </div>
-      <p className="px-4 text-[14px]">
-        {responseContent ??
-          `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt, fuga facilis? Expedita, perferendis corrupti harum quisquam quam dolores iusto voluptatum. Architecto eligendi optio molestiae odio ducimus accusantium id ipsa quisquam?`}
-      </p>
     </div>
   );
 };
