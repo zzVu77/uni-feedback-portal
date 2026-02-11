@@ -49,11 +49,26 @@ export const StatusSelection = () => {
     </Suspense>
   );
 };
+
+export const ReportStatusSelection = () => {
+  const reportStatusOptions = [
+    { label: "Trạng thái", value: "all" },
+    { label: "Đang chờ tiếp nhận", value: "PENDING" },
+    { label: "Đã xử lý", value: "RESOLVED" },
+  ];
+  return (
+    <Suspense fallback={null}>
+      <Filter type="status" items={reportStatusOptions} />
+    </Suspense>
+  );
+};
+
 const CommonFilter = {
   CategorySelection,
   DepartmentSelection,
   SortBySelection,
   StatusSelection,
+  ReportStatusSelection,
 };
 
 export default CommonFilter;
