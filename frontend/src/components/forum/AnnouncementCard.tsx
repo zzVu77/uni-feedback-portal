@@ -1,7 +1,6 @@
 import { AnnouncementListItem } from "@/types";
-import { Building2 } from "lucide-react";
+import { ArrowRight, Building2 } from "lucide-react";
 import Link from "next/link";
-import { Separator } from "../ui/separator";
 import { useMemo } from "react";
 import { stripHtml } from "@/utils/stripHtml";
 
@@ -13,44 +12,49 @@ const AnnouncementCard = ({
   const previewContent = useMemo(() => {
     return stripHtml(announcement.content);
   }, [announcement.content]);
+
   return (
-    <div className="flex w-full flex-col gap-4 rounded-xl bg-white px-3 py-4 shadow-sm transition-shadow duration-200 hover:scale-101 md:px-4">
-      <div className="flex flex-row items-center justify-between">
-        {/* Post Title */}
+    <div className="group relative flex w-full flex-col rounded-xl border border-slate-100 bg-yellow-50/30 p-4 shadow-sm transition-all duration-300 hover:scale-101 hover:border-slate-300 hover:shadow-md md:p-6">
+      {/* Header: Department & Date */}
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100 text-yellow-600">
+            <Building2 className="h-4 w-4" />
+          </div>
+          <span className="text-sm font-semibold text-slate-900">
+            {announcement.department.name}
+          </span>
+        </div>
+        <span className="text-xs text-slate-400">
+          {new Date(announcement.createdAt).toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
+      </div>
+
+      {/* Content Section */}
+      <div className="flex flex-col gap-2">
         <Link href={`/forum/announcements/${announcement.id}`}>
-          <h2 className="text-md hover:text-blue-primary-300 max-w-[200px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
+          <h2 className="text-lg font-bold text-slate-900 transition-colors hover:text-blue-600 md:text-xl">
             {announcement.title}
           </h2>
         </Link>
+        <p className="line-clamp-2 text-sm leading-relaxed text-slate-600 md:text-base">
+          {previewContent}
+        </p>
       </div>
-      {/* Post Short Content */}
-      <h3 className="lg:text-md text-neutral-dark-primary-600 line-clamp-2 text-sm font-normal">
-        {previewContent}
-      </h3>
-      <div className="flex w-full flex-row items-center justify-between">
-        <div className="flex h-5 items-center space-x-1 text-sm">
-          <Link
-            href={`/department/${announcement.department.id}`}
-            className="hover:text-red-400 hover:underline"
-          >
-            <div className="flex flex-row items-center gap-1">
-              <div className="bg-yellow-primary-100 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
-                <Building2 className="text-yellow-primary-200" />
-              </div>
-              <span className="text-[11px] font-medium text-black/70 hover:text-red-400 md:text-[14px]">
-                {announcement.department.name}
-              </span>
-            </div>
-          </Link>
-          <Separator orientation="vertical" />
-          <span className="text-neutral-dark-primary-400 text-[11px] md:text-[14px]">
-            {new Date(announcement.createdAt).toLocaleDateString("vi-VN", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })}
-          </span>
-        </div>
+
+      {/* Footer: Read More */}
+      <div className="mt-4 flex items-center justify-end border-t border-slate-100/50 pt-3">
+        <Link
+          href={`/forum/announcements/${announcement.id}`}
+          className="group/more flex items-center gap-1 text-sm font-medium text-blue-600 hover:underline"
+        >
+          <span>Xem chi tiết</span>
+          <ArrowRight className="h-4 w-4 transition-transform group-hover/more:translate-x-1" />
+        </Link>
       </div>
     </div>
   );
