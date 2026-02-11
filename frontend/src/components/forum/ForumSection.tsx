@@ -102,6 +102,10 @@ export function ForumSection() {
     }
   }, [router, searchParams]);
   const { user } = useUser();
+  const isShowButtonCreateFeedback =
+    user?.role === "STUDENT" && currentTabValue === "feedbacks";
+  const isShowButtonCreateAnnouncement =
+    user?.role === "DEPARTMENT_STAFF" && currentTabValue === "announcements";
   return (
     <div className="flex min-h-screen w-full flex-col gap-0 bg-slate-50/50">
       {/* 1. Header Section */}
@@ -429,12 +433,9 @@ export function ForumSection() {
               <Button
                 className={cn(
                   "w-full rounded-xl bg-blue-600 py-6 text-base font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/30",
-                  user?.role === "STUDENT" &&
-                    currentTabValue === "feedbacks" &&
-                    "",
-                  user?.role === "DEPARTMENT_STAFF" &&
-                    currentTabValue === "announcements" &&
-                    "",
+                  isShowButtonCreateAnnouncement || isShowButtonCreateFeedback
+                    ? ""
+                    : "hidden",
                 )}
                 onClick={() => {
                   if (user?.role === "STUDENT") {
