@@ -157,7 +157,7 @@ export function ListDepartmentFeedback() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-10 flex-1 bg-red-400 text-white"
+                  className="flex-1 rounded-xl bg-red-400 text-white"
                   onClick={() => {
                     const params = new URLSearchParams(searchParams.toString());
                     params.delete("status");

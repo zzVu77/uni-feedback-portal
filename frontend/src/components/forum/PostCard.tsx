@@ -21,7 +21,7 @@ const PostCard = ({ data }: Props) => {
       <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:justify-between md:gap-0">
         {/* Post Title */}
         <Link href={`/forum/posts/${id}`}>
-          <h2 className="text-md hover:text-blue-primary-300 max-w-[300px] truncate font-semibold md:max-w-lg md:text-[16px] lg:text-xl">
+          <h2 className="text-md hover:text-blue-primary-300 max-w-[200px] truncate font-semibold md:max-w-[250px] md:text-[16px] lg:text-xl xl:max-w-lg">
             {feedback.subject}
           </h2>
         </Link>

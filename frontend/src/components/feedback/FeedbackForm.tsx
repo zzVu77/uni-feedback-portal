@@ -734,7 +734,7 @@ const FeedbackForm = ({
                                 </FormLabel>
                               </div>
                               <p className="text-xs text-slate-500">
-                                Đăng lên diễn đàn sinh viên
+                                Đăng lên diễn đàn
                               </p>
                             </div>
                             <FormControl>

@@ -57,7 +57,7 @@ const Filter = ({ type, items }: Props) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-10 w-auto min-w-[150px] justify-between rounded-lg border bg-white px-3 py-2 font-semibold shadow-sm hover:bg-slate-50 md:min-w-[200px] lg:w-max"
+          className="h-10 w-auto min-w-[100px] justify-between rounded-lg border bg-white px-3 py-2 font-semibold shadow-sm hover:bg-slate-50 md:min-w-[150px] lg:w-max"
         >
           <div className="flex items-center gap-2 overflow-hidden">
             <Icon className="h-4 w-4 shrink-0 text-gray-500" />
