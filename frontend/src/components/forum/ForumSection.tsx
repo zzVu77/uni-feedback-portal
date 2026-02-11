@@ -129,14 +129,14 @@ export function ForumSection() {
           <TabsList className="flex h-auto w-fit gap-2 bg-transparent p-0">
             <TabsTrigger
               value="feedbacks"
-              className="rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all hover:bg-slate-50 data-[state=active]:border-slate-900 data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md"
+              className="cursor-pointer rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all hover:bg-slate-50 data-[state=active]:border-slate-900 data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               <MessageCircle className="mr-2 h-4 w-4" />
               Thảo luận
             </TabsTrigger>
             <TabsTrigger
               value="announcements"
-              className="rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all hover:bg-slate-50 data-[state=active]:border-slate-900 data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md"
+              className="cursor-pointer rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all hover:bg-slate-50 data-[state=active]:border-slate-900 data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               <Megaphone className="mr-2 h-4 w-4" />
               Thông báo
