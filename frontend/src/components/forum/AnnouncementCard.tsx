@@ -14,7 +14,7 @@ const AnnouncementCard = ({
   }, [announcement.content]);
 
   return (
-    <div className="group relative flex w-full flex-col rounded-xl border border-slate-100 bg-yellow-50/30 p-4 shadow-sm transition-all duration-300 hover:scale-101 hover:border-slate-300 hover:shadow-md md:p-6">
+    <div className="group relative flex w-full flex-col rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all duration-300 hover:scale-101 hover:border-slate-300 hover:shadow-md md:p-6">
       {/* Header: Department & Date */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">

@@ -1,26 +1,30 @@
 import { FileAttachment } from "@/types";
-import { Download, Paperclip } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 const Attachment = ({ fileName, fileUrl }: FileAttachment) => {
   return (
-    <div className="bg-neutral-light-primary-100 flex w-full flex-row justify-between rounded-xl border border-gray-200 p-2 shadow-xs">
-      <div className="flex flex-row items-center gap-2">
-        {/* File Icon */}
-        <div className="bg-blue-primary-100 rounded-lg p-2">
-          <Paperclip className="text-blue-primary-300 h-6 w-6" />
+    <Link
+      href={fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm"
+    >
+      <div className="flex items-center gap-3 overflow-hidden">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
+          <FileText className="h-5 w-5" />
         </div>
-        {/* File Name */}
-        <span className="text-[14px] font-medium">{fileName}</span>
+        <div className="flex flex-col overflow-hidden">
+          <span className="truncate text-sm font-medium text-slate-700 group-hover:text-slate-900">
+            {fileName}
+          </span>
+          <span className="text-xs text-slate-400">Tệp đính kèm</span>
+        </div>
       </div>
-      <Link href={fileUrl} target="_blank" rel="noopener noreferrer">
-        <Button className="bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600">
-          <Download />
-          Download
-        </Button>
-      </Link>
-    </div>
+      <div className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-all group-hover:bg-white group-hover:text-blue-600">
+        <Download className="h-4 w-4" />
+      </div>
+    </Link>
   );
 };
 
