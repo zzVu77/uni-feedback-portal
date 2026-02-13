@@ -144,7 +144,7 @@ export function ForumSection() {
           </TabsList>
 
           {/* Mobile Search & Filter Row */}
-          <div className="flex w-full items-center gap-2 md:hidden">
+          <div className="flex w-full items-center gap-2 lg:hidden">
             <Suspense fallback={null}>
               <SearchBar
                 placeholder="Tìm kiếm..."
