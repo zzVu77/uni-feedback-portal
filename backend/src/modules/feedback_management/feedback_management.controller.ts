@@ -22,7 +22,7 @@ import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
-  QueryFeedbackByStaffDto,
+  // QueryFeedbackByStaffDto,
 } from './dto';
 import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -55,10 +55,11 @@ export class FeedbackManagementController {
     type: ListFeedbacksResponseDto,
   })
   getStaffFeedbacks(
-    @Query() query: QueryFeedbackByStaffDto,
+    @Query() query: QueryFeedbacksDto,
     @ActiveUser() actor: ActiveUserData,
   ) {
-    return this.feedbackManagementService.getAllStaffFeedbacks(query, actor);
+    query.departmentId = actor.departmentId;
+    return this.feedbackManagementService.getAllFeedbacks(query);
   }
 
   @Get('/staff/feedbacks/:feedbackId')
