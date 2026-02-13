@@ -40,47 +40,51 @@ export class FeedbackManagementService {
   ): Promise<ListFeedbacksResponseDto> {
     const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
-    const where: Prisma.FeedbacksWhereInput = {
-      AND: [
+    const conditions: Prisma.FeedbacksWhereInput[] = [];
+
+    conditions.push({
+      OR: [
+        { departmentId: actor.departmentId },
         {
-          OR: [
-            { departmentId: actor.departmentId },
-            {
-              forwardingLogs: {
-                some: { fromDepartmentId: actor.departmentId },
-              },
-            },
-          ],
+          forwardingLogs: {
+            some: { fromDepartmentId: actor.departmentId },
+          },
         },
       ],
-    };
+    });
 
     if (status) {
-      where.currentStatus = Object.values(FeedbackStatus).includes(
-        status.toUpperCase() as FeedbackStatus,
-      )
-        ? (status.toUpperCase() as FeedbackStatus)
-        : undefined;
+      conditions.push({
+        currentStatus: status.toUpperCase() as FeedbackStatus,
+      });
     }
-    if (categoryId) where.categoryId = categoryId;
+
+    if (categoryId) {
+      conditions.push({ categoryId });
+    }
+
     if (from || to) {
-      where.createdAt = {};
-      if (from) where.createdAt.gte = new Date(from);
+      const dateFilter: Prisma.DateTimeFilter = {};
+      if (from) dateFilter.gte = new Date(from);
       if (to) {
-        where.createdAt.lt = new Date(
+        dateFilter.lt = new Date(
           new Date(to).setDate(new Date(to).getDate() + 1),
         );
       }
+      conditions.push({ createdAt: dateFilter });
     }
 
     if (q) {
-      (where.AND as Prisma.FeedbacksWhereInput[]).push({
+      conditions.push({
         OR: [
           { subject: { contains: q, mode: 'insensitive' } },
           { description: { contains: q, mode: 'insensitive' } },
         ],
       });
     }
+
+    const where = { AND: conditions };
+    console.log('Where Condition:', where);
 
     const [feedbacks, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
