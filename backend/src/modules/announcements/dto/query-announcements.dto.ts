@@ -1,5 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsISO8601, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class QueryAnnouncementsDto {
@@ -22,7 +29,7 @@ export class QueryAnnouncementsDto {
     example: '550e8400-e29b-41d4-a716-446655440001',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   departmentId?: string;
 
   @ApiPropertyOptional({
@@ -30,7 +37,7 @@ export class QueryAnnouncementsDto {
     example: '550e8400-e29b-41d4-a716-44665544000c',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   userId?: string;
 
   @ApiPropertyOptional({ description: 'Search query', example: 'maintenance' })
