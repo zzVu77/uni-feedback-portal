@@ -1,19 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Comment } from "@/types";
-import {
-  BadgeCheck,
-  Flag,
-  MessageSquareReply,
-  Send,
-  Trash2,
-  User,
-} from "lucide-react";
+import { School, User } from "lucide-react";
 import React, { useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { ReportDialog } from "./ReportDialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 // Import hook
 import { useReportComment } from "@/hooks/queries/useCommentQueries";
 
@@ -32,12 +24,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
   onDelete,
   currentUser,
   level = 1,
-  isLast = false,
 }) => {
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyContent, setReplyContent] = useState<string>("");
 
-  // Integrate Report Mutation
   const { mutateAsync: reportComment } = useReportComment();
 
   const handleSubmitReply = () => {
@@ -51,39 +41,50 @@ const CommentItem: React.FC<CommentItemProps> = ({
     onDelete(comment.id);
   };
 
-  // Handle report submission from dialog
   const handleReportSubmit = async (reason: string) => {
     await reportComment({ id: comment.id, reason });
   };
 
   const isAuthor = currentUser.id === comment.user.id;
+  const isStaff = comment.user.role !== "STUDENT";
 
   return (
-    <div
-      className={cn(
-        "flex w-full flex-col gap-1 rounded-lg bg-white px-2 py-2",
-        !isLast && "border-b border-gray-200",
-      )}
-    >
-      <div className="flex flex-row items-center gap-2">
-        {comment.user.role !== "STUDENT" && (
-          <Tooltip>
-            <TooltipTrigger>
-              <BadgeCheck className="h-5 w-5 text-green-500" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="text-[10px]">Cán bộ nhà trường</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
-        <div className="bg-neutral-light-primary-200 flex h-8 w-8 flex-row items-center justify-center rounded-full p-2">
-          <User className="text-neutral-dark-primary-700" />
+    <div className="group/comment flex w-full gap-4">
+      {/* Avatar Section */}
+      <div className="flex shrink-0 flex-col items-center">
+        <div
+          className={cn(
+            "flex h-10 w-10 items-center justify-center rounded-full text-slate-500",
+            isStaff
+              ? "bg-emerald-100 text-emerald-600 ring-2 ring-emerald-50"
+              : "bg-slate-100",
+          )}
+        >
+          {isStaff ? (
+            <School className="h-5 w-5" />
+          ) : (
+            <User className="h-5 w-5" />
+          )}
         </div>
-        <div className="flex flex-row items-center gap-1">
-          <span className="text-[14px] font-medium text-black">
+        {/* Thread Line */}
+        {comment.replies && comment.replies.length > 0 && (
+          <div className="mt-2 w-px flex-1 bg-slate-100" />
+        )}
+      </div>
+
+      {/* Content Section */}
+      <div className="flex flex-1 flex-col gap-1.5">
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              "text-sm font-bold",
+              isStaff ? "text-emerald-700" : "text-slate-900",
+            )}
+          >
             {comment.user.fullName}
           </span>
-          <time className="text-[13px] font-normal text-gray-400 before:mx-1 before:content-['•']">
+          <span className="text-xs text-slate-400">•</span>
+          <time className="text-xs text-slate-400">
             {new Date(comment.createdAt).toLocaleString("vi-VN", {
               day: "2-digit",
               month: "2-digit",
@@ -93,82 +94,84 @@ const CommentItem: React.FC<CommentItemProps> = ({
             })}
           </time>
         </div>
-      </div>
-      <div className="pl-4">
-        <p className="pl-4 text-black/80">{comment.content}</p>
-        <div className="flex flex-row items-center gap-2 pl-4">
+
+        <div className="text-sm leading-relaxed text-slate-700">
+          {comment.content}
+        </div>
+
+        {/* Actions */}
+        <div className="mt-1 flex items-center gap-4">
           {level < 2 && (
             <Button
-              className="hover:text-blue-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
               variant="outline"
               onClick={() => setIsReplying(!isReplying)}
+              className="border-none bg-transparent text-xs font-semibold text-slate-500 transition-colors hover:bg-transparent hover:text-blue-600"
             >
-              <MessageSquareReply className="h-4 w-4" /> Trả lời
+              Trả lời
             </Button>
           )}
 
-          {/* Connected Report Dialog */}
           {!isAuthor && (
             <ReportDialog onSubmit={handleReportSubmit}>
               <Button
-                className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
                 variant="outline"
+                className="border-none bg-transparent text-xs font-semibold text-slate-500 transition-colors hover:bg-transparent hover:text-amber-600"
               >
-                <Flag className="h-4 w-4" /> Báo cáo
+                Báo cáo
               </Button>
             </ReportDialog>
           )}
 
           {isAuthor && (
             <ConfirmationDialog
-              title="Xác nhận xóa bình luận"
-              description="Bạn có chắc chắn muốn xóa bình luận này không? Hành động này không thể hoàn tác."
+              title="Xác nhận xóa"
+              description="Bạn có chắc chắn muốn xóa bình luận này không?"
               onConfirm={handleDelete}
             >
               <Button
-                className="hover:text-red-primary-400 text-neutral-dark-primary-700/70 flex w-fit flex-row items-center gap-1 rounded-lg border-none bg-transparent px-0 text-sm shadow-none hover:bg-transparent"
-                variant="outline"
+                variant={"outline"}
+                className="border-none bg-transparent text-xs font-semibold text-slate-500 transition-colors hover:bg-transparent hover:text-red-600"
               >
-                <Trash2 className="h-4 w-4" /> Xóa
+                Xóa
               </Button>
             </ConfirmationDialog>
           )}
         </div>
+
         {/* Form reply */}
         {isReplying && (
-          <div className="mt-3 flex flex-col gap-3 pl-4">
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4">
             <Textarea
-              placeholder="Viết câu trả lời của bạn..."
+              placeholder="Viết câu trả lời..."
               value={replyContent}
-              className="bg-white"
+              className="min-h-[80px] resize-none border-slate-200 bg-white"
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setReplyContent(e.target.value)
               }
             />
-            <div className="flex flex-row justify-end gap-2">
+            <div className="flex justify-end gap-2">
               <Button
-                type="button"
-                variant="outline"
-                className="w-fit py-2 shadow-sm"
+                size="sm"
+                variant="ghost"
+                className="rounded-full text-slate-500"
                 onClick={() => setIsReplying(false)}
               >
                 Hủy
               </Button>
               <Button
-                type="button"
-                variant="primary"
-                className="flex w-fit flex-row items-center gap-2 py-2 shadow-md"
+                size="sm"
+                className="rounded-full bg-blue-600 px-4 text-white hover:bg-blue-700"
                 onClick={handleSubmitReply}
               >
-                <Send className="h-4 w-4" />
                 Gửi trả lời
               </Button>
             </div>
           </div>
         )}
-        {/* Render nested comments */}
+
+        {/* Nested Replies with Guide Line */}
         {comment.replies && comment.replies.length > 0 && (
-          <div className="mt-4 flex flex-col gap-2 px-2 pl-8">
+          <div className="mt-6 flex flex-col gap-4 border-l-2 border-slate-100 pl-6">
             {comment.replies.map((reply) => (
               <CommentItem
                 key={reply.id}
@@ -177,9 +180,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 onDelete={onDelete}
                 currentUser={currentUser}
                 level={level + 1}
-                isLast={
-                  reply.id === comment.replies[comment.replies.length - 1].id
-                }
               />
             ))}
           </div>

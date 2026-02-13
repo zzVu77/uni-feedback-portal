@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 "use client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNotificationFilters } from "@/hooks/filters/useNotificationFilter"; // Import new filter hook
-import { useGetInfiniteNotifications } from "@/hooks/queries/useNotificationQueries"; // Import new query hook
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNotificationFilters } from "@/hooks/filters/useNotificationFilter";
+import { useGetInfiniteNotifications } from "@/hooks/queries/useNotificationQueries";
 import { useUrlTabs } from "@/hooks/useUrlTabs";
-import { BellDot, MessageCircle, MessageSquareText } from "lucide-react";
+import { BellDot } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
-import { useInView } from "react-intersection-observer"; // Import Intersection Observer
+import { useInView } from "react-intersection-observer";
 import Filter from "../common/filter/Filter";
 import { Loading } from "../common/Loading";
 import { ScrollArea } from "../ui/scroll-area";
@@ -28,31 +28,22 @@ const NotificationSection = () => {
 
   const searchParams = useSearchParams();
   const router = useRouter();
-
   const filters = useNotificationFilters();
 
-  const {
-    data,
-    isFetching, // Initial load or filter change
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage, // Loading more data
-  } = useGetInfiniteNotifications(filters);
+  const { data, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGetInfiniteNotifications(filters);
 
-  // 3. Flatten pages into a single array
+  // const { mutate: markAsRead } = useMarkNotificationAsRead();
+
   const notifications = data?.pages.flatMap((page) => page.results) || [];
-
-  // 4. Ref for intersection observer
   const { ref, inView } = useInView();
 
-  // 5. Trigger fetch next page when scrolling to bottom
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
-  // Handle URL Params for Tabs (Keep existing logic)
   useEffect(() => {
     const urlTab = searchParams.get(TAB_PARAM_NAME);
     if (!urlTab || !VALID_TABS.includes(urlTab as NotificationTab)) {
@@ -62,119 +53,106 @@ const NotificationSection = () => {
     }
   }, [router, searchParams]);
 
+  // const handleMarkAllAsRead = () => {
+  //   const unreadIds = notifications.filter((n) => !n.isRead).map((n) => n.id);
+  //   if (unreadIds.length > 0) {
+  //     markAsRead({ ids: unreadIds });
+  //   }
+  // };
+
   const mockNotificationStatus = [
     { label: "Tất cả", value: "all" },
     { label: "Đã đọc", value: "true" },
     { label: "Chưa đọc", value: "false" },
   ];
 
-  // Helper to render the list and loading state
   const renderNotificationList = () => (
-    <div className="flex h-[65vh] flex-col gap-3 px-2 lg:h-[76vh]">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
       {notifications.map((notification) => (
         <NotificationItem key={notification.id} {...notification} />
       ))}
 
-      {/* Loading trigger element */}
-      <div ref={ref} className="flex w-full justify-center py-1">
+      <div ref={ref} className="flex w-full justify-center py-4">
         {isFetchingNextPage && <Loading variant="spinner" />}
       </div>
 
       {!hasNextPage && notifications.length > 0 && (
-        <p className="pb-4 text-center text-sm text-gray-500">
-          Đã hiển thị tất cả thông báo.
+        <p className="py-6 text-center text-sm text-slate-400">
+          Bạn đã xem hết thông báo.
         </p>
       )}
 
       {!isFetching && notifications.length === 0 && (
-        <p className="mt-10 text-center text-gray-500">
-          Chưa có thông báo nào.
-        </p>
+        <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+          <BellDot className="mb-4 h-12 w-12 opacity-20" />
+          <p>Chưa có thông báo nào.</p>
+        </div>
       )}
     </div>
   );
 
   return (
-    <Tabs
-      className="flex w-full flex-col gap-4 pb-2"
-      value={currentTabValue}
-      onValueChange={(value: string) =>
-        handleTabChange(value as NotificationTab)
-      }
-    >
-      <TabsList className="h-auto w-full border-2 bg-white px-2 py-1 shadow-lg">
-        <TabsTrigger
-          value="all"
-          className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold text-black/70 transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
+    <div className="flex w-full flex-col gap-6">
+      <div className="flex items-center justify-center gap-4">
+        <Tabs
+          className="w-fit"
+          value={currentTabValue}
+          onValueChange={(value: string) =>
+            handleTabChange(value as NotificationTab)
+          }
         >
-          <BellDot />
-          Tất cả
-        </TabsTrigger>
-        <TabsTrigger
-          value="feedback"
-          className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold text-black/70 transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
-        >
-          <MessageSquareText />
-          Góp ý
-        </TabsTrigger>
-        <TabsTrigger
-          value="forum"
-          className="data-[state=active]:bg-neutral-dark-primary-800 cursor-pointer text-sm font-bold text-black/70 transition-all duration-200 ease-in-out data-[state=active]:text-white data-[state=active]:shadow-xs lg:text-lg"
-        >
-          <MessageCircle />
-          Diễn đàn
-        </TabsTrigger>
-      </TabsList>
+          <TabsList className="h-11 rounded-full border-none bg-slate-100/80 p-1">
+            <TabsTrigger
+              value="all"
+              className="cursor-pointer rounded-full px-6 transition-all data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+            >
+              Tất cả
+            </TabsTrigger>
+            <TabsTrigger
+              value="feedback"
+              className="cursor-pointer rounded-full px-6 transition-all data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+            >
+              Góp ý
+            </TabsTrigger>
+            <TabsTrigger
+              value="forum"
+              className="cursor-pointer rounded-full px-6 transition-all data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+            >
+              Diễn đàn
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center md:justify-center lg:justify-start">
-        <div className="flex w-full flex-row items-center justify-center gap-2 md:justify-end">
-          <Suspense fallback={null}>
-            <Filter type="notificationStatus" items={mockNotificationStatus} />
-          </Suspense>
-        </div>
+        {/* <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleMarkAllAsRead}
+          className="gap-2 rounded-full text-slate-500 hover:bg-blue-50 hover:text-blue-600"
+        >
+          <CheckCheck className="h-4 w-4" />
+          <span className="hidden sm:inline">Đánh dấu đã đọc tất cả</span>
+        </Button> */}
       </div>
 
-      {/* Since the API filters data based on the URL 'tab' param via useNotificationFilters,
-        we can reuse the same render logic for all TabsContent. 
-        The hook automatically refetches when the tab changes.
-      */}
+      <div className="flex w-full items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-slate-900">Thông báo</h1>
+        <Suspense fallback={null}>
+          <Filter type="notificationStatus" items={mockNotificationStatus} />
+        </Suspense>
+      </div>
 
-      <TabsContent value="all" className="flex h-screen w-full flex-col gap-4">
-        <ScrollArea className="overflow-y-auto pr-1">
+      <div className="flex h-[80vh] w-full flex-col gap-4">
+        <ScrollArea className="h-full pr-4">
           {isFetching && !isFetchingNextPage ? (
-            <Loading variant="spinner" />
+            <div className="flex h-40 w-full items-center justify-center">
+              <Loading variant="spinner" />
+            </div>
           ) : (
             renderNotificationList()
           )}
         </ScrollArea>
-      </TabsContent>
-
-      <TabsContent
-        value="feedback"
-        className="flex h-screen w-full flex-col gap-4"
-      >
-        <ScrollArea className="overflow-y-auto pr-1">
-          {isFetching && !isFetchingNextPage ? (
-            <Loading variant="spinner" />
-          ) : (
-            renderNotificationList()
-          )}
-        </ScrollArea>
-      </TabsContent>
-
-      <TabsContent
-        value="forum"
-        className="flex h-screen w-full flex-col gap-4"
-      >
-        <ScrollArea className="overflow-y-auto pr-1">
-          {isFetching && !isFetchingNextPage ? (
-            <Loading variant="spinner" />
-          ) : (
-            renderNotificationList()
-          )}
-        </ScrollArea>
-      </TabsContent>
-    </Tabs>
+      </div>
+    </div>
   );
 };
 

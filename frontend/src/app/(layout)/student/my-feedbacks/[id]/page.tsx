@@ -21,7 +21,7 @@ const Page = () => {
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
     <Wrapper classNames={{ container: "lg:px-4" }}>
-      <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2 pb-3 lg:grid-cols-2">
+      <div className="grid h-full w-full grid-cols-1 gap-x-2 gap-y-2 pb-3 lg:grid-cols-2">
         <div className="col-span-1 w-full lg:col-span-2">
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
         </div>
