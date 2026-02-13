@@ -41,13 +41,16 @@ export class FeedbackManagementService {
     const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
     const where: Prisma.FeedbacksWhereInput = {
-      OR: [
-        { departmentId: actor.departmentId },
-
+      AND: [
         {
-          forwardingLogs: {
-            some: { fromDepartmentId: actor.departmentId },
-          },
+          OR: [
+            { departmentId: actor.departmentId },
+            {
+              forwardingLogs: {
+                some: { fromDepartmentId: actor.departmentId },
+              },
+            },
+          ],
         },
       ],
     };
@@ -71,10 +74,12 @@ export class FeedbackManagementService {
     }
 
     if (q) {
-      where.OR = [
-        { subject: { contains: q, mode: 'insensitive' } },
-        { description: { contains: q, mode: 'insensitive' } },
-      ];
+      (where.AND as Prisma.FeedbacksWhereInput[]).push({
+        OR: [
+          { subject: { contains: q, mode: 'insensitive' } },
+          { description: { contains: q, mode: 'insensitive' } },
+        ],
+      });
     }
 
     const [feedbacks, total] = await Promise.all([
