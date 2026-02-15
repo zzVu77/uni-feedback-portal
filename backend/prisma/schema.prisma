@@ -56,6 +56,10 @@ enum NotificationType {
   // General/System notifications
   ADMIN_NOTIFICATION
   SYSTEM_ANNOUNCEMENT_NOTIFICATION
+  
+  // Feedback check toxic
+  FEEDBACK_TOXIC_ACCEPTED
+  FEEDBACK_TOXIC_REJECTED
 }
 
 enum FeedbackStatus {
@@ -154,6 +158,7 @@ model Feedbacks {
   departmentId    String            @db.Uuid
   categoryId      String            @db.Uuid
   createdAt       DateTime          @default(now())
+  isToxic         Boolean           
 
   user            Users             @relation(fields: [userId], references: [id])
   department      Departments       @relation(fields: [departmentId], references: [id])
