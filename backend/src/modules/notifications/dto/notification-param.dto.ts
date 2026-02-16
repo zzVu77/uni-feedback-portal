@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 export class NotificationParamDto {
   @ApiProperty({
@@ -7,6 +7,6 @@ export class NotificationParamDto {
     type: String,
   })
   // @IsUUID()
-  @IsString()
+  @IsUUID('loose')
   id: string;
 }

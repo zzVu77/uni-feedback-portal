@@ -1,7 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { FeedbackStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsInt, IsISO8601, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 
 export class QueryFeedbacksDto {
   @ApiPropertyOptional({ example: 1, description: 'Current page number' })
@@ -35,7 +42,7 @@ export class QueryFeedbacksDto {
     description: 'Filter by category ID',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   categoryId?: string;
 
   @ApiPropertyOptional({
@@ -43,7 +50,7 @@ export class QueryFeedbacksDto {
     description: 'Filter by department ID',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   departmentId?: string;
 
   @ApiPropertyOptional({
