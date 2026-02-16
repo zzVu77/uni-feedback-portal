@@ -4,6 +4,7 @@ import {
   FeedbackDetail,
 } from '../../feedbacks/dto/feedback-response.dto';
 import { FeedbackStatus } from '@prisma/client';
+import { Feedbacks } from '@prisma/client';
 
 class StudentInfo {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544001c' })
@@ -22,7 +23,7 @@ export class ListFeedbacksResponseDto {
       'List of feedbacks with optional student info and forwarding flag',
   })
   results: (FeedbackSummary & {
-    student?: StudentInfo;
+    student?: StudentInfo | null;
     isForwarding?: boolean;
   })[];
 
@@ -117,3 +118,16 @@ export class UpdateFeedbackStatusResponseDto {
   // })
   // updatedAt: string;
 }
+
+export type FeedbackBase = Feedbacks;
+export type RawFeedbackJoinedRow = FeedbackBase & {
+  departmentName: string;
+  categoryName: string;
+
+  studentId: string;
+  studentFullName: string;
+  studentEmail: string;
+
+  // voteCount: number;
+  // commentCount: number;
+};
