@@ -52,7 +52,7 @@ const Page = () => {
       <div className="flex h-full w-full grow flex-col items-center justify-center">
         <EmptyState
           title="Lỗi tải dữ liệu"
-          description="Đã có lỗi xảy ra trong quá trình tải thông tin thông báo. Vui lòng thử lại."
+          description="Dữ liệu không tồn tại hoặc đường dẫn không hợp lệ."
           retryAction={() => refetch()}
           errorCode="FETCH_ERROR"
         />
