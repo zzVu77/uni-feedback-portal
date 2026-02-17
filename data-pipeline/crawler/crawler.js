@@ -16,7 +16,9 @@ const GROUP_URL = process.env.FACEBOOK_GROUP_URL;
  */
 async function runCrawler() {
   if (!fs.existsSync(AUTH_FILE)) {
-    console.error(`❌ ${AUTH_FILE} not found. Please run 'node auth.js' first!`);
+    console.error(
+      `❌ ${AUTH_FILE} not found. Please run 'node auth.js' first!`,
+    );
     return;
   }
 
@@ -25,7 +27,11 @@ async function runCrawler() {
     return;
   }
 
-  const { browser, context } = await initBrowser({ headless: false, useAuth: true });
+  const { browser, context } = await initBrowser({
+    headless: false,
+    useAuth: true,
+  });
+  // todo: turn on headless when deploy to production
   const page = await context.newPage();
 
   console.log(`🚀 Accessing group: ${GROUP_URL}`);
@@ -112,7 +118,7 @@ async function runCrawler() {
           (line) =>
             !badges.includes(line) &&
             line !== author &&
-            !line.startsWith("UTE - ")
+            !line.startsWith("UTE - "),
         );
 
         const cleanContent = contentLines.join("\n");
@@ -144,7 +150,7 @@ async function runCrawler() {
 
       return data;
     },
-    { badges: BADGES, stopWords: STOP_KEYWORDS }
+    { badges: BADGES, stopWords: STOP_KEYWORDS },
   );
 
   console.log(`✅ Successfully collected ${posts.length} cleaned posts.`);
@@ -157,10 +163,10 @@ async function runCrawler() {
 
     const fileName = `posts_${Date.now()}.json`;
     const filePath = path.join(outputDir, fileName);
-    
+
     fs.writeFileSync(filePath, JSON.stringify(posts, null, 2));
     console.log(`💾 Data saved to: ${filePath}`);
-    
+
     // Preview first post
     console.log("🔍 Sample post:", JSON.stringify(posts[0], null, 2));
   } else {
