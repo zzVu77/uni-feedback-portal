@@ -1,7 +1,7 @@
 // utils/browser.js
-const { chromium } = require("playwright");
-const { DEFAULT_VIEWPORT, DEFAULT_USER_AGENT, AUTH_FILE } = require("../constants");
-const fs = require("fs");
+import { chromium } from "playwright";
+import { DEFAULT_VIEWPORT, DEFAULT_USER_AGENT, AUTH_FILE } from "../constants.js";
+import fs from "fs";
 
 /**
  * Initializes a Playwright browser and context.
@@ -10,7 +10,7 @@ const fs = require("fs");
  * @param {boolean} options.useAuth - Whether to use the stored authentication state.
  * @returns {Promise<{browser: import('playwright').Browser, context: import('playwright').BrowserContext}>}
  */
-async function initBrowser(options = { headless: false, useAuth: false }) {
+export async function initBrowser(options = { headless: false, useAuth: false }) {
   const browser = await chromium.launch({ headless: options.headless });
   
   const contextOptions = {
@@ -26,5 +26,3 @@ async function initBrowser(options = { headless: false, useAuth: false }) {
   
   return { browser, context };
 }
-
-module.exports = { initBrowser };

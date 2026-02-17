@@ -1,7 +1,7 @@
 // auth.js
-const readline = require("readline");
-const { initBrowser } = require("./utils/browser");
-const { AUTH_FILE } = require("./constants");
+import readline from "readline";
+import { initBrowser } from "./utils/browser.js";
+import { AUTH_FILE } from "./constants.js";
 
 /**
  * Script to handle manual Facebook login and save session state.
@@ -42,7 +42,8 @@ async function runAuth() {
   await browser.close();
 }
 
-if (require.main === module) {
+import { fileURLToPath } from "url";
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   runAuth().catch((err) => {
     console.error("❌ Error during authentication:", err);
     process.exit(1);

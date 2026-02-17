@@ -1,9 +1,13 @@
 // crawler.js
-require("dotenv").config();
-const fs = require("fs");
-const path = require("path");
-const { initBrowser } = require("./utils/browser");
-const { BADGES, STOP_KEYWORDS, AUTH_FILE } = require("./constants");
+import "dotenv/config";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { initBrowser } from "./utils/browser.js";
+import { BADGES, STOP_KEYWORDS, AUTH_FILE } from "./constants.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const GROUP_URL = process.env.FACEBOOK_GROUP_URL;
 
@@ -12,9 +16,7 @@ const GROUP_URL = process.env.FACEBOOK_GROUP_URL;
  */
 async function runCrawler() {
   if (!fs.existsSync(AUTH_FILE)) {
-    console.error(
-      `❌ ${AUTH_FILE} not found. Please run 'node auth.js' first!`,
-    );
+    console.error(`❌ ${AUTH_FILE} not found. Please run 'node auth.js' first!`);
     return;
   }
 
@@ -23,10 +25,7 @@ async function runCrawler() {
     return;
   }
 
-  const { browser, context } = await initBrowser({
-    headless: false,
-    useAuth: true,
-  });
+  const { browser, context } = await initBrowser({ headless: false, useAuth: true });
   const page = await context.newPage();
 
   console.log(`🚀 Accessing group: ${GROUP_URL}`);
@@ -113,7 +112,7 @@ async function runCrawler() {
           (line) =>
             !badges.includes(line) &&
             line !== author &&
-            !line.startsWith("UTE - "),
+            !line.startsWith("UTE - ")
         );
 
         const cleanContent = contentLines.join("\n");
@@ -145,7 +144,7 @@ async function runCrawler() {
 
       return data;
     },
-    { badges: BADGES, stopWords: STOP_KEYWORDS },
+    { badges: BADGES, stopWords: STOP_KEYWORDS }
   );
 
   console.log(`✅ Successfully collected ${posts.length} cleaned posts.`);
@@ -158,10 +157,10 @@ async function runCrawler() {
 
     const fileName = `posts_${Date.now()}.json`;
     const filePath = path.join(outputDir, fileName);
-
+    
     fs.writeFileSync(filePath, JSON.stringify(posts, null, 2));
     console.log(`💾 Data saved to: ${filePath}`);
-
+    
     // Preview first post
     console.log("🔍 Sample post:", JSON.stringify(posts[0], null, 2));
   } else {
@@ -171,7 +170,7 @@ async function runCrawler() {
   await browser.close();
 }
 
-if (require.main === module) {
+if (process.argv[1] === __filename) {
   runCrawler().catch((err) => {
     console.error("❌ Error during crawling:", err);
     process.exit(1);
