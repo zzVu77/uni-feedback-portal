@@ -158,7 +158,7 @@ model Feedbacks {
   departmentId    String            @db.Uuid
   categoryId      String            @db.Uuid
   createdAt       DateTime          @default(now())
-  isToxic         Boolean           
+  isToxic         Boolean           @default(false)
 
   user            Users             @relation(fields: [userId], references: [id])
   department      Departments       @relation(fields: [departmentId], references: [id])
