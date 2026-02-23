@@ -31,6 +31,31 @@ export class FeedbackToxicProcessor extends WorkerHost {
         const { fileAttachments, ...feedbackData } = dto;
         const isToxic = await this.aiService.checkToxicity(dto.description);
         if (isToxic) {
+            const feedback = await this.prisma.feedbacks.create({
+            data: {
+                subject: feedbackData.subject,
+                description: feedbackData.description,
+                location: feedbackData.location,
+                isPrivate: dto.isAnonymous ? true : false,
+                departmentId: feedbackData.departmentId,
+                categoryId: feedbackData.categoryId,
+                userId: actor.sub,
+                isToxic: true,
+            },
+            include: {
+                department: true,
+                category: true,
+            },
+            });
+            // Emit Event: Toxic Feedback Created
+            const feedbackCreatedEvent = new FeedbackCreatedEvent({
+              feedbackId: feedback.id,
+              userId: actor.sub,
+              departmentId: feedback.departmentId,
+              subject: feedback.subject,
+              isToxic: true,
+            });
+            this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
             throw new UnrecoverableError(
                 'Feedback description contains toxic content. Please modify and try again.',
             );
@@ -46,6 +71,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
                 departmentId: feedbackData.departmentId,
                 categoryId: feedbackData.categoryId,
                 userId: actor.sub,
+                isToxic: false,
             },
             include: {
                 department: true,
@@ -83,6 +109,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
         userId: actor.sub,
         departmentId: feedback.departmentId,
         subject: feedback.subject,
+        isToxic: false,
       });
       this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
 
