@@ -35,27 +35,24 @@ async function runCrawler() {
   const page = await context.newPage();
   const capturedPosts = [];
 
-  // --- MẤU CHỐT: LẮNG NGHE GÓI TIN TỪ FACEBOOK SERVER ---
+  // Lắng nghe gói tin từ Facebook Server
   page.on("response", async (response) => {
     const url = response.url();
-    // Bắt các request gửi đến GraphQL của Facebook
     if (
       response.request().method() === "POST" &&
       url.includes("/api/graphql/")
     ) {
       try {
         const text = await response.text();
-        // Facebook thường stream data, trả về nhiều dòng JSON riêng biệt trong 1 request
         const chunks = text.split("\n");
 
         for (const chunk of chunks) {
           if (!chunk.trim()) continue;
           const data = JSON.parse(chunk);
-          // Gửi data vào hàm đệ quy để mò tìm các bài post
           extractPostFromGraphQL(data, capturedPosts);
         }
       } catch (e) {
-        // Bỏ qua lỗi parse JSON vì có thể có payload mã hoá hoặc rỗng
+        // Bỏ qua lỗi parse JSON
       }
     }
   });
@@ -79,7 +76,6 @@ async function runCrawler() {
   }
 
   console.log("⬇️  Scrolling page to trigger API requests...");
-  // Scroll nhiều hơn một chút để ép Facebook phải gọi API tải thêm bài viết
   for (let i = 0; i < 5; i++) {
     try {
       await page.keyboard.press("End");
@@ -89,13 +85,12 @@ async function runCrawler() {
 
   console.log("🔍 Filtering and deduplicating collected posts...");
 
-  // Facebook có thể trả về 1 bài viết nhiều lần, ta cần lọc trùng lặp
   const uniquePosts = [];
   const seenLinks = new Set();
   const seenContents = new Set();
 
   for (const post of capturedPosts) {
-    if (!post.content || post.content.length < 10) continue; // Bỏ qua bài quá ngắn
+    if (!post.content || post.content.length < 10) continue;
 
     const linkKey = post.post_link || post.content.substring(0, 50);
 
@@ -123,7 +118,6 @@ async function runCrawler() {
     fs.writeFileSync(filePath, JSON.stringify(uniquePosts, null, 2));
     console.log(`💾 Data saved to: ${filePath}`);
 
-    // Preview post đầu tiên
     console.log("🔍 Sample post:", JSON.stringify(uniquePosts[0], null, 2));
   } else {
     console.log("⚠️ No valid posts found via API. Try scrolling more.");
@@ -133,17 +127,66 @@ async function runCrawler() {
 }
 
 /**
- * Hàm đệ quy để mò tìm dữ liệu bài viết trong cục JSON khổng lồ của Facebook
+ * THUẬT TOÁN VÉT CẠN: Quét toàn bộ object để tìm con số lớn nhất
+ * liên quan đến comment và reaction. Không quan tâm FB giấu sâu cỡ nào.
+ */
+function extractStatsAggressively(node) {
+  let maxComments = 0;
+  let maxReactions = 0;
+
+  function traverse(o) {
+    if (o === null || typeof o !== "object") return;
+
+    for (const [k, v] of Object.entries(o)) {
+      const key = k.toLowerCase();
+
+      // Bắt Comment
+      if (key.includes("comment")) {
+        if (typeof v === "number" && key.includes("count") && v > maxComments)
+          maxComments = v;
+        if (v && typeof v.count === "number" && v.count > maxComments)
+          maxComments = v.count;
+        if (
+          v &&
+          typeof v.total_count === "number" &&
+          v.total_count > maxComments
+        )
+          maxComments = v.total_count;
+      }
+
+      // Bắt Reaction / Like
+      if (key.includes("reaction") || key.includes("like")) {
+        if (typeof v === "number" && key.includes("count") && v > maxReactions)
+          maxReactions = v;
+        if (v && typeof v.count === "number" && v.count > maxReactions)
+          maxReactions = v.count;
+        if (
+          v &&
+          typeof v.total_count === "number" &&
+          v.total_count > maxReactions
+        )
+          maxReactions = v.total_count;
+      }
+
+      // Tiếp tục chui sâu xuống các tầng dưới
+      if (typeof v === "object") traverse(v);
+    }
+  }
+
+  traverse(node);
+  return { reactions: maxReactions, comments: maxComments };
+}
+
+/**
+ * Hàm đệ quy mò tìm dữ liệu bài viết
  */
 function extractPostFromGraphQL(node, postsArray) {
-  // Nếu là Array, chui vào từng phần tử
   if (Array.isArray(node)) {
     node.forEach((n) => extractPostFromGraphQL(n, postsArray));
     return;
   }
   if (typeof node !== "object" || node === null) return;
 
-  // Dấu hiệu nhận biết 1 Object là bài viết (Story) trên Facebook
   if (node.__typename === "Story" || (node.comet_sections && node.post_id)) {
     try {
       // 1. Lấy nội dung
@@ -165,7 +208,7 @@ function extractPostFromGraphQL(node, postsArray) {
           author = actors[0].name;
         }
 
-        // 3. Lấy Link bài viết
+        // 3. Lấy Link
         let postLink = node.url || "";
         if (!postLink) {
           postLink =
@@ -173,10 +216,10 @@ function extractPostFromGraphQL(node, postsArray) {
               ?.metadata?.[0]?.story?.url || "";
         }
         if (postLink && postLink.includes("?")) {
-          postLink = postLink.split("?")[0]; // Làm sạch Link
+          postLink = postLink.split("?")[0];
         }
 
-        // 4. Lấy Ngày đăng (Unix Timestamp -> Chuyển thành ISO String)
+        // 4. Lấy Ngày đăng
         let postDate = "";
         const creationTime =
           node.creation_time ||
@@ -186,45 +229,27 @@ function extractPostFromGraphQL(node, postsArray) {
           postDate = new Date(creationTime * 1000).toISOString();
         }
 
-        // 5. Lấy Thống kê (Likes, Comments)
-        let reactions = 0;
-        let comments = 0;
-        const feedback =
-          node.feedback ||
-          node.comet_sections?.feedback?.story?.feedback_context
-            ?.feedback_target_with_context;
+        // 5. LẤY STATS BẰNG THUẬT TOÁN VÉT CẠN TỐI THƯỢNG
+        const stats = extractStatsAggressively(node);
 
-        if (feedback) {
-          reactions =
-            feedback.reaction_count?.count ||
-            feedback.ufi_metrics?.feedback_reactions?.count ||
-            0;
-          comments =
-            feedback.comment_count?.count ||
-            feedback.ufi_metrics?.feedback_comments_count ||
-            feedback.comments_count ||
-            0;
-        }
-
-        // Push vào mảng tạm thời
         postsArray.push({
           author,
           post_date: postDate,
           post_link: postLink,
           content,
           stats: {
-            reactions: reactions.toString(),
-            comments: comments.toString(),
+            reactions: stats.reactions.toString(),
+            comments: stats.comments.toString(),
           },
           crawled_at: new Date().toISOString(),
         });
       }
     } catch (e) {
-      // Bỏ qua nếu object JSON bị thiếu cấu trúc
+      // Bỏ qua lỗi
     }
   }
 
-  // Đệ quy tìm sâu vào các node con (vì Facebook thường bọc data trong rất nhiều lớp)
+  // Tiếp tục chui sâu xuống tìm các Story khác
   Object.values(node).forEach((val) => extractPostFromGraphQL(val, postsArray));
 }
 
