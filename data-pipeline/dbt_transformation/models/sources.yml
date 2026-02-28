@@ -1,0 +1,9 @@
+# models/sources.yml
+version: 2
+
+sources:
+  - name: social_raw
+    database: uni-feedback-data
+    schema: social_raw
+    tables:
+      - name: posts
