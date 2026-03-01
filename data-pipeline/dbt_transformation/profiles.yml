@@ -1,0 +1,31 @@
+# profiles.yml.example
+# To use this:
+# 1. Copy this file to ~/.dbt/profiles.yml (C:\Users\<username>\.dbt\profiles.yml on Windows)
+# 2. Update the 'project' field with your Google Cloud Project ID.
+# 3. Ensure you have the Google Cloud SDK installed and run:
+#    gcloud auth application-default login
+dbt_transformation:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: uni-feedback-data # Update with your GCP Project ID
+      dataset: marts # The default dataset for your models
+      threads: 4
+      timeout_seconds: 300
+      location: US # e.g., US or EU
+      priority: interactive
+      retries: 1
+    # Alternative: Service Account (common for CI/CD)
+    # prod:
+    #   type: bigquery
+    #   method: service-account
+    #   project: uni-feedback-data
+    #   dataset: social_prod
+    #   threads: 4
+    #   keyfile: /path/to/your/service-account.json
+    #   timeout_seconds: 300
+    #   location: US
+    #   priority: interactive
+    #   retries: 1

@@ -5,29 +5,41 @@ with raw_source as (
 
 cleaned as (
     select
-        -- create id for each post by hashing author and content, since Facebook doesn't provide a unique post ID in the raw data
-        FARM_FINGERPRINT(concat(author, content)) as post_id,
+        TO_HEX(MD5(
+            COALESCE(NULLIF(post_link, ''), CONCAT(author, content))
+        )) as post_id,
+        
         author,
         content,
+        post_link,
+        SAFE_CAST(post_date AS TIMESTAMP) as posted_at,
 
-        CASE 
-            WHEN stats.reactions LIKE '%K' THEN
-             CAST(REPLACE(stats.reactions, 'K', '') AS FLOAT64) * 1000
-        ELSE
-             SAFE_CAST(stats.reactions AS INT64)
-        END as reaction_count,
-        SAFE_CAST(stats.comments as INT64) as comment_count,
+        SAFE_CAST(stats.reactions AS INT64) as reaction_count,
+        SAFE_CAST(stats.comments AS INT64) as comment_count,
         
-        crawled_at,
-        
-        -- mark duplicate posts by the same author with the same content, and keep only the most recent one
-        ROW_NUMBER() OVER (
-            PARTITION BY author, content 
-            ORDER BY crawled_at DESC
-        ) as row_num
+        SAFE_CAST(crawled_at AS TIMESTAMP) as crawled_at
 
     from raw_source
+),
+
+deduplicated as (
+    select 
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY post_id 
+            ORDER BY crawled_at DESC
+        ) as row_num
+    from cleaned
 )
 
-select * from cleaned
+select 
+    post_id,
+    author,
+    content,
+    post_link,
+    posted_at,
+    reaction_count,
+    comment_count,
+    crawled_at
+from deduplicated
 where row_num = 1
