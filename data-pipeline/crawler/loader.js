@@ -29,6 +29,9 @@ async function loadDataToBigQuery() {
   }
 
   const bigquery = new BigQuery(bqOptions);
+  const dataset = bigquery.dataset(DATASET_ID);
+  const table = dataset.table(TABLE_ID);
+
   const outputDir = path.join(__dirname, "output");
 
   if (!fs.existsSync(outputDir)) {
@@ -60,7 +63,7 @@ async function loadDataToBigQuery() {
     return;
   }
 
-  // Sanitize data: BigQuery TIMESTAMP doesn't accept empty strings (""), it requires null or a valid date.
+  // Sanitize data
   const sanitizedRows = rows.map((row) => ({
     ...row,
     post_date: row.post_date === "" ? null : row.post_date,
@@ -68,7 +71,6 @@ async function loadDataToBigQuery() {
 
   /**
    * BigQuery Table Schema
-   * Updated to include post_link and post_date to match the crawler output format.
    */
   const schema = [
     { name: "id", type: "INTEGER" },
@@ -88,12 +90,48 @@ async function loadDataToBigQuery() {
   ];
 
   try {
-    console.log(`🚀 Uploading ${sanitizedRows.length} rows to ${DATASET_ID}.${TABLE_ID}...`);
+    let [exists] = await table.exists();
 
-    await bigquery
-      .dataset(DATASET_ID)
-      .table(TABLE_ID)
-      .insert(sanitizedRows, { schema: schema });
+    // --- LOGIC TỰ CHỮA LÀNH BẢNG LỖI ---
+    if (exists) {
+      const [metadata] = await table.getMetadata();
+      // Nếu bảng tồn tại nhưng không có schema, ta xóa nó đi để tạo lại
+      if (!metadata.schema || !metadata.schema.fields) {
+        console.warn(
+          `⚠️ Table ${TABLE_ID} exists but has NO SCHEMA. Dropping it to start fresh...`,
+        );
+        await table.delete();
+        exists = false; // Báo hiệu là bảng không còn nữa để block dưới tạo lại
+      }
+    }
+    // -----------------------------------
+
+    if (!exists) {
+      console.log(
+        `🏗️ Table ${TABLE_ID} does not exist. Creating with schema and partitioning...`,
+      );
+
+      const options = {
+        schema: schema,
+        timePartitioning: {
+          type: "DAY",
+          field: "crawled_at",
+        },
+      };
+
+      await dataset.createTable(TABLE_ID, options);
+      console.log(`✅ Table created successfully with DAY partitioning.`);
+
+      // Đợi 2 giây để BigQuery kịp đồng bộ metadata trước khi insert dữ liệu
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+
+    console.log(
+      `🚀 Uploading ${sanitizedRows.length} rows to ${DATASET_ID}.${TABLE_ID}...`,
+    );
+
+    // Không cần truyền { schema: schema } vào đây nữa vì bảng đã được tạo chuẩn ở trên
+    await table.insert(sanitizedRows);
 
     console.log(`✅ Success! Data successfully loaded into BigQuery.`);
   } catch (error) {
