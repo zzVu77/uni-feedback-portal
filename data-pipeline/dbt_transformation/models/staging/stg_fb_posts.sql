@@ -1,6 +1,25 @@
 -- models/staging/stg_fb_posts.sql
+
+{{
+    config(
+        materialized='incremental',
+        unique_key='post_id',
+        partition_by={
+            "field": "crawled_at",
+            "data_type": "timestamp",
+            "granularity": "day"
+        }
+    )
+}}
+
 with raw_source as (
     select * from {{ source('social_raw', 'posts') }}
+    
+    -- This block only runs when the model exists and you are running incrementally
+    {% if is_incremental() %}
+        -- Filter to get only new data rows crawled after the last dbt run
+        where SAFE_CAST(crawled_at AS TIMESTAMP) > (select max(crawled_at) from {{ this }})
+    {% endif %}
 ),
 
 cleaned as (
