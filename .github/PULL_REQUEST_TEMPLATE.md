@@ -1,6 +1,6 @@
 ## 🔗 Related Issue
 
-Closes #
+Issuse: #
 
 ## 🆕 What’s changed?
 
