@@ -11,7 +11,7 @@ dbt_transformation:
       type: bigquery
       method: oauth
       project: uni-feedback-data # Update with your GCP Project ID
-      dataset: marts # The default dataset for your models
+      dataset: "uni_feedback_data" # The default dataset for your models
       threads: 4
       timeout_seconds: 300
       location: US # e.g., US or EU
