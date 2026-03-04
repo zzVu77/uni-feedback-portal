@@ -45,6 +45,9 @@ export class NotificationEventListener {
 
       // 2. Notify the Department Staff (The specific logic you requested)
       await this.notifyDepartmentStaff(payload);
+
+      // 3. Notify Student about Toxicity Check
+      await this.notifyFeedbackCheckToxicity(payload);
     } catch (error) {
       this.logger.error(
         `[Notification] Failed to create notifications for feedback ${payload.feedbackId}`,
@@ -557,5 +560,24 @@ export class NotificationEventListener {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new Error(`Invalid target type: ${targetType}`);
     }
+  }
+
+  private async notifyFeedbackCheckToxicity(payload: FeedbackCreatedEvent) {
+
+    let content = `Góp ý "${payload.subject}" của bạn đã được xác định là phù hợp với quy định cộng đồng. Cảm ơn bạn đã đóng góp ý kiến!`;
+    let type:NotificationType = NotificationType.FEEDBACK_TOXIC_ACCEPTED;
+    if (payload.isToxic) {
+      content = `Góp ý "${payload.subject}" của bạn đã được xác định là có nội dung không phù hợp và vi phạm quy định cộng đồng. Vui lòng chỉnh sửa và gửi lại góp ý.`;
+      type = NotificationType.FEEDBACK_TOXIC_REJECTED;
+    }
+    await this.notificationsService.createNotifications({
+      userIds: [payload.userId],
+      content: content,
+      type: type,
+      targetId: payload.feedbackId,
+      title: payload.subject,
+    });
+
+    
   }
 }

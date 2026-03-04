@@ -56,6 +56,10 @@ enum NotificationType {
   // General/System notifications
   ADMIN_NOTIFICATION
   SYSTEM_ANNOUNCEMENT_NOTIFICATION
+  
+  // Feedback check toxic
+  FEEDBACK_TOXIC_ACCEPTED
+  FEEDBACK_TOXIC_REJECTED
 }
 
 enum FeedbackStatus {
@@ -63,6 +67,7 @@ enum FeedbackStatus {
   IN_PROGRESS
   RESOLVED
   REJECTED
+  TOXIC
 }
 
 enum ReportStatus {

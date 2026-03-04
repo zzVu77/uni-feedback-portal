@@ -115,7 +115,7 @@ export class FeedbacksController {
     @Param() params: FeedbackParamDto,
     @Body() updateFeedbackDto: UpdateFeedbackDto,
     @ActiveUser() user: ActiveUserData,
-  ): Promise<FeedbackDetail> {
+  ) {
     return this.feedbacksService.updateFeedback(
       params,
       updateFeedbackDto,
