@@ -47,6 +47,14 @@ export class ClarificationsService {
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
+    if (
+      feedback.currentStatus === 'RESOLVED' ||
+      feedback.currentStatus === 'REJECTED'
+    ) {
+      throw new ForbiddenException(
+        `Cannot start a clarification conversation for a resolved feedback.`,
+      );
+    }
 
     const conversation = await this.prisma.clarificationConversations.create({
       data: {
