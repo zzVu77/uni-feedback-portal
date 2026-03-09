@@ -10,6 +10,7 @@ import {
   QueryFeedbacksDto,
   FeedbackDetail,
   FeedbackParamDto,
+  FeedbackSummary,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
@@ -19,6 +20,7 @@ import { ForumService } from '../forum/forum.service';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
 @Injectable()
 export class FeedbacksService {
   constructor(
@@ -203,7 +205,7 @@ export class FeedbacksService {
     params: FeedbackParamDto,
     dto: UpdateFeedbackDto,
     actor: ActiveUserData,
-  ) {
+  ) : Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
@@ -217,9 +219,9 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    if (feedback.currentStatus !== FeedbackStatus.PENDING && feedback.currentStatus !== FeedbackStatus.TOXIC) {
+    if (feedback.currentStatus !== FeedbackStatus.PENDING && feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT && feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED) {
       throw new ForbiddenException(
-        'Feedback can only be updated when in PENDING or TOXIC status.',
+        'Feedback can only be updated when in PENDING, VIOLATED_CONTENT, or AI_REVIEW_FAILED status.',
       );
     }
     if (dto.isAnonymous === true && dto.isPublic === true) {
@@ -271,24 +273,91 @@ export class FeedbacksService {
         FileTargetType.FEEDBACK,
         dto.fileAttachments ?? [],
       );
-    const job = await this.feedbackToxicQueue.add(
+
+    const updateDataNew = {
+      ...updateData,
+      currentStatus: FeedbackStatus.AI_REVIEWING,
+    };
+
+    const updateFeedback = await this.prisma.feedbacks.update({
+      where: { id: feedbackId },
+      data: updateDataNew,
+      include: {
+        department: {
+          select: { id: true, name: true },
+        },
+        category: {
+          select: { id: true, name: true },
+        },
+        statusHistory: {
+          select: {
+            status: true,
+            message: true,
+            note: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        forumPost: {
+          select: { id: true },
+        },
+        forwardingLogs: {
+          select: {
+            id: true,
+            message: true,
+            createdAt: true,
+            note: true,
+            fromDepartment: { select: { id: true, name: true } },
+            toDepartment: { select: { id: true, name: true } },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    });
+
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: updateFeedback.statusHistory,
+      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
+    await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
       {
         type: 'update',
         feedbackId: feedbackId,
-        updateFileAttachments: updateFileAttachments,
         updateData: updateData,
         dto: dto,
         actor: actor,
       },
       {
-        attempts: 3, 
-        backoff: 5000, 
-      }
+        attempts: 3,
+        backoff: 5000,
+      },
     );
     return {
-      jobId: job.id,   
-      status: 'PENDING',
+      id: updateFeedback.id,
+      isPublic: updateFeedback.forumPost ? true : false,
+      subject: updateFeedback.subject,
+      description: updateFeedback.description,
+      location: updateFeedback.location ? updateFeedback.location : null,
+      currentStatus: updateFeedback.currentStatus,
+      isPrivate: updateFeedback.isPrivate,
+      createdAt: updateFeedback.createdAt.toISOString(),
+      department: {
+        id: updateFeedback.department.id,
+        name: updateFeedback.department.name,
+      },
+      category: {
+        id: updateFeedback.category.id,
+        name: updateFeedback.category.name,
+      },
+      statusHistory: unifiedTimeline,
+      fileAttachments: updateFileAttachments,
     };
   }
 
@@ -306,9 +375,9 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    if (feedback.currentStatus !== FeedbackStatus.PENDING) {
+    if (feedback.currentStatus !== FeedbackStatus.PENDING && feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT && feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED) {
       throw new ForbiddenException(
-        'Feedback can only be deleted when in PENDING status.',
+        'Feedback can only be deleted when in PENDING, VIOLATED_CONTENT, or AI_REVIEW_FAILED status.',
       );
     }
 
@@ -322,7 +391,8 @@ export class FeedbacksService {
     });
   }
 
-  async createFeedback(dto: CreateFeedbackDto, actor: ActiveUserData) {
+  async createFeedback(dto: CreateFeedbackDto, actor: ActiveUserData) : Promise<FeedbackSummary> {
+    
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -348,22 +418,75 @@ export class FeedbacksService {
         'You cannot create feedback to an inactive department.',
       );
     }
+    const { fileAttachments, ...feedbackData } = dto;
+    // Create new feedback
+    const feedback = await this.prisma.feedbacks.create({
+      data: {
+        subject: feedbackData.subject,
+        description: feedbackData.description,
+        location: feedbackData.location,
+        isPrivate: dto.isAnonymous ? true : false,
+        departmentId: feedbackData.departmentId,
+        categoryId: feedbackData.categoryId,
+        userId: actor.sub,
+        currentStatus: FeedbackStatus.AI_REVIEWING,
+      },
+      include: {
+        department: true,
+        category: true,
+      },
+    });
+    if (dto.isPublic) {
+      await this.forumService.createForumPost(feedback.id, actor);
+    }
 
-    const job = await this.feedbackToxicQueue.add(
+    // Create attachments using UploadsService
+    if (fileAttachments && fileAttachments.length > 0) {
+      await this.uploadsService.updateAttachmentsForTarget(
+        feedback.id,
+        FileTargetType.FEEDBACK,
+        fileAttachments,
+      );
+    }
+
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedback.id,
+        status: 'PENDING',
+        message: GenerateStatusUpdateMessage(
+          feedback.department.name,
+          'PENDING',
+        ),
+      },
+    });
+
+    await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
       {
         type: 'create',
-        dto: dto,
-        actor: actor,
+        feedback:feedback,
+        actor:actor,
       },
       {
-        attempts: 3, 
-        backoff: 5000, 
-      }
+        attempts: 3,
+        backoff: 5000,
+      },
     );
     return {
-      jobId: job.id,   
-      status: 'PENDING',
+      id: feedback.id,
+      subject: feedback.subject,
+      location: feedback.location ? feedback.location : null,
+      currentStatus: feedback.currentStatus,
+      isPrivate: feedback.isPrivate,
+      department: {
+        id: feedback.department.id,
+        name: feedback.department.name,
+      },
+      category: {
+        id: feedback.category.id,
+        name: feedback.category.name,
+      },
+      createdAt: feedback.createdAt.toISOString(),
     };
   }
   async getToxicJobStatus(jobId: string) {
