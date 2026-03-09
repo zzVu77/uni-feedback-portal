@@ -63,11 +63,13 @@ enum NotificationType {
 }
 
 enum FeedbackStatus {
+  AI_REVIEWING
+  VIOLATED_CONTENT
+  AI_REVIEW_FAILED
   PENDING
   IN_PROGRESS
   RESOLVED
   REJECTED
-  TOXIC
 }
 
 enum ReportStatus {
