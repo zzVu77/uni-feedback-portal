@@ -1,44 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsIn,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  IsUrl,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { BaseFileItemDto } from './file-attachment.dto';
+import { FileTargetType } from '@prisma/client';
 
-export class GenerateUploadUrlDto {
-  @ApiProperty({
-    example: 'screenshot.png',
-    description: 'The name of the file to be uploaded.',
-  })
+export class GenerateUploadUrlDto extends BaseFileItemDto {
+  @ApiProperty({ example: 'feedback', enum: FileTargetType })
+  @IsEnum(FileTargetType)
+  @IsNotEmpty()
+  targetType: FileTargetType;
+
+  @ApiProperty({ example: 'uuid-of-the-feedback' })
   @IsString()
   @IsNotEmpty()
-  fileName: string;
-
-  @ApiProperty({
-    example: 'image/png',
-    description: 'The MIME type of the file.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @IsIn(['image/png', 'image/jpeg', 'application/pdf'], {
-    message: 'File type is not allowed',
-  })
-  fileType: string;
-
-  @ApiProperty({
-    example: 245678,
-    description: 'File size in bytes.',
-  })
-  @IsInt()
-  @Min(1)
-  @Max(5 * 1024 * 1024, {
-    message: 'File size must be less than 5MB',
-  })
-  fileSize: number;
+  targetId: string;
 }
 export class GenerateUploadUrlResponseDto {
   @ApiProperty({
