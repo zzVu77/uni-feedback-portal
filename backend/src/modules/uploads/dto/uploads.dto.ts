@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { BaseFileItemDto } from './file-attachment.dto';
 import { FileTargetType } from '@prisma/client';
 
@@ -22,14 +22,20 @@ export class GenerateUploadUrlResponseDto {
   uploadUrl: string;
 
   @ApiProperty({
-    description: 'The final public URL of the file after it has been uploaded.',
+    description:
+      'The key of the file in the storage after it has been uploaded.',
   })
-  fileUrl: string;
+  fileKey: string;
+
+  // @ApiProperty({
+  //   description: 'The final public URL of the file after it has been uploaded.',
+  // })
+  // fileUrl: string;
 }
 
 export class DeleteFileDto {
   @ApiProperty()
-  @IsUrl()
+  @IsString()
   @IsNotEmpty()
-  fileUrl: string;
+  fileKey: string;
 }

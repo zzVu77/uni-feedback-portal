@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FileTargetType } from '@prisma/client';
-import { FileAttachmentDto } from './dto/file-attachment.dto';
+import {
+  ALLOWED_FILE_TYPES,
+  FileAttachmentDto,
+  MAX_FILE_SIZE,
+} from './dto/file-attachment.dto';
 import { createClient } from '@supabase/supabase-js';
-import { v4 as uuidv4 } from 'uuid';
 import {
   GenerateUploadUrlDto,
   GenerateUploadUrlResponseDto,
@@ -12,6 +15,8 @@ import {
 import config from 'src/config/env.validation';
 import { DeleteObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { generateFileKey } from 'src/shared/helpers/generate-file-key';
+import { generateFileUrl } from 'src/shared/helpers/genrate-file-url';
 
 @Injectable()
 export class UploadsService {
@@ -70,11 +75,8 @@ export class UploadsService {
     const { fileName, fileType, fileSize } = dto;
 
     // ===== 1. Validate ở backend (rất quan trọng) =====
-    const ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'application/pdf'];
 
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
-    if (!ALLOWED_MIME_TYPES.includes(fileType)) {
+    if (!ALLOWED_FILE_TYPES.includes(fileType)) {
       throw new Error('File type not allowed');
     }
 
@@ -83,14 +85,14 @@ export class UploadsService {
     }
 
     // ===== 2. Generate object key =====
-    const key = `uploads/${userId}/${uuidv4()}-${fileName}`;
+    const key = generateFileKey(userId, dto.targetType, dto.targetId, fileName);
 
     // ===== 3. Create PutObject command =====
     const command = new PutObjectCommand({
       Bucket: config.AWS_S3_BUCKET_NAME,
       Key: key,
       ContentType: fileType,
-      // ContentLength: fileSize,
+      ContentLength: fileSize,
       // ACL: 'private', // KHÔNG cần nếu bucket private
     });
 
@@ -98,10 +100,10 @@ export class UploadsService {
     const uploadUrl = await getSignedUrl(this.s3, command, {
       expiresIn: 60,
     });
-    const fileUrl = uploadUrl.split('?')[0];
+    // const fileUrl = uploadUrl.split('?')[0];
     return {
       uploadUrl,
-      fileUrl,
+      fileKey: key,
     };
   }
 
@@ -140,21 +142,15 @@ export class UploadsService {
   //     // We don't throw an error here to allow DB cleanup to proceed
   //   }
   // }
-  async deleteFileFromS3(fileUrl: string): Promise<void> {
+  async deleteFileFromS3(fileKey: string): Promise<void> {
     try {
-      const url = new URL(fileUrl);
-
-      // pathname: /uploads/123/uuid.png
-      const key = decodeURIComponent(url.pathname.substring(1));
-
       const command = new DeleteObjectCommand({
         Bucket: config.AWS_S3_BUCKET_NAME,
-        Key: key,
+        Key: fileKey,
       });
-
       await this.s3.send(command);
     } catch (error) {
-      console.error(`Failed to delete S3 file: ${fileUrl}`, error);
+      console.error(`Failed to delete S3 file: ${fileKey}`, error);
     }
   }
 
@@ -178,7 +174,8 @@ export class UploadsService {
     return attachments.map((a) => ({
       id: a.id,
       fileName: a.fileName,
-      fileUrl: a.fileUrl,
+      fileKey: a.fileKey,
+      fileUrl: generateFileUrl(a.fileKey, config.AWS_S3_BASE_URL),
       fileType: a.fileType,
       fileSize: a.fileSize,
     }));
@@ -215,7 +212,8 @@ export class UploadsService {
         acc[targetId].push({
           id: attachment.id,
           fileName: attachment.fileName,
-          fileUrl: attachment.fileUrl,
+          fileKey: attachment.fileKey,
+          fileUrl: generateFileUrl(attachment.fileKey, config.AWS_S3_BASE_URL),
           fileType: attachment.fileType,
           fileSize: attachment.fileSize,
         });
@@ -239,22 +237,22 @@ export class UploadsService {
       targetId,
       targetType,
     );
-    const newFileUrls = newFiles?.map((f) => f.fileUrl) ?? [];
+    const newFileKeys = newFiles?.map((f) => f.fileKey) ?? [];
 
     const filesToDelete = existingFiles.filter(
-      (f) => !newFileUrls.includes(f.fileUrl),
+      (f) => !newFileKeys.includes(f.fileKey),
     );
 
     const filesToAdd =
       newFiles?.filter(
-        (f) => !existingFiles.some((e) => e.fileUrl === f.fileUrl),
+        (f) => !existingFiles.some((e) => e.fileKey === f.fileKey),
       ) ?? [];
 
     // Xóa file cũ
     if (filesToDelete.length > 0) {
       // Xóa file trên S3 trước
       await Promise.all(
-        filesToDelete.map((file) => this.deleteFileFromS3(file.fileUrl)),
+        filesToDelete.map((file) => this.deleteFileFromS3(file.fileKey)),
       );
 
       // Sau đó xóa trong DB
@@ -270,7 +268,7 @@ export class UploadsService {
           targetId,
           targetType,
           fileName: file.fileName,
-          fileUrl: file.fileUrl,
+          fileKey: file.fileKey,
           fileType: file.fileType,
           fileSize: file.fileSize,
         })),
@@ -278,19 +276,20 @@ export class UploadsService {
     }
 
     // Trả về danh sách file cuối cùng
-    const finalFileUrls = newFileUrls ?? [];
+    const finalFileKeys = newFileKeys ?? [];
     const finalFiles = await this.prisma.fileAttachments.findMany({
       where: {
         targetId,
         targetType,
-        fileUrl: { in: finalFileUrls },
+        fileKey: { in: finalFileKeys },
       },
     });
 
     return finalFiles.map((a) => ({
       id: a.id,
       fileName: a.fileName,
-      fileUrl: a.fileUrl,
+      fileKey: a.fileKey,
+      fileUrl: generateFileUrl(a.fileKey, config.AWS_S3_BASE_URL),
       fileType: a.fileType,
       fileSize: a.fileSize,
     }));
@@ -311,7 +310,7 @@ export class UploadsService {
     if (filesToDelete.length > 0) {
       // Xóa file trên S3 trước
       await Promise.all(
-        filesToDelete.map((file) => this.deleteFileFromS3(file.fileUrl)),
+        filesToDelete.map((file) => this.deleteFileFromS3(file.fileKey)),
       );
 
       // Sau đó xóa trong DB

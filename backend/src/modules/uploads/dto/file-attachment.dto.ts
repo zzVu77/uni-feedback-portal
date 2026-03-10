@@ -44,6 +44,14 @@ export class FileAttachmentDto extends BaseFileItemDto {
   id: string;
 
   @ApiProperty({
+    example: 'projector_issue.jpg',
+    description: 'The key of the file in the storage',
+  })
+  @IsString()
+  @IsNotEmpty()
+  fileKey: string;
+
+  @ApiProperty({
     example: 'https://example.com/files/projector_issue.jpg',
     description: 'Publicly accessible URL of the file',
   })
