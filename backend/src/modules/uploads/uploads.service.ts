@@ -72,7 +72,7 @@ export class UploadsService {
     dto: GenerateUploadUrlDto,
     userId: string,
   ): Promise<GenerateUploadUrlResponseDto> {
-    const { fileName, fileType, fileSize } = dto;
+    const { fileName, fileType, fileSize, targetType } = dto;
 
     // ===== 1. Validate ở backend (rất quan trọng) =====
 
@@ -85,7 +85,7 @@ export class UploadsService {
     }
 
     // ===== 2. Generate object key =====
-    const key = generateFileKey(userId, dto.targetType, dto.targetId, fileName);
+    const key = generateFileKey(userId, targetType, fileName);
 
     // ===== 3. Create PutObject command =====
     const command = new PutObjectCommand({

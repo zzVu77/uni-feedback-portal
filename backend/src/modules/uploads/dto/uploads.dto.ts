@@ -9,10 +9,10 @@ export class GenerateUploadUrlDto extends BaseFileItemDto {
   @IsNotEmpty()
   targetType: FileTargetType;
 
-  @ApiProperty({ example: 'uuid-of-the-feedback' })
-  @IsString()
-  @IsNotEmpty()
-  targetId: string;
+  // @ApiProperty({ example: 'uuid-of-the-feedback' })
+  // @IsString()
+  // @IsNotEmpty()
+  // targetId: string;
 }
 export class GenerateUploadUrlResponseDto {
   @ApiProperty({

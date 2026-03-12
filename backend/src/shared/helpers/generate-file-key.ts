@@ -8,7 +8,7 @@ import { FileTargetType } from '@prisma/client'; // Import Enum từ Prisma củ
 export function generateFileKey(
   userId: string,
   targetType: FileTargetType,
-  targetId: string,
+  // targetId: string,
   fileName: string,
 ): string {
   // 1. Đưa targetType (Enum viết hoa) về chữ thường để đường dẫn đẹp hơn
@@ -27,5 +27,6 @@ export function generateFileKey(
   const uniqueId = uuidv4();
 
   // 4. Nối chuỗi theo đúng format bạn yêu cầu
-  return `${userId}/${context}/${targetId}/${uniqueId}-${safeFileName}`;
+  // return `${userId}/${context}/${targetId}/${uniqueId}-${safeFileName}`;
+  return `${context}/${userId}/${uniqueId}-${safeFileName}`;
 }
