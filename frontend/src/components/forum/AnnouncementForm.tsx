@@ -108,7 +108,7 @@ type AnnouncementForm = {
 // Helper to sanitize URL (encode spaces) and ensure numeric size
 const sanitizeAttachment = (file: FileAttachmentDto) => ({
   fileName: file.fileName,
-  fileUrl: encodeURI(file.fileUrl.trim()),
+  fileKey: file.fileKey,
   fileType: file.fileType || "application/octet-stream", // Fallback if missing
   fileSize: Number(file.fileSize) || 0,
 });
@@ -171,7 +171,9 @@ const AnnouncementForm = ({
       let uploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) =>
+            uploadFileToCloud(file, "ANNOUNCEMENT"),
+          ),
         );
         uploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
@@ -206,14 +208,16 @@ const AnnouncementForm = ({
       let newUploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) =>
+            uploadFileToCloud(file, "ANNOUNCEMENT"),
+          ),
         );
         newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
 
       // 2. Process EXISTING files (sanitize and filter)
       const processedExistingFiles = existingFiles
-        .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
+        .filter((file) => file.fileKey && file.fileKey.trim() !== "")
         .map(sanitizeAttachment);
 
       // 3. Merge files
@@ -266,8 +270,8 @@ const AnnouncementForm = ({
     router.push("/staff/announcement-management");
   };
 
-  const handleRemoveExistingFile = (fileUrl: string) => {
-    setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
+  const handleRemoveExistingFile = (fileKey: string) => {
+    setExistingFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
   };
 
   const isPending = isMutationPending || isUploading;
@@ -363,13 +367,13 @@ const AnnouncementForm = ({
                     <div className="space-y-2">
                       {existingFiles.map((file) => (
                         <div
-                          key={file.fileUrl}
+                          key={file.fileKey}
                           className="flex items-center justify-between rounded-md border border-gray-100 bg-white p-2 text-sm shadow-sm"
                         >
                           <div className="flex items-center gap-2 overflow-hidden">
                             <FileText className="h-4 w-4 shrink-0 text-blue-500" />
                             <a
-                              href={file.fileUrl}
+                              href={file.fileKey}
                               target="_blank"
                               rel="noreferrer"
                               className="truncate text-blue-600 hover:underline"
@@ -393,7 +397,7 @@ const AnnouncementForm = ({
                             size="icon"
                             className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
                             onClick={() =>
-                              handleRemoveExistingFile(file.fileUrl)
+                              handleRemoveExistingFile(file.fileKey)
                             }
                             disabled={isPending}
                           >

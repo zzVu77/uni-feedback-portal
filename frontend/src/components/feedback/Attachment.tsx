@@ -14,12 +14,19 @@ const Attachment = ({ fileName, fileUrl }: FileAttachment) => {
         {/* File Name */}
         <span className="text-[14px] font-medium">{fileName}</span>
       </div>
-      <Link href={fileUrl} target="_blank" rel="noopener noreferrer">
-        <Button className="bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600">
+      {fileUrl ? (
+        <Link href={fileUrl} target="_blank" rel="noopener noreferrer">
+          <Button className="bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600">
+            <Download />
+            Download
+          </Button>
+        </Link>
+      ) : (
+        <Button disabled className="bg-blue-100 text-blue-500">
           <Download />
           Download
         </Button>
-      </Link>
+      )}
     </div>
   );
 };
