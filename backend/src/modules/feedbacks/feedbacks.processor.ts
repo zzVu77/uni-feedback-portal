@@ -1,4 +1,4 @@
-import { OnWorkerEvent, Processor, WorkerHost  } from '@nestjs/bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, UnrecoverableError } from 'bullmq';
 import { AiService } from '../ai/ai.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,6 +9,7 @@ import type { ActiveUserData } from '../auth/interfaces/active-user-data.interfa
 import { FeedbackJobData } from './dto/feedback-job-data.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { Prisma } from '@prisma/client';
+import { FeedbackDetail } from './dto';
 @Processor('feedback-toxic')
 export class FeedbackToxicProcessor extends WorkerHost {
   constructor(
@@ -66,25 +67,27 @@ export class FeedbackToxicProcessor extends WorkerHost {
   // Sử dụng chung hàm này cho cả create và update để tránh trùng lặp code
   async handleUpdateFeedback(data: {
     feedbackId: string;
-    updateData: any;
-    dto: UpdateFeedbackDto;
+    updateData: UpdateFeedbackDto;
     actor: ActiveUserData;
   }) {
     await this.processToxicity({
       feedbackId: data.feedbackId,
-      description: data.dto.description || '',
-      departmentId: data.updateData.departmentId,
-      subject: data.updateData.subject,
+      description: data.updateData.description || '',
+      departmentId: data.updateData.departmentId || '',
+      subject: data.updateData.subject || '',
       actorId: data.actor.sub,
       aiDataContext: data,
       jobType: 'update',
     });
   }
-  async handleCreateFeedback(data: { feedback: any; actor: ActiveUserData }) {
+  async handleCreateFeedback(data: {
+    feedback: FeedbackDetail;
+    actor: ActiveUserData;
+  }) {
     await this.processToxicity({
       feedbackId: data.feedback.id,
       description: data.feedback.description,
-      departmentId: data.feedback.departmentId,
+      departmentId: data.feedback.department.id,
       subject: data.feedback.subject,
       actorId: data.actor.sub,
       aiDataContext: data.feedback,
@@ -155,7 +158,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
         eventPayload = {
           feedbackId: feedback.id,
           userId: actor.sub,
-          departmentId: feedback.departmentId,
+          departmentId: feedback.department.id,
           subject: feedback.subject,
           isToxic: true,
         };
