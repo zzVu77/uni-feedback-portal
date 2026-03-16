@@ -7,6 +7,7 @@ import {
   IsUrl,
   Max,
   Min,
+  IsUUID,
 } from 'class-validator';
 // GENERAL CONSTANTS
 export const ALLOWED_FILE_TYPES = [
@@ -40,7 +41,7 @@ export class FileAttachmentDto extends BaseFileItemDto {
     example: '550e8400-e29b-41d4-a716-44665544004a',
     description: 'Unique ID of the file attachment',
   })
-  @IsString()
+  @IsUUID('loose')
   id: string;
 
   @ApiProperty({
