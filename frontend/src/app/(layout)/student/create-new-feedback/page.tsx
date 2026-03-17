@@ -11,13 +11,11 @@ const page = () => {
 
   return (
     <Wrapper>
-      <div className="h-full w-full">
-        <FeedbackForm
-          type="create"
-          onSubmit={handleSubmit}
-          isPending={isPending}
-        />
-      </div>
+      <FeedbackForm
+        type="create"
+        onSubmit={handleSubmit}
+        isPending={isPending}
+      />
     </Wrapper>
   );
 };

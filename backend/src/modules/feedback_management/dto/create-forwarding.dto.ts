@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateForwardingDto {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440001',
     description: 'ID of the department the feedback will be forwarded to',
   })
-  @IsString()
+  @IsUUID('loose')
   toDepartmentId: string;
 
   @ApiProperty({

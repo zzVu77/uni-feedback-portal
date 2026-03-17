@@ -8,7 +8,9 @@ import {
 } from "@/types";
 
 const announcementBaseUrl = "/announcement";
-export const getAllAnnouncements = async (
+const announcementStaffBaseUrl = "/announcement/staff";
+//  Announcement service functions for authenticated users
+export const getAllAnnouncementsForAuthenticatedUsers = async (
   filter: AnnouncementFilter,
 ): Promise<PaginatedResponse<AnnouncementListItem>> => {
   const response = await axiosInstance.get<
@@ -18,7 +20,7 @@ export const getAllAnnouncements = async (
   });
   return response;
 };
-export const getAnnouncementById = async (
+export const getAnnouncementByIdForAuthenticatedUsers = async (
   id: string,
 ): Promise<AnnouncementDetailType> => {
   const response = await axiosInstance.get<AnnouncementDetailType>(
@@ -26,23 +28,40 @@ export const getAnnouncementById = async (
   );
   return response;
 };
-
+// Announcement service functions for staff users
+export const getAllAnnouncementsForStaff = async (
+  filter: AnnouncementFilter,
+): Promise<PaginatedResponse<AnnouncementListItem>> => {
+  const response = await axiosInstance.get<
+    PaginatedResponse<AnnouncementListItem>
+  >(announcementStaffBaseUrl, {
+    params: filter,
+  });
+  return response;
+};
+export const getAnnouncementByIdForStaff = async (
+  id: string,
+): Promise<AnnouncementDetailType> => {
+  const response = await axiosInstance.get<AnnouncementDetailType>(
+    `${announcementStaffBaseUrl}/${id}`,
+  );
+  return response;
+};
 export const createAnnouncement = async (
   payload: CreateAnnouncementPayload,
 ) => {
-  await axiosInstance.post(announcementBaseUrl, {
+  await axiosInstance.post(announcementStaffBaseUrl, {
     ...payload,
   });
 };
-
 export const updateAnnouncementById = async (
   id: string,
   payload: CreateAnnouncementPayload,
 ) => {
-  await axiosInstance.patch(`${announcementBaseUrl}/${id}`, {
+  await axiosInstance.patch(`${announcementStaffBaseUrl}/${id}`, {
     ...payload,
   });
 };
 export const deleteAnnouncementById = async (id: string) => {
-  await axiosInstance.delete(`${announcementBaseUrl}/${id}`);
+  await axiosInstance.delete(`${announcementStaffBaseUrl}/${id}`);
 };
