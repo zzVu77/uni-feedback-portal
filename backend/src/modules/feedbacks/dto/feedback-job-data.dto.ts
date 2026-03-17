@@ -13,3 +13,10 @@ export type FeedbackJobData =
       updateData: UpdateFeedbackDto;
       actor: ActiveUserData;
     };
+export type AiDataContext =
+  | FeedbackDetail
+  | {
+      feedbackId: string;
+      updateData: UpdateFeedbackDto;
+      actor: ActiveUserData;
+    };

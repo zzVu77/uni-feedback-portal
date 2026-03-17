@@ -3,13 +3,17 @@ import { GoogleGenAI } from '@google/genai';
 import { toxicityPrompt, toxicKeywords } from './prompts/toxicity.prompt';
 import { PrismaService } from '../prisma/prisma.service';
 import { FeedbackStatus } from '@prisma/client';
+import { AiDataContext } from '../feedbacks/dto/feedback-job-data.dto';
+import { FeedbackDetail } from '../feedbacks/dto';
+import { UpdateFeedbackDto } from '../feedbacks/dto/update-feedback.dto';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 @Injectable()
 export class AiService {
   constructor(private readonly prisma: PrismaService) {}
 
   async checkToxicity(
     description: string,
-    data: any,
+    data: AiDataContext,
     type: string,
   ): Promise<boolean> {
     if (description) {
@@ -48,10 +52,11 @@ export class AiService {
     }
     return false;
   }
-  async handleFaultGeminiEvent(data: any, type: string) {
+  async handleFaultGeminiEvent(data: AiDataContext, type: string) {
     if (type === 'create') {
+      const feedback = data as FeedbackDetail;
       await this.prisma.feedbacks.update({
-        where: { id: data.id },
+        where: { id: feedback.id },
         data: {
           currentStatus: FeedbackStatus.AI_REVIEW_FAILED,
         },
@@ -88,7 +93,12 @@ export class AiService {
         },
       });
     } else if (type === 'update') {
-      const { feedbackId } = data;
+      const updateData = data as {
+        feedbackId: string;
+        updateData: UpdateFeedbackDto;
+        actor: ActiveUserData;
+      };
+      const { feedbackId } = updateData;
       await this.prisma.feedbacks.update({
         where: { id: feedbackId },
         data: {

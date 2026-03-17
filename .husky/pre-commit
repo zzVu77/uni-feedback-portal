@@ -4,3 +4,4 @@
 # Run lint-staged
 npx lint-staged
 
+npm run lint

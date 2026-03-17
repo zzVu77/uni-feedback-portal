@@ -10,6 +10,7 @@ import { FeedbackJobData } from './dto/feedback-job-data.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { Prisma } from '@prisma/client';
 import { FeedbackDetail } from './dto';
+import { AiDataContext } from './dto/feedback-job-data.dto';
 @Processor('feedback-toxic')
 export class FeedbackToxicProcessor extends WorkerHost {
   constructor(
@@ -61,7 +62,9 @@ export class FeedbackToxicProcessor extends WorkerHost {
         break;
 
       default:
-        throw new UnrecoverableError(`Unsupported job type: ${type}`);
+        throw new UnrecoverableError(
+          `Unsupported job type: create or update expected`,
+        );
     }
   }
   // Sử dụng chung hàm này cho cả create và update để tránh trùng lặp code
@@ -100,7 +103,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
     departmentId: string;
     subject: string;
     actorId: string;
-    aiDataContext: any;
+    aiDataContext: AiDataContext;
     jobType: 'create' | 'update';
   }) {
     const {
@@ -149,7 +152,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
   }
   // Xử lý khi job thất bại sau tất cả các lần thử
   @OnWorkerEvent('failed')
-  async onFailed(job: Job, error: Error) {
+  onFailed(job: Job<FeedbackJobData>) {
     let eventPayload: FeedbackCreatedEvent | null = null;
     // Chỉ xử lý khi đã hết tất cả các lần thử
     if (job.attemptsMade >= (job.opts.attempts ?? 1)) {
@@ -167,8 +170,8 @@ export class FeedbackToxicProcessor extends WorkerHost {
         eventPayload = {
           feedbackId: feedbackId,
           userId: actor.sub,
-          departmentId: updateData.departmentId,
-          subject: updateData.subject,
+          departmentId: updateData.departmentId || '',
+          subject: updateData.subject || '',
           isToxic: true,
         };
       }
