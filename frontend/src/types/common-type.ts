@@ -14,13 +14,17 @@ export type OptionType = {
 };
 export type PresignedUrlResponse = {
   uploadUrl: string;
-  fileUrl: string;
+  fileKey: string;
 };
 
 export type FileAttachmentDto = {
   fileName: string;
-  fileUrl: string;
+  fileUrl?: string;
+  fileKey: string;
   fileType: string;
   fileSize: number;
 };
-export type FileAttachment = Omit<FileAttachmentDto, "fileType" | "fileSize">;
+export type FileAttachment = Omit<
+  FileAttachmentDto,
+  "fileType" | "fileSize" | "fileKey"
+>;

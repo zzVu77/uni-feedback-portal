@@ -157,8 +157,8 @@ const FeedbackForm = ({
   }, [initialData]);
 
   // Remove existing file handler
-  const handleRemoveExistingFile = (fileUrl: string) => {
-    setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
+  const handleRemoveExistingFile = (fileKey: string) => {
+    setExistingFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
   };
 
   const { data: categoryOptions = [] } = useCategoryOptionsData("active");
@@ -237,7 +237,7 @@ const FeedbackForm = ({
       let uploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) => uploadFileToCloud(file, "FEEDBACK")),
         );
         // FIX: Encode URL for uploaded files
         uploadedAttachments = rawAttachments.map(sanitizeAttachment);
@@ -274,7 +274,7 @@ const FeedbackForm = ({
       let newUploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) => uploadFileToCloud(file, "FEEDBACK")),
         );
         // FIX: Encode URL cho file mới upload
         newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
@@ -282,7 +282,7 @@ const FeedbackForm = ({
 
       // 2. Process existing files (also need to encode to be sure)
       const processedExistingFiles = existingFiles
-        .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
+        .filter((file) => file.fileKey && file.fileKey.trim() !== "")
         .map(sanitizeAttachment);
 
       // 3.Combine existing + new
@@ -416,7 +416,7 @@ const FeedbackForm = ({
                           <div className="grid gap-3 sm:grid-cols-2">
                             {existingFiles.map((file) => (
                               <div
-                                key={file.fileUrl}
+                                key={file.fileKey}
                                 className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
                               >
                                 <div className="flex min-w-0 items-center gap-2.5">
@@ -425,7 +425,7 @@ const FeedbackForm = ({
                                   </div>
                                   <div className="min-w-0 flex-1">
                                     <a
-                                      href={file.fileUrl}
+                                      href={file.fileKey}
                                       target="_blank"
                                       rel="noreferrer"
                                       className="block truncate text-sm font-medium text-slate-700 hover:text-blue-600"
@@ -444,7 +444,7 @@ const FeedbackForm = ({
                                   size="icon"
                                   className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
                                   onClick={() =>
-                                    handleRemoveExistingFile(file.fileUrl)
+                                    handleRemoveExistingFile(file.fileKey)
                                   }
                                   disabled={isPending}
                                 >

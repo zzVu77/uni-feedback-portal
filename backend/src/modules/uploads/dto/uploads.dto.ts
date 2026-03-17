@@ -1,24 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { BaseFileItemDto } from './file-attachment.dto';
+import { FileTargetType } from '@prisma/client';
 
-export class GenerateUploadUrlDto {
-  @ApiProperty({
-    example: 'screenshot.png',
-    description: 'The name of the file to be uploaded.',
-  })
-  @IsString()
+export class GenerateUploadUrlDto extends BaseFileItemDto {
+  @ApiProperty({ example: 'feedback', enum: FileTargetType })
+  @IsEnum(FileTargetType)
   @IsNotEmpty()
-  fileName: string;
+  targetType: FileTargetType;
 
-  @ApiProperty({
-    example: 'image/png',
-    description: 'The MIME type of the file.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  fileType: string;
+  // @ApiProperty({ example: 'uuid-of-the-feedback' })
+  // @IsString()
+  // @IsNotEmpty()
+  // targetId: string;
 }
-
 export class GenerateUploadUrlResponseDto {
   @ApiProperty({
     description:
@@ -27,14 +22,20 @@ export class GenerateUploadUrlResponseDto {
   uploadUrl: string;
 
   @ApiProperty({
-    description: 'The final public URL of the file after it has been uploaded.',
+    description:
+      'The key of the file in the storage after it has been uploaded.',
   })
-  fileUrl: string;
+  fileKey: string;
+
+  // @ApiProperty({
+  //   description: 'The final public URL of the file after it has been uploaded.',
+  // })
+  // fileUrl: string;
 }
 
 export class DeleteFileDto {
   @ApiProperty()
-  @IsUrl()
+  @IsString()
   @IsNotEmpty()
-  fileUrl: string;
+  fileKey: string;
 }

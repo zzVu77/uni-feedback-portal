@@ -87,11 +87,11 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
       // Upload files if any
       if (selectedFiles.length > 0) {
         const rawAttachments = await Promise.all(
-          selectedFiles.map((file) => uploadFileToCloud(file)),
+          selectedFiles.map((file) => uploadFileToCloud(file, "MESSAGE")),
         );
         uploadedAttachments = rawAttachments.map((file) => ({
           fileName: file.fileName,
-          fileUrl: encodeURI(file.fileUrl.trim()),
+          fileKey: file.fileKey,
           fileType: file.fileType,
           fileSize: Number(file.fileSize),
         }));
