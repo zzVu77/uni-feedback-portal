@@ -1,12 +1,12 @@
 "use client";
-import { MessageCircle, Send, SquarePen } from "lucide-react";
+import { User } from "lucide-react";
 import React, { useState } from "react";
-import { ScrollArea } from "../ui/scroll-area";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import CommentItem from "./CommentItem";
 import { Comment } from "@/types";
 import { useUser } from "@/context/UserContext";
+import { cn } from "@/lib/utils";
 import {
   useCreateCommentByAnnouncementId,
   useCreateCommentByPostId,
@@ -80,20 +80,57 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
   return (
     <div
       id="comment-section"
-      className="flex w-full flex-col gap-4 rounded-xl bg-white px-4 py-3 shadow-md"
+      className="mt-2 flex w-full flex-col gap-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8"
     >
-      <div className="flex flex-row items-center justify-start gap-2">
-        <MessageCircle className="text-neutral-dark-primary-700 h-6 w-6" />
-        <span className="text-neutral-dark-primary-700 text-[18px] font-medium">
-          Thảo luận ({totalComments})
-        </span>
+      {/* Discussion Header */}
+      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-slate-900">
+          Thảo luận
+          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-sm font-medium text-slate-500">
+            {totalComments}
+          </span>
+        </h2>
       </div>
-      <ScrollArea className="overflow-y-auto pr-4">
-        <div className="flex max-h-[550px] flex-col gap-4">
-          {/* Render list comment */}
-          {comments.map((comment) => (
+
+      {/* Comment Input Area (Top) */}
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4">
+          <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 sm:flex">
+            <User className="h-5 w-5" />
+          </div>
+          <div className="flex flex-1 flex-col gap-3">
+            <Textarea
+              placeholder="Chia sẻ ý kiến của bạn..."
+              className="min-h-[100px] resize-none border-slate-200 bg-slate-50/30 p-4 transition-all duration-200 focus:bg-white"
+              value={newComment}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setNewComment(e.target.value)
+              }
+            />
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                className={cn(
+                  "rounded-full px-8 py-2 font-semibold shadow-sm transition-all duration-200",
+                  newComment.trim()
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : "cursor-not-allowed bg-slate-100 text-slate-400",
+                )}
+                onClick={handleNewCommentSubmit}
+                disabled={isCreating || !newComment.trim()}
+              >
+                {isCreating ? "Đang gửi..." : "Gửi bình luận"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Comment List Area */}
+      <div className="flex flex-col gap-8">
+        {comments.length > 0 ? (
+          comments.map((comment) => (
             <CommentItem
-              // Pass the delete handler
               onDelete={handleDeleteComment}
               currentUser={{
                 id: user?.id || "",
@@ -103,35 +140,15 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
               comment={comment}
               onReplySubmit={handleReplySubmit}
               level={1}
-              isLast={comment.id === comments[comments.length - 1].id}
             />
-          ))}
-        </div>
-      </ScrollArea>
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-row items-center justify-start gap-2">
-          <SquarePen className="text-neutral-dark-primary-700 h-6 w-6" />
-          <span className="text-neutral-dark-primary-700 text-[18px] font-medium">
-            Bình luận
-          </span>
-        </div>
-        <Textarea
-          placeholder="Viết ý kiến của bạn..."
-          value={newComment}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setNewComment(e.target.value)
-          }
-        />
-        <Button
-          type="button"
-          variant={"primary"}
-          className="flex w-fit flex-row items-center gap-2 self-end py-3 shadow-md"
-          onClick={handleNewCommentSubmit}
-          disabled={isCreating}
-        >
-          <Send className="h-5 w-5" />
-          {isCreating ? "Đang gửi..." : "Gửi"}
-        </Button>
+          ))
+        ) : (
+          <div className="py-12 text-center">
+            <p className="text-slate-400">
+              Chưa có bình luận nào. Hãy là người đầu tiên!
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
