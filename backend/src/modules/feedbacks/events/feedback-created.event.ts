@@ -1,6 +1,5 @@
 // src/modules/feedbacks/events/feedback-created.event.ts
 
-
 export class FeedbackCreatedEvent {
   feedbackId: string;
   userId: string;

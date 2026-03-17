@@ -5,9 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { FeedbackStatus } from '@prisma/client';
 @Injectable()
 export class AiService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async checkToxicity(
     description: string,
@@ -90,7 +88,7 @@ export class AiService {
         },
       });
     } else if (type === 'update') {
-      const { feedbackId} = data;
+      const { feedbackId } = data;
       await this.prisma.feedbacks.update({
         where: { id: feedbackId },
         data: {

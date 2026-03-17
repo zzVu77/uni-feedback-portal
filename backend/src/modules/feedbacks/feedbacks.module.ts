@@ -9,8 +9,8 @@ import { FeedbackToxicProcessor } from './feedbacks.processor';
 
 @Module({
   imports: [
-    UploadsModule, 
-    ForumModule, 
+    UploadsModule,
+    ForumModule,
     AiModule,
     BullModule.registerQueue({
       name: 'feedback-toxic',

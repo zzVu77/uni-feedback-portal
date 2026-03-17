@@ -205,7 +205,7 @@ export class FeedbacksService {
     params: FeedbackParamDto,
     dto: UpdateFeedbackDto,
     actor: ActiveUserData,
-  ) : Promise<FeedbackDetail> {
+  ): Promise<FeedbackDetail> {
     const { feedbackId } = params;
 
     const feedback = await this.prisma.feedbacks.findUnique({
@@ -219,7 +219,11 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    if (feedback.currentStatus !== FeedbackStatus.PENDING && feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT && feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED) {
+    if (
+      feedback.currentStatus !== FeedbackStatus.PENDING &&
+      feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT &&
+      feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED
+    ) {
       throw new ForbiddenException(
         'Feedback can only be updated when in PENDING, VIOLATED_CONTENT, or AI_REVIEW_FAILED status.',
       );
@@ -375,7 +379,11 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    if (feedback.currentStatus !== FeedbackStatus.PENDING && feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT && feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED) {
+    if (
+      feedback.currentStatus !== FeedbackStatus.PENDING &&
+      feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT &&
+      feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED
+    ) {
       throw new ForbiddenException(
         'Feedback can only be deleted when in PENDING, VIOLATED_CONTENT, or AI_REVIEW_FAILED status.',
       );
@@ -391,8 +399,10 @@ export class FeedbacksService {
     });
   }
 
-  async createFeedback(dto: CreateFeedbackDto, actor: ActiveUserData) : Promise<FeedbackSummary> {
-    
+  async createFeedback(
+    dto: CreateFeedbackDto,
+    actor: ActiveUserData,
+  ): Promise<FeedbackSummary> {
     const [department, category] = await Promise.all([
       this.prisma.departments.findUnique({
         where: { id: dto.departmentId },
@@ -464,8 +474,8 @@ export class FeedbacksService {
       'feedbackToxicItem',
       {
         type: 'create',
-        feedback:feedback,
-        actor:actor,
+        feedback: feedback,
+        actor: actor,
       },
       {
         attempts: 3,

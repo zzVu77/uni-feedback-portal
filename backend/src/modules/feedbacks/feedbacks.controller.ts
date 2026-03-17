@@ -58,7 +58,7 @@ export class FeedbacksController {
   createFeedback(
     @Body() createFeedbackDto: CreateFeedbackDto,
     @ActiveUser() user: ActiveUserData,
-  ) : Promise<FeedbackSummary>{
+  ): Promise<FeedbackSummary> {
     return this.feedbacksService.createFeedback(createFeedbackDto, user);
   }
 
@@ -115,7 +115,7 @@ export class FeedbacksController {
     @Param() params: FeedbackParamDto,
     @Body() updateFeedbackDto: UpdateFeedbackDto,
     @ActiveUser() user: ActiveUserData,
-  ) : Promise<FeedbackDetail>{
+  ): Promise<FeedbackDetail> {
     return this.feedbacksService.updateFeedback(
       params,
       updateFeedbackDto,
@@ -146,7 +146,8 @@ export class FeedbacksController {
   @Get('/feedback-toxic/:jobId')
   @ApiOperation({
     summary: 'Get toxic feedback analysis job status',
-    description: 'Returns the current processing status of a toxic feedback analysis job for the given jobId.',
+    description:
+      'Returns the current processing status of a toxic feedback analysis job for the given jobId.',
   })
   @ApiResponse({
     status: 200,
