@@ -4,6 +4,7 @@ import {
   CircleX,
   Forward,
   Loader,
+  TriangleAlert,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
@@ -78,7 +79,7 @@ const STATUS_CONFIG = {
   },
   VIOLATED_CONTENT: {
     text: "Vi phạm",
-    icon: CircleAlert,
+    icon: TriangleAlert,
     badgeClassName: "text-red-500 bg-red-100 hover:bg-red-200/35",
     iconClassName: "text-red-500 animate-pulse",
     textClassName: "",

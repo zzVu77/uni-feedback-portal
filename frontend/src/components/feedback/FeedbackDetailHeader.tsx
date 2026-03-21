@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
+import WarningBox from "../common/WarningBox";
 import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
 import Attachment from "./Attachment";
@@ -143,9 +144,19 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
             </Badge>
           )}
         </div>
+
+        {/* Warning for Violated Content */}
+        {type === "student" && currentStatus === "VIOLATED_CONTENT" && (
+          <WarningBox
+            variant="warning"
+            title="Cảnh báo: Nội dung vi phạm quy định"
+            message="Nội dung phản hồi của bạn đã được xác định là vi phạm tiêu chuẩn cộng đồng hoặc quy định của nhà trường. Vui lòng chỉnh sửa nội dung để được tiếp tục xem xét và xử lý."
+          />
+        )}
+
         {/* Description */}
         <div>
-          <h2 className="text-[18px] font-medium">Nội dung:</h2>
+          <h2 className="text-[18px] font-medium">Nội dung:</h2>{" "}
           <div
             className="text-[13px] font-normal text-black lg:text-[14px]"
             dangerouslySetInnerHTML={{
