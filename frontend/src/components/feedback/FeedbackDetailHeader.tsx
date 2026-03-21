@@ -55,31 +55,32 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
            consequuntur molestias, veniam illum dolores.
            `}
           </h1>
-          {type === "student" && currentStatus === "PENDING" && (
-            <div className="order-1 flex flex-row items-center gap-2 md:order-2">
-              <Link href={`/student/my-feedbacks/${id}/edit`}>
-                <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
-                  <SquarePen className="h-4 w-4 text-black" />
-                  Sửa
-                </Button>
-              </Link>
-              <ConfirmationDialog
-                title="Xác nhận xóa"
-                description="Bạn có chắc chắn muốn xóa phản hồi này không? Hành động này không thể hoàn tác."
-                onConfirm={handleDelete}
-                confirmText="Xóa"
-                cancelText="Hủy"
-              >
-                <Button
-                  className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
-                  disabled={isPending}
+          {(type === "student" && currentStatus === "PENDING") ||
+            (currentStatus === "VIOLATED_CONTENT" && (
+              <div className="order-1 flex flex-row items-center gap-2 md:order-2">
+                <Link href={`/student/my-feedbacks/${id}/edit`}>
+                  <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
+                    <SquarePen className="h-4 w-4 text-black" />
+                    Sửa
+                  </Button>
+                </Link>
+                <ConfirmationDialog
+                  title="Xác nhận xóa"
+                  description="Bạn có chắc chắn muốn xóa phản hồi này không? Hành động này không thể hoàn tác."
+                  onConfirm={handleDelete}
+                  confirmText="Xóa"
+                  cancelText="Hủy"
                 >
-                  <Trash2 className="h-4 w-4 text-white" />
-                  Xóa
-                </Button>
-              </ConfirmationDialog>
-            </div>
-          )}
+                  <Button
+                    className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
+                    disabled={isPending}
+                  >
+                    <Trash2 className="h-4 w-4 text-white" />
+                    Xóa
+                  </Button>
+                </ConfirmationDialog>
+              </div>
+            ))}
         </div>
 
         {/* Information */}

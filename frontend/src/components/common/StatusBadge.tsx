@@ -16,6 +16,7 @@ export type StatusBadgeProps = {
     | "REJECTED"
     | "CLOSED"
     | "FORWARDED"
+    | "VIOLATED_CONTENT"
     | "OPENING";
 };
 
@@ -73,6 +74,13 @@ const STATUS_CONFIG = {
     icon: Forward,
     badgeClassName: "text-purple-800 bg-purple-200/60 hover:bg-purple-200 ",
     iconClassName: "text-purple-800 animate-pulse",
+    textClassName: "",
+  },
+  VIOLATED_CONTENT: {
+    text: "Vi phạm",
+    icon: CircleAlert,
+    badgeClassName: "text-red-500 bg-red-100 hover:bg-red-200/35",
+    iconClassName: "text-red-500 animate-pulse",
     textClassName: "",
   },
 };
