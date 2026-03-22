@@ -7,3 +7,22 @@ sources:
     schema: social_raw
     tables:
       - name: posts
+        columns:
+          - name: id
+            data_type: int64
+          - name: author
+            data_type: string
+          - name: post_date
+            data_type: timestamp
+          - name: post_link
+            data_type: string
+          - name: content
+            data_type: string
+          - name: stats
+            data_type: record
+          - name: stats.reactions
+            description: ""
+          - name: stats.comments
+            description: ""
+          - name: crawled_at
+            data_type: timestamp

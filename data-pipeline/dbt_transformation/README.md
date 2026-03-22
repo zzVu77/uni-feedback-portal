@@ -1,15 +1,41 @@
-Welcome to your new dbt project!
+## 🐍 Environment Setup
 
-### Using the starter project
+### 1. Create the Virtual Environment
 
-Try running the following commands:
-- dbt run
-- dbt test
+Open your terminal at the root directory of the project and run the following command to create a new virtual environment named `dbt-env`:
 
+```bash
+python -m venv dbt-env
+```
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+### 2. Activate the Environment
+
+You must activate the virtual environment every time you work on the Python/dbt portions of this project. Use the command corresponding to your operating system:
+
+- For Windows (PowerShell):
+
+```bash
+.\dbt-env\Scripts\Activate.ps1
+```
+
+- For Windows (Command Prompt):
+
+```bash
+dbt-env\Scripts\activate.bat
+```
+
+### 3. Install Packages
+
+Once the environment is active, install all the required dependencies listed in the requirements.txt file:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Deactivate (When Finished)
+
+When you are done working on the project, you can exit the virtual environment by simply typing:
+
+```bash
+deactivate
+```
