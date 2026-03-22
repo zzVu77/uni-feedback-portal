@@ -2,10 +2,10 @@
 
 ### 1. Create the Virtual Environment
 
-Open your terminal at the root directory of the project and run the following command to create a new virtual environment named `dbt-env`:
+Open your terminal at the root directory of the project and run the following command to create a new virtual environment named `data-env`:
 
 ```bash
-python -m venv dbt-env
+python -m venv data-env
 ```
 
 ### 2. Activate the Environment
@@ -15,13 +15,13 @@ You must activate the virtual environment every time you work on the Python/dbt 
 - For Windows (PowerShell):
 
 ```bash
-.\dbt-env\Scripts\Activate.ps1
+.\data-env\Scripts\Activate.ps1
 ```
 
 - For Windows (Command Prompt):
 
 ```bash
-dbt-env\Scripts\activate.bat
+data-env\Scripts\activate.bat
 ```
 
 ### 3. Install Packages
