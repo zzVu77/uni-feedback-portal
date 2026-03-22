@@ -17,7 +17,7 @@ bq_client = bigquery.Client(project=PROJECT_ID)
 ai_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 def fetch_unprocessed_posts():
-    """Lấy danh sách các bài post chưa được AI phân tích."""
+    """Get up to 50 posts that haven't been analyzed yet from BigQuery."""
     query = f"""
         SELECT post_id, content 
         FROM `{PROJECT_ID}.{DATASET_MARTS}.mrt_posts_for_ai_feed`
@@ -26,23 +26,23 @@ def fetch_unprocessed_posts():
         )
         LIMIT 50 
     """
-    print(f"⏳ Đang kéo tối đa 50 bài viết mới từ BigQuery...")
+    print(f"⏳ Fetching unprocessed posts from BigQuery...")
     return list(bq_client.query(query).result())
 
 def chunk_list(lst, n):
-    """Hàm hỗ trợ: Chia danh sách lớn thành các mảng nhỏ (batch) có kích thước n."""
+    """Helper function: Split a large list into smaller arrays (batches) of size n."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 def analyze_batch_with_gemini(batch_posts):
-    """Gửi 1 batch (nhiều bài) cho Gemini và yêu cầu trả về MẢNG JSON."""
+    """Send a batch (multiple posts) to Gemini and request a JSON array as output."""
     
-    # 1. Gom nội dung của 5 bài viết lại thành 1 chuỗi văn bản dài
+    # 1. Group 5 posts into a single prompt 
     input_data = ""
     for post in batch_posts:
         input_data += f'--- BÀI VIẾT ID: {post.post_id} ---\nNội dung: "{post.content}"\n\n'
 
-    # 2. Ép Gemini trả về dạng Mảng (Array) JSON
+    # 2. Instruct Gemini to return a JSON array with the required structure
     prompt = f"""
     Bạn là một chuyên gia phân tích dữ liệu phản hồi của sinh viên.
     Hãy phân tích danh sách các bài viết dưới đây và trả về KẾT QUẢ ĐỊNH DẠNG JSON LÀ MỘT MẢNG (ARRAY).
@@ -52,7 +52,7 @@ def analyze_batch_with_gemini(batch_posts):
     - "post_id": Giữ nguyên ID của bài viết tương ứng (Bắt buộc phải có).
     - "topic": Phân loại chủ đề ("Học phí", "Cơ sở vật chất", "Giảng viên", "Học thuật", "Khác"). Chỉ chọn 1.
     - "sentiment_score": Điểm số từ -1.0 (Rất tiêu cực) đến 1.0 (Rất tích cực).
-    - "ai_summary": Tóm tắt nội dung tối đa 15 chữ.
+    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ.
 
     Danh sách bài viết cần phân tích:
     {input_data}
@@ -64,69 +64,68 @@ def analyze_batch_with_gemini(batch_posts):
             contents=prompt
         )
         
-        # --- ĐÃ THÊM LỚP BẢO VỆ Ở ĐÂY ---
         if not response.text:
-            print("⚠️ Gemini trả về kết quả rỗng (Có thể do bộ lọc từ ngữ nhạy cảm).")
+            print("⚠️ Gemini returned an empty response since it contains some content that violates the policy. Skipping this batch.")
             return None
             
-        # Làm sạch JSON (Cắt bỏ râu ria nếu AI lỡ sinh ra)
+        # 3. Clean the response to ensure it's a valid JSON array string
         clean_json = response.text.replace("```json", "").replace("```", "").strip()
         return json.loads(clean_json)
         # --------------------------------
 
     except Exception as e:
-        print(f"⚠️ Lỗi khi gọi Gemini cho batch: {e}")
+        print(f"⚠️ Error when calling Gemini for batch: {e}")
         return None
 
 def write_back_to_bigquery(results):
-    """Ghi mảng kết quả lên bảng ai_raw.post_analysis."""
+    """Write the AI analysis results back to BigQuery."""
     table_id = f"{PROJECT_ID}.{DATASET_RAW}.post_analysis"
     
-    print(f"🚀 Đang đẩy {len(results)} dòng kết quả AI lên BigQuery...")
+    print(f"🚀 Pushing {len(results)} AI analysis results to BigQuery...")
     errors = bq_client.insert_rows_json(table_id, results)
     
     if not errors:
-        print("✅ Thành công! Dữ liệu AI đã nằm trên BigQuery.")
+        print("✅ Success! AI data has been pushed to BigQuery.")
     else:
-        print(f"❌ Có lỗi khi insert vào BigQuery: {errors}")
+        print(f"❌ There was an error inserting into BigQuery: {errors}")
 
 def main():
     try:
         posts = fetch_unprocessed_posts()
     except Exception as e:
-        print(f"❌ Lỗi truy vấn dữ liệu. Hãy kiểm tra lại tên DATASET_MARTS. Chi tiết: {e}")
+        print(f"❌ Error querying data. Please check the DATASET_MARTS name. Details: {e}")
         return
     
     if not posts:
-        print("✅ Không có bài đăng nào mới cần phân tích.")
+        print("✅ There are no new posts to analyze.")
         return
 
-    # Chia 50 bài thành các cụm nhỏ, mỗi cụm 5 bài
+    # Split the posts into batches of 5 to comply with Gemini's rate limits and to optimize API calls
     batch_size = 5
     batches = list(chunk_list(posts, batch_size))
     ai_results = []
     
-    print(f"🤖 Đang chia {len(posts)} bài thành {len(batches)} đợt (mỗi đợt {batch_size} bài)...")
+    print(f"🤖 Splitting {len(posts)} posts into {len(batches)} batches ( {batch_size} posts each)...")
     
     for index, batch in enumerate(batches):
-        print(f"[{index + 1}/{len(batches)}] Đang xử lý đợt {index + 1}...")
+        print(f"[{index + 1}/{len(batches)}] Processing batch {index + 1}...")
         
-        # Gọi AI cho 5 bài cùng lúc
+        # Call API for each batch and get the analysis array
         analysis_array = analyze_batch_with_gemini(batch)
         
-        # Nếu AI trả về đúng định dạng mảng, ta gộp nó vào list tổng
+        # If we got a valid array back, extend our results list. Otherwise, log the failure.
         if analysis_array and isinstance(analysis_array, list):
             ai_results.extend(analysis_array)
-            print(f"  -> Phân tích thành công {len(analysis_array)} bài.")
+            print(f"  -> Success! Analyzed {len(analysis_array)} posts.")
         else:
-            print(f"  -> ❌ Đợt {index + 1} thất bại hoặc JSON không hợp lệ.")
+            print(f"  -> ❌ Batch {index + 1} failed or returned invalid JSON.")
             
-        # Cho code nghỉ ngơi để không bị Google phạt (Vượt quá 5 request/phút)
+        # To avoid hitting Gemini's rate limits, we will pause for 15 seconds after each batch except the last one
         if index < len(batches) - 1:
-            print("  💤 Nghỉ 15 giây để hồi chiêu API...")
+            print("  💤 Sleeping for 15 seconds to respect API rate limits...")
             time.sleep(15)
             
-    # Sau khi chạy xong tất cả các đợt, đẩy 1 cục lên BigQuery
+    # After processing all batches, if we have any results, write them back to BigQuery
     if ai_results:
         write_back_to_bigquery(ai_results)
 
