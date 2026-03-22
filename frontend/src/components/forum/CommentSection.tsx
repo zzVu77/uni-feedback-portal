@@ -80,7 +80,7 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
   return (
     <div
       id="comment-section"
-      className="mt-2 flex w-full flex-col gap-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8"
+      className="mt-2 flex w-full flex-col gap-2 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8"
     >
       {/* Discussion Header */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
