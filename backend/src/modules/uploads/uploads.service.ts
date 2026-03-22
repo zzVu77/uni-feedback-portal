@@ -6,7 +6,7 @@ import {
   FileAttachmentDto,
   MAX_FILE_SIZE,
 } from './dto/file-attachment.dto';
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js';
 import {
   GenerateUploadUrlDto,
   GenerateUploadUrlResponseDto,
@@ -20,10 +20,10 @@ import { generateFileUrl } from 'src/shared/helpers/genrate-file-url';
 
 @Injectable()
 export class UploadsService {
-  private supabase = createClient(
-    `https://${config.SUPABASE_PROJECT_REF}.supabase.co`,
-    config.SUPABASE_SERVICE_ROLE_KEY, // dùng key SERVICE ROLE
-  );
+  // private supabase = createClient(
+  //   `https://${config.SUPABASE_PROJECT_REF}.supabase.co`,
+  //   config.SUPABASE_SERVICE_ROLE_KEY, // dùng key SERVICE ROLE
+  // );
   private s3: S3;
   constructor(private readonly prisma: PrismaService) {
     this.s3 = new S3({
@@ -74,7 +74,7 @@ export class UploadsService {
   ): Promise<GenerateUploadUrlResponseDto> {
     const { fileName, fileType, fileSize, targetType } = dto;
 
-    // ===== 1. Validate ở backend (rất quan trọng) =====
+    // ===== 1. Validate  backend  =====
 
     if (!ALLOWED_FILE_TYPES.includes(fileType)) {
       throw new Error('File type not allowed');
@@ -93,7 +93,6 @@ export class UploadsService {
       Key: key,
       ContentType: fileType,
       ContentLength: fileSize,
-      // ACL: 'private', // KHÔNG cần nếu bucket private
     });
 
     // ===== 4. Generate presigned URL =====
@@ -154,9 +153,6 @@ export class UploadsService {
     }
   }
 
-  /**
-   * Lấy danh sách file đính kèm cho một đối tượng.
-   */
   async getAttachmentsForTarget(
     targetId: string,
     targetType: FileTargetType,
@@ -181,12 +177,6 @@ export class UploadsService {
     }));
   }
 
-  /**
-   * Lấy danh sách file đính kèm cho nhiều đối tượng cùng lúc (tối ưu hóa query).
-   * @param targetIds Mảng các ID của feedback, message, hoặc announcement
-   * @param targetType Loại đối tượng
-   * @returns Một Record với key là targetId và value là mảng các file đính kèm
-   */
   async getAttachmentsForManyTargets(
     targetIds: string[],
     targetType: FileTargetType,
@@ -202,7 +192,6 @@ export class UploadsService {
       },
     });
 
-    // Gom nhóm các file theo targetId
     const groupedByTargetId = attachments.reduce(
       (acc, attachment) => {
         const { targetId } = attachment;
@@ -225,9 +214,6 @@ export class UploadsService {
     return groupedByTargetId;
   }
 
-  /**
-   * Cập nhật (thêm/xóa) danh sách file đính kèm cho một đối tượng.
-   */
   async updateAttachmentsForTarget(
     targetId: string,
     targetType: FileTargetType,
@@ -248,20 +234,16 @@ export class UploadsService {
         (f) => !existingFiles.some((e) => e.fileKey === f.fileKey),
       ) ?? [];
 
-    // Xóa file cũ
     if (filesToDelete.length > 0) {
-      // Xóa file trên S3 trước
       await Promise.all(
         filesToDelete.map((file) => this.deleteFileFromS3(file.fileKey)),
       );
 
-      // Sau đó xóa trong DB
       await this.prisma.fileAttachments.deleteMany({
         where: { id: { in: filesToDelete.map((f) => f.id) } },
       });
     }
 
-    // Thêm file mới
     if (filesToAdd.length > 0) {
       await this.prisma.fileAttachments.createMany({
         data: filesToAdd.map((file) => ({
@@ -275,7 +257,6 @@ export class UploadsService {
       });
     }
 
-    // Trả về danh sách file cuối cùng
     const finalFileKeys = newFileKeys ?? [];
     const finalFiles = await this.prisma.fileAttachments.findMany({
       where: {
@@ -295,9 +276,6 @@ export class UploadsService {
     }));
   }
 
-  /**
-   * Xóa tất cả file đính kèm của một đối tượng.
-   */
   async deleteAttachmentsForTarget(
     targetId: string,
     targetType: FileTargetType,
@@ -308,12 +286,10 @@ export class UploadsService {
     );
 
     if (filesToDelete.length > 0) {
-      // Xóa file trên S3 trước
       await Promise.all(
         filesToDelete.map((file) => this.deleteFileFromS3(file.fileKey)),
       );
 
-      // Sau đó xóa trong DB
       await this.prisma.fileAttachments.deleteMany({
         where: { targetId, targetType },
       });
