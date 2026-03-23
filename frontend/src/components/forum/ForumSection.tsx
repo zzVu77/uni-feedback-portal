@@ -144,7 +144,7 @@ export function ForumSection() {
           </TabsList>
 
           {/* Mobile Search & Filter Row */}
-          <div className="flex w-full items-center gap-2 lg:hidden">
+          <div className="flex w-full items-center gap-2 xl:hidden">
             <Suspense fallback={null}>
               <SearchBar
                 placeholder="Tìm kiếm..."
@@ -162,7 +162,7 @@ export function ForumSection() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="bottom" className="rounded-t-2xl px-6 pb-8">
-                <SheetHeader className="mb-4 px-0 text-left">
+                <SheetHeader className="mb-0 px-0 pt-2 pb-0 text-left">
                   <SheetTitle className="text-lg font-bold text-slate-900">
                     Bộ lọc tìm kiếm
                   </SheetTitle>
@@ -238,9 +238,9 @@ export function ForumSection() {
         </div>
 
         {/* 3. Main Content Grid */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        <div className="grid grid-cols-1 gap-8 xl:grid-cols-12">
           {/* LEFT COLUMN: Main Feed */}
-          <div className="flex flex-col gap-6 lg:col-span-8">
+          <div className="flex flex-col gap-6 xl:col-span-9">
             <TabsContent value="feedbacks" className="mt-0 space-y-6">
               {isForumPostsLoading ? (
                 <div className="flex h-40 items-center justify-center">
@@ -341,7 +341,7 @@ export function ForumSection() {
           </div>
 
           {/* RIGHT COLUMN: Sidebar (Desktop) */}
-          <div className="hidden w-full space-y-4 lg:col-span-4 lg:block">
+          <div className="hidden w-full space-y-4 xl:col-span-3 xl:block">
             {/* Search & Filter Widget */}
             <div className="sticky top-0 space-y-6">
               <div className="w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

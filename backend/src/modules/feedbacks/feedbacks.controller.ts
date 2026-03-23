@@ -58,7 +58,7 @@ export class FeedbacksController {
   createFeedback(
     @Body() createFeedbackDto: CreateFeedbackDto,
     @ActiveUser() user: ActiveUserData,
-  ) {
+  ): Promise<FeedbackSummary> {
     return this.feedbacksService.createFeedback(createFeedbackDto, user);
   }
 
@@ -141,5 +141,25 @@ export class FeedbacksController {
     @ActiveUser() user: ActiveUserData,
   ): Promise<void> {
     return this.feedbacksService.deleteFeedback(params, user);
+  }
+
+  @Get('/feedback-toxic/:jobId')
+  @ApiOperation({
+    summary: 'Get toxic feedback analysis job status',
+    description:
+      'Returns the current processing status of a toxic feedback analysis job for the given jobId.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Job status retrieved successfully',
+    schema: {
+      example: {
+        status: 'APPROVED',
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Job not found' })
+  getToxicJobStatus(@Param('jobId') jobId: string) {
+    return this.feedbacksService.getToxicJobStatus(jobId);
   }
 }

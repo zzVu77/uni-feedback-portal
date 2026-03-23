@@ -49,3 +49,15 @@ Open Prisma Studio in your browser to view and edit data.
 ```bash
 npx prisma studio
 ```
+
+### 6. Redis
+Pull Redis Stack image
+
+```bash
+docker pull redis/redis-stack-server:latest
+```
+
+Run Redis container
+```bash
+docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
+```
