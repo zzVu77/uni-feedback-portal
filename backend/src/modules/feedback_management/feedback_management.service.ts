@@ -52,6 +52,11 @@ export class FeedbackManagementService {
         },
       ],
     });
+    conditions.push({
+      currentStatus: {
+        not: FeedbackStatus.VIOLATED_CONTENT,
+      },
+    });
 
     if (status) {
       conditions.push({
