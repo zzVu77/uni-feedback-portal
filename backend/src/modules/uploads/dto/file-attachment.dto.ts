@@ -8,6 +8,8 @@ import {
   Max,
   Min,
   IsUUID,
+  Matches,
+  NotContains,
 } from 'class-validator';
 // GENERAL CONSTANTS
 export const ALLOWED_FILE_TYPES = [
@@ -15,7 +17,7 @@ export const ALLOWED_FILE_TYPES = [
   'image/jpeg',
   'application/pdf',
 ];
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 export class BaseFileItemDto {
   @ApiProperty({ example: 'screenshot.png' })
@@ -32,7 +34,7 @@ export class BaseFileItemDto {
   @ApiProperty({ example: 350000 })
   @IsInt()
   @Min(1)
-  @Max(MAX_FILE_SIZE, { message: 'File size must be less than 5MB' })
+  @Max(MAX_FILE_SIZE, { message: 'File size must be less than 100MB' })
   fileSize: number;
 }
 
@@ -50,6 +52,12 @@ export class FileAttachmentDto extends BaseFileItemDto {
   })
   @IsString()
   @IsNotEmpty()
+  @NotContains('://', {
+    message: 'fileKey must be a storage key, not a full URL',
+  })
+  @Matches(/^[a-zA-Z0-9._\-/]+$/, {
+    message: 'fileKey contains invalid characters',
+  })
   fileKey: string;
 
   @ApiProperty({

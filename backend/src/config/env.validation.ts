@@ -46,7 +46,7 @@ class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
-  AWS_ACCESS_KEY: string;
+  AWS_ACCESS_KEY_ID: string;
 
   @IsString()
   @IsNotEmpty()

@@ -1,24 +1,24 @@
 /**
- * Chuyển đổi fileKey từ Database thành fileUrl hoàn chỉnh để Frontend hiển thị.
- * Có xử lý chống lỗi "hai dấu gạch chéo" (double slash) hoặc lỗi lưu nhầm URL.
+ * Converts a fileKey from the Database into a complete fileUrl for Frontend display.
+ * Handles "double slash" errors or incorrect URL storage.
  */
 export function generateFileUrl(fileKey: string, baseUrl: string): string {
-  if (!fileKey) return ''; // Trả về chuỗi rỗng nếu không có key
+  if (!fileKey) return ''; // Return an empty string if there is no key
 
-  // CẢNH BÁO AN TOÀN:
-  // Nếu vì lý do nào đó data cũ trong DB của bạn đang lưu full URL (http...),
-  // thì trả về luôn để không bị nối chuỗi thành https://.../https://...
-  if (fileKey.startsWith('http://') || fileKey.startsWith('https://')) {
-    return fileKey;
+  const isInvalid =
+    !fileKey || fileKey.startsWith('http') || fileKey.includes('://');
+
+  if (isInvalid) {
+    console.error(`[Security Warning]: Detected invalid fileKey: ${fileKey}`);
+    return 'https://your-domain.com/static/invalid-file-format.png';
   }
-
-  // BƯỚC QUAN TRỌNG: Làm sạch chuỗi
-  // 1. Xóa dấu '/' ở cuối baseUrl (nếu ai đó lỡ gõ dư trong file .env)
+  // IMPORTANT STEP: Clean up the strings
+  // 1. Remove the trailing '/' from baseUrl (if someone accidentally added it in the .env file)
   const cleanBaseUrl = baseUrl.replace(/\/$/, '');
 
-  // 2. Xóa dấu '/' ở đầu fileKey (nếu có)
+  // 2. Remove the leading '/' from fileKey (if any)
   const cleanKey = fileKey.replace(/^\//, '');
 
-  // Nối lại bằng 1 dấu '/' duy nhất
+  // Rejoin with a single '/'
   return `${cleanBaseUrl}/${cleanKey}`;
 }

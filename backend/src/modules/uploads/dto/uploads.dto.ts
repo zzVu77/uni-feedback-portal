@@ -4,7 +4,7 @@ import { BaseFileItemDto } from './file-attachment.dto';
 import { FileTargetType } from '@prisma/client';
 
 export class GenerateUploadUrlDto extends BaseFileItemDto {
-  @ApiProperty({ example: 'feedback', enum: FileTargetType })
+  @ApiProperty({ example: 'FEEDBACK', enum: FileTargetType })
   @IsEnum(FileTargetType)
   @IsNotEmpty()
   targetType: FileTargetType;

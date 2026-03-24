@@ -35,7 +35,7 @@ export const uploadFileToCloud = async (
     await axios.put(uploadUrl, file, {
       headers: {
         "Content-Type": file.type,
-        "Content-Length": file.size.toString(),
+        // "Content-Length": file.size.toString(),
       },
     });
 

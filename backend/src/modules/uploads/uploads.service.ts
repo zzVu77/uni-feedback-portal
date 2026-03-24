@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FileTargetType } from '@prisma/client';
 import {
@@ -28,10 +32,10 @@ export class UploadsService {
   constructor(private readonly prisma: PrismaService) {
     this.s3 = new S3({
       region: config.AWS_REGION,
-      credentials: {
-        accessKeyId: config.AWS_ACCESS_KEY,
-        secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
-      },
+      // credentials: {
+      //   accessKeyId: config.AWS_ACCESS_KEY,
+      //   secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+      // },
     });
     this.s3
       .listBuckets()
@@ -77,11 +81,11 @@ export class UploadsService {
     // ===== 1. Validate  backend  =====
 
     if (!ALLOWED_FILE_TYPES.includes(fileType)) {
-      throw new Error('File type not allowed');
+      throw new BadRequestException('File type not allowed');
     }
 
     if (fileSize > MAX_FILE_SIZE) {
-      throw new Error('File size exceeds limit');
+      throw new BadRequestException('File size exceeds limit');
     }
 
     // ===== 2. Generate object key =====
@@ -243,7 +247,14 @@ export class UploadsService {
         where: { id: { in: filesToDelete.map((f) => f.id) } },
       });
     }
-
+    const keysAlreadyInDb = await this.getExistingFileKeys(
+      filesToAdd.map((f) => f.fileKey),
+    );
+    if (keysAlreadyInDb.length > 0) {
+      throw new ConflictException(
+        `Some fileKeys already exist in the database`,
+      );
+    }
     if (filesToAdd.length > 0) {
       await this.prisma.fileAttachments.createMany({
         data: filesToAdd.map((file) => ({
@@ -294,5 +305,17 @@ export class UploadsService {
         where: { targetId, targetType },
       });
     }
+  }
+  private async getExistingFileKeys(fileKeys: string[]): Promise<string[]> {
+    if (!fileKeys.length) return [];
+
+    const existingRecords = await this.prisma.fileAttachments.findMany({
+      where: {
+        fileKey: { in: fileKeys },
+      },
+      select: { fileKey: true },
+    });
+
+    return existingRecords.map((r) => r.fileKey);
   }
 }
