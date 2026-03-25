@@ -329,6 +329,16 @@ export class FeedbacksService {
         createdAt: f.createdAt,
       })),
     });
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedbackId,
+        status: 'AI_REVIEWING',
+        message: GenerateStatusUpdateMessage(
+          updateFeedback.department.name,
+          'AI_REVIEWING',
+        ),
+      },
+    });
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
       {
@@ -462,10 +472,10 @@ export class FeedbacksService {
     await this.prisma.feedbackStatusHistory.create({
       data: {
         feedbackId: feedback.id,
-        status: 'PENDING',
+        status: 'AI_REVIEWING',
         message: GenerateStatusUpdateMessage(
           feedback.department.name,
-          'PENDING',
+          'AI_REVIEWING',
         ),
       },
     });
