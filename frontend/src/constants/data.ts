@@ -5,4 +5,6 @@ export const FeedbackStatus = [
   { label: "Đã xử lý", value: "resolved" },
   { label: "Từ chối", value: "rejected" },
   { label: "Vi phạm", value: "violated_content" },
+  { label: "Đang xem xét bởi AI", value: "ai_reviewing" },
+  { label: "Hệ thống AI gặp sự cố", value: "ai_review_failed" },
 ];
