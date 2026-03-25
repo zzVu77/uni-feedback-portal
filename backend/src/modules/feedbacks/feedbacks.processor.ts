@@ -11,6 +11,7 @@ import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { Prisma } from '@prisma/client';
 import { FeedbackDetail } from './dto';
 import { AiDataContext } from './dto/feedback-job-data.dto';
+import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
 @Processor('feedback-toxic')
 export class FeedbackToxicProcessor extends WorkerHost {
   constructor(
@@ -131,6 +132,30 @@ export class FeedbackToxicProcessor extends WorkerHost {
       },
       include: this.defaultFeedbackInclude,
     });
+    const department = await this.prisma.departments.findUnique({
+      where: { id: departmentId },
+      select: { id: true, name: true },
+    });
+    if (!department) {
+      throw new UnrecoverableError('Department not found');
+    }
+    if (isToxic) {
+      await this.prisma.feedbackStatusHistory.create({
+        data: {
+          feedbackId: feedbackId,
+          status: 'VIOLATED_CONTENT',
+          message: GenerateStatusUpdateMessage('', 'VIOLATED_CONTENT'),
+        },
+      });
+    } else {
+      await this.prisma.feedbackStatusHistory.create({
+        data: {
+          feedbackId: feedbackId,
+          status: 'PENDING',
+          message: GenerateStatusUpdateMessage(department.name, 'PENDING'),
+        },
+      });
+    }
 
     this.eventEmitter.emit(
       'feedback.created',
@@ -152,7 +177,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
   }
   // Xử lý khi job thất bại sau tất cả các lần thử
   @OnWorkerEvent('failed')
-  onFailed(job: Job<FeedbackJobData>) {
+  async onFailed(job: Job<FeedbackJobData>) {
     let eventPayload: FeedbackCreatedEvent | null = null;
     // Chỉ xử lý khi đã hết tất cả các lần thử
     if (job.attemptsMade >= (job.opts.attempts ?? 1)) {
@@ -165,6 +190,13 @@ export class FeedbackToxicProcessor extends WorkerHost {
           subject: feedback.subject,
           isToxic: true,
         };
+        await this.prisma.feedbackStatusHistory.create({
+          data: {
+            feedbackId: feedback.id,
+            status: 'AI_REVIEW_FAILED',
+            message: GenerateStatusUpdateMessage('', 'AI_REVIEW_FAILED'),
+          },
+        });
       } else if (job.data.type === 'update') {
         const { updateData, feedbackId, actor } = job.data;
         eventPayload = {
@@ -174,6 +206,13 @@ export class FeedbackToxicProcessor extends WorkerHost {
           subject: updateData.subject || '',
           isToxic: true,
         };
+        await this.prisma.feedbackStatusHistory.create({
+          data: {
+            feedbackId: feedbackId,
+            status: 'AI_REVIEW_FAILED',
+            message: GenerateStatusUpdateMessage('', 'AI_REVIEW_FAILED'),
+          },
+        });
       }
       if (eventPayload) {
         this.eventEmitter.emit(
