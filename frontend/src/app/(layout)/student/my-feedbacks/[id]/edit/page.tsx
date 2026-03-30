@@ -33,7 +33,7 @@ const Page = () => {
         feedback.currentStatus !== "AI_REVIEW_FAILED"
       ) {
         toast.error(
-          `Bạn chỉ có thể chỉnh sửa góp ý khi đang ở trạng thái "Đang chờ xử lý"," "Vi phạm" hoặc "Hệ thống AI gặp sự cố".`,
+          `Bạn chỉ có thể chỉnh sửa góp ý khi đang ở trạng thái "Đang chờ xử lý", "Vi phạm" hoặc "Hệ thống AI gặp sự cố".`,
         );
         router.push(`/student/my-feedbacks/${id}`);
       }
