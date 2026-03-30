@@ -123,7 +123,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
       jobType,
     );
 
-    await this.prisma.feedbacks.update({
+    const department = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: {
         currentStatus: isToxic
@@ -132,13 +132,6 @@ export class FeedbackToxicProcessor extends WorkerHost {
       },
       include: this.defaultFeedbackInclude,
     });
-    const department = await this.prisma.departments.findUnique({
-      where: { id: departmentId },
-      select: { id: true, name: true },
-    });
-    if (!department) {
-      throw new UnrecoverableError('Department not found');
-    }
     if (isToxic) {
       await this.prisma.feedbackStatusHistory.create({
         data: {
@@ -152,7 +145,10 @@ export class FeedbackToxicProcessor extends WorkerHost {
         data: {
           feedbackId: feedbackId,
           status: 'PENDING',
-          message: GenerateStatusUpdateMessage(department.name, 'PENDING'),
+          message: GenerateStatusUpdateMessage(
+            department.department.name,
+            'PENDING',
+          ),
         },
       });
     }
