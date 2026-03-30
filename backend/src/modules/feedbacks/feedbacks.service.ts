@@ -319,16 +319,6 @@ export class FeedbacksService {
       },
     });
 
-    const unifiedTimeline = mergeStatusAndForwardLogs({
-      statusHistory: updateFeedback.statusHistory,
-      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
-        fromDept: f.fromDepartment,
-        toDept: f.toDepartment,
-        message: f.message,
-        note: f.note ?? null,
-        createdAt: f.createdAt,
-      })),
-    });
     await this.prisma.feedbackStatusHistory.create({
       data: {
         feedbackId: feedbackId,
@@ -339,6 +329,18 @@ export class FeedbacksService {
         ),
       },
     });
+
+    const unifiedTimeline = mergeStatusAndForwardLogs({
+      statusHistory: updateFeedback.statusHistory,
+      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
+        fromDept: f.fromDepartment,
+        toDept: f.toDepartment,
+        message: f.message,
+        note: f.note ?? null,
+        createdAt: f.createdAt,
+      })),
+    });
+
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
       {
