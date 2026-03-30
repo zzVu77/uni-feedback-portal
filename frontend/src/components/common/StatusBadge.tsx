@@ -2,6 +2,7 @@ import {
   CircleAlert,
   CircleCheckBig,
   CircleX,
+  Ellipsis,
   Forward,
   Loader,
   TriangleAlert,
@@ -88,18 +89,16 @@ const STATUS_CONFIG = {
   },
   AI_REVIEWING: {
     text: "Đang xem xét bởi AI",
-    icon: Loader,
-    badgeClassName:
-      "text-blue-primary-700 bg-blue-primary-100 hover:bg-blue-primary-200/80",
-    iconClassName: "text-blue-primary-300 animate-pulse",
+    icon: Ellipsis,
+    badgeClassName: "text-white bg-amber-700 hover:bg-amber-800/80",
+    iconClassName: "text-amber-100",
     textClassName: "",
   },
   AI_REVIEW_FAILED: {
     text: "Hệ thống AI gặp sự cố",
-    icon: CircleX,
-    badgeClassName:
-      "text-red-primary-500 bg-red-primary-300 hover:bg-red-primary-500/25 ",
-    iconClassName: "text-red-primary-400 animate-pulse",
+    icon: TriangleAlert,
+    badgeClassName: "text-gray-900 bg-gray-200 hover:bg-gray-300/80",
+    iconClassName: "text-gray-800 animate-pulse",
     textClassName: "",
   },
 };
