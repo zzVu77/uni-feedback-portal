@@ -40,9 +40,13 @@ import {
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
 import * as z from "zod";
 import StatusBadge from "../common/StatusBadge";
 import ChatSheet from "./ChatSheet";
+import { io, Socket } from "socket.io-client";
+import { useEffect, useRef } from "react";
+import { useUser } from "@/context/UserContext";
 
 // --- Schema (Không còn attachments) ---
 const newConversationSchema = z.object({
@@ -197,6 +201,40 @@ const ConversationSection = ({
   const { data: conversationDetail } = useGetClarificationsDetailById(
     selectedConversationId || "",
   );
+  const socketRef = useRef<Socket | null>(null);
+  const { user } = useUser();
+  const userId = user?.id;
+  const socketUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8080";
+  useEffect(() => {
+    socketRef.current = io(socketUrl, {
+      query: {
+        userId: userId,
+      },
+      transports: ["websocket"],
+    });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    if (!socketRef.current) return;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handler = async (event: any) => {
+      if (event.conversationId === selectedConversationId) {
+        await queryClient.invalidateQueries({
+          queryKey: [CLARIFICATION_QUERY_KEYS, selectedConversationId],
+        });
+      }
+    };
+
+    socketRef.current.on("clarification.message_sent", handler);
+
+    return () => {
+      socketRef.current?.off("clarification.message_sent", handler);
+    };
+  }, [selectedConversationId]);
 
   // Mutation for Sending Message (Generic)
   const { mutateAsync: sendMessage } = useMutation({
