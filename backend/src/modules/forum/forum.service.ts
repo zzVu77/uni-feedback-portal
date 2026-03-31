@@ -196,13 +196,15 @@ export class ForumService {
         },
       },
     });
+
+    if (!post) {
+      throw new NotFoundException(`Post not found`);
+    }
+
     if (
       post?.feedback.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
       post?.feedback.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
     ) {
-      throw new NotFoundException(`Post not found`);
-    }
-    if (!post) {
       throw new NotFoundException(`Post not found`);
     }
     const resolvedStatus = post.feedback.statusHistory.find(
