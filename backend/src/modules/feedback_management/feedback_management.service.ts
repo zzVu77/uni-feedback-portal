@@ -408,11 +408,11 @@ export class FeedbackManagementService {
     const where: Prisma.FeedbacksWhereInput = {};
 
     if (status) {
-      where.currentStatus = Object.values(FeedbackStatus).includes(
-        status.toUpperCase() as FeedbackStatus,
-      )
-        ? (status.toUpperCase() as FeedbackStatus)
-        : undefined;
+      const normalizedStatus = status.toUpperCase() as FeedbackStatus;
+      if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
+        throw new BadRequestException(`Invalid status: ${status}`);
+      }
+      where.currentStatus = normalizedStatus;
     } else {
       where.currentStatus = {
         notIn: [
@@ -524,14 +524,15 @@ export class FeedbackManagementService {
         // Không include file ở đây
       },
     });
+
+    if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
     if (
       feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
       feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
     ) {
-      throw new NotFoundException('Feedback not found');
-    }
-
-    if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
     const unifiedTimeline = mergeStatusAndForwardLogs({
