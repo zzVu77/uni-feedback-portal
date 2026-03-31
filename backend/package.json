@@ -28,6 +28,10 @@
     "db:seed": "docker exec -i university-feedback psql -U root -d UniversityFeedback < db/init.sql"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.981.0",
+    "@aws-sdk/lib-storage": "^3.981.0",
+    "@aws-sdk/s3-presigned-post": "^3.1014.0",
+    "@aws-sdk/s3-request-presigner": "^3.981.0",
     "@google/genai": "^1.39.0",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/bullmq": "^11.0.4",
@@ -49,6 +53,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "cookie-parser": "^1.4.7",
+    "mime-types": "^3.0.2",
     "nodemailer": "^7.0.10",
     "prisma-zod-generator": "^1.21.1",
     "reflect-metadata": "^0.2.2",

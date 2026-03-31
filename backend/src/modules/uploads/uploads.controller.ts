@@ -5,6 +5,8 @@ import {
   GenerateUploadUrlDto,
   GenerateUploadUrlResponseDto,
 } from './dto/uploads.dto';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 
 @ApiTags('Uploads')
 @Controller('uploads')
@@ -21,7 +23,8 @@ export class UploadsController {
   })
   generateUploadUrl(
     @Body() dto: GenerateUploadUrlDto,
+    @ActiveUser() actor: ActiveUserData,
   ): Promise<GenerateUploadUrlResponseDto> {
-    return this.uploadsService.generateUploadUrl(dto);
+    return this.uploadsService.generateUploadUrl(dto, actor.sub);
   }
 }

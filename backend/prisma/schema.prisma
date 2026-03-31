@@ -279,7 +279,7 @@ model FileAttachments {
   targetType FileTargetType
 
   fileName String
-  fileUrl  String
+  fileKey String @unique
   fileType String
   fileSize Int
 
