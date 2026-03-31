@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import { FileTargetType, Prisma } from '@prisma/client';
+import { FeedbackStatus, FileTargetType, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   GetPostsResponseDto,
@@ -44,6 +44,12 @@ export class ForumService {
         ...(categoryId && { categoryId }),
         ...(departmentId && { departmentId }),
         ...(q && { subject: { contains: q, mode: 'insensitive' } }),
+        currentStatus: {
+          notIn: [
+            FeedbackStatus.VIOLATED_CONTENT,
+            FeedbackStatus.AI_REVIEW_FAILED,
+          ],
+        },
       },
       ...(from || to
         ? {
@@ -190,7 +196,12 @@ export class ForumService {
         },
       },
     });
-
+    if (
+      post?.feedback.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      post?.feedback.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
+      throw new NotFoundException(`Post not found`);
+    }
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
