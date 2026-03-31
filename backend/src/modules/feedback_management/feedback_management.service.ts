@@ -413,6 +413,13 @@ export class FeedbackManagementService {
       )
         ? (status.toUpperCase() as FeedbackStatus)
         : undefined;
+    } else {
+      where.currentStatus = {
+        notIn: [
+          FeedbackStatus.AI_REVIEW_FAILED,
+          FeedbackStatus.VIOLATED_CONTENT,
+        ],
+      };
     }
     if (departmentId) where.departmentId = departmentId;
     if (categoryId) where.categoryId = categoryId;
@@ -517,6 +524,12 @@ export class FeedbackManagementService {
         // Không include file ở đây
       },
     });
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
+      throw new NotFoundException('Feedback not found');
+    }
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
