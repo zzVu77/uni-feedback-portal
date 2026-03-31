@@ -44,15 +44,27 @@ def analyze_batch_with_gemini(batch_posts):
 
     # 2. Instruct Gemini to return a JSON array with the required structure
     prompt = f"""
-    Bạn là một chuyên gia phân tích dữ liệu phản hồi của sinh viên.
-    Hãy phân tích danh sách các bài viết dưới đây và trả về KẾT QUẢ ĐỊNH DẠNG JSON LÀ MỘT MẢNG (ARRAY).
-    Không sử dụng markdown code block (như ```json). Chỉ trả về chuỗi JSON bắt đầu bằng [ và kết thúc bằng ].
+    Bạn là một chuyên gia Lắng nghe Mạng xã hội (Social Listening) cấp cao, chuyên phân tích dữ liệu và tâm lý học hành vi của sinh viên đại học tại Việt Nam.
+    Nhiệm vụ của bạn là đọc các bài đăng từ diễn đàn sinh viên, nhận diện chính xác các vấn đề nhức nhối, lời khen, hoặc các câu hỏi thường ngày để báo cáo cho Ban giám hiệu.
+
+    ĐẶC BIỆT LƯU Ý VỀ NGỮ CẢNH VÀ CẢM XÚC:
+    1. Nhận diện châm biếm (Sarcasm): Sinh viên thường dùng lời lẽ khen ngợi giả tạo để mỉa mai khi bức xúc (Ví dụ: "Trường xịn quá, cứ tới giờ đăng ký môn là sập mạng", "Giảng viên dạy có tâm ghê, hỏi không bao giờ trả lời" -> Đây là cảm xúc RẤT TIÊU CỰC).
+    2. Các điểm nóng thường gặp: Thái độ giảng viên, chất lượng phòng học/máy móc thực hành, bãi giữ xe, học phí, thủ tục hành chính lề mề, hệ thống đăng ký tín chỉ/học vụ.
+    3. Phân biệt câu hỏi và phàn nàn: "Cho em hỏi đóng học phí ở đâu?" là Trung lập (0.0). "Trường làm ăn kiểu gì mà đóng học phí lỗi hoài?" là Tiêu cực.
+
+    Hãy phân tích danh sách bài viết dưới đây và trả về KẾT QUẢ ĐỊNH DẠNG JSON LÀ MỘT MẢNG (ARRAY).
+    Tuyệt đối không sử dụng markdown code block (như ```json). Chỉ trả về chuỗi văn bản thuần túy bắt đầu bằng [ và kết thúc bằng ].
 
     Yêu cầu mỗi object trong mảng phải có cấu trúc chính xác như sau:
     - "post_id": Giữ nguyên ID của bài viết tương ứng (Bắt buộc phải có).
-    - "topic": Phân loại chủ đề ("Học phí", "Cơ sở vật chất", "Giảng viên", "Học thuật", "Khác"). Chỉ chọn 1.
-    - "sentiment_score": Điểm số từ -1.0 (Rất tiêu cực) đến 1.0 (Rất tích cực).
-    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ.
+    - "topic": Phân loại chủ đề sát với thực tế đại học. Chỉ chọn 1 trong các nhóm sau: "Học vụ & Đăng ký môn", "Cơ sở vật chất & Bãi xe", "Giảng viên & Đào tạo", "Học phí & Hành chính", "Đời sống sinh viên", hoặc "Khác".
+    - "sentiment_score": Điểm số đánh giá cảm xúc từ -1.0 đến 1.0. Sử dụng thang đo khắt khe sau:
+        * -1.0 đến -0.6: Bức xúc gay gắt, châm biếm sâu cay, thất vọng lớn về trường/giảng viên.
+        * -0.5 đến -0.1: Phàn nàn nhẹ, chê bai, không hài lòng, góp ý tiêu cực.
+        * 0.0: Trung lập, câu hỏi nhờ tư vấn, tìm đồ rơi, thông báo bình thường.
+        * 0.1 đến 0.5: Hài lòng cơ bản, khen ngợi nhẹ nhàng.
+        * 0.6 đến 1.0: Rất tự hào, biết ơn, khen ngợi nhiệt tình chất lượng trường học/thầy cô.
+    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ. Bắt buộc phải tóm tắt thẳng vào "Nỗi đau" (Pain point) hoặc "Lợi ích" mà sinh viên đang đề cập để nhà trường xử lý ngay.
 
     Danh sách bài viết cần phân tích:
     {input_data}
