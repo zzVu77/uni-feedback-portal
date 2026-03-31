@@ -24,10 +24,6 @@ import { generateFileUrl } from 'src/shared/helpers/genrate-file-url';
 
 @Injectable()
 export class UploadsService {
-  // private supabase = createClient(
-  //   `https://${config.SUPABASE_PROJECT_REF}.supabase.co`,
-  //   config.SUPABASE_SERVICE_ROLE_KEY, // dùng key SERVICE ROLE
-  // );
   private s3: S3;
   constructor(private readonly prisma: PrismaService) {
     this.s3 = new S3({
@@ -46,29 +42,6 @@ export class UploadsService {
         console.error('Error connecting to AWS S3:', error);
       });
   }
-
-  /**
-   * Generates a pre-signed URL for uploading a file to S3-compatible storage (Supabase).
-   */
-  // async generateUploadUrl(
-  //   dto: GenerateUploadUrlDto,
-  // ): Promise<GenerateUploadUrlResponseDto> {
-  //   const { fileName } = dto;
-  //   const key = `uploads/${uuidv4()}/${fileName}`;
-
-  //   const { data, error } = await this.supabase.storage
-  //     .from(config.SUPABASE_BUCKET_NAME)
-  //     .createSignedUploadUrl(key);
-
-  //   if (error) {
-  //     throw new Error(error.message);
-  //   }
-
-  //   return {
-  //     uploadUrl: data.signedUrl,
-  //     fileUrl: `https://${config.SUPABASE_PROJECT_REF}.supabase.co/storage/v1/object/public/${config.SUPABASE_BUCKET_NAME}/${key}`,
-  //   };
-  // }
   /**
    * Generates a pre-signed URL for uploading a file to AWS S3
    */
@@ -110,41 +83,6 @@ export class UploadsService {
     };
   }
 
-  /**
-   * Deletes a file from Supabase Storage.
-   */
-  // private async deleteFileFromS3(fileUrl: string): Promise<void> {
-  //   try {
-  //     const supabaseStorageUrlPrefix = `https://${config.SUPABASE_PROJECT_REF}.supabase.co/storage/v1/object/public/${config.SUPABASE_BUCKET_NAME}/`;
-  //     if (!fileUrl.startsWith(supabaseStorageUrlPrefix)) {
-  //       console.warn(`Skipping deletion of non-Supabase file: ${fileUrl}`);
-  //       return;
-  //     }
-
-  //     // Extract the file path from the public URL
-  //     const urlObject = new URL(fileUrl);
-  //     const bucketName = config.SUPABASE_BUCKET_NAME;
-  //     const pathStartIndex =
-  //       urlObject.pathname.indexOf(`/${bucketName}/`) + bucketName.length + 2;
-  //     const filePath = urlObject.pathname.substring(pathStartIndex);
-
-  //     if (!filePath) {
-  //       console.error(`Could not extract file path from URL: ${fileUrl}`);
-  //       return;
-  //     }
-
-  //     const { error } = await this.supabase.storage
-  //       .from(bucketName)
-  //       .remove([filePath]);
-
-  //     if (error) {
-  //       throw error;
-  //     }
-  //   } catch (error) {
-  //     console.error(`Failed to delete file from Supabase: ${fileUrl}`, error);
-  //     // We don't throw an error here to allow DB cleanup to proceed
-  //   }
-  // }
   async deleteFileFromS3(fileKey: string): Promise<void> {
     try {
       const command = new DeleteObjectCommand({
