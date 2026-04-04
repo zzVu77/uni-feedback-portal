@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import { FeedbackStatus, FileTargetType, Prisma } from '@prisma/client';
+import { FileTargetType, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import {
   GetPostsResponseDto,
@@ -14,6 +14,10 @@ import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ForumPostVotedEvent } from './events/forum-post-voted.event';
+import {
+  HIDDEN_FORUM_FEEDBACK_STATUSES,
+  isHiddenForumFeedbackStatus,
+} from './dto/hidden-status.dto';
 @Injectable()
 export class ForumService {
   constructor(
@@ -45,10 +49,7 @@ export class ForumService {
         ...(departmentId && { departmentId }),
         ...(q && { subject: { contains: q, mode: 'insensitive' } }),
         currentStatus: {
-          notIn: [
-            FeedbackStatus.VIOLATED_CONTENT,
-            FeedbackStatus.AI_REVIEW_FAILED,
-          ],
+          notIn: HIDDEN_FORUM_FEEDBACK_STATUSES,
         },
       },
       ...(from || to
@@ -201,10 +202,7 @@ export class ForumService {
       throw new NotFoundException(`Post not found`);
     }
 
-    if (
-      post?.feedback.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
-      post?.feedback.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
-    ) {
+    if (isHiddenForumFeedbackStatus(post?.feedback.currentStatus)) {
       throw new NotFoundException(`Post not found`);
     }
     const resolvedStatus = post.feedback.statusHistory.find(
