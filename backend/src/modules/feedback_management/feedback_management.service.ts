@@ -406,11 +406,19 @@ export class FeedbackManagementService {
     } = query;
 
     const where: Prisma.FeedbacksWhereInput = {};
-
+    const hiddenStatuses: FeedbackStatus[] = [
+      FeedbackStatus.AI_REVIEW_FAILED,
+      FeedbackStatus.VIOLATED_CONTENT,
+    ];
     if (status) {
       const normalizedStatus = status.toUpperCase() as FeedbackStatus;
       if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
         throw new BadRequestException(`Invalid status: ${status}`);
+      }
+      if (hiddenStatuses.includes(normalizedStatus)) {
+        throw new BadRequestException(
+          `Status ${normalizedStatus} is not accessible in this endpoint`,
+        );
       }
       where.currentStatus = normalizedStatus;
     } else {
