@@ -14,6 +14,10 @@ import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ForumPostVotedEvent } from './events/forum-post-voted.event';
+import {
+  HIDDEN_FORUM_FEEDBACK_STATUSES,
+  isHiddenForumFeedbackStatus,
+} from './dto/hidden-status.dto';
 @Injectable()
 export class ForumService {
   constructor(
@@ -44,6 +48,9 @@ export class ForumService {
         ...(categoryId && { categoryId }),
         ...(departmentId && { departmentId }),
         ...(q && { subject: { contains: q, mode: 'insensitive' } }),
+        currentStatus: {
+          notIn: HIDDEN_FORUM_FEEDBACK_STATUSES,
+        },
       },
       ...(from || to
         ? {
@@ -192,6 +199,10 @@ export class ForumService {
     });
 
     if (!post) {
+      throw new NotFoundException(`Post not found`);
+    }
+
+    if (isHiddenForumFeedbackStatus(post?.feedback.currentStatus)) {
       throw new NotFoundException(`Post not found`);
     }
     const resolvedStatus = post.feedback.statusHistory.find(
