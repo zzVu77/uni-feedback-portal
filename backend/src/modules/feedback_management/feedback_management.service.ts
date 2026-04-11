@@ -52,6 +52,14 @@ export class FeedbackManagementService {
         },
       ],
     });
+    conditions.push({
+      currentStatus: {
+        notIn: [
+          FeedbackStatus.VIOLATED_CONTENT,
+          FeedbackStatus.AI_REVIEW_FAILED,
+        ],
+      },
+    });
 
     if (status) {
       conditions.push({
@@ -189,6 +197,13 @@ export class FeedbackManagementService {
         // Không include file ở đây
       },
     });
+
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
+      throw new NotFoundException('Feedback not found');
+    }
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
