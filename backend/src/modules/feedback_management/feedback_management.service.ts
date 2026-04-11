@@ -406,13 +406,28 @@ export class FeedbackManagementService {
     } = query;
 
     const where: Prisma.FeedbacksWhereInput = {};
-
+    const hiddenStatuses: FeedbackStatus[] = [
+      FeedbackStatus.AI_REVIEW_FAILED,
+      FeedbackStatus.VIOLATED_CONTENT,
+    ];
     if (status) {
-      where.currentStatus = Object.values(FeedbackStatus).includes(
-        status.toUpperCase() as FeedbackStatus,
-      )
-        ? (status.toUpperCase() as FeedbackStatus)
-        : undefined;
+      const normalizedStatus = status.toUpperCase() as FeedbackStatus;
+      if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
+        throw new BadRequestException(`Invalid status: ${status}`);
+      }
+      if (hiddenStatuses.includes(normalizedStatus)) {
+        throw new BadRequestException(
+          `Status ${normalizedStatus} is not accessible in this endpoint`,
+        );
+      }
+      where.currentStatus = normalizedStatus;
+    } else {
+      where.currentStatus = {
+        notIn: [
+          FeedbackStatus.AI_REVIEW_FAILED,
+          FeedbackStatus.VIOLATED_CONTENT,
+        ],
+      };
     }
     if (departmentId) where.departmentId = departmentId;
     if (categoryId) where.categoryId = categoryId;
@@ -519,6 +534,13 @@ export class FeedbackManagementService {
     });
 
     if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
       throw new NotFoundException('Feedback not found');
     }
     const unifiedTimeline = mergeStatusAndForwardLogs({
