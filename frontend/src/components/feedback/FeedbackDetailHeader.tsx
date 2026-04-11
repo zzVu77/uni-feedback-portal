@@ -58,7 +58,8 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           </h1>
           {type === "student" &&
             (currentStatus === "PENDING" ||
-              currentStatus === "VIOLATED_CONTENT") && (
+              currentStatus === "VIOLATED_CONTENT" ||
+              currentStatus === "AI_REVIEW_FAILED") && (
               <div className="order-1 flex flex-row items-center gap-2 md:order-2">
                 <Link href={`/student/my-feedbacks/${id}/edit`}>
                   <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
