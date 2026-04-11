@@ -26,3 +26,19 @@ sources:
             description: ""
           - name: crawled_at
             data_type: timestamp
+  - name: ai_raw
+    database: uni-feedback-data
+    schema: ai_raw
+    tables:
+      - name: post_analysis
+        columns:
+          - name: post_id
+            data_type: string
+          - name: topic
+            data_type: string
+          - name: sentiment_score
+            data_type: float64
+          - name: ai_summary
+            data_type: string
+          - name: analyzed_at
+            data_type: timestamp

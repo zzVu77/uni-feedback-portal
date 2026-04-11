@@ -39,3 +39,15 @@ When you are done working on the project, you can exit the virtual environment b
 ```bash
 deactivate
 ```
+
+### 5. How to set up dbt in dbt_transformation
+
+```bash
+cd dbt_transformation
+```
+
+Install dbt dependencies
+
+```bash
+dbt deps
+```

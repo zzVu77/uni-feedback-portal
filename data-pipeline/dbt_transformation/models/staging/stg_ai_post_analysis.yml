@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_ai_post_analysis
+    description: "Staging model for AI post analysis data. This model serves as an intermediate layer to clean and structure raw AI analysis data before it is transformed into the marts layer."
+    columns:
+      - name: post_id
+        data_type: string
+        description: ""
+
+      - name: sentiment_score
+        data_type: float64
+        description: ""
+
+      - name: ai_summary
+        data_type: string
+        description: ""
+
+      - name: analyzed_at
+        data_type: timestamp
+        description: ""
+
+      - name: topic
+        data_type: string
+        description: ""
