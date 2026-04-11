@@ -88,14 +88,14 @@ const STATUS_CONFIG = {
     textClassName: "",
   },
   AI_REVIEWING: {
-    text: "Đang xem xét bởi AI",
+    text: "Đang kiểm duyệt nội dung",
     icon: Ellipsis,
     badgeClassName: "text-white bg-amber-700 hover:bg-amber-800/80",
     iconClassName: "text-amber-100",
     textClassName: "",
   },
   AI_REVIEW_FAILED: {
-    text: "Hệ thống AI gặp sự cố",
+    text: "Hệ thống kiểm duyệt gặp sự cố",
     icon: TriangleAlert,
     badgeClassName: "text-gray-900 bg-gray-200 hover:bg-gray-300/80",
     iconClassName: "text-gray-800 animate-pulse",
