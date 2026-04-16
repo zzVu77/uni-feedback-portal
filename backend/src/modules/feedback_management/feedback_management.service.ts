@@ -214,15 +214,6 @@ export class FeedbackManagementService {
       feedback.forwardingLogs.some(
         (log) => log.fromDepartment.id === actor.departmentId,
       );
-    const latestStatus = feedback.statusHistory[1].status;
-    if (
-      latestStatus === FeedbackStatus.VIOLATED_CONTENT ||
-      latestStatus === FeedbackStatus.AI_REVIEW_FAILED
-    ) {
-      feedback.statusHistory = feedback.statusHistory.filter(
-        (sh) => sh.status === latestStatus,
-      );
-    }
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: feedback.statusHistory,
       forwardingLogs: feedback.forwardingLogs.map((f) => ({
