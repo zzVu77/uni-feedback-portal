@@ -1,0 +1,49 @@
+name: Uni Feedback Daily Pipeline
+
+on:
+  schedule:
+    # todo: will adjust time later, run every week at 7pm (Vietnam time) to have fresh data for Monday morning meetings
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-data-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Download code from server
+        uses: actions/checkout@v4
+
+      - name: 🟢 Set up Node.js (for Crawler & Loader)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: 🐍 Set up Python (for dbt & AI Gemini)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install Node.js packages
+        run: npm install
+
+      - name: 📦 Install Python libraries
+        run: |
+          python -m pip install --upgrade pip
+          pip install prefect dbt-bigquery google-genai python-dotenv
+
+      - name: 🔑 Configure BigQuery service account file
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+        run: |
+          # Create a temporary file for the service account key
+          echo "$GCP_CREDENTIALS" > ./google-service-account.json
+
+      - name: 🚀 Activate the Entire Pipeline (Prefect Flow)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Declare the path to the key file for dbt and Google Cloud library to know
+          GOOGLE_APPLICATION_CREDENTIALS: ./google-service-account.json
+        run: |
+          # Run the Prefect flow which orchestrates the entire pipeline
+          python prefect-flow/run_pipeline.py
