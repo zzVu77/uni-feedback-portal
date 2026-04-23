@@ -5,13 +5,12 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Prisma, FeedbackStatus, FileTargetType } from '@prisma/client';
-import { EventEmitter2 } from '@nestjs/event-emitter'; // [Import 1] Import EventEmitter
 import {
-  FeedbackSummary,
   GetMyFeedbacksResponseDto,
   QueryFeedbacksDto,
   FeedbackDetail,
   FeedbackParamDto,
+  FeedbackSummary,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
@@ -19,17 +18,16 @@ import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { ForumService } from '../forum/forum.service';
 import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_log-and-feedback_status_history';
-// [Import 2] Import the event definition
-import { FeedbackCreatedEvent } from './events/feedback-created.event';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
-
 @Injectable()
 export class FeedbacksService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly forumService: ForumService,
     private readonly uploadsService: UploadsService,
-    private readonly eventEmitter: EventEmitter2, // [Injection] Inject EventEmitter2
+    @InjectQueue('feedback-toxic') private readonly feedbackToxicQueue: Queue,
   ) {}
 
   async getFeedbacks(
@@ -221,9 +219,13 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    if (feedback.currentStatus !== FeedbackStatus.PENDING) {
+    if (
+      feedback.currentStatus !== FeedbackStatus.PENDING &&
+      feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT &&
+      feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED
+    ) {
       throw new ForbiddenException(
-        'Feedback can only be updated when in PENDING status.',
+        'Feedback can only be updated when in PENDING, VIOLATED_CONTENT, or AI_REVIEW_FAILED status.',
       );
     }
     if (dto.isAnonymous === true && dto.isPublic === true) {
@@ -276,9 +278,14 @@ export class FeedbacksService {
         dto.fileAttachments ?? [],
       );
 
+    const updateDataNew = {
+      ...updateData,
+      currentStatus: FeedbackStatus.AI_REVIEWING,
+    };
+
     const updateFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
-      data: updateData,
+      data: updateDataNew,
       include: {
         department: {
           select: { id: true, name: true },
@@ -312,6 +319,17 @@ export class FeedbacksService {
       },
     });
 
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedbackId,
+        status: 'AI_REVIEWING',
+        message: GenerateStatusUpdateMessage(
+          updateFeedback.department.name,
+          'AI_REVIEWING',
+        ),
+      },
+    });
+
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: updateFeedback.statusHistory,
       forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
@@ -322,6 +340,21 @@ export class FeedbacksService {
         createdAt: f.createdAt,
       })),
     });
+
+    await this.feedbackToxicQueue.add(
+      'feedbackToxicItem',
+      {
+        type: 'update',
+        feedbackId: feedbackId,
+        updateData: updateData,
+        dto: dto,
+        actor: actor,
+      },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
     return {
       id: updateFeedback.id,
       isPublic: updateFeedback.forumPost ? true : false,
@@ -358,9 +391,13 @@ export class FeedbacksService {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
     }
 
-    if (feedback.currentStatus !== FeedbackStatus.PENDING) {
+    if (
+      feedback.currentStatus !== FeedbackStatus.PENDING &&
+      feedback.currentStatus !== FeedbackStatus.VIOLATED_CONTENT &&
+      feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED
+    ) {
       throw new ForbiddenException(
-        'Feedback can only be deleted when in PENDING status.',
+        'Feedback can only be deleted when in PENDING, VIOLATED_CONTENT, or AI_REVIEW_FAILED status.',
       );
     }
 
@@ -403,9 +440,7 @@ export class FeedbacksService {
         'You cannot create feedback to an inactive department.',
       );
     }
-
     const { fileAttachments, ...feedbackData } = dto;
-
     // Create new feedback
     const feedback = await this.prisma.feedbacks.create({
       data: {
@@ -416,6 +451,7 @@ export class FeedbacksService {
         departmentId: feedbackData.departmentId,
         categoryId: feedbackData.categoryId,
         userId: actor.sub,
+        currentStatus: FeedbackStatus.AI_REVIEWING,
       },
       include: {
         department: true,
@@ -438,25 +474,26 @@ export class FeedbacksService {
     await this.prisma.feedbackStatusHistory.create({
       data: {
         feedbackId: feedback.id,
-        status: 'PENDING',
+        status: 'AI_REVIEWING',
         message: GenerateStatusUpdateMessage(
           feedback.department.name,
-          'PENDING',
+          'AI_REVIEWING',
         ),
       },
     });
 
-    // [New Logic] Emit Event: Feedback Created
-    // This allows the Notification module to handle notifications asynchronously without blocking this response.
-    const feedbackCreatedEvent = new FeedbackCreatedEvent({
-      feedbackId: feedback.id,
-      userId: actor.sub,
-      departmentId: feedback.departmentId,
-      subject: feedback.subject,
-    });
-    this.eventEmitter.emit('feedback.created', feedbackCreatedEvent);
-
-    // Return summary
+    await this.feedbackToxicQueue.add(
+      'feedbackToxicItem',
+      {
+        type: 'create',
+        feedback: feedback,
+        actor: actor,
+      },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
     return {
       id: feedback.id,
       subject: feedback.subject,
@@ -473,5 +510,28 @@ export class FeedbacksService {
       },
       createdAt: feedback.createdAt.toISOString(),
     };
+  }
+  async getToxicJobStatus(jobId: string) {
+    const job = await this.feedbackToxicQueue.getJob(jobId);
+    if (!job) {
+      throw new NotFoundException('job not found');
+    }
+    const state = await job.getState();
+    switch (state) {
+      case 'completed':
+        await this.feedbackToxicQueue.remove(jobId);
+        return {
+          status: 'APPROVED',
+        };
+      case 'failed':
+        await this.feedbackToxicQueue.remove(jobId);
+        return {
+          status: 'REJECTED',
+        };
+      default:
+        return {
+          status: 'PENDING',
+        };
+    }
   }
 }

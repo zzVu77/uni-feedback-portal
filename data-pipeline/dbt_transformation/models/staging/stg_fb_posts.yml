@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: stg_fb_posts
+    description: "This is the staging model for Facebook posts, which serves as an intermediate layer to clean and structure raw data before it is transformed into the marts layer."
+    columns:
+      - name: post_id
+        data_type: string
+        description: ""
+
+      - name: author
+        data_type: string
+        description: ""
+
+      - name: content
+        data_type: string
+        description: ""
+
+      - name: post_link
+        data_type: string
+        description: ""
+
+      - name: posted_at
+        data_type: timestamp
+        description: ""
+
+      - name: reaction_count
+        data_type: int64
+        description: ""
+
+      - name: comment_count
+        data_type: int64
+        description: ""
+
+      - name: crawled_at
+        data_type: timestamp
+        description: ""

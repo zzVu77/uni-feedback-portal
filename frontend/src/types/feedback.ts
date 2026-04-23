@@ -4,7 +4,10 @@ export type FeedbackStatus =
   | "PENDING"
   | "IN_PROGRESS"
   | "RESOLVED"
-  | "REJECTED";
+  | "VIOLATED_CONTENT"
+  | "REJECTED"
+  | "AI_REVIEW_FAILED"
+  | "AI_REVIEWING";
 export type FeedbackDetail = {
   id: string;
   subject: string;
