@@ -4,7 +4,8 @@ import time
 from dotenv import load_dotenv
 from google.cloud import bigquery
 from google import genai
-
+from google.genai import types
+import sys
 load_dotenv()
 
 PROJECT_ID = "uni-feedback-data" 
@@ -64,7 +65,7 @@ def analyze_batch_with_gemini(batch_posts):
         * 0.0: Trung lập, câu hỏi nhờ tư vấn, tìm đồ rơi, thông báo bình thường.
         * 0.1 đến 0.5: Hài lòng cơ bản, khen ngợi nhẹ nhàng.
         * 0.6 đến 1.0: Rất tự hào, biết ơn, khen ngợi nhiệt tình chất lượng trường học/thầy cô.
-    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ. Bắt buộc phải tóm tắt thẳng vào "Nỗi đau" (Pain point) hoặc "Lợi ích" mà sinh viên đang đề cập để nhà trường xử lý ngay.
+    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ. Bắt buộc phải tóm tắt thẳng vào "Nỗi đau" (Pain point) hoặc "Lợi ích" mà sinh viên đang đề cập để nhà trường xử lý ngay. (LƯU Ý TỐI QUAN TRỌNG: TUYỆT ĐỐI KHÔNG dùng dấu ngoặc kép (") bên trong câu tóm tắt này. Nếu cần trích dẫn lời sinh viên, bắt buộc phải dùng dấu ngoặc đơn (')).
 
     Danh sách bài viết cần phân tích:
     {input_data}
@@ -73,7 +74,10 @@ def analyze_batch_with_gemini(batch_posts):
     try:
         response = ai_client.models.generate_content(
             model='gemini-2.5-flash',
-            contents=prompt
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+            )
         )
         
         if not response.text:
@@ -82,7 +86,7 @@ def analyze_batch_with_gemini(batch_posts):
             
         # 3. Clean the response to ensure it's a valid JSON array string
         clean_json = response.text.replace("```json", "").replace("```", "").strip()
-        return json.loads(clean_json)
+        return json.loads(clean_json, strict=False)
         # --------------------------------
 
     except Exception as e:
@@ -106,7 +110,8 @@ def main():
         posts = fetch_unprocessed_posts()
     except Exception as e:
         print(f"❌ Error querying data. Please check the DATASET_MARTS name. Details: {e}")
-        return
+        sys.exit(1)
+        
     
     if not posts:
         print("✅ There are no new posts to analyze.")
@@ -116,6 +121,9 @@ def main():
     batch_size = 5
     batches = list(chunk_list(posts, batch_size))
     ai_results = []
+    # used to track how many batches failed to get a valid response from Gemini
+    failed_batches = 0
+
     
     print(f"🤖 Splitting {len(posts)} posts into {len(batches)} batches ( {batch_size} posts each)...")
     
@@ -131,6 +139,7 @@ def main():
             print(f"  -> Success! Analyzed {len(analysis_array)} posts.")
         else:
             print(f"  -> ❌ Batch {index + 1} failed or returned invalid JSON.")
+            failed_batches += 1
             
         # To avoid hitting Gemini's rate limits, we will pause for 15 seconds after each batch except the last one
         if index < len(batches) - 1:
@@ -140,6 +149,10 @@ def main():
     # After processing all batches, if we have any results, write them back to BigQuery
     if ai_results:
         write_back_to_bigquery(ai_results)
+
+    if failed_batches > 0:
+        print(f"⚠️ WARNING: Have {failed_batches} batches that failed. Marking as FAILED for Prefect to retry...")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
