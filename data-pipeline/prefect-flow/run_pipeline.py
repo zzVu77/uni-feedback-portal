@@ -21,7 +21,7 @@ def run_loader():
     print(f"📍 Loading raw data to BigQuery at: {ROOT_DIR}")
     subprocess.run(["node", "crawler/loader.js"], cwd=ROOT_DIR, check=True)
 
-# ----- PHA TIỀN XỬ LÝ (PRE-AI) -----
+# ----- Phase: Pre-AI Processing -----
 @task(name="3. DBT: Staging FB Posts")
 def run_dbt_stg_fb_posts():
     print("📍 Running DBT: Staging FB Posts")
@@ -32,13 +32,13 @@ def run_dbt_mrt_ai_feed():
     print("📍 Running DBT: Marts AI Feed")
     subprocess.run(["dbt", "run", "--select", "mrt_posts_for_ai_feed"], cwd=DBT_DIR, check=True)
 
-# ----- PHA AI XỬ LÝ -----
+# ----- Phase: AI processing-----
 @task(name="5. AI Sentiment Analysis", retries=3, retry_delay_seconds=120)
 def run_ai_processor():
     print(f"📍 Running AI Sentiment Analysis...")
     subprocess.run(["python", "ai_processing/ai_processor.py"], cwd=ROOT_DIR, check=True)
 
-# ----- PHA HẬU XỬ LÝ (POST-AI) -----
+# ----- Phase: Post-AI Processing -----
 @task(name="6. DBT: Staging AI Analysis")
 def run_dbt_stg_ai_analysis():
     print("📍 Running DBT: Staging AI Analysis")
