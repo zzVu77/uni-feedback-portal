@@ -177,7 +177,8 @@ export class FeedbackManagementService {
             note: true,
             createdAt: true,
           },
-          orderBy: { createdAt: 'asc' },
+          orderBy: { createdAt: 'desc' },
+          take: 2,
         },
         forwardingLogs: {
           select: {
