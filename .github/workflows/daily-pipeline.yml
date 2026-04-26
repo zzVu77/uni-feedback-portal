@@ -53,8 +53,8 @@ jobs:
       - name: 🚀 Activate the Entire Pipeline (Prefect Flow)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # Declare the path to the key file for dbt and Google Cloud library to know
-          GOOGLE_APPLICATION_CREDENTIALS: ./google-service-account.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          FACEBOOK_GROUP_URL: ${{ vars.FACEBOOK_GROUP_URL }}
         run: |
           # Run the Prefect flow which orchestrates the entire pipeline
           python data-pipeline/prefect-flow/run_pipeline.py
