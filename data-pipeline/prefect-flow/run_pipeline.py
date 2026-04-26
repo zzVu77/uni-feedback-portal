@@ -22,29 +22,34 @@ def run_loader():
     subprocess.run(["node", "crawler/loader.js"], cwd=ROOT_DIR, check=True)
 
 # ----- Phase: Pre-AI Processing -----
-@task(name="3. DBT: Staging FB Posts")
+@task(name="3. DBT: Install Dependencies", retries=2, retry_delay_seconds=30)
+def run_dbt_deps():
+    print("📍 Đang tải các thư viện phụ thuộc cho dbt (dbt deps)...")
+    subprocess.run(["dbt", "deps"], cwd=DBT_DIR, check=True)
+
+@task(name="4. DBT: Staging FB Posts")
 def run_dbt_stg_fb_posts():
     print("📍 Running DBT: Staging FB Posts")
     subprocess.run(["dbt", "run", "--select", "stg_fb_posts"], cwd=DBT_DIR, check=True)
 
-@task(name="4. DBT: Marts AI Feed")
+@task(name="5. DBT: Marts AI Feed")
 def run_dbt_mrt_ai_feed():
     print("📍 Running DBT: Marts AI Feed")
     subprocess.run(["dbt", "run", "--select", "mrt_posts_for_ai_feed"], cwd=DBT_DIR, check=True)
 
 # ----- Phase: AI processing-----
-@task(name="5. AI Sentiment Analysis", retries=3, retry_delay_seconds=120)
+@task(name="6. AI Sentiment Analysis", retries=3, retry_delay_seconds=120)
 def run_ai_processor():
     print(f"📍 Running AI Sentiment Analysis...")
     subprocess.run(["python", "ai_processing/ai_processor.py"], cwd=ROOT_DIR, check=True)
 
 # ----- Phase: Post-AI Processing -----
-@task(name="6. DBT: Staging AI Analysis")
+@task(name="7. DBT: Staging AI Analysis")
 def run_dbt_stg_ai_analysis():
     print("📍 Running DBT: Staging AI Analysis")
     subprocess.run(["dbt", "run", "--select", "stg_ai_post_analysis"], cwd=DBT_DIR, check=True)
 
-@task(name="7. DBT: Final Dashboard")
+@task(name="8. DBT: Final Dashboard")
 def run_dbt_mrt_dashboard():
     print("📍 Running DBT: Final Dashboard")
     subprocess.run(["dbt", "run", "--select", "mrt_trending_issues_dashboard"], cwd=DBT_DIR, check=True)
@@ -61,6 +66,8 @@ def uni_feedback_flow():
     run_crawler()
     run_loader()
     
+    run_dbt_deps()
+
     run_dbt_stg_fb_posts()
     run_dbt_mrt_ai_feed()
     
