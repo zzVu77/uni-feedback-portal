@@ -25,7 +25,10 @@ jobs:
           python-version: "3.10"
 
       - name: 📦 Install Node.js packages
-        run: npm install
+        working-directory: ./data-pipeline
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
 
       - name: 📦 Install Python libraries
         run: |
@@ -39,11 +42,20 @@ jobs:
           # Create a temporary file for the service account key
           echo "$GCP_CREDENTIALS" > ./google-service-account.json
 
+      - name: 🔑 Configure Facebook Auth State
+        env:
+          FB_AUTH_JSON: ${{ secrets.FB_AUTH_JSON }}
+        run: |
+          # Tạo file auth.json từ GitHub Secrets vào đúng thư mục crawler cần
+          # (Hãy điều chỉnh lại đường dẫn ./data-pipeline/auth.json nếu code bạn để chỗ khác)
+          echo "$FB_AUTH_JSON" > ./data-pipeline/auth.json
+
       - name: 🚀 Activate the Entire Pipeline (Prefect Flow)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # Declare the path to the key file for dbt and Google Cloud library to know
           GOOGLE_APPLICATION_CREDENTIALS: ./google-service-account.json
+        working-directory: ./data-pipeline/prefect-flow
         run: |
           # Run the Prefect flow which orchestrates the entire pipeline
           python data-pipeline/prefect-flow/run_pipeline.py
