@@ -29,4 +29,4 @@ export const DEFAULT_VIEWPORT = { width: 1366, height: 768 };
 export const DEFAULT_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
 
-export const AUTH_FILE = "auth.json";
+export const AUTH_FILE = "../data-pipeline/auth.json";
