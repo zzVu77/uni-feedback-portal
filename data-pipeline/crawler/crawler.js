@@ -148,7 +148,7 @@ async function runCrawler() {
   if (!validateConfig()) return;
 
   const { browser, context } = await initBrowser({
-    headless: false, //TODO: Change to true for production
+    headless: true, //TODO: Change to true for production
     useAuth: true,
   });
 
