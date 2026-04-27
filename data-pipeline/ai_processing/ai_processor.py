@@ -71,7 +71,9 @@ def analyze_batch_with_gemini(batch_posts):
         * 0.0: Trung lập, câu hỏi nhờ tư vấn, tìm đồ rơi, thông báo bình thường.
         * 0.1 đến 0.5: Hài lòng cơ bản, khen ngợi nhẹ nhàng.
         * 0.6 đến 1.0: Rất tự hào, biết ơn, khen ngợi nhiệt tình chất lượng trường học/thầy cô.
-    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ. Bắt buộc phải tóm tắt thẳng vào "Nỗi đau" (Pain point) hoặc "Lợi ích" mà sinh viên đang đề cập để nhà trường xử lý ngay. (LƯU Ý TỐI QUAN TRỌNG: TUYỆT ĐỐI KHÔNG dùng dấu ngoặc kép (") bên trong câu tóm tắt này. Nếu cần trích dẫn lời sinh viên, bắt buộc phải dùng dấu ngoặc đơn (')).
+    - "sentiment_label": Nhãn cảm xúc tương ứng (Tiêu cực / Trung lập / Tích cực).
+    - "ai_summary": Tóm tắt nội dung tối đa 100 chữ. Bắt buộc phải tóm tắt thẳng vào "Nỗi đau" (Pain point) hoặc "Lợi ích" mà sinh viên đang đề cập để nhà trường xử lý ngay. (TUYỆT ĐỐI KHÔNG dùng dấu ngoặc kép (") bên trong câu tóm tắt này).
+    - "is_relevant": Kiểu boolean (true/false). Trả về true nếu bài viết nói về các vấn đề liên quan đến nhà trường (học tập, điểm số, cơ sở vật chất, giảng viên, quy định, KTX, thắc mắc sinh viên...). Trả về false nếu đây là bài tâm sự cá nhân, thả thính, rủ chơi game, mua bán đồ ăn/đồ dùng, tìm trọ ngoài, hoặc spam không liên quan đến vận hành nhà trường.
 
     Danh sách bài viết cần phân tích:
     {input_data}

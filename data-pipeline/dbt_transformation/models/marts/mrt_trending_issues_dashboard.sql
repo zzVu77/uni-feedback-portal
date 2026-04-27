@@ -1,6 +1,8 @@
 {{
     config(
-        materialized='table' 
+        materialized='incremental',
+        unique_key='post_id',
+        on_schema_change='append_new_columns'
     )
 }}
 
@@ -10,6 +12,7 @@ with posts as (
 
 ai_analysis as (
     select * from {{ ref('stg_ai_post_analysis') }}
+    where is_relevant = TRUE 
 )
 
 select
@@ -38,5 +41,13 @@ select
     a.analyzed_at
 
 from posts p
-left join ai_analysis a on p.post_id = a.post_id
+inner join ai_analysis a on p.post_id = a.post_id
+
+{% if is_incremental() %}
+
+  where p.posted_at > (select coalesce(max(posted_at), '1970-01-01') from {{ this }})
+     or a.analyzed_at > (select coalesce(max(analyzed_at), '1970-01-01') from {{ this }})
+
+{% endif %}
+
 order by p.posted_at DESC
