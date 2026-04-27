@@ -53,7 +53,7 @@ jobs:
       - name: 🚀 Activate the Entire Pipeline (Prefect Flow)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/google-service-account.json
           FACEBOOK_GROUP_URL: ${{ vars.FACEBOOK_GROUP_URL }}
         run: |
           # Run the Prefect flow which orchestrates the entire pipeline

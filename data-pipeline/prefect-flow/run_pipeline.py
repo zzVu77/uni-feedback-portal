@@ -6,6 +6,7 @@ from prefect import task, flow
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 DBT_DIR = os.path.join(ROOT_DIR, "dbt_transformation")
+CRAWLER_DIR = os.path.join(ROOT_DIR, "crawler")
 
 # ==========================================
 # 1. Define Tasks (Each task corresponds to a step in the pipeline)
@@ -13,13 +14,13 @@ DBT_DIR = os.path.join(ROOT_DIR, "dbt_transformation")
 
 @task(name="1. Crawl Facebook Data", retries=2, retry_delay_seconds=60)
 def run_crawler():
-    print(f"📍 Running Crawler at: {ROOT_DIR}")
-    subprocess.run(["node", "crawler/crawler.js"], cwd=ROOT_DIR, check=True)
+    print(f"📍 Running Crawler at: {CRAWLER_DIR}")
+    subprocess.run(["node", "crawler/crawler.js"], cwd=CRAWLER_DIR, check=True)
 
 @task(name="2. Load Raw to BigQuery", retries=2, retry_delay_seconds=60)
 def run_loader():
-    print(f"📍 Loading raw data to BigQuery at: {ROOT_DIR}")
-    subprocess.run(["node", "crawler/loader.js"], cwd=ROOT_DIR, check=True)
+    print(f"📍 Loading raw data to BigQuery at: {CRAWLER_DIR}")
+    subprocess.run(["node", "crawler/loader.js"], cwd=CRAWLER_DIR, check=True)
 
 # ----- Phase: Pre-AI Processing -----
 @task(name="3. DBT: Install Dependencies", retries=2, retry_delay_seconds=30)
