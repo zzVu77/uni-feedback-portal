@@ -107,7 +107,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               fill="#d1fae5"
               fontSize={8}
               fillOpacity={0.9}
-              strokeWidth={2}
+              strokeWidth={1}
             />
             <Area
               type="monotone"
@@ -118,7 +118,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               fill="#ffe4e6"
               fontSize={8}
               fillOpacity={0.9}
-              strokeWidth={2}
+              strokeWidth={1}
             />
           </AreaChart>
         </ResponsiveContainer>
