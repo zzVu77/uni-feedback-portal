@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FeedbackPost } from "@/types/dashboard";
-import { Flame, ExternalLink, Filter } from "lucide-react";
+import { ExternalLink, ThumbsUp, MessageSquare } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -9,24 +9,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 interface HotIssuesTableProps {
   data: FeedbackPost[];
 }
 
+type TabType = "Tiêu cực" | "Tích cực" | "Tất cả";
+
 const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
-  const [showAll, setShowAll] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("Tiêu cực");
 
-  // Filter logic: Default to only Negative issues, or all if toggled
-  const processedData = showAll
-    ? data
-    : data.filter((post) => post.sentiment_label === "Tiêu cực");
+  // Filter logic
+  const processedData =
+    activeTab === "Tất cả"
+      ? data
+      : data.filter((post) => post.sentiment_label === activeTab);
 
-  // Sort by engagement_score descending and take top 10
+  // Sort by sentiment_score ascending, then (reaction + comment) descending
   const topIssues = [...processedData]
-    .sort((a, b) => b.engagement_score - a.engagement_score)
+    .sort((a, b) => {
+      if (a.sentiment_score !== b.sentiment_score) {
+        return a.sentiment_score - b.sentiment_score;
+      }
+      const engagementA = a.reaction_count + a.comment_count;
+      const engagementB = b.reaction_count + b.comment_count;
+      return engagementB - engagementA;
+    })
     .slice(0, 10);
 
   const getSentimentStyles = (label: string) => {
@@ -50,38 +60,46 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
             Vấn đề tiêu điểm
           </h3>
           <p className="text-sm text-slate-500">
-            {showAll
+            {activeTab === "Tất cả"
               ? "Danh sách tất cả phản hồi"
-              : "Các vấn đề tiêu cực cần chú ý"}
+              : `Các vấn đề ${activeTab.toLowerCase()} cần chú ý`}
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowAll(!showAll)}
-          className={cn(
-            "rounded-lg border-slate-200 text-slate-600 transition-all",
-            showAll && "border-slate-300 bg-slate-100 text-slate-900",
-          )}
-        >
-          <Filter className="mr-2 h-4 w-4" />
-          {showAll ? "Đang hiện tất cả" : "Hiển thị tất cả"}
-        </Button>
+        {/* 3-Way Tab Selector */}
+        <div className="flex items-center rounded-lg bg-slate-100 p-1">
+          {(["Tiêu cực", "Tích cực", "Tất cả"] as TabType[]).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={cn(
+                "px-4 py-1.5 text-sm font-medium transition-all duration-200",
+                activeTab === tab
+                  ? "rounded-md bg-white text-slate-900 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700",
+              )}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
 
       <Table>
         <TableHeader>
           <TableRow className="border-slate-100 hover:bg-transparent">
-            <TableHead className="w-[150px] font-medium text-slate-500">
-              Mức độ ưu tiên
-            </TableHead>
             <TableHead className="font-medium text-slate-500">
-              Tóm tắt AI
+              Tóm tắt vấn đề
             </TableHead>
             <TableHead className="font-medium text-slate-500">Chủ đề</TableHead>
             <TableHead className="font-medium text-slate-500">
-              Sắc thái
+              Phân loại
+            </TableHead>
+            <TableHead className="font-medium text-slate-500">
+              Tương tác
+            </TableHead>
+            <TableHead className="font-medium text-slate-500">
+              Ngày đăng
             </TableHead>
             <TableHead className="text-right font-medium text-slate-500">
               Hành động
@@ -92,19 +110,6 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
           {topIssues.length > 0 ? (
             topIssues.map((post) => (
               <TableRow key={post.post_id} className="group border-slate-100">
-                <TableCell className="py-4">
-                  <div className="flex items-center gap-2 font-semibold text-slate-700">
-                    <Flame
-                      className={cn(
-                        "h-4 w-4",
-                        post.engagement_score > 50
-                          ? "text-orange-500"
-                          : "text-slate-400",
-                      )}
-                    />
-                    {post.engagement_score}
-                  </div>
-                </TableCell>
                 <TableCell className="py-4">
                   <p className="line-clamp-2 max-w-[400px] text-sm text-slate-600">
                     {post.ai_summary}
@@ -123,6 +128,23 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                     {post.sentiment_label}
                   </span>
                 </TableCell>
+                <TableCell className="py-4">
+                  <div className="flex items-center gap-3 text-xs text-slate-500">
+                    <span className="flex items-center gap-1">
+                      <ThumbsUp className="h-3 w-3" />
+                      {post.reaction_count}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <MessageSquare className="h-3 w-3" />
+                      {post.comment_count}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell className="py-4">
+                  <span className="text-sm whitespace-nowrap text-slate-500">
+                    {format(new Date(post.posted_at), "dd/MM/yyyy")}
+                  </span>
+                </TableCell>
                 <TableCell className="py-4 text-right">
                   <a
                     href={post.post_link}
@@ -139,10 +161,10 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
           ) : (
             <TableRow>
               <TableCell
-                colSpan={5}
+                colSpan={6}
                 className="py-12 text-center text-sm text-slate-400"
               >
-                Không có dữ liệu phản hồi tiêu cực nào.
+                Không có dữ liệu phản hồi phù hợp.
               </TableCell>
             </TableRow>
           )}
