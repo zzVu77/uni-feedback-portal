@@ -105,6 +105,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               stackId="1"
               stroke="#34d399"
               fill="#d1fae5"
+              fontSize={8}
               fillOpacity={0.9}
               strokeWidth={2}
             />
@@ -115,6 +116,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               stackId="1"
               stroke="#fb7185"
               fill="#ffe4e6"
+              fontSize={8}
               fillOpacity={0.9}
               strokeWidth={2}
             />

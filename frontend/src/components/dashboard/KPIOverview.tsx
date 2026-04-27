@@ -26,7 +26,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
       {/* Total Feedbacks Card */}
       <div className="flex items-start justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
         <div>
-          <p className="mb-1 text-sm text-slate-500">Tổng số bài đăng</p>
+          <p className="mb-1 text-sm font-medium">Tổng số bài đăng</p>
           <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
             {totalFeedbacks.toLocaleString()}
           </h3>
@@ -39,7 +39,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
       {/* Average Sentiment Card */}
       <div className="flex items-start justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
         <div>
-          <p className="mb-1 text-sm text-slate-500">Điểm cảm xúc trung bình</p>
+          <p className="mb-1 text-sm font-medium">Điểm cảm xúc trung bình</p>
           <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
             {avgSentiment.toFixed(1)}/10
           </h3>
@@ -52,7 +52,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
       {/* Urgent Issues Card */}
       <div className="flex items-start justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
         <div>
-          <p className="mb-1 text-sm text-slate-500">Bài đăng tiêu cực</p>
+          <p className="mb-1 text-sm font-medium">Bài đăng tiêu cực</p>
           <h3 className="text-2xl font-semibold tracking-tight text-rose-600">
             {urgentIssues}
           </h3>
