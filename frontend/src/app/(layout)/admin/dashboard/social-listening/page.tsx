@@ -41,8 +41,8 @@ const SocialListeningPage = () => {
               Phân tích bài đăng sinh viên trên mạng xã hội
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              Theo dõi và phân tích các vấn đề của sinh viên thông qua các mạng
-              xã hội để có những hành động kịp thời và hiệu quả
+              Theo dõi và phân tích các vấn đề của sinh viên thông qua các bài
+              đăng mạng xã hội để có những hành động kịp thời và hiệu quả
             </p>
           </div>
 

@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { FeedbackPost } from "@/types/dashboard";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -68,7 +68,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
       </div>
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <AreaChart
             data={chartData}
             margin={{ top: 5, right: 10, left: 0, bottom: 0 }}
           >
@@ -97,26 +97,28 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
                 boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
               }}
             />
-            <Legend verticalAlign="top" align="right" iconType="circle" />
-            <Line
+            <Legend verticalAlign="bottom" align="center" iconType="circle" />
+            <Area
               type="monotone"
               dataKey="positive"
               name="Tích cực"
-              stroke="#10b981"
+              stackId="1"
+              stroke="#34d399"
+              fill="#d1fae5"
+              fillOpacity={0.9}
               strokeWidth={2}
-              dot={{ r: 4, fill: "#10b981", strokeWidth: 0 }}
-              activeDot={{ r: 6 }}
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="negative"
               name="Tiêu cực"
-              stroke="#f43f5e"
+              stackId="1"
+              stroke="#fb7185"
+              fill="#ffe4e6"
+              fillOpacity={0.9}
               strokeWidth={2}
-              dot={{ r: 4, fill: "#f43f5e", strokeWidth: 0 }}
-              activeDot={{ r: 6 }}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
