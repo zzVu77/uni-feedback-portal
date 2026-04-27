@@ -35,20 +35,20 @@ const SocialListeningPage = () => {
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
         {/* Header & Filters */}
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-              Hệ thống Phân tích Phản hồi Sinh viên
+              Phân tích bài đăng sinh viên trên mạng xã hội
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              Theo dõi và phân tích tâm trạng sinh viên thông qua các mạng xã
-              hội và diễn đàn
+              Theo dõi và phân tích các vấn đề của sinh viên thông qua các mạng
+              xã hội để có những hành động kịp thời và hiệu quả
             </p>
           </div>
 
           <div className="w-full md:w-64">
             <Select value={selectedTopic} onValueChange={setSelectedTopic}>
-              <SelectTrigger className="rounded-lg border-slate-200 bg-white">
+              <SelectTrigger className="rounded-lg border-slate-200 bg-white shadow-sm">
                 <SelectValue placeholder="Lọc theo chủ đề" />
               </SelectTrigger>
               <SelectContent>

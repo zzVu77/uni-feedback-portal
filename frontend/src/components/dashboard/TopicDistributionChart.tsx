@@ -48,23 +48,38 @@ const TopicDistributionChart: React.FC<TopicDistributionChartProps> = ({
               outerRadius={80}
               paddingAngle={5}
               dataKey="value"
+              stroke="none"
             >
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
+                  className="transition-opacity outline-none hover:opacity-80"
                 />
               ))}
             </Pie>
             <Tooltip
               contentStyle={{
                 backgroundColor: "#fff",
-                borderRadius: "8px",
+                borderRadius: "12px",
                 border: "1px solid #f1f5f9",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+                boxShadow:
+                  "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                padding: "8px 12px",
+              }}
+              itemStyle={{ fontSize: "12px", color: "#475569" }}
+            />
+            <Legend
+              verticalAlign="bottom"
+              align="center"
+              iconType="circle"
+              iconSize={8}
+              wrapperStyle={{
+                paddingTop: "20px",
+                fontSize: "12px",
+                color: "#64748b",
               }}
             />
-            <Legend verticalAlign="bottom" align="center" iconType="circle" />
           </PieChart>
         </ResponsiveContainer>
       </div>
