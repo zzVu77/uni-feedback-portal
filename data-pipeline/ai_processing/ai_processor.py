@@ -6,6 +6,12 @@ from google.cloud import bigquery
 from google import genai
 from google.genai import types
 import sys
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
+logger=logging.getLogger(__name__)
+
 load_dotenv()
 
 PROJECT_ID = "uni-feedback-data" 
@@ -27,7 +33,7 @@ def fetch_unprocessed_posts():
         )
         LIMIT 50 
     """
-    print(f"⏳ Fetching unprocessed posts from BigQuery...")
+    logger.info("Fetching unprocessed posts from BigQuery...")
     return list(bq_client.query(query).result())
 
 def chunk_list(lst, n):
@@ -81,7 +87,7 @@ def analyze_batch_with_gemini(batch_posts):
         )
         
         if not response.text:
-            print("⚠️ Gemini returned an empty response since it contains some content that violates the policy. Skipping this batch.")
+            logger.warning("Gemini returned an empty response since it contains some content that violates the policy. Skipping this batch.")
             return None
             
         # 3. Clean the response to ensure it's a valid JSON array string
@@ -90,31 +96,31 @@ def analyze_batch_with_gemini(batch_posts):
         # --------------------------------
 
     except Exception as e:
-        print(f"⚠️ Error when calling Gemini for batch: {e}")
+        logger.error(f"Error when calling Gemini for batch: {e}")
         return None
 
 def write_back_to_bigquery(results):
     """Write the AI analysis results back to BigQuery."""
     table_id = f"{PROJECT_ID}.{DATASET_RAW}.post_analysis"
     
-    print(f"🚀 Pushing {len(results)} AI analysis results to BigQuery...")
+    logger.info(f"Pushing {len(results)} AI analysis results to BigQuery...")
     errors = bq_client.insert_rows_json(table_id, results)
     
     if not errors:
-        print("✅ Success! AI data has been pushed to BigQuery.")
+        logger.info("Success! AI data has been pushed to BigQuery.")
     else:
-        print(f"❌ There was an error inserting into BigQuery: {errors}")
+        logger.error(f"There was an error inserting into BigQuery: {errors}")
 
 def main():
     try:
         posts = fetch_unprocessed_posts()
     except Exception as e:
-        print(f"❌ Error querying data. Please check the DATASET_MARTS name. Details: {e}")
+        logger.error(f"Error querying data. Please check the DATASET_MARTS name. Details: {e}")
         sys.exit(1)
         
     
     if not posts:
-        print("✅ There are no new posts to analyze.")
+        logger.info("There are no new posts to analyze.")
         return
 
     # Split the posts into batches of 5 to comply with Gemini's rate limits and to optimize API calls
@@ -125,10 +131,9 @@ def main():
     failed_batches = 0
 
     
-    print(f"🤖 Splitting {len(posts)} posts into {len(batches)} batches ( {batch_size} posts each)...")
-    
+    logger.info(f"Splitting {len(posts)} posts into {len(batches)} batches ( {batch_size} posts each)...")
     for index, batch in enumerate(batches):
-        print(f"[{index + 1}/{len(batches)}] Processing batch {index + 1}...")
+        logger.info(f"[{index + 1}/{len(batches)}] Processing batch {index + 1}...")
         
         # Call API for each batch and get the analysis array
         analysis_array = analyze_batch_with_gemini(batch)
@@ -136,14 +141,14 @@ def main():
         # If we got a valid array back, extend our results list. Otherwise, log the failure.
         if analysis_array and isinstance(analysis_array, list):
             ai_results.extend(analysis_array)
-            print(f"  -> Success! Analyzed {len(analysis_array)} posts.")
+            logger.info(f"  -> Success! Analyzed {len(analysis_array)} posts.")
         else:
-            print(f"  -> ❌ Batch {index + 1} failed or returned invalid JSON.")
+            logger.error(f"  -> ❌ Batch {index + 1} failed or returned invalid JSON.")
             failed_batches += 1
             
         # To avoid hitting Gemini's rate limits, we will pause for 15 seconds after each batch except the last one
         if index < len(batches) - 1:
-            print("  💤 Sleeping for 15 seconds to respect API rate limits...")
+            logger.info("Sleeping for 15 seconds to respect API rate limits...")
             time.sleep(15)
             
     # After processing all batches, if we have any results, write them back to BigQuery
@@ -151,7 +156,7 @@ def main():
         write_back_to_bigquery(ai_results)
 
     if failed_batches > 0:
-        print(f"⚠️ WARNING: Have {failed_batches} batches that failed. Marking as FAILED for Prefect to retry...")
+        logger.warning(f"Have {failed_batches} batches that failed. Marking as FAILED for Prefect to retry...")
         sys.exit(1)
 
 if __name__ == "__main__":

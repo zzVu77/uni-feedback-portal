@@ -2,8 +2,8 @@ name: Uni Feedback Daily Pipeline
 
 on:
   schedule:
-    # todo: will adjust time later, run every week at 7pm (Vietnam time) to have fresh data for Monday morning meetings
-    - cron: "0 19 * * *"
+    # run at 19:00 UTC ( 2:AM Vietnam time) every 3 days
+    - cron: "0 19 */3 * *"
   workflow_dispatch:
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
         env:
           FB_AUTH_JSON: ${{ secrets.FB_AUTH_JSON }}
         run: |
-          # Tạo file auth.json từ GitHub Secrets vào đúng thư mục crawler cần
+          # Create the auth.json file for the crawler
           echo "$FB_AUTH_JSON" > ./data-pipeline/crawler/auth.json
 
       - name: 🚀 Activate the Entire Pipeline (Prefect Flow)
