@@ -15,12 +15,12 @@ CRAWLER_DIR = os.path.join(ROOT_DIR, "crawler")
 @task(name="1. Crawl Facebook Data", retries=2, retry_delay_seconds=60)
 def run_crawler():
     print(f"📍 Running Crawler at: {CRAWLER_DIR}")
-    subprocess.run(["node", "crawler/crawler.js"], cwd=CRAWLER_DIR, check=True)
+    subprocess.run(["node", "crawler.js"], cwd=CRAWLER_DIR, check=True)
 
 @task(name="2. Load Raw to BigQuery", retries=2, retry_delay_seconds=60)
 def run_loader():
     print(f"📍 Loading raw data to BigQuery at: {CRAWLER_DIR}")
-    subprocess.run(["node", "crawler/loader.js"], cwd=CRAWLER_DIR, check=True)
+    subprocess.run(["node", "loader.js"], cwd=CRAWLER_DIR, check=True)
 
 # ----- Phase: Pre-AI Processing -----
 @task(name="3. DBT: Install Dependencies", retries=2, retry_delay_seconds=30)
