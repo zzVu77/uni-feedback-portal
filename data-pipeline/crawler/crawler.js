@@ -16,6 +16,7 @@ const OUTPUT_DIR = path.join(__dirname, "output");
  * Validates the environment and necessary files before starting the crawler.
  * @returns {boolean} True if all checks pass, false otherwise.
  */
+console.log(AUTH_FILE);
 function validateConfig() {
   if (!fs.existsSync(AUTH_FILE)) {
     console.error(
