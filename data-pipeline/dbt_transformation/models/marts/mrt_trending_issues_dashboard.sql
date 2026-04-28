@@ -38,14 +38,17 @@ select
         WHEN a.sentiment_score >= 0.5 THEN 'Tích cực'
     END as sentiment_label,
 
-    a.analyzed_at
+    a.analyzed_at,
+    p.crawled_at
 
 from posts p
 inner join ai_analysis a on p.post_id = a.post_id
 
 {% if is_incremental() %}
 
-  where p.posted_at > (select coalesce(max(posted_at), '1970-01-01') from {{ this }})
+  -- Get only new or updated posts since the last run, based on either the post's crawl time or the AI analysis time.
+  -- or based on the most recent analyzed_at time in the target table, to ensure we capture any updates to AI analysis.
+  where p.crawled_at > (select coalesce(max(crawled_at), '1970-01-01') from {{ this }})
      or a.analyzed_at > (select coalesce(max(analyzed_at), '1970-01-01') from {{ this }})
 
 {% endif %}

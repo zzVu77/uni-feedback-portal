@@ -3,3 +3,6 @@ google-cloud-bigquery==3.17.2
 python-dotenv==1.2.2
 google-genai
 prefect
+dlt[postgres]
+sqlalchemy
+pandas
