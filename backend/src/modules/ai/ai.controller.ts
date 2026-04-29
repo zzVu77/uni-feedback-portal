@@ -3,12 +3,10 @@ import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Body, Controller, Post } from '@nestjs/common';
 import { DepartmentResponse } from './types/department-ai.dto';
 import { DepartmentProposalDto } from './types/department-proposal.dto';
-import { Public } from '../auth/decorators/public.decorator';
 import { htmlToText } from 'html-to-text';
 @Controller('ai')
 export class AiController {
   constructor(private readonly aiService: AiService) {}
-  @Public()
   @Post('department-proposal')
   @ApiOperation({
     summary: 'Get department proposal based on feedback description',
