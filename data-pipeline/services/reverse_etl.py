@@ -34,7 +34,7 @@ def sync_dashboard_data():
 
     # 3. Hit BigQuery with an incremental query to get only new or updated posts since the last run, based on either the post's crawl time or the AI analysis time.
     if max_crawled_date:
-        logger.info(f"🌊 Postgres: {max_crawled_date}. Fetching new posts ...")
+        logger.info(f"Postgres: {max_crawled_date}. Fetching new posts ...")
         query = f"""
             SELECT * FROM `uni-feedback-data.uni_feedback_data_marts.mrt_trending_issues_dashboard`
             WHERE crawled_at > '{max_crawled_date}'
@@ -59,7 +59,6 @@ def sync_dashboard_data():
     logger.info(f"Push {len(records)} rows to PostgreSQL using dlt...")
 
     # 5. Initialize dlt pipeline with Postgres destination and dataset/schema name
-    # Định nghĩa pipeline trỏ thẳng vào Postgres
     pipeline = dlt.pipeline(
         pipeline_name='bq_to_postgres_dashboard',
         destination=dlt.destinations.postgres(credentials=pg_uri),
