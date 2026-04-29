@@ -22,10 +22,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:up": "cd db && docker-compose up -d",
     "db:down": "cd db && docker-compose down -v",
+    "db:init-vector": "docker exec -i university-feedback psql -U root -d UniversityFeedback -c \"CREATE EXTENSION IF NOT EXISTS vector;\"",
+    "db:change-version": "docker exec -it university-feedback psql -U root -d postgres -c \"ALTER DATABASE template1 REFRESH COLLATION VERSION;\"",
     "prisma:generate": "prisma generate",
     "migration:generate": "prisma migrate dev --name init",
     "migration:deploy": "prisma migrate deploy",
-    "db:seed": "docker exec -i university-feedback psql -U root -d UniversityFeedback < db/init.sql"
+    "db:seed": "docker exec -i university-feedback psql -U root -d UniversityFeedback < db/init.sql",
+    "seed:dept": "ts-node -r tsconfig-paths/register src/modules/ai/embeddings/embeddingDepartment.ts"
   },
   "dependencies": {
     "@google/genai": "^1.39.0",
@@ -49,6 +52,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "cookie-parser": "^1.4.7",
+    "html-to-text": "^9.0.5",
     "nodemailer": "^7.0.10",
     "prisma-zod-generator": "^1.21.1",
     "reflect-metadata": "^0.2.2",
@@ -67,6 +71,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
+    "@types/html-to-text": "^9.0.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
     "@types/nodemailer": "^7.0.3",
