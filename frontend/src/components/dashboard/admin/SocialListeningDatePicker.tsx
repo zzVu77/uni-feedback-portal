@@ -10,7 +10,6 @@ import {
 import { cn } from "@/lib/utils";
 import { SocialListeningFilter } from "@/types/social-listening";
 import { format, parseISO } from "date-fns";
-import { vi } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
 import * as React from "react";
 import { DateRange } from "react-day-picker";
@@ -88,9 +87,7 @@ export function SocialListeningDatePicker({
           </Button>
         </PopoverTrigger>
 
-        {/* Giữ kích thước gọn gàng, tự động căn giữa lịch */}
         <PopoverContent className="w-auto p-0" align="end">
-          {/* Header hiển thị ngày đang chọn (thay thế cho Tab cũ) */}
           <div className="flex items-center justify-between border-b bg-slate-50/50 px-4 py-3">
             <div className="flex flex-col">
               <span className="text-[10px] font-semibold text-slate-500 uppercase">
@@ -112,14 +109,12 @@ export function SocialListeningDatePicker({
           </div>
 
           <div className="p-3">
-            {/* Sử dụng cấu hình mặc định, an toàn nhất của shadcn */}
             <Calendar
               mode="range"
               defaultMonth={date?.from}
               selected={date}
               onSelect={setDate}
               numberOfMonths={1}
-              locale={vi}
             />
 
             {/* Footer */}
