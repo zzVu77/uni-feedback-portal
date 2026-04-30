@@ -17,7 +17,7 @@ interface SentimentTrendChartProps {
 
 const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
   return (
-    <div className="rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
+    <div className="h-full rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
       <div className="mb-6">
         <h3 className="text-lg font-semibold tracking-tight text-slate-900">
           Xu hướng cảm xúc

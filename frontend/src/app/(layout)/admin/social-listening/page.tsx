@@ -127,7 +127,7 @@ const SocialListeningPage = () => {
             {kpiData && <KPIOverview data={kpiData} />}
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="lg:col-span-2">
+              <div className="h-full lg:col-span-2">
                 {trendData && <SentimentTrendChart data={trendData} />}
               </div>
               <div className="lg:col-span-1">
