@@ -55,7 +55,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
       case "Tích cực":
         return "bg-emerald-50 text-emerald-700 border-emerald-100";
       case "Trung lập":
-        return "bg-slate-100 text-slate-700 border-slate-200";
+        return "bg-blue-100 text-blue-700 border-blue-200";
       default:
         return "bg-slate-50 text-slate-500 border-slate-100";
     }
