@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { FeedbackPost } from "@/types/dashboard";
+import React from "react";
+import { SentimentTrendItem } from "@/types/social-listening";
 import {
   AreaChart,
   Area,
@@ -10,54 +10,14 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { format } from "date-fns";
 
 interface SentimentTrendChartProps {
-  data: FeedbackPost[];
+  data: SentimentTrendItem[];
 }
 
 const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
-  const chartData = useMemo(() => {
-    // Group by full date string (YYYY-MM-DD) for reliable sorting
-    const grouped = data.reduce(
-      (
-        acc: Record<
-          string,
-          {
-            dateStr: string;
-            displayDate: string;
-            positive: number;
-            negative: number;
-          }
-        >,
-        curr,
-      ) => {
-        const dateKey = format(curr.posted_at, "yyyy-MM-dd");
-        if (!acc[dateKey]) {
-          acc[dateKey] = {
-            dateStr: dateKey,
-            displayDate: format(curr.posted_at, "dd/MM"),
-            positive: 0,
-            negative: 0,
-          };
-        }
-        if (curr.sentiment_label === "Tích cực") {
-          acc[dateKey].positive += 1;
-        } else if (curr.sentiment_label === "Tiêu cực") {
-          acc[dateKey].negative += 1;
-        }
-        return acc;
-      },
-      {},
-    );
-
-    return Object.values(grouped).sort((a, b) =>
-      a.dateStr.localeCompare(b.dateStr),
-    );
-  }, [data]);
-
   return (
-    <div className="rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
+    <div className="h-full rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
       <div className="mb-6">
         <h3 className="text-lg font-semibold tracking-tight text-slate-900">
           Xu hướng cảm xúc
@@ -69,7 +29,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={chartData}
+            data={data}
             margin={{ top: 5, right: 10, left: 0, bottom: 0 }}
           >
             <CartesianGrid
@@ -105,6 +65,17 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               stackId="1"
               stroke="#34d399"
               fill="#d1fae5"
+              fontSize={8}
+              fillOpacity={0.9}
+              strokeWidth={1}
+            />
+            <Area
+              type="monotone"
+              dataKey="neutral"
+              name="Trung lập"
+              stackId="1"
+              stroke="#7dd3fc"
+              fill="#e0f2fe"
               fontSize={8}
               fillOpacity={0.9}
               strokeWidth={1}
