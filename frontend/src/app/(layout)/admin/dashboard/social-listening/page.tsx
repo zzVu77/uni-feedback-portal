@@ -1,61 +1,60 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { SocialListeningDatePicker } from "@/components/dashboard/admin/SocialListeningDatePicker";
+import HotIssuesTable from "@/components/dashboard/HotIssuesTable";
 import KPIOverview from "@/components/dashboard/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/SentimentTrendChart";
 import TopicDistributionChart from "@/components/dashboard/TopicDistributionChart";
-import HotIssuesTable from "@/components/dashboard/HotIssuesTable";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useGetTrendingIssues } from "@/hooks/queries/useSocialListeningQueries";
 import { SocialListeningFilter } from "@/types/social-listening";
-import { MonthRangePicker } from "@/components/dashboard/admin/MonthRangePicker";
-import { ReportFilter } from "@/types/report";
-import { startOfMonth, endOfMonth, format } from "date-fns";
+import { endOfMonth, format, startOfMonth } from "date-fns";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo } from "react";
 
 const SocialListeningPage = () => {
-  const [filter, setFilter] = useState<SocialListeningFilter>({
-    page: 1,
-    limit: 100, // Fetch more for charts to show a better overview
-    topic: undefined,
-    startDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
-    endDate: format(endOfMonth(new Date()), "yyyy-MM-dd"),
-  });
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const filter = useMemo((): SocialListeningFilter => {
+    const fromParam = searchParams.get("startDate");
+    const toParam = searchParams.get("endDate");
+    const now = new Date();
+
+    return {
+      startDate: fromParam || format(startOfMonth(now), "yyyy-MM-dd"),
+      endDate: toParam || format(endOfMonth(now), "yyyy-MM-dd"),
+    };
+  }, [searchParams]);
 
   const { data, isLoading } = useGetTrendingIssues(filter);
 
   const results = data?.results || [];
 
-  // Get unique topics for the filter from current results
-  const topics = useMemo(() => {
-    const uniqueTopics = Array.from(new Set(results.map((p) => p.topic)));
-    return ["Tất cả", ...uniqueTopics];
-  }, [results]);
+  const handleDateUpdate = useCallback(
+    (newRange: Partial<SocialListeningFilter>) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-  const handleTopicChange = (value: string) => {
-    setFilter((prev) => ({
-      ...prev,
-      topic: value === "Tất cả" ? undefined : value,
-    }));
-  };
+      if (newRange.startDate) {
+        params.set("startDate", newRange.startDate);
+      } else {
+        params.delete("startDate");
+      }
 
-  const handleDateUpdate = (range: ReportFilter) => {
-    setFilter((prev) => ({
-      ...prev,
-      startDate: range.from,
-      endDate: range.to,
-    }));
-  };
+      if (newRange.endDate) {
+        params.set("endDate", newRange.endDate);
+      } else {
+        params.delete("endDate");
+      }
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        {/* Header & Filters */}
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
@@ -68,28 +67,11 @@ const SocialListeningPage = () => {
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row md:items-center">
-            <MonthRangePicker
+            <SocialListeningDatePicker
               onUpdate={handleDateUpdate}
-              defaultFrom={filter.startDate}
-              defaultTo={filter.endDate}
+              defaultStartDate={filter.startDate}
+              defaultEndDate={filter.endDate}
             />
-            <div className="w-full md:w-48">
-              <Select
-                value={filter.topic || "Tất cả"}
-                onValueChange={handleTopicChange}
-              >
-                <SelectTrigger className="rounded-lg border-slate-200 bg-white shadow-sm">
-                  <SelectValue placeholder="Chủ đề" />
-                </SelectTrigger>
-                <SelectContent>
-                  {topics.map((topic) => (
-                    <SelectItem key={topic} value={topic}>
-                      {topic}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
           </div>
         </div>
 

@@ -16,10 +16,10 @@ interface HotIssuesTableProps {
   data: FeedbackPost[];
 }
 
-type TabType = "Tiêu cực" | "Tích cực" | "Tất cả";
+type TabType = "Tất cả" | "Tiêu cực" | "Tích cực";
 
 const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
-  const [activeTab, setActiveTab] = useState<TabType>("Tiêu cực");
+  const [activeTab, setActiveTab] = useState<TabType>("Tất cả");
 
   // Filter logic
   const processedData =
@@ -46,7 +46,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
       case "Tích cực":
         return "bg-emerald-50 text-emerald-700 border-emerald-100";
       case "Trung lập":
-        return "bg-slate-50 text-slate-700 border-slate-200";
+        return "bg-blue-50 text-blue-700 border-blue-200";
       default:
         return "bg-slate-50 text-slate-500 border-slate-100";
     }
@@ -68,7 +68,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
 
         {/* 3-Way Tab Selector */}
         <div className="flex items-center rounded-lg bg-slate-100 p-1">
-          {(["Tiêu cực", "Tích cực", "Tất cả"] as TabType[]).map((tab) => (
+          {(["Tất cả", "Tiêu cực", "Tích cực"] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

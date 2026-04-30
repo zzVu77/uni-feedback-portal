@@ -27,6 +27,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
             dateStr: string;
             displayDate: string;
             positive: number;
+            neutral: number;
             negative: number;
           }
         >,
@@ -38,14 +39,19 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
             dateStr: dateKey,
             displayDate: format(new Date(curr.postedAt), "dd/MM"),
             positive: 0,
+            neutral: 0,
             negative: 0,
           };
         }
+
         if (curr.sentimentLabel === "Tích cực") {
           acc[dateKey].positive += 1;
         } else if (curr.sentimentLabel === "Tiêu cực") {
           acc[dateKey].negative += 1;
+        } else if (curr.sentimentLabel === "Trung lập") {
+          acc[dateKey].neutral += 1;
         }
+
         return acc;
       },
       {},
@@ -105,6 +111,17 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               stackId="1"
               stroke="#34d399"
               fill="#d1fae5"
+              fontSize={8}
+              fillOpacity={0.9}
+              strokeWidth={1}
+            />
+            <Area
+              type="monotone"
+              dataKey="neutral"
+              name="Trung lập"
+              stackId="1"
+              stroke="#7dd3fc"
+              fill="#e0f2fe"
               fontSize={8}
               fillOpacity={0.9}
               strokeWidth={1}

@@ -16,7 +16,6 @@ import { TopInteractivePostsTable } from "@/components/dashboard/admin/TopIntera
 import { FeedbackTrendChart } from "@/components/dashboard/admin/FeedbackTrendChart";
 import { TopCategoriesChart } from "@/components/dashboard/admin/TopCategoriesChart";
 import { DepartmentPerformanceRadial } from "@/components/dashboard/admin/DepartmentPerformanceRadial";
-// IMPORT MỚI
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function AdminDashboardPage() {
