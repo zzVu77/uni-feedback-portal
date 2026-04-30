@@ -10,7 +10,7 @@ export type DepartmentResponse = {
 export type DepartmentCandidate = {
   id: string;
   name: string;
-  description: string;
+  description: string | null | undefined;
 };
 export function safeParseJSON(text: string): DepartmentResponse {
   try {
