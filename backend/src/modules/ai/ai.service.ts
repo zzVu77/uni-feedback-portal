@@ -183,19 +183,19 @@ export class AiService {
   }
   async searchDepartments(description: string) {
     const embedding = await this.embedDepartmentProposal(description);
-    // const vector = `[${embedding?.join(',')}]`;
-    const results = await this.prisma.$queryRawUnsafe(
-      `
+    if (!embedding || embedding.length === 0) {
+      throw new Error('Failed to generate department embedding for proposal.');
+    }
+    const vector = `[${embedding?.join(',')}]`;
+    const results = await this.prisma.$queryRaw<DepartmentCandidate[]>`
       SELECT d.id, d.name, d.description,
-         1 - (de.embedding <=> $1::vector) AS similarity
+         1 - (de.embedding <=> ${vector}::vector) AS similarity
       FROM "Departments" d
       JOIN "DepartmentEmbeddings" de ON d.id = de."departmentId"
-      ORDER BY de.embedding <=> $1::vector
+      ORDER BY de.embedding <=> ${vector}::vector
       LIMIT 4
-    `,
-      embedding,
-    );
+    `;
 
-    return results as DepartmentCandidate[];
+    return results;
   }
 }
