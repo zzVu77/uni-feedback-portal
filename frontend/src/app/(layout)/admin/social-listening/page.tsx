@@ -1,10 +1,9 @@
 "use client";
-
-import { SocialListeningDatePicker } from "@/components/dashboard/admin/SocialListeningDatePicker";
-import HotIssuesTable from "@/components/dashboard/HotIssuesTable";
-import KPIOverview from "@/components/dashboard/KPIOverview";
-import SentimentTrendChart from "@/components/dashboard/SentimentTrendChart";
-import TopicDistributionChart from "@/components/dashboard/TopicDistributionChart";
+import HotIssuesTable from "@/components/dashboard/social-listening/HotIssuesTable";
+import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
+import SentimentTrendChart from "@/components/dashboard/social-listening/SentimentTrendChart";
+import { SocialListeningDatePicker } from "@/components/dashboard/social-listening/SocialListeningDatePicker";
+import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
 import {
   useGetKPIOverview,
   useGetSentimentTrend,
