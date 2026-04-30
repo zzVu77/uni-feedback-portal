@@ -114,7 +114,6 @@ export function SocialListeningDatePicker({
           <div className="p-3">
             {/* Sử dụng cấu hình mặc định, an toàn nhất của shadcn */}
             <Calendar
-              initialFocus
               mode="range"
               defaultMonth={date?.from}
               selected={date}
