@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { FeedbackPost } from "@/types/dashboard";
+import { FeedbackPost } from "@/types/social-listening";
 import {
   PieChart,
   Pie,

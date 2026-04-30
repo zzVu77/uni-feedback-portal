@@ -1,5 +1,5 @@
 import React from "react";
-import { FeedbackPost } from "@/types/dashboard";
+import { FeedbackPost } from "@/types/social-listening";
 import { MessageSquare, Activity, AlertTriangle } from "lucide-react";
 
 interface KPIOverviewProps {
@@ -12,13 +12,13 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
 
   const avgSentiment =
     data.length > 0
-      ? (data.reduce((acc, curr) => acc + curr.sentiment_score, 0) /
+      ? (data.reduce((acc, curr) => acc + curr.sentimentScore, 0) /
           data.length) *
         10
       : 0;
 
   const urgentIssues = data.filter(
-    (post) => post.sentiment_label === "Tiêu cực" && post.engagement_score > 50,
+    (post) => post.sentimentLabel === "Tiêu cực" && post.engagementScore > 50,
   ).length;
 
   return (

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { FeedbackPost } from "@/types/dashboard";
+import { FeedbackPost } from "@/types/social-listening";
 import {
   AreaChart,
   Area,
@@ -32,18 +32,18 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
         >,
         curr,
       ) => {
-        const dateKey = format(curr.posted_at, "yyyy-MM-dd");
+        const dateKey = format(curr.postedAt, "yyyy-MM-dd");
         if (!acc[dateKey]) {
           acc[dateKey] = {
             dateStr: dateKey,
-            displayDate: format(curr.posted_at, "dd/MM"),
+            displayDate: format(curr.postedAt, "dd/MM"),
             positive: 0,
             negative: 0,
           };
         }
-        if (curr.sentiment_label === "Tích cực") {
+        if (curr.sentimentLabel === "Tích cực") {
           acc[dateKey].positive += 1;
-        } else if (curr.sentiment_label === "Tiêu cực") {
+        } else if (curr.sentimentLabel === "Tiêu cực") {
           acc[dateKey].negative += 1;
         }
         return acc;

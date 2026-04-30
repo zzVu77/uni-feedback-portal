@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FeedbackPost } from "@/types/dashboard";
+import { FeedbackPost } from "@/types/social-listening";
 import { ExternalLink, ThumbsUp, MessageSquare } from "lucide-react";
 import {
   Table,
@@ -25,16 +25,16 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
   const processedData =
     activeTab === "Tất cả"
       ? data
-      : data.filter((post) => post.sentiment_label === activeTab);
+      : data.filter((post) => post.sentimentLabel === activeTab);
 
   // Sort by sentiment_score ascending, then (reaction + comment) descending
   const topIssues = [...processedData]
     .sort((a, b) => {
-      if (a.sentiment_score !== b.sentiment_score) {
-        return a.sentiment_score - b.sentiment_score;
+      if (a.sentimentScore !== b.sentimentScore) {
+        return a.sentimentScore - b.sentimentScore;
       }
-      const engagementA = a.reaction_count + a.comment_count;
-      const engagementB = b.reaction_count + b.comment_count;
+      const engagementA = a.reactionCount + a.commentCount;
+      const engagementB = b.reactionCount + b.commentCount;
       return engagementB - engagementA;
     })
     .slice(0, 10);
@@ -109,10 +109,10 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
         <TableBody>
           {topIssues.length > 0 ? (
             topIssues.map((post) => (
-              <TableRow key={post.post_id} className="group border-slate-100">
+              <TableRow key={post.postId} className="group border-slate-100">
                 <TableCell className="py-4">
                   <p className="line-clamp-2 max-w-[400px] text-sm text-slate-600">
-                    {post.ai_summary}
+                    {post.aiSummary}
                   </p>
                 </TableCell>
                 <TableCell className="py-4">
@@ -122,32 +122,32 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                   <span
                     className={cn(
                       "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold",
-                      getSentimentStyles(post.sentiment_label),
+                      getSentimentStyles(post.sentimentLabel),
                     )}
                   >
-                    {post.sentiment_label}
+                    {post.sentimentLabel}
                   </span>
                 </TableCell>
                 <TableCell className="py-4">
                   <div className="flex items-center gap-3 text-xs text-slate-500">
                     <span className="flex items-center gap-1">
                       <ThumbsUp className="h-3 w-3" />
-                      {post.reaction_count}
+                      {post.reactionCount}
                     </span>
                     <span className="flex items-center gap-1">
                       <MessageSquare className="h-3 w-3" />
-                      {post.comment_count}
+                      {post.commentCount}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className="py-4">
                   <span className="text-sm whitespace-nowrap text-slate-500">
-                    {format(new Date(post.posted_at), "dd/MM/yyyy")}
+                    {format(new Date(post.postedAt), "dd/MM/yyyy")}
                   </span>
                 </TableCell>
                 <TableCell className="py-4 text-right">
                   <a
-                    href={post.post_link}
+                    href={post.postLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
