@@ -21,23 +21,13 @@ async function main() {
   const departments = await prisma.departments.findMany();
 
   for (const dept of departments) {
-    const embedding = (await embed(
-      `${dept.name} - ${dept.description}`,
-    )) as number[];
+    const embedding = await embed(`${dept.name} - ${dept.description}`);
+    if (!Array.isArray(embedding) || embedding.length === 0) {
+      throw new Error(
+        `Failed to generate embedding for department ${dept.id} (${dept.name}): embed() returned no values.`,
+      );
+    }
     const vectorString = `[${embedding.join(',')}]`;
-    // await prisma.$executeRaw`
-    //     INSERT INTO departments (id, name, description, embedding)
-    //     VALUES (${dept.id}, ${dept.name}, ${dept.description}, ${vectorString}::vector)
-    //     ON CONFLICT (id) DO NOTHING
-    //   `;
-    // await prisma.departmentEmbeddings.create({
-    //   data:{
-    //     departmentId: dept.id,
-    //     name: dept.name,
-    //     description: dept.description,
-    //     embedding: vectorString,
-    //   }
-    // })
     await prisma.$executeRaw`
     INSERT INTO "DepartmentEmbeddings"
     ("id", "departmentId", "embedding")
