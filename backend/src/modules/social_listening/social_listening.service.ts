@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -173,8 +174,10 @@ export class SocialListeningService {
   }
 
   /**
-   * Retrieves trending issues with dynamic filtering and pagination.
-   * Sorting: engagementScore DESC (primary), postedAt DESC (secondary).
+   * Retreives trending issues with custom sorting:
+   * 1. sentimentLabel: Tiêu cực > Tích cực > Trung lập.
+   * 2. engagementScore (reactionCount + commentCount) descending.
+   * 3. postedAt descending.
    */
   async getTrendingIssues(dto: GetTrendingIssuesDto) {
     const { page = 1, limit = 10, topic, sentimentLabel } = dto;
@@ -182,23 +185,85 @@ export class SocialListeningService {
 
     const dateFilter = this.getDateFilter(dto);
 
-    // Build dynamic where clause
+    // 1. build where clause for Prisma count
     const where: Prisma.DashboardTrendingIssuesWhereInput = {
       ...(topic && { topic: { contains: topic, mode: 'insensitive' } }),
       ...(sentimentLabel && { sentimentLabel }),
       ...(dateFilter && { postedAt: dateFilter }),
     };
 
-    // Execute count and data fetch in parallel
-    const [total, data] = await Promise.all([
+    // 2. build Raw SQL to handle custom sorting logic
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+
+    if (topic) {
+      whereConditions.push(`topic ILIKE $${params.length + 1}`);
+      params.push(`%${topic}%`);
+    }
+
+    if (sentimentLabel) {
+      whereConditions.push(`sentiment_label = $${params.length + 1}`);
+      params.push(sentimentLabel);
+    }
+
+    if (dto.startDate) {
+      whereConditions.push(`posted_at >= $${params.length + 1}`);
+      params.push(new Date(dto.startDate));
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(`posted_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
+        ),
+      );
+    }
+
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(' AND ')}`
+        : '';
+
+    const query = `
+      SELECT *
+      FROM dashboard_trending_issues
+      ${whereClause}
+      ORDER BY 
+        CASE sentiment_label 
+          WHEN 'Tiêu cực' THEN 1 
+          WHEN 'Tích cực' THEN 2 
+          WHEN 'Trung lập' THEN 3 
+          ELSE 4 
+        END ASC,
+        engagement_score DESC,
+        posted_at DESC
+      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+    `;
+
+    const [total, rawData] = await Promise.all([
       this.prisma.dashboardTrendingIssues.count({ where }),
-      this.prisma.dashboardTrendingIssues.findMany({
-        where,
-        orderBy: [{ engagementScore: 'desc' }, { postedAt: 'desc' }],
-        skip,
-        take: limit,
-      }),
+      this.prisma.$queryRawUnsafe<any[]>(query, ...params, limit, skip),
     ]);
+
+    // 4. Map raw data to expected format, ensuring all fields are present and correctly typed
+    const data = rawData.map((item) => ({
+      postId: item.post_id || item.postId,
+      author: item.author,
+      content: item.content,
+      postLink: item.post_link || item.postLink,
+      postedAt: item.posted_at || item.postedAt,
+      reactionCount: Number(item.reaction_count || item.reactionCount || 0),
+      commentCount: Number(item.comment_count || item.commentCount || 0),
+      engagementScore: Number(
+        item.engagement_score || item.engagementScore || 0,
+      ),
+      topic: item.topic,
+      sentimentScore: Number(item.sentiment_score || item.sentimentScore || 0),
+      aiSummary: item.ai_summary || item.aiSummary,
+      sentimentLabel: item.sentiment_label || item.sentimentLabel,
+      analyzedAt: item.analyzed_at || item.analyzedAt,
+    }));
 
     return {
       results: data,

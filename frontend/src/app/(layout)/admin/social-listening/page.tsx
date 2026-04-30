@@ -93,7 +93,10 @@ const SocialListeningPage = () => {
             </h1>
             <p className="mt-1 text-sm text-slate-500">
               Theo dõi và phân tích các vấn đề của sinh viên thông qua các bài
-              đăng mạng xã hội để có những hành động kịp thời và hiệu quả
+              đăng mạng xã hội để có những hành động kịp thời và hiệu quả. Dữ
+              liệu được thu thập từ group Facebook "UTE - THẮC MẮC HỌC TẬP ®
+              (Trường Đại học Công nghệ Kỹ thuật TP.HCM - HCMUTE)". Dữ liệu được
+              làm mới 3 ngày một lần để đảm bảo tính cập nhật và chính xác.
             </p>
           </div>
 
