@@ -53,7 +53,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
       {/* Card 1: Total Posts */}
       <div className="flex items-start justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
         <div>
-          <p className="mb-1 text-sm font-medium text-slate-500">
+          <p className="mb-1 text-sm font-medium text-black">
             Tổng số bài đăng
           </p>
           <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
@@ -72,7 +72,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
       {/* Card 2: Dominant Trend */}
       <div className="flex items-start justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
         <div>
-          <p className="mb-1 text-sm font-medium text-slate-500">
+          <p className="mb-1 text-sm font-medium text-black">
             Xu hướng phản hồi
           </p>
           <h3
@@ -93,7 +93,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
       {/* Card 3: Negative Posts */}
       <div className="flex items-start justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
         <div>
-          <p className="mb-1 text-sm font-medium text-slate-500">
+          <p className="mb-1 text-sm font-medium text-black">
             Bài đăng tiêu cực
           </p>
           <h3 className="text-2xl font-semibold tracking-tight text-rose-600">
