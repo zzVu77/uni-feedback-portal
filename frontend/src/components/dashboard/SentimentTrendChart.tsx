@@ -32,11 +32,11 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
         >,
         curr,
       ) => {
-        const dateKey = format(curr.postedAt, "yyyy-MM-dd");
+        const dateKey = format(new Date(curr.postedAt), "yyyy-MM-dd");
         if (!acc[dateKey]) {
           acc[dateKey] = {
             dateStr: dateKey,
-            displayDate: format(curr.postedAt, "dd/MM"),
+            displayDate: format(new Date(curr.postedAt), "dd/MM"),
             positive: 0,
             negative: 0,
           };

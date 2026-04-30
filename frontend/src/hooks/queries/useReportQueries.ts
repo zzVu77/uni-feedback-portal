@@ -103,6 +103,6 @@ export const useGetStaffRadarChart = (filter: ReportFilter) => {
   return useQuery({
     queryKey: [REPORT_QUERY_KEYS.staffRadar, filter],
     queryFn: () => getStaffRadarChart(filter),
-    placeholderData: (previousData) => previousData, // Giữ data cũ khi đổi năm để tránh layout shift
+    placeholderData: (previousData) => previousData,
   });
 };

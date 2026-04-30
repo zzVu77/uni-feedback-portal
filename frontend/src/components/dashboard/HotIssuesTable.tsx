@@ -147,7 +147,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                 </TableCell>
                 <TableCell className="py-4 text-right">
                   <a
-                    href={post.postLink}
+                    href={post.postLink || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
