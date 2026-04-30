@@ -33,4 +33,40 @@ export class SocialListeningController {
   async getTrendingIssues(@Query() query: GetTrendingIssuesDto) {
     return this.socialListeningService.getTrendingIssues(query);
   }
+
+  @Get('kpi-overview')
+  @ApiOperation({
+    summary: 'Get KPI overview statistics for social listening',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'KPI overview statistics',
+  })
+  async getKPIOverview(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getKPIOverview(query);
+  }
+
+  @Get('sentiment-trend')
+  @ApiOperation({
+    summary: 'Get sentiment trend statistics grouped by date',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Sentiment trend statistics',
+  })
+  async getSentimentTrend(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getSentimentTrend(query);
+  }
+
+  @Get('topic-distribution')
+  @ApiOperation({
+    summary: 'Get topic distribution statistics',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Topic distribution statistics',
+  })
+  async getTopicDistribution(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getTopicDistribution(query);
+  }
 }

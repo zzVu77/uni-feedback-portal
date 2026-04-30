@@ -5,8 +5,16 @@ import HotIssuesTable from "@/components/dashboard/HotIssuesTable";
 import KPIOverview from "@/components/dashboard/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/SentimentTrendChart";
 import TopicDistributionChart from "@/components/dashboard/TopicDistributionChart";
-import { useGetTrendingIssues } from "@/hooks/queries/useSocialListeningQueries";
-import { SocialListeningFilter } from "@/types/social-listening";
+import {
+  useGetKPIOverview,
+  useGetSentimentTrend,
+  useGetTopicDistribution,
+  useGetTrendingIssues,
+} from "@/hooks/queries/useSocialListeningQueries";
+import {
+  SocialListeningFilter,
+  SentimentLabel,
+} from "@/types/social-listening"; // Import thêm SentimentLabel nếu cần
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -16,20 +24,41 @@ const SocialListeningPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // BẢN SỬA LỖI: Lấy và truyền TẤT CẢ các tham số từ URL vào Query
   const filter = useMemo((): SocialListeningFilter => {
     const fromParam = searchParams.get("startDate");
     const toParam = searchParams.get("endDate");
+    const pageParam = searchParams.get("page");
+    const limitParam = searchParams.get("limit");
+    const sentimentLabelParam = searchParams.get("sentimentLabel");
+
     const now = new Date();
 
     return {
       startDate: fromParam || format(startOfMonth(now), "yyyy-MM-dd"),
       endDate: toParam || format(endOfMonth(now), "yyyy-MM-dd"),
+      page: pageParam ? Number(pageParam) : 1,
+      limit: limitParam ? Number(limitParam) : 10,
+      sentimentLabel: sentimentLabelParam as SentimentLabel | undefined,
     };
   }, [searchParams]);
 
-  const { data, isLoading } = useGetTrendingIssues(filter);
+  // Hook này giờ sẽ tự động gọi lại API khi bất kỳ giá trị nào trong 'filter' thay đổi
+  const { data: trendingData, isLoading: isLoadingTrending } =
+    useGetTrendingIssues(filter);
 
-  const results = data?.results || [];
+  const { data: kpiData, isLoading: isLoadingKPI } = useGetKPIOverview(filter);
+
+  const { data: trendData, isLoading: isLoadingTrend } =
+    useGetSentimentTrend(filter);
+
+  const { data: topicData, isLoading: isLoadingTopic } =
+    useGetTopicDistribution(filter);
+
+  const results = trendingData?.results || [];
+
+  const isLoading =
+    isLoadingTrending || isLoadingKPI || isLoadingTrend || isLoadingTopic;
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
@@ -46,6 +75,9 @@ const SocialListeningPage = () => {
       } else {
         params.delete("endDate");
       }
+
+      // Quan trọng: Khi đổi ngày, reset luôn về trang 1
+      params.set("page", "1");
 
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
     },
@@ -75,7 +107,7 @@ const SocialListeningPage = () => {
           </div>
         </div>
 
-        {isLoading && !data ? (
+        {isLoading && !trendingData ? (
           <div className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {[1, 2, 3].map((i) => (
@@ -93,21 +125,18 @@ const SocialListeningPage = () => {
           </div>
         ) : (
           <>
-            {/* Row 2: KPI Overview */}
-            <KPIOverview data={results} />
+            {kpiData && <KPIOverview data={kpiData} />}
 
-            {/* Row 3: Charts Grid */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2">
-                <SentimentTrendChart data={results} />
+                {trendData && <SentimentTrendChart data={trendData} />}
               </div>
               <div className="lg:col-span-1">
-                <TopicDistributionChart data={results} />
+                {topicData && <TopicDistributionChart data={topicData} />}
               </div>
             </div>
 
-            {/* Row 4: Hot Issues Table */}
-            <HotIssuesTable data={results} />
+            <HotIssuesTable data={results} total={trendingData?.total || 0} />
           </>
         )}
       </div>

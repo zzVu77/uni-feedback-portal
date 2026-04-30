@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { FeedbackPost } from "@/types/social-listening";
-import { ExternalLink, ThumbsUp, MessageSquare, Bot, User } from "lucide-react";
+import {
+  ExternalLink,
+  ThumbsUp,
+  MessageSquare,
+  Bot,
+  User,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -19,34 +27,48 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+// 1. Thêm prop total để tính toán số trang
 interface HotIssuesTableProps {
   data: FeedbackPost[];
+  total: number;
 }
 
-type TabType = "Tất cả" | "Tiêu cực" | "Tích cực";
+const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
-  const [activeTab, setActiveTab] = useState<TabType>("Tất cả");
-
-  // State quản lý bài post đang được chọn để hiển thị trên Dialog
   const [selectedPost, setSelectedPost] = useState<FeedbackPost | null>(null);
 
-  const processedData =
-    activeTab === "Tất cả"
-      ? data
-      : data.filter((post) => post.sentimentLabel === activeTab);
+  // 2. Lấy state từ URL thay vì useState
+  const activeTab = searchParams.get("sentimentLabel") || "Tất cả";
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 10;
 
-  const topIssues = [...processedData]
-    .sort((a, b) => {
-      if (a.sentimentScore !== b.sentimentScore) {
-        return a.sentimentScore - b.sentimentScore;
-      }
-      const engagementA = a.reactionCount + a.commentCount;
-      const engagementB = b.reactionCount + b.commentCount;
-      return engagementB - engagementA;
-    })
-    .slice(0, 10);
+  // Tính tổng số trang
+  const pageCount = total ? Math.ceil(total / limit) : 0;
+
+  // 3. Hàm xử lý khi đổi Tab (Lưu vào URL)
+  const handleTabChange = (tab: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (tab === "Tất cả") {
+      params.delete("sentimentLabel");
+    } else {
+      params.set("sentimentLabel", tab);
+    }
+    // Khi đổi tab thì luôn reset về trang 1
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  // 4. Hàm xử lý khi bấm Next / Prev (Giống hệt file mẫu của bạn)
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPage));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const getSentimentStyles = (label: string) => {
     switch (label) {
@@ -62,7 +84,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
       <div className="flex flex-col justify-between gap-4 border-b border-slate-100 p-6 md:flex-row md:items-center">
         <div>
           <h3 className="text-lg font-semibold tracking-tight text-slate-900">
@@ -76,10 +98,10 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
         </div>
 
         <div className="flex items-center rounded-lg bg-slate-100 p-1">
-          {(["Tất cả", "Tiêu cực", "Tích cực"] as TabType[]).map((tab) => (
+          {["Tất cả", "Tiêu cực", "Trung lập", "Tích cực"].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabChange(tab)}
               className={cn(
                 "px-4 py-1.5 text-sm font-medium transition-all duration-200",
                 activeTab === tab
@@ -93,11 +115,10 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto">
+      <div className="w-full flex-1 overflow-x-auto">
         <Table className="min-w-[900px]">
           <TableHeader>
             <TableRow className="border-slate-100 hover:bg-transparent">
-              {/* Cột được chia lại tỷ lệ sau khi bỏ icon Chevron */}
               <TableHead className="w-[35%] pl-6 font-medium text-slate-500">
                 Vấn đề cốt lõi
               </TableHead>
@@ -119,25 +140,27 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {topIssues.length > 0 ? (
-              topIssues.map((post) => (
+            {/* Render trực tiếp data trả về từ Backend, không cần slice hay filter client nữa */}
+            {data.length > 0 ? (
+              data.map((post) => (
                 <TableRow
                   key={post.postId}
                   className="group cursor-pointer border-slate-100 transition-colors hover:bg-slate-50"
-                  onClick={() => setSelectedPost(post)} // MỞ DIALOG TẠI ĐÂY
+                  onClick={() => setSelectedPost(post)}
                 >
                   <TableCell className="py-4 pl-6">
                     <div className="w-full max-w-[250px] md:max-w-[350px] lg:max-w-[400px]">
-                      <p className="truncate font-medium text-slate-800">
+                      <p
+                        className="truncate font-medium text-slate-800"
+                        title={post.aiSummary}
+                      >
                         {post.aiSummary}
                       </p>
                     </div>
                   </TableCell>
-
                   <TableCell className="py-4">
                     <span className="text-sm text-slate-500">{post.topic}</span>
                   </TableCell>
-
                   <TableCell className="py-4">
                     <span
                       className={cn(
@@ -148,7 +171,6 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                       {post.sentimentLabel}
                     </span>
                   </TableCell>
-
                   <TableCell className="py-4">
                     <div className="flex items-center gap-3 text-xs text-slate-500">
                       <span className="flex items-center gap-1">
@@ -161,19 +183,17 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                       </span>
                     </div>
                   </TableCell>
-
                   <TableCell className="py-4">
                     <span className="text-sm whitespace-nowrap text-slate-500">
                       {format(new Date(post.postedAt), "dd/MM/yyyy")}
                     </span>
                   </TableCell>
-
                   <TableCell className="py-4 pr-6 text-right">
                     <a
                       href={post.postLink || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()} // Chặn event click truyền lên TableRow
+                      onClick={(e) => e.stopPropagation()}
                       className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-700"
                     >
                       Nguồn
@@ -196,11 +216,39 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
         </Table>
       </div>
 
+      {/* --- CỤM PAGINATION CHUẨN TỪ FILE CỦA BẠN --- */}
+      {pageCount > 1 && (
+        <div className="flex flex-shrink-0 items-center justify-center gap-4 border-t border-slate-100 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage <= 1}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-slate-600">
+            Trang {currentPage} / {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage >= pageCount}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+
+      {/* Dialog chi tiết bài đăng (Giữ nguyên cấu trúc đã sửa) */}
       <Dialog
         open={!!selectedPost}
         onOpenChange={(open) => !open && setSelectedPost(null)}
       >
-        <DialogContent className="max-h-[80vh] overflow-auto p-0 sm:max-w-[650px] md:h-auto md:overflow-hidden">
+        <DialogContent className="overflow-hidden p-0 sm:max-w-[650px]">
           <div className="border-b border-slate-100 bg-slate-50 px-6 py-4">
             <DialogHeader>
               <DialogTitle className="flex items-center justify-between text-lg font-semibold text-slate-900">
@@ -222,9 +270,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
               </DialogDescription>
             </DialogHeader>
           </div>
-
-          <div className="space-y-6 p-6">
-            {/* AI analysis */}
+          <div className="max-h-[60vh] space-y-6 overflow-y-auto p-6">
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-indigo-600">
                 <Bot className="h-4 w-4" />
@@ -236,10 +282,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                 {selectedPost?.aiSummary}
               </p>
             </div>
-
             <hr className="border-slate-100" />
-
-            {/* Original content of the post */}
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-slate-500">
                 <User className="h-4 w-4 text-orange-500" />
@@ -248,27 +291,23 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data }) => {
                 </h4>
               </div>
               <div className="rounded-lg border border-slate-100 bg-slate-50 p-4">
-                <p className="text-sm leading-relaxed whitespace-pre-wrap text-slate-600">
+                <p className="text-sm leading-relaxed whitespace-pre-wrap text-slate-600 italic">
                   "{selectedPost?.content}"
                 </p>
               </div>
             </div>
-
-            {/* Interaction statistics at the bottom */}
             {selectedPost && (
-              <div className="flex flex-col items-center justify-between gap-4 py-1 md:flex-row">
+              <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-4 text-sm font-medium text-slate-500">
                   <span className="flex items-center gap-1.5">
-                    <ThumbsUp className="h-4 w-4 text-blue-500" />
+                    <ThumbsUp className="h-4 w-4" />
                     {selectedPost.reactionCount} Lượt thích
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <MessageSquare className="h-4 w-4 text-green-500" />
+                    <MessageSquare className="h-4 w-4" />
                     {selectedPost.commentCount} Bình luận
                   </span>
                 </div>
-
-                {/* Nút hành động mở link gốc */}
                 {selectedPost.postLink && (
                   <Button
                     onClick={() =>

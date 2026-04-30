@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { FeedbackPost } from "@/types/social-listening";
+import React from "react";
+import { TopicDistributionItem } from "@/types/social-listening";
 import {
   PieChart,
   Pie,
@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 interface TopicDistributionChartProps {
-  data: FeedbackPost[];
+  data: TopicDistributionItem[];
 }
 
 const COLORS = ["#6366f1", "#3b82f6", "#10b981", "#64748b", "#f59e0b"];
@@ -18,14 +18,10 @@ const COLORS = ["#6366f1", "#3b82f6", "#10b981", "#64748b", "#f59e0b"];
 const TopicDistributionChart: React.FC<TopicDistributionChartProps> = ({
   data,
 }) => {
-  const chartData = useMemo(() => {
-    const counts = data.reduce((acc: Record<string, number>, curr) => {
-      acc[curr.topic] = (acc[curr.topic] || 0) + 1;
-      return acc;
-    }, {});
-
-    return Object.entries(counts).map(([name, value]) => ({ name, value }));
-  }, [data]);
+  const chartData = data.map((item) => ({
+    name: item.topic,
+    value: item.count,
+  }));
 
   return (
     <div className="rounded-xl border border-slate-100 bg-white p-6 shadow-sm">

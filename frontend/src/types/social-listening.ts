@@ -33,3 +33,25 @@ export interface SocialListeningResponse {
   results: FeedbackPost[];
   total: number;
 }
+
+export interface KPIOverviewData {
+  totalPosts: number;
+  totalReactions: number;
+  totalComments: number;
+  negativePostsCount: number;
+  dominantSentiment: string;
+  sentimentTrendText: string;
+}
+
+export interface SentimentTrendItem {
+  dateStr: string;
+  displayDate: string;
+  positive: number;
+  negative: number;
+  neutral: number;
+}
+
+export interface TopicDistributionItem {
+  topic: string;
+  count: number;
+}

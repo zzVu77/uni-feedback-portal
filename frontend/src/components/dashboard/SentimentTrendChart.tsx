@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { FeedbackPost } from "@/types/social-listening";
+import React from "react";
+import { SentimentTrendItem } from "@/types/social-listening";
 import {
   AreaChart,
   Area,
@@ -10,58 +10,12 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { format } from "date-fns";
 
 interface SentimentTrendChartProps {
-  data: FeedbackPost[];
+  data: SentimentTrendItem[];
 }
 
 const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
-  const chartData = useMemo(() => {
-    // Group by full date string (YYYY-MM-DD) for reliable sorting
-    const grouped = data.reduce(
-      (
-        acc: Record<
-          string,
-          {
-            dateStr: string;
-            displayDate: string;
-            positive: number;
-            neutral: number;
-            negative: number;
-          }
-        >,
-        curr,
-      ) => {
-        const dateKey = format(new Date(curr.postedAt), "yyyy-MM-dd");
-        if (!acc[dateKey]) {
-          acc[dateKey] = {
-            dateStr: dateKey,
-            displayDate: format(new Date(curr.postedAt), "dd/MM"),
-            positive: 0,
-            neutral: 0,
-            negative: 0,
-          };
-        }
-
-        if (curr.sentimentLabel === "Tích cực") {
-          acc[dateKey].positive += 1;
-        } else if (curr.sentimentLabel === "Tiêu cực") {
-          acc[dateKey].negative += 1;
-        } else if (curr.sentimentLabel === "Trung lập") {
-          acc[dateKey].neutral += 1;
-        }
-
-        return acc;
-      },
-      {},
-    );
-
-    return Object.values(grouped).sort((a, b) =>
-      a.dateStr.localeCompare(b.dateStr),
-    );
-  }, [data]);
-
   return (
     <div className="rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
       <div className="mb-6">
@@ -75,7 +29,7 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={chartData}
+            data={data}
             margin={{ top: 5, right: 10, left: 0, bottom: 0 }}
           >
             <CartesianGrid
