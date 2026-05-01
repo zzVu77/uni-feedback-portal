@@ -137,6 +137,7 @@ model Departments {
   feedbacks                      Feedbacks[]
   forwardingLogsFromDepartmentId ForwardingLogs[] @relation("FromDepartment")
   forwardingLogsToDepartmentId   ForwardingLogs[] @relation("ToDepartment")
+  departmentEmbedding            DepartmentEmbeddings?
 
   @@index([isActive])
 }
@@ -339,4 +340,11 @@ model DashboardTrendingIssues {
   analyzedAt      DateTime @map("analyzed_at")
 
   @@map("dashboard_trending_issues")
+
+}
+model DepartmentEmbeddings {
+  id                String   @id @default(uuid()) @db.Uuid
+  departmentId      String   @unique @db.Uuid
+  embedding         Unsupported("vector(3072)")
+  department        Departments       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
 }
