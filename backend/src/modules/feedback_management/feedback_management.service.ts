@@ -171,6 +171,11 @@ export class FeedbackManagementService {
           select: { id: true, name: true },
         },
         statusHistory: {
+          where: {
+            status: {
+              in: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
+            },
+          },
           select: {
             status: true,
             message: true,
@@ -208,6 +213,18 @@ export class FeedbackManagementService {
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+
+    const latestPending = feedback.statusHistory
+      .filter((x) => x.status === 'PENDING')
+      .at(-1);
+    const otherStatuses = feedback.statusHistory.filter(
+      (x) => x.status !== 'PENDING',
+    );
+    feedback.statusHistory = [
+      ...(latestPending ? [latestPending] : []),
+      ...otherStatuses,
+    ];
+
     const isForwarding =
       feedback.department.id !== actor.departmentId &&
       feedback.forwardingLogs.some(
