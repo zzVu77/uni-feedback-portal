@@ -169,6 +169,16 @@ model Feedbacks {
   forwardingLogs  ForwardingLogs[]
   forumPost       ForumPosts?
   conversations   ClarificationConversations[]
+  embedding       FeedbackEmbeddings?
+}
+
+model FeedbackEmbeddings {
+  id         String   @id @default(uuid()) @db.Uuid
+  feedbackId String   @unique @db.Uuid
+  embedding  Unsupported("vector(1024)")
+  createdAt  DateTime @default(now())
+
+  feedback   Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 }
 
 model FeedbackStatusHistory {

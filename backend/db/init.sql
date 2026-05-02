@@ -395,7 +395,7 @@ VALUES
 (
     'd0000000-0000-0000-0000-000000000036',
     'Trung tâm Kỹ thuật tổng hợp',
-    '@hcmute.edu.vn',
+    'a@hcmute.edu.vn',
     'Phụ trách tổ chức các khóa bồi dưỡng và tổ chức sát hạch giấy phép lái xe mô tô, ô tô cho SV và cán bộ trường.',
     'Văn phòng Trung tâm tại Cổng khu E',
     '0913 74 84 04 (Thầy Quang)',
@@ -404,7 +404,7 @@ VALUES
 (
     'd0000000-0000-0000-0000-000000000037',
     'Văn phòng Đảng ủy trường',
-    '@hcmute.edu.vn',
+    'h@hcmute.edu.vn',
     'Phụ trách quản lý công tác Đảng vụ; hồ sơ Đảng viên tại trường.',
     'Phòng A1.1001 (tầng 1), Tòa nhà trung tâm',
     '023 3722 1223 / 09 1406 7489',
