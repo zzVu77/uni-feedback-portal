@@ -21,12 +21,14 @@ import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_l
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
+import { SearchService } from '../search/search.service';
 @Injectable()
 export class FeedbacksService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly forumService: ForumService,
     private readonly uploadsService: UploadsService,
+    private readonly searchService: SearchService,
     @InjectQueue('feedback-toxic') private readonly feedbackToxicQueue: Queue,
   ) {}
 
@@ -469,6 +471,19 @@ export class FeedbacksService {
         ),
       },
     });
+    const embedding = await this.searchService.generateEmbedding(
+      `${feedback.subject} ${feedback.description}`,
+    );
+
+    // KHÔNG dùng prisma.feedbackEmbeddings.create
+    await this.prisma.$executeRaw`
+  INSERT INTO "FeedbackEmbeddings" (id, "feedbackId", embedding)
+  VALUES (
+    gen_random_uuid(), 
+    ${feedback.id}::uuid, 
+    ${embedding}::vector
+  )
+`;
 
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',

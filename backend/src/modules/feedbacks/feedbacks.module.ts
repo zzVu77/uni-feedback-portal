@@ -6,12 +6,14 @@ import { UploadsModule } from '../uploads/uploads.module';
 import { AiModule } from '../ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
 import { FeedbackToxicProcessor } from './feedbacks.processor';
+import { SearchModule } from '../search/search.module';
 
 @Module({
   imports: [
     UploadsModule,
     ForumModule,
     AiModule,
+    SearchModule,
     BullModule.registerQueue({
       name: 'feedback-toxic',
     }),
