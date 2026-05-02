@@ -23,6 +23,7 @@ import { RedisModule } from './modules/redis/redis.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AiModule } from './modules/ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
+import { SearchModule } from './modules/search/search.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { BullModule } from '@nestjs/bullmq';
         port: 6379,
       },
     }),
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

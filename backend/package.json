@@ -48,6 +48,7 @@
     "bullmq": "^5.67.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "cohere-ai": "^8.0.0",
     "cookie-parser": "^1.4.7",
     "nodemailer": "^7.0.10",
     "prisma-zod-generator": "^1.21.1",
