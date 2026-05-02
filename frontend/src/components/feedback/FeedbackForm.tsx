@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
@@ -160,11 +161,38 @@ const FeedbackForm = ({
   const { mutate: getAIProposal, isPending: isAIPending } =
     useGetDepartmentProposal();
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      subject: initialData?.subject || "",
+      location: initialData?.location || "",
+      categoryId: initialData?.categoryId || "",
+      departmentId: initialData?.departmentId || "",
+      description: initialData?.description || "",
+      isAnonymous: initialData?.isAnonymous || false,
+      isPublic: initialData?.isPublic || false,
+      attachments: [],
+    },
+  });
+
+  // Sync initialData to form and existingFiles
   useEffect(() => {
-    if (initialData?.fileAttachments) {
-      setExistingFiles(initialData.fileAttachments);
+    if (initialData) {
+      form.reset({
+        subject: initialData.subject || "",
+        location: initialData.location || "",
+        categoryId: initialData.categoryId || "",
+        departmentId: initialData.departmentId || "",
+        description: initialData.description || "",
+        isAnonymous: initialData.isAnonymous || false,
+        isPublic: initialData.isPublic || false,
+        attachments: [],
+      });
+      if (initialData.fileAttachments) {
+        setExistingFiles(initialData.fileAttachments);
+      }
     }
-  }, [initialData]);
+  }, [initialData, form]);
 
   // Remove existing file handler
   const handleRemoveExistingFile = (fileUrl: string) => {
@@ -201,20 +229,6 @@ const FeedbackForm = ({
     );
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      subject: initialData?.subject || "",
-      location: initialData?.location || "",
-      categoryId: initialData?.categoryId || "",
-      departmentId: initialData?.departmentId || "",
-      description: initialData?.description || "",
-      isAnonymous: initialData?.isAnonymous || false,
-      isPublic: initialData?.isPublic || false,
-      attachments: [],
-    },
-  });
-
   const mapFormValuesToFeedbackParams = (
     values: z.infer<typeof formSchema>,
   ): CreateFeedbackPayload => {
@@ -233,7 +247,7 @@ const FeedbackForm = ({
 
   useEffect(() => {
     if (isAnonymousWatched) {
-      form.setValue("isPublic", false);
+      form.setValue("isPublic", false, { shouldDirty: true });
     }
   }, [isAnonymousWatched, form]);
 
@@ -573,10 +587,7 @@ const FeedbackForm = ({
                                         key={option.value}
                                         value={option.label}
                                         onSelect={() => {
-                                          form.setValue(
-                                            "categoryId",
-                                            option.value,
-                                          );
+                                          field.onChange(option.value);
                                           setOpenCategory(false);
                                         }}
                                       >
@@ -638,7 +649,7 @@ const FeedbackForm = ({
                                     type="button"
                                     className="flex w-full flex-col items-start gap-0.5 rounded-md border border-blue-200 bg-white p-2 text-left transition-all hover:border-blue-400 hover:bg-blue-50"
                                     onClick={() => {
-                                      form.setValue("departmentId", sug.id);
+                                      field.onChange(sug.id);
                                       setAiSuggestions([]);
                                     }}
                                   >
@@ -694,10 +705,7 @@ const FeedbackForm = ({
                                         key={option.value}
                                         value={option.label}
                                         onSelect={() => {
-                                          form.setValue(
-                                            "departmentId",
-                                            option.value,
-                                          );
+                                          field.onChange(option.value);
                                           setOpenDepartment(false);
                                         }}
                                       >

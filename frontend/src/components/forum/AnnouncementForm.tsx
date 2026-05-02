@@ -130,19 +130,6 @@ const AnnouncementForm = ({
   // State to manage EXISTING files (for Edit mode)
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
 
-  // Sync initialData to existingFiles only when initialData ID changes
-  useEffect(() => {
-    if (initialData?.files) {
-      const mappedFiles = initialData.files.map((f: any) => ({
-        fileName: f.fileName,
-        fileUrl: f.fileUrl,
-        fileType: f.fileType || "",
-        fileSize: f.fileSize || 0,
-      }));
-      setExistingFiles(mappedFiles);
-    }
-  }, [initialData?.id]);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -151,6 +138,26 @@ const AnnouncementForm = ({
       attachments: [],
     },
   });
+
+  // Sync initialData to form and existingFiles
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        title: initialData.title || "",
+        content: initialData.content || "",
+        attachments: [],
+      });
+      if (initialData.files) {
+        const mappedFiles = initialData.files.map((f: any) => ({
+          fileName: f.fileName,
+          fileUrl: f.fileUrl,
+          fileType: f.fileType || "",
+          fileSize: f.fileSize || 0,
+        }));
+        setExistingFiles(mappedFiles);
+      }
+    }
+  }, [initialData, form]);
 
   const mapFormValuesToAnnouncementPayload = (
     values: z.infer<typeof formSchema>,
