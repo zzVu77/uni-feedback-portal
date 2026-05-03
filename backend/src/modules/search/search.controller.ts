@@ -19,6 +19,6 @@ export class SearchController {
     // @Body() body: { similarity_threshold?: number },
   ) {
     // const threshold = body.similarity_threshold || 0.7;
-    return this.searchService.findSimilarity(feedbackId, 0.7);
+    return this.searchService.findSimilarity(feedbackId);
   }
 }
