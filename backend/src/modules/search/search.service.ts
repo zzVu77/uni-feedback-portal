@@ -1,18 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { FeedbackStatus } from '@prisma/client';
 import { CohereClient } from 'cohere-ai';
 import { PrismaService } from '../prisma/prisma.service';
 
-/** Max pgvector rows (same department) before Cohere rerank. */
 const FEEDBACK_SIMILARITY_VECTOR_CANDIDATE_LIMIT = 100;
-
-/** Min cosine similarity 1 - (embedding <=> query) for candidates. */
 const FEEDBACK_SIMILARITY_MIN_VECTOR_SIMILARITY = 0.7;
-
-/** Max targets per source after rerank (for persisted links / API slice). */
 const FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS = 20;
 
 const FEEDBACK_SIMILARITY_EXCLUDED_CANDIDATE_STATUSES: readonly FeedbackStatus[] =
@@ -28,18 +22,20 @@ function clampRerankScore(score: number): number {
   return Math.min(1, Math.max(0, score));
 }
 
+function stripHtml(text: string): string {
+  return text.replace(/<[^>]*>/g, '').trim();
+}
+
 export type FeedbackSimilarityTarget = {
   targetFeedbackId: string;
   score: number;
 };
 
-/** Incoming edges when the pivot feedback is the target (source → pivot). */
 export type FeedbackSimilaritySource = {
   sourceFeedbackId: string;
   score: number;
 };
 
-/** Row from pgvector neighbour search (same department, before rerank). */
 export type FeedbackVectorCandidate = {
   feedbackId: string;
   subject: string | null;
@@ -47,7 +43,6 @@ export type FeedbackVectorCandidate = {
   vectorSimilarity: number;
 };
 
-/** Minimal shape for Cohere rerank (full discovery or fixed ID list). */
 export type FeedbackSimilarityRerankCandidate = {
   feedbackId: string;
   subject?: string | null;
@@ -63,16 +58,12 @@ export class SearchService {
     });
   }
 
-  private cleanText(text: string): string {
-    return text.replace(/<[^>]*>/g, '').trim();
-  }
-
   async generateEmbedding(text: string): Promise<number[]> {
     try {
-      this.cleanText(text);
-      console.log('Text sau khi làm sạch:', text);
+      const cleaned = stripHtml(text);
+      console.log('Text sau khi làm sạch:', cleaned);
       const embed = await this.cohere.embed({
-        texts: [text],
+        texts: [cleaned],
         model: 'embed-multilingual-v3.0',
         inputType: 'search_document',
         embeddingTypes: ['float'],
@@ -85,9 +76,18 @@ export class SearchService {
     }
   }
 
-  /**
-   * Same-department pgvector neighbours for a source embedding (excludes source id).
-   */
+  /** Upsert `FeedbackEmbeddings` sau khi đã có vector từ {@link generateEmbedding}. */
+  async saveFeedbackEmbedding(
+    feedbackId: string,
+    embedding: number[],
+  ): Promise<void> {
+    await this.prisma.$executeRaw`
+      INSERT INTO "FeedbackEmbeddings" (id, "feedbackId", embedding)
+      VALUES (gen_random_uuid(), ${feedbackId}::uuid, ${embedding}::vector)
+      ON CONFLICT ("feedbackId") DO UPDATE SET embedding = EXCLUDED.embedding
+    `;
+  }
+
   async vectorSearch(params: {
     embeddingText: string;
     departmentId: string;
@@ -132,9 +132,6 @@ export class SearchService {
     }));
   }
 
-  /**
-   * Cohere rerank for a fixed candidate set. Used after {@link vectorSearch} or with IDs loaded from DB.
-   */
   async scoreSimilarityForCandidates(
     queryText: string,
     candidates: FeedbackSimilarityRerankCandidate[],
@@ -153,11 +150,9 @@ export class SearchService {
       return [];
     }
 
-    const query = this.cleanText(String(queryText ?? ''));
+    const query = stripHtml(String(queryText ?? ''));
     const documents = filtered.map((c) =>
-      this.cleanText(
-        `${String(c.subject ?? '')} ${String(c.description ?? '')}`,
-      ),
+      stripHtml(`${String(c.subject ?? '')} ${String(c.description ?? '')}`),
     );
 
     try {
@@ -180,115 +175,8 @@ export class SearchService {
     }
   }
 
-  /**
-   * Loads source description and candidate rows by id, then {@link scoreSimilarityForCandidates}.
-   */
-  async scoreSimilarityForCandidateIds(
-    sourceFeedbackId: string,
-    candidateFeedbackIds: string[],
-    options?: { maxResults?: number },
-  ): Promise<FeedbackSimilarityTarget[]> {
-    const unique = [...new Set(candidateFeedbackIds)].filter(
-      (id) => id !== sourceFeedbackId,
-    );
-    if (unique.length === 0) {
-      return [];
-    }
-
-    const source = await this.prisma.feedbacks.findUnique({
-      where: { id: sourceFeedbackId },
-      select: { description: true },
-    });
-    if (!source) {
-      throw new Error('Không tìm thấy feedback nguồn.');
-    }
-
-    const feedbacks = await this.prisma.feedbacks.findMany({
-      where: { id: { in: unique } },
-      select: { id: true, subject: true, description: true },
-    });
-
-    const byId = new Map(feedbacks.map((f) => [f.id, f] as const));
-    const candidates: FeedbackSimilarityRerankCandidate[] = [];
-    for (const id of unique) {
-      const f = byId.get(id);
-      if (f) {
-        candidates.push({
-          feedbackId: f.id,
-          subject: f.subject,
-          description: f.description,
-        });
-      }
-    }
-
-    return this.scoreSimilarityForCandidates(
-      String(source.description ?? ''),
-      candidates,
-      { maxResults: options?.maxResults, excludeFeedbackId: sourceFeedbackId },
-    );
-  }
-
-  async findSimilarity(
-    feedbackId: string,
-    similarityThreshold: number = FEEDBACK_SIMILARITY_MIN_VECTOR_SIMILARITY,
-  ): Promise<{ targets: FeedbackSimilarityTarget[] }> {
-    const originalData: any[] = await this.prisma.$queryRawUnsafe(
-      `SELECT 
-        fe.embedding::text as "embeddingText", 
-        f."departmentId",
-        f.subject,
-        f.description,
-        f."currentStatus"
-     FROM "FeedbackEmbeddings" as fe 
-     JOIN "Feedbacks" as f ON fe."feedbackId" = f.id 
-     WHERE fe."feedbackId" = $1::uuid`,
-      feedbackId,
-    );
-
-    if (!originalData || originalData.length === 0) {
-      throw new Error('Không tìm thấy feedback hoặc embedding.');
-    }
-
-    const sourceStatus = originalData[0].currentStatus as FeedbackStatus;
-    if (
-      sourceStatus !== FeedbackStatus.PENDING &&
-      sourceStatus !== FeedbackStatus.IN_PROGRESS
-    ) {
-      return { targets: [] };
-    }
-
-    const vectorString = originalData[0].embeddingText;
-    const departmentId = originalData[0].departmentId;
-    const originalDescription = originalData[0].description;
-
-    if (!vectorString) {
-      throw new Error('Dữ liệu embedding bị trống.');
-    }
-
-    const vectorCandidates = await this.vectorSearch({
-      embeddingText: vectorString,
-      departmentId,
-      sourceFeedbackId: feedbackId,
-      similarityThreshold,
-    });
-
-    const targets = await this.scoreSimilarityForCandidates(
-      String(originalDescription ?? ''),
-      vectorCandidates,
-      {
-        maxResults: FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS,
-        excludeFeedbackId: feedbackId,
-      },
-    );
-
-    return { targets };
-  }
-
-  /**
-   * Replaces all persisted similarity edges for a source feedback in one transaction.
-   * When there are no targets, only old links are removed.
-   */
-  async replaceSimilarityLinksForSource(
+  /** Thay toàn bộ cạnh `source → *` trong `FeedbackSimilarityLink`. */
+  async saveSimilarityLinksForSource(
     sourceFeedbackId: string,
     targets: FeedbackSimilarityTarget[],
   ): Promise<void> {
@@ -316,12 +204,8 @@ export class SearchService {
     ]);
   }
 
-  /**
-   * Replaces all persisted similarity edges that point at a given target feedback.
-   * Use after the target’s embedding/text changes and you have new pair scores from each source.
-   * When there are no sources, only old incoming links are removed.
-   */
-  async replaceSimilarityLinksForTarget(
+  /** Thay toàn bộ cạnh `* → target` trong `FeedbackSimilarityLink`. */
+  async saveSimilarityLinksForTarget(
     targetFeedbackId: string,
     sources: FeedbackSimilaritySource[],
   ): Promise<void> {
@@ -347,5 +231,162 @@ export class SearchService {
         skipDuplicates: true,
       }),
     ]);
+  }
+
+  async handleSimilarityAfterFeedbackCreated(
+    feedbackId: string,
+  ): Promise<void> {
+    try {
+      const row = await this.prisma.feedbacks.findUnique({
+        where: { id: feedbackId },
+        select: {
+          departmentId: true,
+          subject: true,
+          description: true,
+          currentStatus: true,
+        },
+      });
+      if (!row) {
+        throw new Error('Không tìm thấy feedback.');
+      }
+
+      if (
+        row.currentStatus === FeedbackStatus.RESOLVED ||
+        row.currentStatus === FeedbackStatus.REJECTED
+      ) {
+        await this.saveSimilarityLinksForSource(feedbackId, []);
+        return;
+      }
+
+      const textForEmbed = `${String(row.subject ?? '')} ${String(row.description ?? '')}`;
+      const embedding = await this.generateEmbedding(textForEmbed);
+      await this.saveFeedbackEmbedding(feedbackId, embedding);
+
+      const vectorString = `[${embedding.join(',')}]`;
+      const vectorCandidates = await this.vectorSearch({
+        embeddingText: vectorString,
+        departmentId: row.departmentId,
+        sourceFeedbackId: feedbackId,
+      });
+      console.log('vectorCandidates', vectorCandidates);
+      const targets = await this.scoreSimilarityForCandidates(
+        String(row.description ?? ''),
+        vectorCandidates,
+        {
+          maxResults: FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS,
+          excludeFeedbackId: feedbackId,
+        },
+      );
+      console.log('targets', targets);
+      await this.saveSimilarityLinksForSource(feedbackId, targets);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.includes('Không tìm thấy feedback')) {
+        await this.saveSimilarityLinksForSource(feedbackId, []);
+        return;
+      }
+      throw err;
+    }
+  }
+
+  async handleSimilarityAfterFeedbackUpdated(
+    feedbackId: string,
+    priorIncomingSourceIds: string[],
+  ): Promise<void> {
+    try {
+      const row = await this.prisma.feedbacks.findUnique({
+        where: { id: feedbackId },
+        select: {
+          departmentId: true,
+          subject: true,
+          description: true,
+          currentStatus: true,
+        },
+      });
+      if (!row) {
+        throw new Error('Không tìm thấy feedback.');
+      }
+
+      if (
+        row.currentStatus === FeedbackStatus.RESOLVED ||
+        row.currentStatus === FeedbackStatus.REJECTED
+      ) {
+        await this.saveSimilarityLinksForSource(feedbackId, []);
+        await this.saveSimilarityLinksForTarget(feedbackId, []);
+        return;
+      }
+
+      const textForEmbed = `${String(row.subject ?? '')} ${String(row.description ?? '')}`;
+      const embedding = await this.generateEmbedding(textForEmbed);
+      await this.saveFeedbackEmbedding(feedbackId, embedding);
+
+      const vectorString = `[${embedding.join(',')}]`;
+      const vectorCandidates = await this.vectorSearch({
+        embeddingText: vectorString,
+        departmentId: row.departmentId,
+        sourceFeedbackId: feedbackId,
+      });
+      const targets = await this.scoreSimilarityForCandidates(
+        String(row.description ?? ''),
+        vectorCandidates,
+        {
+          maxResults: FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS,
+          excludeFeedbackId: feedbackId,
+        },
+      );
+      await this.saveSimilarityLinksForSource(feedbackId, targets);
+
+      const pivot = await this.prisma.feedbacks.findUnique({
+        where: { id: feedbackId },
+        select: { id: true, subject: true, description: true },
+      });
+      const pivotCandidate = pivot
+        ? [
+            {
+              feedbackId: pivot.id,
+              subject: pivot.subject,
+              description: pivot.description,
+            },
+          ]
+        : [];
+
+      const distinct = [...new Set(priorIncomingSourceIds)].filter(
+        (id) => id !== feedbackId,
+      );
+      const incoming: FeedbackSimilaritySource[] = [];
+      for (const sourceId of distinct) {
+        try {
+          const source = await this.prisma.feedbacks.findUnique({
+            where: { id: sourceId },
+            select: { description: true },
+          });
+          if (!source || pivotCandidate.length === 0) {
+            continue;
+          }
+          const ranked = await this.scoreSimilarityForCandidates(
+            String(source.description ?? ''),
+            pivotCandidate,
+            { maxResults: 1, excludeFeedbackId: sourceId },
+          );
+          if (ranked.length > 0 && ranked[0].targetFeedbackId === feedbackId) {
+            incoming.push({
+              sourceFeedbackId: sourceId,
+              score: ranked[0].score,
+            });
+          }
+        } catch {
+          continue;
+        }
+      }
+      await this.saveSimilarityLinksForTarget(feedbackId, incoming);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.includes('Không tìm thấy feedback')) {
+        await this.saveSimilarityLinksForSource(feedbackId, []);
+        await this.saveSimilarityLinksForTarget(feedbackId, []);
+        return;
+      }
+      throw err;
+    }
   }
 }

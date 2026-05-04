@@ -6,6 +6,7 @@ import { UploadsModule } from '../uploads/uploads.module';
 import { AiModule } from '../ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
 import { FeedbackToxicProcessor } from './feedbacks.processor';
+import { FeedbackSimilarityProcessor } from './feedback-similarity.processor';
 import { SearchModule } from '../search/search.module';
 
 @Module({
@@ -17,8 +18,15 @@ import { SearchModule } from '../search/search.module';
     BullModule.registerQueue({
       name: 'feedback-toxic',
     }),
+    BullModule.registerQueue({
+      name: 'feedback-similarity',
+    }),
   ],
   controllers: [FeedbacksController],
-  providers: [FeedbacksService, FeedbackToxicProcessor],
+  providers: [
+    FeedbacksService,
+    FeedbackToxicProcessor,
+    FeedbackSimilarityProcessor,
+  ],
 })
 export class FeedbacksModule {}

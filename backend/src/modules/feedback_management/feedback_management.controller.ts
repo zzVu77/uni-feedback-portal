@@ -16,9 +16,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  BulkUpdateFeedbackStatusDto,
+  BulkUpdateFeedbackStatusResponseDto,
   FeedbackDetailDto,
   ForwardingResponseDto,
   ListFeedbacksResponseDto,
+  RelatedFeedbacksResponseDto,
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
@@ -61,6 +64,25 @@ export class FeedbackManagementController {
     return this.feedbackManagementService.getAllStaffFeedbacks(query, actor);
   }
 
+  @Patch('/staff/feedbacks/bulk-status')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({
+    summary: 'Bulk update feedback status (Staff only)',
+    description:
+      'Updates each ID with the same rules as single status update. IDs not in scope are skipped.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Per-item results and skipped IDs',
+    type: BulkUpdateFeedbackStatusResponseDto,
+  })
+  bulkUpdateFeedbackStatus(
+    @Body() dto: BulkUpdateFeedbackStatusDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<BulkUpdateFeedbackStatusResponseDto> {
+    return this.feedbackManagementService.bulkUpdateFeedbackStatus(dto, actor);
+  }
+
   @Get('/staff/feedbacks/:feedbackId')
   @Roles(UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
@@ -82,6 +104,27 @@ export class FeedbackManagementController {
     @ActiveUser() actor: ActiveUserData,
   ): Promise<FeedbackDetailDto> {
     return this.feedbackManagementService.getStaffFeedbackDetail(params, actor);
+  }
+
+  @Get('/staff/feedbacks/:feedbackId/related')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({
+    summary: 'List related feedbacks (vector similarity links, Staff only)',
+    description:
+      'Bidirectional links merged per peer with max(score). Peers scoped to the same staff visibility as the list view.',
+  })
+  @ApiResponse({
+    status: 200,
+    type: RelatedFeedbacksResponseDto,
+  })
+  getStaffRelatedFeedbacks(
+    @Param() params: FeedbackParamDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<RelatedFeedbacksResponseDto> {
+    return this.feedbackManagementService.getStaffRelatedFeedbacks(
+      params,
+      actor,
+    );
   }
 
   @Patch('/staff/feedbacks/:feedbackId/status')

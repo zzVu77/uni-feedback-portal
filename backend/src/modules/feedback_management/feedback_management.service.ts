@@ -16,11 +16,15 @@ import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_l
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { UploadsService } from '../uploads/uploads.service';
 import {
+  BulkUpdateFeedbackStatusDto,
+  BulkUpdateFeedbackStatusItemDto,
+  BulkUpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
   FeedbackDetailDto,
   ForwardingResponseDto,
   ListFeedbacksResponseDto,
   QueryFeedbackByStaffDto,
+  RelatedFeedbacksResponseDto,
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
 } from './dto';
@@ -547,5 +551,120 @@ export class FeedbackManagementService {
     };
 
     return result;
+  }
+
+  private staffFeedbackAccessWhere(
+    actor: ActiveUserData,
+  ): Prisma.FeedbacksWhereInput {
+    if (!actor.departmentId) {
+      throw new ForbiddenException('Staff department is not set');
+    }
+    return {
+      OR: [
+        { departmentId: actor.departmentId },
+        {
+          forwardingLogs: {
+            some: { fromDepartmentId: actor.departmentId },
+          },
+        },
+      ],
+    };
+  }
+
+  async getStaffRelatedFeedbacks(
+    params: FeedbackParamDto,
+    actor: ActiveUserData,
+  ): Promise<RelatedFeedbacksResponseDto> {
+    const { feedbackId } = params;
+    const access = this.staffFeedbackAccessWhere(actor);
+
+    const pivot = await this.prisma.feedbacks.findFirst({
+      where: { id: feedbackId, AND: [access] },
+      select: { id: true },
+    });
+    if (!pivot) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    const links = await this.prisma.feedbackSimilarityLink.findMany({
+      where: {
+        OR: [
+          { sourceFeedbackId: feedbackId },
+          { targetFeedbackId: feedbackId },
+        ],
+      },
+    });
+
+    const scoreByPeer = new Map<string, number>();
+    for (const link of links) {
+      const peerId =
+        link.sourceFeedbackId === feedbackId
+          ? link.targetFeedbackId
+          : link.sourceFeedbackId;
+      const prev = scoreByPeer.get(peerId) ?? 0;
+      scoreByPeer.set(peerId, Math.max(prev, link.score));
+    }
+
+    const peerIds = [...scoreByPeer.keys()];
+    if (peerIds.length === 0) {
+      return { peers: [] };
+    }
+
+    const peers = await this.prisma.feedbacks.findMany({
+      where: {
+        id: { in: peerIds },
+        AND: [access],
+      },
+      select: {
+        id: true,
+        subject: true,
+        currentStatus: true,
+        createdAt: true,
+        department: { select: { id: true, name: true } },
+      },
+    });
+
+    const peersOut = peers
+      .map((p) => ({
+        id: p.id,
+        subject: p.subject,
+        currentStatus: p.currentStatus,
+        score: scoreByPeer.get(p.id) ?? 0,
+        createdAt: p.createdAt.toISOString(),
+        department: p.department,
+      }))
+      .sort((a, b) => b.score - a.score);
+
+    return { peers: peersOut };
+  }
+
+  async bulkUpdateFeedbackStatus(
+    dto: BulkUpdateFeedbackStatusDto,
+    actor: ActiveUserData,
+  ): Promise<BulkUpdateFeedbackStatusResponseDto> {
+    const updated: BulkUpdateFeedbackStatusItemDto[] = [];
+    const skippedIds: string[] = [];
+
+    for (const feedbackId of dto.feedbackIds) {
+      try {
+        const res = await this.updateStatus(
+          { feedbackId },
+          { status: dto.status, note: dto.note },
+          actor,
+        );
+        updated.push({
+          feedbackId: res.feedbackId,
+          currentStatus: res.currentStatus,
+        });
+      } catch (e) {
+        if (e instanceof NotFoundException) {
+          skippedIds.push(feedbackId);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    return { updated, skippedIds };
   }
 }
