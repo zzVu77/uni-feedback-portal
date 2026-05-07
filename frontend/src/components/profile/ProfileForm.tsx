@@ -2,23 +2,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Loader2,
-  User,
-  Mail,
-  Shield,
-  Building,
-  Calendar,
-  Camera,
-  Pencil,
-  X,
-  Check,
-} from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -28,21 +20,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { useUser } from "@/context/UserContext";
 import { useUpdateMe } from "@/hooks/queries/useUserQueries";
+import { cn } from "@/lib/utils";
 import { getRoleDisplayName } from "@/utils/getRoleDisplayName";
 import { getSidebarType } from "@/utils/getSidebarType";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
+import {
+  Building,
+  Calendar,
+  Camera,
+  Check,
+  Loader2,
+  Mail,
+  Pencil,
+  Shield,
+  User,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { z } from "zod";
 
 const formSchema = z.object({
   fullName: z.string().min(1, {
@@ -80,7 +80,7 @@ export function ProfileForm() {
 
   if (!user) return null;
 
-  const sidebarType = getSidebarType(user.role as any);
+  const sidebarType = getSidebarType(user.role);
 
   return (
     <div className="mx-auto w-full space-y-6">
@@ -136,7 +136,7 @@ export function ProfileForm() {
         </CardHeader>
         <CardContent className="p-6">
           <Form {...form}>
-            <form onSubmit={onSubmit} className="space-y-6">
+            <form onSubmit={void onSubmit} className="space-y-6">
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Full Name - Editable in edit mode */}
                 <FormField
