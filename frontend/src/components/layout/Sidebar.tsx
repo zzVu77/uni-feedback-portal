@@ -77,12 +77,19 @@ export default function Sidebar({
       </div>
 
       {/* User Info */}
-      <div className="flex flex-shrink-0 items-center gap-3 px-6 py-4">
+      <Link
+        href="/profile"
+        className="flex flex-shrink-0 items-center gap-3 px-6 py-4 transition-colors hover:bg-white/5"
+      >
         <Avatar className="h-10 w-10 border border-slate-700">
           <AvatarImage src="https://github.com/shadcn.png" />
 
           <AvatarFallback className="bg-slate-800 text-slate-200">
-            CN
+            {fullName
+              ?.split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase() || "CN"}
           </AvatarFallback>
         </Avatar>
 
@@ -95,7 +102,7 @@ export default function Sidebar({
             {getRoleDisplayName(type)}
           </span>
         </div>
-      </div>
+      </Link>
 
       {/* Navigation */}
       <div className="min-h-0 flex-1 border-t border-slate-800">
