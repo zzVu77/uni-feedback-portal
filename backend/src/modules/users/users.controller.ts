@@ -21,7 +21,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Update user profile' })
   @ApiOkResponse({ type: UserResponseDto })
-  @Patch('/me')
+  @Patch('update/me')
   async updateMe(
     @ActiveUser() actor: ActiveUserData,
     @Body() dto: UpdateProfileDto,

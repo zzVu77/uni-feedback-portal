@@ -11,6 +11,9 @@ export const getMe = async (): Promise<UserInfo> => {
 export const updateMe = async (data: {
   fullName: string;
 }): Promise<UserInfo> => {
-  const response = await axiosInstance.patch<UserInfo>(`${USERS_URL}/me`, data);
+  const response = await axiosInstance.patch<UserInfo>(
+    `${USERS_URL}/update/me`,
+    data,
+  );
   return response;
 };
