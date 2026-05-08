@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FeedbackStatus } from '@prisma/client';
 import { CohereClient } from 'cohere-ai';
 import { PrismaService } from '../prisma/prisma.service';
@@ -203,6 +203,49 @@ export class SearchService {
       console.error('Lỗi khi gọi Cohere Rerank:', error);
       return [];
     }
+  }
+
+  async findSimilarity(feedbackId: string): Promise<{
+    targets: FeedbackSimilarityTarget[];
+  }> {
+    const exists = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId },
+      select: { id: true },
+    });
+    if (!exists) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    const links = await this.prisma.feedbackSimilarityLink.findMany({
+      where: {
+        OR: [
+          { sourceFeedbackId: feedbackId },
+          { targetFeedbackId: feedbackId },
+        ],
+      },
+      select: {
+        sourceFeedbackId: true,
+        targetFeedbackId: true,
+        score: true,
+      },
+    });
+
+    const scoreByPeer = new Map<string, number>();
+    for (const link of links) {
+      const peerId =
+        link.sourceFeedbackId === feedbackId
+          ? link.targetFeedbackId
+          : link.sourceFeedbackId;
+      const prev = scoreByPeer.get(peerId) ?? 0;
+      scoreByPeer.set(peerId, Math.max(prev, link.score));
+    }
+
+    const targets = [...scoreByPeer.entries()]
+      .map(([targetFeedbackId, score]) => ({ targetFeedbackId, score }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS);
+
+    return { targets };
   }
 
   /** Thay toàn bộ cạnh `source → *` trong `FeedbackSimilarityLink`. */
