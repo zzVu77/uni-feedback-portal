@@ -11,12 +11,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ConfirmationDialog from "../common/ConfirmationDialog";
-import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
 import WarningBox from "../common/WarningBox";
 import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
 import Attachment from "./Attachment";
 import DOMPurify from "dompurify";
+import StatusBadge from "../common/StatusBadge";
 
 type Props = {
   type: "student" | "staff" | "admin";
@@ -58,7 +58,8 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
           </h1>
           {type === "student" &&
             (currentStatus === "PENDING" ||
-              currentStatus === "VIOLATED_CONTENT") && (
+              currentStatus === "VIOLATED_CONTENT" ||
+              currentStatus === "AI_REVIEW_FAILED") && (
               <div className="order-1 flex flex-row items-center gap-2 md:order-2">
                 <Link href={`/student/my-feedbacks/${id}/edit`}>
                   <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
@@ -88,7 +89,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
         {/* Information */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Badge */}
-          <StatusBadge type={currentStatus as StatusBadgeProps["type"]} />
+          <StatusBadge type={currentStatus} />
           {/* 1. Date Badge */}
           <Badge
             variant="secondary"

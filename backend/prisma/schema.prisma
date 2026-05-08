@@ -137,6 +137,7 @@ model Departments {
   feedbacks                      Feedbacks[]
   forwardingLogsFromDepartmentId ForwardingLogs[] @relation("FromDepartment")
   forwardingLogsToDepartmentId   ForwardingLogs[] @relation("ToDepartment")
+  departmentEmbedding            DepartmentEmbeddings?
 
   @@index([isActive])
 }
@@ -342,4 +343,33 @@ model RefreshTokens {
   expiredAt DateTime
   createdAt DateTime @default(now())
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ================================
+// DATA WAREHOUSE BIGQUERY (Reverse ETL)
+// ================================
+
+model DashboardTrendingIssues {
+  postId          String   @id @map("post_id")
+  author          String
+  content         String
+  postLink        String?  @map("post_link")
+  postedAt        DateTime @map("posted_at")
+  reactionCount   Int      @map("reaction_count")
+  commentCount    Int      @map("comment_count")
+  engagementScore Int      @map("engagement_score")
+  topic           String
+  sentimentScore  Float    @map("sentiment_score")
+  aiSummary       String   @map("ai_summary")
+  sentimentLabel  String   @map("sentiment_label")
+  analyzedAt      DateTime @map("analyzed_at")
+
+  @@map("dashboard_trending_issues")
+
+}
+model DepartmentEmbeddings {
+  id                String   @id @default(uuid()) @db.Uuid
+  departmentId      String   @unique @db.Uuid
+  embedding         Unsupported("vector(3072)")
+  department        Departments       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
 }

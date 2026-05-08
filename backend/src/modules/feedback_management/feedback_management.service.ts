@@ -56,6 +56,14 @@ export class FeedbackManagementService {
         },
       ],
     });
+    conditions.push({
+      currentStatus: {
+        notIn: [
+          FeedbackStatus.VIOLATED_CONTENT,
+          FeedbackStatus.AI_REVIEW_FAILED,
+        ],
+      },
+    });
 
     if (status) {
       conditions.push({
@@ -167,6 +175,11 @@ export class FeedbackManagementService {
           select: { id: true, name: true },
         },
         statusHistory: {
+          where: {
+            status: {
+              in: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
+            },
+          },
           select: {
             status: true,
             message: true,
@@ -194,9 +207,28 @@ export class FeedbackManagementService {
       },
     });
 
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
+      throw new NotFoundException('Feedback not found');
+    }
+
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+
+    const latestPending = feedback.statusHistory
+      .filter((x) => x.status === 'PENDING')
+      .at(-1);
+    const otherStatuses = feedback.statusHistory.filter(
+      (x) => x.status !== 'PENDING',
+    );
+    feedback.statusHistory = [
+      ...(latestPending ? [latestPending] : []),
+      ...otherStatuses,
+    ];
+
     const isForwarding =
       feedback.department.id !== actor.departmentId &&
       feedback.forwardingLogs.some(
@@ -395,13 +427,28 @@ export class FeedbackManagementService {
     } = query;
 
     const where: Prisma.FeedbacksWhereInput = {};
-
+    const hiddenStatuses: FeedbackStatus[] = [
+      FeedbackStatus.AI_REVIEW_FAILED,
+      FeedbackStatus.VIOLATED_CONTENT,
+    ];
     if (status) {
-      where.currentStatus = Object.values(FeedbackStatus).includes(
-        status.toUpperCase() as FeedbackStatus,
-      )
-        ? (status.toUpperCase() as FeedbackStatus)
-        : undefined;
+      const normalizedStatus = status.toUpperCase() as FeedbackStatus;
+      if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
+        throw new BadRequestException(`Invalid status: ${status}`);
+      }
+      if (hiddenStatuses.includes(normalizedStatus)) {
+        throw new BadRequestException(
+          `Status ${normalizedStatus} is not accessible in this endpoint`,
+        );
+      }
+      where.currentStatus = normalizedStatus;
+    } else {
+      where.currentStatus = {
+        notIn: [
+          FeedbackStatus.AI_REVIEW_FAILED,
+          FeedbackStatus.VIOLATED_CONTENT,
+        ],
+      };
     }
     if (departmentId) where.departmentId = departmentId;
     if (categoryId) where.categoryId = categoryId;
@@ -508,6 +555,13 @@ export class FeedbackManagementService {
     });
 
     if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
       throw new NotFoundException('Feedback not found');
     }
     const unifiedTimeline = mergeStatusAndForwardLogs({

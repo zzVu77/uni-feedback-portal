@@ -24,6 +24,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AiModule } from './modules/ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
 import { SearchModule } from './modules/search/search.module';
+import { SocialListeningModule } from './modules/social_listening/social_listening.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { SearchModule } from './modules/search/search.module';
       },
     }),
     SearchModule,
+    SocialListeningModule,
   ],
   controllers: [AppController],
   providers: [AppService],
