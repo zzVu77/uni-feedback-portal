@@ -26,6 +26,21 @@ function stripHtml(text: string): string {
   return text.replace(/<[^>]*>/g, '').trim();
 }
 
+function parseVectorString(vectorText: string): number[] {
+  const normalized = vectorText.trim();
+  if (!normalized.startsWith('[') || !normalized.endsWith(']')) {
+    return [];
+  }
+  const payload = normalized.slice(1, -1).trim();
+  if (!payload) {
+    return [];
+  }
+  return payload
+    .split(',')
+    .map((part) => Number(part.trim()))
+    .filter((value) => Number.isFinite(value));
+}
+
 export type FeedbackSimilarityTarget = {
   targetFeedbackId: string;
   score: number;
@@ -86,6 +101,21 @@ export class SearchService {
       VALUES (gen_random_uuid(), ${feedbackId}::uuid, ${embedding}::vector)
       ON CONFLICT ("feedbackId") DO UPDATE SET embedding = EXCLUDED.embedding
     `;
+  }
+
+  async getFeedbackEmbedding(feedbackId: string): Promise<number[] | null> {
+    const rows = await this.prisma.$queryRaw<{ embeddingText: string }[]>`
+      SELECT embedding::text as "embeddingText"
+      FROM "FeedbackEmbeddings"
+      WHERE "feedbackId" = ${feedbackId}::uuid
+      LIMIT 1
+    `;
+    const embeddingText = rows[0]?.embeddingText;
+    if (!embeddingText) {
+      return null;
+    }
+    const vector = parseVectorString(embeddingText);
+    return vector.length > 0 ? vector : null;
   }
 
   async vectorSearch(params: {
@@ -259,8 +289,12 @@ export class SearchService {
       }
 
       const textForEmbed = `${String(row.subject ?? '')} ${String(row.description ?? '')}`;
-      const embedding = await this.generateEmbedding(textForEmbed);
-      await this.saveFeedbackEmbedding(feedbackId, embedding);
+      const existingEmbedding = await this.getFeedbackEmbedding(feedbackId);
+      const embedding =
+        existingEmbedding ?? (await this.generateEmbedding(textForEmbed));
+      if (!existingEmbedding) {
+        await this.saveFeedbackEmbedding(feedbackId, embedding);
+      }
 
       const vectorString = `[${embedding.join(',')}]`;
       const vectorCandidates = await this.vectorSearch({

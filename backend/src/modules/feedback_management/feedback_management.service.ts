@@ -4,6 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FeedbackStatus, FileTargetType, Prisma } from '@prisma/client';
 import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
@@ -30,12 +32,16 @@ import {
 } from './dto';
 import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
 import { FeedbackForwardingEvent } from './events/feedback-forwarding.event';
+import { FEEDBACK_SIMILARITY_JOB_ON_CREATED } from '../feedbacks/feedback-similarity-job.constants';
+
 @Injectable()
 export class FeedbackManagementService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadsService: UploadsService,
     private readonly eventEmitter: EventEmitter2, // [Injection]
+    @InjectQueue('feedback-similarity')
+    private readonly feedbackSimilarityQueue: Queue,
   ) {}
 
   async getAllStaffFeedbacks(
@@ -96,7 +102,6 @@ export class FeedbackManagementService {
     }
 
     const where = { AND: conditions };
-    console.log('Where Condition:', where);
 
     const [feedbacks, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
@@ -301,6 +306,25 @@ export class FeedbackManagementService {
       },
     });
 
+    if (
+      dto.status === FeedbackStatus.RESOLVED ||
+      dto.status === FeedbackStatus.REJECTED
+    ) {
+      await this.prisma.$transaction([
+        this.prisma.feedbackSimilarityLink.deleteMany({
+          where: {
+            OR: [
+              { sourceFeedbackId: feedbackId },
+              { targetFeedbackId: feedbackId },
+            ],
+          },
+        }),
+        this.prisma.feedbackEmbeddings.deleteMany({
+          where: { feedbackId },
+        }),
+      ]);
+    }
+
     await this.prisma.feedbackStatusHistory.create({
       data: {
         feedbackId: feedback.id,
@@ -381,6 +405,25 @@ export class FeedbackManagementService {
         currentStatus: FeedbackStatus.IN_PROGRESS,
       },
     });
+
+    await this.prisma.feedbackSimilarityLink.deleteMany({
+      where: {
+        OR: [
+          { sourceFeedbackId: feedbackId },
+          { targetFeedbackId: feedbackId },
+        ],
+      },
+    });
+
+    await this.feedbackSimilarityQueue.add(
+      FEEDBACK_SIMILARITY_JOB_ON_CREATED,
+      { feedbackId },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
+
     const event = new FeedbackForwardingEvent({
       feedback: {
         id: feedback.id,
