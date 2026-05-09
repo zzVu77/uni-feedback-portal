@@ -12300,3 +12300,271 @@ Call/Zalo ngay: 0377.xxx.888.999 để được tư vấn miễn phí!!!',
 --         4123456,
 --         '2025-12-06 09:10:00'
 --     );
+
+INSERT INTO dashboard_trending_issues (
+    post_id,
+    author,
+    content,
+    post_link,
+    posted_at,
+    reaction_count,
+    comment_count,
+    engagement_score,
+    topic,
+    sentiment_score,
+    ai_summary,
+    sentiment_label,
+    analyzed_at
+) VALUES
+(
+    '45a536403ed63ff7b781e93fa36eae0c', 'Người tham gia ẩn danh', 'Anh chị giúp em cách fix với ạ,nó k hiện chỗ wifi ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175201173304378/', '2026-04-28 13:26:05', 
+    14, 45, 104, 'Cơ sở vật chất & Bãi xe', 0.0, 'Sinh viên đang gặp vấn đề không kết nối được wifi và cần hỗ trợ khắc phục sự cố này để đảm bảo trải nghiệm học tập tốt hơn.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '30f6086fe5863e055fff712b29dc878a', 'MotivatedPapaya1825', 'Lễ trường có mở cửa không mọi người, mình kh về quê nên mình định vô ngồi học làm bài', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176165993207896/', '2026-04-29 16:02:04', 
+    5, 6, 17, 'Cơ sở vật chất & Bãi xe', 0.0, 'Sinh viên hỏi liệu trường có mở cửa trong dịp lễ không để có thể vào học bài, cần thông tin về lịch hoạt động của cơ sở vật chất.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '9d218cbd76eda133fa71949675bf9490', 'LavenderFirefly8798', 'Trường cho đề công bằng vãi đề toán 2 buổi chiều ko học hì cũng qua còn buổi sáng ...', 'https://www.facebook.com/groups/utethacmachoctap/posts/2165585674265928/', '2026-04-17 10:53:24', 
+    28, 59, 146, 'Giảng viên & Đào tạo', -1.0, 'Sinh viên châm biếm về sự thiếu công bằng nghiêm trọng trong đề thi Toán 2, chỉ ra rằng đề thi buổi chiều quá dễ đến mức không cần học cũng qua, trong khi đề thi buổi sáng lại rất khó. Điều này gây bức xúc sâu sắc về sự chênh lệch chất lượng đề thi.', 'Tiêu cực', '2026-04-19 05:05:33.904'
+),
+(
+    '6a075f7395b29ca01a7e771778e53ac7', 'CharmingYuzu1146', 'Thứ 7 này mình bảo vệ khoá luận tốt nghiệp ngành Quản lý Công nghiệp. Cho mình hỏi hội đồng 5 ai biết có hắc ám không? Mất ngủ mấy đêm rồi.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170791843745311/', '2026-04-23 14:02:59', 
+    3, 2, 7, 'Giảng viên & Đào tạo', -0.7, 'Sinh viên bày tỏ sự lo lắng và mất ngủ kéo dài về buổi bảo vệ khóa luận tốt nghiệp sắp tới, đặc biệt là nỗi sợ hãi về hội đồng chấm thi ''hắc ám'', cho thấy áp lực tâm lý rất lớn.', 'Tiêu cực', '2026-04-23 14:41:23.083'
+),
+(
+    '5940f3ca9114445420ebafeeebd41654', 'conchồncute', 'Thi mạch điện ai cũng nói số đẹp có mình tôi số xấu thôi hả', 'https://www.facebook.com/groups/utethacmachoctap/posts/2169698303854665/', '2026-04-22 07:52:47', 
+    12, 16, 44, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên bày tỏ sự thất vọng và cảm thấy không may mắn sau kỳ thi Mạch điện, khi ''ai cũng nói số đẹp'' (đề dễ hoặc kết quả tốt) nhưng bản thân lại gặp ''số xấu'' (đề khó hoặc kết quả không như ý).', 'Trung lập', '2026-04-23 14:41:23.083'
+),
+(
+    'fdefff546182e5e5d84a7153dd28d52c', 'Người tham gia ẩn danh', 'Xin cánh tay của những bạn 8+ toán 2 ạ, đề khê quá huhu', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175209119970250/', '2026-04-28 13:37:03', 
+    9, 22, 53, 'Giảng viên & Đào tạo', -0.2, 'Sinh viên bày tỏ sự thất vọng và khó khăn với đề thi môn toán 2 quá phức tạp, tìm kiếm sự hỗ trợ từ những bạn học tốt hơn.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '26f823082f216770c14e380f349bf415', 'Người tham gia ẩn danh', 'A/c nào học môn công nghệ kim loại của thầy Nguyễn Thanh Tân rồi cho e hỏi, bữa đầu thầy có điểm danh hay làm bài test nào k các anh chị', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173590736798755/', '2026-04-26 17:21:58', 
+    2, 3, 8, 'Giảng viên & Đào tạo', 0.0, 'Sinh viên hỏi về phương pháp điểm danh hoặc bài kiểm tra đầu tiên của giảng viên môn công nghệ kim loại để chuẩn bị cho buổi học.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '754e5da373a7edc38f80299935e4d7d6', 'Người tham gia ẩn danh', 'Ai có đáp án lí 2 cho em xin với ạ.Làm bài rất ok nhưng điểm rất khê ạ.Em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175340013290494/', '2026-04-28 16:44:07', 
+    0, 0, 0, 'Giảng viên & Đào tạo', -0.2, 'Sinh viên bày tỏ sự không hài lòng với kết quả điểm môn lí 2, cho rằng điểm số thấp hơn so với nỗ lực làm bài. Đây là một điểm đau về tính công bằng hoặc minh bạch trong đánh giá.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    'aa8e4430636a36939ea452531fd0bea0', 'Lê Tùng Dương', 'Cảm ơn thầy Khương vì con điểm này. Dù là học mooc và gặp các bạn một cách rất tình cờ, nhưng mọi người đều đồng lòng và chung sức làm bài\nShout out đến:\nĐức Khang\nLê Bùi Thanh Danh\nPhạm Gia Tuệ\nTrương Tấn Sang\nCảm ơn các bạn rất nhiều', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175334263291069/', '2026-04-28 16:35:06', 
+    20, 4, 28, 'Giảng viên & Đào tạo', 0.6, 'Sinh viên bày tỏ lòng biết ơn thầy Khương về kết quả học tập và khen ngợi sự hợp tác hiệu quả của nhóm bạn trong quá trình làm bài học mooc, thể hiện môi trường học tập tích cực.', 'Tích cực', '2026-04-28 17:26:13.403'
+),
+(
+    '9010e20c067fef08d727fb2e82f6cc0f', 'EmpatheticBison8003', 'Học lại lần 2 rồi k qua nản quá mn. Giảng vin nào buff qt 7 thi 3 chia sẽ em vs ạ 😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176143709876791/', '2026-04-29 15:47:28', 
+    11, 26, 63, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên đang rất nản lòng vì đã thi trượt môn học lần thứ hai và đang tìm kiếm giảng viên được cho là dễ tính hoặc có cách ra đề ôn tập giúp sinh viên qua môn dễ hơn, phản ánh áp lực học tập.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '02971db010648d7b1b2403b3d6782199', 'Người tham gia ẩn danh', 'Dạ anh chị có tài liệu toán ứng dụng kỹ sư và mạch điện bản tiếng việt cho e xin với ạ ,sách tiếng anh đọc lú quá😭😭. Dạ e cảm ơn nhiều 💓', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175792466578582/', '2026-04-29 07:11:41', 
+    1, 6, 13, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên gặp khó khăn khi học tài liệu toán ứng dụng kỹ sư và mạch điện bằng tiếng Anh và mong muốn tìm tài liệu tiếng Việt. Đây là một điểm yếu về hỗ trợ tài liệu học tập.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    '7e3a825d61686835420558674a608411', 'Người tham gia ẩn danh', 'Bạn nào học buổi đầu ngày hôm nay cho mình hỏi thầy có gr zalo hay có hay dặn dò gì hong ạ. Mình cảm ơn.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175951323229363/', '2026-04-29 10:53:26', 
+    0, 3, 6, 'Giảng viên & Đào tạo', 0.0, 'Sinh viên hỏi về thông tin liên lạc (nhóm Zalo) hoặc dặn dò từ giảng viên trong buổi học đầu tiên để không bỏ lỡ thông báo quan trọng.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    'ae299209db55e6a97f9489d83f91d831', 'Người tham gia ẩn danh', 'Dạ là Em có đăng kí học lại 1 môn 3tc mà học phí lại vẫn để 18 triệu.Vậy số tiền học lại mình đóng sao ạ😭😭😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2125700394921123/', '2026-03-01 09:58:51', 
+    0, 1, 2, 'Học phí & Hành chính', -0.2, 'Sinh viên đăng ký học lại 1 môn 3 tín chỉ nhưng hệ thống hiển thị tổng học phí là 18 triệu đồng, gây hoang mang về cách tính và đóng tiền. Nhà trường cần kiểm tra lại hệ thống tính toán học phí cho các môn học lại và cung cấp hướng dẫn rõ ràng để tránh nhầm lẫn cho sinh viên.', 'Trung lập', '2026-03-31 15:29:45.402'
+),
+(
+    '5c8ee2245d31c1a60ae20cb0e4d9557d', 'Người tham gia ẩn danh', 'Cho mik hỏi mng đủ điều kiện, có nhận được hoàn trả số tiền BHYT để trừ vào học phí chưa ạ, trước tết đã khai báo ở trạm y tế trường r ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2167095264114969/', '2026-04-19 04:51:21', 
+    0, 1, 2, 'Học phí & Hành chính', -0.1, 'Sinh viên thắc mắc về việc chưa nhận được hoàn trả số tiền Bảo hiểm Y tế (BHYT) để trừ vào học phí, mặc dù đã khai báo. Nhà trường cần rà soát quy trình và tiến độ hoàn trả BHYT.', 'Trung lập', '2026-04-19 05:05:33.904'
+),
+(
+    '3cb84a39d49e36a8553ad758dde50144', 'Người tham gia ẩn danh', 'Dạ anh chị cho em hỏi. Em đóng học phí HK II vào đợt 2 được không ạ. Em nhớ là đóng muộn vào đợt 2 chỉ bị trừ đrl mà sao em đọc thông tin thì bị Khiển Trách ạ, huhu.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166596684164827/', '2026-04-18 13:30:00', 
+    2, 4, 10, 'Học phí & Hành chính', -0.3, 'Sinh viên bối rối và lo lắng (''huhu'') về thông tin đóng học phí muộn, có sự không nhất quán giữa ''trừ điểm rèn luyện'' và ''bị khiển trách''. Cần rà soát và làm rõ chính sách để tránh gây hoang mang cho sinh viên.', 'Trung lập', '2026-04-23 14:41:23.083'
+),
+(
+    '01421ffb2d1312c6462e3016cff30583', 'toiiuute', 'Có bạn nào chuyển ngành ngành thành công đợt này chưa, mình đợi thông báo thấy lâu quá', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174003423424153/', '2026-04-27 05:03:31', 
+    1, 0, 1, 'Học phí & Hành chính', -0.2, 'Sinh viên đang bày tỏ sự sốt ruột vì chờ đợi thông báo kết quả chuyển ngành quá lâu, cho thấy thủ tục hành chính về chuyển ngành còn chậm trễ, gây ảnh hưởng tâm lý và kế hoạch học tập của sinh viên.', 'Trung lập', '2026-04-27 05:15:38.684'
+),
+(
+    '2d8d00d825e317f68c3f0fd49f98cbc8', 'Người tham gia ẩn danh', 'Mng cho em hỏi trường mình có nhận đầu ra bằng chứng chỉ Aptis kh ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/1934604494030715/', '2025-07-18 10:59:23', 
+    3, 7, 17, 'Học phí & Hành chính', 0.0, 'Sinh viên hỏi về việc trường có chấp nhận chứng chỉ Aptis làm điều kiện đầu ra ngoại ngữ hay không, cần thông tin rõ ràng về quy định chứng chỉ.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '549bb2406df9f2b789a650a63a0749da', 'T.Hehehe.M', 'Mn cho em hỏi về qui trình xin cấp lại thẻ sinh viên có tích hợp thẻ ngân hàng, làm như thế nào và làm ở đâu ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176198636537965/', '2026-04-29 16:49:29', 
+    0, 1, 2, 'Học phí & Hành chính', 0.0, 'Sinh viên cần biết quy trình và địa điểm để xin cấp lại thẻ sinh viên có tích hợp thẻ ngân hàng, yêu cầu hướng dẫn thủ tục chi tiết.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '1059e8b3eb8ba22154558a81fe08ce72', 'Người tham gia ẩn danh', 'Dạ ac cho em hỏi em k25 đóng hp qp12( hk1) vào đợt 2 này thì có bị ảnh hưởng hbkkht của hk1 năm 2 ko ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176204733204022/', '2026-04-29 16:58:43', 
+    0, 0, 0, 'Học phí & Hành chính', 0.0, 'Sinh viên khóa K25 hỏi liệu việc đóng học phí quốc phòng học kỳ 1 vào đợt 2 có ảnh hưởng đến học bổng khuyến khích học tập của học kỳ 1 năm 2 hay không.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    'e97a14f9918540427c89002e5348f9fe', 'Người tham gia ẩn danh', 'Cho mình hỏi nợ hp quốc phòng với thể chất bao h mới hết hạn đóng v ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176165436541285/', '2026-04-29 16:01:14', 
+    1, 1, 3, 'Học phí & Hành chính', 0.0, 'Sinh viên hỏi về thời hạn đóng học phí các môn quốc phòng và thể chất.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    '519d650b32b2ce084eb0f6e4c1ae4679', '10p GG', 'E k23 học quốc phòng kì 2, bây giờ đã có thể lấy chứng chỉ đc chưa ạ?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175727956585033/', '2026-04-29 04:22:26', 
+    10, 16, 42, 'Học phí & Hành chính', 0.0, 'Sinh viên khóa K23 hỏi về thời điểm có thể nhận chứng chỉ giáo dục quốc phòng kỳ 2. Cần cung cấp thông tin rõ ràng về quy trình và lịch trả chứng chỉ.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    'a01835389bbba081cbbe0d1f78c7ca74', 'Người tham gia ẩn danh', 'Cầu mong mn vt review nhiều hơn ạ 😔😔😔 ko chỉ tích đức mà còn cứu rỗi bt bao tầm hồn vụn vỡ vì gpa sắp đát như em 😭😭😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166426580848504/', '2026-04-18 12:48:22', 
+    23, 20, 63, 'Học vụ & Đăng ký môn', -0.4, 'Sinh viên bày tỏ sự tuyệt vọng vì điểm GPA thấp, tha thiết mong muốn có thêm các bài review (về môn học/giảng viên/kinh nghiệm học) từ cộng đồng để cải thiện tình hình học tập. Đây là một vấn đề về nhu cầu hỗ trợ học thuật và chia sẻ kinh nghiệm giữa sinh viên.', 'Trung lập', '2026-04-19 05:05:33.904'
+),
+(
+    'a6364b3efb34c7669200214ced3a68e9', 'Mass Queue', '[THẮC MẮC] Link tra cứu Kho Học Liệu Số hỗ trợ học tập - Ôn tập mùa thi\nCho mình hỏi có ai nhận được mail này và truy cập được liên kết không? Mình truy cập tới bước login Mail của trường xong thì bị chặn.\n\nXin cám ơn!', 'https://www.facebook.com/groups/utethacmachoctap/posts/2167094180781744/', '2026-04-19 04:49:20', 
+    0, 0, 0, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên gặp lỗi kỹ thuật khi cố gắng truy cập Kho Học Liệu Số hỗ trợ học tập của trường, bị chặn sau khi đăng nhập bằng email. Nhà trường cần kiểm tra lại hệ thống truy cập tài liệu để đảm bảo sinh viên có thể sử dụng.', 'Trung lập', '2026-04-19 05:05:33.904'
+),
+(
+    'b183f3ccab53897e614c2b0f48e1b7c3', 'Người tham gia ẩn danh', 'Sao toán 2 chưa có điểm vậy mọi người ơi, mình chữ K :((', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170704490420713/', '2026-04-23 12:01:26', 
+    2, 6, 14, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên đang lo lắng về việc môn Toán 2 chưa có điểm và bày tỏ sự hoang mang về khả năng nhận điểm ''K'', cần nhà trường đẩy nhanh việc công bố kết quả để giảm bớt sự bất an cho sinh viên.', 'Trung lập', '2026-04-23 14:41:23.083'
+),
+(
+    '02eea46dff6d8ad72cfe239a1cbc4846', 'Người tham gia ẩn danh', 'Tha thiết xin slot ạ kì sau em có đồ án mà không vô được. Ai có nhường cho em xin với ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170514637106365/', '2026-04-23 07:09:27', 
+    1, 3, 7, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên đang tha thiết xin slot môn học cho đồ án vì không đăng ký được, cho thấy vấn đề về số lượng chỗ hoặc hệ thống đăng ký môn cần được cải thiện.', 'Trung lập', '2026-04-23 14:43:43.214'
+),
+(
+    'fae2a613483ca624efd5f4bbacebb69a', 'SilverCaterpillar3243', 'Mn ơi giúp mình với. Mình nhớ đã hủy môn xstk rồi mà sao ở phần kết quả học tập vẫn còn hiện môn đó', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173989266758902/', '2026-04-27 04:40:54', 
+    1, 2, 5, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên bày tỏ sự khó hiểu và lo lắng khi môn học đã hủy nhưng vẫn xuất hiện trong kết quả học tập. Điều này chỉ ra một lỗi tiềm ẩn trong hệ thống hoặc quy trình học vụ cần được nhà trường xem xét và điều chỉnh.', 'Trung lập', '2026-04-27 04:50:02.482'
+),
+(
+    'd6c118c5ecede1deb9ed6714ed6975a1', 'Người tham gia ẩn danh', 'Tình hình là em mới học lại thấy làm ổn lắm mà điểm như này thì phúc khảo đâu ạ🥹🥹', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173860706771758/', '2026-04-27 03:46:05', 
+    1, 3, 7, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên bày tỏ sự thất vọng và không hài lòng về điểm thi môn học lại, cảm thấy kết quả không xứng đáng với nỗ lực và tìm hiểu về thủ tục phúc khảo.', 'Trung lập', '2026-04-27 05:15:38.684'
+),
+(
+    '025eb61e4df5bdf2cefe4b5703927769', 'Đức Mạnh', 'Mọi người cho em hỏi em đăng kí anh văn 4 sao mà nó ra 3 vậy ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173998150091347/', '2026-04-27 04:54:45', 
+    1, 1, 3, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên gặp vấn đề trong quá trình đăng ký môn học khi hệ thống hiển thị sai kết quả đăng ký môn Anh văn 4 thành Anh văn 3, cần hỗ trợ kiểm tra và khắc phục lỗi hệ thống.', 'Trung lập', '2026-04-27 05:15:38.684'
+),
+(
+    'fd66c3e48f0d1209ceafcf2ac41e3ded', 'Người tham gia ẩn danh', 'Có ní nào có điểm lý 1 chưa ạ,các môn đại cương khác có điểm vèo vèo hết r sao mỗi môn này chưa có 🥲', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173999493424546/', '2026-04-27 04:56:40', 
+    0, 0, 0, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên không hài lòng vì môn Lý 1 chưa có điểm trong khi các môn đại cương khác đã có, gây ra sự chậm trễ và thắc mắc về quy trình công bố điểm.', 'Trung lập', '2026-04-27 05:17:53.265'
+),
+(
+    'f164c09a3957d4e2e39d007b58f136b7', 'Người tham gia ẩn danh', 'Cho em hỏi môn này em cúp 1 buổi có sao không mọi người🥲', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173972756760553/', '2026-04-27 04:16:34', 
+    0, 2, 4, 'Học vụ & Đăng ký môn', -0.1, 'Sinh viên hỏi về hậu quả của việc vắng mặt một buổi học trong một môn cụ thể, thể hiện sự lo lắng về quy định điểm danh và ảnh hưởng đến kết quả học tập.', 'Trung lập', '2026-04-27 05:17:53.265'
+),
+(
+    '50ade1715d3a5e5ce87d88a4ad5f2b54', 'MrBeastUTE', 'Bữa đầu học thực tập đo lường cảm biến cô Nguyễn Thị Ngọc Thảo cúp có sao khong v moi nguoi😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173997896758039/', '2026-04-27 04:54:31', 
+    0, 0, 0, 'Học vụ & Đăng ký môn', -0.1, 'Sinh viên lo lắng về việc vắng mặt trong buổi học thực tập đầu tiên môn đo lường cảm biến với cô Nguyễn Thị Ngọc Thảo và muốn biết liệu có ảnh hưởng đến kết quả học tập hay không.', 'Trung lập', '2026-04-27 05:17:53.265'
+),
+(
+    '90376ffb780787b89861a35ad2d0e7c7', 'Người tham gia ẩn danh', 'Em đăng kí học mooc môn pldc, nhưng mà giờ vẫn chưa nhận được link group zalo thì có sao không ạ. Em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174459766711852/', '2026-04-27 16:10:02', 
+    0, 3, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên đăng ký học MOOC môn pldc nhưng chưa nhận được link nhóm Zalo, lo lắng không biết có ảnh hưởng gì đến việc học. Nhà trường cần đảm bảo gửi thông tin đầy đủ và kịp thời sau khi sinh viên đăng ký.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '5a3fafff1d15afe5ae9935cb07529f98', 'Người tham gia ẩn danh', 'Mn cho e hỏi e hc triết học rồi giờ e đki học tthcm được ko ạ hay phải học kte triết trc ạ em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175337776624051/', '2026-04-28 16:40:47', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên cần tư vấn về trình tự đăng ký các môn học Triết học và Tư tưởng Hồ Chí Minh, mong muốn được hướng dẫn rõ ràng về quy tắc học phần tiên quyết.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '7ebb57cfb90c1f2d6f8ca24a63e6f850', 'ExcitingKangaroo8981', 'Dạ môn này nếu nghỉ buổi đầu có sao hong ạ tại em ở quê sợ vào hong kịp', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175277359963426/', '2026-04-28 15:15:53', 
+    1, 1, 3, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi liệu việc nghỉ buổi học đầu tiên của một môn có ảnh hưởng gì không vì lý do ở quê chưa thể vào kịp. Cần thông tin về quy định điểm danh và việc học bù/theo kịp bài.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '7d0b44e1f8a60cd6436ef5c8f59d3641', 'Người tham gia ẩn danh', 'Đợt xét tốt nghiệp tháng 5 này nhà trường xét tự động nên sốt ruột quá huhu 🥺 \nRáng 10 - 15 ngày nữa có kq\nHy vọng 🙂‍↕️', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173940120097150/', '2026-04-27 03:46:03', 
+    4, 14, 32, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên bày tỏ sự sốt ruột và lo lắng về quy trình xét tốt nghiệp tự động, mong chờ kết quả sớm để giảm bớt căng thẳng.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '48fc02cd3f317e51b504c90d8beea937', 'Người tham gia ẩn danh', 'Em có đăng ký Mooc_nhóm 35 pldc cô Hương mà sao em chưa thấy thông báo gì hết vậy ạ? Lần đầu em học Mooc nên hơi bỡ ngỡ mong anh chị giúp', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175012023323293/', '2026-04-28 08:33:18', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về việc chưa nhận được thông báo cho môn học Mooc đã đăng ký, cần nhà trường hoặc giảng viên cung cấp thông tin kịp thời về khóa học.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    'aec3f6bf01d739166ad20e944c2f1bc0', 'Dừa dằm sữa đặc', 'Mn ơi có ai học moc nhóm 4 tư tưởng Hồ Chí Minh đợt 2 này, do cô Phượng dạy mà chưa có nhóm hông mn, với lại đăng kí nhóm ở đâu ấy:,))) đọc thông báo thấy rối quá', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175327663291729/', '2026-04-28 16:25:01', 
+    0, 3, 6, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên học MOOC nhóm 4 môn tư tưởng Hồ Chí Minh gặp khó khăn trong việc tìm nhóm và không biết cách đăng ký nhóm vì thông báo của trường quá rối. Nhà trường cần cải thiện sự rõ ràng và chi tiết của các thông báo quy trình học tập.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '2229c0813f50580f5c333e9ddc3aba4b', 'Người tham gia ẩn danh', 'Không biết trong group mình có bạn nào nhận kèm Lý 1 và xstk không ạ? Nếu có mọi người cứ cmt thông tin phía dưới mình sẽ chủ động liên hệ ạ. Cảm ơn add đã duyệt bài.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174791600012002/', '2026-04-28 02:05:30', 
+    0, 3, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên đang tìm kiếm bạn nhận kèm môn Lý 1 và XSTK để cải thiện kết quả học tập. Đây là nhu cầu tìm kiếm hỗ trợ học thuật từ cộng đồng sinh viên.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '88712d0255f9a77d798a364127191a31', 'Người tham gia ẩn danh', 'mình lần đầu học khóa MOOC, mình tìm nhóm kiểu j thế mn, không thể xem danh sách sinh viên trong nhóm zalo', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175328089958353/', '2026-04-28 16:35:08', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên lần đầu học MOOC gặp khó khăn trong việc tìm nhóm và không thể xem danh sách thành viên trong nhóm Zalo. Nhà trường cần cung cấp hướng dẫn rõ ràng hơn về quy trình tham gia và quản lý nhóm học cho sinh viên mới.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '1cfb939eb57447c273d3261ba185a7e4', 'Người tham gia ẩn danh', 'Mình làm đơn xin nhận điểm I trêng trang online r thì có cần nộp trực tiếp giấy tờ j nữa ko ạ, nếu có thì thời gian nộp là khi nào vậy', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175314513293044/', '2026-04-28 16:06:05', 
+    0, 4, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về quy trình nộp giấy tờ sau khi đăng ký xin điểm I online, muốn biết có cần nộp bản cứng và thời hạn nộp nếu có. Đây là một câu hỏi về thủ tục hành chính học vụ.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '85dd063468c2c807a0377019efa83ee5', 'Hướng nội thích MXH', 'Lớp Mooc LSĐ thầy Chung có vào gr zalo hay có thông báo gì chưa mn?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175337663290729/', '2026-04-28 16:40:40', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về thông báo hoặc nhóm Zalo cho lớp Mooc Lịch sử Đảng thầy Chung, thể hiện nhu cầu thông tin rõ ràng và kênh liên lạc chính thức.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '1cc3fb0d545fd4f9a77dad5bff8178c0', 'Người tham gia ẩn danh', 'Em chào mn.Em có đăng kí 1 môn xong em hủy nhưng trong phần kết quả học tập vẫn có.Còn trong phần thanh toán học phí và thời khó biểu ko có thì môn đó em đã hủy thành công chưa ạ.Em cảm ơn ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175333096624519/', '2026-04-28 16:33:16', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về trạng thái hủy môn học, vì môn đó vẫn hiển thị trong kết quả học tập nhưng không có trong thanh toán hay thời khóa biểu, gây bối rối về việc hủy thành công.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '8f5f455e8f8ec2a6a16f0459831271d2', 'Người tham gia ẩn danh', 'Cho mình hỏi là nếu mình cần nộp phúc khảo điểm mà bị vướng lịch hc quốc phòng thì làm như nào để có thể nộp đơn đc v ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176193203205175/', '2026-04-29 16:41:19', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về cách nộp đơn phúc khảo điểm khi bị trùng lịch học quốc phòng, cần hướng dẫn quy trình giải quyết tình huống đặc biệt này.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    'da63ceafcaacde622b0824c6edc47c13', 'Người tham gia ẩn danh', 'Dạ a/c cho e hỏi môn thí nghiệm vật lý 1 sẽ học những gì và kiểm tra ntn ạ, dạ với lại dễ lấy điểm cao k ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176184349872727/', '2026-04-29 16:27:54', 
+    2, 2, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên cần thông tin chi tiết về nội dung môn thí nghiệm Vật lý 1, cách thức kiểm tra và khả năng đạt điểm cao để chuẩn bị tốt cho việc học.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '5112aed04af424c5cc46c6bd92ccbaf6', 'Người tham gia ẩn danh', 'Mọi người cho em hỏi chứng chỉ tiếng Anh aptis có được miễn avdr không mn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2148446855979810/', '2026-03-27 17:37:22', 
+    0, 2, 4, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về quy định miễn học phần tiếng Anh đầu vào bằng chứng chỉ Aptis để nắm rõ thủ tục và điều kiện.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '22a1ebf738fcc6b5c34e1c0339514af3', 'Người tham gia ẩn danh', 'anh chị ơi cứu e sao nó cứ báo lỗi có cách nào khắc phục không ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176187383205757/', '2026-04-29 16:32:34', 
+    0, 2, 4, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên đang gặp lỗi khi sử dụng một hệ thống hoặc thực hiện một thao tác nào đó và cần được hỗ trợ khắc phục. Cần xác định lỗi cụ thể để hỗ trợ.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    '5bc05d0e015bb7b38d6952670bd394ad', 'Người tham gia ẩn danh', 'utex sập rồi hả mọi người, bao giờ vào lại được vậy ạa', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176144716543357/', '2026-04-29 15:47:28', 
+    0, 1, 2, 'Học vụ & Đăng ký môn', -0.3, 'Hệ thống utex đang gặp sự cố và không thể truy cập, gây gián đoạn cho sinh viên. Cần thông báo thời gian khắc phục và khôi phục hoạt động.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    'e17124a8272d191463f53b9d083ab8ce', 'Người tham gia ẩn danh', 'anh chị cho em hỏi e chưa học avgt1-2 có đk thi avdr được k ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176134236544405/', '2026-04-29 15:15:52', 
+    1, 6, 13, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về điều kiện dự thi chứng chỉ ngoại ngữ AVDR khi chưa hoàn thành các môn AVGT1-2, cần được giải đáp về quy định học vụ.', 'Trung lập', '2026-04-29 17:19:07.868'
+),
+(
+    '794fc61a9365415615a9f168231a4a91', 'Người tham gia ẩn danh', 'Dạ cho em hỏi mình đăng ký thi avdr xong thì coi lịch thi ở đâu ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173241440167018/', '2026-04-26 08:36:12', 
+    2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về cách tra cứu lịch thi sau khi đã đăng ký thi chứng chỉ AVDR, cho thấy có thể thông tin về lịch thi chưa được hiển thị rõ ràng.', 'Trung lập', '2026-04-29 17:19:07.868'
+),
+(
+    'e673f96684c7c1711ebdc83709725c57', 'Người tham gia ẩn danh', 'Cho em hỏi bằng b1 Aptis có pass đầu ra và pass avgt 0,1,2 không ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2058413104983186/', '2025-12-09 13:37:28', 
+    2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về việc chứng chỉ B1 Aptis có được công nhận để đạt chuẩn đầu ra và các môn AVGT 0,1,2 hay không, cần thông tin rõ ràng về quy đổi tín chỉ ngoại ngữ.', 'Trung lập', '2026-04-29 17:19:07.868'
+),
+(
+    '666075d6939ec84ce64a1875b420423f', 'BrilliantLynx2509', 'Cho em hỏi chứng chỉ aptis cho khóa k23 chỉ cần B1 thôi phải không ạ? Có yêu cầu là B1 nhưng tổng điểm phải trên bao nhiêu điểm mới được xét không ạ?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2155015325322963/', '2026-04-04 09:47:32', 
+    2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về tiêu chuẩn chứng chỉ Aptis B1 cho khóa K23, cụ thể là liệu có yêu cầu điểm tổng tối thiểu nào kèm theo hay không, cần nhà trường làm rõ quy định.', 'Trung lập', '2026-04-29 17:19:07.868'
+),
+(
+    '521824a6ae3a2ead33564166d62a9739', 'keoconhocute', 'Em vừa mới rớt môn mạch điện ạ, theo mọi người thì em nên trả nợ môn này vào năm 2 hay 3 là ổn nhất mà không bị quá nặng kiến thức ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176171133207382/', '2026-04-29 16:08:38', 
+    1, 6, 13, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên vừa rớt môn mạch điện và đang tìm lời khuyên về thời điểm thích hợp để học lại môn này nhằm tránh quá tải kiến thức. Đây là một câu hỏi học vụ thông thường.', 'Trung lập', '2026-04-29 17:19:07.868'
+),
+(
+    'd8e9ff366058cfcd2be593d49ac13f73', 'Hướng nội thích MXH', 'mọi người ơi sao hội thao em không thấy Bóng đá Nữ ạ? em nghe bảo mấy năm trước có mà ạ 😭 đừng bỏ đá bóng nữ mà em mong chờ từ đầu năm tới giờ, help me plsssss', 'https://www.facebook.com/groups/utethacmachoctap/posts/2126293278195168/', '2026-03-01 09:56:46', 
+    1, 1, 3, 'Đời sống sinh viên', -0.6, 'Sinh viên bày tỏ sự thất vọng sâu sắc và đề nghị nhà trường xem xét lại quyết định bỏ môn Bóng đá Nữ trong hội thao, vì đây là hoạt động được nhiều sinh viên mong chờ và quan tâm.', 'Tiêu cực', '2026-03-31 15:29:45.402'
+),
+(
+    'e30a7fc4daafacd37fff926c21d2daad', 'Khầy Kụt nè coăn 🐧🐧🐧', 'Tiến ơi Tiến, chơi tiktok lịch sự tí đi e. Cán bộ lụm đó e', 'https://www.facebook.com/groups/utethacmachoctap/posts/2126209124870250/', '2026-03-01 09:56:45', 
+    32, 14, 60, 'Đời sống sinh viên', -0.2, 'Một sinh viên đang nhắc nhở bạn cùng trường về việc sử dụng TikTok không lịch sự, cảnh báo hành vi này có thể bị cán bộ nhà trường xử lý. Vấn đề liên quan đến ý thức và hành vi cá nhân của sinh viên trong môi trường chung cần được lưu ý.', 'Trung lập', '2026-03-31 15:29:45.402'
+),
+(
+    '8ef7a9a2f8f4715c0fb92417d30dd7c7', 'thangthatbai123', 'ac ơi em hối hận quá!em mới năm nhất thôi đã rớt hơn 8 tín và bị hạ bằng chỉ vì ham chơi em sợ cầm tấm bằng khá sẽ không có tương lai quá g em phải làm sao ạ😞', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166681710822991/', '2026-04-19 03:47:10', 
+    33, 55, 143, 'Đời sống sinh viên', -0.7, 'Sinh viên năm nhất bày tỏ sự hối hận và lo lắng sâu sắc vì đã rớt nhiều tín chỉ và bị hạ bằng do ham chơi. Sinh viên sợ tấm bằng khá sẽ ảnh hưởng đến tương lai và đang tìm kiếm lời khuyên để khắc phục tình hình học tập và định hướng nghề nghiệp.', 'Tiêu cực', '2026-04-19 05:05:33.904'
+),
+(
+    '60641a516d6575684c159710fcd1bd38', 'Người tham gia ẩn danh', 'rớt mạch điện có phải là quá tệ ko ạ, em lần đầu rớt môn, giờ buồn và stress quá ạ😔', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175215486636280/', '2026-04-28 14:01:45', 
+    7, 10, 27, 'Đời sống sinh viên', -0.3, 'Sinh viên bày tỏ nỗi buồn và căng thẳng vì lần đầu rớt môn mạch điện, tìm kiếm sự đồng cảm và lời khuyên từ cộng đồng.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '4eccfff654fda67c1c8a8ca996b376f0', 'Người tham gia ẩn danh', 'Dạ cho em hỏi là nếu học TOEIC hoặc IELTS thì em nên học ở đâu, em ở khu vực gần trường mình ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175288569962305/', '2026-04-28 15:28:41', 
+    3, 8, 19, 'Đời sống sinh viên', 0.0, 'Sinh viên hỏi cộng đồng về các trung tâm học TOEIC hoặc IELTS uy tín ở khu vực gần trường.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '290b60a806f91dc5161d3941ca6264fa', 'Người tham gia ẩn danh', 'Mình học tư tưởng hcm cô phượng(mooc-nhóm 4).Hiện nhóm mình còn thiếu 3 bạn,bạn nào chưa có nhóm để lại zalo mình ib rồi vào nhóm nhaaa', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175316289959533/', '2026-04-28 16:35:12', 
+    1, 3, 7, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm 3 thành viên cho nhóm môn Tư tưởng Hồ Chí Minh (MOOC) của cô Phượng, yêu cầu các bạn chưa có nhóm để lại Zalo để liên hệ.', 'Trung lập', '2026-04-28 17:26:13.403'
+),
+(
+    '16f712b75470cd82d9edfa5b20e09d3a', 'Người tham gia ẩn danh', 'Mấy anh chị bạn bè nào có học môn vẽ kỹ thuật rồi thì cho em xin phép hỏi muốn mua mấy cái dụng cụ để vẽ thì nên mua ở chỗ nào gần trường ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176176029873559/', '2026-04-29 16:15:46', 
+    0, 2, 4, 'Đời sống sinh viên', 0.0, 'Sinh viên hỏi tìm địa điểm mua dụng cụ vẽ kỹ thuật gần trường, cần thông tin về các cửa hàng cung cấp vật tư học tập cho môn học.', 'Trung lập', '2026-04-29 17:11:03.287'
+),
+(
+    '764b4a71b7e0fe25b64ef0a2e5a5b0b0', 'Người tham gia ẩn danh', 'Có bạn nào học lớp chiều thứ 7 cô Huyền Châu được tham gia gr zalo hông , cho mình xin vô với ạ .', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174454683379027/', '2026-04-27 18:14:35', 
+    1, 1, 3, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm link nhóm Zalo của lớp học chiều thứ 7 cô Huyền Châu để tham gia.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    '2d10da37cf33a6fd4e8293a1a7dec96c', 'Người tham gia ẩn danh', 'nhận học bù cho mọi người về quê chơi lễ, mình là nam, ai cần thì để lại sđt dưới BL nhé', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176205403203955/', '2026-04-29 16:59:40', 
+    4, 3, 10, 'Đời sống sinh viên', 0.0, 'Sinh viên đăng bài nhận học bù hộ bạn bè về quê chơi lễ, cho thấy tiềm ẩn rủi ro gian lận trong điểm danh.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    '6bff6adbd5f8b19696e484b212749323', 'Người tham gia ẩn danh', 'Dạ k biết trường mình có tổ chức các sự kiện giống như ghép đối đường phố k ạ, chứ e cô đơn quá huhu', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176098976547931/', '2026-04-29 14:26:53', 
+    60, 66, 192, 'Đời sống sinh viên', -0.1, 'Sinh viên hỏi liệu trường có tổ chức các sự kiện ghép đôi hoặc hoạt động xã hội tương tự không vì cảm thấy cô đơn, mong muốn trường tăng cường các hoạt động kết nối cho sinh viên.', 'Trung lập', '2026-04-29 17:14:25.838'
+),
+(
+    '3dccc867867a572e4736e42a8f4b58f4', 'Người tham gia ẩn danh', 'có bạn nào học av4 lớp cô Thanh Hằng ngày t4 không ạ, mình có việc phải nghỉ nên cho mình hỏi ít việc với ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2070556787102151/', '2025-12-25 01:59:33', 
+    1, 8, 17, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm thông tin bài học từ bạn học do nghỉ buổi học AV4 lớp cô Thanh Hằng.', 'Trung lập', '2026-04-29 17:14:25.838'
+);
