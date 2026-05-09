@@ -270,4 +270,154 @@ export class SocialListeningService {
       total: total,
     };
   }
+
+  async getClassificationSentiment(dto: GetTrendingIssuesDto) {
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+
+    if (dto.startDate) {
+      whereConditions.push(`posted_at >= $${params.length + 1}`);
+      params.push(new Date(dto.startDate));
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(`posted_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
+        ),
+      );
+    }
+
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(' AND ')}`
+        : '';
+
+    const query = `
+    SELECT
+      sentiment_label as "sentimentLabel",
+      COUNT(*) as "count"
+    FROM dashboard_trending_issues
+    ${whereClause}
+    GROUP BY sentiment_label
+  `;
+
+    const results: any[] = await this.prisma.$queryRawUnsafe(query, ...params);
+
+    const defaultLabels = ['Tích cực', 'Tiêu cực', 'Trung lập'];
+    const mapped: Record<string, number> = Object.fromEntries(
+      defaultLabels.map((l) => [l, 0]),
+    );
+
+    results.forEach((r) => {
+      if (mapped.hasOwnProperty(r.sentimentLabel)) {
+        mapped[r.sentimentLabel] = Number(r.count);
+      }
+    });
+
+    return Object.entries(mapped).map(([sentimentLabel, count]) => ({
+      sentimentLabel,
+      count,
+    }));
+  }
+
+  async getPostCountByDate(dto: GetTrendingIssuesDto) {
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+
+    if (dto.startDate) {
+      whereConditions.push(`posted_at >= $${params.length + 1}`);
+      params.push(new Date(dto.startDate));
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(`posted_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
+        ),
+      );
+    }
+
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(' AND ')}`
+        : '';
+
+    const query = `
+    SELECT
+      TO_CHAR(posted_at, 'YYYY-MM-DD') as "dateStr",
+      TO_CHAR(posted_at, 'DD/MM') as "displayDate",
+      COUNT(*) as "totalPosts"
+    FROM dashboard_trending_issues
+    ${whereClause}
+    GROUP BY "dateStr", "displayDate"
+    ORDER BY "dateStr" ASC
+  `;
+
+    const results: any[] = await this.prisma.$queryRawUnsafe(query, ...params);
+
+    return results.map((item) => ({
+      dateStr: item.dateStr,
+      displayDate: item.displayDate,
+      totalPosts: Number(item.totalPosts),
+    }));
+  }
+  async getPostsBySentiment(dto: GetTrendingIssuesDto) {
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+
+    whereConditions.push(`sentiment_label IN ('Tiêu cực', 'Tích cực')`);
+
+    if (dto.startDate) {
+      whereConditions.push(`posted_at >= $${params.length + 1}`);
+      params.push(new Date(dto.startDate));
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(`posted_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
+        ),
+      );
+    }
+
+    const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
+
+    const query = `
+    SELECT *
+    FROM dashboard_trending_issues
+    ${whereClause}
+    ORDER BY
+      CASE sentiment_label
+        WHEN 'Tiêu cực' THEN 1
+        WHEN 'Tích cực' THEN 2
+        ELSE 3
+      END ASC,
+      engagement_score DESC,
+      posted_at DESC
+  `;
+
+    const rawData = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+
+    return rawData.map((item) => ({
+      postId: item.post_id || item.postId,
+      author: item.author,
+      content: item.content,
+      postLink: item.post_link || item.postLink,
+      postedAt: item.posted_at || item.postedAt,
+      reactionCount: Number(item.reaction_count || item.reactionCount || 0),
+      commentCount: Number(item.comment_count || item.commentCount || 0),
+      engagementScore: Number(
+        item.engagement_score || item.engagementScore || 0,
+      ),
+      topic: item.topic,
+      sentimentScore: Number(item.sentiment_score || item.sentimentScore || 0),
+      aiSummary: item.ai_summary || item.aiSummary,
+      sentimentLabel: item.sentiment_label || item.sentimentLabel,
+      analyzedAt: item.analyzed_at || item.analyzedAt,
+    }));
+  }
 }
