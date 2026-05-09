@@ -136,7 +136,12 @@ export function ProfileForm() {
         </CardHeader>
         <CardContent className="p-6">
           <Form {...form}>
-            <form onSubmit={void onSubmit} className="space-y-6">
+            <form
+              onSubmit={(e) => {
+                void onSubmit(e);
+              }}
+              className="space-y-6"
+            >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Full Name - Editable in edit mode */}
                 <FormField
