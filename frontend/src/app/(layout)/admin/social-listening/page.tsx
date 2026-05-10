@@ -4,19 +4,29 @@ import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/social-listening/SentimentTrendChart";
 import { SocialListeningDatePicker } from "@/components/dashboard/social-listening/SocialListeningDatePicker";
 import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
+import { Button } from "@/components/ui/button";
 import {
   useGetKPIOverview,
   useGetSentimentTrend,
   useGetTopicDistribution,
   useGetTrendingIssues,
+  useGetClassificationSentiment,
+  useGetPostCountByDate,
+  useGetPostsBySentiment,
 } from "@/hooks/queries/useSocialListeningQueries";
 import {
   SocialListeningFilter,
   SentimentLabel,
+  TopicDistributionItem,
+  KPIOverviewData,
+  ClassificationSentimentData,
+  PostCountByDateItem,
+  FeedbackPost,
 } from "@/types/social-listening"; // Import thêm SentimentLabel nếu cần
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
+import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
 
 const SocialListeningPage = () => {
   const router = useRouter();
@@ -54,10 +64,24 @@ const SocialListeningPage = () => {
   const { data: topicData, isLoading: isLoadingTopic } =
     useGetTopicDistribution(filter);
 
+  const { data: classificationData, isLoading: isLoadingClassification } =
+    useGetClassificationSentiment(filter);
+
+  const { data: postCountData, isLoading: isLoadingPostCount } =
+    useGetPostCountByDate(filter);
+  const { data: postsBySentimentData, isLoading: isLoadingPostsBySentiment } =
+    useGetPostsBySentiment(filter);
+
   const results = trendingData?.results || [];
 
   const isLoading =
-    isLoadingTrending || isLoadingKPI || isLoadingTrend || isLoadingTopic;
+    isLoadingTrending ||
+    isLoadingKPI ||
+    isLoadingTrend ||
+    isLoadingTopic ||
+    isLoadingClassification ||
+    isLoadingPostCount ||
+    isLoadingPostsBySentiment;
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
@@ -82,6 +106,27 @@ const SocialListeningPage = () => {
     },
     [pathname, router, searchParams],
   );
+  const exportPdf = async (
+    topicData: TopicDistributionItem[] | undefined,
+    kpiData: KPIOverviewData | undefined,
+    fromDate: string,
+    toDate: string,
+    classificationData: ClassificationSentimentData[] | undefined,
+    postCountData: PostCountByDateItem[] | undefined,
+    postsBySentimentData: FeedbackPost[] | undefined,
+  ) => {
+    const blob = await GenerateReportSocialListening(
+      topicData,
+      kpiData,
+      fromDate,
+      toDate,
+      classificationData,
+      postCountData,
+      postsBySentimentData,
+    );
+    const url = URL.createObjectURL(blob);
+    window.open(url); // mở tab pdf mới
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
@@ -100,12 +145,29 @@ const SocialListeningPage = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row md:items-center">
+          <div className="flex flex-col gap-4 sm:flex-col md:items-center">
             <SocialListeningDatePicker
               onUpdate={handleDateUpdate}
               defaultStartDate={filter.startDate}
               defaultEndDate={filter.endDate}
             />
+            <Button
+              variant="primary"
+              onClick={() =>
+                exportPdf(
+                  topicData,
+                  kpiData,
+                  filter.startDate || "",
+                  filter.endDate || "",
+                  classificationData,
+                  postCountData,
+                  postsBySentimentData,
+                )
+              }
+              size="sm"
+            >
+              Xuất báo cáo
+            </Button>
           </div>
         </div>
 
