@@ -95,3 +95,15 @@ export const getPostsBySentiment = async (
   );
   return response;
 };
+
+export const getTopicBySentiment = async (
+  filter: SocialListeningFilter,
+): Promise<TopicDistributionItem[]> => {
+  const response = await axiosInstance.get<TopicDistributionItem[]>(
+    `${socialListeningBaseUrl}/topic-by-sentiment`,
+    {
+      params: filter,
+    },
+  );
+  return response;
+};

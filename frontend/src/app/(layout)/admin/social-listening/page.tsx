@@ -13,6 +13,7 @@ import {
   useGetClassificationSentiment,
   useGetPostCountByDate,
   useGetPostsBySentiment,
+  useGetTopicBySentiment,
 } from "@/hooks/queries/useSocialListeningQueries";
 import {
   SocialListeningFilter,
@@ -71,6 +72,8 @@ const SocialListeningPage = () => {
     useGetPostCountByDate(filter);
   const { data: postsBySentimentData, isLoading: isLoadingPostsBySentiment } =
     useGetPostsBySentiment(filter);
+  const { data: topicBySentimentData, isLoading: isLoadingTopicBySentiment } =
+    useGetTopicBySentiment(filter);
 
   const results = trendingData?.results || [];
 
@@ -81,7 +84,8 @@ const SocialListeningPage = () => {
     isLoadingTopic ||
     isLoadingClassification ||
     isLoadingPostCount ||
-    isLoadingPostsBySentiment;
+    isLoadingPostsBySentiment ||
+    isLoadingTopicBySentiment;
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
@@ -107,22 +111,22 @@ const SocialListeningPage = () => {
     [pathname, router, searchParams],
   );
   const exportPdf = async (
-    topicData: TopicDistributionItem[] | undefined,
     kpiData: KPIOverviewData | undefined,
     fromDate: string,
     toDate: string,
     classificationData: ClassificationSentimentData[] | undefined,
     postCountData: PostCountByDateItem[] | undefined,
     postsBySentimentData: FeedbackPost[] | undefined,
+    topicBySentimentData: TopicDistributionItem[] | undefined,
   ) => {
     const blob = await GenerateReportSocialListening(
-      topicData,
       kpiData,
       fromDate,
       toDate,
       classificationData,
       postCountData,
       postsBySentimentData,
+      topicBySentimentData,
     );
     const url = URL.createObjectURL(blob);
     window.open(url); // mở tab pdf mới
@@ -155,13 +159,13 @@ const SocialListeningPage = () => {
               variant="primary"
               onClick={() =>
                 exportPdf(
-                  topicData,
                   kpiData,
                   filter.startDate || "",
                   filter.endDate || "",
                   classificationData,
                   postCountData,
                   postsBySentimentData,
+                  topicBySentimentData,
                 )
               }
               size="sm"

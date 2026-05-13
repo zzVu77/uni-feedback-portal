@@ -1,4 +1,6 @@
 import Chart from "chart.js/auto";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Context } from "chartjs-plugin-datalabels";
 import {
   PostCountByDateItem,
   ClassificationSentimentData,
@@ -28,6 +30,7 @@ export const drawChart = ({
   // Vẽ biểu đồ bằng thư viện chartjs-node-canvas hoặc bất kỳ thư viện nào bạn thích
   const sentimentChart = new Chart(sentimentCanvas, {
     type: "pie",
+    plugins: [ChartDataLabels],
     data: {
       labels: ["Tích cực", "Tiêu cực"],
       datasets: [
@@ -48,6 +51,18 @@ export const drawChart = ({
           labels: {
             font: { size: 80 }, // chữ legend to hơn
             padding: 16,
+          },
+        },
+        datalabels: {
+          color: "#fff",
+          font: { size: 70 },
+          formatter: (value: number, context: Context) => {
+            const dataset = context.chart.data.datasets[0].data as number[];
+            const total = dataset.reduce((a: number, b: number) => a + b, 0);
+            const percent = total
+              ? ((value / total) * 100).toFixed(1) + "%"
+              : "0%";
+            return `${percent}`;
           },
         },
       },

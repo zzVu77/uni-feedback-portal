@@ -10,13 +10,13 @@ import { ReportDoc } from "./ReportDoc";
 import { pdf } from "@react-pdf/renderer";
 
 export async function GenerateReportSocialListening(
-  topicData: TopicDistributionItem[] | undefined,
   kpiData: KPIOverviewData | undefined,
   fromDate: string,
   toDate: string,
   classificationData: ClassificationSentimentData[] | undefined,
   postCountData: PostCountByDateItem[] | undefined,
   postsBySentimentData: FeedbackPost[] | undefined,
+  topicBySentimentData: TopicDistributionItem[] | undefined,
 ): Promise<Blob> {
   const { sentimentChartImage, postCountChartImage } = drawChart({
     classificationData,
@@ -24,11 +24,11 @@ export async function GenerateReportSocialListening(
   });
   return await pdf(
     <ReportDoc
-      topicData={topicData}
       kpiData={kpiData}
       fromDate={fromDate}
       toDate={toDate}
       postsBySentimentData={postsBySentimentData}
+      topicBySentimentData={topicBySentimentData}
       sentimentChartImage={sentimentChartImage}
       postCountChartImage={postCountChartImage}
     />,

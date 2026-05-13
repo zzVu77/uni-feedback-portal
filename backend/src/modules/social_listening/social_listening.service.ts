@@ -325,6 +325,7 @@ export class SocialListeningService {
   async getPostCountByDate(dto: GetTrendingIssuesDto) {
     const whereConditions: string[] = [];
     const params: any[] = [];
+    whereConditions.push(`sentiment_label IN ('Tích cực', 'Tiêu cực')`);
 
     if (dto.startDate) {
       whereConditions.push(`posted_at >= $${params.length + 1}`);
@@ -340,10 +341,7 @@ export class SocialListeningService {
       );
     }
 
-    const whereClause =
-      whereConditions.length > 0
-        ? `WHERE ${whereConditions.join(' AND ')}`
-        : '';
+    const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
 
     const query = `
     SELECT
@@ -418,6 +416,30 @@ export class SocialListeningService {
       aiSummary: item.ai_summary || item.aiSummary,
       sentimentLabel: item.sentiment_label || item.sentimentLabel,
       analyzedAt: item.analyzed_at || item.analyzedAt,
+    }));
+  }
+  async getTopicSentimentDistribution(dto: GetTrendingIssuesDto) {
+    const dateFilter = this.getDateFilter(dto);
+    const where: Prisma.DashboardTrendingIssuesWhereInput = {
+      ...(dateFilter && { postedAt: dateFilter }),
+      sentimentLabel: { in: ['Tích cực', 'Tiêu cực'] }, // ← thêm dòng này
+    };
+
+    const groups = await this.prisma.dashboardTrendingIssues.groupBy({
+      where,
+      by: ['topic'],
+      _count: { postId: true },
+      orderBy: {
+        _count: {
+          postId: 'desc',
+        },
+      },
+      take: 10,
+    });
+
+    return groups.map((g) => ({
+      topic: g.topic,
+      count: g._count.postId,
     }));
   }
 }

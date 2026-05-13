@@ -105,4 +105,16 @@ export class SocialListeningController {
   async getPostsBySentiment(@Query() query: GetTrendingIssuesDto) {
     return this.socialListeningService.getPostsBySentiment(query);
   }
+
+  @Get('topic-by-sentiment')
+  @ApiOperation({
+    summary: 'Get sentiment distribution for each topic',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Sentiment distribution by topic',
+  })
+  async getTopicSentimentDistribution(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getTopicSentimentDistribution(query);
+  }
 }

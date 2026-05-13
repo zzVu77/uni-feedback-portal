@@ -6,25 +6,36 @@ import {
   TopicDistributionItem,
 } from "@/types/social-listening";
 export const ReportDoc = ({
-  topicData,
   kpiData,
   fromDate,
   toDate,
   sentimentChartImage,
   postCountChartImage,
   postsBySentimentData,
+  topicBySentimentData,
 }: {
-  topicData: TopicDistributionItem[] | undefined;
   kpiData: KPIOverviewData | undefined;
   fromDate: string;
   toDate: string;
   sentimentChartImage: string;
   postCountChartImage: string;
   postsBySentimentData: FeedbackPost[] | undefined;
+  topicBySentimentData: TopicDistributionItem[] | undefined;
 }) => {
   const format = (d: string) => {
     const [y, m, day] = d.split("-");
     return `${day}/${m}/${y}`;
+  };
+  const getPositiveCount = () => {
+    return (
+      postsBySentimentData?.filter((p) => p.sentimentLabel === "Tích cực")
+        .length || 0
+    );
+  };
+  const getEngagementScore = () => {
+    return (
+      postsBySentimentData?.reduce((sum, p) => sum + p.engagementScore, 0) || 0
+    );
   };
   return (
     <>
@@ -33,8 +44,8 @@ export const ReportDoc = ({
           <View style={styles.cover}>
             <Image src="/logo-hcmute.png" style={styles.logo} />
             <Text style={styles.title}>
-              BÁO CÁO CÁC VẤN ĐỀ XÃ HỘI CỦA TRƯỜNG ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT
-              TP.HCM
+              BÁO CÁO PHÂN TÍCH THẢO LUẬN TRÊN MẠNG XÃ HỘI VỀ TRƯỜNG ĐẠI HỌC
+              CÔNG NGHỆ KỸ THUẬT TP.HCM
             </Text>
             <Text style={styles.subtitle}>
               Từ ngày {format(fromDate)} đến ngày {format(toDate)}
@@ -48,18 +59,10 @@ export const ReportDoc = ({
             <View style={styles.row}>
               <View style={styles.card}>
                 <Text style={[styles.big, { textAlign: "center" }]}>
-                  {kpiData?.totalPosts || 0}
+                  {getPositiveCount()}
                 </Text>
                 <Text style={[styles.small, { textAlign: "center" }]}>
-                  Tổng số bài đăng
-                </Text>
-              </View>
-              <View style={styles.card}>
-                <Text style={[styles.big, { textAlign: "center" }]}>
-                  {kpiData?.totalReactions || 0}
-                </Text>
-                <Text style={[styles.small, { textAlign: "center" }]}>
-                  Tương tác
+                  Tích cực
                 </Text>
               </View>
               <View style={styles.card}>
@@ -68,6 +71,14 @@ export const ReportDoc = ({
                 </Text>
                 <Text style={[styles.small, { textAlign: "center" }]}>
                   Tiêu cực
+                </Text>
+              </View>
+              <View style={styles.card}>
+                <Text style={[styles.big, { textAlign: "center" }]}>
+                  {getEngagementScore()}
+                </Text>
+                <Text style={[styles.small, { textAlign: "center" }]}>
+                  Tương tác
                 </Text>
               </View>
             </View>
@@ -79,7 +90,7 @@ export const ReportDoc = ({
                 src={sentimentChartImage}
                 style={{ width: 200, height: 200 }}
               />
-              <Text style={{ fontSize: 8, marginTop: 8, fontStyle: "italic" }}>
+              <Text style={{ fontSize: 8, marginTop: 12, fontStyle: "italic" }}>
                 Biểu đồ phân bố cảm xúc của các bài đăng
               </Text>
             </View>
@@ -88,7 +99,7 @@ export const ReportDoc = ({
                 src={postCountChartImage}
                 style={{ width: "100%", height: 300 }}
               />
-              <Text style={{ fontSize: 8, marginTop: 8, fontStyle: "italic" }}>
+              <Text style={{ fontSize: 8, marginTop: 12, fontStyle: "italic" }}>
                 Biểu đồ số lượng bài viết theo ngày
               </Text>
             </View>
@@ -110,7 +121,7 @@ export const ReportDoc = ({
                   Tổng số bài viết
                 </Text>
               </View>
-              {topicData?.map((p, i) => (
+              {topicBySentimentData?.map((p, i) => (
                 <View style={styles.tr} key={i}>
                   <Text style={[styles.td, { flex: 0.2, textAlign: "center" }]}>
                     {i + 1}
@@ -142,9 +153,14 @@ export const ReportDoc = ({
                 <Text style={[styles.th, { flex: 0.7, textAlign: "center" }]}>
                   Ngày đăng
                 </Text>
-                <Text style={[styles.th, { flex: 0.8 }]}>Độ tương tác</Text>
+                <Text style={[styles.th, { flex: 0.8, textAlign: "center" }]}>
+                  Tương tác
+                </Text>
                 <Text style={[styles.th, { flex: 0.7, textAlign: "center" }]}>
                   Cảm xúc
+                </Text>
+                <Text style={[styles.th, { flex: 0.7, textAlign: "center" }]}>
+                  Trạng thái
                 </Text>
               </View>
               {postsBySentimentData?.map((p, i) => (
@@ -164,6 +180,9 @@ export const ReportDoc = ({
                   </Text>
                   <Text style={[styles.td, { flex: 0.7, textAlign: "center" }]}>
                     {p.reactionCount}
+                  </Text>
+                  <Text style={[styles.td, { flex: 0.7, textAlign: "center" }]}>
+                    {p.sentimentLabel}
                   </Text>
                 </View>
               ))}
