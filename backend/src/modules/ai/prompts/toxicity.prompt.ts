@@ -193,3 +193,33 @@ export const toxicKeywords = [
   'promoted post',
   'boost post',
 ];
+export function containsToxicKeyword(
+  text: string,
+  keywords: string[],
+): string | null {
+  const contentLower = text.toLowerCase();
+
+  for (const keyword of keywords) {
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const isAsciiOnly = /^[a-zA-Z0-9\s]+$/.test(keyword);
+
+    let pattern: RegExp;
+
+    if (isAsciiOnly) {
+      // English
+      pattern = new RegExp(`\\b${escaped}\\b`, 'i');
+    } else {
+      // Vietnamese
+      pattern = new RegExp(
+        `(^|[\\s,\\.!?;:"'()])${escaped}($|[\\s,\\.!?;:"'()])`,
+        'i',
+      );
+    }
+
+    if (pattern.test(contentLower)) {
+      return keyword;
+    }
+  }
+
+  return null;
+}
