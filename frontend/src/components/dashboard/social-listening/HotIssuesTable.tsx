@@ -29,7 +29,6 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-// 1. Thêm prop total để tính toán số trang
 interface HotIssuesTableProps {
   data: FeedbackPost[];
   total: number;
@@ -42,15 +41,12 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
 
   const [selectedPost, setSelectedPost] = useState<FeedbackPost | null>(null);
 
-  // 2. Lấy state từ URL thay vì useState
   const activeTab = searchParams.get("sentimentLabel") || "Tất cả";
   const currentPage = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
 
-  // Tính tổng số trang
   const pageCount = total ? Math.ceil(total / limit) : 0;
 
-  // 3. Hàm xử lý khi đổi Tab (Lưu vào URL)
   const handleTabChange = (tab: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (tab === "Tất cả") {
@@ -58,12 +54,10 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
     } else {
       params.set("sentimentLabel", tab);
     }
-    // Khi đổi tab thì luôn reset về trang 1
     params.set("page", "1");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // 4. Hàm xử lý khi bấm Next / Prev (Giống hệt file mẫu của bạn)
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
@@ -140,7 +134,6 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* Render trực tiếp data trả về từ Backend, không cần slice hay filter client nữa */}
             {data.length > 0 ? (
               data.map((post) => (
                 <TableRow
@@ -216,7 +209,6 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
         </Table>
       </div>
 
-      {/* --- CỤM PAGINATION CHUẨN TỪ FILE CỦA BẠN --- */}
       {pageCount > 1 && (
         <div className="flex flex-shrink-0 items-center justify-center gap-4 border-t border-slate-100 py-4">
           <Button
@@ -243,7 +235,6 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
         </div>
       )}
 
-      {/* Dialog chi tiết bài đăng (Giữ nguyên cấu trúc đã sửa) */}
       <Dialog
         open={!!selectedPost}
         onOpenChange={(open) => !open && setSelectedPost(null)}

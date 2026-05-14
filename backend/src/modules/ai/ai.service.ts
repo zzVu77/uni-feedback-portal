@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleGenAI } from '@google/genai';
-import { toxicityPrompt, toxicKeywords } from './prompts/toxicity.prompt';
+import {
+  containsToxicKeyword,
+  toxicityPrompt,
+  toxicKeywords,
+} from './prompts/toxicity.prompt';
 import { PrismaService } from '../prisma/prisma.service';
 import { FeedbackStatus } from '@prisma/client';
 import { AiDataContext } from '../feedbacks/dto/feedback-job-data.dto';
@@ -24,12 +28,10 @@ export class AiService {
   ): Promise<boolean> {
     if (description) {
       // check keywords for toxicity
-      const toxicKeywordsList = toxicKeywords;
-      const contentLower = description.toLowerCase();
-      for (const keyword of toxicKeywordsList) {
-        if (contentLower.includes(keyword)) {
-          return true;
-        }
+      const detectedKeyword = containsToxicKeyword(description, toxicKeywords);
+      if (detectedKeyword) {
+        console.warn(`Toxic keyword detected: ${detectedKeyword}`);
+        return true;
       }
       const API_KEY = process.env.API_GEMINI_KEY || '';
       if (!API_KEY) {
