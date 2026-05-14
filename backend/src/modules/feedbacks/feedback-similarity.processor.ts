@@ -1,6 +1,6 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, UnrecoverableError } from 'bullmq';
-import { SearchService } from '../search/search.service';
+import { FeedbackSimilarityService } from '../feedback-similarity/feedback-similarity.service';
 import {
   FEEDBACK_SIMILARITY_JOB_ON_CREATED,
   FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
@@ -10,7 +10,7 @@ import {
 
 @Processor('feedback-similarity')
 export class FeedbackSimilarityProcessor extends WorkerHost {
-  constructor(private readonly searchService: SearchService) {
+  constructor(private readonly feedbackSimilarity: FeedbackSimilarityService) {
     super();
   }
 
@@ -22,7 +22,7 @@ export class FeedbackSimilarityProcessor extends WorkerHost {
     switch (job.name) {
       case FEEDBACK_SIMILARITY_JOB_ON_CREATED: {
         const { feedbackId } = job.data as FeedbackSimilarityJobCreatedPayload;
-        await this.searchService.handleSimilarityAfterFeedbackCreated(
+        await this.feedbackSimilarity.handleSimilarityAfterFeedbackCreated(
           feedbackId,
         );
         return;
@@ -30,7 +30,7 @@ export class FeedbackSimilarityProcessor extends WorkerHost {
       case FEEDBACK_SIMILARITY_JOB_ON_UPDATED: {
         const { feedbackId, priorIncomingSourceIds } =
           job.data as FeedbackSimilarityJobUpdatedPayload;
-        await this.searchService.handleSimilarityAfterFeedbackUpdated(
+        await this.feedbackSimilarity.handleSimilarityAfterFeedbackUpdated(
           feedbackId,
           priorIncomingSourceIds,
         );

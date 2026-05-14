@@ -7,7 +7,7 @@ import { AiModule } from '../ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
 import { FeedbackToxicProcessor } from './feedbacks.processor';
 import { FeedbackSimilarityProcessor } from './feedback-similarity.processor';
-import { SearchModule } from '../search/search.module';
+import { SearchModule } from '../feedback-similarity/search.module';
 
 @Module({
   imports: [

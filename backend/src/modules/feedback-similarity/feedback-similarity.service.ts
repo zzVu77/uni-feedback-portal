@@ -1,209 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FeedbackStatus } from '@prisma/client';
-import { CohereClient } from 'cohere-ai';
 import { PrismaService } from '../prisma/prisma.service';
+import { CohereClientService } from './cohere-client.service';
+import { FeedbackEmbeddingService } from './feedback-embedding.service';
+import {
+  FeedbackDepartmentCosineRow,
+  FeedbackDepartmentRerankRow,
+  FeedbackSimilaritySource,
+  FeedbackSimilarityTarget,
+} from './feedback-similarity.types';
 
-const FEEDBACK_SIMILARITY_VECTOR_CANDIDATE_LIMIT = 100;
-const FEEDBACK_SIMILARITY_MIN_VECTOR_SIMILARITY = 0.7;
 const FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS = 20;
 
-const FEEDBACK_SIMILARITY_EXCLUDED_CANDIDATE_STATUSES: readonly FeedbackStatus[] =
-  [FeedbackStatus.RESOLVED, FeedbackStatus.REJECTED];
-
-function feedbackSimilarityExcludedStatusesSqlInList(): string {
-  return FEEDBACK_SIMILARITY_EXCLUDED_CANDIDATE_STATUSES.map(
-    (s) => `'${s}'`,
-  ).join(', ');
-}
-
-function clampRerankScore(score: number): number {
-  return Math.min(1, Math.max(0, score));
-}
-
-function stripHtml(text: string): string {
-  return text.replace(/<[^>]*>/g, '').trim();
-}
-
-function parseVectorString(vectorText: string): number[] {
-  const normalized = vectorText.trim();
-  if (!normalized.startsWith('[') || !normalized.endsWith(']')) {
-    return [];
-  }
-  const payload = normalized.slice(1, -1).trim();
-  if (!payload) {
-    return [];
-  }
-  return payload
-    .split(',')
-    .map((part) => Number(part.trim()))
-    .filter((value) => Number.isFinite(value));
-}
-
-export type FeedbackSimilarityTarget = {
-  targetFeedbackId: string;
-  score: number;
-};
-
-export type FeedbackSimilaritySource = {
-  sourceFeedbackId: string;
-  score: number;
-};
-
-export type FeedbackVectorCandidate = {
-  feedbackId: string;
-  subject: string | null;
-  description: string | null;
-  vectorSimilarity: number;
-};
-
-export type FeedbackSimilarityRerankCandidate = {
-  feedbackId: string;
-  subject?: string | null;
-  description?: string | null;
-};
-
 @Injectable()
-export class SearchService {
-  private cohere: CohereClient;
-  constructor(private readonly prisma: PrismaService) {
-    this.cohere = new CohereClient({
-      token: process.env.COHERE_API_KEY,
-    });
-  }
-
-  async generateEmbedding(text: string): Promise<number[]> {
-    try {
-      const cleaned = stripHtml(text);
-      console.log('Text sau khi làm sạch:', cleaned);
-      const embed = await this.cohere.embed({
-        texts: [cleaned],
-        model: 'embed-multilingual-v3.0',
-        inputType: 'search_document',
-        embeddingTypes: ['float'],
-      });
-
-      return (embed.embeddings as { float: number[][] }).float[0];
-    } catch (error) {
-      console.error('Lỗi gọi Cohere SDK:', error);
-      throw error;
-    }
-  }
-
-  /** Upsert `FeedbackEmbeddings` sau khi đã có vector từ {@link generateEmbedding}. */
-  async saveFeedbackEmbedding(
-    feedbackId: string,
-    embedding: number[],
-  ): Promise<void> {
-    await this.prisma.$executeRaw`
-      INSERT INTO "FeedbackEmbeddings" (id, "feedbackId", embedding)
-      VALUES (gen_random_uuid(), ${feedbackId}::uuid, ${embedding}::vector)
-      ON CONFLICT ("feedbackId") DO UPDATE SET embedding = EXCLUDED.embedding
-    `;
-  }
-
-  async getFeedbackEmbedding(feedbackId: string): Promise<number[] | null> {
-    const rows = await this.prisma.$queryRaw<{ embeddingText: string }[]>`
-      SELECT embedding::text as "embeddingText"
-      FROM "FeedbackEmbeddings"
-      WHERE "feedbackId" = ${feedbackId}::uuid
-      LIMIT 1
-    `;
-    const embeddingText = rows[0]?.embeddingText;
-    if (!embeddingText) {
-      return null;
-    }
-    const vector = parseVectorString(embeddingText);
-    return vector.length > 0 ? vector : null;
-  }
-
-  async vectorSearch(params: {
-    embeddingText: string;
-    departmentId: string;
-    sourceFeedbackId: string;
-    similarityThreshold?: number;
-    limit?: number;
-  }): Promise<FeedbackVectorCandidate[]> {
-    const similarityThreshold =
-      params.similarityThreshold ?? FEEDBACK_SIMILARITY_MIN_VECTOR_SIMILARITY;
-    const limit = params.limit ?? FEEDBACK_SIMILARITY_VECTOR_CANDIDATE_LIMIT;
-    const excludedStatuses = feedbackSimilarityExcludedStatusesSqlInList();
-    const rows: any[] = await this.prisma.$queryRawUnsafe(
-      `SELECT * FROM (
-      SELECT
-        fe."feedbackId",
-        f.subject,
-        f.description,
-        1 - (fe.embedding <=> $1::vector) as similarity
-      FROM "FeedbackEmbeddings" as fe
-      JOIN "Feedbacks" as f ON fe."feedbackId" = f.id
-      WHERE 
-        f."departmentId" = $2::uuid 
-        AND fe."feedbackId" != $3::uuid
-        AND f."currentStatus"::text NOT IN (${excludedStatuses})
-        AND (1 - (fe.embedding <=> $1::vector)) >= $4::double precision
-    ) AS sub_query
-    ORDER BY similarity DESC
-    LIMIT $5::int
-    `,
-      params.embeddingText,
-      params.departmentId,
-      params.sourceFeedbackId,
-      similarityThreshold,
-      limit,
-    );
-
-    return rows.map((r) => ({
-      feedbackId: r.feedbackId as string,
-      subject: (r.subject ?? null) as string | null,
-      description: (r.description ?? null) as string | null,
-      vectorSimilarity: Number(r.similarity),
-    }));
-  }
-
-  async scoreSimilarityForCandidates(
-    queryText: string,
-    candidates: FeedbackSimilarityRerankCandidate[],
-    options?: {
-      maxResults?: number;
-      excludeFeedbackId?: string;
-    },
-  ): Promise<FeedbackSimilarityTarget[]> {
-    const maxResults =
-      options?.maxResults ?? FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS;
-    const excludeId = options?.excludeFeedbackId;
-    const filtered = candidates.filter(
-      (c) => !excludeId || c.feedbackId !== excludeId,
-    );
-    if (filtered.length === 0) {
-      return [];
-    }
-
-    const query = stripHtml(String(queryText ?? ''));
-    const documents = filtered.map((c) =>
-      stripHtml(`${String(c.subject ?? '')} ${String(c.description ?? '')}`),
-    );
-
-    try {
-      const rerankResponse = await this.cohere.rerank({
-        model: 'rerank-multilingual-v3.0',
-        query,
-        documents,
-        topN: filtered.length,
-      });
-
-      return rerankResponse.results
-        .slice(0, maxResults)
-        .map((result: { index: number; relevanceScore: number }) => ({
-          targetFeedbackId: filtered[result.index].feedbackId,
-          score: clampRerankScore(result.relevanceScore),
-        }));
-    } catch (error) {
-      console.error('Lỗi khi gọi Cohere Rerank:', error);
-      return [];
-    }
-  }
+export class FeedbackSimilarityService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cohereClient: CohereClientService,
+    private readonly feedbackEmbedding: FeedbackEmbeddingService,
+  ) {}
 
   async findSimilarity(feedbackId: string): Promise<{
     targets: FeedbackSimilarityTarget[];
@@ -246,6 +61,79 @@ export class SearchService {
       .slice(0, FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS);
 
     return { targets };
+  }
+
+  async findDepartmentCosineSimilarity(
+    feedbackId: string,
+  ): Promise<{ feedbackId: string; results: FeedbackDepartmentCosineRow[] }> {
+    const row = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId },
+      select: {
+        id: true,
+        departmentId: true,
+      },
+    });
+    if (!row) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    const embedding =
+      await this.feedbackEmbedding.getFeedbackEmbedding(feedbackId);
+    if (!embedding) {
+      throw new NotFoundException('Feedback embedding not found');
+    }
+
+    const results =
+      await this.feedbackEmbedding.findDepartmentPendingCosineRows(
+        row.departmentId,
+        embedding,
+      );
+
+    return { feedbackId, results };
+  }
+
+  async findDepartmentRerankTest(
+    feedbackId: string,
+  ): Promise<{ feedbackId: string; targets: FeedbackDepartmentRerankRow[] }> {
+    const row = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId },
+      select: {
+        id: true,
+        subject: true,
+        description: true,
+        departmentId: true,
+      },
+    });
+    if (!row) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    const candidates = await this.prisma.feedbacks.findMany({
+      where: {
+        departmentId: row.departmentId,
+        currentStatus: FeedbackStatus.PENDING,
+      },
+      select: {
+        id: true,
+        subject: true,
+        description: true,
+      },
+    });
+    console.log(candidates);
+    const queryText = String(row.description ?? '');
+    const targets = await this.cohereClient.scoreSimilarityForCandidates(
+      queryText,
+      candidates.map((candidate) => ({
+        feedbackId: candidate.id,
+        subject: candidate.subject,
+        description: candidate.description,
+      })),
+      {
+        maxResults: candidates.length,
+      },
+    );
+
+    return { feedbackId, targets };
   }
 
   /** Thay toàn bộ cạnh `source → *` trong `FeedbackSimilarityLink`. */
@@ -332,21 +220,28 @@ export class SearchService {
       }
 
       const textForEmbed = `${String(row.subject ?? '')} ${String(row.description ?? '')}`;
-      const existingEmbedding = await this.getFeedbackEmbedding(feedbackId);
+      const existingEmbedding =
+        await this.feedbackEmbedding.getFeedbackEmbedding(feedbackId);
       const embedding =
-        existingEmbedding ?? (await this.generateEmbedding(textForEmbed));
+        existingEmbedding ??
+        (await this.cohereClient.generateEmbedding(textForEmbed));
       if (!existingEmbedding) {
-        await this.saveFeedbackEmbedding(feedbackId, embedding);
+        await this.feedbackEmbedding.saveFeedbackEmbedding(
+          feedbackId,
+          embedding,
+        );
       }
 
-      const vectorString = `[${embedding.join(',')}]`;
-      const vectorCandidates = await this.vectorSearch({
+      const queryVector =
+        await this.cohereClient.generateQueryEmbedding(textForEmbed);
+      const vectorString = `[${queryVector.join(',')}]`;
+      const vectorCandidates = await this.feedbackEmbedding.vectorSearch({
         embeddingText: vectorString,
         departmentId: row.departmentId,
         sourceFeedbackId: feedbackId,
       });
-      console.log('vectorCandidates', vectorCandidates);
-      const targets = await this.scoreSimilarityForCandidates(
+      // console.log('vectorCandidates', vectorCandidates);
+      const targets = await this.cohereClient.scoreSimilarityForCandidates(
         String(row.description ?? ''),
         vectorCandidates,
         {
@@ -394,16 +289,18 @@ export class SearchService {
       }
 
       const textForEmbed = `${String(row.subject ?? '')} ${String(row.description ?? '')}`;
-      const embedding = await this.generateEmbedding(textForEmbed);
-      await this.saveFeedbackEmbedding(feedbackId, embedding);
+      const embedding = await this.cohereClient.generateEmbedding(textForEmbed);
+      await this.feedbackEmbedding.saveFeedbackEmbedding(feedbackId, embedding);
 
-      const vectorString = `[${embedding.join(',')}]`;
-      const vectorCandidates = await this.vectorSearch({
+      const queryVector =
+        await this.cohereClient.generateQueryEmbedding(textForEmbed);
+      const vectorString = `[${queryVector.join(',')}]`;
+      const vectorCandidates = await this.feedbackEmbedding.vectorSearch({
         embeddingText: vectorString,
         departmentId: row.departmentId,
         sourceFeedbackId: feedbackId,
       });
-      const targets = await this.scoreSimilarityForCandidates(
+      const targets = await this.cohereClient.scoreSimilarityForCandidates(
         String(row.description ?? ''),
         vectorCandidates,
         {
@@ -440,7 +337,7 @@ export class SearchService {
           if (!source || pivotCandidate.length === 0) {
             continue;
           }
-          const ranked = await this.scoreSimilarityForCandidates(
+          const ranked = await this.cohereClient.scoreSimilarityForCandidates(
             String(source.description ?? ''),
             pivotCandidate,
             { maxResults: 1, excludeFeedbackId: sourceId },

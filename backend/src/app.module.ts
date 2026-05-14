@@ -23,7 +23,7 @@ import { RedisModule } from './modules/redis/redis.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AiModule } from './modules/ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
-import { SearchModule } from './modules/search/search.module';
+import { SearchModule } from './modules/feedback-similarity/search.module';
 import { SocialListeningModule } from './modules/social_listening/social_listening.module';
 
 @Module({
