@@ -4,30 +4,31 @@ import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/social-listening/SentimentTrendChart";
 import { SocialListeningDatePicker } from "@/components/dashboard/social-listening/SocialListeningDatePicker";
 import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
+import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
 import { Button } from "@/components/ui/button";
 import {
-  useGetKPIOverview,
-  useGetSentimentTrend,
-  useGetTopicDistribution,
-  useGetTrendingIssues,
   useGetClassificationSentiment,
+  useGetKPIOverview,
   useGetPostCountByDate,
   useGetPostsBySentiment,
+  useGetSentimentTrend,
   useGetTopicBySentiment,
+  useGetTopicDistribution,
+  useGetTrendingIssues,
 } from "@/hooks/queries/useSocialListeningQueries";
 import {
-  SocialListeningFilter,
-  SentimentLabel,
-  TopicDistributionItem,
-  KPIOverviewData,
   ClassificationSentimentData,
-  PostCountByDateItem,
   FeedbackPost,
+  KPIOverviewData,
+  PostCountByDateItem,
+  SentimentLabel,
+  SocialListeningFilter,
+  TopicDistributionItem,
 } from "@/types/social-listening";
 import { endOfMonth, format, startOfMonth } from "date-fns";
+import { Download } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
 
 const SocialListeningPage = () => {
   const router = useRouter();
@@ -132,7 +133,7 @@ const SocialListeningPage = () => {
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+        <div className="flex flex-col justify-between gap-6 md:items-center lg:flex-row">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
               Phân tích bài đăng sinh viên trên mạng xã hội
@@ -146,7 +147,7 @@ const SocialListeningPage = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-col md:items-center">
+          <div className="flex flex-col gap-4 md:items-center lg:flex-row">
             <SocialListeningDatePicker
               onUpdate={handleDateUpdate}
               defaultStartDate={filter.startDate}
@@ -167,6 +168,7 @@ const SocialListeningPage = () => {
               }
               size="sm"
             >
+              <Download className="h-5 w-5" />
               Xuất báo cáo
             </Button>
           </div>
