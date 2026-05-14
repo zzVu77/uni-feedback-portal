@@ -4,17 +4,29 @@ import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/social-listening/SentimentTrendChart";
 import { SocialListeningDatePicker } from "@/components/dashboard/social-listening/SocialListeningDatePicker";
 import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
+import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
+import { Button } from "@/components/ui/button";
 import {
+  useGetClassificationSentiment,
   useGetKPIOverview,
+  useGetPostCountByDate,
+  useGetPostsBySentiment,
   useGetSentimentTrend,
+  useGetTopicBySentiment,
   useGetTopicDistribution,
   useGetTrendingIssues,
 } from "@/hooks/queries/useSocialListeningQueries";
 import {
-  SocialListeningFilter,
+  ClassificationSentimentData,
+  FeedbackPost,
+  KPIOverviewData,
+  PostCountByDateItem,
   SentimentLabel,
-} from "@/types/social-listening"; // Import thêm SentimentLabel nếu cần
+  SocialListeningFilter,
+  TopicDistributionItem,
+} from "@/types/social-listening";
 import { endOfMonth, format, startOfMonth } from "date-fns";
+import { Download } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
@@ -23,7 +35,6 @@ const SocialListeningPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // BẢN SỬA LỖI: Lấy và truyền TẤT CẢ các tham số từ URL vào Query
   const filter = useMemo((): SocialListeningFilter => {
     const fromParam = searchParams.get("startDate");
     const toParam = searchParams.get("endDate");
@@ -42,7 +53,6 @@ const SocialListeningPage = () => {
     };
   }, [searchParams]);
 
-  // Hook này giờ sẽ tự động gọi lại API khi bất kỳ giá trị nào trong 'filter' thay đổi
   const { data: trendingData, isLoading: isLoadingTrending } =
     useGetTrendingIssues(filter);
 
@@ -54,10 +64,27 @@ const SocialListeningPage = () => {
   const { data: topicData, isLoading: isLoadingTopic } =
     useGetTopicDistribution(filter);
 
+  const { data: classificationData, isLoading: isLoadingClassification } =
+    useGetClassificationSentiment(filter);
+
+  const { data: postCountData, isLoading: isLoadingPostCount } =
+    useGetPostCountByDate(filter);
+  const { data: postsBySentimentData, isLoading: isLoadingPostsBySentiment } =
+    useGetPostsBySentiment(filter);
+  const { data: topicBySentimentData, isLoading: isLoadingTopicBySentiment } =
+    useGetTopicBySentiment(filter);
+
   const results = trendingData?.results || [];
 
   const isLoading =
-    isLoadingTrending || isLoadingKPI || isLoadingTrend || isLoadingTopic;
+    isLoadingTrending ||
+    isLoadingKPI ||
+    isLoadingTrend ||
+    isLoadingTopic ||
+    isLoadingClassification ||
+    isLoadingPostCount ||
+    isLoadingPostsBySentiment ||
+    isLoadingTopicBySentiment;
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
@@ -75,18 +102,38 @@ const SocialListeningPage = () => {
         params.delete("endDate");
       }
 
-      // Quan trọng: Khi đổi ngày, reset luôn về trang 1
       params.set("page", "1");
 
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
     },
     [pathname, router, searchParams],
   );
+  const exportPdf = async (
+    kpiData: KPIOverviewData | undefined,
+    fromDate: string,
+    toDate: string,
+    classificationData: ClassificationSentimentData[] | undefined,
+    postCountData: PostCountByDateItem[] | undefined,
+    postsBySentimentData: FeedbackPost[] | undefined,
+    topicBySentimentData: TopicDistributionItem[] | undefined,
+  ) => {
+    const blob = await GenerateReportSocialListening(
+      kpiData,
+      fromDate,
+      toDate,
+      classificationData,
+      postCountData,
+      postsBySentimentData,
+      topicBySentimentData,
+    );
+    const url = URL.createObjectURL(blob);
+    window.open(url);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+        <div className="flex flex-col justify-between gap-6 md:items-center lg:flex-row">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
               Phân tích bài đăng sinh viên trên mạng xã hội
@@ -100,12 +147,30 @@ const SocialListeningPage = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row md:items-center">
+          <div className="flex flex-col gap-4 md:items-center lg:flex-row">
             <SocialListeningDatePicker
               onUpdate={handleDateUpdate}
               defaultStartDate={filter.startDate}
               defaultEndDate={filter.endDate}
             />
+            <Button
+              variant="primary"
+              onClick={() =>
+                exportPdf(
+                  kpiData,
+                  filter.startDate || "",
+                  filter.endDate || "",
+                  classificationData,
+                  postCountData,
+                  postsBySentimentData,
+                  topicBySentimentData,
+                )
+              }
+              size="sm"
+            >
+              <Download className="h-5 w-5" />
+              Xuất báo cáo
+            </Button>
           </div>
         </div>
 

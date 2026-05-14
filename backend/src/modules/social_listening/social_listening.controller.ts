@@ -69,4 +69,52 @@ export class SocialListeningController {
   async getTopicDistribution(@Query() query: GetTrendingIssuesDto) {
     return this.socialListeningService.getTopicDistribution(query);
   }
+
+  @Get('classification-sentiment')
+  @ApiOperation({
+    summary: 'Get post count grouped by sentiment label',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Sentiment classification statistics',
+  })
+  async getClassificationSentiment(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getClassificationSentiment(query);
+  }
+
+  @Get('post-count-by-date')
+  @ApiOperation({
+    summary: 'Get total post count grouped by date',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Post count per day',
+  })
+  async getPostCountByDate(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getPostCountByDate(query);
+  }
+
+  @Get('posts-by-sentiment')
+  @ApiOperation({
+    summary: 'Get all positive and negative posts',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all positive and negative posts',
+  })
+  async getPostsBySentiment(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getPostsBySentiment(query);
+  }
+
+  @Get('topic-by-sentiment')
+  @ApiOperation({
+    summary: 'Get sentiment distribution for each topic',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Sentiment distribution by topic',
+  })
+  async getTopicSentimentDistribution(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getTopicSentimentDistribution(query);
+  }
 }

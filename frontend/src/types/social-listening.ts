@@ -55,3 +55,14 @@ export interface TopicDistributionItem {
   topic: string;
   count: number;
 }
+
+export interface ClassificationSentimentData {
+  sentimentLabel: SentimentLabel;
+  count: number;
+}
+
+export interface PostCountByDateItem {
+  dateStr: string;
+  displayDate: string;
+  totalPosts: number;
+}
