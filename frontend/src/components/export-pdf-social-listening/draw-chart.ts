@@ -19,7 +19,6 @@ export const drawChart = ({
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    // Phải append vào DOM để Chart.js hoạt động
     canvas.style.position = "absolute";
     canvas.style.opacity = "0";
     canvas.style.pointerEvents = "none";
@@ -27,7 +26,6 @@ export const drawChart = ({
     return canvas;
   };
   const sentimentCanvas = createCanvas(250, 250);
-  // Vẽ biểu đồ bằng thư viện chartjs-node-canvas hoặc bất kỳ thư viện nào bạn thích
   const sentimentChart = new Chart(sentimentCanvas, {
     type: "pie",
     plugins: [ChartDataLabels],
@@ -49,7 +47,7 @@ export const drawChart = ({
         legend: {
           position: "bottom",
           labels: {
-            font: { size: 80 }, // chữ legend to hơn
+            font: { size: 80 },
             padding: 16,
           },
         },

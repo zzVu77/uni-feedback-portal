@@ -23,7 +23,7 @@ import {
   ClassificationSentimentData,
   PostCountByDateItem,
   FeedbackPost,
-} from "@/types/social-listening"; // Import thêm SentimentLabel nếu cần
+} from "@/types/social-listening";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -34,7 +34,6 @@ const SocialListeningPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // BẢN SỬA LỖI: Lấy và truyền TẤT CẢ các tham số từ URL vào Query
   const filter = useMemo((): SocialListeningFilter => {
     const fromParam = searchParams.get("startDate");
     const toParam = searchParams.get("endDate");
@@ -53,7 +52,6 @@ const SocialListeningPage = () => {
     };
   }, [searchParams]);
 
-  // Hook này giờ sẽ tự động gọi lại API khi bất kỳ giá trị nào trong 'filter' thay đổi
   const { data: trendingData, isLoading: isLoadingTrending } =
     useGetTrendingIssues(filter);
 
@@ -103,7 +101,6 @@ const SocialListeningPage = () => {
         params.delete("endDate");
       }
 
-      // Quan trọng: Khi đổi ngày, reset luôn về trang 1
       params.set("page", "1");
 
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
@@ -129,7 +126,7 @@ const SocialListeningPage = () => {
       topicBySentimentData,
     );
     const url = URL.createObjectURL(blob);
-    window.open(url); // mở tab pdf mới
+    window.open(url);
   };
 
   return (

@@ -44,8 +44,8 @@ export const ReportDoc = ({
           <View style={styles.cover}>
             <Image src="/logo-hcmute.png" style={styles.logo} />
             <Text style={styles.title}>
-              BÁO CÁO PHÂN TÍCH THẢO LUẬN TRÊN MẠNG XÃ HỘI VỀ TRƯỜNG ĐẠI HỌC
-              CÔNG NGHỆ KỸ THUẬT TP.HCM
+              BÁO CÁO PHÂN TÍCH XU HƯỚNG {"\n"} CÁC VẤN ĐỀ NỔI BẬT ĐƯỢC THẢO
+              LUẬN TRÊN MẠNG XÃ HỘI {"\n"} ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT TP.HCM
             </Text>
             <Text style={styles.subtitle}>
               Từ ngày {format(fromDate)} đến ngày {format(toDate)}

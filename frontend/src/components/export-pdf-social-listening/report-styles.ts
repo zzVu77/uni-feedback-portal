@@ -25,9 +25,9 @@ export const styles = StyleSheet.create({
   cover: {
     height: "100%",
     display: "flex",
-    justifyContent: "center", // giữa dọc
-    alignItems: "center", // giữa ngang
-    marginTop: -120, // kéo toàn bộ block lên cao
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -120,
     textAlign: "center",
   },
   title: { fontSize: 26, fontWeight: "bold", marginBottom: 12 },
