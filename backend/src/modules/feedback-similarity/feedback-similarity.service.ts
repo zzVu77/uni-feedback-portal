@@ -119,7 +119,6 @@ export class FeedbackSimilarityService {
         description: true,
       },
     });
-    console.log(candidates);
     const queryText = String(row.description ?? '');
     const targets = await this.cohereClient.scoreSimilarityForCandidates(
       queryText,
@@ -249,7 +248,6 @@ export class FeedbackSimilarityService {
           excludeFeedbackId: feedbackId,
         },
       );
-      console.log('targets', targets);
       await this.saveSimilarityLinksForSource(feedbackId, targets);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -276,7 +274,7 @@ export class FeedbackSimilarityService {
         },
       });
       if (!row) {
-        throw new Error('Không tìm thấy feedback.');
+        throw new NotFoundException('Feedback not found');
       }
 
       if (

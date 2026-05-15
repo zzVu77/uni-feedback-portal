@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { CohereClientService } from './cohere-client.service';
 import { FeedbackEmbeddingService } from './feedback-embedding.service';
 import { FeedbackSimilarityService } from './feedback-similarity.service';
-import { SearchController } from './search.controller';
+import { FeedbackSimilarityController } from './feedback-similarity.controller';
 
 @Module({
-  controllers: [SearchController],
+  controllers: [FeedbackSimilarityController],
   providers: [
     CohereClientService,
     FeedbackEmbeddingService,
@@ -13,4 +13,4 @@ import { SearchController } from './search.controller';
   ],
   exports: [FeedbackSimilarityService],
 })
-export class SearchModule {}
+export class FeedbackSimilarityModule {}

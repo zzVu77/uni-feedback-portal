@@ -42,7 +42,6 @@ export class CohereClientService {
   ): Promise<number[]> {
     try {
       const cleaned = stripHtml(text);
-      console.log(`Text sau khi làm sạch (${inputType}):`, cleaned);
       const embed = await this.cohere.embed({
         texts: [cleaned],
         model: 'embed-multilingual-v3.0',

@@ -7,14 +7,14 @@ import { AiModule } from '../ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
 import { FeedbackToxicProcessor } from './feedbacks.processor';
 import { FeedbackSimilarityProcessor } from './feedback-similarity.processor';
-import { SearchModule } from '../feedback-similarity/search.module';
+import { FeedbackSimilarityModule } from '../feedback-similarity/feedback-similarity.module';
 
 @Module({
   imports: [
     UploadsModule,
     ForumModule,
     AiModule,
-    SearchModule,
+    FeedbackSimilarityModule,
     BullModule.registerQueue({
       name: 'feedback-toxic',
     }),
