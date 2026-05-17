@@ -117,3 +117,50 @@ export class UpdateFeedbackStatusResponseDto {
   // })
   // updatedAt: string;
 }
+
+export class RelatedFeedbackPeerDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  subject: string;
+
+  @ApiProperty({ enum: FeedbackStatus })
+  currentStatus: FeedbackStatus;
+
+  @ApiProperty({
+    description:
+      'Max relevance score when both directions exist (pivot→peer and peer→pivot)',
+  })
+  score: number;
+
+  @ApiProperty()
+  createdAt: string;
+
+  @ApiProperty({ type: () => DepartmentInfo })
+  department: { id: string; name: string };
+}
+
+export class RelatedFeedbacksResponseDto {
+  @ApiProperty({ type: () => [RelatedFeedbackPeerDto] })
+  peers: RelatedFeedbackPeerDto[];
+}
+
+export class BulkUpdateFeedbackStatusItemDto {
+  @ApiProperty()
+  feedbackId: string;
+
+  @ApiProperty({ enum: FeedbackStatus })
+  currentStatus: FeedbackStatus;
+}
+
+export class BulkUpdateFeedbackStatusResponseDto {
+  @ApiProperty({ type: () => [BulkUpdateFeedbackStatusItemDto] })
+  updated: BulkUpdateFeedbackStatusItemDto[];
+
+  @ApiProperty({
+    type: [String],
+    description: 'IDs skipped (not found or not in scope for this staff)',
+  })
+  skippedIds: string[];
+}

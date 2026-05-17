@@ -21,6 +21,10 @@ import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_l
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
+import {
+  FEEDBACK_SIMILARITY_JOB_ON_CREATED,
+  FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
+} from '../feedback-similarity/type/feedback-similarity-job.constants';
 @Injectable()
 export class FeedbacksService {
   constructor(
@@ -28,6 +32,8 @@ export class FeedbacksService {
     private readonly forumService: ForumService,
     private readonly uploadsService: UploadsService,
     @InjectQueue('feedback-toxic') private readonly feedbackToxicQueue: Queue,
+    @InjectQueue('feedback-similarity')
+    private readonly feedbackSimilarityQueue: Queue,
   ) {}
 
   async getFeedbacks(
@@ -283,6 +289,13 @@ export class FeedbacksService {
       currentStatus: FeedbackStatus.AI_REVIEWING,
     };
 
+    const embeddingRelevant =
+      (dto.subject !== undefined && dto.subject !== feedback.subject) ||
+      (dto.description !== undefined &&
+        dto.description !== feedback.description) ||
+      (dto.departmentId !== undefined &&
+        dto.departmentId !== feedback.departmentId);
+
     const updateFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateDataNew,
@@ -340,6 +353,33 @@ export class FeedbacksService {
         createdAt: f.createdAt,
       })),
     });
+
+    if (embeddingRelevant) {
+      const incomingRows: { sourceFeedbackId: string }[] =
+        await this.prisma.feedbackSimilarityLink.findMany({
+          where: { targetFeedbackId: feedbackId },
+          select: { sourceFeedbackId: true },
+        });
+      const priorIncomingSourceIds = [
+        ...new Set(incomingRows.map((r) => r.sourceFeedbackId)),
+      ];
+      await this.prisma.feedbackSimilarityLink.deleteMany({
+        where: {
+          OR: [
+            { sourceFeedbackId: feedbackId },
+            { targetFeedbackId: feedbackId },
+          ],
+        },
+      });
+      await this.feedbackSimilarityQueue.add(
+        FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
+        { feedbackId, priorIncomingSourceIds },
+        {
+          attempts: 3,
+          backoff: 5000,
+        },
+      );
+    }
 
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
@@ -481,6 +521,14 @@ export class FeedbacksService {
         ),
       },
     });
+    await this.feedbackSimilarityQueue.add(
+      FEEDBACK_SIMILARITY_JOB_ON_CREATED,
+      { feedbackId: feedback.id },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
 
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',

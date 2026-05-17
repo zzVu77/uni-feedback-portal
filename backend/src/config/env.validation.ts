@@ -61,6 +61,7 @@ class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   AWS_S3_BASE_URL: string;
+  COHERE_API_KEY: string;
 }
 
 const config = plainToInstance(EnvironmentVariables, process.env, {
