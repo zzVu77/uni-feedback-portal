@@ -24,20 +24,20 @@ export class AccessTokenGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    console.log('AccessTokenGuard: Checking access permissions');
+    // console.log('AccessTokenGuard: Checking access permissions');
     if (isPublic) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromCookie(request);
-    console.log('AccessTokenGuard: extracted token=', token);
+    // console.log('AccessTokenGuard: extracted token=', token);
     if (!token) {
       throw new UnauthorizedException();
     }
     try {
       const payload = await this.tokenService.verifyAccessToken(token);
-      console.log('AccessTokenGuard: token payload=', payload);
+      //console.log('AccessTokenGuard: token payload=', payload);
       request[REQUEST_USER_KEY] = payload;
     } catch {
       throw new UnauthorizedException();

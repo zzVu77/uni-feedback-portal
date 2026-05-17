@@ -170,6 +170,31 @@ model Feedbacks {
   forwardingLogs  ForwardingLogs[]
   forumPost       ForumPosts?
   conversations   ClarificationConversations[]
+  embedding       FeedbackEmbeddings?
+  similarityLinksAsSource FeedbackSimilarityLink[] @relation("SimilaritySource")
+  similarityLinksAsTarget FeedbackSimilarityLink[] @relation("SimilarityTarget")
+}
+
+model FeedbackEmbeddings {
+  id         String   @id @default(uuid()) @db.Uuid
+  feedbackId String   @unique @db.Uuid
+  embedding  Unsupported("vector(1024)")
+  createdAt  DateTime @default(now())
+
+  feedback   Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+}
+
+model FeedbackSimilarityLink {
+  id               String @id @default(uuid()) @db.Uuid
+  sourceFeedbackId String @db.Uuid
+  targetFeedbackId String @db.Uuid
+  score            Float
+
+  sourceFeedback Feedbacks @relation("SimilaritySource", fields: [sourceFeedbackId], references: [id], onDelete: Cascade)
+  targetFeedback Feedbacks @relation("SimilarityTarget", fields: [targetFeedbackId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceFeedbackId, targetFeedbackId])
+  @@index([sourceFeedbackId])
 }
 
 model FeedbackStatusHistory {

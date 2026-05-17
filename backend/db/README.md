@@ -48,6 +48,7 @@ To populate the database with initial data from `db/init.sql`. This is usually d
 ```bash
 npm run db:seed
 ```
+
 ### 5. Update data embeddings of departments
 
 Run this command to ensure table embedding is created.
@@ -73,6 +74,7 @@ npx prisma studio
 ```
 
 ### 8. Redis
+
 Pull Redis Stack image
 
 ```bash
@@ -80,9 +82,12 @@ docker pull redis/redis-stack-server:latest
 ```
 
 Run Redis container
+
 ```bash
 docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
 ```
+
+docker exec -it university-feedback psql -U root -d UniversityFeedback -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
 ### 9. Change version
 
