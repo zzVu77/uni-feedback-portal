@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: mrt_posts_for_ai_feed
+    description: "This model transforms the staged Facebook posts data into a format suitable for AI feed generation. It includes additional calculated fields such as post_date, post_week, and engagement_score to enhance the analysis and insights derived from the data."
+    columns:
+      - name: post_id
+        data_type: string
+        description: ""
+
+      - name: posted_at
+        data_type: timestamp
+        description: ""
+
+      - name: post_date
+        data_type: date
+        description: ""
+
+      - name: post_week
+        data_type: int64
+        description: ""
+
+      - name: content
+        data_type: string
+        description: ""
+
+      - name: reaction_count
+        data_type: int64
+        description: ""
+
+      - name: comment_count
+        data_type: int64
+        description: ""
+
+      - name: engagement_score
+        data_type: int64
+        description: ""

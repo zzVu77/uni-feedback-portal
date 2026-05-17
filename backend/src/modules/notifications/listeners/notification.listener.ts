@@ -43,8 +43,10 @@ export class NotificationEventListener {
       // 1. Notify the Student (Confirmation that feedback was sent)
       await this.notifyStudent(payload);
 
-      // 2. Notify the Department Staff (The specific logic you requested)
-      await this.notifyDepartmentStaff(payload);
+      if (!payload.isToxic) {
+        // 2. Notify the Department Staff (The specific logic you requested)
+        await this.notifyDepartmentStaff(payload);
+      }
 
       // 3. Notify Student about Toxicity Check
       await this.notifyFeedbackCheckToxicity(payload);

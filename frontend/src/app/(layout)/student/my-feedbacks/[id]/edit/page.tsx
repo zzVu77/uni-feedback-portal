@@ -27,9 +27,13 @@ const Page = () => {
   // --- GUARD LOGIC ---
   useEffect(() => {
     if (feedback) {
-      if (feedback.currentStatus !== "PENDING") {
+      if (
+        feedback.currentStatus !== "PENDING" &&
+        feedback.currentStatus !== "VIOLATED_CONTENT" &&
+        feedback.currentStatus !== "AI_REVIEW_FAILED"
+      ) {
         toast.error(
-          `Bạn chỉ có thể chỉnh sửa góp ý khi đang ở trạng thái "Đang chờ xử lý."`,
+          `Bạn chỉ có thể chỉnh sửa góp ý khi đang ở trạng thái "Đang chờ xử lý", "Vi phạm" hoặc "Hệ thống AI gặp sự cố".`,
         );
         router.push(`/student/my-feedbacks/${id}`);
       }
@@ -44,7 +48,11 @@ const Page = () => {
   if (isLoading || !feedback) return <Loading variant="spinner" />;
 
   // Prevent rendering the form momentarily while redirecting
-  if (feedback.currentStatus !== "PENDING") {
+  if (
+    feedback.currentStatus !== "PENDING" &&
+    feedback.currentStatus !== "VIOLATED_CONTENT" &&
+    feedback.currentStatus !== "AI_REVIEW_FAILED"
+  ) {
     return <Loading variant="spinner" />;
   }
 

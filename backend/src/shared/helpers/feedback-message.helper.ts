@@ -15,7 +15,12 @@ export function GenerateStatusUpdateMessage(
 
     case FeedbackStatus.REJECTED:
       return `Góp ý đã bị bộ phận ${departmentName} từ chối.`;
-
+    case FeedbackStatus.VIOLATED_CONTENT:
+      return `Góp ý của bạn đã bị từ chối vì chứa nội dung vi phạm. Vui lòng chỉnh sửa và gửi lại.`;
+    case FeedbackStatus.AI_REVIEWING:
+      return `Góp ý của bạn đang được hệ thống kiểm duyệt nội dung tự động đánh giá. Vui lòng chờ trong giây lát.`;
+    case FeedbackStatus.AI_REVIEW_FAILED:
+      return `Hệ thống đang gặp sự cố khi đánh giá nội dung của góp ý. Vui lòng thử lại sau.`;
     default:
       return `Trạng thái Góp ý đã được cập nhật tại bộ phận ${departmentName}.`;
   }
