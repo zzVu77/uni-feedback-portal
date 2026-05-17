@@ -23,6 +23,7 @@ import { RedisModule } from './modules/redis/redis.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AiModule } from './modules/ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
+import { FeedbackSimilarityModule } from './modules/feedback-similarity/feedback-similarity.module';
 import { SocialListeningModule } from './modules/social_listening/social_listening.module';
 
 @Module({
@@ -54,6 +55,7 @@ import { SocialListeningModule } from './modules/social_listening/social_listeni
         port: 6379,
       },
     }),
+    FeedbackSimilarityModule,
     SocialListeningModule,
   ],
   controllers: [AppController],

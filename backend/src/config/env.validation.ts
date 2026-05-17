@@ -43,6 +43,10 @@ class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   SUPABASE_SERVICE_ROLE_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  COHERE_API_KEY: string;
 }
 
 const config = plainToInstance(EnvironmentVariables, process.env, {
