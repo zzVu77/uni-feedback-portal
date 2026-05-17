@@ -8,7 +8,7 @@ import {
   FeedbackDepartmentRerankRow,
   FeedbackSimilaritySource,
   FeedbackSimilarityTarget,
-} from './feedback-similarity.types';
+} from './type/feedback-similarity.types';
 
 const FEEDBACK_SIMILARITY_MAX_PERSISTED_LINKS = 20;
 
@@ -135,7 +135,6 @@ export class FeedbackSimilarityService {
     return { feedbackId, targets };
   }
 
-  /** Thay toàn bộ cạnh `source → *` trong `FeedbackSimilarityLink`. */
   async saveSimilarityLinksForSource(
     sourceFeedbackId: string,
     targets: FeedbackSimilarityTarget[],
@@ -164,7 +163,6 @@ export class FeedbackSimilarityService {
     ]);
   }
 
-  /** Thay toàn bộ cạnh `* → target` trong `FeedbackSimilarityLink`. */
   async saveSimilarityLinksForTarget(
     targetFeedbackId: string,
     sources: FeedbackSimilaritySource[],
@@ -239,7 +237,6 @@ export class FeedbackSimilarityService {
         departmentId: row.departmentId,
         sourceFeedbackId: feedbackId,
       });
-      // console.log('vectorCandidates', vectorCandidates);
       const targets = await this.cohereClient.scoreSimilarityForCandidates(
         String(row.description ?? ''),
         vectorCandidates,

@@ -6,7 +6,7 @@ import { UploadsModule } from '../uploads/uploads.module';
 import { AiModule } from '../ai/ai.module';
 import { BullModule } from '@nestjs/bullmq';
 import { FeedbackToxicProcessor } from './feedbacks.processor';
-import { FeedbackSimilarityProcessor } from './feedback-similarity.processor';
+import { FeedbackSimilarityProcessor } from '../feedback-similarity/feedback-similarity.processor';
 import { FeedbackSimilarityModule } from '../feedback-similarity/feedback-similarity.module';
 
 @Module({

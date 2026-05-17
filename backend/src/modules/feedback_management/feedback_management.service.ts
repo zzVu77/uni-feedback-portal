@@ -32,14 +32,14 @@ import {
 } from './dto';
 import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
 import { FeedbackForwardingEvent } from './events/feedback-forwarding.event';
-import { FEEDBACK_SIMILARITY_JOB_ON_CREATED } from '../feedbacks/feedback-similarity-job.constants';
+import { FEEDBACK_SIMILARITY_JOB_ON_CREATED } from '../feedback-similarity/type/feedback-similarity-job.constants';
 
 @Injectable()
 export class FeedbackManagementService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadsService: UploadsService,
-    private readonly eventEmitter: EventEmitter2, // [Injection]
+    private readonly eventEmitter: EventEmitter2,
     @InjectQueue('feedback-similarity')
     private readonly feedbackSimilarityQueue: Queue,
   ) {}
@@ -208,7 +208,6 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        // Không include file ở đây
       },
     });
 
@@ -289,7 +288,6 @@ export class FeedbackManagementService {
   ): Promise<UpdateFeedbackStatusResponseDto> {
     const { feedbackId } = params;
 
-    // Cần đảm bảo feedback tồn tại và lấy userId, subject để bắn event
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
       include: { department: true },
@@ -593,7 +591,6 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        // Không include file ở đây
       },
     });
 

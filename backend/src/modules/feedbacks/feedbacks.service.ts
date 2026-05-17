@@ -24,7 +24,7 @@ import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message
 import {
   FEEDBACK_SIMILARITY_JOB_ON_CREATED,
   FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
-} from './feedback-similarity-job.constants';
+} from '../feedback-similarity/type/feedback-similarity-job.constants';
 @Injectable()
 export class FeedbacksService {
   constructor(

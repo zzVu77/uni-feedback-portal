@@ -1,12 +1,12 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, UnrecoverableError } from 'bullmq';
-import { FeedbackSimilarityService } from '../feedback-similarity/feedback-similarity.service';
+import { FeedbackSimilarityService } from './feedback-similarity.service';
 import {
   FEEDBACK_SIMILARITY_JOB_ON_CREATED,
   FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
   FeedbackSimilarityJobCreatedPayload,
   FeedbackSimilarityJobUpdatedPayload,
-} from './feedback-similarity-job.constants';
+} from './type/feedback-similarity-job.constants';
 
 @Processor('feedback-similarity')
 export class FeedbackSimilarityProcessor extends WorkerHost {

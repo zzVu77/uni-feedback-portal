@@ -3,7 +3,7 @@ import { CohereClient } from 'cohere-ai';
 import {
   FeedbackSimilarityRerankCandidate,
   FeedbackSimilarityTarget,
-} from './feedback-similarity.types';
+} from './type/feedback-similarity.types';
 
 function stripHtml(text: string): string {
   return text.replace(/<[^>]*>/g, '').trim();
@@ -23,15 +23,10 @@ export class CohereClientService {
     });
   }
 
-  /** Embedding lưu DB / index: `search_document` (corpus). */
   async generateEmbedding(text: string): Promise<number[]> {
     return this.embedWithInputType(text, 'search_document');
   }
 
-  /**
-   * Embedding cho pivot khi vector search: `search_query` so khớp asymmetric
-   * với các vector `search_document` đã lưu.
-   */
   async generateQueryEmbedding(text: string): Promise<number[]> {
     return this.embedWithInputType(text, 'search_query');
   }

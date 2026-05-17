@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
   FeedbackDepartmentCosineRow,
   FeedbackVectorCandidate,
-} from './feedback-similarity.types';
+} from './type/feedback-similarity.types';
 
 const FEEDBACK_SIMILARITY_VECTOR_CANDIDATE_LIMIT = 100;
 const FEEDBACK_SIMILARITY_MIN_VECTOR_SIMILARITY = 0.65;
@@ -45,7 +45,6 @@ function parseVectorString(vectorText: string): number[] {
 export class FeedbackEmbeddingService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /** Upsert `FeedbackEmbeddings` sau khi đã có vector từ {@link CohereClientService.generateEmbedding}. */
   async saveFeedbackEmbedding(
     feedbackId: string,
     embedding: number[],
