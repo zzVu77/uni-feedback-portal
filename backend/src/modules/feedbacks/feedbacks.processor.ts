@@ -68,7 +68,6 @@ export class FeedbackToxicProcessor extends WorkerHost {
         );
     }
   }
-  // Sử dụng chung hàm này cho cả create và update để tránh trùng lặp code
   async handleUpdateFeedback(data: {
     feedbackId: string;
     updateData: UpdateFeedbackDto;
@@ -164,18 +163,15 @@ export class FeedbackToxicProcessor extends WorkerHost {
       }),
     );
 
-    // Throw error nếu có toxic
     if (isToxic) {
       throw new UnrecoverableError(
         'Feedback description contains toxic content. Please modify and try again.',
       );
     }
   }
-  // Xử lý khi job thất bại sau tất cả các lần thử
   @OnWorkerEvent('failed')
   async onFailed(job: Job<FeedbackJobData>) {
     let eventPayload: FeedbackCreatedEvent | null = null;
-    // Chỉ xử lý khi đã hết tất cả các lần thử
     if (job.attemptsMade >= (job.opts.attempts ?? 1)) {
       if (job.data.type === 'create') {
         const { feedback, actor } = job.data;

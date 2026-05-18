@@ -170,7 +170,6 @@ export class ForumService {
             currentStatus: true,
             statusHistory: true,
             isPrivate: true,
-            // Không include fileAttachments ở đây
             user: {
               select: {
                 id: true,
@@ -215,7 +214,6 @@ export class ForumService {
         }
       : null;
 
-    // Lấy file đính kèm bằng UploadsService
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
       post.feedback.id,
       FileTargetType.FEEDBACK,
@@ -281,7 +279,6 @@ export class ForumService {
       },
     });
 
-    // [New Logic] Emit Event: Post Voted
     const event = new ForumPostVotedEvent({
       postId: postId,
       userId: actor.sub,
@@ -302,7 +299,6 @@ export class ForumService {
     feedbackId: string,
     actor: ActiveUserData,
   ): Promise<string> {
-    // Kiểm tra feedback tồn tại
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, userId: actor.sub },
       include: { forumPost: true },

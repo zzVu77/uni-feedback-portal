@@ -14,7 +14,6 @@ export class ClarificationsGateway {
   @WebSocketServer()
   server: Server;
 
-  // Khi user connect → join room theo userId
   async handleConnection(client: Socket) {
     const userId = client.handshake.query.userId as string;
     if (userId) {

@@ -335,12 +335,11 @@ export class FeedbackManagementService {
       },
     });
 
-    // [New Logic] Emit Event: Feedback Status Updated
     const event = new FeedbackStatusUpdatedEvent({
       feedbackId: feedback.id,
-      userId: feedback.userId, // Student ID
+      userId: feedback.userId,
       subject: feedback.subject,
-      status: dto.status, // New Status
+      status: dto.status,
     });
     this.eventEmitter.emit('feedback.status_updated', event);
 
