@@ -169,12 +169,12 @@ const ChatSheet = ({
                             {msg.attachments.map((file, idx) => {
                               const isImage =
                                 /\.(jpg|jpeg|png|webp|gif)$/i.test(
-                                  file.fileUrl,
+                                  file.fileUrl || "",
                                 );
                               return (
                                 <a
                                   key={idx}
-                                  href={file.fileUrl}
+                                  href={file.fileUrl || ""}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className={`flex items-center gap-2 rounded-md border p-2 transition-colors hover:bg-black/5 ${
@@ -185,7 +185,7 @@ const ChatSheet = ({
                                 >
                                   {isImage ? (
                                     <img
-                                      src={file.fileUrl}
+                                      src={file.fileUrl || ""}
                                       alt={file.fileName}
                                       className="max-w-full rounded-md object-cover lg:max-w-[200px]"
                                     />

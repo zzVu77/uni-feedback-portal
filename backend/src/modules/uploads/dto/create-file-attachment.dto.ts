@@ -3,4 +3,5 @@ import { FileAttachmentDto } from './file-attachment.dto';
 
 export class CreateFileAttachmentDto extends OmitType(FileAttachmentDto, [
   'id',
+  'fileUrl',
 ] as const) {}

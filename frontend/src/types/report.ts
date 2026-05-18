@@ -3,7 +3,6 @@ export interface ReportFilter {
   from?: string;
   to?: string;
 }
-
 // 1. Overview Stats
 export type StatsOverviewDto = {
   totalFeedbacks: number;

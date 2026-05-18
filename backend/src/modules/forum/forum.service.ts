@@ -14,6 +14,10 @@ import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ForumPostVotedEvent } from './events/forum-post-voted.event';
+import {
+  HIDDEN_FORUM_FEEDBACK_STATUSES,
+  isHiddenForumFeedbackStatus,
+} from './dto/hidden-status.dto';
 @Injectable()
 export class ForumService {
   constructor(
@@ -44,6 +48,9 @@ export class ForumService {
         ...(categoryId && { categoryId }),
         ...(departmentId && { departmentId }),
         ...(q && { subject: { contains: q, mode: 'insensitive' } }),
+        currentStatus: {
+          notIn: HIDDEN_FORUM_FEEDBACK_STATUSES,
+        },
       },
       ...(from || to
         ? {
@@ -163,7 +170,6 @@ export class ForumService {
             currentStatus: true,
             statusHistory: true,
             isPrivate: true,
-            // Không include fileAttachments ở đây
             user: {
               select: {
                 id: true,
@@ -194,6 +200,10 @@ export class ForumService {
     if (!post) {
       throw new NotFoundException(`Post not found`);
     }
+
+    if (isHiddenForumFeedbackStatus(post?.feedback.currentStatus)) {
+      throw new NotFoundException(`Post not found`);
+    }
     const resolvedStatus = post.feedback.statusHistory.find(
       (h) => h.status === 'RESOLVED',
     );
@@ -204,7 +214,6 @@ export class ForumService {
         }
       : null;
 
-    // Lấy file đính kèm bằng UploadsService
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
       post.feedback.id,
       FileTargetType.FEEDBACK,
@@ -270,7 +279,6 @@ export class ForumService {
       },
     });
 
-    // [New Logic] Emit Event: Post Voted
     const event = new ForumPostVotedEvent({
       postId: postId,
       userId: actor.sub,
@@ -291,7 +299,6 @@ export class ForumService {
     feedbackId: string,
     actor: ActiveUserData,
   ): Promise<string> {
-    // Kiểm tra feedback tồn tại
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, userId: actor.sub },
       include: { forumPost: true },

@@ -247,11 +247,11 @@ const ConversationSection = ({
 
     let uploadedAttachments: FileAttachmentDto[] = [];
     if (file) {
-      const uploadedFile = await uploadFileToCloud(file);
+      const uploadedFile = await uploadFileToCloud(file, "MESSAGE");
       uploadedAttachments = [
         {
           fileName: uploadedFile.fileName,
-          fileUrl: encodeURI(uploadedFile.fileUrl.trim()),
+          fileKey: uploadedFile.fileKey,
           fileType: uploadedFile.fileType,
           fileSize: Number(uploadedFile.fileSize),
         },
