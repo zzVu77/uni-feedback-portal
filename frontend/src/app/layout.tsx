@@ -6,6 +6,7 @@ import { Check, Info, X } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
+import RegisterSW from "@/components/pwa/RegisterSW";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -64,6 +65,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <UserProvider initialUser={userData}>
+          <RegisterSW />
           <Toaster
             position="top-right"
             icons={{
