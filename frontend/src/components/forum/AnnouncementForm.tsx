@@ -110,7 +110,7 @@ type AnnouncementForm = {
 // Helper to sanitize URL (encode spaces) and ensure numeric size
 const sanitizeAttachment = (file: FileAttachmentDto) => ({
   fileName: file.fileName,
-  fileUrl: encodeURI(file.fileUrl.trim()),
+  fileKey: file.fileKey,
   fileType: file.fileType || "application/octet-stream", // Fallback if missing
   fileSize: Number(file.fileSize) || 0,
 });
@@ -129,6 +129,25 @@ const AnnouncementForm = ({
 
   // State to manage EXISTING files (for Edit mode)
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
+
+  // Sync initialData to existingFiles only when initialData ID changes
+  // useEffect(() => {
+  //   if (initialData?.files) {
+  //     form.reset({
+  //       title: initialData.title || "",
+  //       content: initialData.content || "",
+  //       attachments: [],
+  //     });
+  //     const mappedFiles = initialData.files.map((f: any) => ({
+  //       fileName: f.fileName,
+  //       fileKey: f.fileKey,
+  //       fileUrl: f.fileUrl,
+  //       fileType: f.fileType || "",
+  //       fileSize: f.fileSize || 0,
+  //     }));
+  //     setExistingFiles(mappedFiles);
+  //   }
+  // }, [initialData?.id]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -177,7 +196,9 @@ const AnnouncementForm = ({
       let uploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) =>
+            uploadFileToCloud(file, "ANNOUNCEMENT"),
+          ),
         );
         uploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
@@ -207,13 +228,15 @@ const AnnouncementForm = ({
       let newUploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) =>
+            uploadFileToCloud(file, "ANNOUNCEMENT"),
+          ),
         );
         newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
 
       const processedExistingFiles = existingFiles
-        .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
+        .filter((file) => file.fileKey && file.fileKey.trim() !== "")
         .map(sanitizeAttachment);
 
       const finalFiles = [...processedExistingFiles, ...newUploadedAttachments];
@@ -240,6 +263,7 @@ const AnnouncementForm = ({
     if (initialData?.files) {
       const mappedFiles = initialData.files.map((f: any) => ({
         fileName: f.fileName,
+        fileKey: f.fileKey,
         fileUrl: f.fileUrl,
         fileType: f.fileType || "",
         fileSize: f.fileSize || 0,
@@ -264,8 +288,8 @@ const AnnouncementForm = ({
     router.push("/staff/announcement-management");
   };
 
-  const handleRemoveExistingFile = (fileUrl: string) => {
-    setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
+  const handleRemoveExistingFile = (fileKey: string) => {
+    setExistingFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
   };
 
   const isPending = isMutationPending || isUploading;
@@ -386,7 +410,7 @@ const AnnouncementForm = ({
                         <div className="grid gap-3 sm:grid-cols-2">
                           {existingFiles.map((file) => (
                             <div
-                              key={file.fileUrl}
+                              key={file.fileKey}
                               className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
                             >
                               <div className="flex min-w-0 items-center gap-2.5">
@@ -420,7 +444,7 @@ const AnnouncementForm = ({
                                 size="icon"
                                 className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
                                 onClick={() =>
-                                  handleRemoveExistingFile(file.fileUrl)
+                                  handleRemoveExistingFile(file.fileKey)
                                 }
                                 disabled={isPending}
                               >

@@ -46,6 +46,21 @@ class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
+  AWS_ACCESS_KEY_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  AWS_SECRET_ACCESS_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  AWS_REGION: string;
+  @IsString()
+  @IsNotEmpty()
+  AWS_S3_BUCKET_NAME: string;
+  @IsString()
+  @IsNotEmpty()
+  AWS_S3_BASE_URL: string;
   COHERE_API_KEY: string;
 }
 

@@ -502,7 +502,6 @@ export class FeedbacksService {
       await this.forumService.createForumPost(feedback.id, actor);
     }
 
-    // Create attachments using UploadsService
     if (fileAttachments && fileAttachments.length > 0) {
       await this.uploadsService.updateAttachmentsForTarget(
         feedback.id,

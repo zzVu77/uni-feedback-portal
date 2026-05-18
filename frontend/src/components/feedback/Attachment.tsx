@@ -5,7 +5,7 @@ import Link from "next/link";
 const Attachment = ({ fileName, fileUrl }: FileAttachment) => {
   return (
     <Link
-      href={fileUrl}
+      href={fileUrl ?? "#"}
       target="_blank"
       rel="noopener noreferrer"
       className="group flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm"

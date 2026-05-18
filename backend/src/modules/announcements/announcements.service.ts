@@ -39,7 +39,6 @@ export class AnnouncementsService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
-    // Build dynamic WHERE condition
     const where: Prisma.AnnouncementsWhereInput = {};
 
     if (departmentId) {
@@ -66,7 +65,6 @@ export class AnnouncementsService {
         );
     }
 
-    // Query data + total count
     const [items, total] = await Promise.all([
       this.prisma.announcements.findMany({
         where,
@@ -88,7 +86,6 @@ export class AnnouncementsService {
       this.prisma.announcements.count({ where }),
     ]);
 
-    // Map to DTO
     const mappedItems = items.map((item) => ({
       id: item.id,
       title: item.title,
@@ -113,7 +110,7 @@ export class AnnouncementsService {
       include: {
         user: {
           select: {
-            id: true, // Thêm id của user
+            id: true,
             fullName: true,
             department: {
               select: {
@@ -123,14 +120,12 @@ export class AnnouncementsService {
             },
           },
         },
-        // Không include files ở đây nữa
       },
     });
     if (!announcement) {
       throw new NotFoundException(`Announcement with id ${id} not found`);
     }
 
-    // Lấy file đính kèm bằng UploadsService
     const files = await this.uploadsService.getAttachmentsForTarget(
       id,
       FileTargetType.ANNOUNCEMENT,
@@ -174,7 +169,6 @@ export class AnnouncementsService {
     });
 
     let files: FileAttachmentDto[] = [];
-    // Gọi service chuyên dụng để xử lý file
     if (dto.files && dto.files.length > 0) {
       files = await this.uploadsService.updateAttachmentsForTarget(
         announcement.id,
@@ -183,7 +177,6 @@ export class AnnouncementsService {
       );
     }
 
-    // Trả về DTO được xây dựng thủ công
     return {
       id: announcement.id,
       title: announcement.title,
@@ -233,7 +226,6 @@ export class AnnouncementsService {
       dto.files ?? [],
     );
 
-    // 3. Trả về DTO được xây dựng thủ công
     return {
       id: updatedAnnouncement.id,
       title: updatedAnnouncement.title,
@@ -263,13 +255,11 @@ export class AnnouncementsService {
 
     if (!existing) throw new NotFoundException('Announcement not found');
 
-    // Xóa file đính kèm trong DB (và trên S3 trong tương lai) bằng service
     await this.uploadsService.deleteAttachmentsForTarget(
       id,
       FileTargetType.ANNOUNCEMENT,
     );
 
-    // Xóa announcement
     await this.prisma.announcements.delete({
       where: { id },
     });
@@ -317,9 +307,7 @@ export class AnnouncementsService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
-    // Build dynamic WHERE condition
     const where: Prisma.AnnouncementsWhereInput = {};
-    // console.log('Actor:', actor);
     where.userId = actor.sub;
     if (q) {
       where.OR = [
@@ -337,7 +325,6 @@ export class AnnouncementsService {
         );
     }
 
-    // Query data + total count
     const [items, total] = await Promise.all([
       this.prisma.announcements.findMany({
         where,
@@ -359,7 +346,6 @@ export class AnnouncementsService {
       this.prisma.announcements.count({ where }),
     ]);
 
-    // Map to DTO
     const mappedItems = items.map((item) => ({
       id: item.id,
       title: item.title,
@@ -387,7 +373,7 @@ export class AnnouncementsService {
       include: {
         user: {
           select: {
-            id: true, // Thêm id của user
+            id: true,
             fullName: true,
             department: {
               select: {

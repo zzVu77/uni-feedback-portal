@@ -53,7 +53,6 @@ export class NotificationsController {
   async createNotifications(
     @Body() dto: CreateNotificationsDto,
   ): Promise<NotificationResponseDto[]> {
-    // Pass field-by-field, không truyền DTO trực tiếp
     return this.notificationsService.createNotifications({
       userIds: dto.userIds ? dto.userIds : [],
       content: dto.content,
@@ -83,7 +82,7 @@ export class NotificationsController {
       all: dto.all,
       type: dto.type,
       isRead: dto.isRead,
-      userId: user.sub, // thêm userId
+      userId: user.sub,
     });
   }
 
@@ -106,7 +105,7 @@ export class NotificationsController {
       ids: dto.ids,
       all: dto.all,
       type: dto.type,
-      userId: user.sub, // thêm userId
+      userId: user.sub,
     });
   }
   // ============================================

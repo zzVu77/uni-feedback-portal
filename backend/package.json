@@ -31,6 +31,10 @@
     "seed:dept": "ts-node -r tsconfig-paths/register src/modules/ai/embeddings/embeddingDepartment.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.981.0",
+    "@aws-sdk/lib-storage": "^3.981.0",
+    "@aws-sdk/s3-presigned-post": "^3.1014.0",
+    "@aws-sdk/s3-request-presigner": "^3.981.0",
     "@google/genai": "^1.39.0",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/bullmq": "^11.0.4",
@@ -53,6 +57,7 @@
     "class-validator": "^0.14.2",
     "cohere-ai": "^8.0.0",
     "cookie-parser": "^1.4.7",
+    "mime-types": "^3.0.2",
     "html-to-text": "^9.0.5",
     "nodemailer": "^7.0.10",
     "prisma-zod-generator": "^1.21.1",
