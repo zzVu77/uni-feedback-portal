@@ -5,12 +5,20 @@ import { useEffect } from "react";
 
 export default function RegisterSW() {
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      void navigator.serviceWorker.register("/sw.js", {
+    if (
+      process.env.NODE_ENV !== "production" ||
+      !("serviceWorker" in navigator)
+    ) {
+      return;
+    }
+    void navigator.serviceWorker
+      .register("/sw.js", {
         scope: "/",
         updateViaCache: "none",
+      })
+      .catch((error) => {
+        console.error("Service worker registration failed:", error);
       });
-    }
   }, []);
 
   return null;

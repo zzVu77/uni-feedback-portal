@@ -1,6 +1,6 @@
 const CACHE_NAME = "FeedbackAppCache-v1";
 
-const staticFiles = ["/", "/globals.css"];
+const staticFiles = ["/"];
 
 const BASE_URL = self.location.origin;
 
@@ -13,28 +13,30 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
+  if (event.request.method !== "GET") {
+    return;
+  }
   const url = new URL(event.request.url);
 
   if (url.origin !== BASE_URL) {
-    event.respondWith(
-      fetch(event.request)
-        .then(function (networkResponse) {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(function (cache) {
-            cache.put(event.request, responseClone);
-          });
-          return networkResponse;
-        })
-        .catch(function () {
-          return caches.match(event.request);
-        }),
-    );
     return;
   }
   event.respondWith(
     caches.match(event.request).then(function (response) {
       if (response) return response;
-      return fetch(event.request);
+      return fetch(event.request).then(function (networkResponse) {
+        if (
+          networkResponse &&
+          networkResponse.ok &&
+          networkResponse.type === "basic"
+        ) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then(function (cache) {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      });
     }),
   );
 });

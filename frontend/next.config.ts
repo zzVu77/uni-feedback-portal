@@ -30,10 +30,6 @@ async function getHeaders(): Promise<Header[]> {
           key: "Cache-Control",
           value: "no-cache, no-store, must-revalidate",
         },
-        {
-          key: "Content-Security-Policy",
-          value: "default-src 'self'; script-src 'self'",
-        },
       ],
     },
   ]);
