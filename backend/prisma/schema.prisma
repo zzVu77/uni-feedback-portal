@@ -93,6 +93,7 @@ enum FileTargetType {
   FEEDBACK
   MESSAGE
   ANNOUNCEMENT
+  AVATAR
 }
 
 

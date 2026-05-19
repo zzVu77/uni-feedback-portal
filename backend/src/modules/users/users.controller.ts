@@ -1,11 +1,12 @@
 // users.controller.ts
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserResponseDto } from './dto/user-response.dto';
 import { UsersService } from './users.service';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { CreateFileAttachmentDto } from '../uploads/dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -19,6 +20,15 @@ export class UsersController {
     return this.usersService.getUser(actor);
   }
 
+  @ApiOperation({ summary: 'Upload user avatar' })
+  @ApiOkResponse({ type: UserResponseDto })
+  @Post('upload/avatar')
+  async uploadAvatar(
+    @ActiveUser() actor: ActiveUserData,
+    @Body() fileAttachment: CreateFileAttachmentDto,
+  ): Promise<UserResponseDto> {
+    return this.usersService.uploadAvatar(actor, fileAttachment);
+  }
   @ApiOperation({ summary: 'Update user profile' })
   @ApiOkResponse({ type: UserResponseDto })
   @Patch('update/me')
