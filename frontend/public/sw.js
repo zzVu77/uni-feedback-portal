@@ -19,17 +19,28 @@ self.addEventListener("fetch", function (event) {
   const url = new URL(event.request.url);
 
   if (url.origin !== BASE_URL) {
+    event.respondWith(
+      fetch(event.request)
+        .then(function (networkResponse) {
+          if (networkResponse && networkResponse.ok) {
+            const clone = networkResponse.clone();
+            caches
+              .open(CACHE_NAME)
+              .then((cache) => cache.put(event.request, clone));
+          }
+          return networkResponse;
+        })
+        .catch(function () {
+          return caches.match(event.request);
+        }),
+    );
     return;
   }
   event.respondWith(
     caches.match(event.request).then(function (response) {
       if (response) return response;
       return fetch(event.request).then(function (networkResponse) {
-        if (
-          networkResponse &&
-          networkResponse.ok &&
-          networkResponse.type === "basic"
-        ) {
+        if (networkResponse && networkResponse.ok) {
           const responseClone = networkResponse.clone();
           caches.open(CACHE_NAME).then(function (cache) {
             cache.put(event.request, responseClone);
