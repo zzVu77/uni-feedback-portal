@@ -12,7 +12,7 @@ import { UploadsService } from '../uploads/uploads.service';
 
 type UserWithDepartment = Users & {
   department?: Pick<Departments, 'id' | 'name' | 'email' | 'location'> | null;
-  attachment: FileAttachmentDto;
+  attachment: FileAttachmentDto | null;
 };
 
 @Injectable()
@@ -29,7 +29,7 @@ export class UsersService implements UsersServiceContract {
       email: user.email,
       role: user.role,
       createdAt: user.createdAt.toISOString(),
-      attachment: user.attachment,
+      attachment: user.attachment ?? null,
       ...(user.department
         ? {
             department: {
@@ -64,11 +64,11 @@ export class UsersService implements UsersServiceContract {
       user.id,
       FileTargetType.AVATAR,
     );
-    if (!attachment) {
-      throw new NotFoundException(`Avatar not found for user ${actor.sub}`);
-    }
 
-    return this.mapToUserResponse({ ...user, attachment: attachment[0] });
+    return this.mapToUserResponse({
+      ...user,
+      attachment: attachment?.[0] ?? null,
+    });
   }
 
   async updateMe(
@@ -109,7 +109,7 @@ export class UsersService implements UsersServiceContract {
     }
     return this.mapToUserResponse({
       ...updatedUser,
-      attachment: attachment[0],
+      attachment: attachment?.[0] ?? null,
     });
   }
   async uploadAvatar(
@@ -130,6 +130,6 @@ export class UsersService implements UsersServiceContract {
         [fileAttachment],
       );
     }
-    return this.mapToUserResponse({ ...user, attachment: files[0] });
+    return this.mapToUserResponse({ ...user, attachment: files?.[0] ?? null });
   }
 }

@@ -55,5 +55,5 @@ export class UserResponseDto {
     type: [FileAttachmentDto],
     description: 'Avatar of the user',
   })
-  attachment: FileAttachmentDto;
+  attachment: FileAttachmentDto | null;
 }
