@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, MinLength } from 'class-validator';
-import { CreateFileAttachmentDto } from 'src/modules/uploads/dto';
+import { CreateAvatarAttachmentDto } from 'src/modules/uploads/dto';
 
 export class UpdateProfileDto {
   @ApiPropertyOptional({
@@ -13,8 +13,8 @@ export class UpdateProfileDto {
   fullName?: string;
   @ApiPropertyOptional({
     description: 'The new avatar of the user',
-    type: CreateFileAttachmentDto,
+    type: CreateAvatarAttachmentDto,
   })
   @IsOptional()
-  attachment?: CreateFileAttachmentDto;
+  attachment?: CreateAvatarAttachmentDto;
 }

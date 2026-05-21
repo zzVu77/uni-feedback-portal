@@ -7,7 +7,7 @@ import { UsersServiceContract } from './users.service.contract';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
 import { Users, Departments, FileTargetType } from '@prisma/client';
-import { CreateFileAttachmentDto, FileAttachmentDto } from '../uploads/dto';
+import { CreateAvatarAttachmentDto, FileAttachmentDto } from '../uploads/dto';
 import { UploadsService } from '../uploads/uploads.service';
 
 type UserWithDepartment = Users & {
@@ -114,7 +114,7 @@ export class UsersService implements UsersServiceContract {
   }
   async uploadAvatar(
     actor: ActiveUserData,
-    fileAttachment: CreateFileAttachmentDto,
+    fileAttachment: CreateAvatarAttachmentDto,
   ): Promise<UserResponseDto> {
     const user = await this.prisma.users.findUnique({
       where: { id: actor.sub },

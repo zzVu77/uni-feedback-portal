@@ -6,7 +6,7 @@ import { UsersService } from './users.service';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { CreateFileAttachmentDto } from '../uploads/dto';
+import { CreateAvatarAttachmentDto } from '../uploads/dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -25,7 +25,7 @@ export class UsersController {
   @Post('upload/avatar')
   async uploadAvatar(
     @ActiveUser() actor: ActiveUserData,
-    @Body() fileAttachment: CreateFileAttachmentDto,
+    @Body() fileAttachment: CreateAvatarAttachmentDto,
   ): Promise<UserResponseDto> {
     return this.usersService.uploadAvatar(actor, fileAttachment);
   }
