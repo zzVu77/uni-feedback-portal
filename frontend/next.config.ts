@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import type { Header } from "next/dist/lib/load-custom-routes";
+import withSerwistInit from "@serwist/next";
 async function getHeaders(): Promise<Header[]> {
   return Promise.resolve([
     {
@@ -38,5 +39,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   headers: getHeaders,
 };
-
-export default nextConfig;
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  disable: process.env.NODE_ENV === "development",
+});
+export default withSerwist(nextConfig);

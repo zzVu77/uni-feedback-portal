@@ -55,6 +55,7 @@
     "react-hook-form": "^7.65.0",
     "react-intersection-observer": "^10.0.0",
     "recharts": "^2.15.4",
+    "serwist": "^9.5.11",
     "socket.io-client": "^4.8.1",
     "sonner": "^2.0.7",
     "suneditor": "^2.47.8",
@@ -64,6 +65,7 @@
     "zod": "^4.1.9"
   },
   "devDependencies": {
+    "@serwist/next": "^9.5.11",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
     "@types/js-cookie": "^3.0.6",
