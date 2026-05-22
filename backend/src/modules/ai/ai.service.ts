@@ -22,13 +22,15 @@ export class AiService {
   constructor(private readonly prisma: PrismaService) {}
 
   async checkToxicity(
+    subject: string,
     description: string,
     data: AiDataContext,
     type: string,
   ): Promise<boolean> {
-    if (description) {
+    if (description && subject) {
+      const dataCheck = `${subject}\n${description}`;
       // check keywords for toxicity
-      const detectedKeyword = containsToxicKeyword(description, toxicKeywords);
+      const detectedKeyword = containsToxicKeyword(dataCheck, toxicKeywords);
       if (detectedKeyword) {
         console.warn(`Toxic keyword detected: ${detectedKeyword}`);
         return true;
@@ -39,7 +41,7 @@ export class AiService {
         throw new Error('Google Gemini API key is not configured.');
       }
       const genAI = new GoogleGenAI({ apiKey: API_KEY });
-      const prompt = toxicityPrompt(description);
+      const prompt = toxicityPrompt(dataCheck);
       const model = genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,

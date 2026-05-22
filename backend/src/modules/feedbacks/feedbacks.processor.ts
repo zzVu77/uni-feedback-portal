@@ -117,6 +117,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
     } = params;
 
     const isToxic = await this.aiService.checkToxicity(
+      subject,
       description,
       aiDataContext,
       jobType,
