@@ -152,7 +152,7 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-md lg:w-auto">
+    <div className="flex h-full w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-xs lg:w-auto">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
       <Form {...statusForm}>
         <form className="flex w-full flex-col gap-2 lg:max-w-[200px]">
