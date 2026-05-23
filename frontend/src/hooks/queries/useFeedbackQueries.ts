@@ -9,14 +9,17 @@ import {
   getAllFeedbacksOfAllDepartments,
   getAllStaffFeedbacks,
   getMyFeedbackById,
+  getRelatedStaffFeedbacksById,
   getStaffFeedbackById,
   updateFeedbackById,
   updateStaffFeedbackStatusById,
+  bulkUpdateStaffFeedbackStatus,
 } from "@/services/feedback-service";
 import {
   FeedbackFilter,
   CreateFeedbackPayload,
   UpdateFeedbackStatusParams,
+  BulkUpdateFeedbackStatusParams,
   ForwardFeedbackParams,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -30,6 +33,7 @@ export const FEEDBACK_QUERY_KEYS = {
   staff: {
     STAFF_FEEDBACKS: "staff-feedbacks",
     STAFF_FEEDBACK_DETAIL: "staff-feedback-detail",
+    STAFF_RELATED_FEEDBACKS: "staff-related-feedbacks",
   },
   admin: {
     ALL_DEPARTMENTS_FEEDBACKS: "admin-all-departments-feedbacks",
@@ -129,6 +133,19 @@ export const useGetStaffFeedbackById = (
   });
 };
 
+export const useGetRelatedStaffFeedbacksById = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_RELATED_FEEDBACKS, id],
+    queryFn: () => getRelatedStaffFeedbacksById(id),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+    ...options,
+  });
+};
+
 export const useUpdateStaffFeedbackStatusById = () => {
   return useMutation({
     mutationFn: (params: UpdateFeedbackStatusParams) =>
@@ -136,6 +153,24 @@ export const useUpdateStaffFeedbackStatusById = () => {
     retry: false,
     onSuccess: () => {
       toast.success("Cập nhật trạng thái góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+
+export const useBulkUpdateStaffFeedbackStatus = () => {
+  return useMutation({
+    mutationFn: (params: BulkUpdateFeedbackStatusParams) =>
+      bulkUpdateStaffFeedbackStatus(
+        params.feedbackIds,
+        params.status,
+        params.note,
+      ),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Cập nhật trạng thái nhiều góp ý thành công!");
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");

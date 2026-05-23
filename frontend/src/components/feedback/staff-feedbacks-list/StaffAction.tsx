@@ -31,6 +31,7 @@ import {
   FEEDBACK_QUERY_KEYS,
   useForwardStaffFeedbackById,
   useUpdateStaffFeedbackStatusById,
+  useBulkUpdateStaffFeedbackStatus,
 } from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackStatus } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -71,11 +72,16 @@ const statusOptions = [
 ];
 
 type StaffActionProps = {
-  feedbackId: string;
+  feedbackId?: string;
+  feedbackIds?: string[];
   currentStatus: string;
 };
 
-const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
+const StaffAction = ({
+  feedbackId,
+  feedbackIds,
+  currentStatus,
+}: StaffActionProps) => {
   const queryClient = useQueryClient();
 
   const statusForm = useForm<UpdateStatusValues>({
@@ -94,23 +100,37 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
   const { isValid: isForwardFormValid } = forwardForm.formState;
 
   const { mutateAsync: updateStatus } = useUpdateStaffFeedbackStatusById();
+  const { mutateAsync: bulkUpdateStatus } = useBulkUpdateStaffFeedbackStatus();
   const { mutateAsync: forwardFeedback } = useForwardStaffFeedbackById();
+
   const handleOnStatusSubmit = async (data: UpdateStatusValues) => {
     try {
-      await updateStatus({
-        id: feedbackId,
-        status: data.status as FeedbackStatus,
-        note: data.note,
-      });
-      // Refetching data to update UI dependent on query keys
-      await Promise.all([
-        queryClient.invalidateQueries({
+      if (feedbackIds && feedbackIds.length > 0) {
+        await bulkUpdateStatus({
+          feedbackIds,
+          status: data.status as FeedbackStatus,
+          note: data.note,
+        });
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS],
+        });
+        // Also invalidate related if needed
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_RELATED_FEEDBACKS],
+        });
+      } else if (feedbackId) {
+        await updateStatus({
+          id: feedbackId,
+          status: data.status as FeedbackStatus,
+          note: data.note,
+        });
+        await queryClient.invalidateQueries({
           queryKey: [
             FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL,
             feedbackId,
           ],
-        }),
-      ]);
+        });
+      }
       statusForm.reset();
       statusForm.clearErrors();
     } catch (error) {
@@ -120,20 +140,32 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
 
   const handleOnForwardSubmit = async (data: ForwardFeedbackValues) => {
     try {
-      await forwardFeedback({
-        id: feedbackId,
-        toDepartmentId: data.toDepartmentId,
-        note: data.note,
-      });
-      // Refetching data to update UI dependent on query keys
-      await Promise.all([
-        queryClient.invalidateQueries({
+      if (feedbackIds && feedbackIds.length > 0) {
+        await Promise.all(
+          feedbackIds.map((id) =>
+            forwardFeedback({
+              id,
+              toDepartmentId: data.toDepartmentId,
+              note: data.note,
+            }),
+          ),
+        );
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS],
+        });
+      } else if (feedbackId) {
+        await forwardFeedback({
+          id: feedbackId,
+          toDepartmentId: data.toDepartmentId,
+          note: data.note,
+        });
+        await queryClient.invalidateQueries({
           queryKey: [
             FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL,
             feedbackId,
           ],
-        }),
-      ]);
+        });
+      }
       forwardForm.reset();
       setIsDialogOpen(false);
     } catch (error) {

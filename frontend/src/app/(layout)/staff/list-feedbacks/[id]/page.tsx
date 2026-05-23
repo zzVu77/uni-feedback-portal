@@ -142,7 +142,7 @@ const Page = () => {
               className="m-0 focus-visible:outline-none"
             >
               <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-                <RelatedFeedbackTable />
+                <RelatedFeedbackTable feedbackId={id} />
               </div>
             </TabsContent>
           </Tabs>

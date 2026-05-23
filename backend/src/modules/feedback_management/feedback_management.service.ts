@@ -700,7 +700,7 @@ export class FeedbackManagementService {
 
     const peerIds = [...scoreByPeer.keys()];
     if (peerIds.length === 0) {
-      return { peers: [] };
+      return { results: [] };
     }
 
     const peers = await this.prisma.feedbacks.findMany({
@@ -728,7 +728,7 @@ export class FeedbackManagementService {
       }))
       .sort((a, b) => b.score - a.score);
 
-    return { peers: peersOut };
+    return { results: peersOut };
   }
 
   async bulkUpdateFeedbackStatus(

@@ -1,10 +1,9 @@
 "use client";
 
-import StatusBadge, { StatusBadgeProps } from "@/components/common/StatusBadge";
+import StatusBadge from "@/components/common/StatusBadge";
 import StaffAction from "@/components/feedback/staff-feedbacks-list/StaffAction";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -21,120 +21,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetRelatedStaffFeedbacksById } from "@/hooks/queries/useFeedbackQueries";
+import { RelatedFeedbackItem } from "@/types";
 import { FileText, Inbox } from "lucide-react";
 import { useState } from "react";
 
-// Mock Data Types
-interface RelatedFeedback {
-  id: string;
-  subject: string;
-  senderName: string;
-  createdAt: string;
-  status: StatusBadgeProps["type"];
+interface RelatedFeedbackTableProps {
+  feedbackId: string;
 }
 
-// Mock Data
-const MOCK_RELATED_FEEDBACKS: RelatedFeedback[] = [
-  {
-    id: "FB-1001",
-    subject: "Wi-Fi is extremely slow in the central library on the 3rd floor.",
-    senderName: "Nguyen Van A",
-    createdAt: "2023-10-15T08:30:00Z",
-    status: "PENDING",
-  },
-  {
-    id: "FB-1002",
-    subject: "Unable to connect to eduroam in building C.",
-    senderName: "Tran Thi B",
-    createdAt: "2023-10-14T14:20:00Z",
-    status: "IN_PROGRESS",
-  },
-  {
-    id: "FB-1005",
-    subject: "Internet connection drops every 10 minutes in the study hall.",
-    senderName: "Le Van C",
-    createdAt: "2023-10-12T09:15:00Z",
-    status: "RESOLVED",
-  },
-  {
-    id: "FB-1008",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-1009",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10010",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10011",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10012",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10011",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10012",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10011",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-  {
-    id: "FB-10012",
-    subject: "Network issue during online exam in lab room 4.",
-    senderName: "Pham Thi D",
-    createdAt: "2023-10-10T16:45:00Z",
-    status: "REJECTED",
-  },
-];
-
-// interface RelatedFeedbackTableProps {
-//   feedbackId: string;
-// }
-
-export function RelatedFeedbackTable() {
-  // {
-  //   // feedbackId,
-  // }: RelatedFeedbackTableProps,
+export function RelatedFeedbackTable({
+  feedbackId,
+}: RelatedFeedbackTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  // const [bulkStatus, setBulkStatus] = useState<string>("");
+  const {
+    data: relatedFeedbacks,
+    isLoading,
+    isError,
+  } = useGetRelatedStaffFeedbacksById(feedbackId);
+
+  const feedbacksList: RelatedFeedbackItem[] = Array.isArray(
+    relatedFeedbacks?.results,
+  )
+    ? relatedFeedbacks.results
+    : [];
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedIds(new Set(MOCK_RELATED_FEEDBACKS.map((fb) => fb.id)));
+      setSelectedIds(new Set(feedbacksList.map((fb) => fb.id)));
     } else {
       setSelectedIds(new Set());
     }
@@ -158,23 +72,32 @@ export function RelatedFeedbackTable() {
   // };
 
   const isAllSelected =
-    MOCK_RELATED_FEEDBACKS.length > 0 &&
-    selectedIds.size === MOCK_RELATED_FEEDBACKS.length;
+    feedbacksList.length > 0 && selectedIds.size === feedbacksList.length;
   const isIndeterminate =
-    selectedIds.size > 0 && selectedIds.size < MOCK_RELATED_FEEDBACKS.length;
+    selectedIds.size > 0 && selectedIds.size < feedbacksList.length;
 
-  if (MOCK_RELATED_FEEDBACKS.length === 0) {
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
+        <div className="mb-4 animate-pulse rounded-full bg-slate-50 p-4">
+          <Inbox className="h-8 w-8 text-slate-300" />
+        </div>
+        <h3 className="mb-1 font-medium text-slate-900">Đang tải...</h3>
+      </div>
+    );
+  }
+
+  if (isError || feedbacksList.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
         <div className="mb-4 rounded-full bg-slate-50 p-4">
           <Inbox className="h-8 w-8 text-slate-400" />
         </div>
         <h3 className="mb-1 font-medium text-slate-900">
-          No related feedbacks found
+          Không tìm thấy góp ý liên quan
         </h3>
         <p className="max-w-sm text-sm text-slate-500">
-          We couldn't find any feedbacks with similar context or semantic
-          meaning to this one.
+          Không có góp ý nào có nội dung tương tự.
         </p>
       </div>
     );
@@ -216,9 +139,7 @@ export function RelatedFeedbackTable() {
                   <ScrollArea className="order-2 h-full w-full rounded-xl border border-slate-200 bg-slate-50/30 md:order-1 md:w-3/5">
                     <div className="flex max-h-[70vh] flex-col gap-3 p-4">
                       {Array.from(selectedIds).map((id) => {
-                        const fb = MOCK_RELATED_FEEDBACKS.find(
-                          (f) => f.id === id,
-                        );
+                        const fb = feedbacksList.find((f) => f.id === id);
                         return (
                           <div
                             key={id}
@@ -231,7 +152,7 @@ export function RelatedFeedbackTable() {
                               <span className="flex items-center gap-1.5">
                                 <FileText className="h-4 w-4" /> Người gửi:{" "}
                                 <span className="font-medium text-slate-700">
-                                  {fb?.senderName}
+                                  {"Ẩn danh"}
                                 </span>
                               </span>
                               <span className="flex items-center gap-1.5 border-l border-slate-200 pl-4 text-xs text-slate-400">
@@ -249,7 +170,7 @@ export function RelatedFeedbackTable() {
                   {/* Right side: StaffAction */}
                   <div className="order-1 w-full md:order-2 md:w-2/5">
                     <StaffAction
-                      feedbackId={Array.from(selectedIds)[0]}
+                      feedbackIds={Array.from(selectedIds)}
                       currentStatus="PENDING"
                     />
                   </div>
@@ -291,7 +212,7 @@ export function RelatedFeedbackTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_RELATED_FEEDBACKS.map((feedback) => (
+              {feedbacksList.map((feedback) => (
                 <TableRow
                   key={feedback.id}
                   className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50"
@@ -318,7 +239,7 @@ export function RelatedFeedbackTable() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
-                    {feedback.senderName}
+                    {"Ẩn danh"}
                   </TableCell>
                   <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
                     {new Date(feedback.createdAt).toLocaleDateString("en-US", {
@@ -329,7 +250,7 @@ export function RelatedFeedbackTable() {
                   </TableCell>
                   <TableCell className="px-4 py-4 text-right">
                     <div className="flex justify-end">
-                      <StatusBadge type={feedback.status} />
+                      <StatusBadge type={feedback.currentStatus} />
                     </div>
                   </TableCell>
                 </TableRow>
