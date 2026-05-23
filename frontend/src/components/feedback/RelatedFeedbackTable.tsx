@@ -24,6 +24,7 @@ import {
 import { useGetRelatedStaffFeedbacksById } from "@/hooks/queries/useFeedbackQueries";
 import { RelatedFeedbackItem } from "@/types";
 import { FileText, Inbox } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface RelatedFeedbackTableProps {
@@ -141,27 +142,29 @@ export function RelatedFeedbackTable({
                       {Array.from(selectedIds).map((id) => {
                         const fb = feedbacksList.find((f) => f.id === id);
                         return (
-                          <div
-                            key={id}
-                            className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm transition-colors hover:border-blue-200"
+                          <Link
+                            href={`/staff/list-feedbacks/${fb?.id}`}
+                            key={fb?.id}
                           >
-                            <div className="text-base font-semibold text-slate-900">
-                              {fb?.subject}
-                            </div>
-                            <div className="mt-2 flex items-center gap-4 text-sm text-slate-500">
-                              <span className="flex items-center gap-1.5">
-                                <FileText className="h-4 w-4" /> Người gửi:{" "}
-                                <span className="font-medium text-slate-700">
-                                  {fb?.student?.fullName || "Ẩn danh"}
+                            <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm transition-colors hover:border-blue-200">
+                              <div className="text-base font-semibold text-slate-900">
+                                {fb?.subject}
+                              </div>
+                              <div className="mt-2 flex items-center gap-4 text-sm text-slate-500">
+                                <span className="flex items-center gap-1.5">
+                                  <FileText className="h-4 w-4" /> Người gửi:{" "}
+                                  <span className="font-medium text-slate-700">
+                                    {fb?.student?.fullName || "Ẩn danh"}
+                                  </span>
                                 </span>
-                              </span>
-                              <span className="flex items-center gap-1.5 border-l border-slate-200 pl-4 text-xs text-slate-400">
-                                {new Date(
-                                  fb?.createdAt ?? "",
-                                ).toLocaleDateString()}
-                              </span>
+                                <span className="flex items-center gap-1.5 border-l border-slate-200 pl-4 text-xs text-slate-400">
+                                  {new Date(
+                                    fb?.createdAt ?? "",
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
                             </div>
-                          </div>
+                          </Link>
                         );
                       })}
                     </div>
@@ -227,17 +230,22 @@ export function RelatedFeedbackTable({
                       aria-label={`Select feedback ${feedback.id}`}
                     />
                   </TableCell>
-                  <TableCell className="px-4 py-4">
-                    <div className="flex items-start gap-2">
-                      <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
-                      <span
-                        className="line-clamp-2 cursor-pointer font-medium text-slate-900 transition-colors hover:text-blue-600"
-                        title={feedback.subject}
-                      >
-                        {feedback.subject}
-                      </span>
-                    </div>
-                  </TableCell>
+                  <Link
+                    href={`/staff/list-feedbacks/${feedback?.id}`}
+                    key={feedback.id}
+                  >
+                    <TableCell className="px-4 py-4">
+                      <div className="flex items-start gap-2">
+                        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                        <span
+                          className="line-clamp-2 cursor-pointer font-medium text-slate-900 transition-colors hover:text-blue-600"
+                          title={feedback.subject}
+                        >
+                          {feedback.subject}
+                        </span>
+                      </div>
+                    </TableCell>
+                  </Link>
                   <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
                     {feedback?.student?.fullName || "Ẩn danh"}
                   </TableCell>

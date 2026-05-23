@@ -86,7 +86,7 @@ const Page = () => {
           {feedback.currentStatus !== "REJECTED" &&
             feedback.currentStatus !== "RESOLVED" &&
             feedback.isForwarding === false && (
-              <div className="mt-2 w-full shrink-0 lg:mt-0 lg:w-auto">
+              <div className="h-full w-full shrink-0 lg:mt-0 lg:w-auto">
                 <StaffAction
                   feedbackId={id}
                   currentStatus={feedback.currentStatus}
