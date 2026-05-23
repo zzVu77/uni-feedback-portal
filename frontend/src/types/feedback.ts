@@ -118,5 +118,11 @@ export type FeedbackHeaderType = Pick<
 
 export type RelatedFeedbackItem = Pick<
   FeedbackDetail,
-  "id" | "subject" | "currentStatus" | "createdAt" | "category" | "department"
+  | "id"
+  | "subject"
+  | "currentStatus"
+  | "createdAt"
+  | "category"
+  | "department"
+  | "student"
 >;

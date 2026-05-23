@@ -152,7 +152,7 @@ export function RelatedFeedbackTable({
                               <span className="flex items-center gap-1.5">
                                 <FileText className="h-4 w-4" /> Người gửi:{" "}
                                 <span className="font-medium text-slate-700">
-                                  {"Ẩn danh"}
+                                  {fb?.student?.fullName || "Ẩn danh"}
                                 </span>
                               </span>
                               <span className="flex items-center gap-1.5 border-l border-slate-200 pl-4 text-xs text-slate-400">
@@ -239,7 +239,7 @@ export function RelatedFeedbackTable({
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
-                    {"Ẩn danh"}
+                    {feedback?.student?.fullName || "Ẩn danh"}
                   </TableCell>
                   <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
                     {new Date(feedback.createdAt).toLocaleDateString("en-US", {
