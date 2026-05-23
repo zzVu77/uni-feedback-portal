@@ -76,7 +76,7 @@ const Page = () => {
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
 
   return (
-    <Wrapper classNames={{ container: "lg:px-4" }}>
+    <Wrapper>
       <div className="flex h-full w-full flex-col gap-6 pb-3">
         {/* Top Section */}
         <div className="flex flex-col items-start justify-between gap-4 lg:flex-row">

@@ -1,15 +1,18 @@
 "use client";
 
 import StatusBadge, { StatusBadgeProps } from "@/components/common/StatusBadge";
+import StaffAction from "@/components/feedback/staff-feedbacks-list/StaffAction";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -60,6 +63,62 @@ const MOCK_RELATED_FEEDBACKS: RelatedFeedback[] = [
     createdAt: "2023-10-10T16:45:00Z",
     status: "REJECTED",
   },
+  {
+    id: "FB-1009",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10010",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10011",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10012",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10011",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10012",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10011",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
+  {
+    id: "FB-10012",
+    subject: "Network issue during online exam in lab room 4.",
+    senderName: "Pham Thi D",
+    createdAt: "2023-10-10T16:45:00Z",
+    status: "REJECTED",
+  },
 ];
 
 // interface RelatedFeedbackTableProps {
@@ -71,7 +130,7 @@ export function RelatedFeedbackTable() {
   //   // feedbackId,
   // }: RelatedFeedbackTableProps,
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [bulkStatus, setBulkStatus] = useState<string>("");
+  // const [bulkStatus, setBulkStatus] = useState<string>("");
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -91,12 +150,12 @@ export function RelatedFeedbackTable() {
     setSelectedIds(newSelected);
   };
 
-  const handleBulkUpdate = () => {
-    if (!bulkStatus) return;
-    // Add toast or actual mutation logic here
-    setSelectedIds(new Set());
-    setBulkStatus("");
-  };
+  // const handleBulkUpdate = () => {
+  //   if (!bulkStatus) return;
+  //   // Add toast or actual mutation logic here
+  //   setSelectedIds(new Set());
+  //   setBulkStatus("");
+  // };
 
   const isAllSelected =
     MOCK_RELATED_FEEDBACKS.length > 0 &&
@@ -131,105 +190,155 @@ export function RelatedFeedbackTable() {
               Đã chọn {selectedIds.size} góp ý
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <Select value={bulkStatus} onValueChange={setBulkStatus}>
-              <SelectTrigger className="h-9 w-40 border-slate-200 bg-white">
-                <SelectValue placeholder="Update status..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="RESOLVED">Resolved</SelectItem>
-                <SelectItem value="REJECTED">Rejected</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={handleBulkUpdate}
-              disabled={!bulkStatus}
-              size="sm"
-              className="h-9 shadow-none"
-            >
-              Update Status
-            </Button>
+          <div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  size="sm"
+                  className="h-9 bg-blue-600 text-white shadow-none hover:bg-blue-700"
+                >
+                  Xử lý hàng loạt
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[90vh] w-full max-w-5xl overflow-auto md:max-w-6xl">
+                <DialogHeader>
+                  <DialogTitle className="text-md md:text-xl">
+                    Xử lý hàng loạt ({selectedIds.size} góp ý)
+                  </DialogTitle>
+                  <DialogDescription className="text-xs md:text-sm">
+                    Kiểm tra lại danh sách các góp ý đã chọn trước khi thực hiện
+                    hành động.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-2 flex flex-col items-start gap-8 overflow-auto md:flex-row">
+                  {/* Left side: List of selected feedbacks */}
+                  <ScrollArea className="order-2 h-full w-full rounded-xl border border-slate-200 bg-slate-50/30 md:order-1 md:w-3/5">
+                    <div className="flex max-h-[70vh] flex-col gap-3 p-4">
+                      {Array.from(selectedIds).map((id) => {
+                        const fb = MOCK_RELATED_FEEDBACKS.find(
+                          (f) => f.id === id,
+                        );
+                        return (
+                          <div
+                            key={id}
+                            className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm transition-colors hover:border-blue-200"
+                          >
+                            <div className="text-base font-semibold text-slate-900">
+                              {fb?.subject}
+                            </div>
+                            <div className="mt-2 flex items-center gap-4 text-sm text-slate-500">
+                              <span className="flex items-center gap-1.5">
+                                <FileText className="h-4 w-4" /> Người gửi:{" "}
+                                <span className="font-medium text-slate-700">
+                                  {fb?.senderName}
+                                </span>
+                              </span>
+                              <span className="flex items-center gap-1.5 border-l border-slate-200 pl-4 text-xs text-slate-400">
+                                {new Date(
+                                  fb?.createdAt ?? "",
+                                ).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+
+                  {/* Right side: StaffAction */}
+                  <div className="order-1 w-full md:order-2 md:w-2/5">
+                    <StaffAction
+                      feedbackId={Array.from(selectedIds)[0]}
+                      currentStatus="PENDING"
+                    />
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       )}
 
       {/* Data Table */}
-      <div className="w-full overflow-auto">
-        <Table className="w-full text-sm">
-          <TableHeader>
-            <TableRow className="border-b border-slate-200 hover:bg-transparent">
-              <TableHead className="w-[50px] px-4 py-4">
-                <Checkbox
-                  checked={
-                    isAllSelected || (isIndeterminate ? "indeterminate" : false)
-                  }
-                  onCheckedChange={handleSelectAll}
-                  aria-label="Select all"
-                />
-              </TableHead>
-              <TableHead className="px-4 py-4 font-medium text-slate-900">
-                Tiêu đề
-              </TableHead>
-              <TableHead className="px-4 py-4 font-medium text-slate-900">
-                Người gửi
-              </TableHead>
-              <TableHead className="px-4 py-4 font-medium text-slate-900">
-                Ngày gửi
-              </TableHead>
-              <TableHead className="px-4 py-4 text-right font-medium text-slate-900">
-                Trạng thái
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {MOCK_RELATED_FEEDBACKS.map((feedback) => (
-              <TableRow
-                key={feedback.id}
-                className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50"
-                data-state={selectedIds.has(feedback.id) && "selected"}
-              >
-                <TableCell className="px-4 py-4">
+      <ScrollArea className="h-full w-full rounded-md border border-slate-100 whitespace-nowrap">
+        <div className="max-h-[49vh] w-full">
+          <Table className="w-full text-sm">
+            <TableHeader>
+              <TableRow className="border-b border-slate-200 hover:bg-transparent">
+                <TableHead className="w-[50px] px-4 py-4">
                   <Checkbox
-                    checked={selectedIds.has(feedback.id)}
-                    onCheckedChange={(checked) =>
-                      handleSelectOne(feedback.id, checked as boolean)
+                    checked={
+                      isAllSelected ||
+                      (isIndeterminate ? "indeterminate" : false)
                     }
-                    aria-label={`Select feedback ${feedback.id}`}
+                    onCheckedChange={handleSelectAll}
+                    aria-label="Select all"
                   />
-                </TableCell>
-                <TableCell className="px-4 py-4">
-                  <div className="flex items-start gap-2">
-                    <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
-                    <span
-                      className="line-clamp-2 cursor-pointer font-medium text-slate-900 transition-colors hover:text-blue-600"
-                      title={feedback.subject}
-                    >
-                      {feedback.subject}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
-                  {feedback.senderName}
-                </TableCell>
-                <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
-                  {new Date(feedback.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </TableCell>
-                <TableCell className="px-4 py-4 text-right">
-                  <div className="flex justify-end">
-                    <StatusBadge type={feedback.status} />
-                  </div>
-                </TableCell>
+                </TableHead>
+                <TableHead className="px-4 py-4 font-medium text-slate-900">
+                  Tiêu đề
+                </TableHead>
+                <TableHead className="px-4 py-4 font-medium text-slate-900">
+                  Người gửi
+                </TableHead>
+                <TableHead className="px-4 py-4 font-medium text-slate-900">
+                  Ngày gửi
+                </TableHead>
+                <TableHead className="px-4 py-4 text-right font-medium text-slate-900">
+                  Trạng thái
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {MOCK_RELATED_FEEDBACKS.map((feedback) => (
+                <TableRow
+                  key={feedback.id}
+                  className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50"
+                  data-state={selectedIds.has(feedback.id) && "selected"}
+                >
+                  <TableCell className="px-4 py-4">
+                    <Checkbox
+                      checked={selectedIds.has(feedback.id)}
+                      onCheckedChange={(checked) =>
+                        handleSelectOne(feedback.id, checked as boolean)
+                      }
+                      aria-label={`Select feedback ${feedback.id}`}
+                    />
+                  </TableCell>
+                  <TableCell className="px-4 py-4">
+                    <div className="flex items-start gap-2">
+                      <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                      <span
+                        className="line-clamp-2 cursor-pointer font-medium text-slate-900 transition-colors hover:text-blue-600"
+                        title={feedback.subject}
+                      >
+                        {feedback.subject}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
+                    {feedback.senderName}
+                  </TableCell>
+                  <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
+                    {new Date(feedback.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell className="px-4 py-4 text-right">
+                    <div className="flex justify-end">
+                      <StatusBadge type={feedback.status} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 }
