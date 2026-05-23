@@ -106,24 +106,6 @@ axiosInstance.interceptors.response.use(
         isRefreshing = false;
       }
     }
-    if (!error.response || error.response.status >= 500) {
-      const requestConfig = error.config;
-      if (requestConfig && "caches" in window) {
-        try {
-          const cache = await caches.open("FeedbackAppCache-v1");
-
-          const cacheKey = `${requestConfig.baseURL}${requestConfig.url}`;
-
-          const cached = await cache.match(cacheKey);
-          if (cached) {
-            console.warn("[Axios] API lỗi, dùng cache:", cacheKey);
-            return cached.json();
-          }
-        } catch (cacheError) {
-          console.warn("[Axios] Không đọc được cache", cacheError);
-        }
-      }
-    }
     return Promise.reject(error);
   },
 );
