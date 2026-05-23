@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsNotEmpty, IsString, validateSync } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, validateSync } from 'class-validator';
 import 'dotenv/config'; // Tự động load file .env
 
 // Định nghĩa class chứa tất cả các biến môi trường
@@ -62,6 +62,14 @@ class EnvironmentVariables {
   @IsNotEmpty()
   AWS_S3_BASE_URL: string;
   COHERE_API_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  REDIS_HOST: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  REDIS_PORT: number;
 }
 
 const config = plainToInstance(EnvironmentVariables, process.env, {

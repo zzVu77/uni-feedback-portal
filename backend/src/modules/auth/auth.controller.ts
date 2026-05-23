@@ -135,16 +135,18 @@ export class AuthController {
     response.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
       secure: isProduction,
+      sameSite: 'none',
       maxAge: accessTokenMaxAge,
       path: '/',
-      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: isProduction,
+      sameSite: 'none',
       maxAge: refreshTokenMaxAge,
       path: '/',
-      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
     });
   }
 }

@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: university-feedback
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: UniversityFeedback
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend-net
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - backend-net
+
+  backend:
+    image: ${DOCKER_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env
+    networks:
+      - backend-net
+
+volumes:
+  postgres_data:
+
+networks:
+  backend-net:
