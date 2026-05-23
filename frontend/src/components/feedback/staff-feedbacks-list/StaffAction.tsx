@@ -75,12 +75,14 @@ type StaffActionProps = {
   feedbackId?: string;
   feedbackIds?: string[];
   currentStatus: string;
+  onSuccess?: () => void;
 };
 
 const StaffAction = ({
   feedbackId,
   feedbackIds,
   currentStatus,
+  onSuccess,
 }: StaffActionProps) => {
   const queryClient = useQueryClient();
 
@@ -133,6 +135,7 @@ const StaffAction = ({
       }
       statusForm.reset();
       statusForm.clearErrors();
+      onSuccess?.();
     } catch (error) {
       console.error("Update failed", error);
     }
@@ -168,6 +171,7 @@ const StaffAction = ({
       }
       forwardForm.reset();
       setIsDialogOpen(false);
+      onSuccess?.();
     } catch (error) {
       console.error("Forward failed", error);
     }

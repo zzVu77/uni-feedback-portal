@@ -35,6 +35,7 @@ export function RelatedFeedbackTable({
   feedbackId,
 }: RelatedFeedbackTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
   const {
     data: relatedFeedbacks,
     isLoading,
@@ -115,7 +116,7 @@ export function RelatedFeedbackTable({
             </span>
           </div>
           <div>
-            <Dialog>
+            <Dialog open={isBulkDialogOpen} onOpenChange={setIsBulkDialogOpen}>
               <DialogTrigger asChild>
                 <Button
                   size="sm"
@@ -145,6 +146,7 @@ export function RelatedFeedbackTable({
                           <Link
                             href={`/staff/list-feedbacks/${fb?.id}`}
                             key={fb?.id}
+                            target="_blank"
                           >
                             <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm transition-colors hover:border-blue-200">
                               <div className="text-base font-semibold text-slate-900">
@@ -175,6 +177,10 @@ export function RelatedFeedbackTable({
                     <StaffAction
                       feedbackIds={Array.from(selectedIds)}
                       currentStatus="PENDING"
+                      onSuccess={() => {
+                        setIsBulkDialogOpen(false);
+                        setSelectedIds(new Set());
+                      }}
                     />
                   </div>
                 </div>
@@ -233,6 +239,7 @@ export function RelatedFeedbackTable({
                   <Link
                     href={`/staff/list-feedbacks/${feedback?.id}`}
                     key={feedback.id}
+                    target="_blank"
                   >
                     <TableCell className="px-4 py-4">
                       <div className="flex items-start gap-2">
