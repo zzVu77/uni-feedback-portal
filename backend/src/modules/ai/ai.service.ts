@@ -27,40 +27,38 @@ export class AiService {
     data: AiDataContext,
     type: string,
   ): Promise<boolean> {
-    if (description && subject) {
-      const dataCheck = `${subject}\n${description}`;
-      // check keywords for toxicity
-      const detectedKeyword = containsToxicKeyword(dataCheck, toxicKeywords);
-      if (detectedKeyword) {
-        console.warn(`Toxic keyword detected: ${detectedKeyword}`);
-        return true;
-      }
-      const API_KEY = process.env.API_GEMINI_KEY || '';
-      if (!API_KEY) {
-        await this.handleFaultGeminiEvent(data, type);
-        throw new Error('Google Gemini API key is not configured.');
-      }
-      const genAI = new GoogleGenAI({ apiKey: API_KEY });
-      const prompt = toxicityPrompt(dataCheck);
-      const model = genAI.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
-      try {
-        const responseText = (await model).text;
-        const parsed = JSON.parse(responseText || '{"toxic": false}') as {
-          toxic: boolean;
-        };
-        const isToxicAI = parsed.toxic;
-        if (isToxicAI) {
-          return true;
-        }
-      } catch {
-        await this.handleFaultGeminiEvent(data, type);
-        throw new Error('Error parsing AI response for toxicity check.');
-      }
+    if (!description && !subject) {
+      return false;
     }
-    return false;
+    const parts = [subject, description].filter(Boolean);
+    const dataCheck = parts.join('\n');
+    // check keywords for toxicity
+    const detectedKeyword = containsToxicKeyword(dataCheck, toxicKeywords);
+    if (detectedKeyword) {
+      console.warn(`Toxic keyword detected: ${detectedKeyword}`);
+      return true;
+    }
+    const API_KEY = process.env.API_GEMINI_KEY || '';
+    if (!API_KEY) {
+      await this.handleFaultGeminiEvent(data, type);
+      throw new Error('Google Gemini API key is not configured.');
+    }
+    const genAI = new GoogleGenAI({ apiKey: API_KEY });
+    const prompt = toxicityPrompt(dataCheck);
+    const model = genAI.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+    });
+    try {
+      const responseText = (await model).text;
+      const parsed = JSON.parse(responseText || '{"toxic": false}') as {
+        toxic: boolean;
+      };
+      return parsed.toxic;
+    } catch {
+      await this.handleFaultGeminiEvent(data, type);
+      throw new Error('Error parsing AI response for toxicity check.');
+    }
   }
   async handleFaultGeminiEvent(data: AiDataContext, type: string) {
     if (type === 'create') {
