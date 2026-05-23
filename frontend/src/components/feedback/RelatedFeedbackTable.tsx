@@ -135,7 +135,7 @@ export function RelatedFeedbackTable({
                   </DialogDescription>
                 </DialogHeader>
 
-                <div className="mt-2 flex flex-col items-start gap-8 overflow-auto md:flex-row">
+                <div className="flex flex-col items-start gap-2 overflow-auto md:flex-row">
                   {/* Left side: List of selected feedbacks */}
                   <ScrollArea className="order-2 h-full w-full rounded-xl border border-slate-200 bg-slate-50/30 md:order-1 md:w-3/5">
                     <div className="flex max-h-[70vh] flex-col gap-3 p-4">
