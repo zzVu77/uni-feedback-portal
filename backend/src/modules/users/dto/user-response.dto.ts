@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
+import { FileAttachmentDto } from 'src/modules/uploads/dto';
 
 export class UserResponseDto {
   @ApiProperty({
@@ -49,4 +50,10 @@ export class UserResponseDto {
     description: 'Date when the user was created',
   })
   createdAt: string;
+
+  @ApiProperty({
+    type: [FileAttachmentDto],
+    description: 'Avatar of the user',
+  })
+  attachment: FileAttachmentDto | null;
 }
