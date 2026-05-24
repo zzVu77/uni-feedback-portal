@@ -35,7 +35,6 @@ type SidebarProps = {
 export default function Sidebar({
   showOnMobile = false,
   type = "student",
-  fullName,
 }: SidebarProps) {
   let navigation: NavigationItem[];
 
@@ -62,7 +61,7 @@ export default function Sidebar({
 
   const { mutateAsync: logout, isPending } = useLogout();
 
-  const { setUser } = useUser();
+  const { setUser, user } = useUser();
 
   return (
     <div
@@ -81,11 +80,14 @@ export default function Sidebar({
         href="/profile"
         className="flex flex-shrink-0 items-center gap-3 px-6 py-4 transition-colors hover:bg-white/5"
       >
-        <Avatar className="h-10 w-10 border border-slate-700">
-          <AvatarImage src="https://github.com/shadcn.png" />
+        <Avatar className="h-12 w-12 border border-slate-700">
+          <AvatarImage
+            src={user?.avatarUrl || "https://github.com/shadcn.png"}
+            className="object-cover"
+          />
 
           <AvatarFallback className="bg-slate-800 text-slate-200">
-            {fullName
+            {user?.fullName
               ?.split(" ")
               .map((n) => n[0])
               .join("")
@@ -95,7 +97,7 @@ export default function Sidebar({
 
         <div className="flex flex-col">
           <span className="max-w-[140px] truncate text-sm font-semibold text-white">
-            {fullName}
+            {user?.fullName}
           </span>
 
           <span className="text-xs font-medium text-slate-400">
