@@ -21,32 +21,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetRelatedStaffFeedbacksById } from "@/hooks/queries/useFeedbackQueries";
 import { RelatedFeedbackItem } from "@/types";
 import { FileText, Inbox } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 interface RelatedFeedbackTableProps {
-  feedbackId: string;
+  // feedbackId: string;
+  feedbacksList: RelatedFeedbackItem[] | [];
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export function RelatedFeedbackTable({
-  feedbackId,
+  feedbacksList,
+  isLoading,
+  isError,
 }: RelatedFeedbackTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
-  const {
-    data: relatedFeedbacks,
-    isLoading,
-    isError,
-  } = useGetRelatedStaffFeedbacksById(feedbackId);
+  // const {
+  //   data: relatedFeedbacks,
+  //   isLoading,
+  //   isError,
+  // } = useGetRelatedStaffFeedbacksById(feedbackId);
 
-  const feedbacksList: RelatedFeedbackItem[] = Array.isArray(
-    relatedFeedbacks?.results,
-  )
-    ? relatedFeedbacks.results
-    : [];
+  // const feedbacksList: RelatedFeedbackItem[] = Array.isArray(
+  //   relatedFeedbacks?.results,
+  // )
+  //   ? relatedFeedbacks.results
+  //   : [];
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -65,13 +69,6 @@ export function RelatedFeedbackTable({
     }
     setSelectedIds(newSelected);
   };
-
-  // const handleBulkUpdate = () => {
-  //   if (!bulkStatus) return;
-  //   // Add toast or actual mutation logic here
-  //   setSelectedIds(new Set());
-  //   setBulkStatus("");
-  // };
 
   const isAllSelected =
     feedbacksList.length > 0 && selectedIds.size === feedbacksList.length;

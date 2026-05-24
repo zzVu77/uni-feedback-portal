@@ -25,7 +25,7 @@ const Page = () => {
     enabled: isClient,
   });
 
-  if (isLoading) return <Loading variant="spinner" />;
+  if (isLoading || !isClient) return <Loading variant="spinner" />;
 
   if (
     error &&
