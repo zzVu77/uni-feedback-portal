@@ -1,16 +1,17 @@
-import { Calendar, MessageSquare, ThumbsUp, User } from "lucide-react";
-import InfoBadge from "../common/InfoBadge";
-import StatusBadge from "../common/StatusBadge";
-import Attachment from "../feedback/Attachment";
-import { Button } from "../ui/button";
-import { ForumPostDetail } from "@/types";
-import { cn } from "@/lib/utils";
 import {
   useUnvoteForumPost,
   useVoteForumPost,
 } from "@/hooks/queries/useForumPostQueries";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { ForumPostDetail } from "@/types";
 import DOMPurify from "dompurify";
+import { Calendar, MessageSquare, ThumbsUp } from "lucide-react";
+import Link from "next/link";
+import InfoBadge from "../common/InfoBadge";
+import StatusBadge from "../common/StatusBadge";
+import Attachment from "../feedback/Attachment";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 
 type Props = {
   data: ForumPostDetail;
@@ -47,9 +48,20 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
 
         <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-              <User className="h-5 w-5" />
-            </div>
+            <Avatar className="h-12 w-12 border border-slate-700">
+              <AvatarImage
+                src={user?.avatarUrl || "https://github.com/shadcn.png"}
+                className="object-cover"
+              />
+
+              <AvatarFallback className="bg-slate-800 text-slate-200">
+                {user?.fullName
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase() || "CN"}
+              </AvatarFallback>
+            </Avatar>
             <div className="flex flex-col">
               <span className="font-semibold text-slate-900">
                 {user.fullName}
