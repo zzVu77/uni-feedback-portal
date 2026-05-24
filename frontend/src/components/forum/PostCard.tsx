@@ -1,11 +1,12 @@
-import { MessageSquare, ThumbsUp, User } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ForumPostListItem } from "@/types";
+import { stripHtml } from "@/utils/stripHtml";
+import { MessageSquare, ThumbsUp } from "lucide-react";
 import Link from "next/link";
+import { useMemo } from "react";
 import InfoBadge from "../common/InfoBadge";
 import StatusBadge from "../common/StatusBadge";
-import { ForumPostListItem } from "@/types";
-import { cn } from "@/lib/utils";
-import { useMemo } from "react";
-import { stripHtml } from "@/utils/stripHtml";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type Props = {
   data: ForumPostListItem;
@@ -24,9 +25,20 @@ const PostCard = ({ data }: Props) => {
       {/* Header: Author Info & Status */}
       <div className="mb-4 flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-            <User className="h-5 w-5" />
-          </div>
+          <Avatar className="h-12 w-12 border border-slate-700">
+            <AvatarImage
+              src={user?.avatarUrl || "https://github.com/shadcn.png"}
+              className="object-cover"
+            />
+
+            <AvatarFallback className="bg-slate-800 text-slate-200">
+              {user?.fullName
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase() || "CN"}
+            </AvatarFallback>
+          </Avatar>
           <div className="flex flex-col">
             <span className="text-sm font-semibold text-slate-900">
               {user.fullName}
