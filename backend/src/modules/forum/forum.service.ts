@@ -122,6 +122,14 @@ export class ForumService {
     const postIds = items.map((p) => p.id);
     const commentCountMap =
       await this.commentService.countCommentsForPosts(postIds);
+
+    const userIds = new Set<string>();
+    items.forEach((item) => userIds.add(item.feedback.user.id));
+    const userAvatars = await this.uploadsService.getAttachmentsForManyTargets(
+      Array.from(userIds),
+      FileTargetType.AVATAR,
+    );
+
     const mappedItems = items.map((post) => ({
       id: post.id,
       createdAt: post.createdAt.toISOString(),
@@ -146,6 +154,7 @@ export class ForumService {
         id: post.feedback.user.id,
         fullName: post.feedback.user.fullName,
         email: post.feedback.user.email,
+        avatarUrl: userAvatars[post.feedback.user.id]?.[0]?.fileUrl ?? null,
       },
       commentsCount: commentCountMap[post.id] ?? 0,
       hasVoted: post.votes.some((vote) => vote.userId === actor.sub),
@@ -219,6 +228,11 @@ export class ForumService {
       FileTargetType.FEEDBACK,
     );
 
+    const userAvatars = await this.uploadsService.getAttachmentsForTarget(
+      post.feedback.user.id,
+      FileTargetType.AVATAR,
+    );
+
     return {
       id: post.id,
       createdAt: post.createdAt.toISOString(),
@@ -247,6 +261,7 @@ export class ForumService {
         id: post.feedback.user.id,
         fullName: post.feedback.user.fullName,
         email: post.feedback.user.email,
+        avatarUrl: userAvatars?.[0]?.fileUrl ?? null,
       },
     };
   }
