@@ -20,11 +20,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/context/UserContext";
-import { useUpdateMe } from "@/hooks/queries/useUserQueries";
+import {
+  useGetMe,
+  useUpdateMe,
+  useUploadAvatar,
+} from "@/hooks/queries/useUserQueries";
 import { cn } from "@/lib/utils";
+import { uploadFileToCloud } from "@/services/upload-service";
 import { getRoleDisplayName } from "@/utils/getRoleDisplayName";
-import { getSidebarType } from "@/utils/getSidebarType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import {
@@ -39,7 +42,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -51,16 +54,27 @@ const formSchema = z.object({
 });
 
 export function ProfileForm() {
-  const { user } = useUser();
+  const { data: user, isLoading: isFetchingUser } = useGetMe();
   const { mutateAsync: updateMe, isPending } = useUpdateMe();
+  const { mutateAsync: uploadAvatarMutation, isPending: isUploadingAvatar } =
+    useUploadAvatar();
   const [isEditing, setIsEditing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: user?.fullName || "",
+      fullName: "",
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        fullName: user.fullName,
+      });
+    }
+  }, [user, form]);
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
@@ -78,9 +92,46 @@ export function ProfileForm() {
     form.reset({ fullName: user?.fullName || "" });
   };
 
-  if (!user) return null;
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
 
-  const sidebarType = getSidebarType(user.role);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+      toast.error("Vui lòng chọn ảnh định dạng JPG hoặc PNG");
+      return;
+    }
+
+    try {
+      toast.loading("Đang tải ảnh lên...", { id: "avatar-upload" });
+      const uploadedFile = await uploadFileToCloud(file, "AVATAR");
+      await uploadAvatarMutation(uploadedFile);
+      toast.success("Cập nhật ảnh đại diện thành công!", {
+        id: "avatar-upload",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Có lỗi xảy ra khi tải ảnh lên.", { id: "avatar-upload" });
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  if (isFetchingUser) {
+    return (
+      <div className="mx-auto flex w-full items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   return (
     <div className="mx-auto w-full space-y-6">
@@ -89,7 +140,13 @@ export function ProfileForm() {
           <div className="flex flex-col items-center gap-6 md:flex-row">
             <div className="group relative">
               <Avatar className="h-24 w-24 border-2 border-white shadow-md">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                {user.avatarUrl && (
+                  <AvatarImage
+                    src={user.avatarUrl}
+                    alt={user.fullName}
+                    className="object-cover"
+                  />
+                )}
                 <AvatarFallback className="bg-blue-100 text-xl text-blue-700">
                   {user.fullName
                     .split(" ")
@@ -98,16 +155,28 @@ export function ProfileForm() {
                     .toUpperCase()}
                 </AvatarFallback>
               </Avatar>
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/png, image/jpeg"
+                onChange={(e) => {
+                  void handleFileChange(e);
+                }}
+              />
               <Button
                 size="icon"
                 variant="secondary"
                 className="absolute right-0 bottom-0 h-8 w-8 rounded-full border border-white bg-white shadow-md hover:bg-slate-50"
-                onClick={() =>
-                  toast.info("Tính năng cập nhật ảnh đại diện sẽ sớm ra mắt!")
-                }
+                onClick={handleAvatarClick}
+                disabled={isUploadingAvatar}
                 type="button"
               >
-                <Camera className="h-4 w-4 text-slate-600" />
+                {isUploadingAvatar ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-slate-600" />
+                ) : (
+                  <Camera className="h-4 w-4 text-slate-600" />
+                )}
               </Button>
             </div>
             <div className="flex-1 space-y-1 text-center md:text-left">
@@ -117,7 +186,7 @@ export function ProfileForm() {
                     {user.fullName}
                   </CardTitle>
                   <CardDescription className="font-medium text-slate-500">
-                    {getRoleDisplayName(sidebarType)}
+                    {user.fullName}
                   </CardDescription>
                 </div>
                 {!isEditing && (
@@ -183,7 +252,7 @@ export function ProfileForm() {
                       <Input
                         value={user.email}
                         readOnly
-                        className="h-11 cursor-not-allowed rounded-lg border-slate-200 border-transparent bg-slate-50 pl-10 text-slate-500 shadow-none"
+                        className="h-11 cursor-not-allowed rounded-lg border-slate-200 bg-slate-50 pl-10 text-slate-500 shadow-none"
                       />
                     </div>
                   </FormControl>
@@ -198,7 +267,7 @@ export function ProfileForm() {
                     <div className="relative">
                       <Shield className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-slate-400" />
                       <Input
-                        value={getRoleDisplayName(sidebarType)}
+                        value={getRoleDisplayName(user.role.toLowerCase())}
                         readOnly
                         className="h-11 cursor-not-allowed rounded-lg border-slate-200 border-transparent bg-slate-50 pl-10 text-slate-500 shadow-none"
                       />

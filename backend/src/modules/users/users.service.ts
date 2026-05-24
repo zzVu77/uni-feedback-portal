@@ -29,7 +29,7 @@ export class UsersService implements UsersServiceContract {
       email: user.email,
       role: user.role,
       createdAt: user.createdAt.toISOString(),
-      attachment: user.attachment ?? null,
+      avatarUrl: user.attachment?.fileUrl ?? '',
       ...(user.department
         ? {
             department: {
