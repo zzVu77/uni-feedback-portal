@@ -1,17 +1,18 @@
 "use client";
-import { User } from "lucide-react";
-import React, { useState } from "react";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import CommentItem from "./CommentItem";
-import { Comment } from "@/types";
 import { useUser } from "@/context/UserContext";
-import { cn } from "@/lib/utils";
 import {
   useCreateCommentByAnnouncementId,
   useCreateCommentByPostId,
   useDeleteComment,
 } from "@/hooks/queries/useCommentQueries";
+import { cn } from "@/lib/utils";
+import { Comment } from "@/types";
+import { User } from "lucide-react";
+import React, { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
+import CommentItem from "./CommentItem";
 
 type Props = {
   postId: string;
@@ -96,7 +97,24 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
           <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 sm:flex">
-            <User className="h-5 w-5" />
+            {user?.role !== "STUDENT" ? (
+              <User className="h-5 w-5" />
+            ) : (
+              <Avatar className="h-full w-full">
+                <AvatarImage
+                  src={user?.avatarUrl || "https://github.com/shadcn.png"}
+                  className="object-cover"
+                />
+
+                <AvatarFallback className="bg-slate-800 text-slate-200">
+                  {user?.fullName
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase() || "CN"}
+                </AvatarFallback>
+              </Avatar>
+            )}
           </div>
           <div className="flex flex-1 flex-col gap-3">
             <Textarea
