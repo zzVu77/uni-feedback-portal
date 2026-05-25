@@ -113,7 +113,9 @@ const Page = () => {
                 <div className="flex flex-row items-center justify-center gap-1.5">
                   <span>Góp ý tương tự</span>
                   <span className="ml-auto flex min-w-5 items-center justify-center rounded-full bg-red-600 px-0.5 py-0.5 text-[10px] font-bold text-white">
-                    {relatedFeedbacks?.results?.length || 0}
+                    {relatedFeedbacks?.results?.length
+                      ? relatedFeedbacks.results.length - 1
+                      : 0}
                   </span>
                 </div>
               </TabsTrigger>
@@ -143,6 +145,7 @@ const Page = () => {
                   feedbacksList={relatedFeedbacks?.results || []}
                   isLoading={relatedIsLoading}
                   isError={relatedIsError}
+                  originalFeedbackId={feedbackDetail.id}
                 />
               </div>
             </TabsContent>

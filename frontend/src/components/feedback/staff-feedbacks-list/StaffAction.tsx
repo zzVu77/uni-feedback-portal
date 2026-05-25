@@ -41,7 +41,7 @@ import { z } from "zod";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useUser } from "@/context/UserContext";
 import { useState } from "react";
-//Define cchema validation using Zod
+//Define schema validation using Zod
 const updateStatusSchema = z.object({
   status: z.string().min(1, { message: "Vui lòng chọn trạng thái" }),
   note: z.string().optional(),
@@ -114,11 +114,10 @@ const StaffAction = ({
           note: data.note,
         });
         await queryClient.invalidateQueries({
-          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS],
-        });
-        // Also invalidate related if needed
-        await queryClient.invalidateQueries({
           queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_RELATED_FEEDBACKS],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL],
         });
       } else if (feedbackId) {
         await updateStatus({
@@ -155,6 +154,9 @@ const StaffAction = ({
         );
         await queryClient.invalidateQueries({
           queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL],
         });
       } else if (feedbackId) {
         await forwardFeedback({
