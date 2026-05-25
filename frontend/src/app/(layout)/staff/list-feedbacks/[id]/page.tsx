@@ -143,6 +143,7 @@ const Page = () => {
                   feedbacksList={relatedFeedbacks?.results || []}
                   isLoading={relatedIsLoading}
                   isError={relatedIsError}
+                  originalFeedbackId={feedbackDetail.id}
                 />
               </div>
             </TabsContent>

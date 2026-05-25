@@ -41,7 +41,7 @@ import { z } from "zod";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useUser } from "@/context/UserContext";
 import { useState } from "react";
-//Define cchema validation using Zod
+//Define schema validation using Zod
 const updateStatusSchema = z.object({
   status: z.string().min(1, { message: "Vui lòng chọn trạng thái" }),
   note: z.string().optional(),

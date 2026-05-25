@@ -698,7 +698,7 @@ export class FeedbackManagementService {
       scoreByPeer.set(peerId, Math.max(prev, link.score));
     }
 
-    const peerIds = [...scoreByPeer.keys()];
+    const peerIds = [feedbackId, ...scoreByPeer.keys()];
     if (peerIds.length === 0) {
       return { results: [] };
     }

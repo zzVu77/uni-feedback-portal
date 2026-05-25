@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import { RelatedFeedbackItem } from "@/types";
 import { FileText, Inbox } from "lucide-react";
 import Link from "next/link";
@@ -31,30 +32,27 @@ interface RelatedFeedbackTableProps {
   feedbacksList: RelatedFeedbackItem[] | [];
   isLoading: boolean;
   isError: boolean;
+  originalFeedbackId?: string;
 }
 
 export function RelatedFeedbackTable({
   feedbacksList,
   isLoading,
   isError,
+  originalFeedbackId,
 }: RelatedFeedbackTableProps) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set([]));
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
-  // const {
-  //   data: relatedFeedbacks,
-  //   isLoading,
-  //   isError,
-  // } = useGetRelatedStaffFeedbacksById(feedbackId);
-
-  // const feedbacksList: RelatedFeedbackItem[] = Array.isArray(
-  //   relatedFeedbacks?.results,
-  // )
-  //   ? relatedFeedbacks.results
-  //   : [];
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedIds(new Set(feedbacksList.map((fb) => fb.id)));
+      const allIds = feedbacksList.map((fb) => fb.id);
+
+      if (originalFeedbackId) {
+        allIds.unshift(originalFeedbackId);
+      }
+
+      setSelectedIds(new Set(allIds));
     } else {
       setSelectedIds(new Set());
     }
@@ -62,11 +60,25 @@ export function RelatedFeedbackTable({
 
   const handleSelectOne = (id: string, checked: boolean) => {
     const newSelected = new Set(selectedIds);
+
     if (checked) {
       newSelected.add(id);
+
+      if (originalFeedbackId) {
+        newSelected.add(originalFeedbackId);
+      }
     } else {
       newSelected.delete(id);
+
+      if (
+        originalFeedbackId &&
+        newSelected.size === 1 &&
+        newSelected.has(originalFeedbackId)
+      ) {
+        newSelected.delete(originalFeedbackId);
+      }
     }
+
     setSelectedIds(newSelected);
   };
 
@@ -109,7 +121,8 @@ export function RelatedFeedbackTable({
         <div className="animate-in slide-in-from-top-2 fade-in flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3 duration-200">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-slate-700">
-              Đã chọn {selectedIds.size} góp ý
+              {/* -1 because we don't count the original feedback */}
+              Đã chọn {selectedIds.size - 1} góp ý
             </span>
           </div>
           <div>
@@ -145,7 +158,14 @@ export function RelatedFeedbackTable({
                             key={fb?.id}
                             target="_blank"
                           >
-                            <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm transition-colors hover:border-blue-200">
+                            <div
+                              className={cn(
+                                "rounded-xl border p-4 text-sm shadow-sm transition-colors",
+                                fb?.id === originalFeedbackId
+                                  ? "border-green-400 bg-green-200/50"
+                                  : "border-slate-200 bg-white hover:border-blue-200",
+                              )}
+                            >
                               <div className="text-base font-semibold text-slate-900">
                                 {fb?.subject}
                               </div>
@@ -218,55 +238,61 @@ export function RelatedFeedbackTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {feedbacksList.map((feedback) => (
-                <TableRow
-                  key={feedback.id}
-                  className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50"
-                  data-state={selectedIds.has(feedback.id) && "selected"}
-                >
-                  <TableCell className="px-4 py-4">
-                    <Checkbox
-                      checked={selectedIds.has(feedback.id)}
-                      onCheckedChange={(checked) =>
-                        handleSelectOne(feedback.id, checked as boolean)
-                      }
-                      aria-label={`Select feedback ${feedback.id}`}
-                    />
-                  </TableCell>
-                  <Link
-                    href={`/staff/list-feedbacks/${feedback?.id}`}
-                    key={feedback.id}
-                    target="_blank"
-                  >
-                    <TableCell className="px-4 py-4">
-                      <div className="flex items-start gap-2">
-                        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
-                        <span
-                          className="line-clamp-2 cursor-pointer font-medium text-slate-900 transition-colors hover:text-blue-600"
-                          title={feedback.subject}
-                        >
-                          {feedback.subject}
-                        </span>
-                      </div>
-                    </TableCell>
-                  </Link>
-                  <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
-                    {feedback?.student?.fullName || "Ẩn danh"}
-                  </TableCell>
-                  <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
-                    {new Date(feedback.createdAt).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell className="px-4 py-4 text-right">
-                    <div className="flex justify-end">
-                      <StatusBadge type={feedback.currentStatus} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {feedbacksList.map(
+                (feedback) =>
+                  feedback.id !== originalFeedbackId && (
+                    <TableRow
+                      key={feedback.id}
+                      className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50"
+                      data-state={selectedIds.has(feedback.id) && "selected"}
+                    >
+                      <TableCell className="px-4 py-4">
+                        <Checkbox
+                          checked={selectedIds.has(feedback.id)}
+                          onCheckedChange={(checked) =>
+                            handleSelectOne(feedback.id, checked as boolean)
+                          }
+                          aria-label={`Select feedback ${feedback.id}`}
+                        />
+                      </TableCell>
+                      <Link
+                        href={`/staff/list-feedbacks/${feedback?.id}`}
+                        key={feedback.id}
+                        target="_blank"
+                      >
+                        <TableCell className="px-4 py-4">
+                          <div className="flex items-start gap-2">
+                            <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                            <span
+                              className="line-clamp-2 cursor-pointer font-medium text-slate-900 transition-colors hover:text-blue-600"
+                              title={feedback.subject}
+                            >
+                              {feedback.subject}
+                            </span>
+                          </div>
+                        </TableCell>
+                      </Link>
+                      <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
+                        {feedback?.student?.fullName || "Ẩn danh"}
+                      </TableCell>
+                      <TableCell className="px-4 py-4 whitespace-nowrap text-slate-600">
+                        {new Date(feedback.createdAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          },
+                        )}
+                      </TableCell>
+                      <TableCell className="px-4 py-4 text-right">
+                        <div className="flex justify-end">
+                          <StatusBadge type={feedback.currentStatus} />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ),
+              )}
             </TableBody>
           </Table>
         </div>
