@@ -65,7 +65,11 @@ export function RelatedFeedbackTable({
       newSelected.add(id);
 
       if (originalFeedbackId) {
-        newSelected.add(originalFeedbackId);
+        newSelected.delete(originalFeedbackId);
+
+        setSelectedIds(new Set([originalFeedbackId, ...newSelected]));
+
+        return;
       }
     } else {
       newSelected.delete(id);
@@ -98,7 +102,7 @@ export function RelatedFeedbackTable({
     );
   }
 
-  if (isError || feedbacksList.length === 0) {
+  if (isError || feedbacksList.length - 1 === 0) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
         <div className="mb-4 rounded-full bg-slate-50 p-4">
