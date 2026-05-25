@@ -287,10 +287,6 @@ const ConversationSection = ({
     <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
       {/* Header */}
       <div className="flex flex-row items-center justify-between border-b border-transparent pb-2">
-        <div className="flex flex-row items-center gap-2">
-          <MessageCircleMore className="h-6 w-6 text-neutral-700" />
-          <h2 className="text-[18px] font-medium text-neutral-700">Trao đổi</h2>
-        </div>
         {/* {canCreateNew && !isForwarded && !isCreating && (
           <Button
             variant="outline"
