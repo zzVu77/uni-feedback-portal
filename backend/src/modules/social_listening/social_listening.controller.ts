@@ -15,7 +15,7 @@ import { GetTrendingIssuesDto } from './dto/get-trending-issues.dto';
 @ApiTags('Social Listening')
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
 @Controller('social-listening')
 export class SocialListeningController {
   constructor(
