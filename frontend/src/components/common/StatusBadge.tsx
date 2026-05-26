@@ -1,14 +1,15 @@
+import { cn } from "@/lib/utils";
 import {
   CircleAlert,
   CircleCheckBig,
   CircleX,
+  ClipboardCheck,
   Ellipsis,
   Forward,
   Loader,
   TriangleAlert,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils";
 
 export type StatusBadgeProps = {
   type:
@@ -99,6 +100,13 @@ const STATUS_CONFIG = {
     icon: TriangleAlert,
     badgeClassName: "text-gray-900 bg-gray-200 hover:bg-gray-300/80",
     iconClassName: "text-gray-800 animate-pulse",
+    textClassName: "",
+  },
+  AI_REVIEW_SUCCESS: {
+    text: "Kiểm duyệt nội dung thành công",
+    icon: ClipboardCheck,
+    badgeClassName: "text-orange-600 bg-orange-100 hover:bg-orange-200/80",
+    iconClassName: "text-orange-500 animate-pulse",
     textClassName: "",
   },
 };

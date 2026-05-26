@@ -144,6 +144,14 @@ export class FeedbackToxicProcessor extends WorkerHost {
       await this.prisma.feedbackStatusHistory.create({
         data: {
           feedbackId: feedbackId,
+          status: 'AI_REVIEW_SUCCESS',
+          message: GenerateStatusUpdateMessage('', 'AI_REVIEW_SUCCESS'),
+        },
+      });
+
+      await this.prisma.feedbackStatusHistory.create({
+        data: {
+          feedbackId: feedbackId,
           status: 'PENDING',
           message: GenerateStatusUpdateMessage(
             department.department.name,
