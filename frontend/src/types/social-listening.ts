@@ -4,6 +4,15 @@ export type SentimentLabel =
   | "Tích cực"
   | "Chưa có dữ liệu";
 
+export enum FeedbackTopic {
+  ACADEMIC_REGISTRATION = "Học vụ & Đăng ký môn",
+  STUDENT_LIFE = "Đời sống sinh viên",
+  TUITION_ADMIN = "Học phí & Hành chính",
+  FACILITY_PARKING = "Cơ sở vật chất & Bãi xe",
+  FACULTY_TRAINING = "Giảng viên & Đào tạo",
+  OTHER = "Khác",
+}
+
 export interface FeedbackPost {
   postId: string;
   author: string;

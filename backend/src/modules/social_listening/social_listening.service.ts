@@ -5,9 +5,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/modules/social_listening/social_listening.service.ts
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetTrendingIssuesDto } from './dto/get-trending-issues.dto';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SocialListeningService {

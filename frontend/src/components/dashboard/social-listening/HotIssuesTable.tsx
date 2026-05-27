@@ -8,6 +8,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -16,7 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { FeedbackPost } from "@/types/social-listening";
+import { FeedbackPost, FeedbackTopic } from "@/types/social-listening";
 import { format } from "date-fns";
 import {
   AlertCircle,
@@ -35,7 +42,7 @@ import {
   User,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 
 interface HotIssuesTableProps {
   data: FeedbackPost[];
@@ -47,11 +54,26 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [selectedPost, setSelectedPost] = useState<FeedbackPost | null>(null);
+  const [selectedPost, setSelectedPost] = React.useState<FeedbackPost | null>(
+    null,
+  );
 
   const activeTab = searchParams.get("sentimentLabel") || "Tất cả";
   const currentPage = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
+
+  const selectedTopic = searchParams.get("topic") || "all";
+
+  const handleTopicChange = (val: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (val && val !== "all") {
+      params.set("topic", val);
+    } else {
+      params.delete("topic");
+    }
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const pageCount = total ? Math.ceil(total / limit) : 0;
 
@@ -129,22 +151,44 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
           </p>
         </div>
 
-        {/* Premium Segmented Control */}
-        <div className="inline-flex items-center rounded-xl bg-slate-200/50 p-1.5 shadow-inner">
-          {["Tất cả", "Tiêu cực", "Trung lập", "Tích cực"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={cn(
-                "relative flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-300",
-                activeTab === tab
-                  ? "bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/50"
-                  : "text-slate-500 hover:bg-slate-200/50 hover:text-slate-700",
-              )}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          {/* Topic Filter */}
+          <Select value={selectedTopic} onValueChange={handleTopicChange}>
+            <SelectTrigger className="h-10 w-full rounded-xl border-slate-200 bg-white font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 focus:ring-indigo-500 sm:w-[220px]">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4 text-slate-400" />
+                <SelectValue placeholder="Tất cả chủ đề" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="rounded-xl shadow-xl">
+              <SelectItem value="all" className="font-medium">
+                Tất cả chủ đề
+              </SelectItem>
+              {Object.values(FeedbackTopic).map((topic) => (
+                <SelectItem key={topic} value={topic} className="font-medium">
+                  {topic}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Premium Segmented Control */}
+          <div className="inline-flex items-center rounded-xl bg-slate-200/50 p-1.5 shadow-inner">
+            {["Tất cả", "Tiêu cực", "Trung lập", "Tích cực"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={cn(
+                  "relative flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-300",
+                  activeTab === tab
+                    ? "bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/50"
+                    : "text-slate-500 hover:bg-slate-200/50 hover:text-slate-700",
+                )}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

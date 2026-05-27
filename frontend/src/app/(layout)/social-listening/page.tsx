@@ -41,6 +41,7 @@ const SocialListeningPage = () => {
     const pageParam = searchParams.get("page");
     const limitParam = searchParams.get("limit");
     const sentimentLabelParam = searchParams.get("sentimentLabel");
+    const topicParam = searchParams.get("topic");
 
     const now = new Date();
 
@@ -50,6 +51,7 @@ const SocialListeningPage = () => {
       page: pageParam ? Number(pageParam) : 1,
       limit: limitParam ? Number(limitParam) : 10,
       sentimentLabel: sentimentLabelParam as SentimentLabel | undefined,
+      topic: topicParam || undefined,
     };
   }, [searchParams]);
 
