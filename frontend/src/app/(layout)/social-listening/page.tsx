@@ -134,7 +134,7 @@ const SocialListeningPage = () => {
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
         <div className="flex flex-col justify-between gap-6 md:items-center lg:flex-row">
-          <div>
+          <div className="order-2 md:order-1">
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
               Phân tích bài đăng sinh viên trên mạng xã hội
             </h1>
@@ -147,7 +147,7 @@ const SocialListeningPage = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 md:items-center lg:flex-row">
+          <div className="order-1 flex flex-col gap-4 md:order-2 md:items-center lg:flex-row">
             <SocialListeningDatePicker
               onUpdate={handleDateUpdate}
               defaultStartDate={filter.startDate}

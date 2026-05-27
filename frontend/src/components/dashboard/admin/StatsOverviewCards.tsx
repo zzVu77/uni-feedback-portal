@@ -31,7 +31,7 @@ export const StatsOverviewCards = ({ data, isLoading }: Props) => {
       title: "Đang chờ xử lý",
       value: data?.pendingCount || 0,
       icon: Clock,
-      color: "text-red-500", // Red tone (Warning/Action needed)
+      color: "text-orange-500", // Red tone (Warning/Action needed)
       desc: "Cần xử lý ngay",
     },
     {
@@ -56,7 +56,7 @@ export const StatsOverviewCards = ({ data, isLoading }: Props) => {
         <Card key={index}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{item.title}</CardTitle>
-            <item.icon className={`h-4 w-4 ${item.color}`} />
+            <item.icon className={`h-6 w-6 ${item.color}`} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{item.value}</div>

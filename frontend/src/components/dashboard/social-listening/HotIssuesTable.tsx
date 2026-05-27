@@ -114,7 +114,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
           <TableHeader>
             <TableRow className="border-slate-100 hover:bg-transparent">
               <TableHead className="w-[35%] pl-6 font-medium text-slate-500">
-                Vấn đề cốt lõi
+                Tóm tắt vấn đề
               </TableHead>
               <TableHead className="w-[15%] font-medium text-slate-500">
                 Chủ đề
