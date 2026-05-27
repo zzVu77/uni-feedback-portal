@@ -1,19 +1,33 @@
 import React from "react";
 import { SentimentTrendItem } from "@/types/social-listening";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
 interface SentimentTrendChartProps {
   data: SentimentTrendItem[];
 }
+
+const chartConfig = {
+  positive: {
+    label: "Tích cực",
+    color: "#34d399",
+  },
+  neutral: {
+    label: "Trung lập",
+    color: "#7dd3fc",
+  },
+  negative: {
+    label: "Tiêu cực",
+    color: "#fb7185",
+  },
+} satisfies ChartConfig;
 
 const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
   return (
@@ -27,8 +41,8 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
         </p>
       </div>
       <div className="h-[300px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
+        <ChartContainer config={chartConfig} className="h-full w-full">
+          <LineChart
             data={data}
             margin={{ top: 5, right: 10, left: 0, bottom: 0 }}
           >
@@ -41,58 +55,43 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
               dataKey="displayDate"
               axisLine={false}
               tickLine={false}
+              tickMargin={10}
               tick={{ fill: "#94a3b8", fontSize: 12 }}
-              dy={10}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#94a3b8", fontSize: 12 }}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#fff",
-                borderRadius: "8px",
-                border: "1px solid #f1f5f9",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
-              }}
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartLegend
+              verticalAlign="bottom"
+              align="center"
+              content={<ChartLegendContent />}
             />
-            <Legend verticalAlign="bottom" align="center" iconType="circle" />
-            <Area
+            <Line
               type="monotone"
               dataKey="positive"
-              name="Tích cực"
-              stackId="1"
-              stroke="#34d399"
-              fill="#d1fae5"
-              fontSize={8}
-              fillOpacity={0.9}
-              strokeWidth={1}
+              stroke="var(--color-positive)"
+              strokeWidth={2}
+              dot={false}
             />
-            <Area
+            <Line
               type="monotone"
               dataKey="neutral"
-              name="Trung lập"
-              stackId="1"
-              stroke="#7dd3fc"
-              fill="#e0f2fe"
-              fontSize={8}
-              fillOpacity={0.9}
-              strokeWidth={1}
+              stroke="var(--color-neutral)"
+              strokeWidth={2}
+              dot={false}
             />
-            <Area
+            <Line
               type="monotone"
               dataKey="negative"
-              name="Tiêu cực"
-              stackId="1"
-              stroke="#fb7185"
-              fill="#ffe4e6"
-              fontSize={8}
-              fillOpacity={0.9}
-              strokeWidth={1}
+              stroke="var(--color-negative)"
+              strokeWidth={2}
+              dot={false}
             />
-          </AreaChart>
-        </ResponsiveContainer>
+          </LineChart>
+        </ChartContainer>
       </div>
     </div>
   );
