@@ -64,6 +64,7 @@ enum NotificationType {
 
 enum FeedbackStatus {
   AI_REVIEWING
+  AI_REVIEW_SUCCESS
   VIOLATED_CONTENT
   AI_REVIEW_FAILED
   PENDING
@@ -93,6 +94,7 @@ enum FileTargetType {
   FEEDBACK
   MESSAGE
   ANNOUNCEMENT
+  AVATAR
 }
 
 

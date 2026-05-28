@@ -567,6 +567,11 @@ export class FeedbackManagementService {
           select: { id: true, name: true },
         },
         statusHistory: {
+          where: {
+            status: {
+              in: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
+            },
+          },
           select: {
             status: true,
             message: true,
@@ -603,6 +608,17 @@ export class FeedbackManagementService {
     ) {
       throw new NotFoundException('Feedback not found');
     }
+    const latestPending = feedback.statusHistory
+      .filter((x) => x.status === 'PENDING')
+      .at(-1);
+    const otherStatuses = feedback.statusHistory.filter(
+      (x) => x.status !== 'PENDING',
+    );
+    feedback.statusHistory = [
+      ...(latestPending ? [latestPending] : []),
+      ...otherStatuses,
+    ];
+
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: feedback.statusHistory,
       forwardingLogs: feedback.forwardingLogs.map((f) => ({
@@ -698,9 +714,9 @@ export class FeedbackManagementService {
       scoreByPeer.set(peerId, Math.max(prev, link.score));
     }
 
-    const peerIds = [...scoreByPeer.keys()];
+    const peerIds = [feedbackId, ...scoreByPeer.keys()];
     if (peerIds.length === 0) {
-      return { peers: [] };
+      return { results: [] };
     }
 
     const peers = await this.prisma.feedbacks.findMany({
@@ -714,6 +730,8 @@ export class FeedbackManagementService {
         currentStatus: true,
         createdAt: true,
         department: { select: { id: true, name: true } },
+        user: { select: { id: true, fullName: true, email: true } },
+        isPrivate: true,
       },
     });
 
@@ -725,10 +743,19 @@ export class FeedbackManagementService {
         score: scoreByPeer.get(p.id) ?? 0,
         createdAt: p.createdAt.toISOString(),
         department: p.department,
+        ...(p.isPrivate
+          ? {}
+          : {
+              student: {
+                id: p.user.id,
+                fullName: p.user.fullName,
+                email: p.user.email,
+              },
+            }),
       }))
       .sort((a, b) => b.score - a.score);
 
-    return { peers: peersOut };
+    return { results: peersOut };
   }
 
   async bulkUpdateFeedbackStatus(

@@ -143,7 +143,7 @@ export class RelatedFeedbackPeerDto {
 
 export class RelatedFeedbacksResponseDto {
   @ApiProperty({ type: () => [RelatedFeedbackPeerDto] })
-  peers: RelatedFeedbackPeerDto[];
+  results: RelatedFeedbackPeerDto[];
 }
 
 export class BulkUpdateFeedbackStatusItemDto {

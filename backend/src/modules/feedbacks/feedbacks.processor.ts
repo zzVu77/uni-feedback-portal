@@ -117,6 +117,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
     } = params;
 
     const isToxic = await this.aiService.checkToxicity(
+      subject,
       description,
       aiDataContext,
       jobType,
@@ -140,6 +141,14 @@ export class FeedbackToxicProcessor extends WorkerHost {
         },
       });
     } else {
+      await this.prisma.feedbackStatusHistory.create({
+        data: {
+          feedbackId: feedbackId,
+          status: 'AI_REVIEW_SUCCESS',
+          message: GenerateStatusUpdateMessage('', 'AI_REVIEW_SUCCESS'),
+        },
+      });
+
       await this.prisma.feedbackStatusHistory.create({
         data: {
           feedbackId: feedbackId,

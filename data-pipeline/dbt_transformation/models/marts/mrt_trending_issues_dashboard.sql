@@ -33,9 +33,11 @@ select
     -- Categorize sentiment score into labels
     CASE 
         WHEN a.sentiment_score is null THEN 'Chưa có dữ liệu'
+        WHEN a.sentiment_score = -2 THEN 'Stress lo âu' 
         WHEN a.sentiment_score <= -0.5 THEN 'Tiêu cực'
         WHEN a.sentiment_score > -0.5 AND a.sentiment_score < 0.5 THEN 'Trung lập'
         WHEN a.sentiment_score >= 0.5 THEN 'Tích cực'
+        ELSE 'Không xác định'
     END as sentiment_label,
 
     a.analyzed_at,

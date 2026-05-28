@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Injectable,
   NotFoundException,
@@ -169,16 +173,18 @@ export class FeedbacksService {
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
-    const unifiedTimeline = mergeStatusAndForwardLogs({
-      statusHistory: feedback.statusHistory,
-      forwardingLogs: feedback.forwardingLogs.map((f) => ({
-        fromDept: f.fromDepartment,
-        toDept: f.toDepartment,
-        message: f.message,
-        note: f.note ?? null,
-        createdAt: f.createdAt,
-      })),
-    });
+    const unifiedTimeline = this.filterTimeline(
+      mergeStatusAndForwardLogs({
+        statusHistory: feedback.statusHistory,
+        forwardingLogs: feedback.forwardingLogs.map((f) => ({
+          fromDept: f.fromDepartment,
+          toDept: f.toDepartment,
+          message: f.message,
+          note: f.note ?? null,
+          createdAt: f.createdAt,
+        })),
+      }),
+    );
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
       feedback.id,
       FileTargetType.FEEDBACK,
@@ -343,16 +349,18 @@ export class FeedbacksService {
       },
     });
 
-    const unifiedTimeline = mergeStatusAndForwardLogs({
-      statusHistory: updateFeedback.statusHistory,
-      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
-        fromDept: f.fromDepartment,
-        toDept: f.toDepartment,
-        message: f.message,
-        note: f.note ?? null,
-        createdAt: f.createdAt,
-      })),
-    });
+    const unifiedTimeline = this.filterTimeline(
+      mergeStatusAndForwardLogs({
+        statusHistory: updateFeedback.statusHistory,
+        forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
+          fromDept: f.fromDepartment,
+          toDept: f.toDepartment,
+          message: f.message,
+          note: f.note ?? null,
+          createdAt: f.createdAt,
+        })),
+      }),
+    );
 
     if (embeddingRelevant) {
       const incomingRows: { sourceFeedbackId: string }[] =
@@ -580,5 +588,25 @@ export class FeedbacksService {
           status: 'PENDING',
         };
     }
+  }
+
+  private filterTimeline(timeline: any[]) {
+    const lastPendingIndex = timeline
+      .map((t) => t.status)
+      .lastIndexOf('PENDING');
+    const lastAiReviewingIndex = timeline
+      .map((t) => t.status)
+      .lastIndexOf('AI_REVIEWING');
+    const lastAiReviewSuccessIndex = timeline
+      .map((t) => t.status)
+      .lastIndexOf('AI_REVIEW_SUCCESS');
+
+    return timeline.filter((item, index) => {
+      if (item.status === 'PENDING') return index === lastPendingIndex;
+      if (item.status === 'AI_REVIEWING') return index === lastAiReviewingIndex;
+      if (item.status === 'AI_REVIEW_SUCCESS')
+        return index === lastAiReviewSuccessIndex;
+      return true;
+    });
   }
 }

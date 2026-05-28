@@ -18,17 +18,20 @@ import {
   CommentTargetType,
   ReportStatus,
   UserRole,
+  FileTargetType,
 } from '@prisma/client';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CommentCreatedEvent } from './events/comment-created.event';
 import { CommentReportCreatedEvent } from './events/comment-report-created.event';
+import { UploadsService } from '../uploads/uploads.service';
 
 @Injectable()
 export class CommentService {
   constructor(
     private prisma: PrismaService,
-    private readonly eventEmitter: EventEmitter2, // [Injection]
+    private readonly eventEmitter: EventEmitter2,
+    private uploadsService: UploadsService,
   ) {}
 
   async createForumPostComment(
@@ -115,6 +118,11 @@ export class CommentService {
     });
     this.eventEmitter.emit('comment.created', event);
 
+    const attachment = await this.uploadsService.getAttachmentsForTarget(
+      comment.user.id,
+      FileTargetType.AVATAR,
+    );
+
     return {
       id: comment.id,
       content: comment.content,
@@ -124,6 +132,7 @@ export class CommentService {
         id: comment.user.id,
         fullName: comment.user.fullName,
         role: comment.user.role,
+        avatarUrl: attachment?.[0]?.fileUrl ?? null,
       },
     };
   }
@@ -193,6 +202,17 @@ export class CommentService {
       }),
     ]);
 
+    const userIds = new Set<string>();
+    rootComments.forEach((c) => {
+      userIds.add(c.user.id);
+      c.replies.forEach((r) => userIds.add(r.user.id));
+    });
+
+    const userAvatars = await this.uploadsService.getAttachmentsForManyTargets(
+      Array.from(userIds),
+      FileTargetType.AVATAR,
+    );
+
     const results = rootComments.map((comment) => ({
       id: comment.id,
       content: comment.content,
@@ -201,6 +221,7 @@ export class CommentService {
         id: comment.user.id,
         fullName: comment.user.fullName,
         role: comment.user.role,
+        avatarUrl: userAvatars[comment.user.id]?.[0]?.fileUrl ?? null,
       },
       replies: comment.replies.map((reply) => ({
         id: reply.id,
@@ -210,6 +231,7 @@ export class CommentService {
           id: reply.user.id,
           fullName: reply.user.fullName,
           role: reply.user.role,
+          avatarUrl: userAvatars[reply.user.id]?.[0]?.fileUrl ?? null,
         },
       })),
     }));
@@ -341,6 +363,11 @@ export class CommentService {
       data: { deletedAt: now },
     });
 
+    const attachment = await this.uploadsService.getAttachmentsForTarget(
+      updatedComment.user.id,
+      FileTargetType.AVATAR,
+    );
+
     const mappedComment: CommentDeletedResponseDto = {
       id: updatedComment.id,
       content: updatedComment.content,
@@ -349,6 +376,7 @@ export class CommentService {
       user: {
         id: updatedComment.user.id,
         fullName: updatedComment.user.fullName,
+        avatarUrl: attachment?.[0]?.fileUrl ?? null,
       },
     };
 

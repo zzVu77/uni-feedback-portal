@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Comment } from "@/types";
-import { School, User } from "lucide-react";
+import { School } from "lucide-react";
 import React, { useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { Button } from "../ui/button";
@@ -8,6 +8,7 @@ import { Textarea } from "../ui/textarea";
 import { ReportDialog } from "./ReportDialog";
 // Import hook
 import { useReportComment } from "@/hooks/queries/useCommentQueries";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface CommentItemProps {
   comment: Comment;
@@ -63,7 +64,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
           {isStaff ? (
             <School className="h-5 w-5" />
           ) : (
-            <User className="h-5 w-5" />
+            <Avatar className="h-full w-full">
+              <AvatarImage
+                src={comment.user.avatarUrl || "https://github.com/shadcn.png"}
+                className="object-cover"
+              />
+
+              <AvatarFallback className="bg-slate-800 text-slate-200">
+                {comment.user.fullName
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase() || "CN"}
+              </AvatarFallback>
+            </Avatar>
           )}
         </div>
         {/* Thread Line */}

@@ -10,18 +10,17 @@ import { ReportFilter } from "@/types/report";
 import {
   endOfMonth,
   format,
+  isAfter,
   isBefore,
   isSameMonth,
-  isWithinInterval,
-  startOfMonth,
-  parseISO,
   isValid,
+  parseISO,
+  startOfMonth,
 } from "date-fns";
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
-  XCircle,
 } from "lucide-react";
 import * as React from "react";
 
@@ -38,30 +37,38 @@ export function MonthRangePicker({
   defaultFrom,
   defaultTo,
 }: MonthRangePickerProps) {
-  // Helper để parse date string an toàn
   const parseDate = (dateStr?: string, fallback = new Date()) => {
     if (!dateStr) return fallback;
     const parsed = parseISO(dateStr);
     return isValid(parsed) ? parsed : fallback;
   };
 
+  const defaultFromDate = startOfMonth(new Date());
+  const defaultToDate = endOfMonth(new Date());
+
   const [date, setDate] = React.useState<{ from: Date; to: Date }>({
-    from: parseDate(defaultFrom, startOfMonth(new Date())),
-    to: parseDate(defaultTo, endOfMonth(new Date())),
+    from: parseDate(defaultFrom, defaultFromDate),
+    to: parseDate(defaultTo, defaultToDate),
   });
 
   React.useEffect(() => {
     if (defaultFrom && defaultTo) {
+      const fromDate = parseDate(defaultFrom, defaultFromDate);
+      const toDate = parseDate(defaultTo, defaultToDate);
       setDate({
-        from: parseDate(defaultFrom),
-        to: parseDate(defaultTo),
+        from: fromDate,
+        to: toDate,
       });
-      setViewYear(parseDate(defaultFrom).getFullYear());
+      setFromViewYear(fromDate.getFullYear());
+      setToViewYear(toDate.getFullYear());
     }
   }, [defaultFrom, defaultTo]);
 
-  const [viewYear, setViewYear] = React.useState<number>(
+  const [fromViewYear, setFromViewYear] = React.useState<number>(
     date.from.getFullYear(),
+  );
+  const [toViewYear, setToViewYear] = React.useState<number>(
+    date.to.getFullYear(),
   );
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -80,55 +87,54 @@ export function MonthRangePicker({
     "Tháng 12",
   ];
 
-  const handleMonthSelect = (monthIndex: number) => {
-    const selectedDate = new Date(viewYear, monthIndex, 1);
-    const isRangeSelected = !isSameMonth(date.from, date.to);
-
-    let newRange = { ...date };
-
-    if (isRangeSelected) {
-      // Case 1: There is a range -> Reset selection from the beginning
-      newRange = {
-        from: startOfMonth(selectedDate),
-        to: endOfMonth(selectedDate),
-      };
-      setDate(newRange);
-    } else {
-      // Case 2: Choose the end month
-      const currentFrom = date.from;
-      if (isBefore(selectedDate, currentFrom)) {
-        newRange = {
-          from: startOfMonth(selectedDate),
-          to: endOfMonth(currentFrom),
-        };
-      } else {
-        newRange = {
-          from: startOfMonth(currentFrom),
-          to: endOfMonth(selectedDate),
-        };
-      }
-      setDate(newRange);
-    }
-
-    // Trigger update immediately
+  const handleApply = () => {
     onUpdate({
-      from: format(newRange.from, "yyyy-MM-dd"),
-      to: format(newRange.to, "yyyy-MM-dd"),
+      from: format(date.from, "yyyy-MM-dd"),
+      to: format(date.to, "yyyy-MM-dd"),
     });
+    setIsOpen(false);
+  };
+
+  const handleClear = () => {
+    const now = new Date();
+    const resetFrom = startOfMonth(now);
+    const resetTo = endOfMonth(now);
+    setDate({ from: resetFrom, to: resetTo });
+    setFromViewYear(resetFrom.getFullYear());
+    setToViewYear(resetTo.getFullYear());
+
+    onUpdate({
+      from: format(resetFrom, "yyyy-MM-dd"),
+      to: format(resetTo, "yyyy-MM-dd"),
+    });
+    setIsOpen(false);
   };
 
   const currentYear = new Date().getFullYear();
 
-  // Helper tính style
-  const getMonthState = (monthIndex: number) => {
-    const currentMonth = new Date(viewYear, monthIndex, 1);
-    const isStart = isSameMonth(currentMonth, date.from);
-    const isEnd = isSameMonth(currentMonth, date.to);
+  // Disable logic
+  const isFromMonthDisabled = (monthIndex: number, year: number) => {
+    const d = new Date(year, monthIndex, 1);
+    if (isAfter(d, date.to)) return true; // Cannot be after selected End date
+    if (isAfter(d, new Date())) return true; // Cannot be in future
+    return false;
+  };
 
-    if (isStart || isEnd) return "selected";
-    if (isWithinInterval(currentMonth, { start: date.from, end: date.to })) {
-      return "in-range";
-    }
+  const isToMonthDisabled = (monthIndex: number, year: number) => {
+    const d = new Date(year, monthIndex, 1);
+    if (isBefore(d, startOfMonth(date.from))) return true; // Cannot be before selected Start date
+    if (isAfter(d, new Date())) return true; // Cannot be in future
+    return false;
+  };
+
+  const getMonthState = (
+    monthIndex: number,
+    year: number,
+    type: "from" | "to",
+  ) => {
+    const currentMonth = new Date(year, monthIndex, 1);
+    const targetDate = type === "from" ? date.from : date.to;
+    if (isSameMonth(currentMonth, targetDate)) return "selected";
     return "default";
   };
 
@@ -140,7 +146,7 @@ export function MonthRangePicker({
             id="date"
             variant={"outline"}
             className={cn(
-              "justify-start border-blue-200 bg-blue-50 text-left font-normal text-blue-700 hover:bg-blue-100 hover:text-blue-800",
+              "w-full justify-start bg-white text-left font-normal text-slate-700 shadow-sm md:w-[280px]",
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -153,86 +159,179 @@ export function MonthRangePicker({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
-          <div className="w-[320px] p-4">
-            <div className="mb-4 flex items-center justify-between">
-              <Button
-                variant="ghost"
-                disabled={viewYear === 1970}
-                size="icon"
-                className="h-7 w-7 hover:bg-slate-100"
-                onClick={() => setViewYear(viewYear - 1)}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <div className="text-base font-bold text-slate-900">
-                Năm {viewYear}
-              </div>
-              <Button
-                disabled={viewYear === currentYear}
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 hover:bg-slate-100"
-                onClick={() => setViewYear(viewYear + 1)}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {months.map((month, index) => {
-                const state = getMonthState(index);
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleMonthSelect(index)}
-                    className={cn(
-                      "rounded-md border border-transparent px-2 py-2 text-sm font-medium transition-all",
-                      state === "default" &&
-                        "text-slate-700 hover:border-slate-200 hover:bg-slate-100",
-                      state === "selected" &&
-                        "scale-105 bg-blue-600 text-white shadow-md hover:bg-blue-700",
-                      state === "in-range" &&
-                        "bg-blue-100 text-blue-700 hover:bg-blue-200",
-                    )}
-                  >
-                    {month}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-4 flex items-center justify-between border-t pt-3">
-              <span className="text-muted-foreground text-xs">
-                {isSameMonth(date.from, date.to)
-                  ? "Chọn tháng kết thúc..."
-                  : "Đã chọn khoảng thời gian"}
+        <PopoverContent
+          className="w-auto max-w-[95vw] p-0"
+          align="center"
+          side="bottom"
+          collisionPadding={10}
+        >
+          <div className="flex items-center justify-between border-b bg-slate-50/50 px-4 py-3">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-semibold text-slate-500 uppercase">
+                Từ tháng
               </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 px-2 text-xs text-red-500 hover:bg-red-50 hover:text-red-700"
-                onClick={() => {
-                  const now = new Date();
-                  const newRange = {
-                    from: startOfMonth(now),
-                    to: endOfMonth(now),
-                  };
-                  setDate(newRange);
-                  setViewYear(now.getFullYear());
-                  setIsOpen(false);
-
-                  // Update URL
-                  onUpdate({
-                    from: format(newRange.from, "yyyy-MM-dd"),
-                    to: format(newRange.to, "yyyy-MM-dd"),
-                  });
-                }}
-              >
-                <XCircle className="mr-1 h-3 w-3" />
-                Đặt lại
-              </Button>
+              <span className="text-sm font-medium text-slate-900">
+                {date?.from ? format(date.from, "MM/yyyy") : "---"}
+              </span>
             </div>
+            <div className="text-slate-300">-</div>
+            <div className="flex flex-col text-right">
+              <span className="text-[10px] font-semibold text-slate-500 uppercase">
+                Đến tháng
+              </span>
+              <span className="text-sm font-medium text-slate-900">
+                {date?.to ? format(date.to, "MM/yyyy") : "---"}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex max-h-[50vh] flex-col gap-4 overflow-y-auto p-3 sm:max-h-none sm:flex-row sm:overflow-visible">
+            {/* FROM GRID */}
+            <div className="flex w-[240px] flex-col gap-2">
+              <span className="px-2 text-sm font-medium text-slate-700">
+                Từ tháng
+              </span>
+              <div className="mb-2 flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  disabled={fromViewYear === 1970}
+                  size="icon"
+                  className="h-7 w-7 hover:bg-slate-100"
+                  onClick={() => setFromViewYear(fromViewYear - 1)}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm font-bold text-slate-900">
+                  Năm {fromViewYear}
+                </div>
+                <Button
+                  disabled={fromViewYear === currentYear}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 hover:bg-slate-100"
+                  onClick={() => setFromViewYear(fromViewYear + 1)}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                {months.map((month, index) => {
+                  const state = getMonthState(index, fromViewYear, "from");
+                  const isDisabled = isFromMonthDisabled(index, fromViewYear);
+                  return (
+                    <button
+                      key={index}
+                      disabled={isDisabled}
+                      onClick={() => {
+                        const newFrom = startOfMonth(
+                          new Date(fromViewYear, index, 1),
+                        );
+                        setDate((prev) => ({ ...prev, from: newFrom }));
+                      }}
+                      className={cn(
+                        "rounded-md border border-transparent px-2 py-2 text-xs font-medium transition-all",
+                        isDisabled &&
+                          "cursor-not-allowed text-slate-400 opacity-50",
+                        !isDisabled &&
+                          state === "default" &&
+                          "text-slate-700 hover:border-slate-200 hover:bg-slate-100",
+                        !isDisabled &&
+                          state === "selected" &&
+                          "scale-105 bg-blue-600 text-white shadow-md hover:bg-blue-700",
+                      )}
+                    >
+                      {month}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="hidden border-l border-slate-100 sm:block"></div>
+
+            {/* TO GRID */}
+            <div className="flex w-[240px] flex-col gap-2">
+              <span className="px-2 text-sm font-medium text-slate-700">
+                Đến tháng
+              </span>
+              <div className="mb-2 flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  disabled={toViewYear === 1970}
+                  size="icon"
+                  className="h-7 w-7 hover:bg-slate-100"
+                  onClick={() => setToViewYear(toViewYear - 1)}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm font-bold text-slate-900">
+                  Năm {toViewYear}
+                </div>
+                <Button
+                  disabled={toViewYear === currentYear}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 hover:bg-slate-100"
+                  onClick={() => setToViewYear(toViewYear + 1)}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                {months.map((month, index) => {
+                  const state = getMonthState(index, toViewYear, "to");
+                  const isDisabled = isToMonthDisabled(index, toViewYear);
+                  return (
+                    <button
+                      key={index}
+                      disabled={isDisabled}
+                      onClick={() => {
+                        const newTo = endOfMonth(
+                          new Date(toViewYear, index, 1),
+                        );
+                        setDate((prev) => ({ ...prev, to: newTo }));
+                      }}
+                      className={cn(
+                        "rounded-md border border-transparent px-2 py-2 text-xs font-medium transition-all",
+                        isDisabled &&
+                          "cursor-not-allowed text-slate-400 opacity-50",
+                        !isDisabled &&
+                          state === "default" &&
+                          "text-slate-700 hover:border-slate-200 hover:bg-slate-100",
+                        !isDisabled &&
+                          state === "selected" &&
+                          "scale-105 bg-blue-600 text-white shadow-md hover:bg-blue-700",
+                      )}
+                    >
+                      {month}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between border-t bg-slate-50/50 p-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-red-600 hover:bg-red-50 hover:text-red-700"
+              onClick={handleClear}
+            >
+              Mặc định
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              className="bg-blue-600 text-white hover:bg-blue-700"
+              onClick={handleApply}
+              disabled={!date?.from || !date?.to}
+            >
+              Áp dụng
+            </Button>
           </div>
         </PopoverContent>
       </Popover>

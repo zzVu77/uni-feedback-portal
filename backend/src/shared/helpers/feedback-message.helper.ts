@@ -21,6 +21,8 @@ export function GenerateStatusUpdateMessage(
       return `Góp ý của bạn đang được hệ thống kiểm duyệt nội dung tự động đánh giá. Vui lòng chờ trong giây lát.`;
     case FeedbackStatus.AI_REVIEW_FAILED:
       return `Hệ thống đang gặp sự cố khi đánh giá nội dung của góp ý. Vui lòng thử lại sau.`;
+    case FeedbackStatus.AI_REVIEW_SUCCESS:
+      return `Nội dung góp ý của bạn đã được duyệt.`;
     default:
       return `Trạng thái Góp ý đã được cập nhật tại bộ phận ${departmentName}.`;
   }

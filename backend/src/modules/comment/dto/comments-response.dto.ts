@@ -9,6 +9,9 @@ export class UserInfo {
 
   @ApiProperty({ example: 'STUDENT' })
   role?: string;
+
+  @ApiProperty({ example: 'https://example.com/avatar.jpg', nullable: true })
+  avatarUrl?: string | null;
 }
 
 export class CommentDto {

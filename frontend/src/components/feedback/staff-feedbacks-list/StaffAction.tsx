@@ -31,6 +31,7 @@ import {
   FEEDBACK_QUERY_KEYS,
   useForwardStaffFeedbackById,
   useUpdateStaffFeedbackStatusById,
+  useBulkUpdateStaffFeedbackStatus,
 } from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackStatus } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,7 +41,7 @@ import { z } from "zod";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useUser } from "@/context/UserContext";
 import { useState } from "react";
-//Define cchema validation using Zod
+//Define schema validation using Zod
 const updateStatusSchema = z.object({
   status: z.string().min(1, { message: "Vui lòng chọn trạng thái" }),
   note: z.string().optional(),
@@ -71,11 +72,18 @@ const statusOptions = [
 ];
 
 type StaffActionProps = {
-  feedbackId: string;
+  feedbackId?: string;
+  feedbackIds?: string[];
   currentStatus: string;
+  onSuccess?: () => void;
 };
 
-const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
+const StaffAction = ({
+  feedbackId,
+  feedbackIds,
+  currentStatus,
+  onSuccess,
+}: StaffActionProps) => {
   const queryClient = useQueryClient();
 
   const statusForm = useForm<UpdateStatusValues>({
@@ -94,25 +102,39 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
   const { isValid: isForwardFormValid } = forwardForm.formState;
 
   const { mutateAsync: updateStatus } = useUpdateStaffFeedbackStatusById();
+  const { mutateAsync: bulkUpdateStatus } = useBulkUpdateStaffFeedbackStatus();
   const { mutateAsync: forwardFeedback } = useForwardStaffFeedbackById();
+
   const handleOnStatusSubmit = async (data: UpdateStatusValues) => {
     try {
-      await updateStatus({
-        id: feedbackId,
-        status: data.status as FeedbackStatus,
-        note: data.note,
-      });
-      // Refetching data to update UI dependent on query keys
-      await Promise.all([
-        queryClient.invalidateQueries({
+      if (feedbackIds && feedbackIds.length > 0) {
+        await bulkUpdateStatus({
+          feedbackIds,
+          status: data.status as FeedbackStatus,
+          note: data.note,
+        });
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_RELATED_FEEDBACKS],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL],
+        });
+      } else if (feedbackId) {
+        await updateStatus({
+          id: feedbackId,
+          status: data.status as FeedbackStatus,
+          note: data.note,
+        });
+        await queryClient.invalidateQueries({
           queryKey: [
             FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL,
             feedbackId,
           ],
-        }),
-      ]);
+        });
+      }
       statusForm.reset();
       statusForm.clearErrors();
+      onSuccess?.();
     } catch (error) {
       console.error("Update failed", error);
     }
@@ -120,22 +142,38 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
 
   const handleOnForwardSubmit = async (data: ForwardFeedbackValues) => {
     try {
-      await forwardFeedback({
-        id: feedbackId,
-        toDepartmentId: data.toDepartmentId,
-        note: data.note,
-      });
-      // Refetching data to update UI dependent on query keys
-      await Promise.all([
-        queryClient.invalidateQueries({
+      if (feedbackIds && feedbackIds.length > 0) {
+        await Promise.all(
+          feedbackIds.map((id) =>
+            forwardFeedback({
+              id,
+              toDepartmentId: data.toDepartmentId,
+              note: data.note,
+            }),
+          ),
+        );
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL],
+        });
+      } else if (feedbackId) {
+        await forwardFeedback({
+          id: feedbackId,
+          toDepartmentId: data.toDepartmentId,
+          note: data.note,
+        });
+        await queryClient.invalidateQueries({
           queryKey: [
             FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACK_DETAIL,
             feedbackId,
           ],
-        }),
-      ]);
+        });
+      }
       forwardForm.reset();
       setIsDialogOpen(false);
+      onSuccess?.();
     } catch (error) {
       console.error("Forward failed", error);
     }
@@ -152,10 +190,10 @@ const StaffAction = ({ feedbackId, currentStatus }: StaffActionProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-md lg:w-auto">
+    <div className="flex h-fit w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-xs md:h-full lg:w-auto">
       <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
       <Form {...statusForm}>
-        <form className="flex w-full flex-col gap-2 lg:max-w-[200px]">
+        <form className="flex w-full flex-col gap-2">
           <FormField
             control={statusForm.control}
             name="status"

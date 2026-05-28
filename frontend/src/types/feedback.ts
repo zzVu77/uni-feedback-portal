@@ -91,6 +91,11 @@ export type UpdateFeedbackStatusParams = {
   status: FeedbackStatus;
   note?: string;
 };
+export type BulkUpdateFeedbackStatusParams = {
+  feedbackIds: string[];
+  status: FeedbackStatus;
+  note?: string;
+};
 export type ForwardFeedbackParams = {
   id: string;
   toDepartmentId: string;
@@ -109,4 +114,15 @@ export type FeedbackHeaderType = Pick<
   | "department"
   | "student"
   | "fileAttachments"
+>;
+
+export type RelatedFeedbackItem = Pick<
+  FeedbackDetail,
+  | "id"
+  | "subject"
+  | "currentStatus"
+  | "createdAt"
+  | "category"
+  | "department"
+  | "student"
 >;
