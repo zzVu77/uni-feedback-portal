@@ -151,7 +151,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
         <div>
           <h3 className="flex items-center gap-2 text-xl font-bold tracking-tight text-slate-900">
             <Sparkles className="h-5 w-5 text-amber-500" />
-            Vấn đề tiêu điểm
+            Vấn đề tiêu biểu
           </h3>
           <p className="mt-1 text-sm text-slate-500">
             {activeTab === "Tất cả"

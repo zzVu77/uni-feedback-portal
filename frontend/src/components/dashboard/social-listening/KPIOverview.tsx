@@ -150,7 +150,7 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
           </span>
         </div>
         <p className="mb-1 text-[13px] font-bold tracking-wider text-rose-500/80 uppercase">
-          Bài đăng tiêu cực
+          Bài đăng tiêu cực và stress lo âu
         </p>
         <h3 className="mb-3 text-3xl font-bold tracking-tight text-rose-600">
           {negativePostsCount.toLocaleString()}

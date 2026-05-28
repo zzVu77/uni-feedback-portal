@@ -58,6 +58,7 @@ export class SocialListeningService {
       'Tích cực': 0,
       'Tiêu cực': 0,
       'Trung lập': 0,
+      'Stress lo âu': 0,
     };
 
     sentimentGroups.forEach((group) => {
@@ -88,7 +89,7 @@ export class SocialListeningService {
       totalPosts,
       totalReactions: aggregate._sum.reactionCount || 0,
       totalComments: aggregate._sum.commentCount || 0,
-      negativePostsCount: counts['Tiêu cực'],
+      negativePostsCount: counts['Tiêu cực'] + counts['Stress lo âu'],
       dominantSentiment,
       sentimentTrendText,
     };
@@ -234,9 +235,10 @@ export class SocialListeningService {
       ORDER BY 
         CASE sentiment_label 
           WHEN 'Tiêu cực' THEN 1 
-          WHEN 'Tích cực' THEN 2 
-          WHEN 'Trung lập' THEN 3 
-          ELSE 4 
+          WHEN 'Stress lo âu' THEN 2
+          WHEN 'Tích cực' THEN 3 
+          WHEN 'Trung lập' THEN 4 
+          ELSE 5 
         END ASC,
         engagement_score DESC,
         posted_at DESC
