@@ -123,6 +123,15 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
           lightBg: "bg-blue-50/50",
           indicator: "bg-blue-500",
         };
+      case "Stress lo âu":
+        return {
+          color: "text-yellow-700",
+          bg: "bg-yellow-50",
+          border: "border-yellow-200",
+          icon: <AlertCircle className="mr-1 h-3.5 w-3.5" />,
+          lightBg: "bg-yellow-50/50",
+          indicator: "bg-yellow-500",
+        };
       default:
         return {
           color: "text-slate-600",
@@ -174,7 +183,13 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
 
           {/* Premium Segmented Control */}
           <div className="inline-flex items-center rounded-xl bg-slate-200/50 p-1.5 shadow-inner">
-            {["Tất cả", "Tiêu cực", "Trung lập", "Tích cực"].map((tab) => (
+            {[
+              "Tất cả",
+              "Tiêu cực",
+              "Stress lo âu",
+              "Tích cực",
+              "Trung lập",
+            ].map((tab) => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}

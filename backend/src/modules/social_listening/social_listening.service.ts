@@ -128,7 +128,8 @@ export class SocialListeningService {
         TO_CHAR(posted_at, 'DD/MM') as "displayDate",
         COUNT(*) FILTER (WHERE sentiment_label = 'Tích cực') as positive,
         COUNT(*) FILTER (WHERE sentiment_label = 'Tiêu cực') as negative,
-        COUNT(*) FILTER (WHERE sentiment_label = 'Trung lập') as neutral
+        COUNT(*) FILTER (WHERE sentiment_label = 'Trung lập') as neutral,
+        COUNT(*) FILTER (WHERE sentiment_label = 'Stress lo âu') as stessAnxiety
       FROM dashboard_trending_issues
       ${whereClause}
       GROUP BY "dateStr", "displayDate"
@@ -143,6 +144,7 @@ export class SocialListeningService {
       positive: Number(item.positive),
       negative: Number(item.negative),
       neutral: Number(item.neutral),
+      stressAnxiety: Number(item.stressAnxiety),
     }));
   }
 

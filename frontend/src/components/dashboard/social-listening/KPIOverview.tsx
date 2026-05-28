@@ -47,6 +47,13 @@ const KPIOverview: React.FC<KPIOverviewProps> = ({ data }) => {
           iconColor: "text-slate-500",
           ring: "ring-slate-200",
         };
+      case "Stress lo âu":
+        return {
+          bg: "bg-yellow-50",
+          text: "text-yellow-600",
+          iconColor: "text-yellow-500",
+          ring: "ring-yellow-100",
+        };
       default:
         return {
           bg: "bg-indigo-50",

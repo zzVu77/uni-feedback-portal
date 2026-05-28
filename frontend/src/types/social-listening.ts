@@ -2,6 +2,7 @@ export type SentimentLabel =
   | "Tiêu cực"
   | "Trung lập"
   | "Tích cực"
+  | "Stress lo âu"
   | "Chưa có dữ liệu";
 
 export enum FeedbackTopic {

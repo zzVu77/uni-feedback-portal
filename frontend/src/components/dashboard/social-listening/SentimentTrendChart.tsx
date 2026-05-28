@@ -35,6 +35,10 @@ const chartConfig = {
     label: "Tiêu cực",
     color: "#f43f5e", // rose-500
   },
+  stressAnxiety: {
+    label: "Stress lo âu",
+    color: "#eab308", // yellow-500
+  },
 } satisfies ChartConfig;
 
 const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
@@ -125,6 +129,18 @@ const SentimentTrendChart: React.FC<SentimentTrendChartProps> = ({ data }) => {
                     r: 6,
                     strokeWidth: 0,
                     fill: "var(--color-negative)",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="stressAnxiety"
+                  stroke="var(--color-stressAnxiety)"
+                  strokeWidth={3}
+                  dot={false}
+                  activeDot={{
+                    r: 6,
+                    strokeWidth: 0,
+                    fill: "var(--color-stressAnxiety)",
                   }}
                 />
               </LineChart>
