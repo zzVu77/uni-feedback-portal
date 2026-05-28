@@ -4,6 +4,7 @@ import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/social-listening/SentimentTrendChart";
 import { SocialListeningDatePicker } from "@/components/dashboard/social-listening/SocialListeningDatePicker";
 import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
+import UrgentIssuesAlert from "@/components/dashboard/social-listening/UrgentIssuesAlert";
 import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import {
   useGetTopicBySentiment,
   useGetTopicDistribution,
   useGetTrendingIssues,
+  useGetUrgentIssues,
 } from "@/hooks/queries/useSocialListeningQueries";
 import {
   ClassificationSentimentData,
@@ -75,6 +77,8 @@ const SocialListeningPage = () => {
     useGetPostsBySentiment(filter);
   const { data: topicBySentimentData, isLoading: isLoadingTopicBySentiment } =
     useGetTopicBySentiment(filter);
+  const { data: urgentIssuesData, isLoading: isLoadingUrgent } =
+    useGetUrgentIssues(filter);
 
   const results = trendingData?.results || [];
 
@@ -86,7 +90,8 @@ const SocialListeningPage = () => {
     isLoadingClassification ||
     isLoadingPostCount ||
     isLoadingPostsBySentiment ||
-    isLoadingTopicBySentiment;
+    isLoadingTopicBySentiment ||
+    isLoadingUrgent;
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
@@ -197,6 +202,10 @@ const SocialListeningPage = () => {
         ) : (
           <div className="animate-in fade-in space-y-6 duration-500 lg:space-y-8">
             {kpiData && <KPIOverview data={kpiData} />}
+
+            {urgentIssuesData && urgentIssuesData.length > 0 && (
+              <UrgentIssuesAlert issues={urgentIssuesData} />
+            )}
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="min-h-[400px] lg:col-span-2">

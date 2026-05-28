@@ -107,3 +107,15 @@ export const getTopicBySentiment = async (
   );
   return response;
 };
+
+export const getUrgentIssues = async (
+  filter: SocialListeningFilter,
+): Promise<FeedbackPost[]> => {
+  const response = await axiosInstance.get<FeedbackPost[]>(
+    `${socialListeningBaseUrl}/urgent-issues`,
+    {
+      params: filter,
+    },
+  );
+  return response;
+};

@@ -129,7 +129,7 @@ export class SocialListeningService {
         COUNT(*) FILTER (WHERE sentiment_label = 'Tích cực') as positive,
         COUNT(*) FILTER (WHERE sentiment_label = 'Tiêu cực') as negative,
         COUNT(*) FILTER (WHERE sentiment_label = 'Trung lập') as neutral,
-        COUNT(*) FILTER (WHERE sentiment_label = 'Stress lo âu') as stessAnxiety
+        COUNT(*) FILTER (WHERE sentiment_label = 'Stress lo âu') as "stressAnxiety"
       FROM dashboard_trending_issues
       ${whereClause}
       GROUP BY "dateStr", "displayDate"
@@ -307,7 +307,7 @@ export class SocialListeningService {
 
     const results: any[] = await this.prisma.$queryRawUnsafe(query, ...params);
 
-    const defaultLabels = ['Tích cực', 'Tiêu cực', 'Trung lập'];
+    const defaultLabels = ['Tích cực', 'Tiêu cực', 'Trung lập', 'Stress lo âu'];
     const mapped: Record<string, number> = Object.fromEntries(
       defaultLabels.map((l) => [l, 0]),
     );
@@ -442,6 +442,62 @@ export class SocialListeningService {
     return groups.map((g) => ({
       topic: g.topic,
       count: g._count.postId,
+    }));
+  }
+  async getUrgentIssues(dto: GetTrendingIssuesDto) {
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+
+    // Filter by sentiment label 'Tiêu cực' or 'Stress lo âu'
+    whereConditions.push(`sentiment_label IN ('Tiêu cực', 'Stress lo âu')`);
+
+    // Filter by ai_summary containing 'nghiêm trọng' (case-insensitive)
+    whereConditions.push(`ai_summary ILIKE '%nghiêm trọng%'`);
+
+    if (dto.startDate) {
+      whereConditions.push(`posted_at >= $${params.length + 1}`);
+      params.push(new Date(dto.startDate));
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(`posted_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
+        ),
+      );
+    }
+
+    const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
+
+    // Order by engagement_score DESC and posted_at DESC
+    const query = `
+      SELECT *
+      FROM dashboard_trending_issues
+      ${whereClause}
+      ORDER BY
+        engagement_score DESC,
+        posted_at DESC
+    `;
+
+    const rawData = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+
+    return rawData.map((item) => ({
+      postId: item.post_id || item.postId,
+      author: item.author,
+      content: item.content,
+      postLink: item.post_link || item.postLink,
+      postedAt: item.posted_at || item.postedAt,
+      reactionCount: Number(item.reaction_count || item.reactionCount || 0),
+      commentCount: Number(item.comment_count || item.commentCount || 0),
+      engagementScore: Number(
+        item.engagement_score || item.engagementScore || 0,
+      ),
+      topic: item.topic,
+      sentimentScore: Number(item.sentiment_score || item.sentimentScore || 0),
+      aiSummary: item.ai_summary || item.aiSummary,
+      sentimentLabel: item.sentiment_label || item.sentimentLabel,
+      analyzedAt: item.analyzed_at || item.analyzedAt,
     }));
   }
 }

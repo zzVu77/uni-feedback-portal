@@ -8,6 +8,7 @@ import {
   getTrendingIssues,
   getPostsBySentiment,
   getTopicBySentiment,
+  getUrgentIssues,
 } from "@/services/social-listening-service";
 import { SocialListeningFilter } from "@/types/social-listening";
 
@@ -20,6 +21,7 @@ export const SOCIAL_LISTENING_QUERY_KEYS = {
   postCountByDate: "social-listening-post-count-by-date",
   postsBySentiment: "social-listening-posts-by-sentiment",
   topicBySentiment: "social-listening-topic-by-sentiment",
+  urgentIssues: "social-listening-urgent-issues",
 };
 
 export const useGetTrendingIssues = (filter: SocialListeningFilter) => {
@@ -83,6 +85,14 @@ export const useGetTopicBySentiment = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.topicBySentiment, filter],
     queryFn: () => getTopicBySentiment(filter),
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetUrgentIssues = (filter: SocialListeningFilter) => {
+  return useQuery({
+    queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues, filter],
+    queryFn: () => getUrgentIssues(filter),
     placeholderData: (previousData) => previousData,
   });
 };

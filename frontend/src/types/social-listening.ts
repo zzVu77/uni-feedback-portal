@@ -59,6 +59,7 @@ export interface SentimentTrendItem {
   positive: number;
   negative: number;
   neutral: number;
+  stressAnxiety: number;
 }
 
 export interface TopicDistributionItem {
