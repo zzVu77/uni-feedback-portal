@@ -5,9 +5,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/modules/social_listening/social_listening.service.ts
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetTrendingIssuesDto } from './dto/get-trending-issues.dto';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SocialListeningService {
@@ -58,6 +58,7 @@ export class SocialListeningService {
       'Tích cực': 0,
       'Tiêu cực': 0,
       'Trung lập': 0,
+      'Stress lo âu': 0,
     };
 
     sentimentGroups.forEach((group) => {
@@ -88,7 +89,7 @@ export class SocialListeningService {
       totalPosts,
       totalReactions: aggregate._sum.reactionCount || 0,
       totalComments: aggregate._sum.commentCount || 0,
-      negativePostsCount: counts['Tiêu cực'],
+      negativePostsCount: counts['Tiêu cực'] + counts['Stress lo âu'],
       dominantSentiment,
       sentimentTrendText,
     };
@@ -128,7 +129,8 @@ export class SocialListeningService {
         TO_CHAR(posted_at, 'DD/MM') as "displayDate",
         COUNT(*) FILTER (WHERE sentiment_label = 'Tích cực') as positive,
         COUNT(*) FILTER (WHERE sentiment_label = 'Tiêu cực') as negative,
-        COUNT(*) FILTER (WHERE sentiment_label = 'Trung lập') as neutral
+        COUNT(*) FILTER (WHERE sentiment_label = 'Trung lập') as neutral,
+        COUNT(*) FILTER (WHERE sentiment_label = 'Stress lo âu') as "stressAnxiety"
       FROM dashboard_trending_issues
       ${whereClause}
       GROUP BY "dateStr", "displayDate"
@@ -143,6 +145,7 @@ export class SocialListeningService {
       positive: Number(item.positive),
       negative: Number(item.negative),
       neutral: Number(item.neutral),
+      stressAnxiety: Number(item.stressAnxiety),
     }));
   }
 
@@ -232,9 +235,10 @@ export class SocialListeningService {
       ORDER BY 
         CASE sentiment_label 
           WHEN 'Tiêu cực' THEN 1 
-          WHEN 'Tích cực' THEN 2 
-          WHEN 'Trung lập' THEN 3 
-          ELSE 4 
+          WHEN 'Stress lo âu' THEN 2
+          WHEN 'Tích cực' THEN 3 
+          WHEN 'Trung lập' THEN 4 
+          ELSE 5 
         END ASC,
         engagement_score DESC,
         posted_at DESC
@@ -305,7 +309,7 @@ export class SocialListeningService {
 
     const results: any[] = await this.prisma.$queryRawUnsafe(query, ...params);
 
-    const defaultLabels = ['Tích cực', 'Tiêu cực', 'Trung lập'];
+    const defaultLabels = ['Tích cực', 'Tiêu cực', 'Trung lập', 'Stress lo âu'];
     const mapped: Record<string, number> = Object.fromEntries(
       defaultLabels.map((l) => [l, 0]),
     );
@@ -440,6 +444,62 @@ export class SocialListeningService {
     return groups.map((g) => ({
       topic: g.topic,
       count: g._count.postId,
+    }));
+  }
+  async getUrgentIssues(dto: GetTrendingIssuesDto) {
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+
+    // Filter by sentiment label 'Tiêu cực' or 'Stress lo âu'
+    whereConditions.push(`sentiment_label IN ('Tiêu cực', 'Stress lo âu')`);
+
+    // Filter by ai_summary containing 'nghiêm trọng' (case-insensitive)
+    whereConditions.push(`ai_summary ILIKE '%nghiêm trọng%'`);
+
+    if (dto.startDate) {
+      whereConditions.push(`posted_at >= $${params.length + 1}`);
+      params.push(new Date(dto.startDate));
+    }
+
+    if (dto.endDate) {
+      whereConditions.push(`posted_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
+        ),
+      );
+    }
+
+    const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
+
+    // Order by engagement_score DESC and posted_at DESC
+    const query = `
+      SELECT *
+      FROM dashboard_trending_issues
+      ${whereClause}
+      ORDER BY
+        engagement_score DESC,
+        posted_at DESC
+    `;
+
+    const rawData = await this.prisma.$queryRawUnsafe<any[]>(query, ...params);
+
+    return rawData.map((item) => ({
+      postId: item.post_id || item.postId,
+      author: item.author,
+      content: item.content,
+      postLink: item.post_link || item.postLink,
+      postedAt: item.posted_at || item.postedAt,
+      reactionCount: Number(item.reaction_count || item.reactionCount || 0),
+      commentCount: Number(item.comment_count || item.commentCount || 0),
+      engagementScore: Number(
+        item.engagement_score || item.engagementScore || 0,
+      ),
+      topic: item.topic,
+      sentimentScore: Number(item.sentiment_score || item.sentimentScore || 0),
+      aiSummary: item.ai_summary || item.aiSummary,
+      sentimentLabel: item.sentiment_label || item.sentimentLabel,
+      analyzedAt: item.analyzed_at || item.analyzedAt,
     }));
   }
 }

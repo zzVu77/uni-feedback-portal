@@ -4,6 +4,7 @@ import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
 import SentimentTrendChart from "@/components/dashboard/social-listening/SentimentTrendChart";
 import { SocialListeningDatePicker } from "@/components/dashboard/social-listening/SocialListeningDatePicker";
 import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
+import UrgentIssuesAlert from "@/components/dashboard/social-listening/UrgentIssuesAlert";
 import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import {
   useGetTopicBySentiment,
   useGetTopicDistribution,
   useGetTrendingIssues,
+  useGetUrgentIssues,
 } from "@/hooks/queries/useSocialListeningQueries";
 import {
   ClassificationSentimentData,
@@ -25,7 +27,7 @@ import {
   SocialListeningFilter,
   TopicDistributionItem,
 } from "@/types/social-listening";
-import { endOfMonth, format, startOfMonth } from "date-fns";
+import { format, startOfMonth, toDate } from "date-fns";
 import { Download } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -41,15 +43,17 @@ const SocialListeningPage = () => {
     const pageParam = searchParams.get("page");
     const limitParam = searchParams.get("limit");
     const sentimentLabelParam = searchParams.get("sentimentLabel");
+    const topicParam = searchParams.get("topic");
 
     const now = new Date();
 
     return {
       startDate: fromParam || format(startOfMonth(now), "yyyy-MM-dd"),
-      endDate: toParam || format(endOfMonth(now), "yyyy-MM-dd"),
+      endDate: toParam || format(toDate(now), "yyyy-MM-dd"),
       page: pageParam ? Number(pageParam) : 1,
       limit: limitParam ? Number(limitParam) : 10,
       sentimentLabel: sentimentLabelParam as SentimentLabel | undefined,
+      topic: topicParam || undefined,
     };
   }, [searchParams]);
 
@@ -73,6 +77,8 @@ const SocialListeningPage = () => {
     useGetPostsBySentiment(filter);
   const { data: topicBySentimentData, isLoading: isLoadingTopicBySentiment } =
     useGetTopicBySentiment(filter);
+  const { data: urgentIssuesData, isLoading: isLoadingUrgent } =
+    useGetUrgentIssues(filter);
 
   const results = trendingData?.results || [];
 
@@ -84,7 +90,8 @@ const SocialListeningPage = () => {
     isLoadingClassification ||
     isLoadingPostCount ||
     isLoadingPostsBySentiment ||
-    isLoadingTopicBySentiment;
+    isLoadingTopicBySentiment ||
+    isLoadingUrgent;
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
@@ -108,6 +115,7 @@ const SocialListeningPage = () => {
     },
     [pathname, router, searchParams],
   );
+
   const exportPdf = async (
     kpiData: KPIOverviewData | undefined,
     fromDate: string,
@@ -131,30 +139,30 @@ const SocialListeningPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-8">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <div className="flex flex-col justify-between gap-6 md:items-center lg:flex-row">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-              Phân tích bài đăng sinh viên trên mạng xã hội
+    <div className="min-h-screen bg-slate-50/50 p-4 sm:p-6 md:p-8">
+      <div className="mx-auto max-w-[1400px] space-y-6 lg:space-y-8">
+        {/* Page Header */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
+          <div className="flex-1 space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+              Lắng nghe sinh viên
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
               Theo dõi và phân tích các vấn đề của sinh viên thông qua các bài
-              đăng mạng xã hội để có những hành động kịp thời và hiệu quả. Dữ
-              liệu được thu thập từ group Facebook "UTE - THẮC MẮC HỌC TẬP ®
-              (Trường Đại học Công nghệ Kỹ thuật TP.HCM - HCMUTE)". Dữ liệu được
-              làm mới 3 ngày một lần để đảm bảo tính cập nhật và chính xác.
+              đăng mạng xã hội để có những hành động kịp thời. Dữ liệu từ group
+              "UTE - THẮC MẮC HỌC TẬP ®" và được làm mới mỗi ngày một lần.
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 md:items-center lg:flex-row">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             <SocialListeningDatePicker
               onUpdate={handleDateUpdate}
               defaultStartDate={filter.startDate}
               defaultEndDate={filter.endDate}
+              className="w-full sm:w-auto"
             />
             <Button
-              variant="primary"
+              variant="default"
               onClick={() =>
                 exportPdf(
                   kpiData,
@@ -166,45 +174,52 @@ const SocialListeningPage = () => {
                   topicBySentimentData,
                 )
               }
-              size="sm"
+              className="h-10 w-full bg-indigo-600 font-semibold text-white shadow-md transition-colors hover:bg-indigo-700 sm:w-auto"
             >
-              <Download className="h-5 w-5" />
+              <Download className="mr-2 h-4 w-4" />
               Xuất báo cáo
             </Button>
           </div>
         </div>
 
+        {/* Content Area */}
         {isLoading && !trendingData ? (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="space-y-6 lg:space-y-8">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-32 animate-pulse rounded-xl bg-gray-200"
+                  className="h-40 animate-pulse rounded-2xl bg-slate-200/60"
                 />
               ))}
             </div>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="h-80 animate-pulse rounded-xl bg-gray-200 lg:col-span-2" />
-              <div className="h-80 animate-pulse rounded-xl bg-gray-200 lg:col-span-1" />
+              <div className="h-[400px] animate-pulse rounded-2xl bg-slate-200/60 lg:col-span-2" />
+              <div className="h-[400px] animate-pulse rounded-2xl bg-slate-200/60 lg:col-span-1" />
             </div>
-            <div className="h-96 animate-pulse rounded-xl bg-gray-200" />
+            <div className="h-[600px] animate-pulse rounded-2xl bg-slate-200/60" />
           </div>
         ) : (
-          <>
+          <div className="animate-in fade-in space-y-6 duration-500 lg:space-y-8">
             {kpiData && <KPIOverview data={kpiData} />}
 
+            {urgentIssuesData && urgentIssuesData.length > 0 && (
+              <UrgentIssuesAlert issues={urgentIssuesData} />
+            )}
+
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="h-full lg:col-span-2">
+              <div className="min-h-[400px] lg:col-span-2">
                 {trendData && <SentimentTrendChart data={trendData} />}
               </div>
-              <div className="lg:col-span-1">
+              <div className="min-h-[400px] lg:col-span-1">
                 {topicData && <TopicDistributionChart data={topicData} />}
               </div>
             </div>
 
-            <HotIssuesTable data={results} total={trendingData?.total || 0} />
-          </>
+            <div className="w-full overflow-hidden">
+              <HotIssuesTable data={results} total={trendingData?.total || 0} />
+            </div>
+          </div>
         )}
       </div>
     </div>

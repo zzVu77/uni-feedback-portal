@@ -35,6 +35,9 @@ export class SentimentTrendItemDto {
 
   @ApiProperty({ example: 10 })
   neutral: number;
+
+  @ApiProperty({ example: 3 })
+  stressAnxiety: number;
 }
 
 export class TopicDistributionItemDto {

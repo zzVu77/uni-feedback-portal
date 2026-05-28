@@ -117,4 +117,16 @@ export class SocialListeningController {
   async getTopicSentimentDistribution(@Query() query: GetTrendingIssuesDto) {
     return this.socialListeningService.getTopicSentimentDistribution(query);
   }
+  @Get('urgent-issues')
+  @ApiOperation({
+    summary:
+      'Get urgent issues based on severity keywords and negative sentiment',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of urgent feedback posts',
+  })
+  async getUrgentIssues(@Query() query: GetTrendingIssuesDto) {
+    return this.socialListeningService.getUrgentIssues(query);
+  }
 }
