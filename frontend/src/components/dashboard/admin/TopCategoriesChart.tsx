@@ -22,11 +22,11 @@ import {
   YAxis,
 } from "recharts";
 
-// Config color to Violet
+// Config color to Red
 const chartConfig = {
   count: {
     label: "Số lượng",
-    color: "#8b5cf6", // violet-500
+    color: "#ef4444", // red-500
   },
   label: {
     color: "#64748b", // slate-500
@@ -51,7 +51,7 @@ export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
       <div className="mb-6 flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600">
             <Layers className="h-4 w-4" />
           </div>
           <h3 className="text-lg font-bold tracking-tight text-slate-900">

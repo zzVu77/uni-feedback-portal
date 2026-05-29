@@ -14,11 +14,11 @@ import { FeedbackTrendDto } from "@/types/report";
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-// Config color to Indigo
+// Config color to Blue
 const chartConfig = {
   count: {
     label: "Số lượng",
-    color: "#4f46e5", // indigo-600
+    color: "#3b82f6", // blue-500
   },
 } satisfies ChartConfig;
 
@@ -37,7 +37,7 @@ export const FeedbackTrendChart = ({ data, isLoading }: Props) => {
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
       <div className="mb-6 flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
             <TrendingUp className="h-4 w-4" />
           </div>
           <h3 className="text-lg font-bold tracking-tight text-slate-900">
