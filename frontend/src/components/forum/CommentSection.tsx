@@ -7,7 +7,7 @@ import {
 } from "@/hooks/queries/useCommentQueries";
 import { cn } from "@/lib/utils";
 import { Comment } from "@/types";
-import { User } from "lucide-react";
+import { MessageCircle, Send, User } from "lucide-react";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -81,68 +81,74 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
   return (
     <div
       id="comment-section"
-      className="mt-2 flex w-full flex-col gap-2 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8"
+      className="mt-6 flex w-full flex-col gap-3 rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm md:p-8"
     >
       {/* Discussion Header */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-slate-900">
+        <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-slate-900">
           Thảo luận
-          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-sm font-medium text-slate-500">
+          <span className="flex h-6 min-w-[24px] items-center justify-center rounded-md bg-slate-100 px-1.5 text-xs font-semibold text-slate-600">
             {totalComments}
           </span>
         </h2>
       </div>
 
       {/* Comment Input Area (Top) */}
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-4">
-          <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 sm:flex">
-            {user?.role !== "STUDENT" ? (
-              <User className="h-5 w-5" />
-            ) : (
-              <Avatar className="h-full w-full">
-                <AvatarImage
-                  src={user?.avatarUrl || "https://github.com/shadcn.png"}
-                  className="object-cover"
-                />
-
-                <AvatarFallback className="bg-slate-800 text-slate-200">
-                  {user?.fullName
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase() || "CN"}
-                </AvatarFallback>
-              </Avatar>
-            )}
-          </div>
-          <div className="flex flex-1 flex-col gap-3">
-            <Textarea
-              placeholder="Chia sẻ ý kiến của bạn..."
-              className="min-h-[100px] resize-none border-slate-200 bg-slate-50/30 p-4 transition-all duration-200 focus:bg-white"
-              value={newComment}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setNewComment(e.target.value)
-              }
-            />
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                className={cn(
-                  "rounded-full px-8 py-2 font-semibold shadow-sm transition-all duration-200",
-                  newComment.trim()
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "cursor-not-allowed bg-slate-100 text-slate-400",
-                )}
-                onClick={handleNewCommentSubmit}
-                disabled={isCreating || !newComment.trim()}
-              >
-                {isCreating ? "Đang gửi..." : "Gửi bình luận"}
-              </Button>
-            </div>
+      <div className="flex gap-4">
+        <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 ring-1 ring-slate-200 sm:flex">
+          {user?.role !== "STUDENT" ? (
+            <User className="h-5 w-5" />
+          ) : (
+            <Avatar className="h-full w-full">
+              <AvatarImage
+                src={user?.avatarUrl || "https://github.com/shadcn.png"}
+                className="object-cover"
+              />
+              <AvatarFallback className="bg-slate-100 text-xs font-semibold text-slate-700">
+                {user?.fullName
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase() || "CN"}
+              </AvatarFallback>
+            </Avatar>
+          )}
+        </div>
+        <div className="flex flex-1 flex-col gap-3">
+          <Textarea
+            placeholder="Viết bình luận..."
+            className="min-h-[100px] resize-none rounded-xl border-slate-200 bg-slate-50 p-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/50"
+            value={newComment}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setNewComment(e.target.value)
+            }
+          />
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              className={cn(
+                "h-9 items-center gap-2 rounded-lg px-6 text-sm font-semibold transition-colors",
+                newComment.trim()
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "cursor-not-allowed bg-slate-100 text-slate-400 hover:bg-slate-100",
+              )}
+              onClick={handleNewCommentSubmit}
+              disabled={isCreating || !newComment.trim()}
+            >
+              {isCreating ? (
+                "Đang gửi..."
+              ) : (
+                <>
+                  <Send className="h-3.5 w-3.5" />
+                  Gửi bình luận
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </div>
+
+      <div className="h-px w-full bg-slate-100" />
 
       {/* Comment List Area */}
       <div className="flex flex-col gap-8">
@@ -161,10 +167,18 @@ const CommentSection: React.FC<Props> = ({ data, postId, type }) => {
             />
           ))
         ) : (
-          <div className="py-12 text-center">
-            <p className="text-slate-400">
-              Chưa có bình luận nào. Hãy là người đầu tiên!
-            </p>
+          <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-50">
+              <MessageCircle className="h-6 w-6 text-slate-400" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-slate-700">
+                Chưa có bình luận nào
+              </p>
+              <p className="text-xs text-slate-500">
+                Hãy là người đầu tiên chia sẻ suy nghĩ của bạn!
+              </p>
+            </div>
           </div>
         )}
       </div>

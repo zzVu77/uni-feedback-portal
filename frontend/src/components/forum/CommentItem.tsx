@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Comment } from "@/types";
-import { School } from "lucide-react";
+import { School, Reply } from "lucide-react";
 import React, { useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { Button } from "../ui/button";
@@ -50,27 +50,24 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const isStaff = comment.user.role !== "STUDENT";
 
   return (
-    <div className="group/comment flex w-full gap-4">
+    <div className="group/comment flex w-full gap-3">
       {/* Avatar Section */}
       <div className="flex shrink-0 flex-col items-center">
         <div
           className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-full text-slate-500",
-            isStaff
-              ? "bg-emerald-100 text-emerald-600 ring-2 ring-emerald-50"
-              : "bg-slate-100",
+            "flex h-8 w-8 items-center justify-center rounded-full ring-1 ring-slate-200",
+            isStaff ? "bg-emerald-50 text-emerald-600" : "bg-slate-50",
           )}
         >
           {isStaff ? (
-            <School className="h-5 w-5" />
+            <School className="h-4 w-4" />
           ) : (
             <Avatar className="h-full w-full">
               <AvatarImage
                 src={comment.user.avatarUrl || "https://github.com/shadcn.png"}
                 className="object-cover"
               />
-
-              <AvatarFallback className="bg-slate-800 text-slate-200">
+              <AvatarFallback className="bg-slate-100 text-xs font-semibold text-slate-700">
                 {comment.user.fullName
                   ?.split(" ")
                   .map((n) => n[0])
@@ -82,7 +79,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         </div>
         {/* Thread Line */}
         {comment.replies && comment.replies.length > 0 && (
-          <div className="mt-2 w-px flex-1 bg-slate-100" />
+          <div className="mt-2 w-px flex-1 bg-slate-200" />
         )}
       </div>
 
@@ -91,14 +88,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="flex items-center gap-2">
           <span
             className={cn(
-              "text-sm font-bold",
+              "text-sm font-semibold",
               isStaff ? "text-emerald-700" : "text-slate-900",
             )}
           >
             {comment.user.fullName}
           </span>
-          <span className="text-xs text-slate-400">•</span>
-          <time className="text-xs text-slate-400">
+          <span className="text-xs text-slate-300">•</span>
+          <time className="text-xs text-slate-500">
             {new Date(comment.createdAt).toLocaleString("vi-VN", {
               day: "2-digit",
               month: "2-digit",
@@ -114,25 +111,22 @@ const CommentItem: React.FC<CommentItemProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="mt-1 flex items-center gap-4">
+        <div className="mt-1 flex items-center gap-2 text-slate-500">
           {level < 2 && (
-            <Button
-              variant="outline"
+            <button
               onClick={() => setIsReplying(!isReplying)}
-              className="border-none bg-transparent text-xs font-semibold text-slate-500 transition-colors hover:bg-transparent hover:text-blue-600"
+              className="flex items-center gap-1.5 text-xs font-semibold transition-colors hover:text-blue-600"
             >
+              <Reply className="h-3.5 w-3.5" />
               Trả lời
-            </Button>
+            </button>
           )}
 
           {!isAuthor && (
             <ReportDialog onSubmit={handleReportSubmit}>
-              <Button
-                variant="outline"
-                className="border-none bg-transparent text-xs font-semibold text-slate-500 transition-colors hover:bg-transparent hover:text-amber-600"
-              >
+              <button className="text-xs font-semibold transition-colors hover:text-amber-600">
                 Báo cáo
-              </Button>
+              </button>
             </ReportDialog>
           )}
 
@@ -142,23 +136,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
               description="Bạn có chắc chắn muốn xóa bình luận này không?"
               onConfirm={handleDelete}
             >
-              <Button
-                variant={"outline"}
-                className="border-none bg-transparent text-xs font-semibold text-slate-500 transition-colors hover:bg-transparent hover:text-red-600"
-              >
+              <button className="text-xs font-semibold transition-colors hover:text-red-600">
                 Xóa
-              </Button>
+              </button>
             </ConfirmationDialog>
           )}
         </div>
 
         {/* Form reply */}
         {isReplying && (
-          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+          <div className="mt-2 flex flex-col gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
             <Textarea
-              placeholder="Viết câu trả lời..."
+              placeholder={`Trả lời ${comment.user.fullName}...`}
               value={replyContent}
-              className="min-h-[80px] resize-none border-slate-200 bg-white"
+              className="min-h-[60px] resize-none rounded-md border-slate-200 bg-white p-2.5 text-sm focus:ring-2 focus:ring-blue-500/50"
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setReplyContent(e.target.value)
               }
@@ -167,25 +158,25 @@ const CommentItem: React.FC<CommentItemProps> = ({
               <Button
                 size="sm"
                 variant="ghost"
-                className="rounded-full text-slate-500"
+                className="h-8 rounded-md px-3 text-xs font-semibold text-slate-500 hover:bg-slate-200/50"
                 onClick={() => setIsReplying(false)}
               >
                 Hủy
               </Button>
               <Button
                 size="sm"
-                className="rounded-full bg-blue-600 px-4 text-white hover:bg-blue-700"
+                className="h-8 rounded-md bg-blue-600 px-4 text-xs font-semibold text-white hover:bg-blue-700"
                 onClick={handleSubmitReply}
               >
-                Gửi trả lời
+                Gửi
               </Button>
             </div>
           </div>
         )}
 
-        {/* Nested Replies with Guide Line */}
+        {/* Nested Replies */}
         {comment.replies && comment.replies.length > 0 && (
-          <div className="mt-6 flex flex-col gap-4 border-l-2 border-slate-100 pl-6">
+          <div className="mt-3 flex flex-col gap-4 pt-1">
             {comment.replies.map((reply) => (
               <CommentItem
                 key={reply.id}
