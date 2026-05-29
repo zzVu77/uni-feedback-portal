@@ -34,9 +34,9 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
   };
 
   return (
-    <div className="relative flex w-full flex-col overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] ring-1 ring-slate-200/50 md:p-12">
+    <div className="relative flex w-full flex-col overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] ring-1 ring-slate-200/50">
       {/* Header Area */}
-      <div className="mb-8 flex flex-col gap-6">
+      <div className="mb-8 flex flex-col gap-4">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <h1 className="flex-1 text-3xl leading-tight font-black tracking-tight text-slate-900 md:text-4xl lg:text-[2.75rem]">
             {feedback.subject}
@@ -122,7 +122,7 @@ const FeedbackPostDetail = ({ data, commentsCount }: Props) => {
       )}
 
       {/* Footer Actions */}
-      <div className="mt-10 flex items-center justify-between border-t border-slate-100 pt-8">
+      <div className="mt-5 flex items-center justify-between border-t border-slate-100">
         <div className="flex items-center gap-4">
           <Button
             onClick={handleToggleVote}

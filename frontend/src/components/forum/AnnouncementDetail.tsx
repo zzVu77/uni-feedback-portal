@@ -65,7 +65,7 @@ const AnnouncementDetail = ({ data }: Props) => {
 
       {/* Attachments */}
       {data.files && data.files.length > 0 && (
-        <div className="mt-10 rounded-[1.5rem] bg-slate-50 p-6 ring-1 ring-slate-100">
+        <div className="mt-5 rounded-[1.5rem] bg-slate-50 p-2 ring-1 ring-slate-100">
           <h2 className="mb-5 flex items-center gap-3 text-lg font-extrabold text-slate-900">
             Tệp đính kèm
             <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-100 px-2 text-xs font-bold text-blue-700">
