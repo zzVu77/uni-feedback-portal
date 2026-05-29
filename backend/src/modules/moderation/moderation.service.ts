@@ -44,7 +44,7 @@ export class ModerationService {
   ): Promise<CommentReportResponseDto> {
     this._ensureIsAdmin(actor);
 
-    const { page = 1, pageSize = 10, status } = query;
+    const { page = 1, pageSize = 10, status, q, reportReason } = query;
     const skip = (page - 1) * pageSize;
 
     const where: Prisma.CommentReportsWhereInput = {};
@@ -54,6 +54,41 @@ export class ModerationService {
       )
         ? (status.toUpperCase() as ReportStatus)
         : undefined;
+    }
+
+    if (q) {
+      where.OR = [
+        { reason: { contains: q, mode: 'insensitive' } },
+        { comment: { content: { contains: q, mode: 'insensitive' } } },
+      ];
+    }
+    const KNOWN_REASONS = [
+      'Spam hoặc quảng cáo',
+      'Quấy rối hoặc bắt nạt',
+      'Nội dung không phù hợp',
+      'Ngôn từ thù địch',
+    ];
+    const REPORT_REASON_MAP: Record<string, string> = {
+      SPAM: 'Spam hoặc quảng cáo',
+      HARASSMENT: 'Quấy rối hoặc bắt nạt',
+      INAPPROPRIATE_CONTENT: 'Nội dung không phù hợp',
+      HATE_SPEECH: 'Ngôn từ thù địch',
+      OTHER: 'Khác',
+    };
+    if (reportReason) {
+      if (reportReason === 'OTHER') {
+        where.AND = [
+          ...KNOWN_REASONS.map((r) => ({
+            reason: { not: { equals: r } },
+          })),
+          { reason: { not: null } },
+        ];
+      } else {
+        const mappedReason = REPORT_REASON_MAP[reportReason];
+        if (mappedReason) {
+          where.reason = { equals: mappedReason };
+        }
+      }
     }
 
     const [items, total] = await Promise.all([

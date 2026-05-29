@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { ReportStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class QueryCommentReportsDto {
   @ApiPropertyOptional({ description: 'Page number', example: 1 })
@@ -24,4 +24,20 @@ export class QueryCommentReportsDto {
   })
   @IsOptional()
   status?: ReportStatus;
+
+  @ApiPropertyOptional({
+    description: 'Search by reason or comment content',
+    example: 'spam',
+  })
+  @IsOptional()
+  @IsString()
+  q?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by report reason',
+    example: 'Inappropriate content',
+  })
+  @IsOptional()
+  @IsString()
+  reportReason?: string;
 }
