@@ -4,14 +4,6 @@
 // src/components/dashboard/FeedbackTrendChart.tsx
 "use client";
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -19,12 +11,14 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { FeedbackTrendDto } from "@/types/report";
+import { TrendingUp } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-// Config color to Blue (Tailwind blue-600 approx)
+// Config color to Indigo
 const chartConfig = {
   count: {
     label: "Số lượng",
-    color: "hsl(221.2 83.2% 53.3%)", // Blue 600
+    color: "#4f46e5", // indigo-600
   },
 } satisfies ChartConfig;
 
@@ -36,61 +30,89 @@ interface Props {
 export const FeedbackTrendChart = ({ data, isLoading }: Props) => {
   if (isLoading)
     return (
-      <div className="h-[300px] w-full animate-pulse rounded-xl bg-gray-100" />
+      <div className="h-[350px] w-full animate-pulse rounded-2xl bg-slate-200/60" />
     );
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Xu hướng góp ý</CardTitle>
-        <CardDescription>
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
+      <div className="mb-6 flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
+            <TrendingUp className="h-4 w-4" />
+          </div>
+          <h3 className="text-lg font-bold tracking-tight text-slate-900">
+            Xu hướng góp ý
+          </h3>
+        </div>
+        <p className="pl-10 text-sm font-medium text-slate-500">
           Số lượng góp ý theo ngày trong giai đoạn đã chọn
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        </p>
+      </div>
+
+      <div className="flex-1">
+        <ChartContainer config={chartConfig} className="min-h-[250px] w-full">
           <AreaChart
             data={data || []}
-            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <defs>
               <linearGradient id="fillCount" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
                   stopColor="var(--color-count)"
-                  stopOpacity={0.8}
+                  stopOpacity={0.4}
                 />
                 <stop
                   offset="95%"
                   stopColor="var(--color-count)"
-                  stopOpacity={0.1}
+                  stopOpacity={0.0}
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <CartesianGrid
+              vertical={false}
+              strokeDasharray="4 4"
+              stroke="#e2e8f0"
+            />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={12}
+              tick={{ fill: "#64748b", fontSize: 12 }}
               tickFormatter={(value) => value.slice(5)} // Show MM-DD only
             />
-            <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={12}
+              tick={{ fill: "#64748b", fontSize: 12 }}
+            />
             <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" />}
+              cursor={{
+                stroke: "#cbd5e1",
+                strokeWidth: 1,
+                strokeDasharray: "4 4",
+              }}
+              content={
+                <ChartTooltipContent
+                  indicator="dot"
+                  className="border-slate-100 bg-white/95 shadow-xl backdrop-blur-sm"
+                />
+              }
             />
             <Area
               dataKey="count"
-              type="natural"
+              type="monotone"
               fill="url(#fillCount)"
-              fillOpacity={0.4}
+              fillOpacity={1}
               stroke="var(--color-count)"
-              stackId="a"
+              strokeWidth={3}
+              activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-count)" }}
             />
           </AreaChart>
         </ChartContainer>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

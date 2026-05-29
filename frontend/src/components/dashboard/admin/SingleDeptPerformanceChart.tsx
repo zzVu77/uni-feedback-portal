@@ -1,24 +1,23 @@
 "use client";
 
-import { TopDepartmentStatsDto } from "@/types/report";
-import { cn } from "@/lib/utils";
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
+import { TopDepartmentStatsDto } from "@/types/report";
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
-// Cấu hình màu sắc Chart
 const chartConfig = {
   resolved: {
     label: "Đã xử lý",
-    color: "hsl(221.2 83.2% 53.3%)", // Blue tone
+    color: "#10b981", // emerald-500
   },
   unresolved: {
     label: "Chưa xử lý",
-    color: "hsl(0 84.2% 60.2%)", // Red tone
+    color: "#f43f5e", // rose-500
   },
 } satisfies ChartConfig;
 
@@ -31,7 +30,7 @@ const getPerformanceColor = (hours: number) => {
 
 interface Props {
   dept: TopDepartmentStatsDto;
-  className?: string; // Cho phép override style container nếu cần
+  className?: string;
 }
 
 export const SingleDeptPerformanceChart = ({ dept, className }: Props) => {
@@ -48,12 +47,12 @@ export const SingleDeptPerformanceChart = ({ dept, className }: Props) => {
   return (
     <div
       className={cn(
-        "flex flex-col items-center rounded-lg p-2 transition-colors hover:bg-slate-50",
+        "group flex flex-col items-center rounded-2xl border border-slate-100 bg-white p-4 shadow-sm ring-1 ring-slate-200/50 transition-all duration-300 hover:-translate-y-1 hover:border-slate-200 hover:shadow-md",
         className,
       )}
     >
       <div
-        className="mb-2 line-clamp-1 h-5 w-full px-2 text-center text-sm font-medium"
+        className="mb-2 line-clamp-1 h-5 w-full px-2 text-center text-sm font-semibold tracking-tight text-slate-700 transition-colors group-hover:text-indigo-600"
         title={dept.departmentName}
       >
         {dept.departmentName}
@@ -70,7 +69,12 @@ export const SingleDeptPerformanceChart = ({ dept, className }: Props) => {
         >
           <ChartTooltip
             cursor={false}
-            content={<ChartTooltipContent hideLabel />}
+            content={
+              <ChartTooltipContent
+                hideLabel
+                className="border-slate-100 bg-white/95 shadow-xl backdrop-blur-sm"
+              />
+            }
           />
           <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
             <Label
@@ -88,7 +92,7 @@ export const SingleDeptPerformanceChart = ({ dept, className }: Props) => {
                       <tspan
                         x={viewBox.cx}
                         y={(viewBox.cy || 0) + 4}
-                        className="fill-muted-foreground text-[10px]"
+                        className="fill-slate-400 text-[10px] font-medium"
                       >
                         Trung bình
                       </tspan>
