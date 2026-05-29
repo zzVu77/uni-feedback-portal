@@ -149,6 +149,7 @@ export function ReportedCommentTable() {
         {/* Desktop Filters */}
         <div className="hidden items-center gap-3 md:flex">
           <CommonFilter.ReportStatusSelection />
+          <CommonFilter.ReportReasonSelection />
         </div>
 
         {/* Mobile Filter Drawer */}
