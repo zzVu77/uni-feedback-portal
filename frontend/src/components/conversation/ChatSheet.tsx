@@ -9,6 +9,7 @@ import {
   Paperclip,
   SendHorizontal,
   X,
+  UserCircle2,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -116,24 +117,26 @@ const ChatSheet = ({
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col p-0 sm:max-w-[500px]"
+        className="flex w-full flex-col border-l-0 p-0 shadow-2xl sm:max-w-[500px]"
       >
-        <SheetHeader className="border-b border-slate-200 p-6 text-left">
-          <div className="mr-6 flex items-center justify-center gap-4">
+        <SheetHeader className="border-b border-slate-100 bg-white/80 p-5 pb-4 text-left backdrop-blur-md">
+          <div className="mr-6 flex items-center justify-between gap-4">
             <div className="flex-1">
-              <SheetTitle className="mb-2 text-xl font-semibold text-slate-900">
+              <SheetTitle className="mb-1 line-clamp-1 text-lg font-bold text-slate-800">
                 {threadTitle}
               </SheetTitle>
-              <SheetDescription className="text-[12px] text-slate-500">
-                Trạng thái:{" "}
+              <SheetDescription className="flex items-center gap-1.5 text-xs font-medium">
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    isConversationOpen ? "bg-emerald-500" : "bg-rose-500"
+                  }`}
+                />
                 <span
                   className={
-                    isConversationOpen
-                      ? "font-medium text-emerald-600"
-                      : "font-medium text-red-600"
+                    isConversationOpen ? "text-emerald-600" : "text-rose-600"
                   }
                 >
-                  {isConversationOpen ? "Đang mở" : "Đã đóng"}
+                  {isConversationOpen ? "Đang mở" : "Đã kết thúc"}
                 </span>
               </SheetDescription>
             </div>
@@ -147,45 +150,72 @@ const ChatSheet = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-9 rounded-lg border-red-200 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                  className="h-8 rounded-full border-rose-200 bg-rose-50 px-3 text-xs font-bold text-rose-600 transition-colors hover:bg-rose-100 hover:text-rose-700"
                 >
                   <CheckCircle className="mr-1.5 h-3.5 w-3.5" />
-                  Đóng trao đổi
+                  Kết thúc
                 </Button>
               </ConfirmationDialog>
             )}
           </div>
         </SheetHeader>
 
-        <div className="flex-1 overflow-hidden bg-white">
-          <ScrollArea ref={scrollRef} className="h-full px-6 py-4">
-            <div className="flex flex-col gap-4">
+        <div className="flex-1 overflow-hidden bg-slate-50/50">
+          <ScrollArea ref={scrollRef} className="h-full px-5 py-4">
+            <div className="flex flex-col gap-5 pb-4">
               {messages.length === 0 ? (
-                <div className="flex h-40 items-center justify-center text-slate-400">
-                  Chưa có tin nhắn nào.
+                <div className="flex h-40 flex-col items-center justify-center gap-2 text-slate-400">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
+                    <UserCircle2 className="h-6 w-6 text-slate-300" />
+                  </div>
+                  <span className="text-sm font-medium">
+                    Chưa có tin nhắn nào. Bắt đầu cuộc trò chuyện!
+                  </span>
                 </div>
               ) : (
                 messages.map((msg) => {
                   const isMe = msg.user.id === user?.id;
+                  const senderName = isMe
+                    ? "Bạn"
+                    : msg.user.fullName || "Người dùng";
+                  const timeString = new Date(msg.createdAt).toLocaleTimeString(
+                    "vi-VN",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    },
+                  );
+
                   return (
                     <div
                       key={msg.id}
-                      className={`flex flex-col gap-1 ${
+                      className={`flex flex-col gap-1.5 ${
                         isMe ? "items-end" : "items-start"
                       }`}
                     >
+                      {/* User Info Header */}
                       <div
-                        className={`max-w-[85%] px-4 py-2 text-[14px] shadow-sm ${
+                        className={`flex items-center gap-2 px-1 text-xs font-medium ${isMe ? "flex-row-reverse" : "flex-row"}`}
+                      >
+                        <span className="text-slate-700">{senderName}</span>
+                        <span className="text-[10px] text-slate-400">
+                          {timeString}
+                        </span>
+                      </div>
+
+                      {/* Message Bubble */}
+                      <div
+                        className={`max-w-[85%] px-4 py-2.5 text-[15px] leading-relaxed shadow-sm ${
                           isMe
-                            ? "rounded-2xl rounded-tr-none bg-blue-600 text-white"
-                            : "rounded-2xl rounded-tl-none bg-slate-100 text-slate-800"
+                            ? "rounded-[20px] rounded-tr-[4px] bg-indigo-600 text-white"
+                            : "rounded-[20px] rounded-tl-[4px] border border-slate-200 bg-white text-slate-700"
                         }`}
                       >
                         {msg.content}
 
                         {/* Attachments rendering */}
                         {msg.attachments && msg.attachments.length > 0 && (
-                          <div className="mt-2 flex flex-col gap-2">
+                          <div className="mt-3 flex flex-col gap-2">
                             {msg.attachments.map((file, idx) => {
                               const isImage =
                                 /\.(jpg|jpeg|png|webp|gif)$/i.test(
@@ -197,23 +227,27 @@ const ChatSheet = ({
                                   href={file.fileUrl || ""}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className={`flex items-center gap-2 rounded-md border p-2 transition-colors hover:bg-black/5 ${
+                                  className={`flex items-center gap-2.5 rounded-xl border p-2 transition-colors ${
                                     isMe
-                                      ? "border-white/20 bg-white/20"
-                                      : "border-slate-200 bg-white"
+                                      ? "border-indigo-400 bg-indigo-500/50 hover:bg-indigo-500/80"
+                                      : "border-slate-100 bg-slate-50 hover:bg-slate-100"
                                   }`}
                                 >
                                   {isImage ? (
                                     <img
                                       src={file.fileUrl || ""}
                                       alt={file.fileName}
-                                      className="max-w-full rounded-md object-cover lg:max-w-[200px]"
+                                      className="max-h-[200px] w-full rounded-lg object-cover"
                                     />
                                   ) : (
                                     <>
-                                      <FileIcon className="h-4 w-4 shrink-0" />
-                                      <span className="truncate text-xs font-medium underline">
-                                        {file.fileName || "Xem tệp đính kèm"}
+                                      <div
+                                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${isMe ? "bg-indigo-400 text-white" : "bg-slate-200 text-slate-500"}`}
+                                      >
+                                        <FileIcon className="h-4 w-4" />
+                                      </div>
+                                      <span className="truncate text-sm font-medium">
+                                        {file.fileName || "Tệp đính kèm"}
                                       </span>
                                     </>
                                   )}
@@ -223,12 +257,6 @@ const ChatSheet = ({
                           </div>
                         )}
                       </div>
-                      <span className="px-1 text-[10px] text-slate-400">
-                        {new Date(msg.createdAt).toLocaleTimeString("vi-VN", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
                     </div>
                   );
                 })
@@ -238,19 +266,19 @@ const ChatSheet = ({
         </div>
 
         {isConversationOpen ? (
-          <div className="border-t border-slate-200 bg-slate-50 p-4">
+          <div className="border-t border-slate-100 bg-white p-4 shadow-[0_-4px_24px_-12px_rgba(0,0,0,0.05)]">
             {/* File Preview Chip */}
             {selectedFile && (
-              <div className="mb-2 flex w-fit items-center gap-2 rounded-md bg-slate-100 px-3 py-1.5">
-                <FileIcon className="h-3.5 w-3.5 text-slate-500" />
-                <span className="max-w-[150px] truncate text-xs font-medium text-slate-700">
+              <div className="mb-3 flex w-fit max-w-[80%] items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 py-1.5 pr-2 pl-3 shadow-sm">
+                <FileIcon className="h-4 w-4 text-indigo-500" />
+                <span className="truncate text-xs font-semibold text-indigo-700">
                   {selectedFile.name}
                 </span>
                 <button
                   onClick={() => setSelectedFile(null)}
-                  className="ml-1 text-slate-400 hover:text-red-500"
+                  className="ml-1 flex h-5 w-5 items-center justify-center rounded-full text-indigo-400 transition-colors hover:bg-indigo-200 hover:text-indigo-800"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-3 w-3" />
                 </button>
               </div>
             )}
@@ -268,7 +296,7 @@ const ChatSheet = ({
                 size="icon"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isSending}
-                className="h-11 w-11 shrink-0 text-slate-500 hover:bg-slate-200 hover:text-blue-600"
+                className="h-11 w-11 shrink-0 rounded-full text-slate-400 hover:bg-slate-100 hover:text-indigo-600"
               >
                 <Paperclip className="h-5 w-5" />
               </Button>
@@ -278,23 +306,23 @@ const ChatSheet = ({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="max-h-[120px] min-h-[44px] resize-none bg-white p-3 text-[14px]"
+                className="max-h-[120px] min-h-[44px] flex-1 resize-none rounded-[22px] border-slate-200 bg-slate-50 px-4 py-3 text-[14px] leading-relaxed transition-colors focus-visible:bg-white focus-visible:ring-1 focus-visible:ring-indigo-500"
                 disabled={isSending}
               />
               <Button
                 size="icon"
                 disabled={(!inputValue.trim() && !selectedFile) || isSending}
                 onClick={() => void handleSend()}
-                className="h-11 w-11 shrink-0 bg-blue-600 hover:bg-blue-700"
+                className="h-11 w-11 shrink-0 rounded-full bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition-transform hover:scale-105 hover:bg-indigo-700 disabled:hover:scale-100"
               >
-                <SendHorizontal className="h-5 w-5" />
+                <SendHorizontal className="ml-0.5 h-5 w-5" />
               </Button>
             </div>
           </div>
         ) : (
-          <div className="border-t border-slate-100 bg-slate-50/50 p-4 text-center">
-            <p className="text-sm text-slate-400">
-              Cuộc trao đổi này đã kết thúc.
+          <div className="border-t border-slate-100 bg-slate-50 p-5 text-center">
+            <p className="text-[13px] font-medium text-slate-400">
+              Cuộc trò chuyện này đã được đóng lại.
             </p>
           </div>
         )}
