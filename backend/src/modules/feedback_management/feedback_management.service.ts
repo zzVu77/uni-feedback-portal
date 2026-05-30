@@ -464,7 +464,7 @@ export class FeedbackManagementService {
   ): Promise<ListFeedbacksResponseDto> {
     const {
       page = 1,
-      pageSize = 12,
+      pageSize = 10,
       status,
       departmentId,
       categoryId,
@@ -474,13 +474,11 @@ export class FeedbackManagementService {
       sort = FeedbackSortOption.STATUS,
     } = query;
 
-    // Sử dụng raw query để order theo status custom và join bảng liên quan
     let whereClause = 'WHERE 1=1';
     type SqlParam = string | number | boolean | Date | null;
 
     const params: SqlParam[] = [];
 
-    // helper tạo placeholder $1, $2, ...
     let paramIndex = 1;
     const nextParam = () => `$${paramIndex++}`;
     const hiddenStatuses: FeedbackStatus[] = [
@@ -540,7 +538,7 @@ export class FeedbackManagementService {
     let joinClause = '';
     const orderByParts: string[] = [];
 
-    // Base: STATUS ORDER (luôn có)
+    // Base: STATUS ORDER
     const statusOrderExpr = `
     CASE
       WHEN f."currentStatus" = 'PENDING' THEN 1
@@ -551,7 +549,7 @@ export class FeedbackManagementService {
     END
   `;
 
-    // HOT = thêm trọng số
+    // HOT
     if (sort === FeedbackSortOption.TRENDING) {
       joinClause = `
       LEFT JOIN "ForumPosts" fp ON fp."feedbackId" = f."id"
@@ -566,7 +564,7 @@ export class FeedbackManagementService {
     `);
     }
 
-    // Base sort luôn đứng sau
+    // Base sort
     orderByParts.push(`
     ${statusOrderExpr},
     f."createdAt" DESC
@@ -616,7 +614,6 @@ export class FeedbackManagementService {
       //   });
       // });
 
-      // Đếm tổng số kết quả
       const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
         `
   SELECT COUNT(*) as count
@@ -628,7 +625,6 @@ export class FeedbackManagementService {
 
       const total = Number(result.count);
 
-      // Map lại kết quả cho đúng DTO
       const results = rawResults.map((f) => ({
         id: f.id,
         subject: f.subject,
