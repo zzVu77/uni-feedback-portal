@@ -30,6 +30,7 @@ export type AnnouncementManagementItem = Pick<
 
 export interface AnnouncementFilter extends BaseFilter {
   departmentId?: string;
+  sort?: "newest" | "oldest" | "all";
 }
 
 export type CreateAnnouncementPayload = Pick<
