@@ -17,14 +17,13 @@ import {
 import { toast } from "sonner";
 
 export const FORUM_POST_QUERY_KEYS = "forum-posts";
+export const FORUM_POST_INFINITE_QUERY_KEYS = "infinite-forum-posts";
 
-// Refactored to Infinite Query
 export const useGetInfiniteForumPosts = (filters: ForumPostFilter) => {
   return useInfiniteQuery<PaginatedResponse<ForumPostListItem>>({
-    queryKey: [FORUM_POST_QUERY_KEYS, filters],
+    queryKey: [FORUM_POST_INFINITE_QUERY_KEYS, filters],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
-      // Merge pageParam with existing filters
       return await getAllForumPosts({
         ...filters,
         page: pageParam as number,
@@ -32,8 +31,11 @@ export const useGetInfiniteForumPosts = (filters: ForumPostFilter) => {
       });
     },
     getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage || !lastPage.results) return undefined;
       // Calculate loaded items count
-      const loadedItems = allPages.flatMap((page) => page.results).length;
+      const loadedItems = allPages.flatMap(
+        (page) => page?.results ?? [],
+      ).length;
       // Check if there are more items to load
       if (loadedItems < lastPage.total) {
         return allPages.length + 1;
