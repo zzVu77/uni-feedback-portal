@@ -1,9 +1,8 @@
-import React from "react";
-import { FeedbackPost } from "@/types/social-listening";
-import { AlertTriangle, ExternalLink, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { FeedbackPost } from "@/types/social-listening";
 import { format } from "date-fns";
+import { AlertTriangle, ExternalLink, ShieldAlert } from "lucide-react";
+import React from "react";
 
 interface UrgentIssuesAlertProps {
   issues: FeedbackPost[];
@@ -29,7 +28,7 @@ const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
         </div>
       </div>
 
-      <ScrollArea className="h-[500px] w-full rounded-b-2xl">
+      <div className="max-h-[450px] overflow-y-auto">
         <div className="flex flex-col">
           {issues.map((issue, index) => (
             <div
@@ -74,7 +73,7 @@ const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };
