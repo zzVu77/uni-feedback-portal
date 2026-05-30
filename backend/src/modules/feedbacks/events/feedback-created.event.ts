@@ -5,6 +5,7 @@ export class FeedbackCreatedEvent {
   userId: string;
   departmentId: string;
   subject: string;
+  isToxic: boolean;
 
   constructor(partial: Partial<FeedbackCreatedEvent>) {
     Object.assign(this, partial);

@@ -6,6 +6,7 @@ export interface Comment {
     id: string;
     fullName: string;
     role: "STUDENT" | "DEPARTMENT_STAFF" | "ADMIN";
+    avatarUrl?: string;
   };
   replies: Comment[];
 }

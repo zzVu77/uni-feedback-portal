@@ -33,6 +33,9 @@ class UserInfo {
 
   @ApiProperty({ example: 'a@student.edu.vn' })
   email: string;
+
+  @ApiProperty({ example: 'https://example.com/avatar.jpg', nullable: true })
+  avatarUrl?: string | null;
 }
 export class PostDetailDto {
   @ApiProperty({

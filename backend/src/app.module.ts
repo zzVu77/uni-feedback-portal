@@ -21,6 +21,10 @@ import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AiModule } from './modules/ai/ai.module';
+import { BullModule } from '@nestjs/bullmq';
+import { FeedbackSimilarityModule } from './modules/feedback-similarity/feedback-similarity.module';
+import { SocialListeningModule } from './modules/social_listening/social_listening.module';
 
 @Module({
   imports: [
@@ -44,6 +48,15 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     CommentModule,
     MailModule,
     EventEmitterModule.forRoot(),
+    AiModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    FeedbackSimilarityModule,
+    SocialListeningModule,
   ],
   controllers: [AppController],
   providers: [AppService],

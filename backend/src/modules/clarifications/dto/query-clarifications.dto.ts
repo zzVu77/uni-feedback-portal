@@ -2,8 +2,8 @@ import {
   IsBooleanString,
   IsInt,
   IsOptional,
-  IsString,
   Min,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
@@ -14,7 +14,7 @@ export class QueryClarificationsDto {
     example: '550e8400-e29b-41d4-a716-446655440013',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   feedbackId?: string;
 
   @ApiPropertyOptional({

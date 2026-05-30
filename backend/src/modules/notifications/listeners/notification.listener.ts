@@ -43,8 +43,13 @@ export class NotificationEventListener {
       // 1. Notify the Student (Confirmation that feedback was sent)
       await this.notifyStudent(payload);
 
-      // 2. Notify the Department Staff (The specific logic you requested)
-      await this.notifyDepartmentStaff(payload);
+      if (!payload.isToxic) {
+        // 2. Notify the Department Staff (The specific logic you requested)
+        await this.notifyDepartmentStaff(payload);
+      }
+
+      // 3. Notify Student about Toxicity Check
+      await this.notifyFeedbackCheckToxicity(payload);
     } catch (error) {
       this.logger.error(
         `[Notification] Failed to create notifications for feedback ${payload.feedbackId}`,
@@ -435,6 +440,27 @@ export class NotificationEventListener {
     }
   }
 
+  // ============================================
+  // NEW HANDLER: FEEDBACK FAULT API GEMINI
+  // ============================================
+  @OnEvent('feedback.fault.api.gemini', { async: true })
+  async handleFeedbackFaultAPIGemini(payload: FeedbackCreatedEvent) {
+    this.logger.log(
+      `[Notification] Processing Gemini API fault for Feedback ID: ${payload.feedbackId}`,
+    );
+    try {
+      // 1. Notify the Student (Confirmation that feedback was sent)
+      await this.notifyStudent(payload);
+      // 2. fault system issue when checking toxicity with Gemini API
+      await this.notifyFeedbackFaultAPIGemini(payload);
+    } catch (error) {
+      this.logger.error(
+        `Failed to notify Gemini API fault for feedback ${payload.feedbackId}`,
+        error.stack,
+      );
+    }
+  }
+
   // ==========================================
   // HELPER METHODS
   // ==========================================
@@ -557,5 +583,31 @@ export class NotificationEventListener {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new Error(`Invalid target type: ${targetType}`);
     }
+  }
+
+  private async notifyFeedbackCheckToxicity(payload: FeedbackCreatedEvent) {
+    let content = `Góp ý "${payload.subject}" của bạn đã được hệ thống kiểm tra và xác nhận là phù hợp với quy định của nhà trường. Cảm ơn bạn đã dành thời gian đóng góp ý kiến nhằm cải thiện môi trường học tập và hoạt động của trường.`;
+    let type: NotificationType = NotificationType.FEEDBACK_TOXIC_ACCEPTED;
+    if (payload.isToxic) {
+      content = `Góp ý "${payload.subject}" của bạn đã được hệ thống kiểm tra và phát hiện có nội dung chưa phù hợp với quy định của nhà trường. Vui lòng chỉnh sửa lại nội dung và gửi lại để góp ý được xem xét. Xin cảm ơn sự hợp tác của bạn.`;
+      type = NotificationType.FEEDBACK_TOXIC_REJECTED;
+    }
+    await this.notificationsService.createNotifications({
+      userIds: [payload.userId],
+      content: content,
+      type: type,
+      targetId: payload.feedbackId,
+      title: payload.subject,
+    });
+  }
+  private async notifyFeedbackFaultAPIGemini(payload: FeedbackCreatedEvent) {
+    const content = `Góp ý "${payload.subject}" của bạn đã được gửi thành công. Tuy nhiên, hệ thống đang gặp sự cố khi kiểm tra nội dung bằng AI. Chúng tôi sẽ tiến hành kiểm tra lại trong thời gian sớm nhất. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ.`;
+    await this.notificationsService.createNotifications({
+      userIds: [payload.userId],
+      content: content,
+      type: NotificationType.SYSTEM_ANNOUNCEMENT_NOTIFICATION,
+      targetId: payload.feedbackId,
+      title: payload.subject,
+    });
   }
 }

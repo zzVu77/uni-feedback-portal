@@ -4,13 +4,16 @@
 import {
   createAnnouncement,
   deleteAnnouncementById,
-  getAllAnnouncements,
-  getAnnouncementById,
+  getAllAnnouncementsForAuthenticatedUsers,
+  getAllAnnouncementsForStaff,
+  getAnnouncementByIdForAuthenticatedUsers,
+  getAnnouncementByIdForStaff,
   updateAnnouncementById,
 } from "@/services/announcement-service";
 import {
   AnnouncementFilter,
   AnnouncementListItem,
+  BaseFilter,
   CreateAnnouncementPayload,
   PaginatedResponse,
 } from "@/types";
@@ -25,21 +28,27 @@ import { toast } from "sonner";
 export const ANNOUNCEMENT_QUERY_KEYS = {
   all: "announcements",
   detail: "announcement-detail",
+  infinite: "infinite-announcements",
+  staff: "staff-announcements",
+  staffDetail: "staff-announcement-detail",
 };
-export const useGetAnnouncements = (filters: AnnouncementFilter) => {
+// Announcement queries for authenticated users
+export const useGetAllAnnouncementsForAuthenticatedUsers = (
+  filters: AnnouncementFilter,
+) => {
   return useQuery({
     queryKey: [ANNOUNCEMENT_QUERY_KEYS.all, filters],
-    queryFn: () => getAllAnnouncements(filters),
+    queryFn: () => getAllAnnouncementsForAuthenticatedUsers(filters),
     retry: false,
     placeholderData: (previousData) => previousData,
   });
 };
 export const useGetInfiniteAnnouncements = (filters: AnnouncementFilter) => {
   return useInfiniteQuery<PaginatedResponse<AnnouncementListItem>>({
-    queryKey: [ANNOUNCEMENT_QUERY_KEYS.all, filters],
+    queryKey: [ANNOUNCEMENT_QUERY_KEYS.infinite, filters],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
-      return await getAllAnnouncements({
+      return await getAllAnnouncementsForAuthenticatedUsers({
         ...filters,
         page: pageParam as number,
         pageSize: 10,
@@ -62,13 +71,35 @@ export const useGetInfiniteAnnouncements = (filters: AnnouncementFilter) => {
   });
 };
 
-export const useGetAnnouncementById = (
+export const useGetAnnouncementByIdForAuthenticatedUsers = (
   id: string,
   options?: { enabled?: boolean },
 ) => {
   return useQuery({
     queryKey: [ANNOUNCEMENT_QUERY_KEYS.detail, id],
-    queryFn: () => getAnnouncementById(id),
+    queryFn: () => getAnnouncementByIdForAuthenticatedUsers(id),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+    ...options,
+  });
+};
+// Announcement queries for staff
+export const useGetAllAnnouncementsForStaff = (filters: BaseFilter) => {
+  return useQuery({
+    queryKey: [ANNOUNCEMENT_QUERY_KEYS.all, filters],
+    queryFn: () => getAllAnnouncementsForStaff(filters),
+    retry: false,
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGetAnnouncementByIdForStaff = (
+  id: string,
+  options?: { enabled?: boolean },
+) => {
+  return useQuery({
+    queryKey: [ANNOUNCEMENT_QUERY_KEYS.detail, id],
+    queryFn: () => getAnnouncementByIdForStaff(id),
     retry: false,
     placeholderData: (previousData) => previousData,
     ...options,

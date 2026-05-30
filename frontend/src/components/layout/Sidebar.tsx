@@ -1,5 +1,9 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
 import { ASSETS } from "@/constants/assets";
 import {
   adminNavigation,
@@ -7,16 +11,20 @@ import {
   staffNavigation,
   studentNavigation,
 } from "@/constants/navigation";
+
+import { useLogout } from "@/hooks/queries/useAuthenticationQueries";
+import { useGetUnreadNotificationCount } from "@/hooks/queries/useNotificationQueries";
+
+import { useUser } from "@/context/UserContext";
+
 import { cn } from "@/lib/utils";
+import { getRoleDisplayName } from "@/utils/getRoleDisplayName";
+
 import { LogOut } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useLogout } from "@/hooks/queries/useAuthenticationQueries";
-import { useUser } from "@/context/UserContext";
-import { getRoleDisplayName } from "@/utils/getRoleDisplayName";
-import { useGetUnreadNotificationCount } from "@/hooks/queries/useNotificationQueries";
 
 type SidebarProps = {
   showOnMobile?: boolean;
@@ -27,9 +35,9 @@ type SidebarProps = {
 export default function Sidebar({
   showOnMobile = false,
   type = "student",
-  fullName,
 }: SidebarProps) {
   let navigation: NavigationItem[];
+
   const pathname = usePathname();
 
   const { data: unreadCount } = useGetUnreadNotificationCount();
@@ -38,58 +46,80 @@ export default function Sidebar({
     case "student":
       navigation = studentNavigation;
       break;
+
     case "staff":
       navigation = staffNavigation;
       break;
+
     case "admin":
       navigation = adminNavigation;
       break;
+
     default:
       navigation = studentNavigation;
   }
+
   const { mutateAsync: logout, isPending } = useLogout();
-  const { setUser } = useUser();
+
+  const { setUser, user } = useUser();
 
   return (
-    <div>
-      {/* Sidebar Desktop */}
-      <div
-        className={cn(
-          "bg-neutral-dark-primary-800 border-neutral-dark-primary-800/20 h-screen w-60 flex-col gap-4 border-r text-white",
-          showOnMobile ? "flex w-full" : "hidden lg:flex",
-        )}
-      >
-        <div className="flex items-center justify-center border-b border-white/20 py-3">
-          <Image
-            src={ASSETS.LOGO_UTE}
-            alt="Logo UTE"
-            height={100}
-            width={100}
-          />
-        </div>
-        <div className="flex flex-row items-center justify-center gap-2">
-          <Avatar className="h-12 w-12">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback className="text-black">CN</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col items-center">
-            <span className="text-[14px] font-medium text-white lg:text-[16px]">
-              {fullName}
-            </span>
-            <span className="text-muted/80 text-[12px] font-normal lg:text-[14px]">
-              {getRoleDisplayName(type)}
-            </span>
-          </div>
-        </div>
+    <div
+      className={cn(
+        "flex h-screen w-64 flex-col overflow-hidden border-r border-slate-800 bg-slate-900 text-white",
+        showOnMobile ? "w-full" : "hidden lg:flex",
+      )}
+    >
+      {/* Logo */}
+      <div className="flex flex-shrink-0 items-center justify-center border-b border-slate-800 px-6 py-8">
+        <Image src={ASSETS.LOGO_UTE} alt="Logo UTE" width={100} height={100} />
+      </div>
 
-        <div className="flex h-full flex-col justify-between border-t border-white/20">
-          <div className="flex flex-col gap-2">
+      {/* User Info */}
+      <Link
+        href="/profile"
+        className="flex flex-shrink-0 items-center gap-3 px-6 py-4 transition-colors hover:bg-white/5"
+      >
+        <Avatar className="h-12 w-12 border border-slate-700">
+          <AvatarImage
+            src={user?.avatarUrl || "https://github.com/shadcn.png"}
+            className="object-cover"
+          />
+
+          <AvatarFallback className="bg-slate-800 text-slate-200">
+            {user?.fullName
+              ?.split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase() || "CN"}
+          </AvatarFallback>
+        </Avatar>
+
+        <div className="flex flex-col">
+          <span className="max-w-[140px] truncate text-sm font-semibold text-white">
+            {user?.fullName}
+          </span>
+
+          <span className="text-xs font-medium text-slate-400">
+            {getRoleDisplayName(type)}
+          </span>
+        </div>
+      </Link>
+
+      {/* Navigation */}
+      <div className="min-h-0 flex-1 border-t border-slate-800">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col gap-1 px-3 py-4">
             {navigation.map(({ href, label, icon: Icon }) => {
               const isNotificationItem = href === "/notifications";
+
+              const isActive = pathname === href;
+
               const showBadge =
                 isNotificationItem &&
                 unreadCount &&
                 unreadCount.unreadCount > 0;
+
               const displayCount =
                 unreadCount && unreadCount.unreadCount > 99
                   ? "99+"
@@ -100,21 +130,21 @@ export default function Sidebar({
                   <Button
                     variant="ghost"
                     className={cn(
-                      "hover:text-neutral-dark-primary-800 w-full justify-start rounded-none text-[13px] text-white hover:bg-white lg:text-[14px]",
-                      pathname === href
-                        ? "text-neutral-dark-primary-800 bg-white font-semibold"
-                        : "",
+                      "h-auto w-full justify-start rounded-md px-4 py-3 text-[13px] transition-all duration-200 lg:text-[14px]",
+                      isActive
+                        ? "bg-white/10 font-semibold text-white shadow-sm hover:bg-white/10 hover:text-white"
+                        : "text-slate-400 hover:bg-white/5 hover:text-white",
                     )}
                   >
-                    <Icon className="mr-2 h-4 w-4" />
-                    {label}
+                    <Icon className="mr-3 h-4 w-4 shrink-0" />
 
-                    {/* Hiển thị Badge nếu là item thông báo và có số lượng > 0 */}
+                    <span className="truncate">{label}</span>
+
                     {showBadge && (
                       <span
                         className={cn(
-                          "ml-auto flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white",
-                          pathname === href ? "bg-red-600" : "bg-red-500",
+                          "ml-auto flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white",
+                          isActive ? "bg-red-500" : "bg-red-600",
                         )}
                       >
                         {displayCount}
@@ -125,21 +155,25 @@ export default function Sidebar({
               );
             })}
           </div>
-          <div className="border-t border-white/20 p-2">
-            <Button
-              onClick={async () => {
-                await logout().then(() => {
-                  setUser(null);
-                });
-              }}
-              disabled={isPending}
-              className="text-neutral-dark-primary-800 flex w-full items-center justify-center bg-white hover:bg-gray-100"
-            >
-              <LogOut className="text-neutral-dark-primary-800 mr-2 h-4 w-4" />
-              Đăng xuất
-            </Button>
-          </div>
-        </div>
+        </ScrollArea>
+      </div>
+
+      {/* Logout */}
+      <div className="flex-shrink-0 border-t border-slate-800 p-4">
+        <Button
+          variant="ghost"
+          disabled={isPending}
+          onClick={async () => {
+            await logout().then(() => {
+              setUser(null);
+            });
+          }}
+          className="h-auto w-full justify-start rounded-md px-4 py-3 text-slate-400 transition-all hover:bg-rose-400/10 hover:text-rose-400"
+        >
+          <LogOut className="mr-3 h-4 w-4" />
+
+          <span className="text-sm font-medium">Đăng xuất</span>
+        </Button>
       </div>
     </div>
   );

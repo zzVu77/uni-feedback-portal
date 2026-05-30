@@ -10,6 +10,7 @@ import {
   AnnouncementListResponseDto,
   CreateAnnouncementDto,
   QueryAnnouncementsDto,
+  QueryStaffAnnouncementsDto,
   UpdateAnnouncementDto,
 } from './dto';
 import { UploadsService } from '../uploads/uploads.service';
@@ -38,7 +39,6 @@ export class AnnouncementsService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
-    // Build dynamic WHERE condition
     const where: Prisma.AnnouncementsWhereInput = {};
 
     if (departmentId) {
@@ -65,7 +65,6 @@ export class AnnouncementsService {
         );
     }
 
-    // Query data + total count
     const [items, total] = await Promise.all([
       this.prisma.announcements.findMany({
         where,
@@ -87,7 +86,6 @@ export class AnnouncementsService {
       this.prisma.announcements.count({ where }),
     ]);
 
-    // Map to DTO
     const mappedItems = items.map((item) => ({
       id: item.id,
       title: item.title,
@@ -112,7 +110,7 @@ export class AnnouncementsService {
       include: {
         user: {
           select: {
-            id: true, // Thêm id của user
+            id: true,
             fullName: true,
             department: {
               select: {
@@ -122,14 +120,12 @@ export class AnnouncementsService {
             },
           },
         },
-        // Không include files ở đây nữa
       },
     });
     if (!announcement) {
       throw new NotFoundException(`Announcement with id ${id} not found`);
     }
 
-    // Lấy file đính kèm bằng UploadsService
     const files = await this.uploadsService.getAttachmentsForTarget(
       id,
       FileTargetType.ANNOUNCEMENT,
@@ -173,7 +169,6 @@ export class AnnouncementsService {
     });
 
     let files: FileAttachmentDto[] = [];
-    // Gọi service chuyên dụng để xử lý file
     if (dto.files && dto.files.length > 0) {
       files = await this.uploadsService.updateAttachmentsForTarget(
         announcement.id,
@@ -182,7 +177,6 @@ export class AnnouncementsService {
       );
     }
 
-    // Trả về DTO được xây dựng thủ công
     return {
       id: announcement.id,
       title: announcement.title,
@@ -232,7 +226,6 @@ export class AnnouncementsService {
       dto.files ?? [],
     );
 
-    // 3. Trả về DTO được xây dựng thủ công
     return {
       id: updatedAnnouncement.id,
       title: updatedAnnouncement.title,
@@ -262,13 +255,11 @@ export class AnnouncementsService {
 
     if (!existing) throw new NotFoundException('Announcement not found');
 
-    // Xóa file đính kèm trong DB (và trên S3 trong tương lai) bằng service
     await this.uploadsService.deleteAttachmentsForTarget(
       id,
       FileTargetType.ANNOUNCEMENT,
     );
 
-    // Xóa announcement
     await this.prisma.announcements.delete({
       where: { id },
     });
@@ -306,5 +297,121 @@ export class AnnouncementsService {
         'This action is only allowed for Department Staff.',
       );
     }
+  }
+  async getStaffAnnouncements(
+    query: QueryStaffAnnouncementsDto,
+    actor: ActiveUserData,
+  ): Promise<AnnouncementListResponseDto> {
+    const { page = 1, pageSize = 10, q, from, to } = query;
+
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+
+    const where: Prisma.AnnouncementsWhereInput = {};
+    where.userId = actor.sub;
+    if (q) {
+      where.OR = [
+        { title: { contains: q, mode: 'insensitive' } },
+        { content: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+
+    if (from || to) {
+      where.createdAt = {};
+      if (from) where.createdAt.gte = new Date(from);
+      if (to)
+        where.createdAt.lt = new Date(
+          new Date(to).setDate(new Date(to).getDate() + 1),
+        );
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.announcements.findMany({
+        where,
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              department: {
+                select: { id: true, name: true },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.announcements.count({ where }),
+    ]);
+
+    const mappedItems = items.map((item) => ({
+      id: item.id,
+      title: item.title,
+      content: item.content,
+      createdAt: item.createdAt,
+      user: {
+        id: item.user.id,
+        userName: item.user.fullName,
+      },
+      department: {
+        id: item.user.department?.id ?? 'null',
+        name: item.user.department?.name ?? 'null',
+      },
+    }));
+
+    return { results: mappedItems, total };
+  }
+
+  async getStaffAnnouncementDetail(
+    id: string,
+    actor: ActiveUserData,
+  ): Promise<AnnouncementDetailDto> {
+    const announcement = await this.prisma.announcements.findUnique({
+      where: { id, userId: actor.sub },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            department: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        // Không include files ở đây nữa
+      },
+    });
+    if (!announcement) {
+      throw new NotFoundException(
+        `Announcement with id ${id} not found or you do not have permission to access it`,
+      );
+    }
+
+    // Lấy file đính kèm bằng UploadsService
+    const files = await this.uploadsService.getAttachmentsForTarget(
+      id,
+      FileTargetType.ANNOUNCEMENT,
+    );
+
+    return {
+      id: announcement.id,
+      title: announcement.title,
+      content: announcement.content,
+      createdAt: announcement.createdAt,
+      user: {
+        id: announcement.userId,
+        userName: announcement.user.fullName,
+      },
+      department: {
+        id: announcement.user.department?.id ?? 'null',
+        name: announcement.user.department?.name ?? 'null',
+      },
+      files: files,
+    };
   }
 }

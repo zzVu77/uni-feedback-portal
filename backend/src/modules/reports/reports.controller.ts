@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { RolesGuard } from '../auth/guards/roles.guard'; // Giả sử bạn có guard này
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { ReportFilterDto } from './dto/report-filter.dto';
 import { ReportsService } from './reports.service';
 import {
@@ -24,7 +24,7 @@ import type { ActiveUserData } from '../auth/interfaces/active-user-data.interfa
 @ApiTags('Admin Reports')
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
-@Roles(UserRole.ADMIN) // Chỉ Admin mới xem được
+@Roles(UserRole.ADMIN)
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}

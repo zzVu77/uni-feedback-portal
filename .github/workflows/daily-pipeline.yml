@@ -1,0 +1,59 @@
+name: Uni Feedback Daily Pipeline
+
+on:
+  schedule:
+    # run at 19:00 UTC ( 2:AM Vietnam time) every 3 days
+    - cron: "0 19 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  run-data-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Download code from server
+        uses: actions/checkout@v4
+
+      - name: 🟢 Set up Node.js (for Crawler & Loader)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: 🐍 Set up Python (for dbt & AI Gemini)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install Node.js packages
+        working-directory: ./data-pipeline/crawler
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: 📦 Install Python libraries
+        run: |
+          cd data-pipeline
+          pip install -r requirements.txt
+
+      - name: 🔑 Configure BigQuery service account file
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+        run: |
+          # Create a temporary file for the service account key
+          echo "$GCP_CREDENTIALS" > ./google-service-account.json
+
+      - name: 🔑 Configure Facebook Auth State
+        env:
+          FB_AUTH_JSON: ${{ secrets.FB_AUTH_JSON }}
+        run: |
+          # Create the auth.json file for the crawler
+          echo "$FB_AUTH_JSON" > ./data-pipeline/crawler/auth.json
+
+      - name: 🚀 Activate the Entire Pipeline (Prefect Flow)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/google-service-account.json
+          FACEBOOK_GROUP_URL: ${{ vars.FACEBOOK_GROUP_URL }}
+        run: |
+          # Run the Prefect flow which orchestrates the entire pipeline
+          python data-pipeline/prefect-flow/run_pipeline.py

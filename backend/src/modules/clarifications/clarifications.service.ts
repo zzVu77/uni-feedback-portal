@@ -17,7 +17,6 @@ import {
 import { FileTargetType, Prisma, UserRole } from '@prisma/client';
 import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
-// [Import 2] Import Events
 import { ClarificationEvent } from './events/clarification.event';
 import { ClarificationMessageSentEvent } from './events/clarification-message-sent.event';
 
@@ -40,12 +39,19 @@ export class ClarificationsService {
         `Only department staff can start a clarification conversation.`,
       );
     }
-    // Need to fetch feedback to get the Student ID
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
     });
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
+    }
+    if (
+      feedback.currentStatus === 'RESOLVED' ||
+      feedback.currentStatus === 'REJECTED'
+    ) {
+      throw new ForbiddenException(
+        `Cannot start a clarification conversation for a resolved feedback.`,
+      );
     }
 
     const conversation = await this.prisma.clarificationConversations.create({
@@ -71,11 +77,9 @@ export class ClarificationsService {
       },
     });
 
-    // [New Logic] Emit Event: Conversation Created
-    // Notify the student that a clarification request has been started
     const event = new ClarificationEvent({
       conversationId: conversation.id,
-      studentId: feedback.userId, // Send to Student
+      studentId: feedback.userId,
       subject: conversation.subject,
       feedbackId: feedback.id,
     });
@@ -96,7 +100,6 @@ export class ClarificationsService {
     };
   }
 
-  // ... (Keep getAllClarificationsConversations and getClarificationConversationDetail as is)
   async getAllClarificationsConversations(
     query: QueryClarificationsDto,
     actor: ActiveUserData,
@@ -200,13 +203,11 @@ export class ClarificationsService {
       throw new ForbiddenException('Message must have content or attachments.');
     }
 
-    // Need both conversation.userId (Staff) and feedback.userId (Student)
     const conversation =
       await this.prisma.clarificationConversations.findUnique({
         where: { id: conversationId },
         include: {
           feedback: { select: { userId: true } },
-          // Ensure we select userId of the conversation creator (Staff)
         },
       });
 

@@ -40,17 +40,21 @@ const ConfirmationDialog = ({
     <AlertDialog open={open} onOpenChange={setOpen}>
       {/* 'children' is the trigger element for the dialog */}
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-xl">
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogTitle className="text-xl text-slate-800">
+            {title}
+          </AlertDialogTitle>
+          <AlertDialogDescription className="text-slate-600">
+            {description}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-500 hover:text-white">
+          <AlertDialogCancel className="rounded-lg bg-red-600 text-white hover:bg-red-600/80 hover:text-white">
             {cancelText}
           </AlertDialogCancel>
           <AlertDialogAction
-            className="bg-blue-600 hover:bg-blue-500"
+            className="rounded-lg bg-blue-600 hover:bg-blue-700/80"
             onClick={() => void handleConfirm()}
           >
             {confirmText}

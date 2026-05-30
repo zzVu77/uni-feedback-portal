@@ -11,8 +11,8 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
-
-import Filter from "@/components/common/filter/Filter";
+import CommonFilter from "@/components/common/CommonFilter";
+import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,15 +23,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Suspense, useMemo } from "react";
-import { reportedCommentsColumns } from "./columns";
-import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useReportCommentFilters } from "@/hooks/filters/useReportCommentFilter";
 import { useGetAllReportComments } from "@/hooks/queries/useReportCommentQueries";
 import { cn } from "@/lib/utils";
-import { Loading } from "@/components/common/Loading";
-import { useReportCommentFilters } from "@/hooks/filters/useReportCommentFilter";
+import { ChevronLeft, ChevronRight, ListFilter, SearchX } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useMemo } from "react";
 import ReportCommentDetailDialog from "../ReportCommentDetailDialog";
+import { reportedCommentsColumns } from "./columns";
 
 export function ReportedCommentTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -83,6 +91,12 @@ export function ReportedCommentTable() {
     params.delete("open");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPage));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
   // ---------------------------------
 
   // --- Table Configuration ---
@@ -122,33 +136,87 @@ export function ReportedCommentTable() {
     },
   });
 
-  // Mock data for filters (Keep UI consistent)
-  const mockStatus = [
-    { label: "Tất cả", value: "all" },
-    { label: "Đang chờ tiếp nhận", value: "pending" },
-    { label: "Đã xử lý", value: "resolved" },
-  ];
-
   return (
-    <div className="flex h-screen w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
+    <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+      <div className="flex w-full flex-shrink-0 items-center gap-3">
         <Suspense fallback={null}>
-          <SearchBar placeholder="Tìm kiếm theo tiêu đề..." />
+          <SearchBar
+            placeholder="Tìm kiếm báo cáo..."
+            className="flex-1 bg-white shadow-sm"
+          />
         </Suspense>
-        <div className="flex w-full flex-row items-center justify-center gap-2 md:w-auto">
-          <Suspense fallback={null}>
-            <Filter type="status" items={mockStatus} />
-          </Suspense>
+
+        {/* Desktop Filters */}
+        <div className="hidden items-center gap-3 md:flex">
+          <CommonFilter.ReportStatusSelection />
+        </div>
+
+        {/* Mobile Filter Drawer */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <ListFilter className="h-4 w-4" />
+                Bộ lọc
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-xl px-6 pb-8">
+              <SheetHeader className="px-0 text-left">
+                <SheetTitle className="text-lg font-bold text-slate-800">
+                  Bộ lọc tìm kiếm
+                </SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col gap-6 py-4">
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Trạng thái
+                  </span>
+                  <div className="w-full [&>button]:w-full">
+                    <CommonFilter.ReportStatusSelection />
+                  </div>
+                </div>
+              </div>
+              <SheetFooter className="flex-row items-center gap-3 px-0 pt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1 rounded-xl bg-red-400 text-white"
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.delete("status");
+                    params.delete("q");
+                    params.delete("page");
+                    router.replace(`${pathname}?${params.toString()}`, {
+                      scroll: false,
+                    });
+                  }}
+                >
+                  Xóa bộ lọc
+                </Button>
+                <SheetClose asChild>
+                  <Button className="h-10 flex-[2] bg-blue-600 text-white hover:bg-blue-700">
+                    Xem kết quả
+                  </Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table className={cn(tableData.length === 0 && "h-[70vh]")}>
-          <TableHeader className="bg-neutral-light-primary-200/60">
+
+      <div className="flex-1 overflow-auto rounded-xl border border-slate-100">
+        <Table
+          className={cn("min-w-[1000px]", tableData.length === 0 && "h-full")}
+        >
+          <TableHeader className="sticky top-0 z-10 bg-slate-50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="h-12 px-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -165,12 +233,12 @@ export function ReportedCommentTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="hover:bg-blue-primary-100/40 text-xs lg:text-[13px]"
+                  className="group border-b border-slate-50 transition-colors hover:bg-slate-50/80"
                   key={row.id}
                   data-state={row.getIsSelected()}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="px-4 py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -183,12 +251,12 @@ export function ReportedCommentTable() {
               <TableRow>
                 <TableCell
                   colSpan={reportedCommentsColumns.length}
-                  className="h-24 font-medium text-red-500"
+                  className="h-24 font-medium"
                 >
                   {!isFetching && (
-                    <div className="flex flex-row items-center justify-center gap-2 text-center">
-                      <SearchX />
-                      Không có dữ liệu để hiển thị
+                    <div className="flex flex-col items-center justify-center gap-2 text-center text-slate-500">
+                      <SearchX className="h-8 w-8 text-slate-300" />
+                      <span>Không có dữ liệu để hiển thị</span>
                     </div>
                   )}
                   {isFetching && <Loading variant="spinner" />}
@@ -198,27 +266,30 @@ export function ReportedCommentTable() {
           </TableBody>
         </Table>
       </div>
-      {/* Pagination Controls */}
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-end space-x-2">
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight />
-            </Button>
-          </div>
+
+      {pageCount > 1 && (
+        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page - 1)}
+            disabled={filters.page <= 1}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-slate-600">
+            Trang {filters.page} / {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(filters.page + 1)}
+            disabled={filters.page >= pageCount}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
 

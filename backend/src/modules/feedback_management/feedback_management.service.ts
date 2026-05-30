@@ -4,6 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FeedbackStatus, FileTargetType, Prisma } from '@prisma/client';
 import {
@@ -20,23 +22,33 @@ import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_l
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { UploadsService } from '../uploads/uploads.service';
 import {
+  BulkForwardFeedbackDto,
+  BulkForwardFeedbackResponseDto,
+  BulkUpdateFeedbackStatusDto,
+  BulkUpdateFeedbackStatusItemDto,
+  BulkUpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
   FeedbackDetailDto,
   ForwardingResponseDto,
   ListFeedbacksResponseDto,
   QueryFeedbackByStaffDto,
+  RelatedFeedbacksResponseDto,
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   RawFeedbackJoinedRow,
 } from './dto';
 import { FeedbackStatusUpdatedEvent } from './events/feedback-status-updated.event';
 import { FeedbackForwardingEvent } from './events/feedback-forwarding.event';
+import { FEEDBACK_SIMILARITY_JOB_ON_CREATED } from '../feedback-similarity/type/feedback-similarity-job.constants';
+
 @Injectable()
 export class FeedbackManagementService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadsService: UploadsService,
-    private readonly eventEmitter: EventEmitter2, // [Injection]
+    private readonly eventEmitter: EventEmitter2,
+    @InjectQueue('feedback-similarity')
+    private readonly feedbackSimilarityQueue: Queue,
   ) {}
 
   async getAllStaffFeedbacks(
@@ -45,42 +57,58 @@ export class FeedbackManagementService {
   ): Promise<ListFeedbacksResponseDto> {
     const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
 
-    const where: Prisma.FeedbacksWhereInput = {
+    const conditions: Prisma.FeedbacksWhereInput[] = [];
+
+    conditions.push({
       OR: [
         { departmentId: actor.departmentId },
-
         {
           forwardingLogs: {
             some: { fromDepartmentId: actor.departmentId },
           },
         },
       ],
-    };
+    });
+    conditions.push({
+      currentStatus: {
+        notIn: [
+          FeedbackStatus.VIOLATED_CONTENT,
+          FeedbackStatus.AI_REVIEW_FAILED,
+        ],
+      },
+    });
 
     if (status) {
-      where.currentStatus = Object.values(FeedbackStatus).includes(
-        status.toUpperCase() as FeedbackStatus,
-      )
-        ? (status.toUpperCase() as FeedbackStatus)
-        : undefined;
+      conditions.push({
+        currentStatus: status.toUpperCase() as FeedbackStatus,
+      });
     }
-    if (categoryId) where.categoryId = categoryId;
+
+    if (categoryId) {
+      conditions.push({ categoryId });
+    }
+
     if (from || to) {
-      where.createdAt = {};
-      if (from) where.createdAt.gte = new Date(from);
+      const dateFilter: Prisma.DateTimeFilter = {};
+      if (from) dateFilter.gte = new Date(from);
       if (to) {
-        where.createdAt.lt = new Date(
+        dateFilter.lt = new Date(
           new Date(to).setDate(new Date(to).getDate() + 1),
         );
       }
+      conditions.push({ createdAt: dateFilter });
     }
 
     if (q) {
-      where.OR = [
-        { subject: { contains: q, mode: 'insensitive' } },
-        { description: { contains: q, mode: 'insensitive' } },
-      ];
+      conditions.push({
+        OR: [
+          { subject: { contains: q, mode: 'insensitive' } },
+          { description: { contains: q, mode: 'insensitive' } },
+        ],
+      });
     }
+
+    const where = { AND: conditions };
 
     const [feedbacks, total] = await Promise.all([
       this.prisma.feedbacks.findMany({
@@ -159,6 +187,11 @@ export class FeedbackManagementService {
           select: { id: true, name: true },
         },
         statusHistory: {
+          where: {
+            status: {
+              in: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
+            },
+          },
           select: {
             status: true,
             message: true,
@@ -182,13 +215,31 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        // Không include file ở đây
       },
     });
+
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
+      throw new NotFoundException('Feedback not found');
+    }
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+
+    const latestPending = feedback.statusHistory
+      .filter((x) => x.status === 'PENDING')
+      .at(-1);
+    const otherStatuses = feedback.statusHistory.filter(
+      (x) => x.status !== 'PENDING',
+    );
+    feedback.statusHistory = [
+      ...(latestPending ? [latestPending] : []),
+      ...otherStatuses,
+    ];
+
     const isForwarding =
       feedback.department.id !== actor.departmentId &&
       feedback.forwardingLogs.some(
@@ -244,7 +295,6 @@ export class FeedbackManagementService {
   ): Promise<UpdateFeedbackStatusResponseDto> {
     const { feedbackId } = params;
 
-    // Cần đảm bảo feedback tồn tại và lấy userId, subject để bắn event
     const feedback = await this.prisma.feedbacks.findUnique({
       where: { id: feedbackId, departmentId: actor.departmentId },
       include: { department: true },
@@ -261,6 +311,25 @@ export class FeedbackManagementService {
       },
     });
 
+    if (
+      dto.status === FeedbackStatus.RESOLVED ||
+      dto.status === FeedbackStatus.REJECTED
+    ) {
+      await this.prisma.$transaction([
+        this.prisma.feedbackSimilarityLink.deleteMany({
+          where: {
+            OR: [
+              { sourceFeedbackId: feedbackId },
+              { targetFeedbackId: feedbackId },
+            ],
+          },
+        }),
+        this.prisma.feedbackEmbeddings.deleteMany({
+          where: { feedbackId },
+        }),
+      ]);
+    }
+
     await this.prisma.feedbackStatusHistory.create({
       data: {
         feedbackId: feedback.id,
@@ -273,12 +342,11 @@ export class FeedbackManagementService {
       },
     });
 
-    // [New Logic] Emit Event: Feedback Status Updated
     const event = new FeedbackStatusUpdatedEvent({
       feedbackId: feedback.id,
-      userId: feedback.userId, // Student ID
+      userId: feedback.userId,
       subject: feedback.subject,
-      status: dto.status, // New Status
+      status: dto.status,
     });
     this.eventEmitter.emit('feedback.status_updated', event);
 
@@ -341,6 +409,25 @@ export class FeedbackManagementService {
         currentStatus: FeedbackStatus.IN_PROGRESS,
       },
     });
+
+    await this.prisma.feedbackSimilarityLink.deleteMany({
+      where: {
+        OR: [
+          { sourceFeedbackId: feedbackId },
+          { targetFeedbackId: feedbackId },
+        ],
+      },
+    });
+
+    await this.feedbackSimilarityQueue.add(
+      FEEDBACK_SIMILARITY_JOB_ON_CREATED,
+      { feedbackId },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
+
     const event = new FeedbackForwardingEvent({
       feedback: {
         id: feedback.id,
@@ -394,11 +481,33 @@ export class FeedbackManagementService {
     const params: SqlParam[] = [];
 
     // helper tạo placeholder $1, $2, ...
-    const nextParam = () => `$${params.length + 1}`;
-
+    let paramIndex = 1;
+    const nextParam = () => `$${paramIndex++}`;
+    const hiddenStatuses: FeedbackStatus[] = [
+      FeedbackStatus.AI_REVIEW_FAILED,
+      FeedbackStatus.VIOLATED_CONTENT,
+    ];
     if (status) {
+      const normalizedStatus = status.toUpperCase() as FeedbackStatus;
+      if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
+        throw new BadRequestException(`Invalid status: ${status}`);
+      }
+      if (hiddenStatuses.includes(normalizedStatus)) {
+        throw new BadRequestException(
+          `Status ${normalizedStatus} is not accessible in this endpoint`,
+        );
+      }
       whereClause += ` AND f."currentStatus" = ${nextParam()}::"FeedbackStatus"`;
       params.push(status.toUpperCase());
+    } else {
+      const placeholders = hiddenStatuses.map((status) => {
+        const placeholder = nextParam();
+
+        params.push(status);
+        return `${placeholder}::"FeedbackStatus"`;
+      });
+
+      whereClause += ` AND f."currentStatus" NOT IN (${placeholders.join(',')})`;
     }
 
     if (departmentId) {
@@ -466,8 +575,8 @@ export class FeedbackManagementService {
     const orderByClause = `
     ORDER BY ${orderByParts.join(',')}
   `;
-    // console.log('Where Clause', whereClause);
-    // console.log('Params', params);
+    console.log('Where Clause', whereClause);
+    console.log('Params', params);
     // Raw query join Department, Category, User
     try {
       const rawResults = await this.prisma.$queryRawUnsafe<
@@ -567,6 +676,11 @@ export class FeedbackManagementService {
           select: { id: true, name: true },
         },
         statusHistory: {
+          where: {
+            status: {
+              in: ['PENDING', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'],
+            },
+          },
           select: {
             status: true,
             message: true,
@@ -590,13 +704,30 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
-        // Không include file ở đây
       },
     });
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found');
     }
+
+    if (
+      feedback?.currentStatus === FeedbackStatus.VIOLATED_CONTENT ||
+      feedback?.currentStatus === FeedbackStatus.AI_REVIEW_FAILED
+    ) {
+      throw new NotFoundException('Feedback not found');
+    }
+    const latestPending = feedback.statusHistory
+      .filter((x) => x.status === 'PENDING')
+      .at(-1);
+    const otherStatuses = feedback.statusHistory.filter(
+      (x) => x.status !== 'PENDING',
+    );
+    feedback.statusHistory = [
+      ...(latestPending ? [latestPending] : []),
+      ...otherStatuses,
+    ];
+
     const unifiedTimeline = mergeStatusAndForwardLogs({
       statusHistory: feedback.statusHistory,
       forwardingLogs: feedback.forwardingLogs.map((f) => ({
@@ -638,5 +769,158 @@ export class FeedbackManagementService {
     };
 
     return result;
+  }
+
+  private staffFeedbackAccessWhere(
+    actor: ActiveUserData,
+  ): Prisma.FeedbacksWhereInput {
+    if (!actor.departmentId) {
+      throw new ForbiddenException('Staff department is not set');
+    }
+    return {
+      OR: [
+        { departmentId: actor.departmentId },
+        {
+          forwardingLogs: {
+            some: { fromDepartmentId: actor.departmentId },
+          },
+        },
+      ],
+    };
+  }
+
+  async getStaffRelatedFeedbacks(
+    params: FeedbackParamDto,
+    actor: ActiveUserData,
+  ): Promise<RelatedFeedbacksResponseDto> {
+    const { feedbackId } = params;
+    const access = this.staffFeedbackAccessWhere(actor);
+
+    const pivot = await this.prisma.feedbacks.findFirst({
+      where: { id: feedbackId, AND: [access] },
+      select: { id: true },
+    });
+    if (!pivot) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    const links = await this.prisma.feedbackSimilarityLink.findMany({
+      where: {
+        OR: [
+          { sourceFeedbackId: feedbackId },
+          { targetFeedbackId: feedbackId },
+        ],
+      },
+    });
+
+    const scoreByPeer = new Map<string, number>();
+    for (const link of links) {
+      const peerId =
+        link.sourceFeedbackId === feedbackId
+          ? link.targetFeedbackId
+          : link.sourceFeedbackId;
+      const prev = scoreByPeer.get(peerId) ?? 0;
+      scoreByPeer.set(peerId, Math.max(prev, link.score));
+    }
+
+    const peerIds = [feedbackId, ...scoreByPeer.keys()];
+    if (peerIds.length === 0) {
+      return { results: [] };
+    }
+
+    const peers = await this.prisma.feedbacks.findMany({
+      where: {
+        id: { in: peerIds },
+        AND: [access],
+      },
+      select: {
+        id: true,
+        subject: true,
+        currentStatus: true,
+        createdAt: true,
+        department: { select: { id: true, name: true } },
+        user: { select: { id: true, fullName: true, email: true } },
+        isPrivate: true,
+      },
+    });
+
+    const peersOut = peers
+      .map((p) => ({
+        id: p.id,
+        subject: p.subject,
+        currentStatus: p.currentStatus,
+        score: scoreByPeer.get(p.id) ?? 0,
+        createdAt: p.createdAt.toISOString(),
+        department: p.department,
+        ...(p.isPrivate
+          ? {}
+          : {
+              student: {
+                id: p.user.id,
+                fullName: p.user.fullName,
+                email: p.user.email,
+              },
+            }),
+      }))
+      .sort((a, b) => b.score - a.score);
+
+    return { results: peersOut };
+  }
+
+  async bulkUpdateFeedbackStatus(
+    dto: BulkUpdateFeedbackStatusDto,
+    actor: ActiveUserData,
+  ): Promise<BulkUpdateFeedbackStatusResponseDto> {
+    const updated: BulkUpdateFeedbackStatusItemDto[] = [];
+    const skippedIds: string[] = [];
+
+    for (const feedbackId of dto.feedbackIds) {
+      try {
+        const res = await this.updateStatus(
+          { feedbackId },
+          { status: dto.status, note: dto.note },
+          actor,
+        );
+        updated.push({
+          feedbackId: res.feedbackId,
+          currentStatus: res.currentStatus,
+        });
+      } catch (e) {
+        if (e instanceof NotFoundException) {
+          skippedIds.push(feedbackId);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    return { updated, skippedIds };
+  }
+
+  async bulkForwardFeedback(
+    dto: BulkForwardFeedbackDto,
+    actor: ActiveUserData,
+  ): Promise<BulkForwardFeedbackResponseDto> {
+    const forwarded: ForwardingResponseDto[] = [];
+    const skippedIds: string[] = [];
+
+    for (const feedbackId of dto.feedbackIds) {
+      try {
+        const res = await this.createForwarding(
+          feedbackId,
+          { toDepartmentId: dto.toDepartmentId, note: dto.note },
+          actor,
+        );
+        forwarded.push(res);
+      } catch (e) {
+        if (e instanceof NotFoundException) {
+          skippedIds.push(feedbackId);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    return { forwarded, skippedIds };
   }
 }

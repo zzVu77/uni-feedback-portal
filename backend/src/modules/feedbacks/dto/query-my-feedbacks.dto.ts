@@ -7,6 +7,7 @@ import {
   IsISO8601,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 export enum FeedbackSortOption {
@@ -45,7 +46,7 @@ export class QueryFeedbacksDto {
     description: 'Filter by category ID',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   categoryId?: string;
 
   @ApiPropertyOptional({
@@ -53,7 +54,7 @@ export class QueryFeedbacksDto {
     description: 'Filter by department ID',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   departmentId?: string;
 
   @ApiPropertyOptional({

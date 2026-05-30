@@ -117,7 +117,6 @@ export class NotificationsService {
       data: { isRead },
     });
 
-    // Lấy lại dữ liệu vừa cập nhật
     const updatedNotifications = await this.prisma.notifications.findMany({
       where,
       orderBy: { createdAt: 'desc' },

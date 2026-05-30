@@ -10,10 +10,13 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import StatusBadge, { StatusBadgeProps } from "../common/StatusBadge";
+import ConfirmationDialog from "../common/ConfirmationDialog";
+import WarningBox from "../common/WarningBox";
 import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
 import Attachment from "./Attachment";
+import DOMPurify from "dompurify";
+import StatusBadge from "../common/StatusBadge";
 
 type Props = {
   type: "student" | "staff" | "admin";
@@ -53,32 +56,40 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
            consequuntur molestias, veniam illum dolores.
            `}
           </h1>
-          {type === "student" && currentStatus === "PENDING" && (
-            <div className="order-1 flex flex-row items-center gap-2 md:order-2">
-              <Link href={`/student/my-feedbacks/${id}/edit`}>
-                <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
-                  <SquarePen className="h-4 w-4 text-black" />
-                  Sửa
-                </Button>
-              </Link>
-              <Button
-                className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
-                onClick={() => {
-                  void handleDelete();
-                }}
-                disabled={isPending}
-              >
-                <Trash2 className="h-4 w-4 text-white" />
-                Xóa
-              </Button>
-            </div>
-          )}
+          {type === "student" &&
+            (currentStatus === "PENDING" ||
+              currentStatus === "VIOLATED_CONTENT" ||
+              currentStatus === "AI_REVIEW_FAILED") && (
+              <div className="order-1 flex flex-row items-center gap-2 md:order-2">
+                <Link href={`/student/my-feedbacks/${id}/edit`}>
+                  <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
+                    <SquarePen className="h-4 w-4 text-black" />
+                    Sửa
+                  </Button>
+                </Link>
+                <ConfirmationDialog
+                  title="Xác nhận xóa"
+                  description="Bạn có chắc chắn muốn xóa phản hồi này không? Hành động này không thể hoàn tác."
+                  onConfirm={handleDelete}
+                  confirmText="Xóa"
+                  cancelText="Hủy"
+                >
+                  <Button
+                    className="h-fit border bg-red-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-red-400"
+                    disabled={isPending}
+                  >
+                    <Trash2 className="h-4 w-4 text-white" />
+                    Xóa
+                  </Button>
+                </ConfirmationDialog>
+              </div>
+            )}
         </div>
 
         {/* Information */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Badge */}
-          <StatusBadge type={currentStatus as StatusBadgeProps["type"]} />
+          <StatusBadge type={currentStatus} />
           {/* 1. Date Badge */}
           <Badge
             variant="secondary"
@@ -135,13 +146,27 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
             </Badge>
           )}
         </div>
+
+        {/* Warning for Violated Content */}
+        {type === "student" && currentStatus === "VIOLATED_CONTENT" && (
+          <WarningBox
+            variant="warning"
+            title="Cảnh báo: Nội dung vi phạm quy định"
+            message="Nội dung phản hồi của bạn đã được xác định là vi phạm tiêu chuẩn cộng đồng hoặc quy định của nhà trường. Vui lòng chỉnh sửa nội dung để được tiếp tục xem xét và xử lý."
+          />
+        )}
+
         {/* Description */}
         <div>
-          <h2 className="text-[18px] font-medium">Nội dung:</h2>
-          <p className="text-[13px] font-normal text-black lg:text-[14px]">
-            {description ||
-              " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-          </p>
+          <h2 className="text-[18px] font-medium">Nội dung:</h2>{" "}
+          <div
+            className="text-[13px] font-normal text-black lg:text-[14px]"
+            dangerouslySetInnerHTML={{
+              __html:
+                DOMPurify.sanitize(description) ||
+                " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            }}
+          />
         </div>
         {/* Attachments */}
         {fileAttachments && fileAttachments.length > 0 && (

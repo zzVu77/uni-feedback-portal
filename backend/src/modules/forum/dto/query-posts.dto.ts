@@ -1,5 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsISO8601, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class QueryPostsDto {
@@ -22,7 +29,7 @@ export class QueryPostsDto {
     description: 'Filter by categoryId',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   categoryId?: string;
 
   @ApiPropertyOptional({
@@ -30,7 +37,7 @@ export class QueryPostsDto {
     description: 'Filter by departmentId',
   })
   @IsOptional()
-  @IsString()
+  @IsUUID('loose')
   departmentId?: string;
 
   @ApiPropertyOptional({

@@ -5,6 +5,7 @@ import {
   MinLength,
   ValidateNested,
   IsArray,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -44,14 +45,14 @@ export class CreateFeedbackDto {
     description:
       'The ID of the feedback category (linked to the Categories table).',
   })
-  @IsString()
+  @IsUUID('loose')
   categoryId: string;
 
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440003',
     description: 'The ID of the department receiving the feedback.',
   })
-  @IsString()
+  @IsUUID('loose')
   departmentId: string;
 
   @ApiProperty({
