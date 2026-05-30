@@ -105,6 +105,17 @@ export const forwardStaffFeedbackById = async (
     note,
   });
 };
+export const bulkForwardStaffFeedbacks = async (
+  feedbackIds: string[],
+  toDepartmentId: string,
+  note?: string,
+) => {
+  await axiosInstance.post(`${staffFeedbackBaseUrl}/bulk-forwardings`, {
+    feedbackIds,
+    toDepartmentId,
+    note,
+  });
+};
 // Feedback service functions for admin
 export const getAllFeedbacksOfAllDepartments = async (
   filter: FeedbackFilter,
