@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser } from "@/context/UserContext";
+import { ACCEPTED_FILE_TYPES } from "@/constants/data";
 import { Message } from "@/types/conversation";
 import {
   CheckCircle,
@@ -10,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
@@ -64,7 +66,24 @@ const ChatSheet = ({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+
+      if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+        toast.error(
+          "Định dạng tệp không được hỗ trợ. Vui lòng chọn ảnh, PDF, DOCX hoặc TXT.",
+        );
+        e.target.value = "";
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("Kích thước tệp không được vượt quá 100MB.");
+        e.target.value = "";
+        return;
+      }
+
+      setSelectedFile(file);
     }
     // Reset value to allow selecting the same file again if needed
     e.target.value = "";
@@ -80,6 +99,7 @@ const ChatSheet = ({
       setSelectedFile(null);
     } catch (error) {
       console.error("Failed to send message:", error);
+      toast.error("Gửi tin nhắn thất bại. Vui lòng thử lại!");
     } finally {
       setIsSending(false);
     }
@@ -241,6 +261,7 @@ const ChatSheet = ({
                 className="hidden"
                 ref={fileInputRef}
                 onChange={handleFileSelect}
+                accept={ACCEPTED_FILE_TYPES.join(",")}
               />
               <Button
                 variant="ghost"
