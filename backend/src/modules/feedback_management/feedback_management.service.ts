@@ -18,6 +18,8 @@ import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_l
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { UploadsService } from '../uploads/uploads.service';
 import {
+  BulkForwardFeedbackDto,
+  BulkForwardFeedbackResponseDto,
   BulkUpdateFeedbackStatusDto,
   BulkUpdateFeedbackStatusItemDto,
   BulkUpdateFeedbackStatusResponseDto,
@@ -786,5 +788,32 @@ export class FeedbackManagementService {
     }
 
     return { updated, skippedIds };
+  }
+
+  async bulkForwardFeedback(
+    dto: BulkForwardFeedbackDto,
+    actor: ActiveUserData,
+  ): Promise<BulkForwardFeedbackResponseDto> {
+    const forwarded: ForwardingResponseDto[] = [];
+    const skippedIds: string[] = [];
+
+    for (const feedbackId of dto.feedbackIds) {
+      try {
+        const res = await this.createForwarding(
+          feedbackId,
+          { toDepartmentId: dto.toDepartmentId, note: dto.note },
+          actor,
+        );
+        forwarded.push(res);
+      } catch (e) {
+        if (e instanceof NotFoundException) {
+          skippedIds.push(feedbackId);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    return { forwarded, skippedIds };
   }
 }
