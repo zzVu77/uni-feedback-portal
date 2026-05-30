@@ -96,4 +96,12 @@ export class QueryStaffAnnouncementsDto {
   @IsOptional()
   @IsISO8601()
   to?: string;
+
+  @ApiPropertyOptional({
+    description: 'Sorting field and order (e.g., "createdAt:desc")',
+    example: 'createdAt:desc',
+  })
+  @IsOptional()
+  @IsString()
+  sort?: string;
 }
