@@ -63,7 +63,7 @@ export function ForumSection() {
   } = useGetInfiniteAnnouncements(announcementFilters);
 
   const announcements =
-    announcementData?.pages.flatMap((page) => page.results) || [];
+    announcementData?.pages.flatMap((page) => page?.results ?? []) || [];
 
   const { ref: announcementRef, inView: inViewAnnouncement } = useInView();
 
@@ -83,7 +83,8 @@ export function ForumSection() {
     isFetchingNextPage: isFetchingNextForumPosts,
   } = useGetInfiniteForumPosts(forumPostFilters);
 
-  const forumPosts = forumData?.pages.flatMap((page) => page.results) || [];
+  const forumPosts =
+    forumData?.pages.flatMap((page) => page?.results ?? []) || [];
 
   const { ref: forumRef, inView: inViewForum } = useInView();
 
