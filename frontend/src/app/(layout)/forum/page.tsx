@@ -1,4 +1,3 @@
-"use client";
 import { Loading } from "@/components/common/Loading";
 import { ForumSection } from "@/components/forum/ForumSection";
 import Wrapper from "@/components/shared/Wrapper";
