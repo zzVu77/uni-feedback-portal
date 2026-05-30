@@ -32,6 +32,7 @@ import {
   useForwardStaffFeedbackById,
   useUpdateStaffFeedbackStatusById,
   useBulkUpdateStaffFeedbackStatus,
+  useBulkForwardStaffFeedbacks,
 } from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackStatus } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -104,6 +105,7 @@ const StaffAction = ({
   const { mutateAsync: updateStatus } = useUpdateStaffFeedbackStatusById();
   const { mutateAsync: bulkUpdateStatus } = useBulkUpdateStaffFeedbackStatus();
   const { mutateAsync: forwardFeedback } = useForwardStaffFeedbackById();
+  const { mutateAsync: bulkForwardFeedback } = useBulkForwardStaffFeedbacks();
 
   const handleOnStatusSubmit = async (data: UpdateStatusValues) => {
     try {
@@ -143,15 +145,11 @@ const StaffAction = ({
   const handleOnForwardSubmit = async (data: ForwardFeedbackValues) => {
     try {
       if (feedbackIds && feedbackIds.length > 0) {
-        await Promise.all(
-          feedbackIds.map((id) =>
-            forwardFeedback({
-              id,
-              toDepartmentId: data.toDepartmentId,
-              note: data.note,
-            }),
-          ),
-        );
+        await bulkForwardFeedback({
+          feedbackIds,
+          toDepartmentId: data.toDepartmentId,
+          note: data.note,
+        });
         await queryClient.invalidateQueries({
           queryKey: [FEEDBACK_QUERY_KEYS.staff.STAFF_FEEDBACKS],
         });
