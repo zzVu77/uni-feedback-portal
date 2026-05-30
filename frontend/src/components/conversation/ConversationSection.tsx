@@ -33,6 +33,7 @@ import {
   ChevronRight,
   Loader2,
   MessageCircleMore,
+  Plus,
   Send,
   User,
 } from "lucide-react";
@@ -286,8 +287,12 @@ const ConversationSection = ({
   return (
     <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
       {/* Header */}
-      <div className="flex flex-row items-center justify-between border-b border-transparent pb-2">
-        {/* {canCreateNew && !isForwarded && !isCreating && (
+      {canCreateNew &&
+      !isForwarded &&
+      !isCreating &&
+      listConversation?.total &&
+      listConversation.total > 0 ? (
+        <div className="flex flex-row items-center justify-between border-b border-transparent pb-2">
           <Button
             variant="outline"
             size="sm"
@@ -297,8 +302,8 @@ const ConversationSection = ({
             <Plus className="h-4 w-4" />
             Mới
           </Button>
-        )} */}
-      </div>
+        </div>
+      ) : null}
 
       <ScrollArea className="w-full overflow-y-auto">
         <div className="flex h-full max-h-[50vh] flex-col gap-4 py-1 pr-4">
