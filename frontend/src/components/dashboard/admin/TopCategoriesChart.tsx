@@ -1,24 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+// src/components/dashboard/TopCategoriesChart.tsx
 "use client";
 
-import { useRouter } from "next/navigation"; // 1. Import router
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  LabelList,
-} from "recharts";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -26,15 +11,25 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { TopCategoryDto } from "@/types/report";
+import { Layers } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-// Config color
+// Config color to Red
 const chartConfig = {
   count: {
     label: "Số lượng",
-    color: "hsl(221.2 83.2% 53.3%)",
+    color: "#ef4444", // red-500
   },
   label: {
-    color: "hsl(var(--foreground))",
+    color: "#64748b", // slate-500
   },
 } satisfies ChartConfig;
 
@@ -45,20 +40,30 @@ interface Props {
 }
 
 export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
-  const router = useRouter(); // 2. Init router
+  const router = useRouter();
 
   if (isLoading)
     return (
-      <div className="h-[300px] w-full animate-pulse rounded-xl bg-gray-100" />
+      <div className="h-[300px] w-full animate-pulse rounded-2xl bg-slate-200/60" />
     );
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle>Danh mục hàng đầu</CardTitle>
-        <CardDescription>Các vấn đề được phản ánh nhiều nhất</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
+      <div className="mb-6 flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600">
+            <Layers className="h-4 w-4" />
+          </div>
+          <h3 className="text-lg font-bold tracking-tight text-slate-900">
+            Danh mục hàng đầu
+          </h3>
+        </div>
+        <p className="pl-10 text-sm font-medium text-slate-500">
+          Các vấn đề được phản ánh nhiều nhất
+        </p>
+      </div>
+
+      <div className="flex-1">
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
@@ -66,10 +71,14 @@ export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
             layout="vertical"
             margin={{
               right: 30,
-              left: 10,
+              left: -10, // pull slightly left for aesthetics
             }}
           >
-            <CartesianGrid horizontal={false} strokeDasharray="3 3" />
+            <CartesianGrid
+              horizontal={false}
+              strokeDasharray="4 4"
+              stroke="#e2e8f0"
+            />
 
             <YAxis
               dataKey="categoryName"
@@ -77,7 +86,7 @@ export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
               tickLine={false}
               axisLine={false}
               width={140}
-              tick={{ fontSize: 13, fill: "hsl(var(--foreground))" }}
+              tick={{ fontSize: 13, fill: "#475569", fontWeight: 500 }}
               tickFormatter={(value) =>
                 value.length > 20 ? `${value.slice(0, 20)}...` : value
               }
@@ -86,17 +95,22 @@ export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
             <XAxis dataKey="count" type="number" hide />
 
             <ChartTooltip
-              cursor={{ fill: "transparent" }}
-              content={<ChartTooltipContent indicator="line" />}
+              cursor={{ fill: "rgba(241, 245, 249, 0.5)" }} // slate-100/50
+              content={
+                <ChartTooltipContent
+                  indicator="line"
+                  className="border-slate-100 bg-white/95 shadow-xl backdrop-blur-sm"
+                />
+              }
             />
 
             <Bar
               dataKey="count"
               layout="vertical"
               fill="var(--color-count)"
-              radius={4}
-              barSize={32}
-              className="cursor-pointer"
+              radius={[0, 4, 4, 0]}
+              barSize={24}
+              className="cursor-pointer transition-opacity hover:opacity-80"
               onClick={(entry: any) => {
                 const id = entry.categoryId || entry.id;
                 if (id) {
@@ -109,14 +123,14 @@ export const TopCategoriesChart = ({ data, isLoading, type }: Props) => {
               <LabelList
                 dataKey="count"
                 position="right"
-                offset={10}
-                className="fill-foreground font-bold"
+                offset={12}
+                className="fill-slate-600 font-bold"
                 fontSize={12}
               />
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

@@ -46,11 +46,11 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import dynamic from "next/dynamic";
 
-import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
-import "suneditor/dist/css/suneditor.min.css";
-import { useRouter } from "next/navigation";
 import { uploadFileToCloud } from "@/services/upload-service"; // Ensure this service exists
+import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import "suneditor/dist/css/suneditor.min.css";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,

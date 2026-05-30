@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useGetStaffRadarChart } from "@/hooks/queries/useReportQueries";
+import { useState } from "react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
@@ -16,10 +25,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { RadarStatsDto, ReportFilter } from "@/types/report";
-import { useMemo } from "react";
 
-// Config màu sắc: Blue (Resolved) & Red (Unresolved)
 const chartConfig = {
   resolved: {
     label: "Đã xử lý",
@@ -31,18 +37,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-interface Props {
-  data?: RadarStatsDto[];
-  isLoading: boolean;
-  filter: ReportFilter; // Nhận filter để hiển thị năm
-}
+export function StaffRadarChart() {
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState<string>(
+    currentYear.toString(),
+  );
 
-export function StaffRadarChart({ data, isLoading, filter }: Props) {
-  // Lấy năm từ filter để hiển thị lên UI
-  const displayYear = useMemo(() => {
-    if (filter.to) return new Date(filter.to).getFullYear();
-    return new Date().getFullYear();
-  }, [filter.to]);
+  const { data, isLoading } = useGetStaffRadarChart({ year: selectedYear });
+
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
   if (isLoading) {
     return (
@@ -52,11 +55,25 @@ export function StaffRadarChart({ data, isLoading, filter }: Props) {
 
   return (
     <Card className="flex h-full flex-col">
-      <CardHeader className="items-center pb-4">
-        <CardTitle>Tổng quan năm {displayYear}</CardTitle>
-        <CardDescription>
-          So sánh trạng thái xử lý theo từng tháng
-        </CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+        <div>
+          <CardTitle>Tổng quan năm {selectedYear}</CardTitle>
+          <CardDescription>
+            So sánh trạng thái xử lý theo từng tháng
+          </CardDescription>
+        </div>
+        <Select value={selectedYear} onValueChange={setSelectedYear}>
+          <SelectTrigger className="w-[120px]">
+            <SelectValue placeholder="Chọn năm" />
+          </SelectTrigger>
+          <SelectContent>
+            {years.map((year) => (
+              <SelectItem key={year} value={year.toString()}>
+                Năm {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -71,7 +88,6 @@ export function StaffRadarChart({ data, isLoading, filter }: Props) {
             <PolarAngleAxis
               dataKey="month"
               tick={{ fontSize: 12 }}
-              // Có thể format lại tên tháng cho ngắn gọn nếu cần (Jan, Feb...)
               tickFormatter={(val) => val.replace("Tháng ", "T")}
             />
             <PolarGrid />
