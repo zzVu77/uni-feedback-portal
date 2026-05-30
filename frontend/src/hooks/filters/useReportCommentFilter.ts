@@ -12,9 +12,7 @@ export function useReportCommentFilters(): ReportCommentFilter {
     const pageSize = Number(params.get("pageSize")) || DEFAULT_PAGE_SIZE;
     const status = params.get("status") as ReportCommentFilter["status"];
     const q = params.get("q") || undefined;
-    const reportReason = params.get(
-      "reportReason",
-    ) as ReportCommentFilter["reportReason"];
+    const reportReason = params.get("reportReason") || undefined;
     const parsedFilters: ReportCommentFilter = { page, pageSize };
     if (status) parsedFilters.status = status;
     if (q) parsedFilters.q = q;

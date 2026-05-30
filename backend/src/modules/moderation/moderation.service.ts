@@ -77,12 +77,7 @@ export class ModerationService {
     };
     if (reportReason) {
       if (reportReason === 'OTHER') {
-        where.AND = [
-          ...KNOWN_REASONS.map((r) => ({
-            reason: { not: { equals: r } },
-          })),
-          { reason: { not: null } },
-        ];
+        where.reason = { notIn: KNOWN_REASONS, not: null };
       } else {
         const mappedReason = REPORT_REASON_MAP[reportReason];
         if (mappedReason) {

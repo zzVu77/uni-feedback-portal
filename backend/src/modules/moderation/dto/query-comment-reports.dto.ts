@@ -35,7 +35,14 @@ export class QueryCommentReportsDto {
 
   @ApiPropertyOptional({
     description: 'Filter by report reason',
-    example: 'Inappropriate content',
+    enum: [
+      'SPAM',
+      'HARASSMENT',
+      'INAPPROPRIATE_CONTENT',
+      'HATE_SPEECH',
+      'OTHER',
+    ],
+    example: 'SPAM',
   })
   @IsOptional()
   @IsString()
