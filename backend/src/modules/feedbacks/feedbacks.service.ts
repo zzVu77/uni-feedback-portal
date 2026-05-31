@@ -572,7 +572,7 @@ export class FeedbacksService {
     actor: ActiveUserData,
   ): Promise<void> {
     const { feedbackId } = params;
-    const feedback = await this.prisma.feedbacks.findUnique({
+    const feedback = await this.prisma.feedbacks.findFirst({
       where: { id: feedbackId, userId: actor.sub },
       include: {
         department: {

@@ -144,10 +144,11 @@ export class FeedbacksController {
   }
 
   @Post('/me/:feedbackId/resubmit')
+  @HttpCode(200)
   @ApiOperation({
     summary: 'Resubmit a feedback (Student and Owner only)',
     description:
-      'Allows the user to resubmit their own feedback that was previously rejected. The feedback must be in "REJECTED" status to be eligible for resubmission.',
+      'Allows the user to resubmit their own feedback that previously failed AI review. The feedback must be in "AI_REVIEW_FAILED" status to be eligible for resubmission.',
   })
   @ApiResponse({
     status: 200,
