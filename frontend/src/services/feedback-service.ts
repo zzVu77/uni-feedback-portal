@@ -45,6 +45,9 @@ export const createNewFeedback = async (data: CreateFeedbackPayload) => {
 export const deleteFeedbackById = async (id: string) => {
   await axiosInstance.delete(`${studentFeedbackBaseUrl}/me/${id}`);
 };
+export const resubmitFeedbackById = async (id: string) => {
+  await axiosInstance.post(`${studentFeedbackBaseUrl}/me/${id}/resubmit`);
+};
 
 // Feedback service functions for staff
 export const getAllStaffFeedbacks = async (

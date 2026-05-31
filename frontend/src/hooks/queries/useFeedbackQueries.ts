@@ -14,6 +14,7 @@ import {
   updateFeedbackById,
   updateStaffFeedbackStatusById,
   bulkUpdateStaffFeedbackStatus,
+  resubmitFeedbackById,
 } from "@/services/feedback-service";
 import {
   FeedbackFilter,
@@ -102,6 +103,19 @@ export const useDeleteFeedbackById = () => {
     retry: false,
     onSuccess: () => {
       toast.success("Xoá góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+
+export const useResubmitFeedbackById = () => {
+  return useMutation({
+    mutationFn: (id: string) => resubmitFeedbackById(id),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Gửi lại góp ý thành công!");
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
