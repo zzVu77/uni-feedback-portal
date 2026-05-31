@@ -591,7 +591,7 @@ VALUES (
         '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
         'staff.thuvien@uni.edu.vn',
         'DEPARTMENT_STAFF',
-        'd0000000-0000-0000-0000-000000000034',
+        'd0000000-0000-0000-0000-000000000041',
         NOW()
     ),
     (
@@ -600,7 +600,7 @@ VALUES (
         '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
         'staff.ktx@uni.edu.vn',
         'DEPARTMENT_STAFF',
-        'd0000000-0000-0000-0000-000000000035',
+        'd0000000-0000-0000-0000-000000000042',
         NOW()
     );
 
