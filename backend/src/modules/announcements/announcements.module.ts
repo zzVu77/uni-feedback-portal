@@ -4,9 +4,9 @@ import { AnnouncementsController } from './announcements.controller';
 import { UploadsModule } from '../uploads/uploads.module';
 
 @Module({
-  imports: [UploadsModule], // Import UploadsModule để sử dụng UploadsService
+  imports: [UploadsModule],
   controllers: [AnnouncementsController],
   providers: [AnnouncementsService],
-  exports: [AnnouncementsService], // Export service để các module khác (vd: Moderation) có thể dùng
+  exports: [AnnouncementsService],
 })
 export class AnnouncementsModule {}

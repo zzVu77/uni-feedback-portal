@@ -1,10 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
+import { ACCEPTED_FILE_TYPES } from "@/constants/data";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
+import { useGetDepartmentProposal } from "@/hooks/queries/useAiQueries";
 import { cn } from "@/lib/utils";
 import { uploadFileToCloud } from "@/services/upload-service";
-import { CreateFeedbackPayload, FileAttachmentDto } from "@/types";
+import {
+  CreateFeedbackPayload,
+  DepartmentAI,
+  FileAttachmentDto,
+} from "@/types";
 import { sanitizeAttachment } from "@/utils/sanitizeAttachment";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -23,6 +30,7 @@ import {
   Save,
   Send,
   ShieldAlert,
+  Sparkles,
   Trash2,
 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -74,15 +82,6 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-const ACCEPTED_FILE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-  "text/plain", // .txt
-];
 
 const formSchema = z.object({
   subject: z
@@ -149,20 +148,10 @@ const FeedbackForm = ({
   const [editorKey, setEditorKey] = useState(0);
 
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<DepartmentAI[]>([]);
 
-  useEffect(() => {
-    if (initialData?.fileAttachments) {
-      setExistingFiles(initialData.fileAttachments);
-    }
-  }, [initialData]);
-
-  // Remove existing file handler
-  const handleRemoveExistingFile = (fileUrl: string) => {
-    setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
-  };
-
-  const { data: categoryOptions = [] } = useCategoryOptionsData("active");
-  const { data: departmentOptions = [] } = useDepartmentOptionsData();
+  const { mutate: getAIProposal, isPending: isAIPending } =
+    useGetDepartmentProposal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -177,6 +166,60 @@ const FeedbackForm = ({
       attachments: [],
     },
   });
+
+  // Sync initialData to form and existingFiles
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        subject: initialData.subject || "",
+        location: initialData.location || "",
+        categoryId: initialData.categoryId || "",
+        departmentId: initialData.departmentId || "",
+        description: initialData.description || "",
+        isAnonymous: initialData.isAnonymous || false,
+        isPublic: initialData.isPublic || false,
+        attachments: [],
+      });
+      if (initialData.fileAttachments) {
+        setExistingFiles(initialData.fileAttachments);
+      }
+    }
+  }, [initialData, form]);
+
+  // Remove existing file handler
+  const handleRemoveExistingFile = (fileKey: string) => {
+    setExistingFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
+  };
+
+  const { data: categoryOptions = [] } = useCategoryOptionsData("active");
+  const { data: departmentOptions = [] } = useDepartmentOptionsData();
+
+  const handleGetAIProposal = () => {
+    const description = form.getValues("description");
+    const textContent = description.replace(/<[^>]+>/g, "").trim();
+
+    if (textContent.length < 10) {
+      toast.error(
+        "Vui lòng nhập mô tả chi tiết ít nhất 10 ký tự để AI có thể phân tích.",
+      );
+      return;
+    }
+
+    getAIProposal(
+      { description: textContent },
+      {
+        onSuccess: (data) => {
+          if (data.departments.length === 0) {
+            toast.info("AI không tìm thấy phòng ban nào phù hợp.");
+          }
+          setAiSuggestions(data.departments);
+        },
+        onError: () => {
+          toast.error("Có lỗi xảy ra khi lấy đề xuất từ AI.");
+        },
+      },
+    );
+  };
 
   const mapFormValuesToFeedbackParams = (
     values: z.infer<typeof formSchema>,
@@ -196,7 +239,7 @@ const FeedbackForm = ({
 
   useEffect(() => {
     if (isAnonymousWatched) {
-      form.setValue("isPublic", false);
+      form.setValue("isPublic", false, { shouldDirty: true });
     }
   }, [isAnonymousWatched, form]);
 
@@ -237,7 +280,7 @@ const FeedbackForm = ({
       let uploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) => uploadFileToCloud(file, "FEEDBACK")),
         );
         // FIX: Encode URL for uploaded files
         uploadedAttachments = rawAttachments.map(sanitizeAttachment);
@@ -274,7 +317,7 @@ const FeedbackForm = ({
       let newUploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) => uploadFileToCloud(file, "FEEDBACK")),
         );
         // FIX: Encode URL cho file mới upload
         newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
@@ -282,7 +325,7 @@ const FeedbackForm = ({
 
       // 2. Process existing files (also need to encode to be sure)
       const processedExistingFiles = existingFiles
-        .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
+        .filter((file) => file.fileKey && file.fileKey.trim() !== "")
         .map(sanitizeAttachment);
 
       // 3.Combine existing + new
@@ -416,7 +459,7 @@ const FeedbackForm = ({
                           <div className="grid gap-3 sm:grid-cols-2">
                             {existingFiles.map((file) => (
                               <div
-                                key={file.fileUrl}
+                                key={file.fileKey}
                                 className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
                               >
                                 <div className="flex min-w-0 items-center gap-2.5">
@@ -425,7 +468,7 @@ const FeedbackForm = ({
                                   </div>
                                   <div className="min-w-0 flex-1">
                                     <a
-                                      href={file.fileUrl}
+                                      href={file.fileKey}
                                       target="_blank"
                                       rel="noreferrer"
                                       className="block truncate text-sm font-medium text-slate-700 hover:text-blue-600"
@@ -444,7 +487,7 @@ const FeedbackForm = ({
                                   size="icon"
                                   className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
                                   onClick={() =>
-                                    handleRemoveExistingFile(file.fileUrl)
+                                    handleRemoveExistingFile(file.fileKey)
                                   }
                                   disabled={isPending}
                                 >
@@ -536,10 +579,7 @@ const FeedbackForm = ({
                                         key={option.value}
                                         value={option.label}
                                         onSelect={() => {
-                                          form.setValue(
-                                            "categoryId",
-                                            option.value,
-                                          );
+                                          field.onChange(option.value);
                                           setOpenCategory(false);
                                         }}
                                       >
@@ -568,9 +608,55 @@ const FeedbackForm = ({
                       name="departmentId"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
-                          <FormLabel className="font-semibold text-slate-700">
-                            Phòng ban<span className="text-red-500">*</span>
-                          </FormLabel>
+                          <div className="flex items-center justify-between">
+                            <FormLabel className="font-semibold text-slate-700">
+                              Phòng ban<span className="text-red-500">*</span>
+                            </FormLabel>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 gap-1.5 text-[11px] font-semibold text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                              onClick={handleGetAIProposal}
+                              disabled={isAIPending || isMutationPending}
+                            >
+                              {isAIPending ? (
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <Sparkles className="h-3 w-3" />
+                              )}
+                              Đề xuất phòng ban
+                            </Button>
+                          </div>
+
+                          {aiSuggestions.length > 0 && (
+                            <div className="animate-in fade-in slide-in-from-top-2 mb-2 flex flex-col gap-2 rounded-lg border border-blue-100 bg-blue-50/50 p-2.5">
+                              <p className="text-[10px] font-bold tracking-wider text-blue-600 uppercase">
+                                Gợi ý từ AI
+                              </p>
+                              <div className="flex flex-col gap-2">
+                                {aiSuggestions.map((sug) => (
+                                  <button
+                                    key={sug.id}
+                                    type="button"
+                                    className="flex w-full flex-col items-start gap-0.5 rounded-md border border-blue-200 bg-white p-2 text-left transition-all hover:border-blue-400 hover:bg-blue-50"
+                                    onClick={() => {
+                                      field.onChange(sug.id);
+                                      setAiSuggestions([]);
+                                    }}
+                                  >
+                                    <span className="text-[11px] font-bold text-slate-900">
+                                      {sug.name}
+                                    </span>
+                                    <span className="text-[10px] leading-relaxed text-slate-500">
+                                      {sug.reason}
+                                    </span>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
                           <Popover
                             open={openDepartment}
                             onOpenChange={setOpenDepartment}
@@ -611,10 +697,7 @@ const FeedbackForm = ({
                                         key={option.value}
                                         value={option.label}
                                         onSelect={() => {
-                                          form.setValue(
-                                            "departmentId",
-                                            option.value,
-                                          );
+                                          field.onChange(option.value);
                                           setOpenDepartment(false);
                                         }}
                                       >

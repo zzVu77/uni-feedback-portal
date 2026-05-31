@@ -64,6 +64,7 @@ enum NotificationType {
 
 enum FeedbackStatus {
   AI_REVIEWING
+  AI_REVIEW_SUCCESS
   VIOLATED_CONTENT
   AI_REVIEW_FAILED
   PENDING
@@ -93,6 +94,7 @@ enum FileTargetType {
   FEEDBACK
   MESSAGE
   ANNOUNCEMENT
+  AVATAR
 }
 
 
@@ -137,6 +139,7 @@ model Departments {
   feedbacks                      Feedbacks[]
   forwardingLogsFromDepartmentId ForwardingLogs[] @relation("FromDepartment")
   forwardingLogsToDepartmentId   ForwardingLogs[] @relation("ToDepartment")
+  departmentEmbedding            DepartmentEmbeddings?
 
   @@index([isActive])
 }
@@ -169,6 +172,31 @@ model Feedbacks {
   forwardingLogs  ForwardingLogs[]
   forumPost       ForumPosts?
   conversations   ClarificationConversations[]
+  embedding       FeedbackEmbeddings?
+  similarityLinksAsSource FeedbackSimilarityLink[] @relation("SimilaritySource")
+  similarityLinksAsTarget FeedbackSimilarityLink[] @relation("SimilarityTarget")
+}
+
+model FeedbackEmbeddings {
+  id         String   @id @default(uuid()) @db.Uuid
+  feedbackId String   @unique @db.Uuid
+  embedding  Unsupported("vector(1024)")
+  createdAt  DateTime @default(now())
+
+  feedback   Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+}
+
+model FeedbackSimilarityLink {
+  id               String @id @default(uuid()) @db.Uuid
+  sourceFeedbackId String @db.Uuid
+  targetFeedbackId String @db.Uuid
+  score            Float
+
+  sourceFeedback Feedbacks @relation("SimilaritySource", fields: [sourceFeedbackId], references: [id], onDelete: Cascade)
+  targetFeedback Feedbacks @relation("SimilarityTarget", fields: [targetFeedbackId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceFeedbackId, targetFeedbackId])
+  @@index([sourceFeedbackId])
 }
 
 model FeedbackStatusHistory {
@@ -279,7 +307,7 @@ model FileAttachments {
   targetType FileTargetType
 
   fileName String
-  fileUrl  String
+  fileKey String @unique
   fileType String
   fileSize Int
 
@@ -317,4 +345,33 @@ model RefreshTokens {
   expiredAt DateTime
   createdAt DateTime @default(now())
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ================================
+// DATA WAREHOUSE BIGQUERY (Reverse ETL)
+// ================================
+
+model DashboardTrendingIssues {
+  postId          String   @id @map("post_id")
+  author          String
+  content         String
+  postLink        String?  @map("post_link")
+  postedAt        DateTime @map("posted_at")
+  reactionCount   Int      @map("reaction_count")
+  commentCount    Int      @map("comment_count")
+  engagementScore Int      @map("engagement_score")
+  topic           String
+  sentimentScore  Float    @map("sentiment_score")
+  aiSummary       String   @map("ai_summary")
+  sentimentLabel  String   @map("sentiment_label")
+  analyzedAt      DateTime @map("analyzed_at")
+
+  @@map("dashboard_trending_issues")
+
+}
+model DepartmentEmbeddings {
+  id                String   @id @default(uuid()) @db.Uuid
+  departmentId      String   @unique @db.Uuid
+  embedding         Unsupported("vector(3072)")
+  department        Departments       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
 }

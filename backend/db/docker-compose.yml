@@ -2,10 +2,10 @@ version: '3.9'
 
 services:
   postgres:
-    image: postgres:15
+    image: pgvector/pgvector:pg15
     container_name: university-feedback
     ports:
-      - '5433:5432' # 5432 là cổng mặc định của Postgres
+      - '5433:5432'
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: 123456

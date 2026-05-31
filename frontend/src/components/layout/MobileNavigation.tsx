@@ -47,7 +47,13 @@ const MobileNavigation = ({ type = "student", fullName }: Props) => {
         <DropdownMenuTrigger asChild>
           <Avatar className="h-10 w-10">
             <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback className="text-black">CN</AvatarFallback>
+            <AvatarFallback className="bg-slate-100 text-slate-700">
+              {fullName
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase() || "CN"}
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-3">
@@ -61,7 +67,7 @@ const MobileNavigation = ({ type = "student", fullName }: Props) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="#" className="flex cursor-pointer items-center">
+            <Link href="/profile" className="flex cursor-pointer items-center">
               <CircleUserRound className="mr-2 h-4 w-4" />
               Hồ sơ của tôi
             </Link>

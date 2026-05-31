@@ -1,12 +1,11 @@
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UserResponseDto } from './dto/user-response.dto';
+
 export interface UsersServiceContract {
-  getMe(userId: number): Promise<UserResponseDto>;
-  getById(
-    userId: number,
-    requester: {
-      role: 'Admin' | 'DepartmentStaff' | 'Student';
-      requesterId: number;
-      department_id: number;
-    },
+  getUser(actor: ActiveUserData): Promise<UserResponseDto>;
+  updateMe(
+    actor: ActiveUserData,
+    dto: UpdateProfileDto,
   ): Promise<UserResponseDto>;
 }

@@ -5,7 +5,9 @@ export type FeedbackStatus =
   | "IN_PROGRESS"
   | "RESOLVED"
   | "VIOLATED_CONTENT"
-  | "REJECTED";
+  | "REJECTED"
+  | "AI_REVIEW_FAILED"
+  | "AI_REVIEWING";
 export type FeedbackDetail = {
   id: string;
   subject: string;
@@ -89,8 +91,18 @@ export type UpdateFeedbackStatusParams = {
   status: FeedbackStatus;
   note?: string;
 };
+export type BulkUpdateFeedbackStatusParams = {
+  feedbackIds: string[];
+  status: FeedbackStatus;
+  note?: string;
+};
 export type ForwardFeedbackParams = {
   id: string;
+  toDepartmentId: string;
+  note?: string;
+};
+export type BulkForwardFeedbackParams = {
+  feedbackIds: string[];
   toDepartmentId: string;
   note?: string;
 };
@@ -107,4 +119,15 @@ export type FeedbackHeaderType = Pick<
   | "department"
   | "student"
   | "fileAttachments"
+>;
+
+export type RelatedFeedbackItem = Pick<
+  FeedbackDetail,
+  | "id"
+  | "subject"
+  | "currentStatus"
+  | "createdAt"
+  | "category"
+  | "department"
+  | "student"
 >;

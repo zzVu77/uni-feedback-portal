@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Injectable,
   NotFoundException,
@@ -21,6 +25,10 @@ import { mergeStatusAndForwardLogs } from 'src/shared/helpers/merge-forwarding_l
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { GenerateStatusUpdateMessage } from 'src/shared/helpers/feedback-message.helper';
+import {
+  FEEDBACK_SIMILARITY_JOB_ON_CREATED,
+  FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
+} from '../feedback-similarity/type/feedback-similarity-job.constants';
 @Injectable()
 export class FeedbacksService {
   constructor(
@@ -28,6 +36,8 @@ export class FeedbacksService {
     private readonly forumService: ForumService,
     private readonly uploadsService: UploadsService,
     @InjectQueue('feedback-toxic') private readonly feedbackToxicQueue: Queue,
+    @InjectQueue('feedback-similarity')
+    private readonly feedbackSimilarityQueue: Queue,
   ) {}
 
   async getFeedbacks(
@@ -163,16 +173,18 @@ export class FeedbacksService {
     if (!feedback) {
       throw new NotFoundException(`Feedback with ID ${feedbackId} not found`);
     }
-    const unifiedTimeline = mergeStatusAndForwardLogs({
-      statusHistory: feedback.statusHistory,
-      forwardingLogs: feedback.forwardingLogs.map((f) => ({
-        fromDept: f.fromDepartment,
-        toDept: f.toDepartment,
-        message: f.message,
-        note: f.note ?? null,
-        createdAt: f.createdAt,
-      })),
-    });
+    const unifiedTimeline = this.filterTimeline(
+      mergeStatusAndForwardLogs({
+        statusHistory: feedback.statusHistory,
+        forwardingLogs: feedback.forwardingLogs.map((f) => ({
+          fromDept: f.fromDepartment,
+          toDept: f.toDepartment,
+          message: f.message,
+          note: f.note ?? null,
+          createdAt: f.createdAt,
+        })),
+      }),
+    );
     const fileAttachments = await this.uploadsService.getAttachmentsForTarget(
       feedback.id,
       FileTargetType.FEEDBACK,
@@ -283,6 +295,13 @@ export class FeedbacksService {
       currentStatus: FeedbackStatus.AI_REVIEWING,
     };
 
+    const embeddingRelevant =
+      (dto.subject !== undefined && dto.subject !== feedback.subject) ||
+      (dto.description !== undefined &&
+        dto.description !== feedback.description) ||
+      (dto.departmentId !== undefined &&
+        dto.departmentId !== feedback.departmentId);
+
     const updateFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: updateDataNew,
@@ -319,16 +338,57 @@ export class FeedbacksService {
       },
     });
 
-    const unifiedTimeline = mergeStatusAndForwardLogs({
-      statusHistory: updateFeedback.statusHistory,
-      forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
-        fromDept: f.fromDepartment,
-        toDept: f.toDepartment,
-        message: f.message,
-        note: f.note ?? null,
-        createdAt: f.createdAt,
-      })),
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedbackId,
+        status: 'AI_REVIEWING',
+        message: GenerateStatusUpdateMessage(
+          updateFeedback.department.name,
+          'AI_REVIEWING',
+        ),
+      },
     });
+
+    const unifiedTimeline = this.filterTimeline(
+      mergeStatusAndForwardLogs({
+        statusHistory: updateFeedback.statusHistory,
+        forwardingLogs: updateFeedback.forwardingLogs.map((f) => ({
+          fromDept: f.fromDepartment,
+          toDept: f.toDepartment,
+          message: f.message,
+          note: f.note ?? null,
+          createdAt: f.createdAt,
+        })),
+      }),
+    );
+
+    if (embeddingRelevant) {
+      const incomingRows: { sourceFeedbackId: string }[] =
+        await this.prisma.feedbackSimilarityLink.findMany({
+          where: { targetFeedbackId: feedbackId },
+          select: { sourceFeedbackId: true },
+        });
+      const priorIncomingSourceIds = [
+        ...new Set(incomingRows.map((r) => r.sourceFeedbackId)),
+      ];
+      await this.prisma.feedbackSimilarityLink.deleteMany({
+        where: {
+          OR: [
+            { sourceFeedbackId: feedbackId },
+            { targetFeedbackId: feedbackId },
+          ],
+        },
+      });
+      await this.feedbackSimilarityQueue.add(
+        FEEDBACK_SIMILARITY_JOB_ON_UPDATED,
+        { feedbackId, priorIncomingSourceIds },
+        {
+          attempts: 3,
+          backoff: 5000,
+        },
+      );
+    }
+
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
       {
@@ -450,7 +510,6 @@ export class FeedbacksService {
       await this.forumService.createForumPost(feedback.id, actor);
     }
 
-    // Create attachments using UploadsService
     if (fileAttachments && fileAttachments.length > 0) {
       await this.uploadsService.updateAttachmentsForTarget(
         feedback.id,
@@ -462,13 +521,21 @@ export class FeedbacksService {
     await this.prisma.feedbackStatusHistory.create({
       data: {
         feedbackId: feedback.id,
-        status: 'PENDING',
+        status: 'AI_REVIEWING',
         message: GenerateStatusUpdateMessage(
           feedback.department.name,
-          'PENDING',
+          'AI_REVIEWING',
         ),
       },
     });
+    await this.feedbackSimilarityQueue.add(
+      FEEDBACK_SIMILARITY_JOB_ON_CREATED,
+      { feedbackId: feedback.id },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
 
     await this.feedbackToxicQueue.add(
       'feedbackToxicItem',
@@ -521,5 +588,25 @@ export class FeedbacksService {
           status: 'PENDING',
         };
     }
+  }
+
+  private filterTimeline(timeline: any[]) {
+    const lastPendingIndex = timeline
+      .map((t) => t.status)
+      .lastIndexOf('PENDING');
+    const lastAiReviewingIndex = timeline
+      .map((t) => t.status)
+      .lastIndexOf('AI_REVIEWING');
+    const lastAiReviewSuccessIndex = timeline
+      .map((t) => t.status)
+      .lastIndexOf('AI_REVIEW_SUCCESS');
+
+    return timeline.filter((item, index) => {
+      if (item.status === 'PENDING') return index === lastPendingIndex;
+      if (item.status === 'AI_REVIEWING') return index === lastAiReviewingIndex;
+      if (item.status === 'AI_REVIEW_SUCCESS')
+        return index === lastAiReviewSuccessIndex;
+      return true;
+    });
   }
 }

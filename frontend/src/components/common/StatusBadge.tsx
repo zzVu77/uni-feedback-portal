@@ -1,13 +1,15 @@
+import { cn } from "@/lib/utils";
 import {
   CircleAlert,
   CircleCheckBig,
   CircleX,
+  ClipboardCheck,
+  Ellipsis,
   Forward,
   Loader,
   TriangleAlert,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils";
 
 export type StatusBadgeProps = {
   type:
@@ -18,7 +20,9 @@ export type StatusBadgeProps = {
     | "CLOSED"
     | "FORWARDED"
     | "VIOLATED_CONTENT"
-    | "OPENING";
+    | "OPENING"
+    | "AI_REVIEWING"
+    | "AI_REVIEW_FAILED";
 };
 
 const STATUS_CONFIG = {
@@ -82,6 +86,27 @@ const STATUS_CONFIG = {
     icon: TriangleAlert,
     badgeClassName: "text-red-500 bg-red-100 hover:bg-red-200/35",
     iconClassName: "text-red-500 animate-pulse",
+    textClassName: "",
+  },
+  AI_REVIEWING: {
+    text: "Đang kiểm duyệt nội dung",
+    icon: Ellipsis,
+    badgeClassName: "text-white bg-amber-700 hover:bg-amber-800/80",
+    iconClassName: "text-amber-100",
+    textClassName: "",
+  },
+  AI_REVIEW_FAILED: {
+    text: "Hệ thống kiểm duyệt gặp sự cố",
+    icon: TriangleAlert,
+    badgeClassName: "text-gray-900 bg-gray-200 hover:bg-gray-300/80",
+    iconClassName: "text-gray-800 animate-pulse",
+    textClassName: "",
+  },
+  AI_REVIEW_SUCCESS: {
+    text: "Kiểm duyệt nội dung thành công",
+    icon: ClipboardCheck,
+    badgeClassName: "text-orange-600 bg-orange-100 hover:bg-orange-200/80",
+    iconClassName: "text-orange-500 animate-pulse",
     textClassName: "",
   },
 };

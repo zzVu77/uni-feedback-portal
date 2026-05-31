@@ -2,11 +2,11 @@ import { CommentTargetType } from '@prisma/client';
 
 export class CommentCreatedEvent {
   commentId: string;
-  userId: string; // Người viết comment
+  userId: string;
   content: string;
-  targetId: string; // ID của Post hoặc Announcement
+  targetId: string;
   targetType: CommentTargetType;
-  parentId?: string | null; // Nếu có thì là reply
+  parentId?: string | null;
 
   constructor(partial: Partial<CommentCreatedEvent>) {
     Object.assign(this, partial);

@@ -46,11 +46,12 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import dynamic from "next/dynamic";
 
-import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
-import "suneditor/dist/css/suneditor.min.css";
-import { useRouter } from "next/navigation";
+import { ACCEPTED_FILE_TYPES } from "@/constants/data";
 import { uploadFileToCloud } from "@/services/upload-service"; // Ensure this service exists
+import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import "suneditor/dist/css/suneditor.min.css";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -58,16 +59,6 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-const ACCEPTED_FILE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-  "text/plain", // .txt
-];
-
 const formSchema = z.object({
   title: z
     .string()
@@ -110,7 +101,7 @@ type AnnouncementForm = {
 // Helper to sanitize URL (encode spaces) and ensure numeric size
 const sanitizeAttachment = (file: FileAttachmentDto) => ({
   fileName: file.fileName,
-  fileUrl: encodeURI(file.fileUrl.trim()),
+  fileKey: file.fileKey,
   fileType: file.fileType || "application/octet-stream", // Fallback if missing
   fileSize: Number(file.fileSize) || 0,
 });
@@ -131,17 +122,23 @@ const AnnouncementForm = ({
   const [existingFiles, setExistingFiles] = useState<FileAttachmentDto[]>([]);
 
   // Sync initialData to existingFiles only when initialData ID changes
-  useEffect(() => {
-    if (initialData?.files) {
-      const mappedFiles = initialData.files.map((f: any) => ({
-        fileName: f.fileName,
-        fileUrl: f.fileUrl,
-        fileType: f.fileType || "",
-        fileSize: f.fileSize || 0,
-      }));
-      setExistingFiles(mappedFiles);
-    }
-  }, [initialData?.id]);
+  // useEffect(() => {
+  //   if (initialData?.files) {
+  //     form.reset({
+  //       title: initialData.title || "",
+  //       content: initialData.content || "",
+  //       attachments: [],
+  //     });
+  //     const mappedFiles = initialData.files.map((f: any) => ({
+  //       fileName: f.fileName,
+  //       fileKey: f.fileKey,
+  //       fileUrl: f.fileUrl,
+  //       fileType: f.fileType || "",
+  //       fileSize: f.fileSize || 0,
+  //     }));
+  //     setExistingFiles(mappedFiles);
+  //   }
+  // }, [initialData?.id]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -151,6 +148,26 @@ const AnnouncementForm = ({
       attachments: [],
     },
   });
+
+  // Sync initialData to form and existingFiles
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        title: initialData.title || "",
+        content: initialData.content || "",
+        attachments: [],
+      });
+      if (initialData.files) {
+        const mappedFiles = initialData.files.map((f: any) => ({
+          fileName: f.fileName,
+          fileUrl: f.fileUrl,
+          fileType: f.fileType || "",
+          fileSize: f.fileSize || 0,
+        }));
+        setExistingFiles(mappedFiles);
+      }
+    }
+  }, [initialData, form]);
 
   const mapFormValuesToAnnouncementPayload = (
     values: z.infer<typeof formSchema>,
@@ -170,7 +187,9 @@ const AnnouncementForm = ({
       let uploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) =>
+            uploadFileToCloud(file, "ANNOUNCEMENT"),
+          ),
         );
         uploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
@@ -200,13 +219,15 @@ const AnnouncementForm = ({
       let newUploadedAttachments: FileAttachmentDto[] = [];
       if (values.attachments && values.attachments.length > 0) {
         const rawAttachments = await Promise.all(
-          values.attachments.map((file) => uploadFileToCloud(file)),
+          values.attachments.map((file) =>
+            uploadFileToCloud(file, "ANNOUNCEMENT"),
+          ),
         );
         newUploadedAttachments = rawAttachments.map(sanitizeAttachment);
       }
 
       const processedExistingFiles = existingFiles
-        .filter((file) => file.fileUrl && file.fileUrl.trim() !== "")
+        .filter((file) => file.fileKey && file.fileKey.trim() !== "")
         .map(sanitizeAttachment);
 
       const finalFiles = [...processedExistingFiles, ...newUploadedAttachments];
@@ -233,6 +254,7 @@ const AnnouncementForm = ({
     if (initialData?.files) {
       const mappedFiles = initialData.files.map((f: any) => ({
         fileName: f.fileName,
+        fileKey: f.fileKey,
         fileUrl: f.fileUrl,
         fileType: f.fileType || "",
         fileSize: f.fileSize || 0,
@@ -257,8 +279,8 @@ const AnnouncementForm = ({
     router.push("/staff/announcement-management");
   };
 
-  const handleRemoveExistingFile = (fileUrl: string) => {
-    setExistingFiles((prev) => prev.filter((f) => f.fileUrl !== fileUrl));
+  const handleRemoveExistingFile = (fileKey: string) => {
+    setExistingFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
   };
 
   const isPending = isMutationPending || isUploading;
@@ -379,7 +401,7 @@ const AnnouncementForm = ({
                         <div className="grid gap-3 sm:grid-cols-2">
                           {existingFiles.map((file) => (
                             <div
-                              key={file.fileUrl}
+                              key={file.fileKey}
                               className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
                             >
                               <div className="flex min-w-0 items-center gap-2.5">
@@ -413,7 +435,7 @@ const AnnouncementForm = ({
                                 size="icon"
                                 className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
                                 onClick={() =>
-                                  handleRemoveExistingFile(file.fileUrl)
+                                  handleRemoveExistingFile(file.fileKey)
                                 }
                                 disabled={isPending}
                               >

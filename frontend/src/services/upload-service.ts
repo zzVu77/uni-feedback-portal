@@ -6,12 +6,16 @@ export const uploadBaseUrl = "/uploads";
 const getPresignedUrl = async (
   fileName: string,
   fileType: string,
+  fileSize: number,
+  targetType: string,
 ): Promise<PresignedUrlResponse> => {
   const response = await axiosInstance.post<PresignedUrlResponse>(
     `${uploadBaseUrl}/presigned-url`,
     {
       fileName,
       fileType,
+      fileSize,
+      targetType,
     },
   );
   return response;
@@ -19,12 +23,19 @@ const getPresignedUrl = async (
 
 export const uploadFileToCloud = async (
   file: File,
+  targetType: string,
 ): Promise<FileAttachmentDto> => {
   try {
-    const { uploadUrl, fileUrl } = await getPresignedUrl(file.name, file.type);
+    const { uploadUrl, fileKey } = await getPresignedUrl(
+      file.name,
+      file.type,
+      file.size,
+      targetType,
+    );
     await axios.put(uploadUrl, file, {
       headers: {
         "Content-Type": file.type,
+        // "Content-Length": file.size.toString(),
       },
     });
 
@@ -32,7 +43,7 @@ export const uploadFileToCloud = async (
       fileName: file.name,
       fileType: file.type,
       fileSize: file.size,
-      fileUrl: fileUrl,
+      fileKey: fileKey,
     };
   } catch (error) {
     console.error(`Upload failed for file ${file.name}:`, error);
