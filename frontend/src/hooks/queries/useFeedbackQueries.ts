@@ -15,6 +15,7 @@ import {
   updateStaffFeedbackStatusById,
   bulkUpdateStaffFeedbackStatus,
   resubmitFeedbackById,
+  bulkForwardStaffFeedbacks,
 } from "@/services/feedback-service";
 import {
   FeedbackFilter,
