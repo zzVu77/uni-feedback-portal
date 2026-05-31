@@ -17,4 +17,11 @@ export class ReportFilterDto {
   @IsOptional()
   @IsISO8601()
   to?: string;
+
+  @ApiPropertyOptional({
+    example: '2024',
+    description: 'Year for statistics',
+  })
+  @IsOptional()
+  year?: string;
 }

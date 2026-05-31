@@ -101,6 +101,11 @@ export type ForwardFeedbackParams = {
   toDepartmentId: string;
   note?: string;
 };
+export type BulkForwardFeedbackParams = {
+  feedbackIds: string[];
+  toDepartmentId: string;
+  note?: string;
+};
 export type FeedbackHeaderType = Pick<
   FeedbackDetail,
   | "id"

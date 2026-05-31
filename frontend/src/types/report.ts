@@ -1,7 +1,8 @@
-// Filter cho báo cáo (Date Range)
+// Filter for report (Date Range)
 export interface ReportFilter {
   from?: string;
   to?: string;
+  year?: string;
 }
 // 1. Overview Stats
 export type StatsOverviewDto = {

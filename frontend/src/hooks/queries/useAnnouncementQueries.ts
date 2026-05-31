@@ -28,6 +28,7 @@ import { toast } from "sonner";
 export const ANNOUNCEMENT_QUERY_KEYS = {
   all: "announcements",
   detail: "announcement-detail",
+  infinite: "infinite-announcements",
   staff: "staff-announcements",
   staffDetail: "staff-announcement-detail",
 };
@@ -44,7 +45,7 @@ export const useGetAllAnnouncementsForAuthenticatedUsers = (
 };
 export const useGetInfiniteAnnouncements = (filters: AnnouncementFilter) => {
   return useInfiniteQuery<PaginatedResponse<AnnouncementListItem>>({
-    queryKey: [ANNOUNCEMENT_QUERY_KEYS.all, filters],
+    queryKey: [ANNOUNCEMENT_QUERY_KEYS.infinite, filters],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
       return await getAllAnnouncementsForAuthenticatedUsers({

@@ -46,11 +46,12 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import dynamic from "next/dynamic";
 
-import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
-import "suneditor/dist/css/suneditor.min.css";
-import { useRouter } from "next/navigation";
+import { ACCEPTED_FILE_TYPES } from "@/constants/data";
 import { uploadFileToCloud } from "@/services/upload-service"; // Ensure this service exists
+import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import "suneditor/dist/css/suneditor.min.css";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -58,16 +59,6 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-const ACCEPTED_FILE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-  "text/plain", // .txt
-];
-
 const formSchema = z.object({
   title: z
     .string()

@@ -31,7 +31,10 @@ cleaned as (
         author,
         content,
         post_link,
-        SAFE_CAST(post_date AS TIMESTAMP) as posted_at,
+        COALESCE(
+            SAFE_CAST(post_date AS TIMESTAMP), 
+            SAFE_CAST(crawled_at AS TIMESTAMP)
+        ) as posted_at,
 
         SAFE_CAST(stats.reactions AS INT64) as reaction_count,
         SAFE_CAST(stats.comments AS INT64) as comment_count,
