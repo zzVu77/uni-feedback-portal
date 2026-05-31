@@ -504,6 +504,13 @@ VALUES (
         'd0000000-0000-0000-0000-000000000001',
         NOW()
     ),
+    ('b0000000-0000-0000-0000-000000000002', 'Cán bộ Quan hệ Doanh nghiệp', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.qhdn@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000002', NOW()),
+    ('b0000000-0000-0000-0000-000000000003', 'Cán bộ Khoa học Công nghệ',    '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.khcn@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000003', NOW()),
+    ('b0000000-0000-0000-0000-000000000004', 'Cán bộ Quan hệ Quốc tế',       '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.qhqt@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000004', NOW()),
+    ('b0000000-0000-0000-0000-000000000005', 'Cán bộ Thiết bị Vật tư',       '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.tbvt@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000005', NOW()),
+    ('b0000000-0000-0000-0000-000000000006', 'Cán bộ Hợp tác Đào tạo',       '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.htdt@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000006', NOW()),
+    ('b0000000-0000-0000-0000-000000000007', 'Cán bộ Đảm bảo Chất lượng',    '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.dbcl@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000007', NOW()),
+    ('b0000000-0000-0000-0000-000000000008', 'Cán bộ Tổ chức Hành chính',    '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.tchc@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000008', NOW()),
     (
         'b0000000-0000-0000-0000-000000000009',
         'Cán bộ Quản trị CSVC',
@@ -540,6 +547,9 @@ VALUES (
         'd0000000-0000-0000-0000-000000000012',
         NOW()
     ),
+    ('b0000000-0000-0000-0000-000000000013', 'Cán bộ Truyền thông',           '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.tt@uni.edu.vn',   'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000013', NOW()),
+    ('b0000000-0000-0000-0000-000000000014', 'Giáo vụ Khoa Xây dựng',        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.xd@uni.edu.vn',   'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000014', NOW()),
+    ('b0000000-0000-0000-0000-000000000015', 'Giáo vụ Khoa Hóa Thực phẩm',   '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.htp@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000015', NOW()),
     (
         'b0000000-0000-0000-0000-000000000016',
         'Giáo vụ Khoa CNTT',
@@ -549,6 +559,16 @@ VALUES (
         'd0000000-0000-0000-0000-000000000016',
         NOW()
     ),
+    ('b0000000-0000-0000-0000-000000000017', 'Giáo vụ Khoa Cơ khí Động lực', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ckdl@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000017', NOW()),
+    ('b0000000-0000-0000-0000-000000000018', 'Giáo vụ Khoa Thời trang Du lịch','$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC','staff.ttdl@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000018', NOW()),
+    ('b0000000-0000-0000-0000-000000000019', 'Giáo vụ Khoa Điện Điện tử',    '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ddt@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000019', NOW()),
+    ('b0000000-0000-0000-0000-000000000020', 'Giáo vụ Khoa Cơ khí CTM',      '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ctm@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000020', NOW()),
+    ('b0000000-0000-0000-0000-000000000021', 'Giáo vụ Khoa Chính trị Luật',  '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ctl@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000021', NOW()),
+    ('b0000000-0000-0000-0000-000000000022', 'Giáo vụ Khoa KH Ứng dụng',     '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.khud@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000022', NOW()),
+    ('b0000000-0000-0000-0000-000000000023', 'Giáo vụ Khoa In Truyền thông', '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',  'staff.itt@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000023', NOW()),
+    ('b0000000-0000-0000-0000-000000000024', 'Giáo vụ Khoa Ngoại ngữ',       '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.nn@uni.edu.vn',   'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000024', NOW()),
+    ('b0000000-0000-0000-0000-000000000025', 'Giáo vụ Khoa Kinh tế',         '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.kt@uni.edu.vn',   'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000025', NOW()),
+    ('b0000000-0000-0000-0000-000000000026', 'Giáo vụ Khoa Đào tạo QT',      '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.dtqt@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000026', NOW()),
     (
         'b0000000-0000-0000-0000-000000000027',
         'NV Dịch vụ sinh viên',
@@ -585,24 +605,18 @@ VALUES (
         'd0000000-0000-0000-0000-000000000030',
         NOW()
     ),
-    (
-        'b0000000-0000-0000-0000-000000000034',
-        'Thủ thư Thư viện',
-        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
-        'staff.thuvien@uni.edu.vn',
-        'DEPARTMENT_STAFF',
-        'd0000000-0000-0000-0000-000000000041',
-        NOW()
-    ),
-    (
-        'b0000000-0000-0000-0000-000000000035',
-        'Quản lý KTX',
-        '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC',
-        'staff.ktx@uni.edu.vn',
-        'DEPARTMENT_STAFF',
-        'd0000000-0000-0000-0000-000000000042',
-        NOW()
-    );
+    ('b0000000-0000-0000-0000-000000000031', 'Cán bộ GDQP An ninh',          '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.gdqp@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000031', NOW()),
+    ('b0000000-0000-0000-0000-000000000032', 'Cán bộ Sáng tạo Khởi nghiệp',  '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.stkn@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000032', NOW()),
+    ('b0000000-0000-0000-0000-000000000033', 'Cán bộ Phát triển Ngôn ngữ',   '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ptnn@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000033', NOW()),
+    ('b0000000-0000-0000-0000-000000000034', 'Cán bộ Trung tâm Tin học',     '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ttth@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000034', NOW()),
+    ('b0000000-0000-0000-0000-000000000035', 'Cán bộ Trung tâm Việt Nhật',   '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.vn@uni.edu.vn',   'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000035', NOW()),
+    ('b0000000-0000-0000-0000-000000000036', 'Cán bộ Kỹ thuật Tổng hợp',    '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ktth@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000036', NOW()),
+    ('b0000000-0000-0000-0000-000000000037', 'Cán bộ Đảng ủy',               '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.duy@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000037', NOW()),
+    ('b0000000-0000-0000-0000-000000000038', 'Cán bộ Viện SP Kỹ thuật',      '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.vspkt@uni.edu.vn','DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000038', NOW()),
+    ('b0000000-0000-0000-0000-000000000039', 'Cán bộ Đoàn Hội SV',           '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.dhsv@uni.edu.vn', 'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000039', NOW()),
+    ('b0000000-0000-0000-0000-000000000040', 'Cán bộ Y tế',                  '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.yte@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000040', NOW()),
+    ('b0000000-0000-0000-0000-000000000041', 'Thủ thư Thư viện',             '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.thuvien@uni.edu.vn','DEPARTMENT_STAFF','d0000000-0000-0000-0000-000000000041', NOW()),
+    ('b0000000-0000-0000-0000-000000000042', 'Quản lý KTX',                  '$2a$10$8noMz7WuhDZE4hzZN7VnxOORxeq0a0/Ieu0Zfb72DZZ3QeWllKgkC', 'staff.ktx@uni.edu.vn',  'DEPARTMENT_STAFF', 'd0000000-0000-0000-0000-000000000042', NOW());
 
 -- Students (e000... - viết tắt Education, vì 'stud' chứa s,t,u là sai hex)
 INSERT INTO
