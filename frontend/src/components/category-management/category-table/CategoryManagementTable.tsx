@@ -120,7 +120,7 @@ export function CategoryManagementTable() {
   });
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
       <div className="flex w-full flex-shrink-0 items-center gap-3">
         <React.Suspense fallback={null}>
           <SearchBar
@@ -130,7 +130,7 @@ export function CategoryManagementTable() {
         </React.Suspense>
 
         <CategoryDialog mode="create" onSubmit={handleCreateCategory}>
-          <Button className="bg-blue-600 text-white hover:bg-blue-700">
+          <Button className="rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg">
             <PlusCircle className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">Thêm Danh Mục</span>
             <span className="sm:hidden">Thêm</span>
@@ -138,18 +138,19 @@ export function CategoryManagementTable() {
         </CategoryDialog>
       </div>
 
-      <div className="flex-1 overflow-auto rounded-xl border border-slate-100">
-        <Table
-          className={cn("min-w-[800px]", tableData.length === 0 && "h-full")}
-        >
-          <TableHeader className="sticky top-0 z-10 bg-slate-50">
+      <div className="flex-1 overflow-auto rounded-[20px] border border-slate-100 bg-white/50 shadow-sm">
+        <Table className={cn("w-full", tableData.length === 0 && "h-full")}>
+          <TableHeader className="sticky top-0 z-10 bg-indigo-50/80 backdrop-blur-md">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              <TableRow
+                key={headerGroup.id}
+                className="border-b border-indigo-100/50 hover:bg-transparent"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="h-12 px-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+                      className="h-14 px-3 text-center text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5"
                     >
                       {header.isPlaceholder
                         ? null
@@ -167,12 +168,12 @@ export function CategoryManagementTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="group border-b border-slate-50 transition-colors hover:bg-slate-50/80"
+                  className="group border-b border-slate-100 bg-white/40 transition-all hover:bg-indigo-50/30"
                   key={row.id}
                   data-state={row.getIsSelected()}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4 py-4">
+                    <TableCell key={cell.id} className="px-3 py-4 lg:px-5">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -202,27 +203,28 @@ export function CategoryManagementTable() {
       </div>
 
       {pageCount > 1 && (
-        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+        <div className="flex flex-shrink-0 items-center justify-center gap-5 pt-4">
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handlePageChange(filters.page - 1)}
             disabled={filters.page <= 1}
-            className="h-8 w-8 p-0"
+            className="h-10 w-10 rounded-full border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-indigo-600 disabled:opacity-50"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" />
           </Button>
-          <span className="text-sm font-medium text-slate-600">
-            Trang {filters.page} / {pageCount}
+          <span className="min-w-[100px] text-center text-sm font-semibold text-slate-600">
+            Trang {filters.page} <span className="mx-1 text-slate-400">/</span>{" "}
+            {pageCount}
           </span>
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handlePageChange(filters.page + 1)}
             disabled={filters.page >= pageCount}
-            className="h-8 w-8 p-0"
+            className="h-10 w-10 rounded-full border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-indigo-600 disabled:opacity-50"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-5 w-5" />
           </Button>
         </div>
       )}
