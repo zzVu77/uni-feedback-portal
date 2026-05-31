@@ -17,7 +17,6 @@ import {
 import {
   useGetStaffFeedbackTrends,
   useGetStaffPerformance,
-  useGetStaffRadarChart,
   useGetStaffStatsOverview,
   useGetStaffTopCategories,
 } from "@/hooks/queries/useReportQueries";
@@ -66,8 +65,6 @@ export default function StaffDashboardPage() {
 
   const { data: performance, isLoading: loadingPerformance } =
     useGetStaffPerformance(filter);
-  const { data: radarData, isLoading: loadingRadar } =
-    useGetStaffRadarChart(filter);
   return (
     <Wrapper>
       {/* Header */}
@@ -163,11 +160,7 @@ export default function StaffDashboardPage() {
           </Card>
         </div>
         <div className="col-span-1 lg:col-span-4">
-          <StaffRadarChart
-            data={radarData}
-            isLoading={loadingRadar}
-            filter={filter}
-          />
+          <StaffRadarChart />
         </div>
       </div>
     </Wrapper>

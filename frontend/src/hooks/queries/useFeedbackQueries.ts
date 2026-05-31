@@ -14,6 +14,7 @@ import {
   updateFeedbackById,
   updateStaffFeedbackStatusById,
   bulkUpdateStaffFeedbackStatus,
+  bulkForwardStaffFeedbacks,
 } from "@/services/feedback-service";
 import {
   FeedbackFilter,
@@ -21,6 +22,7 @@ import {
   UpdateFeedbackStatusParams,
   BulkUpdateFeedbackStatusParams,
   ForwardFeedbackParams,
+  BulkForwardFeedbackParams,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -185,6 +187,24 @@ export const useForwardStaffFeedbackById = () => {
     retry: false,
     onSuccess: () => {
       toast.success("Chuyển tiếp góp ý thành công!");
+    },
+    onError: () => {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+
+export const useBulkForwardStaffFeedbacks = () => {
+  return useMutation({
+    mutationFn: (params: BulkForwardFeedbackParams) =>
+      bulkForwardStaffFeedbacks(
+        params.feedbackIds,
+        params.toDepartmentId,
+        params.note,
+      ),
+    retry: false,
+    onSuccess: () => {
+      toast.success("Chuyển tiếp nhiều góp ý thành công!");
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");

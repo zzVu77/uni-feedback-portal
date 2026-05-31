@@ -164,3 +164,14 @@ export class BulkUpdateFeedbackStatusResponseDto {
   })
   skippedIds: string[];
 }
+
+export class BulkForwardFeedbackResponseDto {
+  @ApiProperty({ type: () => [ForwardingResponseDto] })
+  forwarded: ForwardingResponseDto[];
+
+  @ApiProperty({
+    type: [String],
+    description: 'IDs skipped (not found or not in scope for this staff)',
+  })
+  skippedIds: string[];
+}

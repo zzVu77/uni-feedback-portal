@@ -323,17 +323,11 @@ export class ReportsService {
     dto: ReportFilterDto,
     departmentId: string,
   ): Promise<RadarStatsDto[]> {
-    // 1. Xác định Năm cần thống kê
-    // Lấy năm từ ngày 'to' (hoặc ngày hiện tại nếu không có filter)
-    // Ví dụ: User chọn range T2/2025 -> T4/2025 => Lấy dữ liệu cả năm 2025
-    const targetDate = dto.to ? new Date(dto.to) : new Date();
-    const year = targetDate.getFullYear();
+    const year = dto.year ? parseInt(dto.year, 10) : new Date().getFullYear();
 
-    // Tạo mốc thời gian đầu năm và đầu năm sau
     const startOfYear = new Date(year, 0, 1); // 01/01/YYYY
     const endOfYear = new Date(year + 1, 0, 1); // 01/01/(YYYY+1)
 
-    // 2. Query DB (Vẫn giữ ::uuid để tránh lỗi)
     const rawData: any[] = await this.prisma.$queryRaw`
       SELECT
         EXTRACT(MONTH FROM f."createdAt")::int as "monthNum",
@@ -347,7 +341,6 @@ export class ReportsService {
       ORDER BY "monthNum" ASC;
     `;
 
-    // 3. Chuẩn hóa dữ liệu cho đủ 12 tháng
     const fullYearData: RadarStatsDto[] = [];
     const monthNames = [
       'Tháng 1',

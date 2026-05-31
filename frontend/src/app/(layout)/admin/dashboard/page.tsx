@@ -58,47 +58,62 @@ export default function AdminDashboardPage() {
 
   return (
     <Wrapper>
-      {/* Header */}
-      <div className="flex w-full flex-col items-start justify-end gap-4 md:flex-row md:items-center">
-        <MonthRangePicker
-          onUpdate={handleDateUpdate}
-          defaultFrom={filter.from}
-          defaultTo={filter.to}
-        />
-      </div>
+      <div className="flex w-full flex-col gap-4 pt-2 pb-8 md:gap-6">
+        {/* Page Header */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
+          <div className="flex-1 space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+              Thống kê
+            </h1>
+            <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
+              Theo dõi và quản lý hiệu suất giải quyết phản hồi từ các phòng
+              ban, đồng thời nắm bắt các xu hướng thảo luận nổi bật nhất trên hệ
+              thống.
+            </p>
+          </div>
 
-      {/* 1. Overview Cards */}
-      <section className="w-full">
-        <StatsOverviewCards data={overview} isLoading={loadingOverview} />
-      </section>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <MonthRangePicker
+              onUpdate={handleDateUpdate}
+              defaultFrom={filter.from}
+              defaultTo={filter.to}
+            />
+          </div>
+        </div>
 
-      {/* 2. Tables Row */}
-      <div className="grid w-full grid-cols-1 gap-4">
-        <div className="col-span-1 w-full">
-          <DepartmentPerformanceRadial
-            data={departments}
-            isLoading={loadingDepts}
-          />
-        </div>
-        <div className="col-span-1 w-full">
-          <TopInteractivePostsTable
-            data={interactivePosts}
-            isLoading={loadingPosts}
-          />
-        </div>
-      </div>
+        {/* 1. Overview Cards */}
+        <section className="w-full">
+          <StatsOverviewCards data={overview} isLoading={loadingOverview} />
+        </section>
 
-      {/* 3. Charts Row */}
-      <div className="grid w-full grid-cols-1 gap-4 pb-4 lg:grid-cols-8">
-        <div className="col-span-1 lg:col-span-4">
-          <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
+        {/* 2. Tables Row */}
+        <div className="grid w-full grid-cols-1 gap-4 lg:gap-6">
+          <div className="col-span-1 w-full">
+            <DepartmentPerformanceRadial
+              data={departments}
+              isLoading={loadingDepts}
+            />
+          </div>
+          <div className="col-span-1 w-full">
+            <TopInteractivePostsTable
+              data={interactivePosts}
+              isLoading={loadingPosts}
+            />
+          </div>
         </div>
-        <div className="col-span-1 h-full lg:col-span-4">
-          <TopCategoriesChart
-            data={categories}
-            isLoading={loadingCategories}
-            type="admin"
-          />
+
+        {/* 3. Charts Row */}
+        <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-8 lg:gap-6">
+          <div className="col-span-1 h-full w-full lg:col-span-4">
+            <FeedbackTrendChart data={trends} isLoading={loadingTrends} />
+          </div>
+          <div className="col-span-1 h-full w-full lg:col-span-4">
+            <TopCategoriesChart
+              data={categories}
+              isLoading={loadingCategories}
+              type="admin"
+            />
+          </div>
         </div>
       </div>
     </Wrapper>

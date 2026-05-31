@@ -16,6 +16,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  BulkForwardFeedbackDto,
+  BulkForwardFeedbackResponseDto,
   BulkUpdateFeedbackStatusDto,
   BulkUpdateFeedbackStatusResponseDto,
   FeedbackDetailDto,
@@ -81,6 +83,27 @@ export class FeedbackManagementController {
     @ActiveUser() actor: ActiveUserData,
   ): Promise<BulkUpdateFeedbackStatusResponseDto> {
     return this.feedbackManagementService.bulkUpdateFeedbackStatus(dto, actor);
+  }
+
+  @Post('/staff/feedbacks/bulk-forwardings')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({
+    summary: 'Bulk forward feedbacks to another department (Staff only)',
+    description:
+      'Forwards each ID with the same rules as single forward. IDs not in scope are skipped.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Per-item forwarding results and skipped IDs',
+    type: BulkForwardFeedbackResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Target department not found' })
+  @ApiResponse({ status: 400, description: 'Invalid forwarding request' })
+  bulkForwardFeedback(
+    @Body() dto: BulkForwardFeedbackDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<BulkForwardFeedbackResponseDto> {
+    return this.feedbackManagementService.bulkForwardFeedback(dto, actor);
   }
 
   @Get('/staff/feedbacks/:feedbackId')
