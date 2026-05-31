@@ -302,7 +302,7 @@ export class AnnouncementsService {
     query: QueryStaffAnnouncementsDto,
     actor: ActiveUserData,
   ): Promise<AnnouncementListResponseDto> {
-    const { page = 1, pageSize = 10, q, from, to } = query;
+    const { page = 1, pageSize = 10, q, from, to, sort } = query;
 
     const skip = (page - 1) * pageSize;
     const take = pageSize;
@@ -330,7 +330,8 @@ export class AnnouncementsService {
         where,
         skip,
         take,
-        orderBy: { createdAt: 'desc' },
+        orderBy:
+          sort === 'oldest' ? { createdAt: 'asc' } : { createdAt: 'desc' },
         include: {
           user: {
             select: {

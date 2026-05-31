@@ -52,10 +52,15 @@ export function AnnouncementManagementTable() {
   const searchParams = useSearchParams();
 
   const filters: AnnouncementFilter = React.useMemo(() => {
+    const sortParam = searchParams.get("sort") as "newest" | "oldest" | null;
     return {
       page: Number(searchParams.get("page")) || 1,
       pageSize: Number(searchParams.get("pageSize")) || 10,
       q: searchParams.get("q") || undefined,
+      sort:
+        sortParam === "newest" || sortParam === "oldest"
+          ? sortParam
+          : undefined,
     };
   }, [searchParams]);
 
