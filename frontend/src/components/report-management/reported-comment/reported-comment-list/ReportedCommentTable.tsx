@@ -176,6 +176,14 @@ export function ReportedCommentTable() {
                     <CommonFilter.ReportStatusSelection />
                   </div>
                 </div>
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Lý do báo cáo
+                  </span>
+                  <div className="w-full [&>button]:w-full">
+                    <CommonFilter.ReportReasonSelection />
+                  </div>
+                </div>
               </div>
               <SheetFooter className="flex-row items-center gap-3 px-0 pt-2">
                 <Button
@@ -185,6 +193,7 @@ export function ReportedCommentTable() {
                   onClick={() => {
                     const params = new URLSearchParams(searchParams.toString());
                     params.delete("status");
+                    params.delete("reason");
                     params.delete("q");
                     params.delete("page");
                     router.replace(`${pathname}?${params.toString()}`, {
