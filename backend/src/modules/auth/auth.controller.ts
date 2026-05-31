@@ -118,7 +118,7 @@ export class AuthController {
     const isProduction = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       path: '/',
-      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
       secure: isProduction,
       httpOnly: true,
     };
