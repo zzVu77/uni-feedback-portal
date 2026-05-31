@@ -263,7 +263,7 @@ export function ListAllFeedbacks() {
         </Table>
       </div>
       {pageCount > 1 && (
-        <div className="flex flex-shrink-0 items-center justify-center gap-5 pt-4">
+        <div className="flex flex-shrink-0 items-center justify-center gap-5 pt-2">
           <Button
             variant="outline"
             size="icon"
