@@ -118,7 +118,7 @@ export default function Sidebar({
           <div className="flex flex-col gap-1.5 px-4 pb-4">
             {navigation.map(({ href, label, icon: Icon }) => {
               const isNotificationItem = href === "/notifications";
-              const isActive = pathname === href;
+              const isActive = pathname.includes(href);
 
               const showBadge =
                 isNotificationItem &&
