@@ -45,7 +45,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   };
   return (
     <>
-      <div className="flex h-full w-full flex-col gap-4 rounded-xl bg-white px-4 py-4 shadow-xs lg:px-8">
+      <div className="flex h-full w-full flex-col gap-4 rounded-xl bg-white px-4 py-4 shadow-md lg:px-8">
         {/* Title */}
         <div className="flex flex-col items-start justify-between gap-1 md:flex-row lg:gap-4">
           <h1 className="order-2 text-[16px] font-bold text-black md:order-1 lg:text-[24px]">
