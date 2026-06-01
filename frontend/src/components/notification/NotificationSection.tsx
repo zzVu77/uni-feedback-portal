@@ -67,7 +67,7 @@ const NotificationSection = () => {
   ];
 
   const renderNotificationList = () => (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden rounded-[24px] border border-white/60 bg-white/70 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
       {notifications.map((notification) => (
         <NotificationItem key={notification.id} {...notification} />
       ))}
@@ -84,7 +84,7 @@ const NotificationSection = () => {
 
       {!isFetching && notifications.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-          <BellDot className="mb-4 h-12 w-12 opacity-20" />
+          <BellDot className="mb-4 h-12 w-12 text-indigo-500 opacity-20" />
           <p>Chưa có thông báo nào.</p>
         </div>
       )}
@@ -101,22 +101,22 @@ const NotificationSection = () => {
             handleTabChange(value as NotificationTab)
           }
         >
-          <TabsList className="h-11 rounded-full border-none bg-slate-100/80 p-1">
+          <TabsList className="h-11 rounded-full border border-white/60 bg-white/50 p-1 shadow-sm backdrop-blur-sm">
             <TabsTrigger
               value="all"
-              className="cursor-pointer rounded-full px-6 transition-all data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+              className="cursor-pointer rounded-full px-6 font-medium transition-all hover:text-indigo-600 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               Tất cả
             </TabsTrigger>
             <TabsTrigger
               value="feedback"
-              className="cursor-pointer rounded-full px-6 transition-all data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+              className="cursor-pointer rounded-full px-6 font-medium transition-all hover:text-indigo-600 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               Góp ý
             </TabsTrigger>
             <TabsTrigger
               value="forum"
-              className="cursor-pointer rounded-full px-6 transition-all data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+              className="cursor-pointer rounded-full px-6 font-medium transition-all hover:text-indigo-600 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               Diễn đàn
             </TabsTrigger>
@@ -135,7 +135,9 @@ const NotificationSection = () => {
       </div>
 
       <div className="flex w-full items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-slate-900">Thông báo</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+          Thông báo
+        </h1>
         <Suspense fallback={null}>
           <Filter type="notificationStatus" items={mockNotificationStatus} />
         </Suspense>

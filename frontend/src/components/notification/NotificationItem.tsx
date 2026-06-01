@@ -25,27 +25,27 @@ import { formatDistanceToNow } from "../../utils/formatDistanceToNow";
 // Modern Color Palette based on Notification Type
 const STYLE_SUCCESS = {
   iconClassName: "text-emerald-600",
-  backgroundClassName: "bg-emerald-100",
+  backgroundClassName: "bg-emerald-50 border border-emerald-100",
 };
 
 const STYLE_COMMENT = {
-  iconClassName: "text-blue-600",
-  backgroundClassName: "bg-blue-100",
+  iconClassName: "text-indigo-600",
+  backgroundClassName: "bg-indigo-50 border border-indigo-100",
 };
 
 const STYLE_ANNOUNCEMENT = {
   iconClassName: "text-amber-600",
-  backgroundClassName: "bg-amber-100",
+  backgroundClassName: "bg-amber-50 border border-amber-100",
 };
 
 const STYLE_ALERT = {
   iconClassName: "text-rose-600",
-  backgroundClassName: "bg-rose-100",
+  backgroundClassName: "bg-rose-50 border border-rose-100",
 };
 
 const STYLE_SYSTEM = {
   iconClassName: "text-slate-600",
-  backgroundClassName: "bg-slate-100",
+  backgroundClassName: "bg-slate-100 border border-slate-200",
 };
 
 export const NOTIFICATION_CONFIG = {
@@ -269,8 +269,8 @@ const NotificationItem = ({
       key={id}
       onClick={handleItemClick}
       className={cn(
-        "flex w-full items-center gap-4 border-b border-slate-100 p-4 transition-colors hover:bg-slate-50",
-        !isRead && "bg-blue-50/50",
+        "group flex w-full items-center gap-4 border-b border-white/40 p-4 transition-all duration-300 hover:bg-indigo-50/40",
+        !isRead && "bg-indigo-50/60",
       )}
     >
       {/* Left: Icon Container */}
@@ -286,8 +286,15 @@ const NotificationItem = ({
       {/* Middle: Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-slate-900">{title}</span>
-          <span className="text-xs text-slate-400">
+          <span
+            className={cn(
+              "text-[15px] font-bold transition-colors group-hover:text-indigo-700",
+              isRead ? "text-slate-700" : "text-slate-900",
+            )}
+          >
+            {title}
+          </span>
+          <span className="text-[12px] font-medium text-slate-400">
             {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
           </span>
         </div>
@@ -301,7 +308,7 @@ const NotificationItem = ({
 
       {/* Right: Unread Indicator */}
       {!isRead && (
-        <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-blue-600" />
+        <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.5)]" />
       )}
     </Link>
   );
