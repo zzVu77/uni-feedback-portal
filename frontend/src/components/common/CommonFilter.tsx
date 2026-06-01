@@ -62,6 +62,21 @@ export const ReportStatusSelection = () => {
     </Suspense>
   );
 };
+export const ReportReasonSelection = () => {
+  const reportReasonOptions = [
+    { label: "Lý do báo cáo", value: "all" },
+    { label: "Spam hoặc quảng cáo", value: "SPAM" },
+    { label: "Quấy rối hoặc bắt nạt", value: "HARASSMENT" },
+    { label: "Nội dung không phù hợp", value: "INAPPROPRIATE_CONTENT" },
+    { label: "Ngôn từ thù địch", value: "HATE_SPEECH" },
+    { label: "Khác", value: "OTHER" },
+  ];
+  return (
+    <Suspense fallback={null}>
+      <Filter type="reportReasonComment" items={reportReasonOptions} />
+    </Suspense>
+  );
+};
 
 const CommonFilter = {
   CategorySelection,
@@ -69,6 +84,7 @@ const CommonFilter = {
   SortBySelection,
   StatusSelection,
   ReportStatusSelection,
+  ReportReasonSelection,
 };
 
 export default CommonFilter;
