@@ -56,6 +56,7 @@ const ActionCell = ({ row }: { row: any }) => {
         description="Hành động này không thể hoàn tác. Thông báo sẽ bị xoá vĩnh viễn khỏi hệ thống."
         onConfirm={handleDelete}
         confirmText="Xoá"
+        isDestructive={true}
       >
         <Button
           variant="outline"

@@ -137,7 +137,7 @@ export function AnnouncementManagementTable() {
           href="/staff/announcement-management/create"
           className="w-full md:w-auto"
         >
-          <Button className="h-11 w-full gap-2 rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg active:scale-[0.98]">
+          <Button className="bg-blue-primary-400 hover:bg-blue-primary-600 h-11 w-full gap-2 rounded-full px-6 font-semibold text-white shadow-md transition-all hover:shadow-lg active:scale-[0.98]">
             <CirclePlus className="mr-1 h-5 w-5" />
             <span className="text-sm tracking-wider uppercase">
               Tạo thông báo
