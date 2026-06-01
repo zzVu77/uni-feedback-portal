@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { FeedbackStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
+  IsEnum,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -9,7 +10,10 @@ import {
   IsUUID,
   Min,
 } from 'class-validator';
-
+export enum FeedbackSortOption {
+  TRENDING = 'trending',
+  STATUS = 'status',
+}
 export class QueryFeedbacksDto {
   @ApiPropertyOptional({ example: 1, description: 'Current page number' })
   @IsOptional()
@@ -76,4 +80,13 @@ export class QueryFeedbacksDto {
   @IsOptional()
   @IsString()
   q?: string;
+
+  @ApiPropertyOptional({
+    enum: FeedbackSortOption,
+    example: FeedbackSortOption.TRENDING,
+    description: 'Sort feedbacks by a specific option',
+  })
+  @IsOptional()
+  @IsEnum(FeedbackSortOption)
+  sort?: FeedbackSortOption;
 }

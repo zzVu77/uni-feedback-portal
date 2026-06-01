@@ -90,7 +90,7 @@ const Page = () => {
         {/* Bottom Section - Tabs */}
         <div>
           <Tabs defaultValue="timeline" className="w-full">
-            <TabsList className="flex h-10 w-full rounded-full border-none bg-white p-1">
+            <TabsList className="flex h-10 w-full rounded-full border-none bg-white p-1 shadow-lg">
               <TabsTrigger
                 value="timeline"
                 className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"

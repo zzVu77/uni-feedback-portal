@@ -6,7 +6,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
   CalendarClock,
-  ChevronRight,
   LayoutDashboard,
   Loader,
   TextInitial,
@@ -28,7 +27,7 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
     cell: ({ row }) => (
       <Link href={`/admin/feedbacks-management/${row.original.id}`}>
         <div
-          className="max-w-[250px] truncate font-medium text-slate-900 capitalize hover:text-blue-600 lg:max-w-sm"
+          className="max-w-[250px] truncate font-semibold text-slate-800 capitalize transition-colors hover:text-indigo-600 lg:max-w-sm"
           title={row.getValue("subject")}
         >
           {row.getValue("subject")}
@@ -50,7 +49,12 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
     cell: ({ cell }) => {
       const categoryName = cell.getValue() as string;
       return (
-        <div className="text-sm text-slate-600 capitalize">{categoryName}</div>
+        <div className="flex items-center gap-2">
+          <div className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
+          <span className="text-sm font-medium text-slate-600 capitalize">
+            {categoryName}
+          </span>
+        </div>
       );
     },
   },
@@ -67,9 +71,9 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
       );
     },
     cell: ({ cell }) => {
-      const departmentName = cell.getValue() as string; // Sửa tên biến cho đúng ngữ cảnh
+      const departmentName = cell.getValue() as string;
       return (
-        <div className="text-sm text-slate-500 capitalize">
+        <div className="text-sm font-medium text-slate-600 capitalize">
           {departmentName}
         </div>
       );
@@ -121,9 +125,16 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
       );
     },
     cell: ({ cell }) => {
-      const studentName = cell.getValue() as string; // Sửa tên biến cho đúng ngữ cảnh
+      const studentName = cell.getValue() as string;
       return (
-        <div className="text-sm text-slate-500 capitalize">{studentName}</div>
+        <div className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold text-slate-500">
+            {studentName.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-sm font-medium text-slate-700 capitalize">
+            {studentName}
+          </span>
+        </div>
       );
     },
   },
@@ -146,26 +157,15 @@ export const adminFeedbackColumns: ColumnDef<AdminFeedbackItem>[] = [
     cell: ({ cell }) => {
       const createdAt = cell.getValue() as string;
       return (
-        <time className="text-sm text-slate-500 capitalize">
-          {new Date(createdAt).toLocaleString("vi-VN")}
+        <time className="text-sm font-medium text-slate-500">
+          {new Date(createdAt).toLocaleString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </time>
-      );
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const feedback = row.original;
-      return (
-        <Link href={`/admin/feedbacks-management/${feedback.id}`}>
-          <Button
-            variant="ghost"
-            className="h-8 w-8 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-transparent hover:text-black/80"
-          >
-            <ChevronRight />
-          </Button>
-        </Link>
       );
     },
   },

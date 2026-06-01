@@ -41,7 +41,7 @@ export const DepartmentAnnouncementList: React.FC<Props> = ({
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-32 w-full rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+            className="h-32 w-full rounded-[24px] border border-white/60 bg-white/50 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-sm"
           >
             <Skeleton className="mb-2 h-6 w-3/4" />
             <Skeleton className="mb-4 h-4 w-1/4" />
@@ -63,12 +63,12 @@ export const DepartmentAnnouncementList: React.FC<Props> = ({
 
   if (announcements.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 py-12 text-center">
-        <div className="mb-3 rounded-full bg-gray-100 p-3">
-          <Megaphone className="h-6 w-6 text-gray-400" />
+      <div className="flex flex-col items-center justify-center rounded-[24px] border border-dashed border-indigo-200 bg-white/50 py-16 text-center shadow-sm backdrop-blur-sm">
+        <div className="mb-4 rounded-full bg-indigo-50 p-4">
+          <Megaphone className="h-8 w-8 text-indigo-400" />
         </div>
-        <h3 className="text-lg font-medium text-gray-900">Chưa có thông báo</h3>
-        <p className="text-sm text-gray-500">
+        <h3 className="text-lg font-bold text-slate-800">Chưa có thông báo</h3>
+        <p className="mt-1 text-sm font-medium text-slate-500">
           Phòng ban này chưa đăng tải thông báo nào.
         </p>
       </div>
@@ -85,12 +85,16 @@ export const DepartmentAnnouncementList: React.FC<Props> = ({
 
       <div ref={ref} className="flex w-full justify-center py-4">
         {isFetchingNextPage ? (
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Loader2 className="h-4 w-4 animate-spin" /> Đang tải thêm...
+          <div className="flex items-center gap-2 text-sm font-medium text-slate-500">
+            <Loader2 className="h-4 w-4 animate-spin text-indigo-600" /> Đang
+            tải thêm...
           </div>
         ) : (
-          !hasNextPage && (
-            <p className="text-sm text-gray-400">Bạn đã xem hết thông báo.</p>
+          !hasNextPage &&
+          announcements.length > 0 && (
+            <p className="text-sm font-medium text-slate-400">
+              Bạn đã xem hết thông báo.
+            </p>
           )
         )}
       </div>

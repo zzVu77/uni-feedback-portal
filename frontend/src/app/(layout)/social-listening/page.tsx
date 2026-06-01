@@ -6,6 +6,7 @@ import { SocialListeningDatePicker } from "@/components/dashboard/social-listeni
 import TopicDistributionChart from "@/components/dashboard/social-listening/TopicDistributionChart";
 import UrgentIssuesAlert from "@/components/dashboard/social-listening/UrgentIssuesAlert";
 import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
+import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
 import {
   useGetClassificationSentiment,
@@ -139,10 +140,10 @@ const SocialListeningPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 p-4 sm:p-6 md:p-8">
-      <div className="mx-auto max-w-[1400px] space-y-6 lg:space-y-8">
+    <Wrapper>
+      <div className="flex h-full w-full flex-col gap-6 md:gap-8">
         {/* Page Header */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between lg:items-center">
           <div className="flex-1 space-y-2">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Lắng nghe sinh viên
@@ -174,7 +175,7 @@ const SocialListeningPage = () => {
                   topicBySentimentData,
                 )
               }
-              className="h-10 w-full bg-indigo-600 font-semibold text-white shadow-md transition-colors hover:bg-indigo-700 sm:w-auto"
+              className="h-10 w-full rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg sm:w-auto"
             >
               <Download className="mr-2 h-4 w-4" />
               Xuất báo cáo
@@ -222,7 +223,7 @@ const SocialListeningPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

@@ -28,7 +28,7 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     cell: ({ row }) => (
       <Link href={`/staff/list-feedbacks/${row.original.id}`}>
         <div
-          className="max-w-[250px] truncate font-medium text-slate-900 capitalize hover:text-blue-600 lg:max-w-sm"
+          className="max-w-[250px] truncate font-semibold text-slate-800 capitalize transition-colors hover:text-indigo-600 lg:max-w-sm"
           title={row.getValue("subject")}
         >
           {row.getValue("subject")}
@@ -51,7 +51,12 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     cell: ({ cell }) => {
       const categoryName = cell.getValue() as string;
       return (
-        <div className="text-sm text-slate-600 capitalize">{categoryName}</div>
+        <div className="flex items-center gap-2">
+          <div className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
+          <span className="text-sm font-medium text-slate-600 capitalize">
+            {categoryName}
+          </span>
+        </div>
       );
     },
   },
@@ -107,7 +112,14 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     cell: ({ cell }) => {
       const studentName = cell.getValue() as string;
       return (
-        <div className="text-sm text-slate-500 capitalize">{studentName}</div>
+        <div className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold text-slate-500">
+            {studentName.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-sm font-medium text-slate-700 capitalize">
+            {studentName}
+          </span>
+        </div>
       );
     },
   },
@@ -130,8 +142,14 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     cell: ({ cell }) => {
       const createdAt = cell.getValue() as string;
       return (
-        <time className="text-sm text-slate-500 capitalize">
-          {new Date(createdAt).toLocaleString("vi-VN")}
+        <time className="text-sm font-medium text-slate-500">
+          {new Date(createdAt).toLocaleString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </time>
       );
     },
@@ -145,9 +163,9 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
         <Link href={`/staff/list-feedbacks/${feedback.id}`}>
           <Button
             variant="ghost"
-            className="h-8 w-8 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-transparent hover:text-black/80"
+            className="h-9 w-9 rounded-full bg-white p-0 text-slate-400 shadow-sm ring-1 ring-slate-200 transition-all hover:scale-110 hover:bg-indigo-50 hover:text-indigo-600 hover:ring-indigo-300"
           >
-            <ChevronRight />
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </Link>
       );

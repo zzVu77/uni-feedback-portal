@@ -8,9 +8,9 @@ const Attachment = ({ fileName, fileUrl }: FileAttachment) => {
       href={fileUrl ?? "#"}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm"
+      className="group flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white p-3 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm"
     >
-      <div className="flex items-center gap-3 overflow-hidden">
+      <div className="flex w-full items-center gap-3 overflow-hidden">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
           <FileText className="h-5 w-5" />
         </div>
