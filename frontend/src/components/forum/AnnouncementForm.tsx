@@ -294,33 +294,35 @@ const AnnouncementForm = ({
     <>
       <Form {...form}>
         <form
-          className="h-full w-full py-2"
+          className="flex h-full w-full flex-col gap-6 py-4"
           onSubmit={(e) => e.preventDefault()}
         >
           {/* Header Area */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">
+          <div className="mb-2">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 lg:text-3xl">
               {type === "edit" ? "Chỉnh sửa thông báo" : "Tạo thông báo mới"}
             </h1>
-            <p className="mt-1 text-sm text-slate-500 md:text-base">
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-500 md:text-base">
               Hãy đảm bảo thông tin được trình bày đầy đủ, rõ ràng và chính xác
               để sinh viên có thể tiếp cận và hiểu nội dung thông báo một cách
               nhanh chóng.
             </p>
           </div>
 
-          <ScrollArea className="w-full overflow-y-auto pr-1">
-            <div className="flex h-full flex-col gap-6">
+          <ScrollArea className="w-full flex-1 overflow-y-auto pr-3">
+            <div className="flex h-full flex-col gap-6 pb-6">
               {/* Main Content Card */}
-              <div className="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white py-6 shadow-sm">
-                <div className="border-b border-slate-100 px-6 pb-4">
-                  <div className="flex items-center gap-2 text-lg font-semibold text-slate-800">
-                    <FileText className="h-5 w-5 text-blue-500" />
+              <div className="flex flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 py-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                <div className="border-b border-indigo-100/50 px-6 pb-4 sm:px-8">
+                  <div className="flex items-center gap-3 text-lg font-bold text-slate-800">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50">
+                      <FileText className="h-5 w-5 text-indigo-600" />
+                    </div>
                     Nội dung thông báo
                   </div>
                 </div>
 
-                <div className="space-y-6 px-6 pt-0">
+                <div className="space-y-8 px-6 pt-2 sm:px-8">
                   {/* Title Field */}
                   <FormField
                     control={form.control}
@@ -329,12 +331,12 @@ const AnnouncementForm = ({
                       <FormItem>
                         <FormLabel className="font-semibold text-slate-700">
                           Tiêu đề thông báo
-                          <span className="text-red-500">*</span>
+                          <span className="ml-1 text-red-500">*</span>
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Nhập tiêu đề thông báo"
-                            className="h-11 w-full bg-slate-50 focus-visible:ring-blue-500"
+                            placeholder="Nhập tiêu đề thông báo..."
+                            className="h-12 w-full rounded-xl border-slate-200 bg-white/50 px-4 text-base shadow-sm transition-all hover:bg-white focus-visible:ring-indigo-500"
                             {...field}
                           />
                         </FormControl>
@@ -351,35 +353,37 @@ const AnnouncementForm = ({
                       <FormItem>
                         <FormLabel className="font-semibold text-slate-700">
                           Nội dung chi tiết
-                          <span className="text-red-500">*</span>
+                          <span className="ml-1 text-red-500">*</span>
                         </FormLabel>
                         <FormControl>
-                          <SunEditor
-                            key={editorKey}
-                            defaultValue={field.value}
-                            onChange={(content) => {
-                              const textContent = content
-                                .replace(/<[^>]+>/g, "")
-                                .trim();
-                              if (!textContent) {
-                                field.onChange("");
-                              } else {
-                                field.onChange(content);
-                              }
-                            }}
-                            height="auto"
-                            setOptions={{
-                              minHeight: "300px",
-                              buttonList: [
-                                ["undo", "redo"],
-                                ["font", "fontSize", "formatBlock"],
-                                ["bold", "italic", "underline", "strike"],
-                                ["list", "link"],
-                                ["removeFormat"],
-                                ["codeView", "fullScreen"],
-                              ],
-                            }}
-                          />
+                          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white/50 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-white">
+                            <SunEditor
+                              key={editorKey}
+                              defaultValue={field.value}
+                              onChange={(content) => {
+                                const textContent = content
+                                  .replace(/<[^>]+>/g, "")
+                                  .trim();
+                                if (!textContent) {
+                                  field.onChange("");
+                                } else {
+                                  field.onChange(content);
+                                }
+                              }}
+                              height="auto"
+                              setOptions={{
+                                minHeight: "300px",
+                                buttonList: [
+                                  ["undo", "redo"],
+                                  ["font", "fontSize", "formatBlock"],
+                                  ["bold", "italic", "underline", "strike"],
+                                  ["list", "link"],
+                                  ["removeFormat"],
+                                  ["codeView", "fullScreen"],
+                                ],
+                              }}
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -387,38 +391,41 @@ const AnnouncementForm = ({
                   />
 
                   {/* Attachments Section */}
-                  <div className="space-y-4 pt-4">
-                    <FormLabel className="flex items-center gap-2 font-semibold text-slate-700">
-                      <Paperclip className="h-4 w-4" /> Tệp đính kèm
+                  <div className="space-y-4 pt-2">
+                    <FormLabel className="flex items-center gap-3 font-bold text-slate-700">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
+                        <Paperclip className="h-4 w-4 text-indigo-600" />
+                      </div>
+                      Tệp đính kèm
                     </FormLabel>
 
                     {/* 1. Display EXISTING files (Edit Mode) */}
                     {existingFiles.length > 0 && (
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                        <p className="mb-3 text-sm font-medium text-slate-700">
+                      <div className="rounded-[20px] border border-indigo-100/50 bg-indigo-50/30 p-5">
+                        <p className="mb-4 text-sm font-semibold text-slate-700">
                           Tệp hiện tại:
                         </p>
-                        <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                           {existingFiles.map((file) => (
                             <div
                               key={file.fileKey}
-                              className="group flex items-center justify-between rounded-md border border-slate-200 bg-white p-2.5 shadow-sm transition-shadow hover:shadow-md"
+                              className="group flex items-center justify-between rounded-xl border border-white/60 bg-white/70 p-3 shadow-sm backdrop-blur-sm transition-all hover:border-indigo-200 hover:shadow-md"
                             >
-                              <div className="flex min-w-0 items-center gap-2.5">
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-blue-50 text-blue-600">
-                                  <FileText className="h-4 w-4" />
+                              <div className="flex min-w-0 items-center gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                                  <FileText className="h-5 w-5" />
                                 </div>
                                 <div className="min-w-0 flex-1">
                                   <a
                                     href={file.fileUrl}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="block truncate text-sm font-medium text-slate-700 hover:text-blue-600"
+                                    className="block truncate text-sm font-semibold text-slate-700 transition-colors hover:text-indigo-600"
                                   >
                                     {file.fileName}
                                   </a>
                                   {file.fileSize ? (
-                                    <p className="text-xs text-slate-400">
+                                    <p className="mt-0.5 text-xs font-medium text-slate-400">
                                       {(
                                         Number(file.fileSize) /
                                         1024 /
@@ -433,7 +440,7 @@ const AnnouncementForm = ({
                                 type="button"
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
+                                className="h-9 w-9 shrink-0 rounded-full text-slate-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
                                 onClick={() =>
                                   handleRemoveExistingFile(file.fileKey)
                                 }
@@ -469,8 +476,8 @@ const AnnouncementForm = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="py-6">
-              <div className="flex items-center justify-center gap-4 lg:justify-end">
+            <div className="py-2">
+              <div className="flex flex-col-reverse items-center justify-center gap-4 sm:flex-row lg:justify-end">
                 {type === "create" ? (
                   <>
                     <ConfirmationDialog
@@ -483,7 +490,7 @@ const AnnouncementForm = ({
                         type="button"
                         disabled={!isDirty || isPending}
                         variant="outline"
-                        className="h-11 gap-2 border-slate-300 text-slate-600 hover:bg-slate-50"
+                        className="h-12 w-full gap-2 rounded-full border-slate-200 bg-white/80 font-semibold text-slate-600 shadow-sm backdrop-blur-md transition-all hover:bg-slate-50 hover:text-slate-800 sm:w-auto"
                       >
                         <RotateCcw className="h-4 w-4" />
                         Làm mới
@@ -494,12 +501,12 @@ const AnnouncementForm = ({
                       type="button"
                       disabled={!isDirty || isPending}
                       onClick={handleAttemptSubmit}
-                      className="h-11 gap-2 rounded-lg bg-blue-600 px-8 text-white shadow-md hover:bg-blue-700"
+                      className="bg-blue-primary-400 hover:bg-blue-primary-600 h-12 w-full gap-2 rounded-full px-8 font-semibold text-white shadow-md transition-all hover:shadow-lg active:scale-[0.98] sm:w-auto"
                     >
                       {isPending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-5 w-5 animate-spin" />
                       ) : (
-                        <Send className="h-4 w-4" />
+                        <Send className="h-5 w-5" />
                       )}
                       {isUploading
                         ? "Đang tải tệp..."
@@ -514,9 +521,9 @@ const AnnouncementForm = ({
                       type="button"
                       variant="outline"
                       onClick={handleCancel}
-                      className="h-11 gap-2 border-slate-300 text-slate-600"
+                      className="h-12 w-full gap-2 rounded-full border-slate-200 bg-white/80 font-semibold text-slate-600 shadow-sm backdrop-blur-md transition-all hover:bg-slate-50 hover:text-slate-800 sm:w-auto"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-5 w-5" />
                       Hủy bỏ
                     </Button>
                     <ConfirmationDialog
@@ -530,12 +537,12 @@ const AnnouncementForm = ({
                         disabled={
                           isPending || (!isDirty && !isExistingFilesChanged)
                         }
-                        className="h-11 gap-2 rounded-lg bg-emerald-600 px-8 text-white shadow-md hover:bg-emerald-700"
+                        className="h-12 w-full gap-2 rounded-full bg-emerald-600 px-8 font-semibold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg active:scale-[0.98] sm:w-auto"
                       >
                         {isPending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <Loader2 className="h-5 w-5 animate-spin" />
                         ) : (
-                          <Save className="h-4 w-4" />
+                          <Save className="h-5 w-5" />
                         )}
                         {isUploading
                           ? "Đang tải tệp..."
@@ -556,14 +563,14 @@ const AnnouncementForm = ({
         open={isSubmitDialogOpen}
         onOpenChange={setIsSubmitDialogOpen}
       >
-        <AlertDialogContent className="rounded-xl">
+        <AlertDialogContent className="rounded-[24px] border border-white/60 bg-white/95 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl text-slate-800">
+            <AlertDialogTitle className="text-xl font-bold text-slate-800">
               Xác nhận đăng thông báo
             </AlertDialogTitle>
             <AlertDialogDescription
               asChild
-              className="space-y-3 text-sm leading-relaxed text-slate-600"
+              className="space-y-4 text-sm leading-relaxed text-slate-600"
             >
               <div>
                 <p>
@@ -571,9 +578,9 @@ const AnnouncementForm = ({
                   viên có thể tiếp cận ngay lập tức. Bạn vẫn có thể chỉnh sửa
                   nội dung sau khi đăng.
                 </p>
-                <div className="flex items-start gap-3 rounded-lg bg-blue-50 p-4 text-xs text-blue-700">
-                  <Info className="mt-0.5 h-4 w-4 shrink-0" />
-                  <p>
+                <div className="flex items-start gap-3 rounded-2xl bg-amber-100 p-4 text-amber-700 shadow-sm">
+                  <Info className="mt-0.5 h-5 w-5 shrink-0" />
+                  <p className="leading-relaxed font-medium">
                     Lưu ý: Nội dung thông báo nên rõ ràng, súc tích và đính kèm
                     đầy đủ các tệp tin liên quan để sinh viên dễ dàng theo dõi.
                   </p>
@@ -581,14 +588,17 @@ const AnnouncementForm = ({
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending} className="rounded-lg">
+          <AlertDialogFooter className="mt-6 gap-2">
+            <AlertDialogCancel
+              disabled={isPending}
+              className="h-11 rounded-full border-slate-200 px-6 font-semibold shadow-sm hover:bg-slate-50"
+            >
               Hủy
             </AlertDialogCancel>
             <AlertDialogAction
               disabled={isPending}
               onClick={handleCreateAnnouncement}
-              className="rounded-lg bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-primary-400 hover:bg-blue-primary-600 h-11 rounded-full px-6 font-semibold text-white shadow-md transition-all hover:shadow-lg"
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isUploading ? "Đang xử lý..." : "Xác nhận đăng"}
