@@ -35,16 +35,16 @@ const ActionCell = ({ row }: { row: any }) => {
       <Link href={`/staff/announcement-management/edit/${announcement.id}`}>
         <Button
           variant="outline"
-          className="h-8 w-8 bg-blue-200/40 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-blue-200/80 hover:text-black/80"
+          className="h-9 w-9 rounded-full border-0 bg-blue-50 p-0 text-blue-500 shadow-sm transition-all hover:scale-110 hover:bg-blue-100 hover:text-blue-600"
         >
-          <SquarePen className="h-4 w-4 text-blue-500" />
+          <SquarePen className="h-4 w-4" />
         </Button>
       </Link>
 
       <Link href={`/forum/announcements/${announcement.id}`}>
         <Button
           variant="outline"
-          className="h-8 w-8 bg-gray-200/40 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-gray-200/80 hover:text-black/80"
+          className="h-9 w-9 rounded-full border-0 bg-slate-50 p-0 text-slate-500 shadow-sm transition-all hover:scale-110 hover:bg-slate-100 hover:text-slate-600"
         >
           <Eye className="h-4 w-4" />
         </Button>
@@ -59,13 +59,13 @@ const ActionCell = ({ row }: { row: any }) => {
       >
         <Button
           variant="outline"
-          className="h-8 w-8 bg-red-200/40 p-0 text-black/50 transition-all ease-in-out hover:scale-110 hover:bg-red-200/80 hover:text-black/80"
+          className="h-9 w-9 rounded-full border-0 bg-red-50 p-0 text-red-500 shadow-sm transition-all hover:scale-110 hover:bg-red-100 hover:text-red-600"
           disabled={isDeleting}
         >
           {isDeleting ? (
-            <Loader2 className="h-4 w-4 animate-spin text-red-500" />
+            <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <Trash className="h-4 w-4 text-red-500" />
+            <Trash className="h-4 w-4" />
           )}
         </Button>
       </ConfirmationDialog>
@@ -87,7 +87,7 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
       },
       cell: ({ row }) => (
         <div
-          className="max-w-[250px] truncate capitalize lg:max-w-sm"
+          className="max-w-[250px] truncate font-semibold text-slate-800 capitalize transition-colors hover:text-indigo-600 lg:max-w-sm"
           title={row.getValue("title")}
         >
           {row.getValue("title")}
@@ -109,7 +109,7 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
 
         return (
           <div
-            className="max-w-[300px] truncate text-gray-500 lg:max-w-[400px]"
+            className="max-w-[300px] truncate text-sm font-medium text-slate-600 lg:max-w-[400px]"
             title={plainText}
           >
             {plainText}
@@ -123,19 +123,27 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
         return (
           <Button
             variant="ghost"
+            size="sm"
+            className="-ml-4 h-8 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:bg-transparent"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            <CalendarClock className="h-3 w-3" />
+            <CalendarClock className="mr-2 h-3 w-3" />
             Ngày tạo
-            <ArrowUpDown className="h-3 w-3" />
+            <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         );
       },
       cell: ({ cell }) => {
         const createdAt = cell.getValue() as string;
         return (
-          <time className="capitalize">
-            {new Date(createdAt).toLocaleString("vi-VN")}
+          <time className="text-sm font-medium text-slate-500">
+            {new Date(createdAt).toLocaleString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </time>
         );
       },
