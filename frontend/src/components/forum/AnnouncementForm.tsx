@@ -294,19 +294,21 @@ const AnnouncementForm = ({
     <>
       <Form {...form}>
         <form
-          className="flex h-full w-full flex-col gap-6 py-4"
+          className="flex h-full w-full flex-col gap-6"
           onSubmit={(e) => e.preventDefault()}
         >
           {/* Header Area */}
-          <div className="mb-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 lg:text-3xl">
-              {type === "edit" ? "Chỉnh sửa thông báo" : "Tạo thông báo mới"}
-            </h1>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-500 md:text-base">
-              Hãy đảm bảo thông tin được trình bày đầy đủ, rõ ràng và chính xác
-              để sinh viên có thể tiếp cận và hiểu nội dung thông báo một cách
-              nhanh chóng.
-            </p>
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
+            <div className="flex-1 space-y-2">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                {type === "edit" ? "Chỉnh sửa thông báo" : "Tạo thông báo mới"}
+              </h1>
+              <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
+                Hãy đảm bảo thông tin được trình bày đầy đủ, rõ ràng và chính
+                xác để sinh viên có thể tiếp cận và hiểu nội dung thông báo một
+                cách nhanh chóng.
+              </p>
+            </div>
           </div>
 
           <ScrollArea className="w-full flex-1 overflow-y-auto pr-3">
