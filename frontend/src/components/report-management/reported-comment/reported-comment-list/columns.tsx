@@ -1,14 +1,9 @@
 "use client";
+import ConfirmationDialog from "@/components/common/ConfirmationDialog";
 import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
+import { ReportCommentDetail } from "@/types";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -16,18 +11,12 @@ import {
   CalendarClock,
   Check,
   Eye,
-  MoreHorizontalIcon,
   Target,
   TextInitial,
   Trash,
   User,
 } from "lucide-react";
-import Link from "next/link";
-import ConfirmationDialog from "@/components/common/ConfirmationDialog";
-import { ReportCommentDetail } from "@/types";
-import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
-import { cn } from "@/lib/utils";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
   const source = row.original;
@@ -57,103 +46,69 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-4 w-4 p-0">
-          <MoreHorizontalIcon className="h-4 w-4" />
+    <div className="flex items-center justify-end gap-2 pr-2">
+      <Button
+        variant="outline"
+        onClick={handleViewDetail}
+        className="h-9 w-9 rounded-full border-0 bg-blue-50 p-0 text-blue-500 shadow-sm transition-all hover:scale-110 hover:bg-blue-100 hover:text-blue-600"
+        title="Xem chi tiết"
+      >
+        <Eye className="h-4 w-4" />
+      </Button>
+
+      {isResolved ? (
+        <Button
+          variant="outline"
+          disabled
+          className="h-9 w-9 rounded-full border-0 bg-red-50/50 p-0 text-red-500/50"
+          title="Xóa bình luận (đã xử lý)"
+        >
+          <Trash className="h-4 w-4" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem asChild>
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-              handleViewDetail();
-            }}
-            className="w-full cursor-pointer"
+      ) : (
+        <ConfirmationDialog
+          title="Xác nhận xóa bình luận?"
+          description="Hành động này sẽ ẩn bình luận khỏi hệ thống. Bạn có muốn tiếp tục không?"
+          onConfirm={handleDelete}
+          confirmText="Đồng ý"
+          isDestructive={true}
+        >
+          <Button
+            variant="outline"
+            className="h-9 w-9 rounded-full border-0 bg-red-50 p-0 text-red-500 shadow-sm transition-all hover:scale-110 hover:bg-red-100 hover:text-red-600"
+            title="Xóa bình luận"
           >
-            <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-blue-500 shadow-none hover:bg-transparent hover:text-blue-600">
-              <Eye className="text-blue-primary-500 mr-2 h-4 w-4" />
-              Xem chi tiết
-            </Button>
-          </div>
-        </DropdownMenuItem>
+            <Trash className="h-4 w-4" />
+          </Button>
+        </ConfirmationDialog>
+      )}
 
-        <DropdownMenuItem asChild disabled={isResolved}>
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-              if (isResolved) return;
-            }}
-            className={cn(
-              "w-full cursor-pointer text-red-500 hover:text-red-500",
-              isResolved && "cursor-not-allowed opacity-50",
-            )}
+      {isResolved ? (
+        <Button
+          variant="outline"
+          disabled
+          className="h-9 w-9 rounded-full border-0 bg-emerald-50/50 p-0 text-emerald-500/50"
+          title="Không vi phạm (đã xử lý)"
+        >
+          <Check className="h-4 w-4" />
+        </Button>
+      ) : (
+        <ConfirmationDialog
+          title="Xác nhận bình luận này không vi phạm?"
+          description="Hành động này sẽ đánh dấu bình luận này là không vi phạm. Bạn có muốn tiếp tục không?"
+          onConfirm={handleResolve}
+          confirmText="Đồng ý"
+        >
+          <Button
+            variant="outline"
+            className="h-9 w-9 rounded-full border-0 bg-emerald-50 p-0 text-emerald-500 shadow-sm transition-all hover:scale-110 hover:bg-emerald-100 hover:text-emerald-600"
+            title="Không vi phạm"
           >
-            {isResolved ? (
-              <Button
-                disabled
-                className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-red-500 shadow-none hover:bg-transparent"
-              >
-                <Trash className="mr-2 h-4 w-4 hover:text-gray-400" />
-                Xóa bình luận
-              </Button>
-            ) : (
-              <ConfirmationDialog
-                title="Xác nhận xóa bình luận?"
-                description="Hành động này sẽ ẩn bình luận khỏi hệ thống. Bạn có muốn tiếp tục không?"
-                onConfirm={handleDelete}
-                confirmText="Đồng ý"
-              >
-                <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-red-500 shadow-none hover:bg-transparent">
-                  <Trash className="mr-2 h-4 w-4 text-red-500 hover:text-gray-400" />
-                  Xóa bình luận
-                </Button>
-              </ConfirmationDialog>
-            )}
-          </div>
-        </DropdownMenuItem>
-
-        {/* Không vi phạm */}
-        <DropdownMenuItem asChild disabled={isResolved}>
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-              if (isResolved) return;
-            }}
-            className={cn(
-              "w-full cursor-pointer text-green-500 hover:text-green-500",
-              isResolved && "cursor-not-allowed opacity-50",
-            )}
-          >
-            {isResolved ? (
-              <Button
-                disabled
-                className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-green-500 shadow-none hover:bg-transparent"
-              >
-                <Check className="mr-2 h-4 w-4 text-green-400" />
-                Không vi phạm
-              </Button>
-            ) : (
-              <ConfirmationDialog
-                title="Xác nhận bình luận này không vi phạm?"
-                description="Hành động này sẽ đánh dấu bình luận này là không vi phạm. Bạn có muốn tiếp tục không?"
-                onConfirm={handleResolve}
-                confirmText="Đồng ý"
-              >
-                <Button className="h-auto w-full justify-start border-none bg-transparent p-0 font-normal text-green-500 shadow-none hover:bg-transparent">
-                  <Check className="mr-2 h-4 w-4 text-green-400" />
-                  Không vi phạm
-                </Button>
-              </ConfirmationDialog>
-            )}
-          </div>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            <Check className="h-4 w-4" />
+          </Button>
+        </ConfirmationDialog>
+      )}
+    </div>
   );
 };
 
@@ -163,7 +118,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
     header: () => {
       return (
         <div className="flex items-center gap-2">
-          <TextInitial className="h-3 w-3" />
+          <TextInitial className="h-3.5 w-3.5 text-indigo-500" />
           Bình luận
         </div>
       );
@@ -174,18 +129,18 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
       return (
         <div className="flex flex-col gap-1">
           <p
-            className="text-blue-primary-500 max-w-[150px] truncate text-[13px] font-semibold capitalize"
+            className="max-w-[200px] truncate text-[14px] font-semibold text-slate-800 transition-colors hover:text-indigo-600 lg:max-w-[250px]"
             title={comment.content}
           >
             {comment.content}
           </p>
-          <div className="flex flex-row items-center justify-start gap-0.5">
-            <Calendar className="h-3 w-3 text-gray-400/80" />
-            <time className="text-[11px] text-gray-500/80 capitalize">
+          <div className="flex flex-row items-center justify-start gap-1">
+            <Calendar className="h-3 w-3 text-slate-400" />
+            <time className="text-[12px] font-medium text-slate-500">
               {new Date(comment.createdAt).toLocaleDateString("vi-VN")}
             </time>
-            <span className="text-[11px] text-gray-500/80">
-              - {comment.user.fullName}
+            <span className="text-[12px] font-medium text-slate-500">
+              • {comment.user.fullName}
             </span>
           </div>
         </div>
@@ -197,7 +152,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
     header: () => {
       return (
         <div className="flex items-center gap-2">
-          <TextInitial className="h-3 w-3" />
+          <TextInitial className="h-3.5 w-3.5 text-indigo-500" />
           Lý do
         </div>
       );
@@ -205,7 +160,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
     cell: ({ cell }) => {
       return (
         <div
-          className="text-red-primary-400 max-w-[250px] truncate text-[13px] capitalize lg:max-w-sm"
+          className="max-w-[200px] truncate text-[13px] font-medium text-red-500 lg:max-w-[250px]"
           title={cell.getValue() as string}
         >
           {cell.getValue() as string}
@@ -218,7 +173,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
     header: () => {
       return (
         <div className="flex items-center gap-2">
-          <User className="h-3 w-3" />
+          <User className="h-3.5 w-3.5 text-indigo-500" />
           Người báo cáo
         </div>
       );
@@ -228,7 +183,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
       const reporter = fullReport.reportedBy;
       return (
         <div
-          className="max-w-[250px] truncate text-[13px] capitalize lg:max-w-sm"
+          className="max-w-[200px] truncate text-[13px] font-medium text-slate-700 lg:max-w-[250px]"
           title={reporter.fullName}
         >
           {reporter.fullName}
@@ -241,7 +196,7 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
     header: () => {
       return (
         <div className="flex items-center gap-2">
-          <TextInitial className="h-3 w-3" />
+          <Target className="h-3.5 w-3.5 text-indigo-500" />
           Trạng thái
         </div>
       );
@@ -257,54 +212,32 @@ export const reportedCommentsColumns: ColumnDef<ReportCommentDetail>[] = [
     },
   },
   {
-    accessorKey: "post",
-    header: () => {
-      return (
-        <div className="flex items-center gap-2">
-          <Target className="h-3 w-3" />
-          Nguồn
-        </div>
-      );
-    },
-    cell: ({ row }) => {
-      const source = row.original;
-      return (
-        <Link
-          href={
-            source.target.targetType === "FORUM_POST"
-              ? `/forum/posts/${source.target.targetInfo.id}`
-              : `/forum//announcements/${source.target.targetInfo.id}`
-          }
-        >
-          <div
-            title={source.target.targetInfo.title}
-            className="text-blue-primary-500 max-w-[250px] truncate text-[13px] capitalize italic underline"
-          >
-            {source.target.targetInfo.title}
-          </div>
-        </Link>
-      );
-    },
-  },
-  {
     accessorKey: "createdAt",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-4 h-8 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <CalendarClock className="h-3 w-3" />
-          Ngày
-          <ArrowUpDown className="h-3 w-3" />
+          <CalendarClock className="mr-2 h-3.5 w-3.5 text-indigo-500" />
+          Ngày tạo
+          <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ cell }) => {
       const createdAt = cell.getValue() as string;
       return (
-        <time className="capitalize">
-          {new Date(createdAt).toLocaleString("vi-VN")}
+        <time className="text-sm font-medium text-slate-500">
+          {new Date(createdAt).toLocaleString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </time>
       );
     },
