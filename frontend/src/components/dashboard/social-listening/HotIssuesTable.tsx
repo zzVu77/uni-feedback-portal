@@ -194,7 +194,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                 key={tab}
                 onClick={() => handleTabChange(tab)}
                 className={cn(
-                  "relative flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-300",
+                  "relative flex items-center justify-center rounded-lg px-2 py-2 text-xs font-semibold transition-all duration-300 md:px-4 md:text-sm",
                   activeTab === tab
                     ? "bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/50"
                     : "text-slate-500 hover:bg-slate-200/50 hover:text-slate-700",

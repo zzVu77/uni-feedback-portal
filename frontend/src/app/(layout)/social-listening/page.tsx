@@ -141,86 +141,88 @@ const SocialListeningPage = () => {
 
   return (
     <Wrapper>
-      {/* Page Header */}
-      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
-        <div className="flex-1 space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-            Lắng nghe sinh viên
-          </h1>
-          <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
-            Theo dõi và phân tích các vấn đề của sinh viên thông qua các bài
-            đăng mạng xã hội để có những hành động kịp thời. Dữ liệu từ group
-            "UTE - THẮC MẮC HỌC TẬP ®" và được làm mới mỗi ngày một lần.
-          </p>
+      <div className="flex h-full w-full flex-col gap-6 md:gap-8">
+        {/* Page Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between lg:items-center">
+          <div className="flex-1 space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+              Lắng nghe sinh viên
+            </h1>
+            <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
+              Theo dõi và phân tích các vấn đề của sinh viên thông qua các bài
+              đăng mạng xã hội để có những hành động kịp thời. Dữ liệu từ group
+              "UTE - THẮC MẮC HỌC TẬP ®" và được làm mới mỗi ngày một lần.
+            </p>
+          </div>
+
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <SocialListeningDatePicker
+              onUpdate={handleDateUpdate}
+              defaultStartDate={filter.startDate}
+              defaultEndDate={filter.endDate}
+              className="w-full sm:w-auto"
+            />
+            <Button
+              variant="default"
+              onClick={() =>
+                exportPdf(
+                  kpiData,
+                  filter.startDate || "",
+                  filter.endDate || "",
+                  classificationData,
+                  postCountData,
+                  postsBySentimentData,
+                  topicBySentimentData,
+                )
+              }
+              className="h-10 w-full rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg sm:w-auto"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Xuất báo cáo
+            </Button>
+          </div>
         </div>
 
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-          <SocialListeningDatePicker
-            onUpdate={handleDateUpdate}
-            defaultStartDate={filter.startDate}
-            defaultEndDate={filter.endDate}
-            className="w-full sm:w-auto"
-          />
-          <Button
-            variant="default"
-            onClick={() =>
-              exportPdf(
-                kpiData,
-                filter.startDate || "",
-                filter.endDate || "",
-                classificationData,
-                postCountData,
-                postsBySentimentData,
-                topicBySentimentData,
-              )
-            }
-            className="h-10 w-full bg-indigo-600 font-semibold text-white shadow-md transition-colors hover:bg-indigo-700 sm:w-auto"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Xuất báo cáo
-          </Button>
-        </div>
+        {/* Content Area */}
+        {isLoading && !trendingData ? (
+          <div className="space-y-6 lg:space-y-8">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-40 animate-pulse rounded-2xl bg-slate-200/60"
+                />
+              ))}
+            </div>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <div className="h-[400px] animate-pulse rounded-2xl bg-slate-200/60 lg:col-span-2" />
+              <div className="h-[400px] animate-pulse rounded-2xl bg-slate-200/60 lg:col-span-1" />
+            </div>
+            <div className="h-[600px] animate-pulse rounded-2xl bg-slate-200/60" />
+          </div>
+        ) : (
+          <div className="animate-in fade-in space-y-6 duration-500 lg:space-y-8">
+            {kpiData && <KPIOverview data={kpiData} />}
+
+            {urgentIssuesData && urgentIssuesData.length > 0 && (
+              <UrgentIssuesAlert issues={urgentIssuesData} />
+            )}
+
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <div className="min-h-[400px] lg:col-span-2">
+                {trendData && <SentimentTrendChart data={trendData} />}
+              </div>
+              <div className="min-h-[400px] lg:col-span-1">
+                {topicData && <TopicDistributionChart data={topicData} />}
+              </div>
+            </div>
+
+            <div className="w-full overflow-hidden">
+              <HotIssuesTable data={results} total={trendingData?.total || 0} />
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Content Area */}
-      {isLoading && !trendingData ? (
-        <div className="space-y-6 lg:space-y-8">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-40 animate-pulse rounded-2xl bg-slate-200/60"
-              />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="h-[400px] animate-pulse rounded-2xl bg-slate-200/60 lg:col-span-2" />
-            <div className="h-[400px] animate-pulse rounded-2xl bg-slate-200/60 lg:col-span-1" />
-          </div>
-          <div className="h-[600px] animate-pulse rounded-2xl bg-slate-200/60" />
-        </div>
-      ) : (
-        <div className="animate-in fade-in space-y-6 duration-500 lg:space-y-8">
-          {kpiData && <KPIOverview data={kpiData} />}
-
-          {urgentIssuesData && urgentIssuesData.length > 0 && (
-            <UrgentIssuesAlert issues={urgentIssuesData} />
-          )}
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="min-h-[400px] lg:col-span-2">
-              {trendData && <SentimentTrendChart data={trendData} />}
-            </div>
-            <div className="min-h-[400px] lg:col-span-1">
-              {topicData && <TopicDistributionChart data={topicData} />}
-            </div>
-          </div>
-
-          <div className="w-full overflow-hidden">
-            <HotIssuesTable data={results} total={trendingData?.total || 0} />
-          </div>
-        </div>
-      )}
     </Wrapper>
   );
 };
