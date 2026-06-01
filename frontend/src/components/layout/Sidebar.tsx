@@ -66,53 +66,58 @@ export default function Sidebar({
   return (
     <div
       className={cn(
-        "flex h-screen w-64 flex-col overflow-hidden border-r border-slate-800 bg-slate-900 text-white",
-        showOnMobile ? "w-full" : "hidden lg:flex",
+        "flex h-screen w-[280px] flex-col overflow-hidden border-r border-slate-200/60 bg-white/80 shadow-xl backdrop-blur-xl",
+        showOnMobile ? "w-full border-r-0" : "hidden lg:flex",
       )}
     >
       {/* Logo */}
-      <div className="flex flex-shrink-0 items-center justify-center border-b border-slate-800 px-6 py-8">
-        <Image src={ASSETS.LOGO_UTE} alt="Logo UTE" width={100} height={100} />
+      <div className="flex flex-shrink-0 items-center justify-center border-b border-slate-100/60 px-6 py-8">
+        <Image
+          src={ASSETS.LOGO_UTE}
+          alt="Logo UTE"
+          width={110}
+          height={110}
+          className="drop-shadow-sm"
+        />
       </div>
 
       {/* User Info */}
-      <Link
-        href="/profile"
-        className="flex flex-shrink-0 items-center gap-3 px-6 py-4 transition-colors hover:bg-white/5"
-      >
-        <Avatar className="h-12 w-12 border border-slate-700">
-          <AvatarImage
-            src={user?.avatarUrl || "https://github.com/shadcn.png"}
-            className="object-cover"
-          />
+      <div className="px-4 py-4">
+        <Link
+          href="/profile"
+          className="group flex flex-shrink-0 items-center gap-3 rounded-[20px] border border-slate-100/60 bg-slate-50/50 p-3 transition-all duration-300 hover:bg-white hover:shadow-sm"
+        >
+          <Avatar className="h-12 w-12 border-2 border-white shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <AvatarImage
+              src={user?.avatarUrl || "https://github.com/shadcn.png"}
+              className="object-cover"
+            />
+            <AvatarFallback className="bg-indigo-100 text-lg font-bold text-indigo-700">
+              {user?.fullName
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase() || "CN"}
+            </AvatarFallback>
+          </Avatar>
 
-          <AvatarFallback className="bg-slate-800 text-slate-200">
-            {user?.fullName
-              ?.split(" ")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase() || "CN"}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className="flex flex-col">
-          <span className="max-w-[140px] truncate text-sm font-semibold text-white">
-            {user?.fullName}
-          </span>
-
-          <span className="text-xs font-medium text-slate-400">
-            {getRoleDisplayName(type)}
-          </span>
-        </div>
-      </Link>
+          <div className="flex flex-col">
+            <span className="max-w-[140px] truncate text-[14px] font-bold text-slate-800 transition-colors group-hover:text-indigo-700">
+              {user?.fullName}
+            </span>
+            <span className="text-[12px] font-semibold text-slate-400">
+              {getRoleDisplayName(type)}
+            </span>
+          </div>
+        </Link>
+      </div>
 
       {/* Navigation */}
-      <div className="min-h-0 flex-1 border-t border-slate-800">
+      <div className="min-h-0 flex-1">
         <ScrollArea className="h-full">
-          <div className="flex flex-col gap-1 px-3 py-4">
+          <div className="flex flex-col gap-1.5 px-4 pb-4">
             {navigation.map(({ href, label, icon: Icon }) => {
               const isNotificationItem = href === "/notifications";
-
               const isActive = pathname === href;
 
               const showBadge =
@@ -130,21 +135,26 @@ export default function Sidebar({
                   <Button
                     variant="ghost"
                     className={cn(
-                      "h-auto w-full justify-start rounded-md px-4 py-3 text-[13px] transition-all duration-200 lg:text-[14px]",
+                      "h-auto w-full justify-start rounded-[16px] px-4 py-3.5 text-[14px] font-medium transition-all duration-300",
                       isActive
-                        ? "bg-white/10 font-semibold text-white shadow-sm hover:bg-white/10 hover:text-white"
-                        : "text-slate-400 hover:bg-white/5 hover:text-white",
+                        ? "bg-indigo-600 font-semibold text-white shadow-[0_4px_16px_rgba(79,70,229,0.3)] hover:bg-indigo-700 hover:text-white"
+                        : "text-slate-500 hover:bg-indigo-50/80 hover:text-indigo-700",
                     )}
                   >
-                    <Icon className="mr-3 h-4 w-4 shrink-0" />
+                    <Icon
+                      className={cn(
+                        "mr-3 h-[18px] w-[18px] shrink-0",
+                        isActive ? "text-white" : "text-slate-400",
+                      )}
+                    />
 
                     <span className="truncate">{label}</span>
 
                     {showBadge && (
                       <span
                         className={cn(
-                          "ml-auto flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white",
-                          isActive ? "bg-red-500" : "bg-red-600",
+                          "ml-auto flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white shadow-sm",
+                          isActive ? "bg-white text-indigo-700" : "bg-rose-500",
                         )}
                       >
                         {displayCount}
@@ -159,7 +169,7 @@ export default function Sidebar({
       </div>
 
       {/* Logout */}
-      <div className="flex-shrink-0 border-t border-slate-800 p-4">
+      <div className="flex-shrink-0 border-t border-slate-100/60 p-4">
         <Button
           variant="ghost"
           disabled={isPending}
@@ -168,11 +178,10 @@ export default function Sidebar({
               setUser(null);
             });
           }}
-          className="h-auto w-full justify-start rounded-md px-4 py-3 text-slate-400 transition-all hover:bg-rose-400/10 hover:text-rose-400"
+          className="group h-auto w-full justify-start rounded-[16px] px-4 py-3.5 text-slate-500 transition-all duration-300 hover:bg-rose-50 hover:text-rose-600"
         >
-          <LogOut className="mr-3 h-4 w-4" />
-
-          <span className="text-sm font-medium">Đăng xuất</span>
+          <LogOut className="mr-3 h-[18px] w-[18px] transition-transform group-hover:-translate-x-1" />
+          <span className="text-[14px] font-bold">Đăng xuất</span>
         </Button>
       </div>
     </div>

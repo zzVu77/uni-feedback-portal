@@ -25,7 +25,6 @@ import {
   MessageCircle,
   Plus,
   Search,
-  Share2,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
@@ -111,33 +110,13 @@ export function ForumSection() {
     user?.role === "DEPARTMENT_STAFF" && currentTabValue === "announcements";
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-slate-50/50 pb-20">
-      {/* 1. Header Section - Premium Banner Style */}
-      <div className="relative mb-6 overflow-hidden rounded-[32px] bg-white px-8 py-8 shadow-sm ring-1 ring-slate-200/50">
-        <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-blue-100 opacity-50 blur-3xl" />
-        <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-purple-100 opacity-50 blur-3xl" />
-
-        <div className="relative z-10 flex flex-col items-center text-center">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-blue-50 px-2 py-1.5 text-sm font-semibold text-blue-700 ring-1 ring-blue-200/50">
-            <Share2 className="h-4 w-4" />
-            <span>Kết nối & Chia sẻ</span>
-          </div>
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
-            Diễn đàn sinh viên
-          </h1>
-          <p className="max-w-2xl text-lg font-medium text-slate-500 md:text-xl">
-            Nơi thảo luận, trao đổi ý kiến và cập nhật những thông báo mới nhất
-            từ nhà trường.
-          </p>
-        </div>
-      </div>
-
+    <div className="flex min-h-screen w-full flex-col bg-slate-50/50 pb-2">
       <div className="mx-auto w-full max-w-7xl">
         <Tabs
           value={currentTabValue}
           onValueChange={(value) => handleTabChange(value as ForumTab)}
           defaultValue="feedbacks"
-          className="w-full space-y-8"
+          className="w-full space-y-4"
         >
           {/* 2. Navigation Pills & Mobile Actions */}
           <div className="flex flex-col items-center justify-center gap-4 md:items-center xl:flex-row">

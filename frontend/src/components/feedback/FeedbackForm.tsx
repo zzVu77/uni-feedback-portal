@@ -361,8 +361,8 @@ const FeedbackForm = ({
           onSubmit={(e) => e.preventDefault()}
         >
           {/* Header Area */}
-          <div className="mb-4">
-            <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">
+          <div className="mb-1">
+            <h1 className="text-[36px] font-bold text-slate-900 lg:text-3xl">
               {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
             </h1>
             <p className="mt-1 text-slate-500">
