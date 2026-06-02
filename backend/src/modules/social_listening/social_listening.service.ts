@@ -35,6 +35,9 @@ export class SocialListeningService {
     const dateFilter = this.getDateFilter(dto);
     const where: Prisma.DashboardTrendingIssuesWhereInput = {
       ...(dateFilter && { postedAt: dateFilter }),
+      ...(dto.groupUrl && {
+        postLink: { contains: dto.groupUrl, mode: 'insensitive' },
+      }),
     };
 
     const [aggregate, sentimentGroups] = await Promise.all([
@@ -118,6 +121,11 @@ export class SocialListeningService {
       );
     }
 
+    if (dto.groupUrl) {
+      whereConditions.push(`post_link ILIKE $${params.length + 1}`);
+      params.push(`%${dto.groupUrl}%`);
+    }
+
     const whereClause =
       whereConditions.length > 0
         ? `WHERE ${whereConditions.join(' AND ')}`
@@ -193,6 +201,9 @@ export class SocialListeningService {
       ...(topic && { topic: { contains: topic, mode: 'insensitive' } }),
       ...(sentimentLabel && { sentimentLabel }),
       ...(dateFilter && { postedAt: dateFilter }),
+      ...(dto.groupUrl && {
+        postLink: { contains: dto.groupUrl, mode: 'insensitive' },
+      }),
     };
 
     // 2. build Raw SQL to handle custom sorting logic
@@ -221,6 +232,11 @@ export class SocialListeningService {
           new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
         ),
       );
+    }
+
+    if (dto.groupUrl) {
+      whereConditions.push(`post_link ILIKE $${params.length + 1}`);
+      params.push(`%${dto.groupUrl}%`);
     }
 
     const whereClause =
@@ -293,6 +309,11 @@ export class SocialListeningService {
       );
     }
 
+    if (dto.groupUrl) {
+      whereConditions.push(`post_link ILIKE $${params.length + 1}`);
+      params.push(`%${dto.groupUrl}%`);
+    }
+
     const whereClause =
       whereConditions.length > 0
         ? `WHERE ${whereConditions.join(' AND ')}`
@@ -345,6 +366,11 @@ export class SocialListeningService {
       );
     }
 
+    if (dto.groupUrl) {
+      whereConditions.push(`post_link ILIKE $${params.length + 1}`);
+      params.push(`%${dto.groupUrl}%`);
+    }
+
     const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
 
     const query = `
@@ -384,6 +410,11 @@ export class SocialListeningService {
           new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
         ),
       );
+    }
+
+    if (dto.groupUrl) {
+      whereConditions.push(`post_link ILIKE $${params.length + 1}`);
+      params.push(`%${dto.groupUrl}%`);
     }
 
     const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
@@ -427,6 +458,9 @@ export class SocialListeningService {
     const where: Prisma.DashboardTrendingIssuesWhereInput = {
       ...(dateFilter && { postedAt: dateFilter }),
       sentimentLabel: { in: ['Tích cực', 'Tiêu cực'] }, // ← thêm dòng này
+      ...(dto.groupUrl && {
+        postLink: { contains: dto.groupUrl, mode: 'insensitive' },
+      }),
     };
 
     const groups = await this.prisma.dashboardTrendingIssues.groupBy({
@@ -468,6 +502,11 @@ export class SocialListeningService {
           new Date(dto.endDate).setDate(new Date(dto.endDate).getDate() + 1),
         ),
       );
+    }
+
+    if (dto.groupUrl) {
+      whereConditions.push(`post_link ILIKE $${params.length + 1}`);
+      params.push(`%${dto.groupUrl}%`);
     }
 
     const whereClause = `WHERE ${whereConditions.join(' AND ')}`;

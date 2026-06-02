@@ -3,20 +3,17 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { initBrowser } from "./utils/browser.js";
-import { AUTH_FILE } from "./constants.js";
+import { AUTH_FILE, GROUP_URLS } from "./constants.js";
 import { extractPostsRecursively } from "./utils/extractor.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const GROUP_URL = process.env.FACEBOOK_GROUP_URL;
 const OUTPUT_DIR = path.join(__dirname, "output");
 
 /**
  * Validates the environment and necessary files before starting the crawler.
- * @returns {boolean} True if all checks pass, false otherwise.
  */
-console.log(AUTH_FILE);
 function validateConfig() {
   if (!fs.existsSync(AUTH_FILE)) {
     console.error(
@@ -25,20 +22,14 @@ function validateConfig() {
     return false;
   }
 
-  if (!GROUP_URL) {
-    console.error("❌ FACEBOOK_GROUP_URL not found in .env file.");
+  if (GROUP_URLS.length === 0) {
+    console.error("❌ GROUP_URLS not found or empty in constants.js.");
     return false;
   }
 
   return true;
 }
 
-/**
- * Sets up the GraphQL response interception on the page.
- * @param {import('playwright').Page} page - The Playwright page object.
- * @param {Array} capturedPosts - The shared array to store captured posts.
- * @param {string} crawledAt - The crawl timestamp.
- */
 function setupGraphQLInterception(page, capturedPosts, crawledAt) {
   page.on("response", async (response) => {
     const url = response.url();
@@ -53,6 +44,7 @@ function setupGraphQLInterception(page, capturedPosts, crawledAt) {
         for (const chunk of chunks) {
           if (!chunk.trim()) continue;
           const data = JSON.parse(chunk);
+          // extractPostsRecursively sẽ push dữ liệu vào mảng capturedPosts
           extractPostsRecursively(data, capturedPosts, crawledAt);
         }
       } catch (e) {
@@ -62,11 +54,6 @@ function setupGraphQLInterception(page, capturedPosts, crawledAt) {
   });
 }
 
-/**
- * Scrolls the page to trigger dynamic content loading.
- * @param {import('playwright').Page} page - The Playwright page object.
- * @param {number} iterations - Number of scroll iterations.
- */
 async function scrollFeed(page, iterations = 5) {
   console.log(
     `⬇️ Scrolling page ${iterations} times to trigger API requests...`,
@@ -81,11 +68,6 @@ async function scrollFeed(page, iterations = 5) {
   }
 }
 
-/**
- * Filters and deduplicates the collected posts.
- * @param {Array} posts - The raw list of collected posts.
- * @returns {Array} - A deduplicated list of unique posts.
- */
 function filterUniquePosts(posts) {
   const uniquePosts = [];
   const seenLinks = new Set();
@@ -100,7 +82,7 @@ function filterUniquePosts(posts) {
       seenLinks.add(linkKey);
       seenContents.add(post.content);
       uniquePosts.push({
-        id: uniquePosts.length,
+        id: uniquePosts.length, // ID sẽ được đánh liên tục cho tất cả các group
         ...post,
       });
     }
@@ -109,14 +91,10 @@ function filterUniquePosts(posts) {
   return uniquePosts;
 }
 
-/**
- * Saves the extracted posts to a JSON file.
- * @param {Array} posts - The list of unique posts to save.
- * @returns {string|null} - The path to the saved file or null if nothing was saved.
- */
+// Đã bỏ tham số groupIndex, đổi tên file để phản ánh việc gộp chung
 function savePosts(posts) {
   if (posts.length === 0) {
-    console.log("⚠️ No valid posts found to save.");
+    console.log(`⚠️ No valid posts found to save.`);
     return null;
   }
 
@@ -124,19 +102,15 @@ function savePosts(posts) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
-  const fileName = `posts_graphql_${Date.now()}.json`;
+  // Tên file chung cho toàn bộ quá trình cào
+  const fileName = `posts_all_groups_${Date.now()}.json`;
   const filePath = path.join(OUTPUT_DIR, fileName);
 
   fs.writeFileSync(filePath, JSON.stringify(posts, null, 2));
-  console.log(`✅ Successfully collected ${posts.length} unique posts.`);
+  console.log(
+    `✅ Successfully collected ${posts.length} unique posts across ALL groups.`,
+  );
   console.log(`💾 Data saved to: ${filePath}`);
-
-  if (posts[0]) {
-    console.log("🔍 Sample post summary:", {
-      author: posts[0].author,
-      contentPrefix: posts[0].content.substring(0, 50) + "...",
-    });
-  }
 
   return filePath;
 }
@@ -148,45 +122,79 @@ async function runCrawler() {
   if (!validateConfig()) return;
 
   const { browser, context } = await initBrowser({
-    headless: true, //TODO: Change to true for production
+    headless: true, // TODO: Change to true for production
     useAuth: true,
   });
 
   try {
-    const page = await context.newPage();
-    const capturedPosts = [];
-    const crawledAt = new Date().toISOString();
+    console.log(`📋 Found ${GROUP_URLS.length} groups to crawl.`);
 
-    setupGraphQLInterception(page, capturedPosts, crawledAt);
+    // 1. KHAI BÁO MẢNG LƯU TRỮ TỔNG Ở NGOÀI VÒNG LẶP
+    const allCapturedPosts = [];
 
-    console.log(`🚀 Navigating to group: ${GROUP_URL}`);
-    try {
-      await page.goto(GROUP_URL, {
-        waitUntil: "domcontentloaded",
-        timeout: 60000,
-      });
-    } catch (e) {
-      console.warn("⚠️ Initial page load timeout, attempting to continue...");
-    }
-
-    console.log("⏳ Waiting for feed to initialize...");
-    try {
-      await page.waitForSelector('div[role="feed"]', { timeout: 20000 });
-    } catch (e) {
-      console.warn(
-        "⚠️ Feed selector not found, continuing with scroll strategy...",
+    // Vòng lặp duyệt qua từng group URL
+    for (let i = 0; i < GROUP_URLS.length; i++) {
+      const groupUrl = GROUP_URLS[i];
+      console.log(`\n======================================================`);
+      console.log(
+        `🚀 [${i + 1}/${GROUP_URLS.length}] Processing Group: ${groupUrl}`,
       );
+      console.log(`======================================================`);
+
+      const page = await context.newPage();
+      const crawledAt = new Date().toISOString();
+
+      // 2. TRUYỀN MẢNG TỔNG VÀO TỪNG PAGE ĐỂ CỘNG DỒN DỮ LIỆU
+      setupGraphQLInterception(page, allCapturedPosts, crawledAt);
+
+      try {
+        await page.goto(groupUrl, {
+          waitUntil: "domcontentloaded",
+          timeout: 60000,
+        });
+
+        console.log("⏳ Waiting for feed to initialize...");
+        try {
+          await page.waitForSelector('div[role="feed"]', { timeout: 20000 });
+        } catch (e) {
+          console.warn(
+            "⚠️ Feed selector not found, continuing with scroll strategy...",
+          );
+        }
+
+        await scrollFeed(page);
+
+        // Không lưu file ở đây nữa, chỉ thông báo số lượng bài cào được tạm thời
+        console.log(
+          `✅ Group ${i + 1} finished. Current total posts collected in memory: ${allCapturedPosts.length}`,
+        );
+      } catch (err) {
+        console.error(`❌ Error while crawling group ${groupUrl}:`, err);
+      } finally {
+        console.log(`🏁 Closing tab for group ${i + 1}...`);
+        await page.close();
+      }
+
+      // Nghỉ một chút giữa các group
+      if (i < GROUP_URLS.length - 1) {
+        console.log(
+          `⏸️ Waiting 10 seconds before navigating to the next group...`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+      }
     }
 
-    await scrollFeed(page);
-
-    console.log("🔍 Filtering and deduplicating collected data...");
-    const uniquePosts = filterUniquePosts(capturedPosts);
+    // 3. SAU KHI CHẠY XONG TẤT CẢ CÁC GROUP MỚI BẮT ĐẦU LỌC TRÙNG VÀ LƯU 1 LẦN
+    console.log(`\n======================================================`);
+    console.log(
+      "🔍 Filtering and deduplicating collected data from ALL groups...",
+    );
+    const uniquePosts = filterUniquePosts(allCapturedPosts);
     savePosts(uniquePosts);
   } catch (err) {
-    console.error("❌ Fatal error during crawling:", err);
+    console.error("❌ Fatal error during crawling process:", err);
   } finally {
-    console.log("🏁 Closing browser...");
+    console.log("\n🏁 All tasks finished. Closing browser...");
     await browser.close();
   }
 }

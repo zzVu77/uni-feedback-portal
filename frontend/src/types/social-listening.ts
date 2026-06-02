@@ -37,6 +37,7 @@ export interface SocialListeningFilter {
   endDate?: string;
   topic?: string;
   sentimentLabel?: SentimentLabel;
+  groupUrl?: string;
 }
 
 export interface SocialListeningResponse {
