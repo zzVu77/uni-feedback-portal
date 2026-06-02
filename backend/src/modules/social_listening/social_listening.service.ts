@@ -164,6 +164,9 @@ export class SocialListeningService {
     const dateFilter = this.getDateFilter(dto);
     const where: Prisma.DashboardTrendingIssuesWhereInput = {
       ...(dateFilter && { postedAt: dateFilter }),
+      ...(dto.groupUrl && {
+        postLink: { contains: dto.groupUrl, mode: 'insensitive' },
+      }),
     };
 
     const groups = await this.prisma.dashboardTrendingIssues.groupBy({
