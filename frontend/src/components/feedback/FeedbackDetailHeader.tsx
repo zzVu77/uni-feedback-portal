@@ -1,9 +1,13 @@
-import { useDeleteFeedbackById } from "@/hooks/queries/useFeedbackQueries";
+import {
+  useDeleteFeedbackById,
+  useResubmitFeedbackById,
+} from "@/hooks/queries/useFeedbackQueries";
 import { FeedbackHeaderType } from "@/types";
 import {
   Building2,
   Calendar,
   MapPin,
+  RefreshCw,
   SquarePen,
   Tag,
   Trash2,
@@ -37,6 +41,14 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
     fileAttachments,
   } = data;
   const { mutateAsync: deleteFeedback, isPending } = useDeleteFeedbackById();
+  const { mutateAsync: resubmitFeedback, isPending: isResubmitting } =
+    useResubmitFeedbackById();
+  const handleResubmit = async () => {
+    await resubmitFeedback(id);
+    setTimeout(() => {
+      window.location.href = `/student/my-feedbacks`;
+    }, 1000);
+  };
   const handleDelete = async () => {
     await deleteFeedback(id);
     setTimeout(() => {
@@ -61,6 +73,25 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
               currentStatus === "VIOLATED_CONTENT" ||
               currentStatus === "AI_REVIEW_FAILED") && (
               <div className="order-1 flex flex-row items-center gap-2 md:order-2">
+                {currentStatus === "AI_REVIEW_FAILED" && (
+                  <ConfirmationDialog
+                    title="Xác nhận gửi lại"
+                    description="Bạn có chắc chắn muốn gửi lại phản hồi này để hệ thống xem xét không?"
+                    onConfirm={handleResubmit}
+                    confirmText="Gửi lại"
+                    cancelText="Hủy"
+                  >
+                    <Button
+                      className="h-fit border bg-blue-500 p-2 text-xs font-normal text-white shadow-xs hover:bg-blue-400"
+                      disabled={isResubmitting}
+                    >
+                      <RefreshCw
+                        className={`h-4 w-4 text-white ${isResubmitting ? "animate-spin" : ""}`}
+                      />
+                      {isResubmitting ? "Đang gửi..." : "Gửi lại"}
+                    </Button>
+                  </ConfirmationDialog>
+                )}
                 <Link href={`/student/my-feedbacks/${id}/edit`}>
                   <Button className="h-fit border bg-gray-100/70 p-2 text-xs font-normal text-black shadow-xs hover:bg-gray-100">
                     <SquarePen className="h-4 w-4 text-black" />

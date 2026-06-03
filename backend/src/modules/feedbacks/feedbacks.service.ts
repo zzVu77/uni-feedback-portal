@@ -566,6 +566,84 @@ export class FeedbacksService {
       createdAt: feedback.createdAt.toISOString(),
     };
   }
+
+  async resubmitFeedback(
+    params: FeedbackParamDto,
+    actor: ActiveUserData,
+  ): Promise<void> {
+    const { feedbackId } = params;
+    const feedback = await this.prisma.feedbacks.findFirst({
+      where: { id: feedbackId, userId: actor.sub },
+      include: {
+        department: {
+          select: { id: true, name: true },
+        },
+        category: {
+          select: { id: true, name: true },
+        },
+        statusHistory: {
+          select: {
+            status: true,
+            message: true,
+            note: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        forumPost: {
+          select: { id: true },
+        },
+        forwardingLogs: {
+          select: {
+            id: true,
+            message: true,
+            createdAt: true,
+            note: true,
+            fromDepartment: { select: { id: true, name: true } },
+            toDepartment: { select: { id: true, name: true } },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    });
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
+    }
+    if (feedback.currentStatus !== FeedbackStatus.AI_REVIEW_FAILED) {
+      throw new ForbiddenException(
+        'Only feedbacks in AI_REVIEW_FAILED status can be resubmitted.',
+      );
+    }
+    await this.prisma.feedbacks.update({
+      where: { id: feedbackId },
+      data: {
+        currentStatus: FeedbackStatus.AI_REVIEWING,
+      },
+    });
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedbackId,
+        status: 'AI_REVIEWING',
+        message: GenerateStatusUpdateMessage(
+          feedback.department.name,
+          'AI_REVIEWING',
+        ),
+      },
+    });
+    await this.feedbackToxicQueue.add(
+      'feedbackToxicItem',
+      {
+        type: 'resubmit',
+        feedback: feedback,
+        actor: actor,
+      },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
+    return;
+  }
   async getToxicJobStatus(jobId: string) {
     const job = await this.feedbackToxicQueue.getJob(jobId);
     if (!job) {

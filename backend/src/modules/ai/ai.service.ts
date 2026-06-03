@@ -144,6 +144,45 @@ export class AiService {
           },
         },
       });
+    } else if (type === 'resubmit') {
+      const feedback = data as FeedbackDetail;
+      await this.prisma.feedbacks.update({
+        where: { id: feedback.id },
+        data: {
+          currentStatus: FeedbackStatus.AI_REVIEW_FAILED,
+        },
+        include: {
+          department: {
+            select: { id: true, name: true },
+          },
+          category: {
+            select: { id: true, name: true },
+          },
+          statusHistory: {
+            select: {
+              status: true,
+              message: true,
+              note: true,
+              createdAt: true,
+            },
+            orderBy: { createdAt: 'asc' },
+          },
+          forumPost: {
+            select: { id: true },
+          },
+          forwardingLogs: {
+            select: {
+              id: true,
+              message: true,
+              createdAt: true,
+              note: true,
+              fromDepartment: { select: { id: true, name: true } },
+              toDepartment: { select: { id: true, name: true } },
+            },
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      });
     }
   }
   async departmentProposal(description: string): Promise<DepartmentResponse> {

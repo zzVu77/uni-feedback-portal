@@ -12,6 +12,11 @@ export type FeedbackJobData =
       feedbackId: string;
       updateData: UpdateFeedbackDto;
       actor: ActiveUserData;
+    }
+  | {
+      type: 'resubmit';
+      feedback: FeedbackDetail;
+      actor: ActiveUserData;
     };
 export type AiDataContext =
   | FeedbackDetail
