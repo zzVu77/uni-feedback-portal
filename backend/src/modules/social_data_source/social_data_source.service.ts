@@ -73,7 +73,7 @@ export class SocialDataSourceService {
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { groupName: 'asc' },
       }),
       this.prisma.dataSources.count({ where }),
     ]);
@@ -139,5 +139,14 @@ export class SocialDataSourceService {
     });
 
     return updatedSource;
+  }
+  async remove(id: string, user: ActiveUserData): Promise<void> {
+    this._ensureIsAdmin(user);
+
+    await this.findOne(id);
+
+    await this.prisma.dataSources.delete({
+      where: { id },
+    });
   }
 }

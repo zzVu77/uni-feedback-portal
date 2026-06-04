@@ -71,7 +71,7 @@ export default function Sidebar({
       )}
     >
       {/* Logo */}
-      <div className="flex flex-shrink-0 items-center justify-center border-b border-slate-100/60 px-6 py-8">
+      <div className="flex flex-shrink-0 items-center justify-center border-b border-slate-100/60 px-4 py-2">
         <Image
           src={ASSETS.LOGO_UTE}
           alt="Logo UTE"
@@ -82,7 +82,7 @@ export default function Sidebar({
       </div>
 
       {/* User Info */}
-      <div className="px-4 py-4">
+      <div className="px-2 py-2">
         <Link
           href="/profile"
           className="group flex flex-shrink-0 items-center gap-3 rounded-[20px] border border-slate-100/60 bg-slate-50/50 p-3 transition-all duration-300 hover:bg-white hover:shadow-sm"
@@ -102,7 +102,7 @@ export default function Sidebar({
           </Avatar>
 
           <div className="flex flex-col">
-            <span className="max-w-[140px] truncate text-[14px] font-bold text-slate-800 transition-colors group-hover:text-indigo-700">
+            <span className="max-w-[140px] truncate text-[12px] font-bold text-slate-800 transition-colors group-hover:text-indigo-700">
               {user?.fullName}
             </span>
             <span className="text-[12px] font-semibold text-slate-400">
@@ -169,7 +169,7 @@ export default function Sidebar({
       </div>
 
       {/* Logout */}
-      <div className="flex-shrink-0 border-t border-slate-100/60 p-4">
+      <div className="flex-shrink-0 border-t border-slate-100/60 p-1">
         <Button
           variant="ghost"
           disabled={isPending}

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
+import { AddDataSourceDialog } from "@/components/dashboard/social-listening/add-data-source-dialog";
 import { DataSourceCardGrid } from "@/components/dashboard/social-listening/data-source-card-grid";
 import HotIssuesTable from "@/components/dashboard/social-listening/HotIssuesTable";
 import KPIOverview from "@/components/dashboard/social-listening/KPIOverview";
@@ -36,7 +36,7 @@ import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-const SocialListeningPage = () => {
+const AdminSocialListeningPage = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -151,7 +151,7 @@ const SocialListeningPage = () => {
   return (
     <Wrapper>
       {!filter.groupUrl ? (
-        <div className="animate-in fade-in flex w-full flex-col items-center duration-500">
+        <div className="animate-in fade-in flex w-full flex-col items-center">
           {/* Hero Section */}
           <div className="mx-auto max-w-3xl space-y-4 text-center">
             <h1 className="bg-gradient-to-r from-indigo-600 to-blue-400 bg-clip-text pb-2 text-4xl font-extrabold tracking-tight text-slate-900 text-transparent sm:text-5xl lg:text-6xl">
@@ -162,10 +162,16 @@ const SocialListeningPage = () => {
               của sinh viên. Hệ thống tự động thu thập và đánh giá cảm xúc mỗi
               ngày.
             </p>
+            <div className="mt-6 flex justify-center">
+              <AddDataSourceDialog />
+            </div>
           </div>
 
           {/* Cards Grid */}
-          <DataSourceCardGrid dataSources={dataSourcesData?.results || []} />
+          <DataSourceCardGrid
+            dataSources={dataSourcesData?.results || []}
+            isAdmin={true}
+          />
         </div>
       ) : (
         <div className="animate-in fade-in flex h-full w-full flex-col gap-6 duration-500 md:gap-8">
@@ -281,4 +287,4 @@ const SocialListeningPage = () => {
   );
 };
 
-export default SocialListeningPage;
+export default AdminSocialListeningPage;

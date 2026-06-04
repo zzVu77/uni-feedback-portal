@@ -7,6 +7,7 @@ import {
   Param,
   Query,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { SocialDataSourceService } from './social_data_source.service';
 import {
@@ -53,7 +54,7 @@ export class SocialDataSourceController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({ summary: 'Get all data sources (Admin only)' })
   @ApiResponse({ status: 200, type: SocialDataSourceListResponseDto })
   findAll(@Query() query: QuerySocialDataSourceDto) {
@@ -62,7 +63,7 @@ export class SocialDataSourceController {
 
   @Get(':id')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({ summary: 'Get a specific data source (Admin only)' })
   @ApiResponse({ status: 200, type: SocialDataSourceDto })
   findOne(@Param('id') id: string) {
@@ -86,7 +87,7 @@ export class SocialDataSourceController {
   @Patch(':id/status')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Update data source status (Admin only)' })
+  @ApiOperation({ summary: 'Update status of a data source (Admin only)' })
   @ApiBody({ type: UpdateDataSourceStatusDto })
   @ApiResponse({ status: 200, type: SocialDataSourceDto })
   updateStatus(
@@ -95,5 +96,14 @@ export class SocialDataSourceController {
     @ActiveUser() user: ActiveUserData,
   ) {
     return this.socialDataSourceService.updateStatus(id, updateStatusDto, user);
+  }
+
+  @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Delete a data source (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Data source deleted successfully' })
+  remove(@Param('id') id: string, @ActiveUser() user: ActiveUserData) {
+    return this.socialDataSourceService.remove(id, user);
   }
 }
