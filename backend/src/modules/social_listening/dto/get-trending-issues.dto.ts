@@ -57,4 +57,9 @@ export class GetTrendingIssuesDto {
   @IsOptional()
   @IsEnum(SentimentLabel)
   sentimentLabel?: SentimentLabel;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  groupUrl?: string;
 }

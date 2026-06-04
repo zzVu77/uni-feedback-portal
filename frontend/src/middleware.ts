@@ -34,7 +34,6 @@ export async function middleware(req: NextRequest) {
   const isAdminRoute = pathname.startsWith("/admin");
   const isStudentRoute = pathname.startsWith("/student");
   const isStaffRoute = pathname.startsWith("/staff");
-  const isSocialListeningRoute = pathname.startsWith("/social-listening");
 
   // --------------------------------------------------------
   // CASE 1: Not Authenticated (No tokens present)
@@ -89,9 +88,6 @@ export async function middleware(req: NextRequest) {
       if (isStaffRoute && userRole !== "DEPARTMENT_STAFF") {
         return NextResponse.redirect(new URL(dashboardUrl, req.url));
       }
-      if (isSocialListeningRoute && userRole === "STUDENT") {
-        return NextResponse.redirect(new URL(dashboardUrl, req.url));
-      }
 
       // C. Allow access if role matches
       return NextResponse.next();
@@ -119,7 +115,6 @@ export const config = {
     "/student/:path*",
     "/admin/:path*",
     "/staff/:path*",
-    "/social-listening/:path*",
     "/forum/:path*",
     "/notifications/:path*",
     "/change-password/:path*",

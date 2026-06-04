@@ -38,7 +38,7 @@ export const staffNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/staff/dashboard", label: "Thống kê", icon: ChartColumn },
   {
-    href: "/social-listening",
+    href: "/staff/social-listening",
     label: "Lắng nghe sinh viên",
     icon: Ear,
   },
@@ -64,7 +64,7 @@ export const adminNavigation: NavigationItem[] = [
   { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/admin/dashboard", label: "Thống kê", icon: ChartColumn },
   {
-    href: "/social-listening",
+    href: "/admin/social-listening",
     label: "Lắng nghe sinh viên",
     icon: Ear,
   },
