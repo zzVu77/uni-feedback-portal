@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 export enum Platform {
   FACEBOOK = "FACEBOOK",
   REDDIT = "REDDIT",
@@ -43,5 +42,4 @@ export interface CreateSocialDataSourceDto {
   description?: string;
 }
 
-export interface UpdateSocialDataSourceDto
-  extends Partial<CreateSocialDataSourceDto> {}
+export type UpdateSocialDataSourceDto = Partial<CreateSocialDataSourceDto>;
