@@ -73,7 +73,7 @@ export class SocialDataSourceService {
         where,
         skip,
         take: limit,
-        orderBy: { groupName: 'asc' },
+        orderBy: [{ status: 'asc' }, { groupName: 'asc' }],
       }),
       this.prisma.dataSources.count({ where }),
     ]);
@@ -122,6 +122,14 @@ export class SocialDataSourceService {
     });
 
     return updatedSource;
+  }
+
+  async getActiveUrls(): Promise<string[]> {
+    const dataSources = await this.prisma.dataSources.findMany({
+      where: { status: 'ACTIVE' },
+      select: { url: true },
+    });
+    return dataSources.map((ds) => ds.url);
   }
 
   async updateStatus(

@@ -27,6 +27,7 @@ import {
 } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -38,6 +39,14 @@ export class SocialDataSourceController {
   constructor(
     private readonly socialDataSourceService: SocialDataSourceService,
   ) {}
+
+  @Public()
+  @Get('active-urls')
+  @ApiOperation({ summary: 'Get all active URLs (Public)' })
+  @ApiResponse({ status: 200, type: [String] })
+  getActiveUrls() {
+    return this.socialDataSourceService.getActiveUrls();
+  }
 
   @Post()
   @UseGuards(RolesGuard)

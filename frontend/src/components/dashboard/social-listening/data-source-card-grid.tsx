@@ -1,10 +1,10 @@
-import { Users, ArrowRight, AlertCircle, Ban, Trash2 } from "lucide-react";
-import { SocialDataSource, DataSourceStatus } from "@/types/social-data-source";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { EditDataSourceDialog } from "./edit-data-source-dialog";
-import { useDeleteSocialDataSource } from "@/hooks/queries/useSocialDataSourceQueries";
-import { Button } from "@/components/ui/button";
 import ConfirmationDialog from "@/components/common/ConfirmationDialog";
+import { Button } from "@/components/ui/button";
+import { useDeleteSocialDataSource } from "@/hooks/queries/useSocialDataSourceQueries";
+import { DataSourceStatus, SocialDataSource } from "@/types/social-data-source";
+import { AlertCircle, ArrowRight, Ban, Trash2, Users } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { EditDataSourceDialog } from "./edit-data-source-dialog";
 
 export function DataSourceCardGrid({
   dataSources,
@@ -15,7 +15,6 @@ export function DataSourceCardGrid({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { mutate: deleteDataSource, isPending: isDeleting } =
     useDeleteSocialDataSource();
 
@@ -47,11 +46,8 @@ export function DataSourceCardGrid({
           <div
             key={group.id}
             onClick={() => {
-              // Optionally prevent navigation if INACTIVE/ERROR
-              // if (isInactive || isError) return;
-              const params = new URLSearchParams(searchParams.toString());
-              params.set("groupUrl", group.url);
-              router.push(`${pathname}?${params.toString()}`);
+              // Redirect to detail page
+              router.push(`${pathname}/${group.id}`);
             }}
             className={`group relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl ${cardBgClass}`}
           >
