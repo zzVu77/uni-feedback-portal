@@ -61,6 +61,9 @@ export class FeedbackToxicProcessor extends WorkerHost {
       case 'update':
         await this.handleUpdateFeedback(job.data);
         break;
+      case 'resubmit':
+        await this.handleResubmitFeedback(job.data);
+        break;
 
       default:
         throw new UnrecoverableError(
@@ -97,6 +100,21 @@ export class FeedbackToxicProcessor extends WorkerHost {
       jobType: 'create',
     });
   }
+  async handleResubmitFeedback(data: {
+    feedback: FeedbackDetail;
+    actor: ActiveUserData;
+  }) {
+    await this.processToxicity({
+      feedbackId: data.feedback.id,
+      description: data.feedback.description,
+      departmentId: data.feedback.department.id,
+      subject: data.feedback.subject,
+      actorId: data.actor.sub,
+      aiDataContext: data.feedback,
+      jobType: 'resubmit',
+    });
+  }
+
   private async processToxicity(params: {
     feedbackId: string;
     description: string;
@@ -104,7 +122,7 @@ export class FeedbackToxicProcessor extends WorkerHost {
     subject: string;
     actorId: string;
     aiDataContext: AiDataContext;
-    jobType: 'create' | 'update';
+    jobType: 'create' | 'update' | 'resubmit';
   }) {
     const {
       feedbackId,
@@ -214,8 +232,24 @@ export class FeedbackToxicProcessor extends WorkerHost {
             message: GenerateStatusUpdateMessage('', 'AI_REVIEW_FAILED'),
           },
         });
+      } else if (job.data.type === 'resubmit') {
+        const { feedback, actor } = job.data;
+        eventPayload = {
+          feedbackId: feedback.id,
+          userId: actor.sub,
+          departmentId: feedback.department.id,
+          subject: feedback.subject,
+          isToxic: true,
+        };
+        await this.prisma.feedbackStatusHistory.create({
+          data: {
+            feedbackId: feedback.id,
+            status: 'AI_REVIEW_FAILED',
+            message: GenerateStatusUpdateMessage('', 'AI_REVIEW_FAILED'),
+          },
+        });
       }
-      if (eventPayload) {
+      if (eventPayload && job.data.type !== 'resubmit') {
         this.eventEmitter.emit(
           'feedback.fault.api.gemini',
           new FeedbackCreatedEvent(eventPayload),

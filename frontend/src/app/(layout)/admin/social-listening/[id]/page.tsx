@@ -8,6 +8,7 @@ import UrgentIssuesAlert from "@/components/dashboard/social-listening/UrgentIss
 import { GenerateReportSocialListening } from "@/components/export-pdf-social-listening/GenerateReportSocialListening";
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
+import { useGetSocialDataSourceById } from "@/hooks/queries/useSocialDataSourceQueries";
 import {
   useGetClassificationSentiment,
   useGetKPIOverview,
@@ -29,14 +30,18 @@ import {
   TopicDistributionItem,
 } from "@/types/social-listening";
 import { format, startOfMonth, toDate } from "date-fns";
-import { Download } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft, Download, ExternalLink } from "lucide-react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-const SocialListeningPage = () => {
+const AdminSocialListeningDetailPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  const params = useParams();
   const searchParams = useSearchParams();
+  const id = params.id as string;
+
+  const { data: dataSource, isLoading: isLoadingDataSource } =
+    useGetSocialDataSourceById(id);
 
   const filter = useMemo((): SocialListeningFilter => {
     const fromParam = searchParams.get("startDate");
@@ -55,8 +60,9 @@ const SocialListeningPage = () => {
       limit: limitParam ? Number(limitParam) : 10,
       sentimentLabel: sentimentLabelParam as SentimentLabel | undefined,
       topic: topicParam || undefined,
+      groupUrl: dataSource?.url,
     };
-  }, [searchParams]);
+  }, [searchParams, dataSource?.url]);
 
   const { data: trendingData, isLoading: isLoadingTrending } =
     useGetTrendingIssues(filter);
@@ -84,6 +90,7 @@ const SocialListeningPage = () => {
   const results = trendingData?.results || [];
 
   const isLoading =
+    isLoadingDataSource ||
     isLoadingTrending ||
     isLoadingKPI ||
     isLoadingTrend ||
@@ -96,25 +103,27 @@ const SocialListeningPage = () => {
 
   const handleDateUpdate = useCallback(
     (newRange: Partial<SocialListeningFilter>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const urlParams = new URLSearchParams(searchParams.toString());
 
       if (newRange.startDate) {
-        params.set("startDate", newRange.startDate);
+        urlParams.set("startDate", newRange.startDate);
       } else {
-        params.delete("startDate");
+        urlParams.delete("startDate");
       }
 
       if (newRange.endDate) {
-        params.set("endDate", newRange.endDate);
+        urlParams.set("endDate", newRange.endDate);
       } else {
-        params.delete("endDate");
+        urlParams.delete("endDate");
       }
 
-      params.set("page", "1");
+      urlParams.set("page", "1");
 
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      router.push(`/admin/social-listening/${id}?${urlParams.toString()}`, {
+        scroll: false,
+      });
     },
-    [pathname, router, searchParams],
+    [router, searchParams, id],
   );
 
   const exportPdf = async (
@@ -139,47 +148,78 @@ const SocialListeningPage = () => {
     window.open(url);
   };
 
+  if (isLoadingDataSource && !dataSource) {
+    return (
+      <Wrapper>
+        <div className="flex h-screen items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-indigo-600"></div>
+        </div>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
-      <div className="flex h-full w-full flex-col gap-6 md:gap-8">
+      <div className="animate-in fade-in flex h-full w-full flex-col gap-6 duration-500 md:gap-8">
         {/* Page Header */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between lg:items-center">
-          <div className="flex-1 space-y-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-              Lắng nghe sinh viên
-            </h1>
-            <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
-              Theo dõi và phân tích các vấn đề của sinh viên thông qua các bài
-              đăng mạng xã hội để có những hành động kịp thời. Dữ liệu từ group
-              "UTE - THẮC MẮC HỌC TẬP ®" và được làm mới mỗi ngày một lần.
-            </p>
-          </div>
+        <div className="flex flex-col gap-4">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              router.push("/admin/social-listening");
+            }}
+            className="-ml-4 w-fit text-slate-500 hover:text-slate-900"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Quay lại danh sách
+          </Button>
 
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <SocialListeningDatePicker
-              onUpdate={handleDateUpdate}
-              defaultStartDate={filter.startDate}
-              defaultEndDate={filter.endDate}
-              className="w-full sm:w-auto"
-            />
-            <Button
-              variant="default"
-              onClick={() =>
-                exportPdf(
-                  kpiData,
-                  filter.startDate || "",
-                  filter.endDate || "",
-                  classificationData,
-                  postCountData,
-                  postsBySentimentData,
-                  topicBySentimentData,
-                )
-              }
-              className="h-10 w-full rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg sm:w-auto"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Xuất báo cáo
-            </Button>
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between lg:items-center">
+            <div className="flex-1 space-y-2">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                {dataSource?.groupName || "Chi tiết Group"}
+              </h1>
+              <p className="flex max-w-3xl flex-wrap items-center gap-2 text-sm leading-relaxed text-slate-500 sm:text-base">
+                <span>Dữ liệu được làm mới mỗi ngày một lần từ nguồn</span>
+                {dataSource?.url && (
+                  <a
+                    href={dataSource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-medium text-indigo-600 hover:underline"
+                  >
+                    Facebook Group <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
+              </p>
+            </div>
+
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+              <SocialListeningDatePicker
+                onUpdate={handleDateUpdate}
+                defaultStartDate={filter.startDate}
+                defaultEndDate={filter.endDate}
+                className="w-full sm:w-auto"
+              />
+              <Button
+                variant="default"
+                onClick={() =>
+                  exportPdf(
+                    kpiData,
+                    filter.startDate || "",
+                    filter.endDate || "",
+                    classificationData,
+                    postCountData,
+                    postsBySentimentData,
+                    topicBySentimentData,
+                  )
+                }
+                className="h-10 w-full rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg sm:w-auto"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Xuất báo cáo
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -217,7 +257,7 @@ const SocialListeningPage = () => {
               </div>
             </div>
 
-            <div className="w-full overflow-hidden">
+            <div className="min-h-[500px]">
               <HotIssuesTable data={results} total={trendingData?.total || 0} />
             </div>
           </div>
@@ -227,4 +267,4 @@ const SocialListeningPage = () => {
   );
 };
 
-export default SocialListeningPage;
+export default AdminSocialListeningDetailPage;
