@@ -14,7 +14,7 @@ const OUTPUT_DIR = path.join(__dirname, "output");
 /**
  * Validates the environment and necessary files before starting the crawler.
  */
-function validateConfig() {
+function validateConfig(urls) {
   if (!fs.existsSync(AUTH_FILE)) {
     console.error(
       `❌ ${AUTH_FILE} not found. Please run 'node auth.js' first!`,
@@ -22,8 +22,8 @@ function validateConfig() {
     return false;
   }
 
-  if (GROUP_URLS.length === 0) {
-    console.error("❌ GROUP_URLS not found or empty in constants.js.");
+  if (urls.length === 0) {
+    console.error("❌ No URLs provided via command line or constants.js.");
     return false;
   }
 
@@ -46,7 +46,7 @@ function setupGraphQLInterception(page, capturedPosts, crawledAt) {
           const data = JSON.parse(chunk);
           extractPostsRecursively(data, capturedPosts, crawledAt);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
   });
 }
@@ -114,7 +114,10 @@ function savePosts(posts) {
  * Main entry point for the Facebook group crawler.
  */
 async function runCrawler() {
-  if (!validateConfig()) return;
+  const args = process.argv.slice(2);
+  const targetUrls = args.length > 0 ? args : GROUP_URLS;
+
+  if (!validateConfig(targetUrls)) return;
 
   const { browser, context } = await initBrowser({
     headless: true, // TODO: Change to true for production
@@ -122,15 +125,15 @@ async function runCrawler() {
   });
 
   try {
-    console.log(`📋 Found ${GROUP_URLS.length} groups to crawl.`);
+    console.log(`📋 Found ${targetUrls.length} groups to crawl.`);
 
     const allCapturedPosts = [];
 
-    for (let i = 0; i < GROUP_URLS.length; i++) {
-      const groupUrl = GROUP_URLS[i];
+    for (let i = 0; i < targetUrls.length; i++) {
+      const groupUrl = targetUrls[i];
       console.log(`\n======================================================`);
       console.log(
-        `🚀 [${i + 1}/${GROUP_URLS.length}] Processing Group: ${groupUrl}`,
+        `🚀 [${i + 1}/${targetUrls.length}] Processing Group: ${groupUrl}`,
       );
       console.log(`======================================================`);
 
@@ -166,7 +169,7 @@ async function runCrawler() {
         await page.close();
       }
 
-      if (i < GROUP_URLS.length - 1) {
+      if (i < targetUrls.length - 1) {
         console.log(
           `⏸️ Waiting 10 seconds before navigating to the next group...`,
         );
