@@ -44,12 +44,9 @@ function setupGraphQLInterception(page, capturedPosts, crawledAt) {
         for (const chunk of chunks) {
           if (!chunk.trim()) continue;
           const data = JSON.parse(chunk);
-          // extractPostsRecursively sẽ push dữ liệu vào mảng capturedPosts
           extractPostsRecursively(data, capturedPosts, crawledAt);
         }
-      } catch (e) {
-        // Ignore JSON parsing or empty response errors
-      }
+      } catch (e) {}
     }
   });
 }
@@ -82,7 +79,7 @@ function filterUniquePosts(posts) {
       seenLinks.add(linkKey);
       seenContents.add(post.content);
       uniquePosts.push({
-        id: uniquePosts.length, // ID sẽ được đánh liên tục cho tất cả các group
+        id: uniquePosts.length,
         ...post,
       });
     }
@@ -91,7 +88,6 @@ function filterUniquePosts(posts) {
   return uniquePosts;
 }
 
-// Đã bỏ tham số groupIndex, đổi tên file để phản ánh việc gộp chung
 function savePosts(posts) {
   if (posts.length === 0) {
     console.log(`⚠️ No valid posts found to save.`);
@@ -102,7 +98,6 @@ function savePosts(posts) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
-  // Tên file chung cho toàn bộ quá trình cào
   const fileName = `posts_all_groups_${Date.now()}.json`;
   const filePath = path.join(OUTPUT_DIR, fileName);
 
@@ -129,10 +124,8 @@ async function runCrawler() {
   try {
     console.log(`📋 Found ${GROUP_URLS.length} groups to crawl.`);
 
-    // 1. KHAI BÁO MẢNG LƯU TRỮ TỔNG Ở NGOÀI VÒNG LẶP
     const allCapturedPosts = [];
 
-    // Vòng lặp duyệt qua từng group URL
     for (let i = 0; i < GROUP_URLS.length; i++) {
       const groupUrl = GROUP_URLS[i];
       console.log(`\n======================================================`);
@@ -144,7 +137,6 @@ async function runCrawler() {
       const page = await context.newPage();
       const crawledAt = new Date().toISOString();
 
-      // 2. TRUYỀN MẢNG TỔNG VÀO TỪNG PAGE ĐỂ CỘNG DỒN DỮ LIỆU
       setupGraphQLInterception(page, allCapturedPosts, crawledAt);
 
       try {
@@ -164,7 +156,6 @@ async function runCrawler() {
 
         await scrollFeed(page);
 
-        // Không lưu file ở đây nữa, chỉ thông báo số lượng bài cào được tạm thời
         console.log(
           `✅ Group ${i + 1} finished. Current total posts collected in memory: ${allCapturedPosts.length}`,
         );
@@ -175,7 +166,6 @@ async function runCrawler() {
         await page.close();
       }
 
-      // Nghỉ một chút giữa các group
       if (i < GROUP_URLS.length - 1) {
         console.log(
           `⏸️ Waiting 10 seconds before navigating to the next group...`,
@@ -184,7 +174,6 @@ async function runCrawler() {
       }
     }
 
-    // 3. SAU KHI CHẠY XONG TẤT CẢ CÁC GROUP MỚI BẮT ĐẦU LỌC TRÙNG VÀ LƯU 1 LẦN
     console.log(`\n======================================================`);
     console.log(
       "🔍 Filtering and deduplicating collected data from ALL groups...",
