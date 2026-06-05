@@ -94,19 +94,19 @@ def uni_feedback_flow():
     
     urls = get_active_urls()
     
-    run_crawler(urls)
-    run_loader()
+    # run_crawler(urls)
+    # run_loader()
     
-    run_dbt_deps()
+    # run_dbt_deps()
 
-    run_dbt_stg_fb_posts()
-    run_dbt_mrt_ai_feed()
+    # run_dbt_stg_fb_posts()
+    # run_dbt_mrt_ai_feed()
     
-    run_ai_processor()
+    # run_ai_processor()
     
-    run_dbt_stg_ai_analysis()
-    run_dbt_mrt_dashboard()
-    
+    # run_dbt_stg_ai_analysis()
+    # run_dbt_mrt_dashboard()
+
     run_reverse_etl()
     
     logger.info("Pipeline completed successfully! All tasks have been executed.")
