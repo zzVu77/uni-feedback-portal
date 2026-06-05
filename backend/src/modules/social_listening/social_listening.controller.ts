@@ -133,9 +133,8 @@ export class SocialListeningController {
     return this.socialListeningService.getTopicSentimentDistribution(query);
   }
 
-  @Public()
   @Get('urgent-issues')
-  @UseGuards(RolesGuard)
+  @Public()
   @ApiOperation({
     summary:
       'Get urgent issues based on severity keywords and negative sentiment',
