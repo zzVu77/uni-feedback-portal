@@ -5,6 +5,7 @@ import {
   CreateFeedbackPayload,
   MyFeedbackHistoryItem,
   PaginatedResponse,
+  RelatedFeedbackItem,
 } from "@/types";
 const studentFeedbackBaseUrl = "/feedbacks";
 const staffFeedbackBaseUrl = "/managements/staff/feedbacks";
@@ -44,6 +45,9 @@ export const createNewFeedback = async (data: CreateFeedbackPayload) => {
 export const deleteFeedbackById = async (id: string) => {
   await axiosInstance.delete(`${studentFeedbackBaseUrl}/me/${id}`);
 };
+export const resubmitFeedbackById = async (id: string) => {
+  await axiosInstance.post(`${studentFeedbackBaseUrl}/me/${id}/resubmit`);
+};
 
 // Feedback service functions for staff
 export const getAllStaffFeedbacks = async (
@@ -65,6 +69,14 @@ export const getStaffFeedbackById = async (
   );
   return response;
 };
+export const getRelatedStaffFeedbacksById = async (
+  id: string,
+): Promise<PaginatedResponse<RelatedFeedbackItem>> => {
+  const response = await axiosInstance.get<
+    PaginatedResponse<RelatedFeedbackItem>
+  >(`${staffFeedbackBaseUrl}/${id}/related`);
+  return response;
+};
 export const updateStaffFeedbackStatusById = async (
   id: string,
   status: string,
@@ -75,12 +87,34 @@ export const updateStaffFeedbackStatusById = async (
     note,
   });
 };
+export const bulkUpdateStaffFeedbackStatus = async (
+  feedbackIds: string[],
+  status: string,
+  note?: string,
+) => {
+  await axiosInstance.patch(`${staffFeedbackBaseUrl}/bulk-status`, {
+    feedbackIds,
+    status,
+    note,
+  });
+};
 export const forwardStaffFeedbackById = async (
   id: string,
   toDepartmentId: string,
   note?: string,
 ) => {
   await axiosInstance.post(`${staffFeedbackBaseUrl}/${id}/forwardings`, {
+    toDepartmentId,
+    note,
+  });
+};
+export const bulkForwardStaffFeedbacks = async (
+  feedbackIds: string[],
+  toDepartmentId: string,
+  note?: string,
+) => {
+  await axiosInstance.post(`${staffFeedbackBaseUrl}/bulk-forwardings`, {
+    feedbackIds,
     toDepartmentId,
     note,
   });

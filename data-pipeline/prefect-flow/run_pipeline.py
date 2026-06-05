@@ -1,6 +1,7 @@
 # prefect-flow/run_pipeline.py
 import os
 import subprocess
+import requests
 from prefect import task, flow
 import logging
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -14,10 +15,28 @@ logger=logging.getLogger(__name__)
 # 1. Define Tasks (Each task corresponds to a step in the pipeline)
 # ==========================================
 
+@task(name="0. Get Active URLs", retries=2, retry_delay_seconds=30)
+def get_active_urls():
+    logger.info("Fetching active URLs from backend...")
+    try:
+        response = requests.get("https://api.uniportal.giahuynguyen28.id.vn/active-urls")
+        response.raise_for_status()
+        urls = response.json()
+        if not urls:
+            logger.warning("No active URLs found from backend!")
+        logger.info(f"Active URLs fetched: {urls}")
+        return urls
+    except Exception as e:
+        logger.error(f"Failed to fetch active URLs: {e}")
+        return []
+
 @task(name="1. Crawl Facebook Data", retries=2, retry_delay_seconds=60)
-def run_crawler():
+def run_crawler(urls):
     logger.info(f"Running Crawler at: {CRAWLER_DIR}")
-    subprocess.run(["node", "crawler.js"], cwd=CRAWLER_DIR, check=True)
+    command = ["node", "crawler.js"]
+    if urls:
+        command.extend(urls)
+    subprocess.run(command, cwd=CRAWLER_DIR, check=True)
 
 @task(name="2. Load Raw to BigQuery", retries=2, retry_delay_seconds=60)
 def run_loader():
@@ -66,7 +85,9 @@ def run_dbt_mrt_dashboard():
 def uni_feedback_flow():
     logger.info("🚀 Start the student feedback analysis system!")
     
-    run_crawler()
+    urls = get_active_urls()
+    
+    run_crawler(urls)
     run_loader()
     
     run_dbt_deps()

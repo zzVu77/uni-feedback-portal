@@ -52,10 +52,15 @@ export function AnnouncementManagementTable() {
   const searchParams = useSearchParams();
 
   const filters: AnnouncementFilter = React.useMemo(() => {
+    const sortParam = searchParams.get("sort") as "newest" | "oldest" | null;
     return {
       page: Number(searchParams.get("page")) || 1,
       pageSize: Number(searchParams.get("pageSize")) || 10,
       q: searchParams.get("q") || undefined,
+      sort:
+        sortParam === "newest" || sortParam === "oldest"
+          ? sortParam
+          : undefined,
     };
   }, [searchParams]);
 
@@ -113,9 +118,8 @@ export function AnnouncementManagementTable() {
       },
     },
   });
-
   return (
-    <div className="flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
       <div className="flex w-full flex-shrink-0 flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div className="flex w-full flex-1 items-center gap-3 md:w-auto">
           <Suspense fallback={null}>
@@ -133,27 +137,28 @@ export function AnnouncementManagementTable() {
           href="/staff/announcement-management/create"
           className="w-full md:w-auto"
         >
-          <Button className="h-11 w-full gap-2 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-200 transition-all hover:bg-blue-700 active:scale-[0.98]">
-            <CirclePlus className="h-5 w-5" />
-            <span className="text-sm font-bold tracking-wider uppercase">
+          <Button className="bg-blue-primary-400 hover:bg-blue-primary-600 h-11 w-full gap-2 rounded-full px-6 font-semibold text-white shadow-md transition-all hover:shadow-lg active:scale-[0.98]">
+            <CirclePlus className="mr-1 h-5 w-5" />
+            <span className="text-sm tracking-wider uppercase">
               Tạo thông báo
             </span>
           </Button>
         </Link>
       </div>
 
-      <div className="flex-1 overflow-auto rounded-xl border border-slate-100">
-        <Table
-          className={cn("min-w-[800px]", tableData.length === 0 && "h-full")}
-        >
-          <TableHeader className="sticky top-0 z-10 bg-slate-50">
+      <div className="flex-1 overflow-x-auto rounded-[20px] border border-slate-100 bg-white/50 shadow-sm">
+        <Table className={cn("w-full", tableData.length === 0 && "h-full")}>
+          <TableHeader className="sticky top-0 z-10 bg-indigo-50/80 backdrop-blur-md">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              <TableRow
+                key={headerGroup.id}
+                className="border-b border-indigo-100/50 hover:bg-transparent"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="h-12 px-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+                      className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5"
                     >
                       {header.isPlaceholder
                         ? null
@@ -171,14 +176,14 @@ export function AnnouncementManagementTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="group border-b border-slate-50 transition-colors hover:bg-slate-50/80"
+                  className="group border-b border-slate-100 bg-white/40 transition-all hover:bg-indigo-50/30"
                   key={row.id}
                   data-state={row.getIsSelected()}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="px-4 py-4 text-sm text-slate-700"
+                      className="px-3 py-4 text-sm text-slate-700 lg:px-5"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -209,27 +214,28 @@ export function AnnouncementManagementTable() {
       </div>
 
       {pageCount > 1 && (
-        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+        <div className="flex flex-shrink-0 items-center justify-center gap-5 pt-4">
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handlePageChange(filters.page - 1)}
             disabled={filters.page <= 1}
-            className="h-8 w-8 rounded-lg p-0"
+            className="h-10 w-10 rounded-full border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-indigo-600 disabled:opacity-50"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" />
           </Button>
-          <span className="text-sm font-medium text-slate-600">
-            Trang {filters.page} / {pageCount}
+          <span className="min-w-[100px] text-center text-sm font-semibold text-slate-600">
+            Trang {filters.page} <span className="mx-1 text-slate-400">/</span>{" "}
+            {pageCount}
           </span>
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handlePageChange(filters.page + 1)}
             disabled={filters.page >= pageCount}
-            className="h-8 w-8 rounded-lg p-0"
+            className="h-10 w-10 rounded-full border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-indigo-600 disabled:opacity-50"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-5 w-5" />
           </Button>
         </div>
       )}

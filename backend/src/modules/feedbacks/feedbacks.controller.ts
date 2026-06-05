@@ -143,6 +143,26 @@ export class FeedbacksController {
     return this.feedbacksService.deleteFeedback(params, user);
   }
 
+  @Post('/me/:feedbackId/resubmit')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Resubmit a feedback (Student and Owner only)',
+    description:
+      'Allows the user to resubmit their own feedback that previously failed AI review. The feedback must be in "AI_REVIEW_FAILED" status to be eligible for resubmission.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Feedback resubmitted successfully',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Feedback not found' })
+  resubmitFeedback(
+    @Param() params: FeedbackParamDto,
+    @ActiveUser() user: ActiveUserData,
+  ): Promise<void> {
+    return this.feedbacksService.resubmitFeedback(params, user);
+  }
+
   @Get('/feedback-toxic/:jobId')
   @ApiOperation({
     summary: 'Get toxic feedback analysis job status',

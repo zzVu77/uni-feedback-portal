@@ -4,12 +4,16 @@ import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
 import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useFeedbackFilters } from "@/hooks/filters/useFeedbackFilters";
 import { useGetFeedbacks } from "@/hooks/queries/useFeedbackQueries";
 import {
@@ -17,23 +21,14 @@ import {
   CalendarClock,
   ChevronLeft,
   ChevronRight,
+  ListFilter,
   SearchX,
   Tag,
-  ListFilter,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { Suspense } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetFooter,
-  SheetClose,
-} from "@/components/ui/sheet";
 
 export function MyFeedbacksHistoryTable() {
   const filters = useFeedbackFilters();
@@ -67,24 +62,26 @@ export function MyFeedbacksHistoryTable() {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-      <div className="flex w-full flex-shrink-0 items-center gap-3">
-        <Suspense fallback={null}>
-          <SearchBar
-            placeholder="Tìm kiếm theo tiêu đề..."
-            className="flex-1 bg-white shadow-sm"
-          />
-        </Suspense>
+    <div className="flex h-full w-full flex-col gap-4 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:p-5">
+      <div className="flex w-full flex-shrink-0 flex-col items-start justify-between gap-3 md:flex-row md:items-center">
+        <div className="flex w-full flex-1 items-center gap-3 md:w-auto">
+          <Suspense fallback={null}>
+            <SearchBar
+              placeholder="Tìm kiếm theo tiêu đề..."
+              className="flex-1 bg-white shadow-sm"
+            />
+          </Suspense>
+        </div>
 
         {/* Desktop Filters */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
           <CommonFilter.DepartmentSelection />
           <CommonFilter.StatusSelection />
           <CommonFilter.CategorySelection />
         </div>
 
         {/* Mobile Filter Drawer */}
-        <div className="md:hidden">
+        <div className="flex w-full gap-3 md:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" className="gap-2">
@@ -154,74 +151,76 @@ export function MyFeedbacksHistoryTable() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2">
+      <div className="flex-1 overflow-y-auto pr-1">
         {tableData.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {tableData.map((feedback) => (
               <Link
                 href={`/student/my-feedbacks/${feedback.id}`}
                 key={feedback.id}
                 className="group block h-full"
               >
-                <Card className="flex h-full flex-col justify-between gap-2 rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
-                  <CardHeader className="space-y-3 pb-3">
-                    <div className="flex flex-col items-start justify-between gap-3">
-                      <div className="flex-shrink-0">
-                        <StatusBadge
-                          type={
-                            feedback.currentStatus as
-                              | "PENDING"
-                              | "IN_PROGRESS"
-                              | "RESOLVED"
-                              | "REJECTED"
-                              | "CLOSED"
-                          }
-                        />
-                      </div>
+                <Card className="flex h-full flex-col justify-between gap-0 rounded-[20px] border border-white/60 bg-white/50 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-100 hover:bg-white hover:shadow-[0_8px_20px_rgb(0,0,0,0.06)]">
+                  <div className="space-y-2">
+                    <div className="flex flex-col items-start gap-2">
+                      <StatusBadge
+                        type={
+                          feedback.currentStatus as
+                            | "PENDING"
+                            | "IN_PROGRESS"
+                            | "RESOLVED"
+                            | "REJECTED"
+                            | "CLOSED"
+                        }
+                      />
                       <h3
-                        className="line-clamp-2 text-lg font-bold text-slate-800 transition-colors group-hover:text-blue-600"
+                        className="line-clamp-2 text-[15px] leading-snug font-bold text-slate-800 transition-colors group-hover:text-indigo-600"
                         title={feedback.subject}
                       >
                         {feedback.subject}
                       </h3>
                     </div>
-                  </CardHeader>
-                  <CardContent className="space-y-3 pb-4">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2 rounded-md border border-slate-100 bg-slate-50 px-2.5 py-1.5">
-                        <Building2 className="h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
+
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      <div className="flex items-center gap-1.5 rounded-full border border-indigo-50 bg-indigo-50/50 px-2.5 py-1">
+                        <Building2 className="h-3 w-3 flex-shrink-0 text-indigo-500" />
                         <span
-                          className="truncate text-xs font-medium text-slate-600"
+                          className="truncate text-[11px] font-semibold text-indigo-700"
                           title={feedback.department.name}
                         >
                           {feedback.department.name}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 rounded-md border border-slate-100 bg-slate-50 px-2.5 py-1.5">
-                        <Tag className="h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
+                      <div className="flex items-center gap-1.5 rounded-full border border-indigo-50 bg-indigo-50/50 px-2.5 py-1">
+                        <Tag className="h-3 w-3 flex-shrink-0 text-indigo-500" />
                         <span
-                          className="truncate text-xs font-medium text-slate-600"
+                          className="truncate text-[11px] font-semibold text-indigo-700"
                           title={feedback.category.name}
                         >
                           {feedback.category.name}
                         </span>
                       </div>
                     </div>
-                  </CardContent>
-                  <CardFooter className="border-t border-slate-100 pt-3">
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs text-slate-400">
-                        <CalendarClock className="h-3.5 w-3.5" />
-                        <time>
-                          {new Date(feedback.createdAt).toLocaleString("vi-VN")}
-                        </time>
-                      </div>
-                      <div className="flex items-center text-xs font-medium text-blue-600 opacity-0 transition-all group-hover:opacity-100">
-                        Chi tiết
-                        <ChevronRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                      </div>
+                  </div>
+
+                  <div className="mt-4 flex w-full items-center justify-between border-t border-slate-100/60 pt-3">
+                    <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
+                      <CalendarClock className="h-3.5 w-3.5" />
+                      <time>
+                        {new Date(feedback.createdAt).toLocaleString("vi-VN", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </time>
                     </div>
-                  </CardFooter>
+                    <div className="flex -translate-x-2 items-center text-[12px] font-semibold text-indigo-600 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                      Chi tiết
+                      <ChevronRight className="ml-0.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </div>
+                  </div>
                 </Card>
               </Link>
             ))}
@@ -243,27 +242,28 @@ export function MyFeedbacksHistoryTable() {
       </div>
 
       {pageCount > 1 && (
-        <div className="flex flex-shrink-0 items-center justify-center gap-4 pt-2">
+        <div className="flex flex-shrink-0 items-center justify-center gap-5 pt-3">
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handlePageChange(filters.page - 1)}
             disabled={filters.page <= 1}
-            className="h-8 w-8 p-0"
+            className="h-10 w-10 rounded-full border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-indigo-600 disabled:opacity-50"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" />
           </Button>
-          <span className="text-sm font-medium text-slate-600">
-            Trang {filters.page} / {pageCount}
+          <span className="min-w-[100px] text-center text-sm font-semibold text-slate-600">
+            Trang {filters.page} <span className="mx-1 text-slate-400">/</span>{" "}
+            {pageCount}
           </span>
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handlePageChange(filters.page + 1)}
             disabled={filters.page >= pageCount}
-            className="h-8 w-8 p-0"
+            className="h-10 w-10 rounded-full border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-indigo-600 disabled:opacity-50"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-5 w-5" />
           </Button>
         </div>
       )}

@@ -44,7 +44,6 @@ import * as z from "zod";
 import StatusBadge from "../common/StatusBadge";
 import ChatSheet from "./ChatSheet";
 
-// --- Schema (Không còn attachments) ---
 const newConversationSchema = z.object({
   subject: z.string().min(1, "Vui lòng nhập tiêu đề cuộc trao đổi"),
   initialMessage: z.string().min(1, "Vui lòng nhập nội dung tin nhắn"),
@@ -149,7 +148,7 @@ const NewConversationForm = ({
             </Button>
             <Button
               type="submit"
-              className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
+              className="flex items-center gap-2 rounded-full bg-indigo-600 px-6 text-white shadow-md shadow-indigo-600/20 transition-all hover:bg-indigo-700"
               disabled={!isDirty || isPending}
             >
               {isPending ? (
@@ -288,12 +287,12 @@ const ConversationSection = ({
   return (
     <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
       {/* Header */}
-      <div className="flex flex-row items-center justify-between border-b border-transparent pb-2">
-        <div className="flex flex-row items-center gap-2">
-          <MessageCircleMore className="h-6 w-6 text-neutral-700" />
-          <h2 className="text-[18px] font-medium text-neutral-700">Trao đổi</h2>
-        </div>
-        {canCreateNew && !isForwarded && !isCreating && (
+      {canCreateNew &&
+      !isForwarded &&
+      !isCreating &&
+      listConversation?.total &&
+      listConversation.total > 0 ? (
+        <div className="flex flex-row items-center justify-between border-b border-transparent pb-2">
           <Button
             variant="outline"
             size="sm"
@@ -303,8 +302,8 @@ const ConversationSection = ({
             <Plus className="h-4 w-4" />
             Mới
           </Button>
-        )}
-      </div>
+        </div>
+      ) : null}
 
       <ScrollArea className="w-full overflow-y-auto">
         <div className="flex h-full max-h-[50vh] flex-col gap-4 py-1 pr-4">
@@ -325,7 +324,7 @@ const ConversationSection = ({
                   {canCreateNew && !isForwarded && (
                     <Button
                       variant="primary"
-                      className="bg-blue-600 text-white hover:bg-blue-700"
+                      className="bg-indigo-600 text-white shadow-md shadow-indigo-600/20 hover:bg-indigo-700"
                       onClick={() => setIsCreating(true)}
                     >
                       Bắt đầu hội thoại mới
@@ -338,10 +337,10 @@ const ConversationSection = ({
                     <div
                       key={conv.id}
                       onClick={() => setSelectedConversationId(conv.id)}
-                      className="group flex cursor-pointer items-start gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-400 hover:shadow-md"
+                      className="group flex cursor-pointer items-start gap-4 rounded-2xl border border-slate-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5"
                     >
                       {/* Left Icon */}
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-colors group-hover:bg-indigo-50 group-hover:text-indigo-600">
                         {role === "student" ? (
                           <Building2 className="h-5 w-5" />
                         ) : (

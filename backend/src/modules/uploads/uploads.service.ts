@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { FileTargetType } from '@prisma/client';
 import {
+  ALLOWED_AVATAR_FILE_TYPES,
   ALLOWED_FILE_TYPES,
   FileAttachmentDto,
   MAX_FILE_SIZE,
@@ -53,7 +54,12 @@ export class UploadsService {
 
     // ===== 1. Validate  backend  =====
 
-    if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+    const allowedTypes =
+      targetType === FileTargetType.AVATAR
+        ? ALLOWED_AVATAR_FILE_TYPES
+        : ALLOWED_FILE_TYPES;
+
+    if (!allowedTypes.includes(fileType)) {
       throw new BadRequestException('File type not allowed');
     }
 
@@ -161,6 +167,15 @@ export class UploadsService {
     targetType: FileTargetType,
     newFiles: CreateFileAttachmentDto[],
   ): Promise<FileAttachmentDto[]> {
+    if (targetType === FileTargetType.AVATAR && newFiles?.length) {
+      const invalid = newFiles.filter(
+        (f) => !ALLOWED_AVATAR_FILE_TYPES.includes(f.fileType),
+      );
+      if (invalid.length > 0) {
+        throw new BadRequestException('Avatar file type must be PNG or JPEG');
+      }
+    }
+
     const existingFiles = await this.getAttachmentsForTarget(
       targetId,
       targetType,

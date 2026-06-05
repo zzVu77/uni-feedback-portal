@@ -31,6 +31,7 @@ export type ForumPostDetail = {
     id: string;
     fullName: string;
     email: string;
+    avatarUrl?: string | null;
   };
   commentsCount: number;
 };

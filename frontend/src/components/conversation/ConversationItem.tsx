@@ -278,7 +278,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
 
                         <Input
                           placeholder="Nhập nội dung trao đổi..."
-                          className="flex-1 border-neutral-300 bg-white focus-visible:ring-blue-500"
+                          className="flex-1 rounded-full border-slate-200 bg-white px-4 py-2 text-sm shadow-sm transition-colors focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-indigo-500"
                           value={replyText}
                           onChange={(e) => setReplyText(e.target.value)}
                           onKeyDown={handleKeyDown}
@@ -286,7 +286,7 @@ const ConversationItem = ({ data, role, onClose }: ConversationItemProps) => {
                         />
                         <Button
                           size="icon"
-                          className="h-10 w-10 shrink-0 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                          className="h-10 w-10 shrink-0 rounded-full bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition-all hover:scale-105 hover:bg-indigo-700 disabled:hover:scale-100"
                           onClick={handleSendReply}
                           disabled={
                             (!replyText.trim() && selectedFiles.length === 0) ||

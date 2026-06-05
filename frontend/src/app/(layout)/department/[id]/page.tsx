@@ -35,16 +35,14 @@ const DepartmentDetailPage = () => {
   }
 
   return (
-    <div className="min-h-full bg-slate-50/50">
-      <div className="px-4">
-        <div className="flex w-full flex-col gap-4">
+    <div className="min-h-full">
+      <div className="px-4 pb-10 sm:px-6 lg:px-8">
+        <div className="flex w-full flex-col gap-6 md:gap-8">
           <DepartmentHeader department={department} />
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="border-l-4 border-red-600 pl-3 text-xl font-bold text-gray-900">
-                Thông báo từ Khoa/Phòng
-              </h2>
-            </div>
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+              Thông báo từ Khoa/Phòng
+            </h2>
             <DepartmentAnnouncementList departmentId={department.id} />
           </div>
         </div>

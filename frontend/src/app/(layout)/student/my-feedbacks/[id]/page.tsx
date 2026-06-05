@@ -5,9 +5,11 @@ import ConversationSection from "@/components/conversation/ConversationSection";
 import FeedbackDetailHeader from "@/components/feedback/FeedbackDetailHeader";
 import StatusTimeLine from "@/components/feedback/StatusTimeline";
 import Wrapper from "@/components/shared/Wrapper";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetMyFeedbackById } from "@/hooks/queries/useFeedbackQueries";
 import { useIsClient } from "@/hooks/useIsClient";
 import { mapFeedbackDetailToHeader } from "@/utils/mappers";
+import { History, MessageCircleMoreIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const Page = () => {
@@ -25,7 +27,7 @@ const Page = () => {
     enabled: isClient,
   });
 
-  if (isLoading) return <Loading variant="spinner" />;
+  if (isLoading || !isClient) return <Loading variant="spinner" />;
 
   if (
     error &&
@@ -73,15 +75,45 @@ const Page = () => {
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
     <Wrapper classNames={{ container: "lg:px-4" }}>
-      <div className="grid h-full w-full grid-cols-1 gap-x-2 gap-y-2 pb-3 lg:grid-cols-2">
+      <div className="flex h-full w-full flex-col gap-6 pb-3">
         <div className="col-span-1 w-full lg:col-span-2">
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
         </div>
-        <StatusTimeLine statusHistory={feedback.statusHistory} />
-        <ConversationSection
-          currentFeedbackStatus={feedback.currentStatus}
-          role="student"
-        />
+        <div>
+          <Tabs defaultValue="timeline" className="w-full">
+            <TabsList className="flex h-10 w-full rounded-full border-none bg-white p-1 shadow-lg">
+              <TabsTrigger
+                value="timeline"
+                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+              >
+                <History />
+                Lịch sử
+              </TabsTrigger>
+              <TabsTrigger
+                value="conversation"
+                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+              >
+                <MessageCircleMoreIcon />
+                Trao đổi
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent
+              value="timeline"
+              className="m-0 focus-visible:outline-none"
+            >
+              <StatusTimeLine statusHistory={feedback.statusHistory} />
+            </TabsContent>
+            <TabsContent
+              value="conversation"
+              className="m-0 focus-visible:outline-none"
+            >
+              <ConversationSection
+                currentFeedbackStatus={feedback.currentStatus}
+                role="student"
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </Wrapper>
   );

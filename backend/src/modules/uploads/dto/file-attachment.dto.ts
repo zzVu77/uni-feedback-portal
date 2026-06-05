@@ -11,12 +11,18 @@ import {
   Matches,
   NotContains,
 } from 'class-validator';
-// GENERAL CONSTANTS
+// GENERAL CONSTANTS (feedbacks, announcements, clarifications, etc.)
 export const ALLOWED_FILE_TYPES = [
-  'image/png',
   'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
   'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+  'text/plain', // .txt
 ];
+
+export const ALLOWED_AVATAR_FILE_TYPES = ['image/png', 'image/jpeg'];
 export const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 export class BaseFileItemDto {

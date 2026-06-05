@@ -2,6 +2,7 @@
 import {
   Bell,
   ChartColumn,
+  Ear,
   History,
   KeyRound,
   LayoutList,
@@ -9,7 +10,6 @@ import {
   MessageCircle,
   MessageSquareText,
   MessageSquareWarning,
-  Radar,
 } from "lucide-react";
 export type NavigationItem = {
   href: string;
@@ -37,6 +37,11 @@ export const staffNavigation: NavigationItem[] = [
   },
   { href: "/notifications", label: "Thông báo", icon: Bell },
   { href: "/staff/dashboard", label: "Thống kê", icon: ChartColumn },
+  {
+    href: "/staff/social-listening",
+    label: "Lắng nghe sinh viên",
+    icon: Ear,
+  },
   { href: "/change-password", label: "Đổi mật khẩu", icon: KeyRound },
 ];
 export const adminNavigation: NavigationItem[] = [
@@ -61,7 +66,7 @@ export const adminNavigation: NavigationItem[] = [
   {
     href: "/admin/social-listening",
     label: "Lắng nghe sinh viên",
-    icon: Radar,
+    icon: Ear,
   },
   { href: "/change-password", label: "Đổi mật khẩu", icon: KeyRound },
 ];

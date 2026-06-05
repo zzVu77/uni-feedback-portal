@@ -13,12 +13,12 @@ import {
   useUpdateCategoryName,
   useUpdateCategoryStatus,
 } from "@/hooks/queries/useCategoryQueries";
+import { cn } from "@/lib/utils";
 import { Category } from "@/types/category";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import {
   ArrowUpDown,
   Ban,
-  Dot,
   Edit,
   MessageCircle,
   MoreHorizontal,
@@ -28,7 +28,6 @@ import {
 import { useState } from "react";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { CategoryDialog } from "../CategoryDialog";
-import { cn } from "@/lib/utils";
 
 // --- Action Cell Component ---
 // Separate component to handle mutations and dialog state for each row
@@ -53,7 +52,10 @@ const ActionCell = ({ row }: { row: Row<Category> }) => {
     <div className="text-right">
       <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button
+            variant="ghost"
+            className="h-9 w-9 rounded-full bg-white p-0 text-slate-400 shadow-sm ring-1 ring-slate-200 transition-all hover:scale-110 hover:bg-indigo-50 hover:text-indigo-600 hover:ring-indigo-300"
+          >
             <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -134,6 +136,8 @@ export const categoryColumns: ColumnDef<Category>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-4 h-8 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <TextIcon className="mr-2 h-3 w-3" />
@@ -143,7 +147,9 @@ export const categoryColumns: ColumnDef<Category>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="font-medium capitalize">{row.getValue("name")}</div>
+      <div className="text-center font-semibold text-slate-800 capitalize transition-colors hover:text-indigo-600">
+        {row.getValue("name")}
+      </div>
     ),
   },
   {
@@ -152,6 +158,8 @@ export const categoryColumns: ColumnDef<Category>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="h-8 text-center text-xs font-semibold tracking-wider text-slate-500 uppercase hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <MessageCircle className="mr-2 h-3 w-3" />
@@ -162,26 +170,46 @@ export const categoryColumns: ColumnDef<Category>[] = [
     },
     cell: ({ row }) => {
       const count = row.original.feedbackCount ?? 0;
-      return <div className="pl-20 font-bold">{count}</div>;
+      return (
+        <div className="flex w-full justify-center">
+          <div className="flex w-14 items-center justify-center rounded-lg bg-indigo-50/80 py-1 font-bold text-indigo-600 shadow-sm">
+            {count}
+          </div>
+        </div>
+      );
     },
   },
   {
     accessorKey: "isActive",
-    header: "Trạng thái",
+    header: () => (
+      <div className="text-center text-xs font-semibold tracking-wider text-slate-500 uppercase">
+        Trạng thái
+      </div>
+    ),
     cell: ({ row }) => {
       const isActive = row.original.isActive;
       return (
-        <Badge
-          variant={isActive ? "default" : "secondary"}
-          className={
-            isActive
-              ? "bg-green-100 text-green-700 hover:bg-green-200"
-              : "bg-red-100 text-red-500 hover:bg-red-200"
-          }
-        >
-          {isActive ? <Dot className="animate-ping" /> : <Ban />}
-          {isActive ? "Đang hoạt động" : "Vô hiệu hóa"}
-        </Badge>
+        <div className="flex w-full justify-center">
+          <Badge
+            variant={isActive ? "default" : "secondary"}
+            className={cn(
+              "rounded-full px-3 py-1 font-medium shadow-none transition-colors",
+              isActive
+                ? "bg-green-100 text-green-700 hover:bg-green-200"
+                : "bg-red-100 text-red-600 hover:bg-red-200",
+            )}
+          >
+            {isActive ? (
+              <div className="mr-1.5 flex h-2 w-2 items-center justify-center">
+                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-600"></span>
+              </div>
+            ) : (
+              <Ban className="mr-1.5 h-3 w-3" />
+            )}
+            {isActive ? "Đang hoạt động" : "Vô hiệu hóa"}
+          </Badge>
+        </div>
       );
     },
   },

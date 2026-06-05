@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsIn,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -96,4 +97,13 @@ export class QueryStaffAnnouncementsDto {
   @IsOptional()
   @IsISO8601()
   to?: string;
+
+  @ApiPropertyOptional({
+    description: 'Sort order by createdAt: "newest" (default) or "oldest"',
+    example: 'newest',
+    enum: ['newest', 'oldest'],
+  })
+  @IsOptional()
+  @IsIn(['newest', 'oldest'])
+  sort?: 'newest' | 'oldest';
 }

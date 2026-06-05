@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
+import { ACCEPTED_FILE_TYPES } from "@/constants/data";
 import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import { useDepartmentOptionsData } from "@/hooks/filters/useDepartmentOptions";
+import { useGetDepartmentProposal } from "@/hooks/queries/useAiQueries";
 import { cn } from "@/lib/utils";
 import { uploadFileToCloud } from "@/services/upload-service";
 import {
   CreateFeedbackPayload,
-  FileAttachmentDto,
   DepartmentAI,
+  FileAttachmentDto,
 } from "@/types";
 import { sanitizeAttachment } from "@/utils/sanitizeAttachment";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -71,7 +73,6 @@ import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ScrollArea } from "../ui/scroll-area";
 import { Switch } from "../ui/switch";
-import { useGetDepartmentProposal } from "@/hooks/queries/useAiQueries";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -81,15 +82,6 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-const ACCEPTED_FILE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-  "text/plain", // .txt
-];
 
 const formSchema = z.object({
   subject: z
@@ -369,8 +361,8 @@ const FeedbackForm = ({
           onSubmit={(e) => e.preventDefault()}
         >
           {/* Header Area */}
-          <div className="mb-4">
-            <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">
+          <div className="mb-1">
+            <h1 className="text-[36px] font-bold text-slate-900 lg:text-3xl">
               {type === "edit" ? "Chỉnh sửa góp ý" : "Gửi góp ý đến nhà trường"}
             </h1>
             <p className="mt-1 text-slate-500">

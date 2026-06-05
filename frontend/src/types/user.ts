@@ -12,4 +12,5 @@ export type UserInfo = {
   role: "DEPARTMENT_STAFF" | "STUDENT" | "ADMIN";
   createdAt: string;
   department?: Department;
+  avatarUrl?: string;
 };

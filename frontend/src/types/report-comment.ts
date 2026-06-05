@@ -32,6 +32,8 @@ export type ReportCommentDetail = {
 export type ReportCommentStatus = "PENDING" | "RESOLVED";
 export interface ReportCommentFilter extends BaseFilter {
   status?: ReportCommentStatus;
+  q?: string;
+  reportReason?: string;
 }
 
 export type UpdateReportCommentPayload = {

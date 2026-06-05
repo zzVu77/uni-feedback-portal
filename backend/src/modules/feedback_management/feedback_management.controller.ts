@@ -16,6 +16,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  BulkForwardFeedbackDto,
+  BulkForwardFeedbackResponseDto,
   BulkUpdateFeedbackStatusDto,
   BulkUpdateFeedbackStatusResponseDto,
   FeedbackDetailDto,
@@ -25,7 +27,7 @@ import {
   UpdateFeedbackStatusDto,
   UpdateFeedbackStatusResponseDto,
   CreateForwardingDto,
-  QueryFeedbackByStaffDto,
+  // QueryFeedbackByStaffDto,
 } from './dto';
 import { FeedbackParamDto, QueryFeedbacksDto } from 'src/modules/feedbacks/dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -58,10 +60,11 @@ export class FeedbackManagementController {
     type: ListFeedbacksResponseDto,
   })
   getStaffFeedbacks(
-    @Query() query: QueryFeedbackByStaffDto,
+    @Query() query: QueryFeedbacksDto,
     @ActiveUser() actor: ActiveUserData,
   ) {
-    return this.feedbackManagementService.getAllStaffFeedbacks(query, actor);
+    query.departmentId = actor.departmentId;
+    return this.feedbackManagementService.getAllFeedbacks(query);
   }
 
   @Patch('/staff/feedbacks/bulk-status')
@@ -81,6 +84,27 @@ export class FeedbackManagementController {
     @ActiveUser() actor: ActiveUserData,
   ): Promise<BulkUpdateFeedbackStatusResponseDto> {
     return this.feedbackManagementService.bulkUpdateFeedbackStatus(dto, actor);
+  }
+
+  @Post('/staff/feedbacks/bulk-forwardings')
+  @Roles(UserRole.DEPARTMENT_STAFF)
+  @ApiOperation({
+    summary: 'Bulk forward feedbacks to another department (Staff only)',
+    description:
+      'Forwards each ID with the same rules as single forward. IDs not in scope are skipped.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Per-item forwarding results and skipped IDs',
+    type: BulkForwardFeedbackResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Target department not found' })
+  @ApiResponse({ status: 400, description: 'Invalid forwarding request' })
+  bulkForwardFeedback(
+    @Body() dto: BulkForwardFeedbackDto,
+    @ActiveUser() actor: ActiveUserData,
+  ): Promise<BulkForwardFeedbackResponseDto> {
+    return this.feedbackManagementService.bulkForwardFeedback(dto, actor);
   }
 
   @Get('/staff/feedbacks/:feedbackId')

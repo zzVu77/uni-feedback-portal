@@ -14,9 +14,9 @@ export default function AdminLayout({
   const type = getSidebarType(user?.role);
   return (
     <div className="flex h-screen overflow-hidden">
-      <MobileNavigation type={type} fullName={user?.fullName} />
-      <Sidebar type={type} fullName={user?.fullName} />
-      <main className="h-full flex-1 overflow-y-auto bg-gray-100 px-1 py-2 pt-18 lg:py-3">
+      <MobileNavigation type={type} />
+      <Sidebar type={type} />
+      <main className="h-full flex-1 overflow-y-auto bg-white px-1 py-2 pt-18 lg:py-3">
         {children}
       </main>
     </div>

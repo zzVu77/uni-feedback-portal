@@ -4,6 +4,7 @@ import {
   Building,
   Hourglass,
   LayoutGrid,
+  Angry,
 } from "lucide-react";
 import type { ElementType } from "react";
 
@@ -19,7 +20,8 @@ export type FilterType =
   | "category"
   | "sort"
   | "notificationStatus"
-  | "sortBy";
+  | "sortBy"
+  | "reportReasonComment";
 
 export const filtersConfig: Record<FilterType, FilterDefinition> = {
   status: {
@@ -51,5 +53,10 @@ export const filtersConfig: Record<FilterType, FilterDefinition> = {
     param: "sortBy",
     placeholder: "Sắp xếp",
     icon: ArrowDownNarrowWide,
+  },
+  reportReasonComment: {
+    param: "reportReason",
+    placeholder: "Lý do báo cáo",
+    icon: Angry,
   },
 };

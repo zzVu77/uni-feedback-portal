@@ -15,6 +15,7 @@ export enum SentimentLabel {
   NEGATIVE = 'Tiêu cực',
   NEUTRAL = 'Trung lập',
   POSITIVE = 'Tích cực',
+  STRESS_ANXIETY = 'Stress lo âu',
   NO_DATA = 'Chưa có dữ liệu',
 }
 
@@ -56,4 +57,9 @@ export class GetTrendingIssuesDto {
   @IsOptional()
   @IsEnum(SentimentLabel)
   sentimentLabel?: SentimentLabel;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  groupUrl?: string;
 }

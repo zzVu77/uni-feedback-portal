@@ -2,8 +2,8 @@ name: Uni Feedback Daily Pipeline
 
 on:
   schedule:
-    # run at 19:00 UTC ( 2:AM Vietnam time) every 3 days
-    - cron: "0 19 */3 * *"
+    # Run every day at 7:00 AM Vietnam time (00:00 UTC)
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
