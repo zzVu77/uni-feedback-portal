@@ -11,11 +11,10 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { SocialListeningService } from './social_listening.service';
 import { GetTrendingIssuesDto } from './dto/get-trending-issues.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Social Listening')
 @ApiBearerAuth()
-@UseGuards(RolesGuard)
-@Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
 @Controller('social-listening')
 export class SocialListeningController {
   constructor(
@@ -23,6 +22,8 @@ export class SocialListeningController {
   ) {}
 
   @Get('trending-issues')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get trending issues data for dashboard with dynamic filters',
   })
@@ -35,6 +36,8 @@ export class SocialListeningController {
   }
 
   @Get('kpi-overview')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get KPI overview statistics for social listening',
   })
@@ -47,6 +50,8 @@ export class SocialListeningController {
   }
 
   @Get('sentiment-trend')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get sentiment trend statistics grouped by date',
   })
@@ -59,6 +64,8 @@ export class SocialListeningController {
   }
 
   @Get('topic-distribution')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get topic distribution statistics',
   })
@@ -71,6 +78,8 @@ export class SocialListeningController {
   }
 
   @Get('classification-sentiment')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get post count grouped by sentiment label',
   })
@@ -83,6 +92,8 @@ export class SocialListeningController {
   }
 
   @Get('post-count-by-date')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get total post count grouped by date',
   })
@@ -95,6 +106,8 @@ export class SocialListeningController {
   }
 
   @Get('posts-by-sentiment')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get all positive and negative posts',
   })
@@ -107,6 +120,8 @@ export class SocialListeningController {
   }
 
   @Get('topic-by-sentiment')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
   @ApiOperation({
     summary: 'Get sentiment distribution for each topic',
   })
@@ -117,7 +132,10 @@ export class SocialListeningController {
   async getTopicSentimentDistribution(@Query() query: GetTrendingIssuesDto) {
     return this.socialListeningService.getTopicSentimentDistribution(query);
   }
+
+  @Public()
   @Get('urgent-issues')
+  @UseGuards(RolesGuard)
   @ApiOperation({
     summary:
       'Get urgent issues based on severity keywords and negative sentiment',
