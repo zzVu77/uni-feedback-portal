@@ -55,6 +55,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/google-service-account.json
           FACEBOOK_GROUP_URL: ${{ vars.FACEBOOK_GROUP_URL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GOOGLE_CLOUD_PROJECT: uni-feedback-data
         run: |
           # Run the Prefect flow which orchestrates the entire pipeline
           python data-pipeline/prefect-flow/run_pipeline.py
