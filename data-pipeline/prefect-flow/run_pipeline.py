@@ -76,6 +76,13 @@ def run_dbt_mrt_dashboard():
     logger.info("Running DBT: Final Dashboard")
     subprocess.run(["dbt", "run", "--select", "mrt_trending_issues_dashboard"], cwd=DBT_DIR, check=True)
 
+@task(name="9. Reverse ETL to Postgres", retries=2, retry_delay_seconds=60)
+def run_reverse_etl():
+     logger.info("Running Reverse ETL to sync data back to PostgreSQL...")
+     subprocess.run(["python", "services/reverse_etl.py"], cwd=ROOT_DIR, check=True)
+
+
+
 
 # ==========================================
 # 2. Define the main flow that orchestrates all tasks in the correct order
@@ -99,6 +106,8 @@ def uni_feedback_flow():
     
     run_dbt_stg_ai_analysis()
     run_dbt_mrt_dashboard()
+    
+    run_reverse_etl()
     
     logger.info("Pipeline completed successfully! All tasks have been executed.")
 
