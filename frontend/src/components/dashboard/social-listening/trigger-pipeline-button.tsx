@@ -86,7 +86,7 @@ export function TriggerPipelineButton() {
               <AlertDialogDescription className="mt-2 text-center text-base text-slate-600">
                 Data Pipeline đã được bắt đầu trên GitHub Actions. Quá trình thu
                 thập và phân tích dữ liệu AI sẽ diễn ra ngầm. Vui lòng quay lại
-                kiểm tra biểu đồ và danh sách sự cố sau khoảng{" "}
+                kiểm tra biểu đồ và dữ liệu sau khoảng{" "}
                 <b className="text-emerald-700">5-7 phút</b> nữa.
               </AlertDialogDescription>
             </AlertDialogHeader>
