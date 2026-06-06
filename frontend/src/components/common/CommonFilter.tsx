@@ -2,7 +2,7 @@ import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
 import React, { Suspense } from "react";
 import Filter from "./filter/Filter";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
-import { FeedbackStatus } from "@/constants/data";
+import { FeedbackStatus, StaffFeedbackStatus } from "@/constants/data";
 
 export const CategorySelection = () => {
   const { data } = useCategoryOptionsData("all");
@@ -42,10 +42,15 @@ export const SortBySelection = () => {
     </Suspense>
   );
 };
-export const StatusSelection = () => {
+export const StatusSelection = ({
+  type = "staff",
+}: {
+  type?: "staff" | "student";
+}) => {
+  const statusOptions = type === "staff" ? StaffFeedbackStatus : FeedbackStatus;
   return (
     <Suspense fallback={null}>
-      <Filter type="status" items={FeedbackStatus} />
+      <Filter type="status" items={statusOptions} />
     </Suspense>
   );
 };
