@@ -8,6 +8,13 @@ export const FeedbackStatus = [
   { label: "Đang kiểm duyệt nội dung", value: "ai_reviewing" },
   { label: "Hệ thống kiểm duyệt gặp sự cố", value: "ai_review_failed" },
 ];
+export const StaffFeedbackStatus = [
+  { label: "Trạng thái", value: "all" },
+  { label: "Đang chờ tiếp nhận", value: "pending" },
+  { label: "Đang xử lý", value: "in_progress" },
+  { label: "Đã xử lý", value: "resolved" },
+  { label: "Từ chối", value: "rejected" },
+];
 export const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
   "image/jpg",
