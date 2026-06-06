@@ -25,6 +25,7 @@ export class ListFeedbacksResponseDto {
   results: (FeedbackSummary & {
     student?: StudentInfo | null;
     isForwarding?: boolean;
+    assignee: StudentInfo | null;
   })[];
 
   @ApiProperty({ example: 42, description: 'Total number of feedbacks' })
@@ -61,6 +62,13 @@ export class FeedbackDetailDto extends FeedbackDetail {
       'Indicates whether this feedback is part of a forwarding chain',
   })
   isForwarding?: boolean;
+  @ApiProperty({
+    type: () => StudentInfo,
+    description: 'Information about the staff member assigned to this feedback',
+    required: false,
+    nullable: true,
+  })
+  assignee: StudentInfo | null;
 }
 
 class DepartmentInfo {
@@ -127,7 +135,9 @@ export type RawFeedbackJoinedRow = FeedbackBase & {
   studentId: string;
   studentFullName: string;
   studentEmail: string;
-
+  assigneeFullName: string;
+  assigneeId: string;
+  assigneeEmail: string;
   // voteCount: number;
   // commentCount: number;
 };

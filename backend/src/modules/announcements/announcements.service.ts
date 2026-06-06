@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { FileTargetType, Prisma, UserRole } from '@prisma/client';
 import {
   ForbiddenException,
@@ -42,7 +45,7 @@ export class AnnouncementsService {
     const where: Prisma.AnnouncementsWhereInput = {};
 
     if (departmentId) {
-      where.user = { departmentId: departmentId };
+      where.departmentId = departmentId;
     }
 
     if (userId) {
@@ -79,6 +82,7 @@ export class AnnouncementsService {
               department: {
                 select: { id: true, name: true },
               },
+              role: true,
             },
           },
         },
@@ -94,6 +98,7 @@ export class AnnouncementsService {
       user: {
         id: item.user.id,
         userName: item.user.fullName,
+        role: item.user.role,
       },
       department: {
         id: item.user.department?.id ?? 'null',
@@ -118,6 +123,7 @@ export class AnnouncementsService {
                 name: true,
               },
             },
+            role: true,
           },
         },
       },
@@ -139,6 +145,7 @@ export class AnnouncementsService {
       user: {
         id: announcement.userId,
         userName: announcement.user.fullName,
+        role: announcement.user.role,
       },
       department: {
         id: announcement.user.department?.id ?? 'null',
@@ -158,6 +165,7 @@ export class AnnouncementsService {
         title: dto.title,
         content: dto.content,
         userId: actor.sub,
+        departmentId: actor.departmentId,
       },
       include: {
         user: {
@@ -185,6 +193,7 @@ export class AnnouncementsService {
       user: {
         id: announcement.user.id,
         userName: announcement.user.fullName,
+        role: announcement.user.role,
       },
       department: {
         id: announcement.user.department?.id ?? 'null',
@@ -198,8 +207,15 @@ export class AnnouncementsService {
     dto: UpdateAnnouncementDto,
     actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
-    const existingAnnouncement = await this.prisma.announcements.findUnique({
-      where: { id, userId: actor.sub },
+    const whereCondition: any = { id };
+    if (actor.role === UserRole.DEPARTMENT_STAFF) {
+      whereCondition.departmentId = actor.departmentId;
+    } else {
+      whereCondition.userId = actor.sub;
+    }
+
+    const existingAnnouncement = await this.prisma.announcements.findFirst({
+      where: whereCondition,
       include: {
         user: {
           include: {
@@ -234,6 +250,7 @@ export class AnnouncementsService {
       user: {
         id: existingAnnouncement.user.id,
         userName: existingAnnouncement.user.fullName,
+        role: existingAnnouncement.user.role,
       },
       department: {
         id: existingAnnouncement.user.department?.id ?? 'null',
@@ -249,8 +266,15 @@ export class AnnouncementsService {
   ): Promise<{ success: boolean }> {
     this._ensureIsDepartmentStaff(actor);
 
-    const existing = await this.prisma.announcements.findUnique({
-      where: { id, userId: actor.sub },
+    const whereCondition: any = { id };
+    if (actor.role === UserRole.DEPARTMENT_STAFF) {
+      whereCondition.departmentId = actor.departmentId;
+    } else {
+      whereCondition.userId = actor.sub;
+    }
+
+    const existing = await this.prisma.announcements.findFirst({
+      where: whereCondition,
     });
 
     if (!existing) throw new NotFoundException('Announcement not found');
@@ -292,7 +316,10 @@ export class AnnouncementsService {
   }
 
   private _ensureIsDepartmentStaff(actor: ActiveUserData) {
-    if (actor.role !== UserRole.DEPARTMENT_STAFF) {
+    if (
+      actor.role !== UserRole.DEPARTMENT_STAFF &&
+      actor.role !== UserRole.STAFF_ASSISTANT
+    ) {
       throw new ForbiddenException(
         'This action is only allowed for Department Staff.',
       );
@@ -308,7 +335,7 @@ export class AnnouncementsService {
     const take = pageSize;
 
     const where: Prisma.AnnouncementsWhereInput = {};
-    where.userId = actor.sub;
+    where.departmentId = actor.departmentId;
     if (q) {
       where.OR = [
         { title: { contains: q, mode: 'insensitive' } },
@@ -340,6 +367,7 @@ export class AnnouncementsService {
               department: {
                 select: { id: true, name: true },
               },
+              role: true,
             },
           },
         },
@@ -355,6 +383,7 @@ export class AnnouncementsService {
       user: {
         id: item.user.id,
         userName: item.user.fullName,
+        role: item.user.role,
       },
       department: {
         id: item.user.department?.id ?? 'null',
@@ -369,8 +398,11 @@ export class AnnouncementsService {
     id: string,
     actor: ActiveUserData,
   ): Promise<AnnouncementDetailDto> {
-    const announcement = await this.prisma.announcements.findUnique({
-      where: { id, userId: actor.sub },
+    const where: Prisma.AnnouncementsWhereInput = { id };
+    where.departmentId = actor.departmentId;
+
+    const announcement = await this.prisma.announcements.findFirst({
+      where,
       include: {
         user: {
           select: {
@@ -382,6 +414,7 @@ export class AnnouncementsService {
                 name: true,
               },
             },
+            role: true,
           },
         },
         // Không include files ở đây nữa
@@ -407,6 +440,7 @@ export class AnnouncementsService {
       user: {
         id: announcement.userId,
         userName: announcement.user.fullName,
+        role: announcement.user.role,
       },
       department: {
         id: announcement.user.department?.id ?? 'null',
