@@ -40,7 +40,7 @@ const getMe = async (token: string): Promise<UserInfo | null> => {
     });
 
     if (!res.ok) {
-      return null;
+      throw new Error(`API returned status ${res.status}`);
     }
 
     const data = await res.json();
