@@ -188,8 +188,10 @@ const StaffAction = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <div className="flex h-fit w-full flex-col gap-2 rounded-xl bg-white/80 px-3 py-4 shadow-xs md:h-full lg:w-auto">
-      <h3 className="text-[16px] font-semibold text-black/50">Hành động:</h3>
+    <div className="flex h-fit w-full flex-col gap-4 rounded-[24px] border border-white/60 bg-white/70 px-5 py-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:h-full lg:w-auto lg:min-w-[320px]">
+      <h3 className="text-[16px] font-bold tracking-tight text-slate-800">
+        Hành động:
+      </h3>
       <Form {...statusForm}>
         <form className="flex w-full flex-col gap-2">
           <FormField
