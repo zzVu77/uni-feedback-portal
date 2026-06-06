@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import RegisterSW from "@/components/pwa/RegisterSW";
+import { decodeJwt } from "jose";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -45,8 +46,25 @@ const getMe = async (token: string): Promise<UserInfo | null> => {
     const data = await res.json();
     return data as UserInfo;
   } catch (error) {
-    console.error("Failed to fetch user info:", error);
-    return null;
+    console.error(
+      "Failed to fetch user info from API, falling back to JWT decode:",
+      error,
+    );
+    try {
+      if (!token) return null;
+      const decoded = decodeJwt(token);
+      return {
+        id: decoded.sub as string,
+        email: decoded.email as string,
+        role: decoded.role as "DEPARTMENT_STAFF" | "STUDENT" | "ADMIN",
+        fullName: decoded.fullName as string,
+        avatarUrl: decoded.avatar as string,
+        createdAt: new Date().toISOString(),
+      } as UserInfo;
+    } catch (e) {
+      console.error("Failed to decode JWT:", e);
+      return null;
+    }
   }
 };
 // --- Root Layout Component ---
