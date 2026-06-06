@@ -16,7 +16,7 @@ export default function AdminLayout({
     <div className="flex h-screen overflow-hidden">
       <MobileNavigation type={type} />
       <Sidebar type={type} />
-      <main className="h-full flex-1 overflow-y-auto bg-white px-2 py-3 md:py-0">
+      <main className="h-full flex-1 overflow-y-auto bg-white px-1 py-2 pt-18 md:py-0 md:pt-0">
         {children}
       </main>
     </div>
