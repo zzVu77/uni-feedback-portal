@@ -66,7 +66,7 @@ export function AddDataSourceDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-indigo-600 text-white hover:bg-indigo-700">
+        <Button className="w-full bg-indigo-600 text-white hover:bg-indigo-700 sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Thêm Mới
         </Button>

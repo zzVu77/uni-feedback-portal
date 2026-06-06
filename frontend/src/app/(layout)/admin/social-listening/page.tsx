@@ -1,6 +1,7 @@
 "use client";
 import { DataSourceCardGrid } from "@/components/dashboard/social-listening/data-source-card-grid";
 import { AddDataSourceDialog } from "@/components/dashboard/social-listening/add-data-source-dialog";
+import { TriggerPipelineButton } from "@/components/dashboard/social-listening/trigger-pipeline-button";
 import Wrapper from "@/components/shared/Wrapper";
 import { Input } from "@/components/ui/input";
 import { useGetSocialDataSources } from "@/hooks/queries/useSocialDataSourceQueries";
@@ -35,18 +36,21 @@ const AdminSocialListeningPage = () => {
             Quản lý các nguồn dữ liệu mạng xã hội (Facebook Groups). Thêm mới,
             chỉnh sửa thông tin hoặc cấu hình để hệ thống tự động cào dữ liệu.
           </p>
-          <div className="mt-6 flex items-center justify-center gap-4">
-            <div className="relative w-full max-w-md">
+          <div className="mt-6 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="relative w-full sm:max-w-md">
               <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400" />
               <Input
                 type="text"
                 placeholder="Tìm kiếm tên hoặc url..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 w-full rounded-full border-slate-200 bg-white pl-12 text-base shadow-sm transition-all focus-visible:ring-indigo-500"
+                className="h-10 w-full rounded-md border-slate-200 bg-white pl-11 text-base shadow-sm transition-all focus-visible:ring-indigo-500"
               />
             </div>
-            <AddDataSourceDialog />
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <AddDataSourceDialog />
+              <TriggerPipelineButton />
+            </div>
           </div>
         </div>
 
