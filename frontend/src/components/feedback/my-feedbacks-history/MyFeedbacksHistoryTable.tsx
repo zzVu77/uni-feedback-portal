@@ -76,7 +76,7 @@ export function MyFeedbacksHistoryTable() {
         {/* Desktop Filters */}
         <div className="hidden items-center gap-2 md:flex">
           <CommonFilter.DepartmentSelection />
-          <CommonFilter.StatusSelection />
+          <CommonFilter.StatusSelection type="student" />
           <CommonFilter.CategorySelection />
         </div>
 
