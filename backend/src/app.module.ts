@@ -26,6 +26,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { FeedbackSimilarityModule } from './modules/feedback-similarity/feedback-similarity.module';
 import { SocialListeningModule } from './modules/social_listening/social_listening.module';
 import { SocialDataSourceModule } from './modules/social_data_source/social_data_source.module';
+import { GithubActionModule } from './modules/github-action/github-action.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { SocialDataSourceModule } from './modules/social_data_source/social_data
     FeedbackSimilarityModule,
     SocialListeningModule,
     SocialDataSourceModule,
+    GithubActionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
