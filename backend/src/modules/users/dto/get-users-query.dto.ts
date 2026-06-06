@@ -37,4 +37,23 @@ export class GetUsersQueryDto {
   @IsString()
   @IsOptional()
   departmentId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Number of days for the rolling time window',
+    default: 30,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  lookbackDays?: number = 30;
+
+  @ApiPropertyOptional({
+    description: 'Order by field',
+    example: 'violationCount_desc',
+  })
+  @IsString()
+  @IsOptional()
+  orderBy?: 'violationCount_desc' | 'violationCount_asc' | 'createdAt_desc' =
+    'createdAt_desc';
 }

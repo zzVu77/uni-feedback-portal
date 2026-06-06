@@ -70,4 +70,12 @@ export class UserResponseDto {
     description: 'Avatar of the user',
   })
   avatarUrl?: string;
+
+  @ApiProperty({
+    example: 3,
+    description:
+      'Number of violations (comment reports with VIOLATION decision)',
+    required: false,
+  })
+  violationCount?: number;
 }

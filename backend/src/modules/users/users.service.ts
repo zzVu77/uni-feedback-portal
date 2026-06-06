@@ -17,6 +17,7 @@ import { UploadsService } from '../uploads/uploads.service';
 import { HashingService } from '../auth/hashing.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUsersQueryDto } from './dto/get-users-query.dto';
+import { GetUserViolationsQueryDto } from './dto/get-user-violations-query.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserStatusDto } from './dto/update-user-status.dto';
 
@@ -32,6 +33,12 @@ export class UsersService implements UsersServiceContract {
     private uploadsService: UploadsService,
     private hashingService: HashingService,
   ) {}
+
+  private getRollingDateLimit(lookbackDays: number): Date {
+    const dateLimit = new Date();
+    dateLimit.setDate(dateLimit.getDate() - lookbackDays);
+    return dateLimit;
+  }
 
   private mapToUserResponse(user: UserWithDepartment): UserResponseDto {
     return {
@@ -154,7 +161,16 @@ export class UsersService implements UsersServiceContract {
   async getUsers(
     query: GetUsersQueryDto,
   ): Promise<{ results: UserResponseDto[]; total: number }> {
-    const { page = 1, limit = 10, search, role, status, departmentId } = query;
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      role,
+      status,
+      departmentId,
+      lookbackDays = 30,
+      orderBy = 'createdAt_desc',
+    } = query;
     const skip = (page - 1) * limit;
 
     const where: Prisma.UsersWhereInput = {
@@ -169,25 +185,131 @@ export class UsersService implements UsersServiceContract {
       }),
     };
 
-    const [users, total] = await Promise.all([
-      this.prisma.users.findMany({
+    const dateLimit = this.getRollingDateLimit(lookbackDays);
+
+    if (orderBy === 'violationCount_desc' || orderBy === 'violationCount_asc') {
+      const allUsers = await this.prisma.users.findMany({
         where,
-        skip,
-        take: limit,
         include: {
           department: {
             select: { id: true, name: true, email: true, location: true },
           },
         },
-        orderBy: { createdAt: 'desc' },
+      });
+
+      const userIds = allUsers.map((u) => u.id);
+      const violationMap = new Map<string, number>();
+
+      if (userIds.length > 0) {
+        const violations = await this.prisma.commentReports.groupBy({
+          by: ['userId'],
+          where: {
+            userId: { in: userIds },
+            decision: 'VIOLATION',
+            updatedAt: { gte: dateLimit },
+          },
+          _count: {
+            id: true,
+          },
+        });
+        violations.forEach((v) => violationMap.set(v.userId, v._count.id));
+      }
+
+      const usersWithCount = allUsers.map((u) => ({
+        ...u,
+        violationCount: violationMap.get(u.id) || 0,
+      }));
+
+      usersWithCount.sort((a, b) => {
+        if (orderBy === 'violationCount_desc')
+          return b.violationCount - a.violationCount;
+        return a.violationCount - b.violationCount;
+      });
+
+      const total = usersWithCount.length;
+      const paginatedUsers = usersWithCount.slice(skip, skip + limit);
+
+      return {
+        results: paginatedUsers.map((u) => {
+          const res = this.mapToUserResponse(u);
+          res.violationCount = u.violationCount;
+          return res;
+        }),
+        total,
+      };
+    } else {
+      const [users, total] = await Promise.all([
+        this.prisma.users.findMany({
+          where,
+          skip,
+          take: limit,
+          include: {
+            department: {
+              select: { id: true, name: true, email: true, location: true },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        }),
+        this.prisma.users.count({ where }),
+      ]);
+
+      const userIds = users.map((u) => u.id);
+      const violationMap = new Map<string, number>();
+
+      if (userIds.length > 0) {
+        const violations = await this.prisma.commentReports.groupBy({
+          by: ['userId'],
+          where: {
+            userId: { in: userIds },
+            decision: 'VIOLATION',
+            updatedAt: { gte: dateLimit },
+          },
+          _count: {
+            id: true,
+          },
+        });
+        violations.forEach((v) => violationMap.set(v.userId, v._count.id));
+      }
+
+      return {
+        results: users.map((u) => {
+          const res = this.mapToUserResponse(u);
+          res.violationCount = violationMap.get(u.id) || 0;
+          return res;
+        }),
+        total,
+      };
+    }
+  }
+
+  async getUserViolations(userId: string, query: GetUserViolationsQueryDto) {
+    const { lookbackDays = 30, page = 1, limit = 10 } = query;
+    const user = await this.prisma.users.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException(`User with ID ${userId} not found`);
+
+    const skip = (page - 1) * limit;
+    const dateLimit = this.getRollingDateLimit(lookbackDays);
+
+    const where: Prisma.CommentReportsWhereInput = {
+      userId,
+      decision: 'VIOLATION',
+      updatedAt: { gte: dateLimit },
+    };
+
+    const [results, total] = await Promise.all([
+      this.prisma.commentReports.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { updatedAt: 'desc' },
+        include: {
+          comment: true,
+        },
       }),
-      this.prisma.users.count({ where }),
+      this.prisma.commentReports.count({ where }),
     ]);
 
-    return {
-      results: users.map((u) => this.mapToUserResponse(u)),
-      total,
-    };
+    return { results, total };
   }
 
   async getUserById(id: string): Promise<UserResponseDto> {
