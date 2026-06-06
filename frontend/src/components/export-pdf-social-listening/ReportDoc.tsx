@@ -1,16 +1,16 @@
-import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
-import { styles } from "./report-styles";
 import {
   FeedbackPost,
   KPIOverviewData,
   TopicDistributionItem,
 } from "@/types/social-listening";
+import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
+import { styles } from "./report-styles";
 export const ReportDoc = ({
   kpiData,
   fromDate,
   toDate,
   sentimentChartImage,
-  postCountChartImage,
+  trendChartImage,
   postsBySentimentData,
   topicBySentimentData,
 }: {
@@ -19,6 +19,7 @@ export const ReportDoc = ({
   toDate: string;
   sentimentChartImage: string;
   postCountChartImage: string;
+  trendChartImage: string;
   postsBySentimentData: FeedbackPost[] | undefined;
   topicBySentimentData: TopicDistributionItem[] | undefined;
 }) => {
@@ -85,22 +86,38 @@ export const ReportDoc = ({
           </View>
           <View style={styles.section}>
             <Text style={styles.h1}>Phân tích biểu đồ</Text>
-            <View style={{ alignItems: "center", marginBottom: 12 }}>
+
+            <View style={{ alignItems: "center", marginBottom: 100 }}>
               <Image
                 src={sentimentChartImage}
-                style={{ width: 200, height: 200 }}
+                style={{ width: 150, height: 150 }}
               />
-              <Text style={{ fontSize: 8, marginTop: 12, fontStyle: "italic" }}>
+              <Text
+                style={{
+                  fontSize: 8,
+                  marginTop: 8,
+                  fontStyle: "italic",
+                  color: "gray",
+                }}
+              >
                 Biểu đồ phân bố cảm xúc của các bài đăng
               </Text>
             </View>
+
             <View style={{ alignItems: "center", marginBottom: 12 }}>
               <Image
-                src={postCountChartImage}
-                style={{ width: "100%", height: 300 }}
+                src={trendChartImage}
+                style={{ width: "100%", height: 220 }}
               />
-              <Text style={{ fontSize: 8, marginTop: 12, fontStyle: "italic" }}>
-                Biểu đồ số lượng bài viết theo ngày
+              <Text
+                style={{
+                  fontSize: 8,
+                  marginTop: 8,
+                  fontStyle: "italic",
+                  color: "gray",
+                }}
+              >
+                Biểu đồ phân tích xu hướng cảm xúc qua các ngày
               </Text>
             </View>
           </View>

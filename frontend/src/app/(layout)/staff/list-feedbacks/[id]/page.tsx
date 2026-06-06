@@ -71,7 +71,7 @@ const Page = () => {
     <Wrapper>
       <div className="flex h-full w-full flex-col gap-6 pb-3">
         {/* Top Section */}
-        <div className="flex flex-col items-start justify-between gap-4 lg:flex-row">
+        <div className="flex flex-col items-stretch justify-between gap-4 lg:flex-row">
           <div className="w-full min-w-0 flex-1">
             <FeedbackDetailHeader type="staff" data={feedbackHeaderData} />
           </div>

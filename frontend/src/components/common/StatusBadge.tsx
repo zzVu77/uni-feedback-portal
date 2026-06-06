@@ -103,7 +103,7 @@ const STATUS_CONFIG = {
     textClassName: "",
   },
   AI_REVIEW_SUCCESS: {
-    text: "Kiểm duyệt nội dung thành công",
+    text: "Kiểm duyệt thành công",
     icon: ClipboardCheck,
     badgeClassName: "text-orange-600 bg-orange-100 hover:bg-orange-200/80",
     iconClassName: "text-orange-500 animate-pulse",

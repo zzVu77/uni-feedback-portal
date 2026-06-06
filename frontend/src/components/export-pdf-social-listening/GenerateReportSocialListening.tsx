@@ -4,6 +4,7 @@ import {
   TopicDistributionItem,
   ClassificationSentimentData,
   FeedbackPost,
+  SentimentTrendItem,
 } from "@/types/social-listening";
 import { drawChart } from "./draw-chart";
 import { ReportDoc } from "./ReportDoc";
@@ -17,11 +18,14 @@ export async function GenerateReportSocialListening(
   postCountData: PostCountByDateItem[] | undefined,
   postsBySentimentData: FeedbackPost[] | undefined,
   topicBySentimentData: TopicDistributionItem[] | undefined,
+  trendData: SentimentTrendItem[] | undefined,
 ): Promise<Blob> {
-  const { sentimentChartImage, postCountChartImage } = drawChart({
-    classificationData,
-    postCountData,
-  });
+  const { sentimentChartImage, postCountChartImage, trendChartImage } =
+    drawChart({
+      classificationData,
+      postCountData,
+      trendData,
+    });
   return await pdf(
     <ReportDoc
       kpiData={kpiData}
@@ -31,6 +35,7 @@ export async function GenerateReportSocialListening(
       topicBySentimentData={topicBySentimentData}
       sentimentChartImage={sentimentChartImage}
       postCountChartImage={postCountChartImage}
+      trendChartImage={trendChartImage}
     />,
   ).toBlob();
 }
