@@ -118,7 +118,7 @@ export class AuthController {
     const isProduction = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       path: '/',
-      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
       secure: isProduction,
       httpOnly: true,
     };
@@ -135,16 +135,17 @@ export class AuthController {
     response.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
       secure: isProduction,
+      sameSite: 'none',
       maxAge: accessTokenMaxAge,
       path: '/',
-      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: isProduction,
       maxAge: refreshTokenMaxAge,
       path: '/',
-      domain: isProduction ? '.vucoder77.id.vn' : 'localhost',
+      domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
     });
   }
 }

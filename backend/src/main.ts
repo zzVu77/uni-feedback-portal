@@ -13,6 +13,7 @@ async function bootstrap() {
     'http://localhost:3000',
     'https://uniportal.vucoder77.id.vn',
     'https://uni-feedback-portal-frontend.vercel.app',
+    'https://uniportal.giahuynguyen28.id.vn',
   ];
   app.enableCors({
     origin: allowedOrigins,
