@@ -28,6 +28,7 @@ import {
   SentimentLabel,
   SocialListeningFilter,
   TopicDistributionItem,
+  SentimentTrendItem,
 } from "@/types/social-listening";
 import { format, startOfMonth, toDate } from "date-fns";
 import { ArrowLeft, Download, ExternalLink } from "lucide-react";
@@ -134,6 +135,7 @@ const SocialListeningDetailPage = () => {
     postCountData: PostCountByDateItem[] | undefined,
     postsBySentimentData: FeedbackPost[] | undefined,
     topicBySentimentData: TopicDistributionItem[] | undefined,
+    trendData: SentimentTrendItem[] | undefined,
   ) => {
     const blob = await GenerateReportSocialListening(
       kpiData,
@@ -143,6 +145,7 @@ const SocialListeningDetailPage = () => {
       postCountData,
       postsBySentimentData,
       topicBySentimentData,
+      trendData,
     );
     const url = URL.createObjectURL(blob);
     window.open(url);
@@ -212,6 +215,7 @@ const SocialListeningDetailPage = () => {
                     postCountData,
                     postsBySentimentData,
                     topicBySentimentData,
+                    trendData,
                   )
                 }
                 className="h-10 w-full rounded-full bg-indigo-600 px-6 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg sm:w-auto"
