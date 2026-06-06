@@ -10,7 +10,7 @@ const page = () => {
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
           <div className="flex-1 space-y-1">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-              Quản lý góp thông bạn
+              Quản lý thông báo
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
               Đăng, chỉnh sửa và quản lý các thông báo quan trọng để truyền đạt

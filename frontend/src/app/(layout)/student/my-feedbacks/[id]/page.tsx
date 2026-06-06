@@ -74,7 +74,7 @@ const Page = () => {
 
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedback);
   return (
-    <Wrapper classNames={{ container: "lg:px-4" }}>
+    <Wrapper classNames={{ container: "lg:px-4 pt-0 mt-0" }}>
       <div className="flex h-full w-full flex-col gap-6 pb-3">
         <div className="col-span-1 w-full lg:col-span-2">
           <FeedbackDetailHeader type="student" data={feedbackHeaderData} />
