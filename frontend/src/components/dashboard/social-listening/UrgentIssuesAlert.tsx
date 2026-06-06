@@ -1,14 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { FeedbackPost } from "@/types/social-listening";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { AlertTriangle, ExternalLink, ShieldAlert } from "lucide-react";
-import React from "react";
+import { ExternalLink, ShieldAlert } from "lucide-react";
+import React, { useState } from "react";
+import { PostDetailDialog, getSentimentInfo } from "./PostDetailDialog";
 
 interface UrgentIssuesAlertProps {
   issues: FeedbackPost[];
 }
 
 const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
+  const [selectedPost, setSelectedPost] = useState<FeedbackPost | null>(null);
+
   if (!issues || issues.length === 0) return null;
 
   return (
@@ -39,10 +43,22 @@ const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
             >
               <div className="flex-1 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-700">
-                    <AlertTriangle className="h-3 w-3" />
-                    {issue.sentimentLabel}
-                  </span>
+                  {(() => {
+                    const sentiment = getSentimentInfo(issue.sentimentLabel);
+                    return (
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold shadow-sm",
+                          sentiment.bg,
+                          sentiment.color,
+                          sentiment.border,
+                        )}
+                      >
+                        {sentiment.icon}
+                        {issue.sentimentLabel}
+                      </span>
+                    );
+                  })()}
                   <span className="border-l border-slate-300 pl-2 text-xs font-medium text-slate-500">
                     {format(new Date(issue.postedAt), "dd/MM/yyyy HH:mm")}
                   </span>
@@ -62,9 +78,7 @@ const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    if (issue.postLink) window.open(issue.postLink, "_blank");
-                  }}
+                  onClick={() => setSelectedPost(issue)}
                   className="w-full border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 sm:w-auto"
                 >
                   Xem chi tiết <ExternalLink className="ml-2 h-3.5 w-3.5" />
@@ -74,6 +88,11 @@ const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
           ))}
         </div>
       </div>
+
+      <PostDetailDialog
+        post={selectedPost}
+        onClose={() => setSelectedPost(null)}
+      />
     </div>
   );
 };
