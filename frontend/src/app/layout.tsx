@@ -1,13 +1,13 @@
+import RegisterSW from "@/components/pwa/RegisterSW";
 import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "@/context/UserContext";
 import QueryProvider from "@/lib/QueryProvider";
 import { UserInfo } from "@/types"; // Đảm bảo bạn đã export type này từ file types
+import { decodeJwt } from "jose";
 import { Check, Info, X } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
-import RegisterSW from "@/components/pwa/RegisterSW";
-import { decodeJwt } from "jose";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -60,7 +60,7 @@ const getMe = async (token: string): Promise<UserInfo | null> => {
         fullName: decoded.fullName as string,
         avatarUrl: decoded.avatar as string,
         createdAt: new Date().toISOString(),
-      } as UserInfo;
+      };
     } catch (e) {
       console.error("Failed to decode JWT:", e);
       return null;
