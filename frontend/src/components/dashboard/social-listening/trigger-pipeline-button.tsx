@@ -49,13 +49,13 @@ export function TriggerPipelineButton() {
         <AlertDialogContent className="rounded-[24px] p-6 sm:p-8">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-xl font-bold">
-              Xác nhận kích hoạt Pipeline
+              Xác nhận kích hoạt quá trình phân tích dữ liệu
             </AlertDialogTitle>
             <AlertDialogDescription className="text-base text-slate-600">
-              Hành động này sẽ gọi Github Action để tiến hành cào dữ liệu mới
-              nhất từ các nguồn mạng xã hội (Facebook Groups) hiện tại và phân
-              tích bằng AI. Quá trình có thể mất vài phút. Bạn có chắc chắn muốn
-              chạy ngay bây giờ?
+              Hành động này sẽ kích hoạt hệ thống để tiến hành thu thập dữ liệu
+              liệu mới nhất từ các nguồn mạng xã hội (Facebook Groups) hiện tại
+              và phân tích bằng AI. Quá trình có thể mất vài phút. Bạn có chắc
+              chắn muốn chạy ngay bây giờ?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-6 gap-3">
