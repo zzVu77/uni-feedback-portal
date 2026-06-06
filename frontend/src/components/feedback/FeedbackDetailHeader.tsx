@@ -15,12 +15,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ConfirmationDialog from "../common/ConfirmationDialog";
+import StatusBadge from "../common/StatusBadge";
 import WarningBox from "../common/WarningBox";
 import { Badge } from "../ui/badge"; // Import Badge
 import { Button } from "../ui/button";
 import Attachment from "./Attachment";
-import DOMPurify from "dompurify";
-import StatusBadge from "../common/StatusBadge";
 
 type Props = {
   type: "student" | "staff" | "admin";
@@ -57,7 +56,7 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
   };
   return (
     <>
-      <div className="flex h-full w-full flex-col gap-4 rounded-xl bg-white px-4 py-4 shadow-md lg:px-8">
+      <div className="flex h-full w-full flex-col gap-5 rounded-[24px] border border-white/60 bg-white/70 px-6 py-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl lg:px-8">
         {/* Title */}
         <div className="flex flex-col items-start justify-between gap-1 md:flex-row lg:gap-4">
           <h1 className="order-2 text-[16px] font-bold text-black md:order-1 lg:text-[24px]">
@@ -191,12 +190,8 @@ const FeedbackDetailHeader = ({ type = "student", data }: Props) => {
         <div>
           <h2 className="text-[18px] font-medium">Nội dung:</h2>{" "}
           <div
-            className="text-[13px] font-normal text-black lg:text-[14px]"
-            dangerouslySetInnerHTML={{
-              __html:
-                DOMPurify.sanitize(description) ||
-                " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            }}
+            className="prose prose-slate prose-lg prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-img:rounded-2xl max-w-none"
+            dangerouslySetInnerHTML={{ __html: description }}
           />
         </div>
         {/* Attachments */}
