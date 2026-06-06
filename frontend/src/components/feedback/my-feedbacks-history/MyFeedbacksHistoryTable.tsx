@@ -158,9 +158,9 @@ export function MyFeedbacksHistoryTable() {
               <Link
                 href={`/student/my-feedbacks/${feedback.id}`}
                 key={feedback.id}
-                className="group block h-full"
+                className="group bp mt-2 block h-full"
               >
-                <Card className="flex h-full flex-col justify-between gap-0 rounded-[20px] border border-white/60 bg-white/50 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-100 hover:bg-white hover:shadow-[0_8px_20px_rgb(0,0,0,0.06)]">
+                <Card className="flex h-full flex-col justify-between gap-0 rounded-[20px] border border-gray-200/90 bg-white/50 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-100 hover:bg-white hover:shadow-[0_8px_20px_rgb(0,0,0,0.06)]">
                   <div className="space-y-2">
                     <div className="flex flex-col items-start gap-2">
                       <StatusBadge

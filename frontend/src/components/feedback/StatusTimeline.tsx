@@ -9,7 +9,7 @@ const StatusTimeLine = ({
   statusHistory: FeedbackDetail["statusHistory"];
 }) => {
   return (
-    <div className="flex max-h-[650px] min-h-[250px] flex-col items-start justify-start gap-4 rounded-xl bg-white px-3 py-4 shadow-xs md:px-8">
+    <div className="flex max-h-[650px] min-h-[250px] w-full flex-col items-start justify-start gap-4 rounded-xl border border-gray-200/90 bg-white px-3 py-4 shadow-xs md:px-8">
       {/* Timeline content */}
       <ScrollArea className="w-full overflow-y-auto">
         {statusHistory.length === 0 ? (

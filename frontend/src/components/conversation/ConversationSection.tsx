@@ -285,7 +285,7 @@ const ConversationSection = ({
   );
 
   return (
-    <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-xs">
+    <div className="flex max-h-[650px] min-h-[250px] w-full flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-xl border border-gray-200/90 bg-white p-4 shadow-xs">
       {/* Header */}
       {canCreateNew &&
       !isForwarded &&
