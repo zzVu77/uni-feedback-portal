@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   BadRequestException,
   ForbiddenException,
@@ -88,6 +90,11 @@ export class FeedbackManagementService {
       conditions.push({ categoryId });
     }
 
+    const { assigneeId } = query as any;
+    if (assigneeId) {
+      conditions.push({ assigneeId });
+    }
+
     if (from || to) {
       const dateFilter: Prisma.DateTimeFilter = {};
       if (from) dateFilter.gte = new Date(from);
@@ -123,6 +130,7 @@ export class FeedbackManagementService {
           forwardingLogs: {
             select: { toDepartmentId: true, fromDepartmentId: true },
           },
+          assignee: { select: { id: true, fullName: true, email: true } },
         },
       }),
       this.prisma.feedbacks.count({ where }),
@@ -142,6 +150,13 @@ export class FeedbackManagementService {
         f.forwardingLogs.some(
           (log) => log.fromDepartmentId === actor.departmentId,
         ),
+      assignee: f.assignee
+        ? {
+            id: f.assignee.id,
+            fullName: f.assignee.fullName,
+            email: f.assignee.email,
+          }
+        : null,
       ...(f.isPrivate
         ? {}
         : {
@@ -177,6 +192,7 @@ export class FeedbackManagementService {
       },
       include: {
         user: true,
+        assignee: { select: { id: true, fullName: true, email: true } },
         forumPost: {
           select: { id: true },
         },
@@ -281,6 +297,13 @@ export class FeedbackManagementService {
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: feedback.department,
       isForwarding,
+      assignee: feedback.assignee
+        ? {
+            id: feedback.assignee.id,
+            fullName: feedback.assignee.fullName,
+            email: feedback.assignee.email,
+          }
+        : null,
       category: feedback.category,
       statusHistory: unifiedTimeline,
       fileAttachments: fileAttachments,
@@ -304,11 +327,30 @@ export class FeedbackManagementService {
       throw new NotFoundException('Feedback not found');
     }
 
+    if (
+      actor.role === 'STAFF_ASSISTANT' &&
+      feedback.assigneeId !== actor.sub &&
+      feedback.assigneeId
+    ) {
+      throw new ForbiddenException(
+        'You can only update feedbacks assigned to you',
+      );
+    }
+
+    const updateData: Prisma.FeedbacksUpdateInput = {
+      currentStatus: dto.status,
+    };
+
+    if (!feedback.assigneeId) {
+      updateData.assignee = { connect: { id: actor.sub } };
+    }
+    if (feedback.assigneeId && dto.status === 'PENDING') {
+      updateData.assignee = { disconnect: true };
+    }
+
     const updatedFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId, departmentId: actor.departmentId },
-      data: {
-        currentStatus: dto.status,
-      },
+      data: updateData,
     });
 
     if (
@@ -371,6 +413,12 @@ export class FeedbackManagementService {
     if (feedback.departmentId !== actor.departmentId) {
       throw new ForbiddenException(
         `You are not allowed to forward feedback #${feedbackId} belonging to another department`,
+      );
+    }
+
+    if (actor.role === 'STAFF_ASSISTANT' && feedback.assigneeId !== actor.sub) {
+      throw new ForbiddenException(
+        'You can only forward feedbacks assigned to you',
       );
     }
     const toDepartment = await this.prisma.departments.findUnique({
@@ -587,14 +635,18 @@ export class FeedbackManagementService {
         c."name" as "categoryName",
         u."id" as "studentId",
         u."fullName" as "studentFullName",
-        u."email" as "studentEmail"
+        u."email" as "studentEmail",
+        a."id" as "assigneeId",
+        a."fullName" as "assigneeFullName",
+        a."email" as "assigneeEmail"
       FROM "Feedbacks" f
       LEFT JOIN "Departments" d ON f."departmentId" = d."id"
       LEFT JOIN "Categories" c ON f."categoryId" = c."id"
       LEFT JOIN "Users" u ON u."id" = f."userId"
+      LEFT JOIN "Users" a ON a."id" = f."assigneeId"
       ${joinClause}
       ${whereClause}
-      GROUP BY f."id", d."name", c."name", u."id" 
+      GROUP BY f."id", d."name", c."name", u."id", a."id", a."fullName", a."email"
       ${orderByClause}
       OFFSET ${(page - 1) * pageSize}
       LIMIT ${pageSize}
@@ -634,6 +686,13 @@ export class FeedbackManagementService {
         department: { id: f.departmentId, name: f.departmentName },
         category: { id: f.categoryId, name: f.categoryName },
         createdAt: new Date(f.createdAt).toISOString(),
+        assignee: f.assigneeId
+          ? {
+              id: f.assigneeId,
+              fullName: f.assigneeFullName,
+              email: f.assigneeEmail,
+            }
+          : null,
         ...(f.isPrivate
           ? null
           : {
@@ -662,6 +721,7 @@ export class FeedbackManagementService {
       },
       include: {
         user: true,
+        assignee: true,
         forumPost: {
           select: { id: true },
         },
@@ -762,6 +822,13 @@ export class FeedbackManagementService {
       category: feedback.category,
       statusHistory: unifiedTimeline,
       fileAttachments: fileAttachments,
+      assignee: feedback.assignee
+        ? {
+            id: feedback.assignee.id,
+            fullName: feedback.assignee.fullName,
+            email: feedback.assignee.email,
+          }
+        : null,
     };
 
     return result;

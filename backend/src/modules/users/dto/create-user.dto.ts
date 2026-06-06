@@ -27,7 +27,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     enum: UserRole,
-    example: UserRole.DEPARTMENT_STAFF,
+    example: UserRole.STAFF_ASSISTANT,
     description: 'Role',
   })
   @IsEnum(UserRole)

@@ -22,7 +22,8 @@ model Users {
   commentReports  CommentReports[]
   deletedComments Comments[]                   @relation("CommentDeleter")
   comments        Comments[]
-  feedbacks       Feedbacks[]
+  createdFeedbacks  Feedbacks[] @relation("FeedbackCreator")
+  assignedFeedbacks Feedbacks[] @relation("FeedbackAssignee")  
   forwardingLogs  ForwardingLogs[]
   messages        Messages[]
   notifications   Notifications[]
@@ -45,6 +46,7 @@ model Departments {
   forwardingLogsFromDepartmentId ForwardingLogs[]      @relation("FromDepartment")
   forwardingLogsToDepartmentId   ForwardingLogs[]      @relation("ToDepartment")
   users                          Users[]
+  announcements                  Announcements[]
 
   @@index([isActive])
 }
@@ -69,6 +71,7 @@ model Feedbacks {
   userId                  String                       @db.Uuid
   departmentId            String                       @db.Uuid
   categoryId              String                       @db.Uuid
+  assigneeId              String?                      @db.Uuid
   conversations           ClarificationConversations[]
   embedding               FeedbackEmbeddings?
   similarityLinksAsSource FeedbackSimilarityLink[]     @relation("SimilaritySource")
@@ -76,9 +79,10 @@ model Feedbacks {
   statusHistory           FeedbackStatusHistory[]
   category                Categories                   @relation(fields: [categoryId], references: [id])
   department              Departments                  @relation(fields: [departmentId], references: [id])
-  user                    Users                        @relation(fields: [userId], references: [id])
+  user         Users     @relation("FeedbackCreator", fields: [userId], references: [id])
   forumPost               ForumPosts?
   forwardingLogs          ForwardingLogs[]
+  assignee     Users?    @relation("FeedbackAssignee", fields: [assigneeId], references: [id])
 }
 
 model FeedbackEmbeddings {
@@ -212,9 +216,11 @@ model Announcements {
   title     String
   content   String
   createdAt DateTime @default(now())
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
-  user      Users    @relation(fields: [userId], references: [id])
+  id           String       @id @default(uuid()) @db.Uuid
+  userId       String       @db.Uuid
+  departmentId String?      @db.Uuid
+  user         Users        @relation(fields: [userId], references: [id])
+  department   Departments? @relation(fields: [departmentId], references: [id])
 }
 
 model Notifications {
@@ -350,6 +356,7 @@ enum ReportStatus {
 
 enum UserRole {
   DEPARTMENT_STAFF
+  STAFF_ASSISTANT
   STUDENT
   ADMIN
 }
