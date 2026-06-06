@@ -10,10 +10,8 @@
 import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
-  AxiosHeaders,
   AxiosInstance,
 } from "axios";
-import Cookies from "js-cookie";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8080";
 
 interface AxiosInstanceCustom extends AxiosInstance {
@@ -33,11 +31,8 @@ const axiosInstance = axios.create({
 /* ------------------ Request Interceptor ------------------ */
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const accessToken = Cookies.get("accessToken");
-    if (accessToken) {
-      config.headers = AxiosHeaders.from(config.headers);
-      config.headers.set("Authorization", `Bearer ${accessToken}`);
-    }
+    // Không cần gán header Authorization bằng tay vì accessToken là httpOnly cookie.
+    // Cấu hình `withCredentials: true` đã tự động yêu cầu trình duyệt gửi cookie đi kèm request.
     return config;
   },
   (error) => Promise.reject(error),
@@ -46,14 +41,14 @@ axiosInstance.interceptors.request.use(
 /* ------------------ Response Interceptor ------------------ */
 let isRefreshing = false;
 let failedQueue: {
-  resolve: (token?: string | null) => void;
+  resolve: () => void;
   reject: (err: unknown) => void;
 }[] = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
+const processQueue = (error: unknown) => {
   failedQueue.forEach((prom) => {
     if (error) prom.reject(error);
-    else prom.resolve(token);
+    else prom.resolve();
   });
   failedQueue = [];
 };
@@ -64,18 +59,10 @@ axiosInstance.interceptors.response.use(
     const originalRequest: any = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then((token) => {
-            if (token) {
-              originalRequest.headers = AxiosHeaders.from(
-                originalRequest.headers,
-              );
-              originalRequest.headers.set("Authorization", `Bearer ${token}`);
-            }
-            return axiosInstance(originalRequest);
-          })
+          .then(() => axiosInstance(originalRequest))
           .catch((err) => Promise.reject(err));
       }
 
@@ -88,19 +75,10 @@ axiosInstance.interceptors.response.use(
           {},
           { withCredentials: true },
         );
-        const newAccessToken = Cookies.get("accessToken");
-        processQueue(null, newAccessToken);
-
-        if (newAccessToken) {
-          originalRequest.headers = AxiosHeaders.from(originalRequest.headers);
-          originalRequest.headers.set(
-            "Authorization",
-            `Bearer ${newAccessToken}`,
-          );
-        }
+        processQueue(null);
         return axiosInstance(originalRequest);
       } catch (err) {
-        processQueue(err, null);
+        processQueue(err);
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

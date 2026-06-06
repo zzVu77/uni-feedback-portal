@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getMe } from "@/services/user-service";
 
 import { useUser } from "@/context/UserContext";
 import {
@@ -17,16 +18,28 @@ import { toast } from "sonner";
 export const useLogin = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user } = useUser();
+  const { setUser } = useUser();
+
   return useMutation({
     mutationFn: (payload: ILoginPayload) => login(payload),
     retry: false,
-    onSuccess: () => {
-      window.location.reload();
+    onSuccess: async () => {
       toast.success("Đăng nhập thành công");
-      const returnTo = searchParams.get("returnTo");
-      const redirectPath = returnTo || (user ? getUrlByRole(user.role) : "/");
-      router.push(redirectPath);
+
+      try {
+        // Fetch user data right after login to update client context immediately
+        const userData = await getMe();
+        setUser(userData);
+
+        const returnTo = searchParams.get("returnTo");
+        const redirectPath = returnTo || getUrlByRole(userData.role);
+
+        router.push(redirectPath);
+        router.refresh(); // Refresh Server Components (like RootLayout) with the new cookie
+      } catch {
+        toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
+        window.location.href = "/";
+      }
     },
     onError: () => {
       toast.error("Email hoặc mật khẩu không chính xác");

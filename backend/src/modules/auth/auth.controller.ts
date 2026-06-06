@@ -135,7 +135,7 @@ export class AuthController {
     response.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'none',
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: accessTokenMaxAge,
       path: '/',
       domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
@@ -143,6 +143,7 @@ export class AuthController {
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: refreshTokenMaxAge,
       path: '/',
       domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
