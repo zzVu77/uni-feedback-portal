@@ -32,11 +32,11 @@ export const useGetUsers = (filter: UserManagementFilter) => {
   });
 };
 
-export const useGetUserById = (id: string) => {
+export const useGetUserById = (id: string, options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: userManagementKeys.detail(id),
     queryFn: () => userManagementService.getUserById(id),
-    enabled: !!id,
+    enabled: !!id && (options?.enabled ?? true),
   });
 };
 

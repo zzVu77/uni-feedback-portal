@@ -23,11 +23,17 @@ import {
   Unlock,
 } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
+import { useIsClient } from "@/hooks/useIsClient";
 
-export default function UserDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
-  const { data: user, isLoading } = useGetUserById(id);
+export default function UserDetailPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const isClient = useIsClient();
+  const { data: user, isLoading } = useGetUserById(id, {
+    enabled: isClient,
+  });
 
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);

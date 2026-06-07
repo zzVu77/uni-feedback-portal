@@ -178,11 +178,11 @@ export const UserManagementTable = () => {
   ];
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+    <div className="flex h-full w-full flex-col gap-2 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
       <Tabs
         value={currentTab}
         onValueChange={handleTabChange}
-        className="w-full"
+        className="flex w-full flex-shrink-0 flex-col gap-2"
       >
         <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
           <TabsList className="grid w-full max-w-[400px] grid-cols-2 rounded-xl bg-slate-100/80 p-1">
@@ -202,7 +202,7 @@ export const UserManagementTable = () => {
         </div>
 
         <TabsContent value={currentTab} className="mt-0">
-          <div className="flex w-full items-center gap-3">
+          <div className="flex w-full flex-shrink-0 items-center gap-3">
             <React.Suspense fallback={null}>
               <SearchBar
                 placeholder="Tìm kiếm theo tên, email..."
@@ -313,30 +313,30 @@ export const UserManagementTable = () => {
       </Tabs>
 
       {/* Table */}
-      <div className="w-full flex-1 overflow-auto rounded-[20px] border border-slate-100 bg-white/50 shadow-sm">
-        <Table className={cn("min-w-[900px]", users.length === 0 && "h-full")}>
+      <div className="flex-1 overflow-auto rounded-[20px] border border-slate-100 bg-white/50 shadow-sm">
+        <Table className={cn("w-full", users.length === 0 && "h-full")}>
           <TableHeader className="sticky top-0 z-10 bg-indigo-50/80 backdrop-blur-md">
             <TableRow className="border-b border-indigo-100/50 hover:bg-transparent">
-              <TableHead className="h-14 w-[35%] px-5 text-xs font-bold tracking-wider text-indigo-800/70 uppercase">
+              <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Người dùng
               </TableHead>
-              <TableHead className="h-14 w-[20%] px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase">
+              <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Phân quyền
               </TableHead>
-              <TableHead className="h-14 w-[15%] px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase">
+              <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Trạng thái
               </TableHead>
 
               {currentTab === "student" && (
-                <TableHead className="h-14 w-[10%] px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase">
+                <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                   Vi phạm
                 </TableHead>
               )}
 
-              <TableHead className="h-14 w-[10%] px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase">
+              <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Ngày tham gia
               </TableHead>
-              <TableHead className="h-14 w-[10%] pr-8 text-right text-xs font-bold tracking-wider text-indigo-800/70 uppercase">
+              <TableHead className="h-14 px-3 text-right text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Thao tác
               </TableHead>
             </TableRow>
@@ -373,7 +373,7 @@ export const UserManagementTable = () => {
                     key={user.id}
                     className="group border-b border-slate-100 bg-white/40 transition-all hover:bg-indigo-50/30"
                   >
-                    <TableCell className="py-4 pl-5">
+                    <TableCell className="px-3 py-4 lg:px-5">
                       <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10 shadow-sm ring-2 ring-white">
                           <AvatarImage src={user.avatarUrl || undefined} />
@@ -397,7 +397,7 @@ export const UserManagementTable = () => {
                       </div>
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="px-3 py-4 lg:px-5">
                       <Badge
                         variant="outline"
                         className={cn(
@@ -409,7 +409,7 @@ export const UserManagementTable = () => {
                       </Badge>
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="px-3 py-4 lg:px-5">
                       <Badge
                         variant="outline"
                         className={cn(
@@ -435,7 +435,7 @@ export const UserManagementTable = () => {
                     </TableCell>
 
                     {currentTab === "student" && (
-                      <TableCell>
+                      <TableCell className="px-3 py-4 lg:px-5">
                         {user.violationCount !== undefined &&
                         user.violationCount > 0 ? (
                           <div className="flex items-center gap-1.5 font-bold text-rose-600">
@@ -450,13 +450,13 @@ export const UserManagementTable = () => {
                       </TableCell>
                     )}
 
-                    <TableCell>
+                    <TableCell className="px-3 py-4 lg:px-5">
                       <span className="text-sm font-medium text-slate-600">
                         {format(new Date(user.createdAt), "dd/MM/yyyy")}
                       </span>
                     </TableCell>
 
-                    <TableCell className="pr-8 text-right">
+                    <TableCell className="px-3 py-4 text-right lg:px-5">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button

@@ -12,8 +12,9 @@ export default function UserManagementPage() {
 
   return (
     <Wrapper>
-      <div className="md:ga-1 flex h-full w-full flex-col items-center justify-between gap-2 md:flex-row">
-        <div className="flex flex-col gap-1 md:flex-row md:items-start md:justify-between lg:items-center">
+      <div className="flex h-full w-full flex-col gap-1">
+        {/* Page Header */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
           <div className="flex-1 space-y-1">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Quản lý người dùng
@@ -23,18 +24,19 @@ export default function UserManagementPage() {
               phạm và phân quyền.
             </p>
           </div>
+          <Button
+            onClick={() => setIsCreateOpen(true)}
+            className="bg-indigo-600 shadow-md transition-all hover:bg-indigo-700 active:scale-95"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Thêm người dùng mới
+          </Button>
         </div>
-        <Button
-          onClick={() => setIsCreateOpen(true)}
-          className="bg-indigo-600 shadow-md transition-all hover:bg-indigo-700 active:scale-95"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Thêm người dùng mới
-        </Button>
+
+        <div className="flex-1 overflow-hidden">
+          <UserManagementTable />
+        </div>
       </div>
-
-      <UserManagementTable />
-
       <CreateUserDialog
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
