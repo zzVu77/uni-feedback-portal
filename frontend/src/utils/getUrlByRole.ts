@@ -6,6 +6,8 @@ export const getUrlByRole = (role: string) => {
       return "/student";
     case "DEPARTMENT_STAFF":
       return "/staff";
+    case "STAFF_ASSISTANT":
+      return "/staff-assistant";
     default:
       return "/";
   }
