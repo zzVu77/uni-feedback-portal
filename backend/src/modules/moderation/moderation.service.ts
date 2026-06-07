@@ -13,6 +13,7 @@ import {
 import {
   CommentTargetType,
   Prisma,
+  ReportDecision,
   ReportStatus,
   UserRole,
 } from '@prisma/client';
@@ -268,6 +269,9 @@ export class ModerationService {
       data: {
         status: dto.status ?? report.status,
         adminResponse: adminResponse,
+        decision: isDeleting
+          ? ReportDecision.VIOLATION
+          : ReportDecision.NO_VIOLATION,
       },
       include: {
         comment: {

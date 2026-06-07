@@ -52,7 +52,7 @@ export class FeedbackManagementController {
   // 1. DEPARTMENT STAFF ROUTES
   // ==========================================================
   @Get('/staff/feedbacks')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get feedbacks for the current staff member' })
   @ApiResponse({
     status: 200,
@@ -68,7 +68,7 @@ export class FeedbackManagementController {
   }
 
   @Patch('/staff/feedbacks/bulk-status')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Bulk update feedback status (Staff only)',
     description:
@@ -87,7 +87,7 @@ export class FeedbackManagementController {
   }
 
   @Post('/staff/feedbacks/bulk-forwardings')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Bulk forward feedbacks to another department (Staff only)',
     description:
@@ -108,7 +108,7 @@ export class FeedbackManagementController {
   }
 
   @Get('/staff/feedbacks/:feedbackId')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get feedback details by ID (Staff only)',
     description:
@@ -131,7 +131,7 @@ export class FeedbackManagementController {
   }
 
   @Get('/staff/feedbacks/:feedbackId/related')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'List related feedbacks (vector similarity links, Staff only)',
     description:
@@ -152,7 +152,7 @@ export class FeedbackManagementController {
   }
 
   @Patch('/staff/feedbacks/:feedbackId/status')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Update the status of a feedback (Staff only)' })
   @ApiResponse({
     status: 200,
@@ -168,7 +168,7 @@ export class FeedbackManagementController {
   }
 
   @Post('/staff/feedbacks/:feedbackId/forwardings')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Forward feedback to another department (Staff only)',
   })
