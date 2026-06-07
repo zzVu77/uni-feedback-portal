@@ -20,6 +20,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { GetUsersQueryDto } from './dto/get-users-query.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserStatusDto } from './dto/update-user-status.dto';
+import { GetUserViolationsQueryDto } from './dto/get-user-violations-query.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -100,6 +101,16 @@ export class UsersController {
     @Body() dto: UpdateUserStatusDto,
   ): Promise<UserResponseDto> {
     return this.usersService.updateUserStatus(id, dto);
+  }
+
+  @ApiOperation({ summary: 'Get user violations (comment reports)' })
+  @Roles(UserRole.ADMIN)
+  @Get('/:id/violations')
+  async getUserViolations(
+    @Param('id') id: string,
+    @Query() query: GetUserViolationsQueryDto,
+  ) {
+    return this.usersService.getUserViolations(id, query);
   }
 
   // @ApiOperation({ summary: 'Soft delete user' })

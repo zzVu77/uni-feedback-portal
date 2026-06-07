@@ -168,13 +168,15 @@ model Comments {
 model CommentReports {
   reason        String?
   adminResponse String?
-  createdAt     DateTime     @default(now())
-  id            String       @id @default(uuid()) @db.Uuid
-  commentId     String       @db.Uuid
-  userId        String       @db.Uuid
-  status        ReportStatus @default(PENDING)
-  comment       Comments     @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user          Users        @relation(fields: [userId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  id            String          @id @default(uuid()) @db.Uuid
+  commentId     String          @db.Uuid
+  userId        String          @db.Uuid
+  status        ReportStatus    @default(PENDING)
+  decision      ReportDecision?
+  comment       Comments        @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user          Users           @relation(fields: [userId], references: [id])
 }
 
 model ClarificationConversations {
@@ -352,6 +354,11 @@ enum FeedbackStatus {
 enum ReportStatus {
   RESOLVED
   PENDING
+}
+
+enum ReportDecision {
+  VIOLATION
+  NO_VIOLATION
 }
 
 enum UserRole {
