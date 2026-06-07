@@ -3,6 +3,12 @@ import { UserRole, UserStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
+export enum UserOrderBy {
+  VIOLATION_COUNT_DESC = 'violationCount_desc',
+  VIOLATION_COUNT_ASC = 'violationCount_asc',
+  CREATED_AT_DESC = 'createdAt_desc',
+}
+
 export class GetUsersQueryDto {
   @ApiPropertyOptional({ example: 1 })
   @Type(() => Number)
@@ -50,10 +56,11 @@ export class GetUsersQueryDto {
 
   @ApiPropertyOptional({
     description: 'Order by field',
-    example: 'violationCount_desc',
+    enum: UserOrderBy,
+    default: UserOrderBy.CREATED_AT_DESC,
+    example: UserOrderBy.VIOLATION_COUNT_DESC,
   })
-  @IsString()
+  @IsEnum(UserOrderBy)
   @IsOptional()
-  orderBy?: 'violationCount_desc' | 'violationCount_asc' | 'createdAt_desc' =
-    'createdAt_desc';
+  orderBy?: UserOrderBy = UserOrderBy.CREATED_AT_DESC;
 }

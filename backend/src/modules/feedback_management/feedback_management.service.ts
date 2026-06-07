@@ -455,6 +455,7 @@ export class FeedbackManagementService {
       data: {
         departmentId: dto.toDepartmentId,
         currentStatus: FeedbackStatus.IN_PROGRESS,
+        assigneeId: null,
       },
     });
 
