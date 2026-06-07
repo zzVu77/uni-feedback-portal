@@ -227,7 +227,9 @@ export class UsersService implements UsersServiceContract {
     const skip = (page - 1) * limit;
 
     const where: Prisma.UsersWhereInput = {
-      ...(role && { role }),
+      ...(role && {
+        role: Array.isArray(role) ? { in: role } : role,
+      }),
       ...(status && { status }),
       ...(departmentId && { departmentId }),
       ...(search && {

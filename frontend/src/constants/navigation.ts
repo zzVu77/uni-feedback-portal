@@ -10,6 +10,7 @@ import {
   MessageCircle,
   MessageSquareText,
   MessageSquareWarning,
+  Users,
 } from "lucide-react";
 export type NavigationItem = {
   href: string;
@@ -59,6 +60,11 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin/category-management",
     label: "Quản lý danh mục",
     icon: LayoutList,
+  },
+  {
+    href: "/admin/user-management",
+    label: "Quản lý người dùng",
+    icon: Users,
   },
   { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
   { href: "/notifications", label: "Thông báo", icon: Bell },

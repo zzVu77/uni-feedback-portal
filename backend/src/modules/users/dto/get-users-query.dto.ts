@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole, UserStatus } from '@prisma/client';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export enum UserOrderBy {
@@ -29,10 +30,12 @@ export class GetUsersQueryDto {
   @IsOptional()
   search?: string;
 
-  @ApiPropertyOptional({ enum: UserRole })
-  @IsEnum(UserRole)
+  @ApiPropertyOptional({ enum: UserRole, isArray: true })
   @IsOptional()
-  role?: UserRole;
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.split(',') : value,
+  )
+  role?: UserRole | UserRole[];
 
   @ApiPropertyOptional({ enum: UserStatus })
   @IsEnum(UserStatus)
