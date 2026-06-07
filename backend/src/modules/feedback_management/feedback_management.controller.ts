@@ -64,7 +64,7 @@ export class FeedbackManagementController {
     @ActiveUser() actor: ActiveUserData,
   ) {
     query.departmentId = actor.departmentId;
-    return this.feedbackManagementService.getAllFeedbacks(query);
+    return this.feedbackManagementService.getAllStaffFeedbacks(query, actor);
   }
 
   @Patch('/staff/feedbacks/bulk-status')
