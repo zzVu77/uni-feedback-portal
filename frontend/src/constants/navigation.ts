@@ -76,3 +76,25 @@ export const adminNavigation: NavigationItem[] = [
   },
   { href: "/change-password", label: "Đổi mật khẩu", icon: KeyRound },
 ];
+
+export const staffAssistantNavigation: NavigationItem[] = [
+  {
+    href: "/staff-assistant/list-feedbacks",
+    label: "Góp ý tiếp nhận",
+    icon: History,
+  },
+  { href: "/forum", label: "Diễn đàn", icon: MessageCircle },
+  {
+    href: "/staff-assistant/announcement-management",
+    label: "Quản lý thông báo",
+    icon: Megaphone,
+  },
+  { href: "/notifications", label: "Thông báo", icon: Bell },
+  { href: "/staff-assistant/dashboard", label: "Thống kê", icon: ChartColumn },
+  {
+    href: "/staff-assistant/social-listening",
+    label: "Lắng nghe sinh viên",
+    icon: Ear,
+  },
+  { href: "/change-password", label: "Đổi mật khẩu", icon: KeyRound },
+];
