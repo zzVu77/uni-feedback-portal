@@ -86,8 +86,8 @@ export default function UserDetailPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Info Card */}
         <div className="col-span-1 flex flex-col gap-6">
-          <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm ring-1 ring-black/5">
-            <div className="flex flex-col items-center bg-slate-50/50 p-8 text-center">
+          <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm ring-1 ring-black/5">
+            <div className="flex h-full flex-col items-center bg-slate-50/50 p-8 text-center">
               <Avatar className="mb-4 h-24 w-24 shadow-md ring-4 ring-white">
                 <AvatarImage src={user.avatarUrl || undefined} />
                 <AvatarFallback className="bg-indigo-100 text-3xl font-bold text-indigo-700">

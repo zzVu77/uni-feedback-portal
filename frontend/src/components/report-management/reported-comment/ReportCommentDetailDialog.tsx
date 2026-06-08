@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
+import { useGetUserViolations } from "@/hooks/queries/useUserManagementQueries";
 import { ReportCommentDetail } from "@/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { useGetUserViolations } from "@/hooks/queries/useUserManagementQueries";
 import {
   AlertCircle,
   Calendar,
@@ -24,7 +24,7 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 type Props = {
   children?: React.ReactNode;
@@ -50,13 +50,28 @@ const ReportCommentDetailDialog = ({
     target,
   } = data;
 
+  const [showBanWarning, setShowBanWarning] = useState(false);
+
   const { mutate: updateReport } = useUpdateReportComment(id);
   const isResolved = status === "RESOLVED";
 
+  const { data: violationsData } = useGetUserViolations(comment.user.id, {
+    lookbackDays: 30,
+    page: 1,
+    limit: 1,
+  });
+  const violationCount = violationsData?.total || 0;
+
   const handleDelete = () => {
     updateReport({ status: "RESOLVED", isDeleted: true });
-    if (onOpenChange) {
-      onOpenChange(false);
+
+    // Nếu số lần vi phạm >= 5 (hoặc sẽ là >= 5 sau khi xóa), hiển thị cảnh báo
+    if (violationCount >= 4) {
+      setShowBanWarning(true);
+    } else {
+      if (onOpenChange) {
+        onOpenChange(false);
+      }
     }
   };
 
@@ -67,220 +82,234 @@ const ReportCommentDetailDialog = ({
     }
   };
 
-  // Lấy danh sách vi phạm của người dùng trong 30 ngày qua
-  const { data: violationsData } = useGetUserViolations(comment.user.id, {
-    lookbackDays: 30,
-    page: 1,
-    limit: 1,
-  });
-  const violationCount = violationsData?.total || 0;
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
-      <DialogContent className="max-w-2xl gap-0 overflow-hidden rounded-xl bg-white p-0 sm:h-fit lg:h-auto">
-        <DialogTitle className="sr-only">Chi tiết báo cáo</DialogTitle>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+        <DialogContent className="max-w-2xl gap-0 overflow-hidden rounded-xl bg-white p-0 sm:h-fit lg:h-auto">
+          <DialogTitle className="sr-only">Chi tiết báo cáo</DialogTitle>
 
-        {/* Header */}
-        <div className="flex flex-col items-start gap-2 border-b border-slate-100 bg-slate-50/50 pt-4 pr-10 pl-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600">
-              <ShieldAlert className="h-4 w-4" />
+          {/* Header */}
+          <div className="flex flex-col items-start gap-2 border-b border-slate-100 bg-slate-50/50 pt-4 pr-10 pl-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <ShieldAlert className="h-4 w-4" />
+              </div>
+              <h2 className="text-lg font-semibold text-slate-800">
+                Chi tiết báo cáo vi phạm
+              </h2>
             </div>
-            <h2 className="text-lg font-semibold text-slate-800">
-              Chi tiết báo cáo vi phạm
-            </h2>
+            <StatusBadge type={status} />
           </div>
-          <StatusBadge type={status} />
-        </div>
 
-        <ScrollArea className="max-h-[70vh] w-full">
-          <div className="flex flex-col gap-6 px-6 py-6">
-            {/* Warning Section for Frequent Violators */}
-            {violationCount > 5 && (
-              <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm md:flex-row md:items-center md:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
-                    <ShieldAlert className="h-5 w-5" />
+          <ScrollArea className="max-h-[70vh] w-full">
+            <div className="flex flex-col gap-6 px-6 py-6">
+              {/* Warning Section for Frequent Violators */}
+              {violationCount > 5 && (
+                <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm md:flex-row md:items-center md:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                      <ShieldAlert className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-red-800">
+                        Người dùng này có dấu hiệu vi phạm nhiều lần
+                      </h3>
+                      <p className="mt-0.5 text-xs text-red-600">
+                        Đã vi phạm {violationCount} lần trong 30 ngày qua. Đề
+                        xuất xem xét khóa tài khoản.
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-red-800">
-                      Người dùng này có dấu hiệu vi phạm nhiều lần
-                    </h3>
-                    <p className="mt-0.5 text-xs text-red-600">
-                      Đã vi phạm {violationCount} lần trong 30 ngày qua. Đề xuất
-                      xem xét khóa tài khoản.
+                  <Link href={`/admin/user-management/${comment.user.id}`}>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="w-full gap-2 md:w-auto"
+                    >
+                      <User className="h-4 w-4" />
+                      Xem thông tin user
+                    </Button>
+                  </Link>
+                </div>
+              )}
+
+              {/* Section 1: Comment Content (The Evidence) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <MessageSquare className="h-4 w-4 text-blue-500" />
+                    Nội dung bình luận
+                  </label>
+                  <Link
+                    href={
+                      target.targetType === "FORUM_POST"
+                        ? `/forum/posts/${target.targetInfo.id}`
+                        : `/forum/announcements/${target.targetInfo.id}`
+                    }
+                    target="_blank"
+                    className="group flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                  >
+                    Xem bài viết gốc
+                    <ExternalLink className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
+                </div>
+
+                <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                  <div className="absolute top-0 bottom-0 left-0 w-1 bg-blue-500" />
+                  <div className="p-4 pl-5">
+                    <p className="text-base leading-relaxed font-medium text-slate-800">
+                      "{comment.content}"
                     </p>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100">
+                          <User className="h-3 w-3" />
+                        </div>
+                        <span className="font-medium text-slate-700">
+                          {comment.user.fullName}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>
+                          {new Date(comment.createdAt).toLocaleString("vi-VN")}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <Link href={`/admin/user-management/${comment.user.id}`}>
+              </div>
+
+              {/* Section 2: Report Context */}
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4">
+                <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-red-700">
+                  <AlertCircle className="h-4 w-4" />
+                  Thông tin tố cáo
+                </label>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <span className="text-xs font-medium text-slate-500">
+                      Người báo cáo
+                    </span>
+                    <div className="flex items-center gap-2 text-sm font-medium text-slate-800">
+                      <User className="h-4 w-4 text-slate-400" />
+                      {reportedBy.fullName}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <span className="text-xs font-medium text-slate-500">
+                      Thời gian báo cáo
+                    </span>
+                    <div className="flex items-center gap-2 text-sm text-slate-800">
+                      <Calendar className="h-4 w-4 text-slate-400" />
+                      {new Date(createdAt).toLocaleString("vi-VN", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 sm:col-span-2">
+                    <span className="text-xs font-medium text-slate-500">
+                      Lý do vi phạm
+                    </span>
+                    <div className="rounded-md border border-red-100 bg-white px-3 py-2 text-sm font-medium text-red-600">
+                      {reason}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 3: Admin Response (If any) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <Quote className="h-4 w-4 text-green-600" />
+                  Ghi chú của quản trị viên
+                </label>
+                <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 text-sm text-slate-600">
+                  {adminResponse ? (
+                    <span className="text-slate-800">{adminResponse}</span>
+                  ) : (
+                    <span className="text-slate-400 italic">
+                      Chưa có ghi chú xử lý.
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
+
+          {/* Footer Actions */}
+          <DialogFooter className="gap-2 border-t border-slate-100 bg-slate-50/50 p-4 sm:justify-end">
+            {isResolved ? (
+              <Button
+                variant="outline"
+                onClick={() => onOpenChange && onOpenChange(false)}
+                className="w-full sm:w-auto"
+              >
+                Đóng
+              </Button>
+            ) : (
+              <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-end">
+                <ConfirmationDialog
+                  title="Xác nhận không vi phạm?"
+                  description="Bình luận này sẽ được giữ lại và đánh dấu là đã xử lý. Báo cáo sẽ được đóng."
+                  onConfirm={handleResolve}
+                  confirmText="Xác nhận"
+                >
                   <Button
-                    variant="destructive"
-                    size="sm"
-                    className="w-full gap-2 md:w-auto"
+                    variant="outline"
+                    className="w-full border-green-200 text-green-700 hover:bg-green-50 hover:text-green-800 sm:w-auto"
                   >
-                    <User className="h-4 w-4" />
-                    Quản lý người dùng
+                    <Check className="mr-2 h-4 w-4" />
+                    Giữ lại (Không vi phạm)
                   </Button>
-                </Link>
+                </ConfirmationDialog>
+
+                <ConfirmationDialog
+                  title="Xác nhận xóa bình luận?"
+                  description="Bình luận này sẽ bị ẩn khỏi hệ thống vĩnh viễn. Hành động này không thể hoàn tác."
+                  onConfirm={handleDelete}
+                  confirmText="Xóa bình luận"
+                >
+                  <Button variant="destructive" className="w-full sm:w-auto">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Xóa nội dung
+                  </Button>
+                </ConfirmationDialog>
               </div>
             )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-            {/* Section 1: Comment Content (The Evidence) */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                  <MessageSquare className="h-4 w-4 text-blue-500" />
-                  Nội dung bình luận
-                </label>
-                <Link
-                  href={
-                    target.targetType === "FORUM_POST"
-                      ? `/forum/posts/${target.targetInfo.id}`
-                      : `/forum/announcements/${target.targetInfo.id}`
-                  }
-                  target="_blank"
-                  className="group flex items-center gap-1 text-xs text-blue-600 hover:underline"
-                >
-                  Xem bài viết gốc
-                  <ExternalLink className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
-              </div>
-
-              <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                <div className="absolute top-0 bottom-0 left-0 w-1 bg-blue-500" />
-                <div className="p-4 pl-5">
-                  <p className="text-base leading-relaxed font-medium text-slate-800">
-                    "{comment.content}"
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
-                    <div className="flex items-center gap-1.5">
-                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100">
-                        <User className="h-3 w-3" />
-                      </div>
-                      <span className="font-medium text-slate-700">
-                        {comment.user.fullName}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" />
-                      <span>
-                        {new Date(comment.createdAt).toLocaleString("vi-VN")}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Section 2: Report Context */}
-            <div className="rounded-xl border border-red-100 bg-red-50/30 p-4">
-              <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-red-700">
-                <AlertCircle className="h-4 w-4" />
-                Thông tin tố cáo
-              </label>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1">
-                  <span className="text-xs font-medium text-slate-500">
-                    Người báo cáo
-                  </span>
-                  <div className="flex items-center gap-2 text-sm font-medium text-slate-800">
-                    <User className="h-4 w-4 text-slate-400" />
-                    {reportedBy.fullName}
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <span className="text-xs font-medium text-slate-500">
-                    Thời gian báo cáo
-                  </span>
-                  <div className="flex items-center gap-2 text-sm text-slate-800">
-                    <Calendar className="h-4 w-4 text-slate-400" />
-                    {new Date(createdAt).toLocaleString("vi-VN", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                </div>
-
-                <div className="space-y-1 sm:col-span-2">
-                  <span className="text-xs font-medium text-slate-500">
-                    Lý do vi phạm
-                  </span>
-                  <div className="rounded-md border border-red-100 bg-white px-3 py-2 text-sm font-medium text-red-600">
-                    {reason}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Section 3: Admin Response (If any) */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                <Quote className="h-4 w-4 text-green-600" />
-                Ghi chú của quản trị viên
-              </label>
-              <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 text-sm text-slate-600">
-                {adminResponse ? (
-                  <span className="text-slate-800">{adminResponse}</span>
-                ) : (
-                  <span className="text-slate-400 italic">
-                    Chưa có ghi chú xử lý.
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </ScrollArea>
-
-        {/* Footer Actions */}
-        <DialogFooter className="gap-2 border-t border-slate-100 bg-slate-50/50 p-4 sm:justify-end">
-          {isResolved ? (
-            <Button
-              variant="outline"
-              onClick={() => onOpenChange && onOpenChange(false)}
-              className="w-full sm:w-auto"
-            >
-              Đóng
-            </Button>
-          ) : (
-            <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-end">
-              <ConfirmationDialog
-                title="Xác nhận không vi phạm?"
-                description="Bình luận này sẽ được giữ lại và đánh dấu là đã xử lý. Báo cáo sẽ được đóng."
-                onConfirm={handleResolve}
-                confirmText="Xác nhận"
-              >
-                <Button
-                  variant="outline"
-                  className="w-full border-green-200 text-green-700 hover:bg-green-50 hover:text-green-800 sm:w-auto"
-                >
-                  <Check className="mr-2 h-4 w-4" />
-                  Giữ lại (Không vi phạm)
-                </Button>
-              </ConfirmationDialog>
-
-              <ConfirmationDialog
-                title="Xác nhận xóa bình luận?"
-                description="Bình luận này sẽ bị ẩn khỏi hệ thống vĩnh viễn. Hành động này không thể hoàn tác."
-                onConfirm={handleDelete}
-                confirmText="Xóa bình luận"
-              >
-                <Button variant="destructive" className="w-full sm:w-auto">
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Xóa nội dung
-                </Button>
-              </ConfirmationDialog>
-            </div>
-          )}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      {/* Dialog cảnh báo khóa tài khoản sau khi xóa bình luận */}
+      <ConfirmationDialog
+        isOpen={showBanWarning}
+        onOpenChange={(isOpen) => {
+          setShowBanWarning(isOpen);
+          if (!isOpen && onOpenChange) {
+            onOpenChange(false); // Đóng cả dialog chi tiết report khi dialog cảnh báo tắt
+          }
+        }}
+        title="Đề xuất xem xét khóa tài khoản"
+        description={`Bình luận đã bị xóa. Người dùng này đã vi phạm ${
+          violationCount + 1
+        } lần trong 30 ngày qua (bao gồm cả lần này). Bạn có muốn chuyển đến trang thông tin của user này để xem xét khóa tài khoản không?`}
+        confirmText="Xem thông tin user"
+        cancelText="Bỏ qua"
+        onConfirm={() => {
+          window.location.href = `/admin/user-management/${comment.user.id}`;
+        }}
+      />
+    </>
   );
 };
 
