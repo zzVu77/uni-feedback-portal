@@ -4,7 +4,6 @@
 
 import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,10 +30,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Edit,
+  Eye,
   Lock,
   MoreHorizontal,
   SearchX,
-  Unlock,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -111,9 +110,9 @@ export const DepartmentManagementTable = () => {
               <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Email / Số điện thoại
               </TableHead>
-              <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
+              {/* <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Trạng thái
-              </TableHead>
+              </TableHead> */}
               <TableHead className="h-14 px-3 text-xs font-bold tracking-wider text-indigo-800/70 uppercase lg:px-5">
                 Lượt góp ý
               </TableHead>
@@ -143,7 +142,7 @@ export const DepartmentManagementTable = () => {
               </TableRow>
             ) : (
               departments.map((dept) => {
-                const statusInfo = getDepartmentStatusInfo(dept.isActive);
+                // const statusInfo = getDepartmentStatusInfo(dept.isActive);
 
                 return (
                   <TableRow
@@ -171,7 +170,7 @@ export const DepartmentManagementTable = () => {
                       </div>
                     </TableCell>
 
-                    <TableCell className="px-3 py-4 lg:px-5">
+                    {/* <TableCell className="px-3 py-4 lg:px-5">
                       <Badge
                         variant="outline"
                         className={cn(
@@ -184,7 +183,7 @@ export const DepartmentManagementTable = () => {
                           {statusInfo.label}
                         </span>
                       </Badge>
-                    </TableCell>
+                    </TableCell> */}
 
                     <TableCell className="px-3 py-4 lg:px-5">
                       <span className="font-semibold text-slate-700">
@@ -218,7 +217,16 @@ export const DepartmentManagementTable = () => {
                             Cập nhật thông tin
                           </DropdownMenuItem>
 
-                          {dept.isActive ? (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              router.push(`/department/${dept.id}`)
+                            }
+                          >
+                            <Eye className="mr-2 h-4 w-4" />
+                            Xem chi tiết
+                          </DropdownMenuItem>
+
+                          {/* {dept.isActive ? (
                             <DropdownMenuItem
                               className="text-rose-600 focus:text-rose-700"
                               onClick={() =>
@@ -244,7 +252,7 @@ export const DepartmentManagementTable = () => {
                               <Unlock className="mr-2 h-4 w-4" />
                               Mở khóa phòng ban
                             </DropdownMenuItem>
-                          )}
+                          )} */}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

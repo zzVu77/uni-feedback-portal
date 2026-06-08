@@ -47,6 +47,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  Edit,
   Eye,
   FilterX,
   ListFilter,
@@ -58,7 +59,9 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import { UpdateUserDialog } from "./UpdateUserDialog";
 import { UpdateUserStatusDialog } from "./UpdateUserStatusDialog";
+import { UserResponse } from "@/types/user-management";
 
 export const getRoleInfo = (role: UserRole) => {
   switch (role) {
@@ -153,6 +156,9 @@ export const UserManagementTable = () => {
     id: string;
     currentStatus: UserStatus;
   } | null>(null);
+
+  const [selectedUserForEdit, setSelectedUserForEdit] =
+    useState<UserResponse | null>(null);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -478,6 +484,13 @@ export const UserManagementTable = () => {
                             Xem chi tiết
                           </DropdownMenuItem>
 
+                          <DropdownMenuItem
+                            onClick={() => setSelectedUserForEdit(user)}
+                          >
+                            <Edit className="mr-2 h-4 w-4" />
+                            Chỉnh sửa thông tin
+                          </DropdownMenuItem>
+
                           {user.status === UserStatus.ACTIVE ? (
                             <DropdownMenuItem
                               className="text-amber-600 focus:text-amber-700"
@@ -550,6 +563,14 @@ export const UserManagementTable = () => {
           onClose={() => setSelectedUserForStatus(null)}
           userId={selectedUserForStatus.id}
           currentStatus={selectedUserForStatus.currentStatus}
+        />
+      )}
+
+      {selectedUserForEdit && (
+        <UpdateUserDialog
+          isOpen={!!selectedUserForEdit}
+          onClose={() => setSelectedUserForEdit(null)}
+          user={selectedUserForEdit}
         />
       )}
     </div>

@@ -16,6 +16,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useUpdateUser } from "@/hooks/queries/useUserManagementQueries";
 import {
@@ -46,6 +61,9 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
     role: user.role,
     departmentId: user.department?.id || "",
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [openDepartment, setOpenDepartment] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -56,11 +74,16 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
         role: user.role,
         departmentId: user.department?.id || "",
       });
+      setConfirmPassword("");
+      setPasswordError("");
     }
   }, [isOpen, user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (e.target.name === "password") {
+      setPasswordError("");
+    }
   };
 
   const handleRoleChange = (val: UserRole) => {
@@ -78,6 +101,12 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.password && formData.password !== confirmPassword) {
+      setPasswordError("Mật khẩu xác nhận không khớp.");
+      return;
+    }
+
     const payload: UpdateUserPayload = {
       fullName: formData.fullName,
       email: formData.email,
@@ -150,10 +179,33 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
             />
           </div>
 
-          <div className="grid gap-2">
+          {formData.password && (
+            <div className="grid gap-2">
+              <Label htmlFor="confirmPassword">Xác nhận mật khẩu *</Label>
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setPasswordError("");
+                }}
+                required
+                placeholder="Nhập lại mật khẩu"
+              />
+              {passwordError && (
+                <span className="text-xs font-medium text-rose-500">
+                  {passwordError}
+                </span>
+              )}
+            </div>
+          )}
+
+          <div className="grid w-full gap-2">
             <Label htmlFor="role">Phân quyền *</Label>
             <Select value={formData.role} onValueChange={handleRoleChange}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Chọn quyền" />
               </SelectTrigger>
               <SelectContent>
@@ -172,24 +224,61 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
           {showDepartmentSelect && (
             <div className="grid gap-2">
               <Label htmlFor="departmentId">Phòng ban *</Label>
-              <Select
-                value={formData.departmentId || ""}
-                onValueChange={(val) =>
-                  setFormData((prev) => ({ ...prev, departmentId: val }))
-                }
-                required={showDepartmentSelect}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Chọn phòng ban" />
-                </SelectTrigger>
-                <SelectContent>
-                  {departmentOptions?.map((dept) => (
-                    <SelectItem key={dept.value} value={dept.value}>
-                      {dept.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={openDepartment} onOpenChange={setOpenDepartment}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className={cn(
+                      "w-full justify-between font-normal",
+                      !formData.departmentId && "text-muted-foreground",
+                    )}
+                  >
+                    {formData.departmentId
+                      ? departmentOptions?.find(
+                          (opt) => opt.value === formData.departmentId,
+                        )?.label
+                      : "Chọn phòng ban"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-[--radix-popover-trigger-width] p-0"
+                  align="start"
+                >
+                  <Command>
+                    <CommandInput placeholder="Tìm kiếm phòng ban..." />
+                    <CommandList>
+                      <CommandEmpty>Không tìm thấy phòng ban.</CommandEmpty>
+                      <CommandGroup>
+                        {departmentOptions?.map((opt) => (
+                          <CommandItem
+                            key={opt.value}
+                            value={opt.label}
+                            onSelect={() => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                departmentId: opt.value,
+                              }));
+                              setOpenDepartment(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                opt.value === formData.departmentId
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {opt.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           )}
 
