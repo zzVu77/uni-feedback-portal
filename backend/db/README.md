@@ -57,6 +57,22 @@ Run this command to ensure table embedding is created.
 npm run seed:dept
 ```
 
+### 5.1 Generate Feedback Embeddings
+
+Generate embeddings for feedback records and export them into a JSON file. This should be run whenever feedback seed data is updated.
+
+```bash
+npm run feedback-embedding:generate
+```
+
+### 5.2 Seed Feedback Embeddings
+
+Import the generated embedding data into the `FeedbackEmbeddings` table. This is usually done after `db:seed` or `migrate reset`.
+
+```bash
+npm run feedback-embedding:init
+```
+
 ### 6. Generate Prisma Client
 
 After any schema change, Prisma Client needs to be regenerated. `migrate dev` and `migrate reset` do this automatically. If you need to do it manually:
