@@ -34,6 +34,7 @@ interface ChatSheetProps {
   role: "student" | "staff";
   isConversationOpen: boolean;
   onCloseConversation: () => Promise<void>;
+  isReadOnly?: boolean;
 }
 
 const ChatSheet = ({
@@ -45,6 +46,7 @@ const ChatSheet = ({
   role,
   isConversationOpen,
   onCloseConversation,
+  isReadOnly = false,
 }: ChatSheetProps) => {
   const { user } = useUser();
   const [inputValue, setInputValue] = useState("");
@@ -140,7 +142,7 @@ const ChatSheet = ({
                 </span>
               </SheetDescription>
             </div>
-            {role === "staff" && isConversationOpen && (
+            {role === "staff" && isConversationOpen && !isReadOnly && (
               <ConfirmationDialog
                 title="Kết thúc cuộc trao đổi?"
                 description="Hành động này sẽ đánh dấu cuộc hội thoại là đã hoàn thành và không thể gửi thêm tin nhắn."
@@ -265,7 +267,13 @@ const ChatSheet = ({
           </ScrollArea>
         </div>
 
-        {isConversationOpen ? (
+        {isReadOnly ? (
+          <div className="border-t border-slate-100 bg-slate-50 p-5 text-center">
+            <p className="text-[13px] font-medium text-slate-400">
+              Bạn không có quyền tham gia cuộc trao đổi này.
+            </p>
+          </div>
+        ) : isConversationOpen ? (
           <div className="border-t border-slate-100 bg-white p-4 shadow-[0_-4px_24px_-12px_rgba(0,0,0,0.05)]">
             {/* File Preview Chip */}
             {selectedFile && (

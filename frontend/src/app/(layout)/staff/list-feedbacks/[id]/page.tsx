@@ -82,6 +82,7 @@ const Page = () => {
                 <StaffAction
                   feedbackId={id}
                   currentStatus={feedbackDetail.currentStatus}
+                  assigneeId={feedbackDetail.assignee?.id}
                 />
               </div>
             )}

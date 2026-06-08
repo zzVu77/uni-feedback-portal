@@ -14,13 +14,15 @@ import {
 } from "@/hooks/queries/useFeedbackQueries";
 import { useIsClient } from "@/hooks/useIsClient";
 import { mapFeedbackDetailToHeader } from "@/utils/mappers";
-import { History, List, MessageCircleMore } from "lucide-react";
+import { List, MessageCircleMore, History } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 const Page = () => {
   const params = useParams();
   const id = params.id as string;
   const isClient = useIsClient();
+  const { user } = useUser();
   const {
     data: feedbackDetail,
     isLoading: isLoadingFeedbackDetail,
@@ -67,6 +69,12 @@ const Page = () => {
 
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedbackDetail);
 
+  const isReadOnly = Boolean(
+    user?.role === "STAFF_ASSISTANT" &&
+      feedbackDetail.assignee?.id &&
+      feedbackDetail.assignee.id !== user?.id,
+  );
+
   return (
     <Wrapper>
       <div className="flex h-full w-full flex-col gap-6 pb-3">
@@ -82,6 +90,7 @@ const Page = () => {
                 <StaffAction
                   feedbackId={id}
                   currentStatus={feedbackDetail.currentStatus}
+                  assigneeId={feedbackDetail.assignee?.id}
                 />
               </div>
             )}
@@ -134,6 +143,7 @@ const Page = () => {
                 role="staff"
                 isForwarded={feedbackDetail.isForwarding}
                 currentFeedbackStatus={feedbackDetail.currentStatus}
+                isReadOnly={isReadOnly}
               />
             </TabsContent>
             <TabsContent
@@ -146,6 +156,7 @@ const Page = () => {
                   isLoading={relatedIsLoading}
                   isError={relatedIsError}
                   originalFeedbackId={feedbackDetail.id}
+                  isReadOnly={isReadOnly}
                 />
               </div>
             </TabsContent>

@@ -152,6 +152,36 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     },
   },
   {
+    accessorKey: "assignee",
+    accessorFn: (row) => row.assignee?.fullName ?? "",
+    header: () => {
+      return (
+        <div className="flex items-center gap-2">
+          <User className="h-3 w-3" />
+          Người xử lý
+        </div>
+      );
+    },
+    cell: ({ cell }) => {
+      const assigneeName = cell.getValue() as string;
+      if (!assigneeName) {
+        return (
+          <span className="text-sm text-slate-400 italic">Chưa phân công</span>
+        );
+      }
+      return (
+        <div className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-[10px] font-bold text-indigo-500">
+            {assigneeName.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-sm font-medium text-slate-700 capitalize">
+            {assigneeName}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "createdAt",
     header: ({ column }) => {
       return (
