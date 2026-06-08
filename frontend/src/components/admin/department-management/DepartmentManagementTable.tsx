@@ -38,7 +38,8 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { UpdateDepartmentDialog } from "./UpdateDepartmentDialog";
-import { UpdateDepartmentStatusDialog } from "./UpdateDepartmentStatusDialog";
+import ConfirmationDialog from "@/components/common/ConfirmationDialog";
+import { useUpdateDepartmentStatus } from "@/hooks/queries/useDepartmentQueries";
 
 export const getDepartmentStatusInfo = (isActive: boolean) => {
   if (isActive) {
@@ -77,6 +78,24 @@ export const DepartmentManagementTable = () => {
     id: string;
     isActive: boolean;
   } | null>(null);
+
+  const { mutate: updateStatus, isPending: isUpdatingStatus } =
+    useUpdateDepartmentStatus();
+
+  const handleConfirmStatusUpdate = () => {
+    if (!selectedDeptForStatus) return;
+    updateStatus(
+      {
+        id: selectedDeptForStatus.id,
+        payload: { isActive: !selectedDeptForStatus.isActive },
+      },
+      {
+        onSuccess: () => {
+          setSelectedDeptForStatus(null);
+        },
+      },
+    );
+  };
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -299,11 +318,30 @@ export const DepartmentManagementTable = () => {
         department={selectedDeptForEdit}
       />
       {selectedDeptForStatus && (
-        <UpdateDepartmentStatusDialog
+        <ConfirmationDialog
           isOpen={!!selectedDeptForStatus}
-          onClose={() => setSelectedDeptForStatus(null)}
-          departmentId={selectedDeptForStatus.id}
-          isActive={selectedDeptForStatus.isActive}
+          onOpenChange={(open) => {
+            if (!open) setSelectedDeptForStatus(null);
+          }}
+          title={
+            selectedDeptForStatus.isActive
+              ? "Khóa phòng ban"
+              : "Mở khóa phòng ban"
+          }
+          description={
+            selectedDeptForStatus.isActive
+              ? "Bạn có chắc chắn muốn khóa phòng ban này? Người dùng sẽ không thể gửi góp ý đến phòng ban này nữa."
+              : "Bạn có chắc chắn muốn mở khóa phòng ban này? Nó sẽ xuất hiện lại trong danh sách gửi góp ý."
+          }
+          confirmText={
+            selectedDeptForStatus.isActive
+              ? "Xác nhận khóa"
+              : "Xác nhận mở khóa"
+          }
+          cancelText="Hủy"
+          isDestructive={selectedDeptForStatus.isActive}
+          onConfirm={handleConfirmStatusUpdate}
+          isConfirmDisabled={isUpdatingStatus}
         />
       )}
     </div>

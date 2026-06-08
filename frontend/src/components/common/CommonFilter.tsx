@@ -106,8 +106,8 @@ export const UserStatusSelection = () => {
   const statusOptions = [
     { label: "Trạng thái", value: "all" },
     { label: "Hoạt động", value: "ACTIVE" },
-    { label: "Đã khóa", value: "DEACTIVATED" },
-    { label: "Bị cấm", value: "BANNED" },
+    { label: "Khóa có thời hạn", value: "DEACTIVATED" },
+    { label: "Khóa vô thời hạn", value: "PERMANENTLY_DELETED" },
   ];
   return (
     <Suspense fallback={null}>

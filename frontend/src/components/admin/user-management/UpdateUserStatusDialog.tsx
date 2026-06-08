@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useUpdateUserStatus } from "@/hooks/queries/useUserManagementQueries";
 import { UserStatus } from "@/types/user-management";
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface UpdateUserStatusDialogProps {
   isOpen: boolean;
@@ -28,18 +29,31 @@ export const UpdateUserStatusDialog: React.FC<UpdateUserStatusDialogProps> = ({
 }) => {
   const { mutate: updateStatus, isPending } = useUpdateUserStatus();
   const [durationDays, setDurationDays] = useState<string>("7");
+  const [lockType, setLockType] = useState<"temporary" | "permanent">(
+    "temporary",
+  );
 
   const isDeactivating = currentStatus === UserStatus.ACTIVE;
-  const newStatus = isDeactivating ? UserStatus.DEACTIVATED : UserStatus.ACTIVE;
 
   const handleConfirm = () => {
+    let targetStatus = UserStatus.ACTIVE;
+    let payloadDuration: number | undefined = undefined;
+
+    if (isDeactivating) {
+      if (lockType === "temporary") {
+        targetStatus = UserStatus.DEACTIVATED;
+        payloadDuration = durationDays ? parseInt(durationDays, 10) : 7;
+      } else {
+        targetStatus = UserStatus.PERMANENTLY_DELETED;
+      }
+    }
     updateStatus(
       {
         id: userId,
         payload: {
-          status: newStatus,
-          ...(isDeactivating && durationDays
-            ? { durationDays: parseInt(durationDays, 10) }
+          status: targetStatus,
+          ...(payloadDuration !== undefined
+            ? { durationDays: payloadDuration }
             : {}),
         },
       },
@@ -67,21 +81,55 @@ export const UpdateUserStatusDialog: React.FC<UpdateUserStatusDialogProps> = ({
 
         {isDeactivating && (
           <div className="grid gap-4 py-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="duration">Thời gian khóa (Số ngày)</Label>
-              <Input
-                id="duration"
-                type="number"
-                min="1"
-                value={durationDays}
-                onChange={(e) => setDurationDays(e.target.value)}
-                placeholder="Ví dụ: 7"
-              />
-              <span className="text-xs text-slate-500">
-                Để trống nếu không muốn tự động mở khóa (Khóa vĩnh viễn cho đến
-                khi mở bằng tay).
-              </span>
+            <div className="grid grid-cols-2 gap-3">
+              <div
+                className={cn(
+                  "cursor-pointer rounded-lg border p-3 transition-all",
+                  lockType === "temporary"
+                    ? "border-amber-600 bg-amber-50 ring-1 ring-amber-600"
+                    : "border-slate-200 hover:bg-slate-50",
+                )}
+                onClick={() => setLockType("temporary")}
+              >
+                <div className="text-sm font-semibold text-slate-800">
+                  Khóa có thời hạn
+                </div>
+                <div className="mt-1 text-[11px] text-slate-500">
+                  Tự động mở khóa sau số ngày chỉ định
+                </div>
+              </div>
+              <div
+                className={cn(
+                  "cursor-pointer rounded-lg border p-3 transition-all",
+                  lockType === "permanent"
+                    ? "border-rose-600 bg-rose-50 ring-1 ring-rose-600"
+                    : "border-slate-200 hover:bg-slate-50",
+                )}
+                onClick={() => setLockType("permanent")}
+              >
+                <div className="text-sm font-semibold text-slate-800">
+                  Khóa vô thời hạn
+                </div>
+                <div className="mt-1 text-[11px] text-slate-500">
+                  Tài khoản sẽ bị khóa cho đến khi được quản trị viên mở khóa.
+                </div>
+              </div>
             </div>
+
+            {lockType === "temporary" && (
+              <div className="mt-2 flex flex-col gap-2">
+                <Label htmlFor="duration">Thời gian khóa (Số ngày) *</Label>
+                <Input
+                  id="duration"
+                  type="number"
+                  min="1"
+                  value={durationDays}
+                  onChange={(e) => setDurationDays(e.target.value)}
+                  placeholder="Ví dụ: 7"
+                  required
+                />
+              </div>
+            )}
           </div>
         )}
 

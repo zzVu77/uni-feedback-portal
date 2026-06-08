@@ -1,6 +1,7 @@
 "use client";
 
 import CommonFilter from "@/components/common/CommonFilter";
+import ConfirmationDialog from "@/components/common/ConfirmationDialog";
 import { Loading } from "@/components/common/Loading";
 import SearchBar from "@/components/common/SearchBar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetClose,
@@ -33,10 +36,14 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserManagementFilters } from "@/hooks/filters/useUserManagementFilters";
-import { useGetUsers } from "@/hooks/queries/useUserManagementQueries";
+import {
+  useGetUsers,
+  useUpdateUserStatus,
+} from "@/hooks/queries/useUserManagementQueries";
 import { cn } from "@/lib/utils";
 import {
   UserManagementFilter,
+  UserResponse,
   UserRole,
   UserStatus,
 } from "@/types/user-management";
@@ -54,14 +61,12 @@ import {
   Lock,
   MoreHorizontal,
   SearchX,
-  Trash2,
   Unlock,
+  UserX,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { UpdateUserDialog } from "./UpdateUserDialog";
-import { UpdateUserStatusDialog } from "./UpdateUserStatusDialog";
-import { UserResponse } from "@/types/user-management";
 
 export const getRoleInfo = (role: UserRole) => {
   switch (role) {
@@ -104,7 +109,7 @@ export const getStatusInfo = (status: UserStatus) => {
       };
     case UserStatus.DEACTIVATED:
       return {
-        label: "Đã khóa",
+        label: "Khóa có thời hạn",
         color: "bg-amber-100 text-amber-700 border-amber-200",
         icon: <Lock className="mr-1 h-3 w-3" />,
       };
@@ -116,9 +121,9 @@ export const getStatusInfo = (status: UserStatus) => {
       };
     case UserStatus.PERMANENTLY_DELETED:
       return {
-        label: "Đã xóa",
-        color: "bg-slate-100 text-slate-700 border-slate-200",
-        icon: <Trash2 className="mr-1 h-3 w-3" />,
+        label: "Khóa vô thời hạn",
+        color: "bg-rose-100 text-rose-700 border-rose-200",
+        icon: <UserX className="mr-1 h-3 w-3" />,
       };
     default:
       return {
@@ -159,6 +164,50 @@ export const UserManagementTable = () => {
 
   const [selectedUserForEdit, setSelectedUserForEdit] =
     useState<UserResponse | null>(null);
+
+  // --- Status Update State ---
+  const { mutate: updateStatus, isPending: isUpdatingStatus } =
+    useUpdateUserStatus();
+  const [durationDays, setDurationDays] = useState<string>("7");
+  const [lockType, setLockType] = useState<"temporary" | "permanent">(
+    "temporary",
+  );
+
+  const handleConfirmStatusUpdate = () => {
+    if (!selectedUserForStatus) return;
+
+    const isDeactivating =
+      selectedUserForStatus.currentStatus === UserStatus.ACTIVE;
+    let targetStatus = UserStatus.ACTIVE;
+    let payloadDuration: number | undefined = undefined;
+
+    if (isDeactivating) {
+      if (lockType === "temporary") {
+        targetStatus = UserStatus.DEACTIVATED;
+        payloadDuration = durationDays ? parseInt(durationDays, 10) : 7;
+      } else {
+        targetStatus = UserStatus.PERMANENTLY_DELETED;
+      }
+    }
+
+    updateStatus(
+      {
+        id: selectedUserForStatus.id,
+        payload: {
+          status: targetStatus,
+          ...(payloadDuration !== undefined
+            ? { durationDays: payloadDuration }
+            : {}),
+        },
+      },
+      {
+        onSuccess: () => {
+          setSelectedUserForStatus(null);
+        },
+      },
+    );
+  };
+  // -------------------------
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -557,12 +606,87 @@ export const UserManagementTable = () => {
         </div>
       )}
 
+      {/* Status Update Confirmation Dialog */}
       {selectedUserForStatus && (
-        <UpdateUserStatusDialog
+        <ConfirmationDialog
           isOpen={!!selectedUserForStatus}
-          onClose={() => setSelectedUserForStatus(null)}
-          userId={selectedUserForStatus.id}
-          currentStatus={selectedUserForStatus.currentStatus}
+          onOpenChange={(open) => {
+            if (!open) setSelectedUserForStatus(null);
+          }}
+          title={
+            selectedUserForStatus.currentStatus === UserStatus.ACTIVE
+              ? "Khóa tài khoản người dùng"
+              : "Mở khóa tài khoản"
+          }
+          description={
+            selectedUserForStatus.currentStatus === UserStatus.ACTIVE
+              ? "Người dùng này sẽ không thể đăng nhập vào hệ thống trong thời gian bị khóa."
+              : "Người dùng này sẽ có thể đăng nhập lại vào hệ thống."
+          }
+          confirmText="Xác nhận"
+          cancelText="Hủy"
+          isDestructive={
+            selectedUserForStatus.currentStatus === UserStatus.ACTIVE
+          }
+          onConfirm={handleConfirmStatusUpdate}
+          isConfirmDisabled={isUpdatingStatus}
+          customContent={
+            selectedUserForStatus.currentStatus === UserStatus.ACTIVE ? (
+              <div className="grid gap-4 pt-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <div
+                    className={cn(
+                      "cursor-pointer rounded-lg border p-3 transition-all",
+                      lockType === "temporary"
+                        ? "border-amber-600 bg-amber-50 ring-1 ring-amber-600"
+                        : "border-slate-200 hover:bg-slate-50",
+                    )}
+                    onClick={() => setLockType("temporary")}
+                  >
+                    <div className="text-sm font-semibold text-slate-800">
+                      Khóa có thời hạn
+                    </div>
+                    <div className="mt-1 text-[11px] text-slate-500">
+                      Tự động mở khóa sau số ngày chỉ định
+                    </div>
+                  </div>
+                  <div
+                    className={cn(
+                      "cursor-pointer rounded-lg border p-3 transition-all",
+                      lockType === "permanent"
+                        ? "border-rose-600 bg-rose-50 ring-1 ring-rose-600"
+                        : "border-slate-200 hover:bg-slate-50",
+                    )}
+                    onClick={() => setLockType("permanent")}
+                  >
+                    <div className="text-sm font-semibold text-slate-800">
+                      Khóa vô thời hạn
+                    </div>
+                    <div className="mt-1 text-[11px] text-slate-500">
+                      Khóa vĩnh viễn (Xóa tài khoản)
+                    </div>
+                  </div>
+                </div>
+
+                {lockType === "temporary" && (
+                  <div className="mt-2 flex flex-col gap-2">
+                    <Label htmlFor="duration" className="text-left">
+                      Thời gian khóa (Số ngày) *
+                    </Label>
+                    <Input
+                      id="duration"
+                      type="number"
+                      min="1"
+                      value={durationDays}
+                      onChange={(e) => setDurationDays(e.target.value)}
+                      placeholder="Ví dụ: 7"
+                      required
+                    />
+                  </div>
+                )}
+              </div>
+            ) : null
+          }
         />
       )}
 

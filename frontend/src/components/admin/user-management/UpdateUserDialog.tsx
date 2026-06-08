@@ -1,27 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -29,15 +7,36 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { useUpdateUser } from "@/hooks/queries/useUserManagementQueries";
+import { cn } from "@/lib/utils";
 import {
   UpdateUserPayload,
   UserResponse,
   UserRole,
 } from "@/types/user-management";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface UpdateUserDialogProps {
@@ -282,7 +281,7 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
             </div>
           )}
 
-          <DialogFooter className="mt-4">
+          <div className="flex justify-end gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
@@ -291,10 +290,15 @@ export const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
             >
               Hủy
             </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Đang xử lý..." : "Lưu thay đổi"}
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="bg-indigo-600 hover:bg-indigo-700"
+            >
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Lưu thay đổi
             </Button>
-          </DialogFooter>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
