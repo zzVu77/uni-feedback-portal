@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUpdateReportComment } from "@/hooks/queries/useReportCommentQueries";
 import { ReportCommentDetail } from "@/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { useGetUserViolations } from "@/hooks/queries/useUserManagementQueries";
 import {
   AlertCircle,
   Calendar,
@@ -66,6 +67,14 @@ const ReportCommentDetailDialog = ({
     }
   };
 
+  // Lấy danh sách vi phạm của người dùng trong 30 ngày qua
+  const { data: violationsData } = useGetUserViolations(comment.user.id, {
+    lookbackDays: 30,
+    page: 1,
+    limit: 1,
+  });
+  const violationCount = violationsData?.total || 0;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
@@ -87,6 +96,36 @@ const ReportCommentDetailDialog = ({
 
         <ScrollArea className="max-h-[70vh] w-full">
           <div className="flex flex-col gap-6 px-6 py-6">
+            {/* Warning Section for Frequent Violators */}
+            {violationCount > 5 && (
+              <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <ShieldAlert className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-red-800">
+                      Người dùng này có dấu hiệu vi phạm nhiều lần
+                    </h3>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      Đã vi phạm {violationCount} lần trong 30 ngày qua. Đề xuất
+                      xem xét khóa tài khoản.
+                    </p>
+                  </div>
+                </div>
+                <Link href={`/admin/user-management/${comment.user.id}`}>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full gap-2 md:w-auto"
+                  >
+                    <User className="h-4 w-4" />
+                    Quản lý người dùng
+                  </Button>
+                </Link>
+              </div>
+            )}
+
             {/* Section 1: Comment Content (The Evidence) */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
