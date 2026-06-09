@@ -450,11 +450,23 @@ export class FeedbackManagementService {
       },
     });
 
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedback.id,
+        status: FeedbackStatus.PENDING,
+        message: GenerateStatusUpdateMessage(
+          feedback.department.name,
+          FeedbackStatus.PENDING,
+        ),
+        note: dto.note ?? null,
+      },
+    });
+
     await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: {
         departmentId: dto.toDepartmentId,
-        currentStatus: FeedbackStatus.IN_PROGRESS,
+        currentStatus: FeedbackStatus.PENDING,
         assigneeId: null,
       },
     });
