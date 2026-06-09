@@ -17,6 +17,7 @@ import {
   SquarePen,
   TextInitial,
   Trash,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
@@ -125,6 +126,25 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
           </div>
         );
       },
+    },
+    {
+      accessorKey: "user",
+      header: () => {
+        return (
+          <div className="flex items-center gap-2">
+            <User className="h-3 w-3" />
+            Người đăng
+          </div>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className="max-w-[150px] truncate font-medium text-slate-700"
+          title={row.original.user?.userName}
+        >
+          {row.original.user?.userName || "N/A"}
+        </div>
+      ),
     },
     {
       accessorKey: "createdAt",
