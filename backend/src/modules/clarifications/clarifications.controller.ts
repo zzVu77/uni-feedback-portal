@@ -43,7 +43,7 @@ export class ClarificationsController {
 
   @Post()
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Create a new clarification conversation (Staff only)',
     description:
@@ -141,7 +141,7 @@ export class ClarificationsController {
 
   @Patch(':conversationId')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Close a conversation (Staff only)',
     description:

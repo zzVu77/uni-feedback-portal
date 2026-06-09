@@ -34,9 +34,12 @@ export class ClarificationsService {
   ): Promise<ClarificationDetailDto> {
     const { feedbackId, subject, initialMessage } = dto;
 
-    if (actor.role !== UserRole.DEPARTMENT_STAFF) {
+    if (
+      actor.role !== UserRole.DEPARTMENT_STAFF &&
+      actor.role !== UserRole.STAFF_ASSISTANT
+    ) {
       throw new ForbiddenException(
-        `Only department staff can start a clarification conversation.`,
+        `Only department staff and staff assistant can start a clarification conversation.`,
       );
     }
     const feedback = await this.prisma.feedbacks.findUnique({
