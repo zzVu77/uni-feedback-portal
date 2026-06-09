@@ -19,8 +19,10 @@ import {
   Trash,
 } from "lucide-react";
 import Link from "next/link";
+import { useUser } from "@/context/UserContext";
 
 const ActionCell = ({ row }: { row: any }) => {
+  const { user } = useUser();
   const announcement = row.original;
   const { mutateAsync: deleteAnnouncement, isPending: isDeleting } =
     useDeleteAnnouncementById();
@@ -32,7 +34,13 @@ const ActionCell = ({ row }: { row: any }) => {
   return (
     <div className="flex flex-row items-center justify-start gap-2">
       {/* Edit Button */}
-      <Link href={`/staff/announcement-management/edit/${announcement.id}`}>
+      <Link
+        href={
+          user?.role === "STAFF_ASSISTANT"
+            ? `/staff-assistant/announcement-management/edit/${announcement.id}`
+            : `/staff/announcement-management/edit/${announcement.id}`
+        }
+      >
         <Button
           variant="outline"
           className="h-9 w-9 rounded-full border-0 bg-blue-50 p-0 text-blue-500 shadow-sm transition-all hover:scale-110 hover:bg-blue-100 hover:text-blue-600"

@@ -31,6 +31,7 @@ import { ChevronLeft, ChevronRight, CirclePlus, SearchX } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useUser } from "@/context/UserContext";
 import { announcementManagementColumns } from "./columns";
 
 const sortOptions = [
@@ -40,6 +41,7 @@ const sortOptions = [
 ];
 
 export function AnnouncementManagementTable() {
+  const { user } = useUser();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -134,7 +136,11 @@ export function AnnouncementManagementTable() {
         </div>
 
         <Link
-          href="/staff/announcement-management/create"
+          href={
+            user?.role === "STAFF_ASSISTANT"
+              ? "/staff-assistant/announcement-management/create"
+              : "/staff/announcement-management/create"
+          }
           className="w-full md:w-auto"
         >
           <Button className="bg-blue-primary-400 hover:bg-blue-primary-600 h-11 w-full gap-2 rounded-full px-6 font-semibold text-white shadow-md transition-all hover:shadow-lg active:scale-[0.98]">
