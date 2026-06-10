@@ -293,6 +293,9 @@ export class ModerationService {
       data: {
         status: dto.status,
         adminResponse: adminResponse,
+        decision: isDeleting
+          ? ReportDecision.VIOLATION
+          : ReportDecision.NO_VIOLATION,
       },
     });
     const { targetId, targetType } = updatedReport.comment;
