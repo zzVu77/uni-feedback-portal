@@ -32,6 +32,7 @@ export const useGetClarificationsDetailById = (id: string) => {
     queryKey: [CLARIFICATION_QUERY_KEYS, id],
     queryFn: () => getConversationDetailById(id),
     retry: false,
+    enabled: !!id,
     placeholderData: (previousData) => previousData,
   });
 };

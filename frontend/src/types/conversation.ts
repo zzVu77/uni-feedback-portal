@@ -6,7 +6,7 @@ export type Message = {
   user: {
     id: string;
     fullName: string;
-    role: "STUDENT" | "DEPARTMENT_STAFF";
+    role: "STUDENT" | "DEPARTMENT_STAFF" | "STAFF_ASSISTANT";
   };
   createdAt: string;
   attachments?: FileAttachmentDto[];

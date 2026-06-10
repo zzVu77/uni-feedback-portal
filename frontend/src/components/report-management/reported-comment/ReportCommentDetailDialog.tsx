@@ -105,7 +105,7 @@ const ReportCommentDetailDialog = ({
           <ScrollArea className="max-h-[70vh] w-full">
             <div className="flex flex-col gap-6 px-6 py-6">
               {/* Warning Section for Frequent Violators */}
-              {violationCount > 5 && (
+              {violationCount >= 5 && (
                 <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm md:flex-row md:items-center md:justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
