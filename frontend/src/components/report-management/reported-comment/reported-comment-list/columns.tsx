@@ -11,16 +11,31 @@ import {
   CalendarClock,
   Check,
   Eye,
+  ShieldAlert,
   Target,
   TextInitial,
   Trash,
   User,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useGetUserViolations } from "@/hooks/queries/useUserManagementQueries";
+import Link from "next/link";
 
 const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
   const source = row.original;
   const { mutate: updateReport } = useUpdateReportComment(source.id);
+  const [showBanWarning, setShowBanWarning] = useState(false);
+
+  const { data: violationsData } = useGetUserViolations(
+    source.comment.user.id,
+    {
+      lookbackDays: 30,
+      page: 1,
+      limit: 1,
+    },
+  );
+  const violationCount = violationsData?.total || 0;
 
   // Hooks for URL manipulation
   const router = useRouter();
@@ -31,6 +46,9 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
 
   const handleDelete = () => {
     updateReport({ status: "RESOLVED", isDeleted: true });
+    if (violationCount >= 4) {
+      setShowBanWarning(true);
+    }
   };
 
   const handleResolve = () => {
@@ -72,6 +90,36 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
           onConfirm={handleDelete}
           confirmText="Đồng ý"
           isDestructive={true}
+          customContent={
+            violationCount >= 4 ? (
+              <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 text-left shadow-sm md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <ShieldAlert className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-red-800">
+                      Người dùng này có dấu hiệu vi phạm nhiều lần
+                    </h3>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      Đã vi phạm {violationCount} lần trong 30 ngày qua. Đề xuất
+                      xem xét khóa tài khoản.
+                    </p>
+                  </div>
+                </div>
+                <Link href={`/admin/user-management/${source.comment.user.id}`}>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full gap-2 md:w-auto"
+                  >
+                    <User className="h-4 w-4" />
+                    Xem thông tin user
+                  </Button>
+                </Link>
+              </div>
+            ) : undefined
+          }
         >
           <Button
             variant="outline"
@@ -108,6 +156,21 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
           </Button>
         </ConfirmationDialog>
       )}
+
+      {/* Dialog cảnh báo khóa tài khoản sau khi xóa bình luận */}
+      <ConfirmationDialog
+        isOpen={showBanWarning}
+        onOpenChange={setShowBanWarning}
+        title="Đề xuất xem xét khóa tài khoản"
+        description={`Bình luận đã bị xóa. Người dùng này đã vi phạm ${
+          violationCount + 1
+        } lần trong 30 ngày qua (bao gồm cả lần này). Bạn có muốn chuyển đến trang thông tin của user này để xem xét khóa tài khoản không?`}
+        confirmText="Xem thông tin user"
+        cancelText="Bỏ qua"
+        onConfirm={() => {
+          window.location.href = `/admin/user-management/${source.comment.user.id}`;
+        }}
+      />
     </div>
   );
 };
