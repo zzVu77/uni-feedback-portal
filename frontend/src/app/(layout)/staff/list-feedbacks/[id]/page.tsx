@@ -58,7 +58,7 @@ const Page = () => {
         <EmptyState
           title="Không tìm thấy phản hồi"
           description={`Chúng tôi không tìm thấy phản hồi với ID: ${id}. Vui lòng kiểm tra lại hoặc quay lại danh sách phản hồi của bạn.`}
-          backLink="/student/my-feedbacks"
+          backLink="/staff/list-feedbacks"
           backLabel="Quay lại danh sách"
           errorCode={404}
         />
