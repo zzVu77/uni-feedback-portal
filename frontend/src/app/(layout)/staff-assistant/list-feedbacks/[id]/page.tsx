@@ -69,12 +69,10 @@ const Page = () => {
 
   const feedbackHeaderData = mapFeedbackDetailToHeader(feedbackDetail);
 
-  const isReadOnly = Boolean(
-    user?.role === "STAFF_ASSISTANT" &&
-      feedbackDetail.assignee?.id &&
-      feedbackDetail.assignee.id !== user?.id,
-  );
-
+  const isStaffAssistant = user?.role === "STAFF_ASSISTANT";
+  const hasAssignee = Boolean(feedbackDetail?.assignee?.id);
+  const isAssignedToSomeoneElse = feedbackDetail?.assignee?.id !== user?.id;
+  const isReadOnly = isStaffAssistant && hasAssignee && isAssignedToSomeoneElse;
   return (
     <Wrapper>
       <div className="flex h-full w-full flex-col gap-6 pb-3">
