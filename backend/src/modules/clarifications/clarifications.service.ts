@@ -110,7 +110,13 @@ export class ClarificationsService {
     const { page = 1, pageSize = 10, feedbackId, isClosed } = query;
 
     const where: Prisma.ClarificationConversationsWhereInput = {
-      OR: [{ userId: actor.sub }, { feedback: { userId: actor.sub } }],
+      OR: [
+        { userId: actor.sub },
+        { feedback: { userId: actor.sub } },
+        ...(actor.departmentId
+          ? [{ feedback: { departmentId: actor.departmentId } }]
+          : []),
+      ],
       ...(feedbackId && { feedbackId }),
       ...(isClosed !== undefined && { isClosed: isClosed === 'true' }),
     };
@@ -144,7 +150,9 @@ export class ClarificationsService {
       await this.prisma.clarificationConversations.findUnique({
         where: { id: conversationId },
         include: {
-          feedback: { select: { userId: true, isPrivate: true } },
+          feedback: {
+            select: { userId: true, isPrivate: true, departmentId: true },
+          },
           messages: {
             include: {
               user: { select: { id: true, fullName: true, role: true } },
@@ -162,7 +170,9 @@ export class ClarificationsService {
 
     if (
       conversation.userId !== actor.sub &&
-      conversation.feedback.userId !== actor.sub
+      conversation.feedback.userId !== actor.sub &&
+      (!actor.departmentId ||
+        conversation.feedback.departmentId !== actor.departmentId)
     ) {
       throw new ForbiddenException(
         'You are not authorized to view this conversation.',
