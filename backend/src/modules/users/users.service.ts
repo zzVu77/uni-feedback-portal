@@ -190,7 +190,9 @@ export class UsersService implements UsersServiceContract {
         decision: ReportDecision.VIOLATION,
         updatedAt: { gte: dateLimit },
       },
+      distinct: ['commentId'],
       select: {
+        commentId: true,
         comment: {
           select: {
             userId: true,
@@ -326,9 +328,10 @@ export class UsersService implements UsersServiceContract {
       updatedAt: { gte: dateLimit },
     };
 
-    const [results, total] = await Promise.all([
+    const [results, groupedForCount] = await Promise.all([
       this.prisma.commentReports.findMany({
         where,
+        distinct: ['commentId'],
         skip,
         take: limit,
         orderBy: { updatedAt: 'desc' },
@@ -336,10 +339,13 @@ export class UsersService implements UsersServiceContract {
           comment: true,
         },
       }),
-      this.prisma.commentReports.count({ where }),
+      this.prisma.commentReports.groupBy({
+        by: ['commentId'],
+        where,
+      }),
     ]);
 
-    return { results, total };
+    return { results, total: groupedForCount.length };
   }
 
   async getUserById(id: string): Promise<UserResponseDto> {
