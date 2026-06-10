@@ -62,4 +62,17 @@ export class GetTrendingIssuesDto {
   @IsOptional()
   @IsString()
   groupUrl?: string;
+  @ApiPropertyOptional({
+    description: 'Filter by analyzedAt >= analyzedStartDate (ISO8601)',
+  })
+  @IsOptional()
+  @IsISO8601()
+  analyzedStartDate?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by analyzedAt < analyzedEndDate + 1 day (ISO8601)',
+  })
+  @IsOptional()
+  @IsISO8601()
+  analyzedEndDate?: string;
 }
