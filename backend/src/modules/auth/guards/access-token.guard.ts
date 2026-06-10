@@ -52,7 +52,9 @@ export class AccessTokenGuard implements CanActivate {
     });
 
     if (!user || user.status === UserStatus.PERMANENTLY_DELETED) {
-      throw new UnauthorizedException();
+      throw new ForbiddenException(
+        `Tài khoản của bạn đang bị tạm khóa vô thời hạn. Vui lòng liên hệ Admin.`,
+      );
     }
 
     if (user.status === UserStatus.DEACTIVATED) {

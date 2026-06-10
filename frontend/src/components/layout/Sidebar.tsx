@@ -29,7 +29,7 @@ import { usePathname } from "next/navigation";
 
 type SidebarProps = {
   showOnMobile?: boolean;
-  type?: "student" | "staff" | "admin" | "staff-assistant";
+  type?: "student" | "staff" | "admin" | "staff_assistant";
   fullName?: string;
 };
 
@@ -56,7 +56,7 @@ export default function Sidebar({
       navigation = adminNavigation;
       break;
 
-    case "staff-assistant":
+    case "staff_assistant":
       navigation = staffAssistantNavigation;
       break;
 

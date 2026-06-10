@@ -38,7 +38,9 @@ export class AuthService implements AuthServiceContract {
     }
 
     if (user.status === 'PERMANENTLY_DELETED') {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new ForbiddenException(
+        `Tài khoản của bạn đang bị tạm khóa vô thời hạn. Vui lòng liên hệ Admin.`,
+      );
     }
 
     if (user.status === 'DEACTIVATED') {
