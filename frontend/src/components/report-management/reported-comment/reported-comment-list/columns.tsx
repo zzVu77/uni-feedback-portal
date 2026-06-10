@@ -91,7 +91,7 @@ const ActionCell = ({ row }: { row: Row<ReportCommentDetail> }) => {
           confirmText="Đồng ý"
           isDestructive={true}
           customContent={
-            violationCount >= 4 ? (
+            violationCount > 5 ? (
               <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 text-left shadow-sm md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
