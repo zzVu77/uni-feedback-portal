@@ -164,6 +164,7 @@ const AnnouncementForm = ({
           fileUrl: f.fileUrl,
           fileType: f.fileType || "",
           fileSize: f.fileSize || 0,
+          fileKey: f.fileKey || "",
         }));
         setExistingFiles(mappedFiles);
       }

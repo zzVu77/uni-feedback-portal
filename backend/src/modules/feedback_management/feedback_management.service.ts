@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   BadRequestException,
   ForbiddenException,
@@ -57,118 +55,7 @@ export class FeedbackManagementService {
     query: QueryFeedbackByStaffDto,
     actor: ActiveUserData,
   ): Promise<ListFeedbacksResponseDto> {
-    const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
-
-    const conditions: Prisma.FeedbacksWhereInput[] = [];
-
-    conditions.push({
-      OR: [
-        { departmentId: actor.departmentId },
-        {
-          forwardingLogs: {
-            some: { fromDepartmentId: actor.departmentId },
-          },
-        },
-      ],
-    });
-    conditions.push({
-      currentStatus: {
-        notIn: [
-          FeedbackStatus.VIOLATED_CONTENT,
-          FeedbackStatus.AI_REVIEW_FAILED,
-        ],
-      },
-    });
-
-    if (status) {
-      conditions.push({
-        currentStatus: status.toUpperCase() as FeedbackStatus,
-      });
-    }
-
-    if (categoryId) {
-      conditions.push({ categoryId });
-    }
-
-    const { assigneeId } = query as any;
-    if (assigneeId) {
-      conditions.push({ assigneeId });
-    }
-
-    if (from || to) {
-      const dateFilter: Prisma.DateTimeFilter = {};
-      if (from) dateFilter.gte = new Date(from);
-      if (to) {
-        dateFilter.lt = new Date(
-          new Date(to).setDate(new Date(to).getDate() + 1),
-        );
-      }
-      conditions.push({ createdAt: dateFilter });
-    }
-
-    if (q) {
-      conditions.push({
-        OR: [
-          { subject: { contains: q, mode: 'insensitive' } },
-          { description: { contains: q, mode: 'insensitive' } },
-        ],
-      });
-    }
-
-    const where = { AND: conditions };
-
-    const [feedbacks, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          department: { select: { id: true, name: true } },
-          category: { select: { id: true, name: true } },
-          user: { select: { id: true, fullName: true, email: true } },
-          forwardingLogs: {
-            select: { toDepartmentId: true, fromDepartmentId: true },
-          },
-          assignee: { select: { id: true, fullName: true, email: true } },
-        },
-      }),
-      this.prisma.feedbacks.count({ where }),
-    ]);
-
-    const results = feedbacks.map((f) => ({
-      id: f.id,
-      subject: f.subject,
-      location: f.location ? f.location : null,
-      currentStatus: f.currentStatus,
-      isPrivate: f.isPrivate,
-      department: f.department,
-      category: f.category,
-      createdAt: f.createdAt.toISOString(),
-      isForwarding:
-        f.department.id !== actor.departmentId &&
-        f.forwardingLogs.some(
-          (log) => log.fromDepartmentId === actor.departmentId,
-        ),
-      assignee: f.assignee
-        ? {
-            id: f.assignee.id,
-            fullName: f.assignee.fullName,
-            email: f.assignee.email,
-          }
-        : null,
-      ...(f.isPrivate
-        ? {}
-        : {
-            student: {
-              id: f.user.id,
-              fullName: f.user.fullName,
-              email: f.user.email,
-            },
-          }),
-    }));
-
-    return { results, total };
+    return this.executeFeedbacksQuery(query, actor.departmentId);
   }
   async getStaffFeedbackDetail(
     params: FeedbackParamDto,
@@ -523,11 +410,17 @@ export class FeedbackManagementService {
   async getAllFeedbacks(
     query: QueryFeedbacksDto,
   ): Promise<ListFeedbacksResponseDto> {
+    return this.executeFeedbacksQuery(query);
+  }
+
+  private async executeFeedbacksQuery(
+    query: QueryFeedbacksDto | QueryFeedbackByStaffDto,
+    actorDepartmentId?: string,
+  ): Promise<ListFeedbacksResponseDto> {
     const {
       page = 1,
       pageSize = 10,
       status,
-      departmentId,
       categoryId,
       from,
       to,
@@ -535,17 +428,32 @@ export class FeedbackManagementService {
       sort = FeedbackSortOption.STATUS,
     } = query;
 
+    const departmentId =
+      'departmentId' in query ? query.departmentId : undefined;
+
     let whereClause = 'WHERE 1=1';
     type SqlParam = string | number | boolean | Date | null;
-
     const params: SqlParam[] = [];
-
     let paramIndex = 1;
     const nextParam = () => `$${paramIndex++}`;
+
+    if (actorDepartmentId) {
+      whereClause += ` AND (f."departmentId" = ${nextParam()}::"uuid" OR EXISTS (
+        SELECT 1 FROM "ForwardingLogs" fl 
+        WHERE fl."feedbackId" = f."id" AND fl."fromDepartmentId" = $${paramIndex - 1}::"uuid"
+      ))`;
+      params.push(actorDepartmentId);
+      console.log(whereClause, params);
+    } else if (departmentId) {
+      whereClause += ` AND f."departmentId" = ${nextParam()}::"uuid"`;
+      params.push(departmentId);
+    }
+
     const hiddenStatuses: FeedbackStatus[] = [
       FeedbackStatus.AI_REVIEW_FAILED,
       FeedbackStatus.VIOLATED_CONTENT,
     ];
+
     if (status) {
       const normalizedStatus = status.toUpperCase() as FeedbackStatus;
       if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
@@ -561,17 +469,10 @@ export class FeedbackManagementService {
     } else {
       const placeholders = hiddenStatuses.map((status) => {
         const placeholder = nextParam();
-
         params.push(status);
         return `${placeholder}::"FeedbackStatus"`;
       });
-
       whereClause += ` AND f."currentStatus" NOT IN (${placeholders.join(',')})`;
-    }
-
-    if (departmentId) {
-      whereClause += ` AND f."departmentId" = ${nextParam()}::"uuid"`;
-      params.push(departmentId);
     }
 
     if (categoryId) {
@@ -593,6 +494,7 @@ export class FeedbackManagementService {
       whereClause += ` AND (f."subject" ILIKE ${nextParam()} OR f."description" ILIKE ${nextParam()})`;
       params.push(`%${q}%`, `%${q}%`);
     }
+
     // ======================
     // SORT LOGIC
     // ======================
@@ -610,7 +512,6 @@ export class FeedbackManagementService {
     END
   `;
 
-    // HOT
     if (sort === FeedbackSortOption.TRENDING) {
       joinClause = `
       LEFT JOIN "ForumPosts" fp ON fp."feedbackId" = f."id"
@@ -634,9 +535,7 @@ export class FeedbackManagementService {
     const orderByClause = `
     ORDER BY ${orderByParts.join(',')}
   `;
-    console.log('Where Clause', whereClause);
-    console.log('Params', params);
-    // Raw query join Department, Category, User
+
     try {
       const rawResults = await this.prisma.$queryRawUnsafe<
         RawFeedbackJoinedRow[]
@@ -666,18 +565,6 @@ export class FeedbackManagementService {
       `,
         ...params,
       );
-      // console.log(rawResults);
-      // rawResults.forEach((f) => {
-      //   const voteCount = Number(f.voteCount);
-      //   const commentCount = Number(f.commentCount);
-
-      //   console.log({
-      //     id: f.id,
-      //     voteCount,
-      //     commentCount,
-      //     hotScore: voteCount * 2 + commentCount,
-      //   });
-      // });
 
       const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
         `
@@ -706,6 +593,9 @@ export class FeedbackManagementService {
               email: f.assigneeEmail,
             }
           : null,
+        ...(actorDepartmentId
+          ? { isForwarding: f.departmentId !== actorDepartmentId }
+          : {}),
         ...(f.isPrivate
           ? null
           : {
