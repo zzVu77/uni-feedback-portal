@@ -33,6 +33,7 @@ interface RelatedFeedbackTableProps {
   isLoading: boolean;
   isError: boolean;
   originalFeedbackId?: string;
+  isReadOnly?: boolean;
 }
 
 export function RelatedFeedbackTable({
@@ -40,6 +41,7 @@ export function RelatedFeedbackTable({
   isLoading,
   isError,
   originalFeedbackId,
+  isReadOnly = false,
 }: RelatedFeedbackTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set([]));
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
@@ -121,7 +123,7 @@ export function RelatedFeedbackTable({
   return (
     <div className="w-full">
       {/* Bulk Action Toolbar */}
-      {selectedIds.size > 0 && (
+      {selectedIds.size > 0 && !isReadOnly && (
         <div className="animate-in slide-in-from-top-2 fade-in flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3 duration-200">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-slate-700">
@@ -217,16 +219,18 @@ export function RelatedFeedbackTable({
           <Table className="w-full text-sm">
             <TableHeader>
               <TableRow className="border-b border-slate-200 hover:bg-transparent">
-                <TableHead className="w-[50px] px-4 py-4">
-                  <Checkbox
-                    checked={
-                      isAllSelected ||
-                      (isIndeterminate ? "indeterminate" : false)
-                    }
-                    onCheckedChange={handleSelectAll}
-                    aria-label="Select all"
-                  />
-                </TableHead>
+                {!isReadOnly && (
+                  <TableHead className="w-[50px] px-4 py-4">
+                    <Checkbox
+                      checked={
+                        isAllSelected ||
+                        (isIndeterminate ? "indeterminate" : false)
+                      }
+                      onCheckedChange={handleSelectAll}
+                      aria-label="Select all"
+                    />
+                  </TableHead>
+                )}
                 <TableHead className="px-4 py-4 font-medium text-slate-900">
                   Tiêu đề
                 </TableHead>
@@ -250,15 +254,17 @@ export function RelatedFeedbackTable({
                       className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50"
                       data-state={selectedIds.has(feedback.id) && "selected"}
                     >
-                      <TableCell className="px-4 py-4">
-                        <Checkbox
-                          checked={selectedIds.has(feedback.id)}
-                          onCheckedChange={(checked) =>
-                            handleSelectOne(feedback.id, checked as boolean)
-                          }
-                          aria-label={`Select feedback ${feedback.id}`}
-                        />
-                      </TableCell>
+                      {!isReadOnly && (
+                        <TableCell className="px-4 py-4">
+                          <Checkbox
+                            checked={selectedIds.has(feedback.id)}
+                            onCheckedChange={(checked) =>
+                              handleSelectOne(feedback.id, checked as boolean)
+                            }
+                            aria-label={`Select feedback ${feedback.id}`}
+                          />
+                        </TableCell>
+                      )}
                       <Link
                         href={`/staff/list-feedbacks/${feedback?.id}`}
                         key={feedback.id}

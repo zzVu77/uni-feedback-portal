@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
   NotFoundException,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { HashingService } from './hashing.service';
@@ -34,6 +35,30 @@ export class AuthService implements AuthServiceContract {
 
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
+    }
+
+    if (user.status === 'PERMANENTLY_DELETED') {
+      throw new ForbiddenException(
+        `Tài khoản của bạn đang bị tạm khóa vô thời hạn. Vui lòng liên hệ Admin.`,
+      );
+    }
+
+    if (user.status === 'DEACTIVATED') {
+      if (user.deactivatedUntil && new Date() > user.deactivatedUntil) {
+        await this.prismaService.users.update({
+          where: { id: user.id },
+          data: { status: 'ACTIVE', deactivatedUntil: null },
+        });
+        user.status = 'ACTIVE';
+        user.deactivatedUntil = null;
+      } else {
+        const deactivatedUntil = user.deactivatedUntil
+          ? user.deactivatedUntil.toLocaleString()
+          : 'không xác định';
+        throw new ForbiddenException(
+          `Tài khoản của bạn đang bị tạm khóa đến [${deactivatedUntil}]. Vui lòng liên hệ Admin.`,
+        );
+      }
     }
 
     const isPasswordValid = await this.hashingService.compare(

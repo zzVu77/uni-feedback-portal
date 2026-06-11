@@ -45,7 +45,7 @@ export class AnnouncementsController {
   })
   @ApiOperation({ summary: 'Get all announcements (Staff only)' })
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   getStaffAnnouncements(
     @Query() query: QueryStaffAnnouncementsDto,
     @ActiveUser() user: ActiveUserData,
@@ -62,7 +62,7 @@ export class AnnouncementsController {
     summary: 'Get announcement detail by ID (Staff only)',
   })
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   getStaffAnnouncementDetail(
     @Param() params: AnnouncementParamDto,
     @ActiveUser() user: ActiveUserData,
@@ -74,7 +74,7 @@ export class AnnouncementsController {
   }
   @Post('staff')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Create new announcement (Staff only)' })
   @ApiOkResponse({
     description: 'Announcement created successfully',
@@ -89,7 +89,7 @@ export class AnnouncementsController {
 
   @Patch('staff/:id')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOkResponse({
     description: 'Update an announcement by ID',
     type: AnnouncementDetailDto,
@@ -104,7 +104,7 @@ export class AnnouncementsController {
   }
   @Delete('staff/:id')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOkResponse({
     description: 'Delete an announcement by ID',
     schema: {

@@ -13,6 +13,41 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const TitleLink = ({ id, subject }: { id: string; subject: string }) => {
+  const pathname = usePathname();
+  const basePath = pathname?.startsWith("/staff-assistant")
+    ? "/staff-assistant"
+    : "/staff";
+  return (
+    <Link href={`${basePath}/list-feedbacks/${id}`}>
+      <div
+        className="max-w-[250px] truncate font-semibold text-slate-800 capitalize transition-colors hover:text-indigo-600 lg:max-w-sm"
+        title={subject}
+      >
+        {subject}
+      </div>
+    </Link>
+  );
+};
+
+const ActionLink = ({ id }: { id: string }) => {
+  const pathname = usePathname();
+  const basePath = pathname?.startsWith("/staff-assistant")
+    ? "/staff-assistant"
+    : "/staff";
+  return (
+    <Link href={`${basePath}/list-feedbacks/${id}`}>
+      <Button
+        variant="ghost"
+        className="h-9 w-9 rounded-full bg-white p-0 text-slate-400 shadow-sm ring-1 ring-slate-200 transition-all hover:scale-110 hover:bg-indigo-50 hover:text-indigo-600 hover:ring-indigo-300"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+    </Link>
+  );
+};
 
 export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
   {
@@ -26,14 +61,7 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
       );
     },
     cell: ({ row }) => (
-      <Link href={`/staff/list-feedbacks/${row.original.id}`}>
-        <div
-          className="max-w-[250px] truncate font-semibold text-slate-800 capitalize transition-colors hover:text-indigo-600 lg:max-w-sm"
-          title={row.getValue("subject")}
-        >
-          {row.getValue("subject")}
-        </div>
-      </Link>
+      <TitleLink id={row.original.id} subject={row.getValue("subject")} />
     ),
   },
 
@@ -124,6 +152,36 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     },
   },
   {
+    accessorKey: "assignee",
+    accessorFn: (row) => row.assignee?.fullName ?? "",
+    header: () => {
+      return (
+        <div className="flex items-center gap-2">
+          <User className="h-3 w-3" />
+          Người xử lý
+        </div>
+      );
+    },
+    cell: ({ cell }) => {
+      const assigneeName = cell.getValue() as string;
+      if (!assigneeName) {
+        return (
+          <span className="text-sm text-slate-400 italic">Chưa phân công</span>
+        );
+      }
+      return (
+        <div className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-[10px] font-bold text-indigo-500">
+            {assigneeName.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-sm font-medium text-slate-700 capitalize">
+            {assigneeName}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "createdAt",
     header: ({ column }) => {
       return (
@@ -159,16 +217,7 @@ export const staffFeedbackColumns: ColumnDef<StaffFeedbackItem>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const feedback = row.original;
-      return (
-        <Link href={`/staff/list-feedbacks/${feedback.id}`}>
-          <Button
-            variant="ghost"
-            className="h-9 w-9 rounded-full bg-white p-0 text-slate-400 shadow-sm ring-1 ring-slate-200 transition-all hover:scale-110 hover:bg-indigo-50 hover:text-indigo-600 hover:ring-indigo-300"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </Link>
-      );
+      return <ActionLink id={feedback.id} />;
     },
   },
 ];

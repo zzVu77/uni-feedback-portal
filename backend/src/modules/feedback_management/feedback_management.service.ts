@@ -55,105 +55,7 @@ export class FeedbackManagementService {
     query: QueryFeedbackByStaffDto,
     actor: ActiveUserData,
   ): Promise<ListFeedbacksResponseDto> {
-    const { page = 1, pageSize = 10, status, categoryId, from, to, q } = query;
-
-    const conditions: Prisma.FeedbacksWhereInput[] = [];
-
-    conditions.push({
-      OR: [
-        { departmentId: actor.departmentId },
-        {
-          forwardingLogs: {
-            some: { fromDepartmentId: actor.departmentId },
-          },
-        },
-      ],
-    });
-    conditions.push({
-      currentStatus: {
-        notIn: [
-          FeedbackStatus.VIOLATED_CONTENT,
-          FeedbackStatus.AI_REVIEW_FAILED,
-        ],
-      },
-    });
-
-    if (status) {
-      conditions.push({
-        currentStatus: status.toUpperCase() as FeedbackStatus,
-      });
-    }
-
-    if (categoryId) {
-      conditions.push({ categoryId });
-    }
-
-    if (from || to) {
-      const dateFilter: Prisma.DateTimeFilter = {};
-      if (from) dateFilter.gte = new Date(from);
-      if (to) {
-        dateFilter.lt = new Date(
-          new Date(to).setDate(new Date(to).getDate() + 1),
-        );
-      }
-      conditions.push({ createdAt: dateFilter });
-    }
-
-    if (q) {
-      conditions.push({
-        OR: [
-          { subject: { contains: q, mode: 'insensitive' } },
-          { description: { contains: q, mode: 'insensitive' } },
-        ],
-      });
-    }
-
-    const where = { AND: conditions };
-
-    const [feedbacks, total] = await Promise.all([
-      this.prisma.feedbacks.findMany({
-        where,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          department: { select: { id: true, name: true } },
-          category: { select: { id: true, name: true } },
-          user: { select: { id: true, fullName: true, email: true } },
-          forwardingLogs: {
-            select: { toDepartmentId: true, fromDepartmentId: true },
-          },
-        },
-      }),
-      this.prisma.feedbacks.count({ where }),
-    ]);
-
-    const results = feedbacks.map((f) => ({
-      id: f.id,
-      subject: f.subject,
-      location: f.location ? f.location : null,
-      currentStatus: f.currentStatus,
-      isPrivate: f.isPrivate,
-      department: f.department,
-      category: f.category,
-      createdAt: f.createdAt.toISOString(),
-      isForwarding:
-        f.department.id !== actor.departmentId &&
-        f.forwardingLogs.some(
-          (log) => log.fromDepartmentId === actor.departmentId,
-        ),
-      ...(f.isPrivate
-        ? {}
-        : {
-            student: {
-              id: f.user.id,
-              fullName: f.user.fullName,
-              email: f.user.email,
-            },
-          }),
-    }));
-
-    return { results, total };
+    return this.executeFeedbacksQuery(query, actor.departmentId);
   }
   async getStaffFeedbackDetail(
     params: FeedbackParamDto,
@@ -177,6 +79,7 @@ export class FeedbackManagementService {
       },
       include: {
         user: true,
+        assignee: { select: { id: true, fullName: true, email: true } },
         forumPost: {
           select: { id: true },
         },
@@ -281,6 +184,13 @@ export class FeedbackManagementService {
       forumPost: feedback.forumPost ? { id: feedback.forumPost.id } : undefined,
       department: feedback.department,
       isForwarding,
+      assignee: feedback.assignee
+        ? {
+            id: feedback.assignee.id,
+            fullName: feedback.assignee.fullName,
+            email: feedback.assignee.email,
+          }
+        : null,
       category: feedback.category,
       statusHistory: unifiedTimeline,
       fileAttachments: fileAttachments,
@@ -304,11 +214,30 @@ export class FeedbackManagementService {
       throw new NotFoundException('Feedback not found');
     }
 
+    if (
+      actor.role === 'STAFF_ASSISTANT' &&
+      feedback.assigneeId !== actor.sub &&
+      feedback.assigneeId
+    ) {
+      throw new ForbiddenException(
+        'You can only update feedbacks assigned to you',
+      );
+    }
+
+    const updateData: Prisma.FeedbacksUpdateInput = {
+      currentStatus: dto.status,
+    };
+
+    if (!feedback.assigneeId) {
+      updateData.assignee = { connect: { id: actor.sub } };
+    }
+    if (feedback.assigneeId && dto.status === 'PENDING') {
+      updateData.assignee = { disconnect: true };
+    }
+
     const updatedFeedback = await this.prisma.feedbacks.update({
       where: { id: feedbackId, departmentId: actor.departmentId },
-      data: {
-        currentStatus: dto.status,
-      },
+      data: updateData,
     });
 
     if (
@@ -373,6 +302,12 @@ export class FeedbackManagementService {
         `You are not allowed to forward feedback #${feedbackId} belonging to another department`,
       );
     }
+
+    if (actor.role === 'STAFF_ASSISTANT' && feedback.assigneeId !== actor.sub) {
+      throw new ForbiddenException(
+        'You can only forward feedbacks assigned to you',
+      );
+    }
     const toDepartment = await this.prisma.departments.findUnique({
       where: { id: dto.toDepartmentId },
     });
@@ -402,11 +337,24 @@ export class FeedbackManagementService {
       },
     });
 
+    await this.prisma.feedbackStatusHistory.create({
+      data: {
+        feedbackId: feedback.id,
+        status: FeedbackStatus.PENDING,
+        message: GenerateStatusUpdateMessage(
+          feedback.department.name,
+          FeedbackStatus.PENDING,
+        ),
+        note: dto.note ?? null,
+      },
+    });
+
     await this.prisma.feedbacks.update({
       where: { id: feedbackId },
       data: {
         departmentId: dto.toDepartmentId,
-        currentStatus: FeedbackStatus.IN_PROGRESS,
+        currentStatus: FeedbackStatus.PENDING,
+        assigneeId: null,
       },
     });
 
@@ -462,11 +410,17 @@ export class FeedbackManagementService {
   async getAllFeedbacks(
     query: QueryFeedbacksDto,
   ): Promise<ListFeedbacksResponseDto> {
+    return this.executeFeedbacksQuery(query);
+  }
+
+  private async executeFeedbacksQuery(
+    query: QueryFeedbacksDto | QueryFeedbackByStaffDto,
+    actorDepartmentId?: string,
+  ): Promise<ListFeedbacksResponseDto> {
     const {
       page = 1,
       pageSize = 10,
       status,
-      departmentId,
       categoryId,
       from,
       to,
@@ -474,17 +428,32 @@ export class FeedbackManagementService {
       sort = FeedbackSortOption.STATUS,
     } = query;
 
+    const departmentId =
+      'departmentId' in query ? query.departmentId : undefined;
+
     let whereClause = 'WHERE 1=1';
     type SqlParam = string | number | boolean | Date | null;
-
     const params: SqlParam[] = [];
-
     let paramIndex = 1;
     const nextParam = () => `$${paramIndex++}`;
+
+    if (actorDepartmentId) {
+      whereClause += ` AND (f."departmentId" = ${nextParam()}::"uuid" OR EXISTS (
+        SELECT 1 FROM "ForwardingLogs" fl 
+        WHERE fl."feedbackId" = f."id" AND fl."fromDepartmentId" = $${paramIndex - 1}::"uuid"
+      ))`;
+      params.push(actorDepartmentId);
+      console.log(whereClause, params);
+    } else if (departmentId) {
+      whereClause += ` AND f."departmentId" = ${nextParam()}::"uuid"`;
+      params.push(departmentId);
+    }
+
     const hiddenStatuses: FeedbackStatus[] = [
       FeedbackStatus.AI_REVIEW_FAILED,
       FeedbackStatus.VIOLATED_CONTENT,
     ];
+
     if (status) {
       const normalizedStatus = status.toUpperCase() as FeedbackStatus;
       if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
@@ -500,17 +469,10 @@ export class FeedbackManagementService {
     } else {
       const placeholders = hiddenStatuses.map((status) => {
         const placeholder = nextParam();
-
         params.push(status);
         return `${placeholder}::"FeedbackStatus"`;
       });
-
       whereClause += ` AND f."currentStatus" NOT IN (${placeholders.join(',')})`;
-    }
-
-    if (departmentId) {
-      whereClause += ` AND f."departmentId" = ${nextParam()}::"uuid"`;
-      params.push(departmentId);
     }
 
     if (categoryId) {
@@ -532,6 +494,7 @@ export class FeedbackManagementService {
       whereClause += ` AND (f."subject" ILIKE ${nextParam()} OR f."description" ILIKE ${nextParam()})`;
       params.push(`%${q}%`, `%${q}%`);
     }
+
     // ======================
     // SORT LOGIC
     // ======================
@@ -549,7 +512,6 @@ export class FeedbackManagementService {
     END
   `;
 
-    // HOT
     if (sort === FeedbackSortOption.TRENDING) {
       joinClause = `
       LEFT JOIN "ForumPosts" fp ON fp."feedbackId" = f."id"
@@ -573,9 +535,7 @@ export class FeedbackManagementService {
     const orderByClause = `
     ORDER BY ${orderByParts.join(',')}
   `;
-    console.log('Where Clause', whereClause);
-    console.log('Params', params);
-    // Raw query join Department, Category, User
+
     try {
       const rawResults = await this.prisma.$queryRawUnsafe<
         RawFeedbackJoinedRow[]
@@ -587,32 +547,24 @@ export class FeedbackManagementService {
         c."name" as "categoryName",
         u."id" as "studentId",
         u."fullName" as "studentFullName",
-        u."email" as "studentEmail"
+        u."email" as "studentEmail",
+        a."id" as "assigneeId",
+        a."fullName" as "assigneeFullName",
+        a."email" as "assigneeEmail"
       FROM "Feedbacks" f
       LEFT JOIN "Departments" d ON f."departmentId" = d."id"
       LEFT JOIN "Categories" c ON f."categoryId" = c."id"
       LEFT JOIN "Users" u ON u."id" = f."userId"
+      LEFT JOIN "Users" a ON a."id" = f."assigneeId"
       ${joinClause}
       ${whereClause}
-      GROUP BY f."id", d."name", c."name", u."id" 
+      GROUP BY f."id", d."name", c."name", u."id", a."id", a."fullName", a."email"
       ${orderByClause}
       OFFSET ${(page - 1) * pageSize}
       LIMIT ${pageSize}
       `,
         ...params,
       );
-      // console.log(rawResults);
-      // rawResults.forEach((f) => {
-      //   const voteCount = Number(f.voteCount);
-      //   const commentCount = Number(f.commentCount);
-
-      //   console.log({
-      //     id: f.id,
-      //     voteCount,
-      //     commentCount,
-      //     hotScore: voteCount * 2 + commentCount,
-      //   });
-      // });
 
       const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
         `
@@ -634,6 +586,16 @@ export class FeedbackManagementService {
         department: { id: f.departmentId, name: f.departmentName },
         category: { id: f.categoryId, name: f.categoryName },
         createdAt: new Date(f.createdAt).toISOString(),
+        assignee: f.assigneeId
+          ? {
+              id: f.assigneeId,
+              fullName: f.assigneeFullName,
+              email: f.assigneeEmail,
+            }
+          : null,
+        ...(actorDepartmentId
+          ? { isForwarding: f.departmentId !== actorDepartmentId }
+          : {}),
         ...(f.isPrivate
           ? null
           : {
@@ -662,6 +624,7 @@ export class FeedbackManagementService {
       },
       include: {
         user: true,
+        assignee: true,
         forumPost: {
           select: { id: true },
         },
@@ -762,6 +725,13 @@ export class FeedbackManagementService {
       category: feedback.category,
       statusHistory: unifiedTimeline,
       fileAttachments: fileAttachments,
+      assignee: feedback.assignee
+        ? {
+            id: feedback.assignee.id,
+            fullName: feedback.assignee.fullName,
+            email: feedback.assignee.email,
+          }
+        : null,
     };
 
     return result;

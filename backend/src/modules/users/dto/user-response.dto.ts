@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from '@prisma/client';
+import { UserRole, UserStatus } from '@prisma/client';
 import { FileAttachmentDto } from 'src/modules/uploads/dto';
 
 export class UserResponseDto {
@@ -29,6 +29,20 @@ export class UserResponseDto {
   role: UserRole;
 
   @ApiProperty({
+    example: UserStatus.ACTIVE,
+    enum: UserStatus,
+    description: 'Status of the user',
+  })
+  status: UserStatus;
+
+  @ApiProperty({
+    example: '2025-10-15T10:00:00Z',
+    description: 'Date until the user is deactivated',
+    required: false,
+  })
+  deactivatedUntil?: string | null;
+
+  @ApiProperty({
     description: 'Department the user belongs to, optional',
     example: {
       id: '550e8400-e29b-41d4-a716-446655440001',
@@ -56,4 +70,12 @@ export class UserResponseDto {
     description: 'Avatar of the user',
   })
   avatarUrl?: string;
+
+  @ApiProperty({
+    example: 3,
+    description:
+      'Number of violations (comment reports with VIOLATION decision)',
+    required: false,
+  })
+  violationCount?: number;
 }

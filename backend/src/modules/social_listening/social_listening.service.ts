@@ -506,6 +506,21 @@ export class SocialListeningService {
         ),
       );
     }
+    if (dto.analyzedStartDate) {
+      whereConditions.push(`analyzed_at >= $${params.length + 1}`);
+      params.push(new Date(dto.analyzedStartDate));
+    }
+
+    if (dto.analyzedEndDate) {
+      whereConditions.push(`analyzed_at < $${params.length + 1}`);
+      params.push(
+        new Date(
+          new Date(dto.analyzedEndDate).setDate(
+            new Date(dto.analyzedEndDate).getDate() + 1,
+          ),
+        ),
+      );
+    }
 
     if (dto.groupUrl) {
       whereConditions.push(`post_link ILIKE $${params.length + 1}`);

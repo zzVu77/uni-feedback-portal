@@ -29,7 +29,7 @@ const REPORT_GROUP_NOTIFICATIONS: TypeOfNotification[] = [
 export const generateNotificationUrl = (
   notificationType: TypeOfNotification,
   id: string,
-  role: "ADMIN" | "DEPARTMENT_STAFF" | "STUDENT",
+  role: "ADMIN" | "DEPARTMENT_STAFF" | "STUDENT" | "STAFF_ASSISTANT",
 ): string => {
   let baseUrl: string;
   switch (role) {
@@ -38,6 +38,9 @@ export const generateNotificationUrl = (
       break;
     case "DEPARTMENT_STAFF":
       baseUrl = "/staff";
+      break;
+    case "STAFF_ASSISTANT":
+      baseUrl = "/staff-assistant";
       break;
     case "STUDENT":
       baseUrl = "/student";
@@ -54,7 +57,7 @@ export const generateNotificationUrl = (
   }
   if (
     FEEDBACK_GROUP_NOTIFICATIONS.includes(notificationType) &&
-    role === "DEPARTMENT_STAFF"
+    (role === "DEPARTMENT_STAFF" || role === "STAFF_ASSISTANT")
   ) {
     return `${baseUrl}/list-feedbacks/${id}`;
   }

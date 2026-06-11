@@ -360,7 +360,13 @@ export function ForumSection() {
                     if (user?.role === "STUDENT") {
                       router.push("/student/create-new-feedback");
                     } else {
-                      router.push("/staff/announcement-management/create");
+                      if (user?.role === "STAFF_ASSISTANT") {
+                        router.push(
+                          "/staff-assistant/announcement-management/create",
+                        );
+                      } else {
+                        router.push("/staff/announcement-management/create");
+                      }
                     }
                   }}
                 >

@@ -58,6 +58,14 @@ export class QueryFeedbacksDto {
   departmentId?: string;
 
   @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440007',
+    description: 'Filter by assignee ID',
+  })
+  @IsOptional()
+  @IsUUID('loose')
+  assigneeId?: string;
+
+  @ApiPropertyOptional({
     example: '2025-01-01',
     description: 'Filter feedbacks created after this date (ISO8601 format)',
   })

@@ -12,8 +12,9 @@ import { useIsClient } from "@/hooks/useIsClient";
 import { CreateAnnouncementPayload } from "@/types";
 import { useParams } from "next/navigation";
 import { useMemo } from "react"; // 1. Import useMemo
-
+import { useUser } from "@/context/UserContext";
 const Page = () => {
+  const { user } = useUser();
   const params = useParams();
   const id = params.id as string;
   const isClient = useIsClient();
@@ -47,7 +48,11 @@ const Page = () => {
         <EmptyState
           title="Không tìm thấy thông báo"
           description={`Chúng tôi không tìm thấy thông báo với ID: ${id}. Vui lòng kiểm tra lại hoặc quay lại danh sách thông báo.`}
-          backLink="/staff/announcement-management"
+          backLink={
+            user?.role === "STAFF_ASSISTANT"
+              ? "/staff-assistant/announcement-management"
+              : "/staff/announcement-management"
+          }
           backLabel="Quay lại danh sách"
           errorCode={404}
         />
@@ -74,7 +79,11 @@ const Page = () => {
         <EmptyState
           title="Không tìm thấy thông báo"
           description={`Chúng tôi không tìm thấy thông báo với ID: ${id}. Vui lòng kiểm tra lại hoặc quay lại danh sách thông báo.`}
-          backLink="/staff/announcement-management"
+          backLink={
+            user?.role === "STAFF_ASSISTANT"
+              ? "/staff-assistant/announcement-management"
+              : "/staff/announcement-management"
+          }
           backLabel="Quay lại danh sách"
           errorCode={404}
         />

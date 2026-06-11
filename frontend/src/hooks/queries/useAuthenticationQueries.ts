@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getMe } from "@/services/user-service";
@@ -41,8 +43,15 @@ export const useLogin = () => {
         window.location.href = "/";
       }
     },
-    onError: () => {
-      toast.error("Email hoặc mật khẩu không chính xác");
+    onError: (error: any) => {
+      const statusCode = error?.response?.status;
+      const message = error?.response?.data?.message;
+
+      if (statusCode === 403 && message) {
+        toast.error(message);
+      } else {
+        toast.error("Email hoặc mật khẩu không chính xác");
+      }
     },
   });
 };

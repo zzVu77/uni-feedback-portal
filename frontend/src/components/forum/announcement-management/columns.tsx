@@ -17,10 +17,13 @@ import {
   SquarePen,
   TextInitial,
   Trash,
+  User,
 } from "lucide-react";
 import Link from "next/link";
+import { useUser } from "@/context/UserContext";
 
 const ActionCell = ({ row }: { row: any }) => {
+  const { user } = useUser();
   const announcement = row.original;
   const { mutateAsync: deleteAnnouncement, isPending: isDeleting } =
     useDeleteAnnouncementById();
@@ -32,7 +35,13 @@ const ActionCell = ({ row }: { row: any }) => {
   return (
     <div className="flex flex-row items-center justify-start gap-2">
       {/* Edit Button */}
-      <Link href={`/staff/announcement-management/edit/${announcement.id}`}>
+      <Link
+        href={
+          user?.role === "STAFF_ASSISTANT"
+            ? `/staff-assistant/announcement-management/edit/${announcement.id}`
+            : `/staff/announcement-management/edit/${announcement.id}`
+        }
+      >
         <Button
           variant="outline"
           className="h-9 w-9 rounded-full border-0 bg-blue-50 p-0 text-blue-500 shadow-sm transition-all hover:scale-110 hover:bg-blue-100 hover:text-blue-600"
@@ -117,6 +126,25 @@ export const announcementManagementColumns: ColumnDef<AnnouncementManagementItem
           </div>
         );
       },
+    },
+    {
+      accessorKey: "user",
+      header: () => {
+        return (
+          <div className="flex items-center gap-2">
+            <User className="h-3 w-3" />
+            Người đăng
+          </div>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className="max-w-[150px] truncate font-medium text-slate-700"
+          title={row.original.user?.userName}
+        >
+          {row.original.user?.userName || "N/A"}
+        </div>
+      ),
     },
     {
       accessorKey: "createdAt",

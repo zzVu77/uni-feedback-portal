@@ -34,6 +34,7 @@ interface ChatSheetProps {
   role: "student" | "staff";
   isConversationOpen: boolean;
   onCloseConversation: () => Promise<void>;
+  isReadOnly?: boolean;
 }
 
 const ChatSheet = ({
@@ -45,6 +46,7 @@ const ChatSheet = ({
   role,
   isConversationOpen,
   onCloseConversation,
+  isReadOnly = false,
 }: ChatSheetProps) => {
   const { user } = useUser();
   const [inputValue, setInputValue] = useState("");
@@ -52,6 +54,12 @@ const ChatSheet = ({
   const [isSending, setIsSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Determine if the current user is a participant (creator or student)
+  const isParticipant =
+    role === "student" ||
+    (messages.length > 0 && messages[0].user.id === user?.id);
+  const effectiveIsReadOnly = isReadOnly || !isParticipant;
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -140,7 +148,7 @@ const ChatSheet = ({
                 </span>
               </SheetDescription>
             </div>
-            {role === "staff" && isConversationOpen && (
+            {role === "staff" && isConversationOpen && !effectiveIsReadOnly && (
               <ConfirmationDialog
                 title="Kết thúc cuộc trao đổi?"
                 description="Hành động này sẽ đánh dấu cuộc hội thoại là đã hoàn thành và không thể gửi thêm tin nhắn."
@@ -175,9 +183,11 @@ const ChatSheet = ({
               ) : (
                 messages.map((msg) => {
                   const isMe = msg.user.id === user?.id;
+                  const isStaffAssistant = msg.user.role === "STAFF_ASSISTANT";
+                  const roleSuffix = isStaffAssistant ? " (CTV)" : "";
                   const senderName = isMe
                     ? "Bạn"
-                    : msg.user.fullName || "Người dùng";
+                    : `${msg.user.fullName || "Người dùng"}${roleSuffix}`;
                   const timeString = new Date(msg.createdAt).toLocaleTimeString(
                     "vi-VN",
                     {
@@ -265,7 +275,13 @@ const ChatSheet = ({
           </ScrollArea>
         </div>
 
-        {isConversationOpen ? (
+        {effectiveIsReadOnly ? (
+          <div className="border-t border-slate-100 bg-slate-50 p-5 text-center">
+            <p className="text-[13px] font-medium text-slate-400">
+              Bạn không có quyền tham gia cuộc trao đổi này.
+            </p>
+          </div>
+        ) : isConversationOpen ? (
           <div className="border-t border-slate-100 bg-white p-4 shadow-[0_-4px_24px_-12px_rgba(0,0,0,0.05)]">
             {/* File Preview Chip */}
             {selectedFile && (

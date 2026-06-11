@@ -78,7 +78,7 @@ export function ReportDialog({ children, onSubmit }: ReportDialogProps) {
   const form = useForm<ReportFormValues>({
     resolver: zodResolver(reportFormSchema),
     defaultValues: {
-      reason: undefined,
+      reason: "",
       description: "",
     },
   });
