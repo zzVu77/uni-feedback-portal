@@ -32,4 +32,14 @@ export class ClarificationsGateway {
   ) {
     this.server.to(userId).emit('clarification.message_sent', event);
   }
+
+  notifyClarificationClosed(userId: string, event: ClarificationEvent) {
+    this.server.to(userId).emit('clarification.closed', event);
+  }
+  handleDisconnect(client: Socket) {
+    const userId = client.handshake.query.userId as string;
+    if (userId) {
+      console.log(`User ${userId} disconnected and left room`);
+    }
+  }
 }
