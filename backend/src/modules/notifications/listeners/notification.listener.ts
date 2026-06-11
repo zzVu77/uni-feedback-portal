@@ -150,6 +150,10 @@ export class NotificationEventListener {
         targetId: payload.feedbackId,
         title: payload.subject,
       });
+      this.clarificationsGateway.notifyClarificationCreated(
+        payload.studentId,
+        payload,
+      );
     } catch (error) {
       this.logger.error(
         `Failed to notify student about clarification ${payload.conversationId}`,
@@ -173,6 +177,10 @@ export class NotificationEventListener {
         targetId: payload.feedbackId,
         title: payload.subject,
       });
+      this.clarificationsGateway.notifyClarificationClosed(
+        payload.studentId,
+        payload,
+      );
     } catch (error) {
       this.logger.error(
         `Failed to notify student about clarification ${payload.conversationId}`,
