@@ -21,7 +21,7 @@ import {
 } from "../ui/dropdown-menu";
 import Sidebar from "./Sidebar";
 type Props = {
-  type?: "student" | "staff" | "admin";
+  type?: "student" | "staff" | "admin" | "staff_assistant";
   fullName?: string;
 };
 const MobileNavigation = ({ type = "student", fullName }: Props) => {

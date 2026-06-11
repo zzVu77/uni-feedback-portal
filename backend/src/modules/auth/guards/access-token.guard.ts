@@ -12,11 +12,16 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 interface RequestWithCookies extends Request {
   cookies: { [key: string]: string };
 }
+import { PrismaService } from '../../prisma/prisma.service';
+import { UserStatus } from '@prisma/client';
+import { ForbiddenException } from '@nestjs/common';
+
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
     private readonly tokenService: TokenService,
     private readonly reflector: Reflector,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,24 +29,51 @@ export class AccessTokenGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    // console.log('AccessTokenGuard: Checking access permissions');
     if (isPublic) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromCookie(request);
-    // console.log('AccessTokenGuard: extracted token=', token);
     if (!token) {
       throw new UnauthorizedException();
     }
+
+    let payload;
     try {
-      const payload = await this.tokenService.verifyAccessToken(token);
-      //console.log('AccessTokenGuard: token payload=', payload);
-      request[REQUEST_USER_KEY] = payload;
+      payload = await this.tokenService.verifyAccessToken(token);
     } catch {
       throw new UnauthorizedException();
     }
+
+    // Lazy Evaluation for User Status
+    const user = await this.prismaService.users.findUnique({
+      where: { id: payload.sub },
+    });
+
+    if (!user || user.status === UserStatus.PERMANENTLY_DELETED) {
+      throw new ForbiddenException(
+        `Tài khoản của bạn đang bị tạm khóa vô thời hạn. Vui lòng liên hệ Admin.`,
+      );
+    }
+
+    if (user.status === UserStatus.DEACTIVATED) {
+      if (user.deactivatedUntil && new Date() > user.deactivatedUntil) {
+        await this.prismaService.users.update({
+          where: { id: user.id },
+          data: { status: UserStatus.ACTIVE, deactivatedUntil: null },
+        });
+      } else {
+        const deactivatedUntil = user.deactivatedUntil
+          ? user.deactivatedUntil.toLocaleString()
+          : 'không xác định';
+        throw new ForbiddenException(
+          `Tài khoản của bạn đang bị tạm khóa đến [${deactivatedUntil}]. Vui lòng liên hệ Admin.`,
+        );
+      }
+    }
+
+    request[REQUEST_USER_KEY] = payload;
     return true;
   }
 

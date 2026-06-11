@@ -170,11 +170,13 @@ interface ConversationSectionProps {
   role: "student" | "staff";
   currentFeedbackStatus: string;
   isForwarded?: boolean;
+  isReadOnly?: boolean;
 }
 const ConversationSection = ({
   role,
   currentFeedbackStatus,
   isForwarded = false,
+  isReadOnly = false,
 }: ConversationSectionProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<
@@ -217,7 +219,8 @@ const ConversationSection = ({
     (!hasConversations || allConversationsClosed) &&
     role === "staff" &&
     currentFeedbackStatus !== "RESOLVED" &&
-    currentFeedbackStatus !== "REJECTED";
+    currentFeedbackStatus !== "REJECTED" &&
+    !isReadOnly;
 
   const { mutateAsync: closeConversation } = useCloseConversationById();
 
@@ -396,6 +399,7 @@ const ConversationSection = ({
           role={role}
           isConversationOpen={!selectedConversation?.isClosed}
           onCloseConversation={handleCloseConversation}
+          isReadOnly={isReadOnly}
         />
       )}
     </div>

@@ -83,6 +83,39 @@ export const ReportReasonSelection = () => {
   );
 };
 
+export const UserRoleSelection = ({
+  options,
+}: {
+  options?: { label: string; value: string }[];
+}) => {
+  const defaultOptions = [
+    { label: "Phân quyền", value: "all" },
+    { label: "Sinh viên", value: "STUDENT" },
+    { label: "Nhân viên phòng ban", value: "DEPARTMENT_STAFF" },
+    { label: "Cộng tác viên", value: "STAFF_ASSISTANT" },
+    { label: "Quản trị viên", value: "ADMIN" },
+  ];
+  return (
+    <Suspense fallback={null}>
+      <Filter type="role" items={options || defaultOptions} />
+    </Suspense>
+  );
+};
+
+export const UserStatusSelection = () => {
+  const statusOptions = [
+    { label: "Trạng thái", value: "all" },
+    { label: "Hoạt động", value: "ACTIVE" },
+    { label: "Khóa có thời hạn", value: "DEACTIVATED" },
+    { label: "Khóa vô thời hạn", value: "PERMANENTLY_DELETED" },
+  ];
+  return (
+    <Suspense fallback={null}>
+      <Filter type="status" items={statusOptions} />
+    </Suspense>
+  );
+};
+
 const CommonFilter = {
   CategorySelection,
   DepartmentSelection,
@@ -90,6 +123,8 @@ const CommonFilter = {
   StatusSelection,
   ReportStatusSelection,
   ReportReasonSelection,
+  UserRoleSelection,
+  UserStatusSelection,
 };
 
 export default CommonFilter;

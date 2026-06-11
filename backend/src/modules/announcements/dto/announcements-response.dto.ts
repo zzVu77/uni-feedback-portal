@@ -1,4 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { UserRole } from '@prisma/client';
 import { FileAttachmentDto } from 'src/modules/uploads/dto';
 export class UserInfo {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-44665544000a' })
@@ -6,6 +7,9 @@ export class UserInfo {
 
   @ApiProperty({ example: 'Nguyen Van A' })
   userName: string;
+
+  @ApiProperty({ enum: UserRole })
+  role: UserRole;
 }
 
 export class DepartmentInfo {

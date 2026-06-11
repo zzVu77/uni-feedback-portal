@@ -76,6 +76,7 @@ type StaffActionProps = {
   feedbackId?: string;
   feedbackIds?: string[];
   currentStatus: string;
+  assigneeId?: string;
   onSuccess?: () => void;
 };
 
@@ -83,6 +84,7 @@ const StaffAction = ({
   feedbackId,
   feedbackIds,
   currentStatus,
+  assigneeId,
   onSuccess,
 }: StaffActionProps) => {
   const queryClient = useQueryClient();
@@ -186,6 +188,23 @@ const StaffAction = ({
     ? data.filter((department) => department.value !== user?.department?.id)
     : [];
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const isStaffAssistant = user?.role === "STAFF_ASSISTANT";
+  const isAssignedToOther = assigneeId && assigneeId !== user?.id;
+
+  if (isStaffAssistant && isAssignedToOther) {
+    return (
+      <div className="flex h-fit w-full flex-col gap-2 rounded-xl border border-amber-200/90 bg-amber-50 px-4 py-4 shadow-xs md:h-full lg:w-auto">
+        <h3 className="text-[16px] font-semibold text-amber-800">
+          Không có quyền xử lý
+        </h3>
+        <p className="mt-1 max-w-[250px] text-sm text-amber-700">
+          Góp ý này đã được phân công xử lý cho một nhân sự khác trong phòng
+          ban. Bạn không thể thực hiện thao tác.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-fit w-full flex-col gap-2 rounded-xl border border-gray-200/90 bg-white/80 px-3 py-4 shadow-xs md:h-full lg:w-auto">

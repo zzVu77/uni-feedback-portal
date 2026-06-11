@@ -8,7 +8,7 @@ const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
 
 export interface JwtPayloadCustom extends JWTPayload {
   sub: string;
-  role: "DEPARTMENT_STAFF" | "STUDENT" | "ADMIN";
+  role: "DEPARTMENT_STAFF" | "STUDENT" | "ADMIN" | "STAFF_ASSISTANT";
   fullName: string;
   departmentId?: string;
 }
@@ -33,7 +33,8 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/login") || pathname.startsWith("/signup");
   const isAdminRoute = pathname.startsWith("/admin");
   const isStudentRoute = pathname.startsWith("/student");
-  const isStaffRoute = pathname.startsWith("/staff");
+  const isStaffAssistantRoute = pathname.startsWith("/staff-assistant");
+  const isStaffRoute = pathname.startsWith("/staff") && !isStaffAssistantRoute;
 
   // --------------------------------------------------------
   // CASE 1: Not Authenticated (No tokens present)
@@ -88,6 +89,9 @@ export async function middleware(req: NextRequest) {
       if (isStaffRoute && userRole !== "DEPARTMENT_STAFF") {
         return NextResponse.redirect(new URL(dashboardUrl, req.url));
       }
+      if (isStaffAssistantRoute && userRole !== "STAFF_ASSISTANT") {
+        return NextResponse.redirect(new URL(dashboardUrl, req.url));
+      }
 
       // C. Allow access if role matches
       return NextResponse.next();
@@ -115,6 +119,7 @@ export const config = {
     "/student/:path*",
     "/admin/:path*",
     "/staff/:path*",
+    "/staff-assistant/:path*",
     "/forum/:path*",
     "/notifications/:path*",
     "/change-password/:path*",

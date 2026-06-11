@@ -42,6 +42,11 @@ export type FeedbackDetail = {
     fullName: string;
     email: string;
   };
+  assignee?: {
+    id: string;
+    fullName: string;
+    email: string;
+  } | null;
   //TODO: isPublic field is just temporarily added here, need to check and remove if not necessary
   isPublic: boolean;
 };
@@ -58,6 +63,7 @@ export type StaffFeedbackItem = Pick<
   | "category"
   | "student"
   | "isForwarding"
+  | "assignee"
 >;
 export type AdminFeedbackItem = Pick<
   FeedbackDetail,

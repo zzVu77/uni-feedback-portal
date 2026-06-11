@@ -9,6 +9,11 @@ export type AnnouncementDetailType = {
     id: string;
     name: string;
   };
+  user: {
+    id: string;
+    userName: string;
+    role: string;
+  };
   createdAt: string;
   content: string;
   // Optional file attachments
@@ -25,7 +30,7 @@ export type AnnouncementListItem = Omit<AnnouncementDetailType, "files">;
 
 export type AnnouncementManagementItem = Pick<
   AnnouncementDetailType,
-  "id" | "title" | "createdAt" | "content"
+  "id" | "title" | "createdAt" | "content" | "user"
 >;
 
 export interface AnnouncementFilter extends BaseFilter {

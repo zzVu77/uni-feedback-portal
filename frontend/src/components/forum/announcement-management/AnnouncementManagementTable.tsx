@@ -31,6 +31,7 @@ import { ChevronLeft, ChevronRight, CirclePlus, SearchX } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useUser } from "@/context/UserContext";
 import { announcementManagementColumns } from "./columns";
 
 const sortOptions = [
@@ -40,6 +41,7 @@ const sortOptions = [
 ];
 
 export function AnnouncementManagementTable() {
+  const { user } = useUser();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -119,9 +121,9 @@ export function AnnouncementManagementTable() {
     },
   });
   return (
-    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:p-4">
       <div className="flex w-full flex-shrink-0 flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div className="flex w-full flex-1 items-center gap-3 md:w-auto">
+        <div className="flex w-full flex-1 items-center gap-3">
           <Suspense fallback={null}>
             <SearchBar
               placeholder="Tìm kiếm theo tiêu đề..."
@@ -134,7 +136,11 @@ export function AnnouncementManagementTable() {
         </div>
 
         <Link
-          href="/staff/announcement-management/create"
+          href={
+            user?.role === "STAFF_ASSISTANT"
+              ? "/staff-assistant/announcement-management/create"
+              : "/staff/announcement-management/create"
+          }
           className="w-full md:w-auto"
         >
           <Button className="bg-blue-primary-400 hover:bg-blue-primary-600 h-11 w-full gap-2 rounded-full px-6 font-semibold text-white shadow-md transition-all hover:shadow-lg active:scale-[0.98]">

@@ -52,6 +52,7 @@ import { CreateAnnouncementPayload, FileAttachmentDto } from "@/types";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import "suneditor/dist/css/suneditor.min.css";
+import { useUser } from "@/context/UserContext";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -114,7 +115,7 @@ const AnnouncementForm = ({
 }: AnnouncementForm) => {
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false); // Manage upload state
-
+  const { user } = useUser();
   // State to manage key of Editor to force re-render on reset
   const [editorKey, setEditorKey] = useState(0);
 
@@ -239,7 +240,11 @@ const AnnouncementForm = ({
       };
       await onSubmit(payload);
       setTimeout(() => {
-        router.replace(`/staff/announcement-management/`);
+        if (user?.role === "STAFF_ASSISTANT") {
+          router.replace(`/staff-assistant/announcement-management/`);
+        } else {
+          router.replace(`/staff/announcement-management/`);
+        }
       }, 1000);
     } catch (error) {
       console.error("Error updating announcement:", error);
@@ -277,7 +282,11 @@ const AnnouncementForm = ({
   const router = useRouter();
 
   const handleCancel = () => {
-    router.push("/staff/announcement-management");
+    if (user?.role === "STAFF_ASSISTANT") {
+      router.push("/staff-assistant/announcement-management");
+    } else {
+      router.push("/staff/announcement-management");
+    }
   };
 
   const handleRemoveExistingFile = (fileKey: string) => {

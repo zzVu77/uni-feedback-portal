@@ -8,6 +8,7 @@ import { ASSETS } from "@/constants/assets";
 import {
   adminNavigation,
   NavigationItem,
+  staffAssistantNavigation,
   staffNavigation,
   studentNavigation,
 } from "@/constants/navigation";
@@ -28,7 +29,7 @@ import { usePathname } from "next/navigation";
 
 type SidebarProps = {
   showOnMobile?: boolean;
-  type?: "student" | "staff" | "admin";
+  type?: "student" | "staff" | "admin" | "staff_assistant";
   fullName?: string;
 };
 
@@ -53,6 +54,10 @@ export default function Sidebar({
 
     case "admin":
       navigation = adminNavigation;
+      break;
+
+    case "staff_assistant":
+      navigation = staffAssistantNavigation;
       break;
 
     default:

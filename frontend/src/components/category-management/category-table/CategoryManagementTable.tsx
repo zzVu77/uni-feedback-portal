@@ -120,7 +120,7 @@ export function CategoryManagementTable() {
   });
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+    <div className="flex h-full w-full flex-col gap-6 rounded-[24px] border border-white/60 bg-white/70 p-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:p-4">
       <div className="flex w-full flex-shrink-0 items-center gap-3">
         <React.Suspense fallback={null}>
           <SearchBar
