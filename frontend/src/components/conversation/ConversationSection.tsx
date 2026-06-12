@@ -47,7 +47,7 @@ import StatusBadge from "../common/StatusBadge";
 import ChatSheet from "./ChatSheet";
 
 const newConversationSchema = z.object({
-  subject: z.string().min(1, "Vui lòng nhập tiêu đề cuộc trao đổi"),
+  subject: z.string().min(3, "Vui lòng nhập tiêu đề cuộc trao đổi"),
   initialMessage: z.string().min(1, "Vui lòng nhập nội dung tin nhắn"),
 });
 
