@@ -6,15 +6,17 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Prisma, FeedbackStatus, FileTargetType } from '@prisma/client';
+import { FeedbackStatus, FileTargetType } from '@prisma/client';
 import {
   GetMyFeedbacksResponseDto,
   QueryFeedbacksDto,
   FeedbackDetail,
   FeedbackParamDto,
   FeedbackSummary,
+  FeedbackSortOption,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
@@ -53,70 +55,140 @@ export class FeedbacksService {
       from,
       to,
       q,
+      sort = FeedbackSortOption.STATUS,
     } = query;
 
-    const whereClause: Prisma.FeedbacksWhereInput = {
-      userId: actor.sub,
-      ...(status && {
-        currentStatus:
-          status.toUpperCase() in FeedbackStatus
-            ? (status.toUpperCase() as FeedbackStatus)
-            : undefined,
-      }),
-      ...(categoryId && {
-        categoryId: categoryId == 'all' ? undefined : categoryId,
-      }),
-      ...(departmentId && {
-        departmentId: departmentId == 'all' ? undefined : departmentId,
-      }),
-      ...(from || to
-        ? {
-            createdAt: {
-              ...(from && { gte: new Date(from) }),
-              ...(to && {
-                lt: new Date(new Date(to).setDate(new Date(to).getDate() + 1)),
-              }),
-            },
-          }
-        : {}),
-      ...(q && {
-        OR: [
-          { subject: { contains: q, mode: 'insensitive' } },
-          { description: { contains: q, mode: 'insensitive' } },
-        ],
-      }),
-    };
+    let whereClause = 'WHERE f."userId" = $1::"uuid"';
+    type SqlParam = string | number | boolean | Date | null;
+    const params: SqlParam[] = [actor.sub];
+    let paramIndex = 2;
+    const nextParam = () => `$${paramIndex++}`;
+
+    if (departmentId && departmentId !== 'all') {
+      whereClause += ` AND f."departmentId" = ${nextParam()}::"uuid"`;
+      params.push(departmentId);
+    }
+
+    if (status) {
+      const normalizedStatus = status.toUpperCase() as FeedbackStatus;
+      if (!Object.values(FeedbackStatus).includes(normalizedStatus)) {
+        throw new BadRequestException(`Invalid status: ${status}`);
+      }
+      whereClause += ` AND f."currentStatus" = ${nextParam()}::"FeedbackStatus"`;
+      params.push(status.toUpperCase());
+    }
+
+    if (categoryId && categoryId !== 'all') {
+      whereClause += ` AND f."categoryId" = ${nextParam()}::"uuid"`;
+      params.push(categoryId);
+    }
+
+    if (from) {
+      whereClause += ` AND f."createdAt" >= ${nextParam()}`;
+      params.push(new Date(from));
+    }
+
+    if (to) {
+      whereClause += ` AND f."createdAt" < ${nextParam()}`;
+      params.push(new Date(new Date(to).setDate(new Date(to).getDate() + 1)));
+    }
+
+    if (q) {
+      whereClause += ` AND (f."subject" ILIKE ${nextParam()} OR f."description" ILIKE ${nextParam()})`;
+      params.push(`%${q}%`, `%${q}%`);
+    }
+
+    // ======================
+    // SORT LOGIC
+    // ======================
+    let joinClause = '';
+    const orderByParts: string[] = [];
+
+    // Base: STATUS ORDER
+    const statusOrderExpr = `
+    CASE
+      WHEN f."currentStatus" = 'PENDING' THEN 1
+      WHEN f."currentStatus" = 'IN_PROGRESS' THEN 2
+      WHEN f."currentStatus" = 'RESOLVED' THEN 3
+      WHEN f."currentStatus" = 'REJECTED' THEN 4
+      ELSE 5
+    END
+  `;
+
+    if (sort === FeedbackSortOption.TRENDING) {
+      joinClause = `
+      LEFT JOIN "ForumPosts" fp ON fp."feedbackId" = f."id"
+      LEFT JOIN "Votes" v ON v."postId" = fp."id"
+      LEFT JOIN "Comments" cm
+        ON cm."targetId" = fp."id"
+       AND cm."targetType" = 'FORUM_POST'
+    `;
+
+      orderByParts.push(`
+      (COUNT(DISTINCT v."userId") * 2 + COUNT(DISTINCT cm."id")) DESC
+    `);
+    }
+
+    // Base sort
+    orderByParts.push(`
+    ${statusOrderExpr},
+    f."createdAt" DESC
+  `);
+
+    const orderByClause = `
+    ORDER BY ${orderByParts.join(',')}
+  `;
 
     try {
-      const [items, total] = await Promise.all([
-        this.prisma.feedbacks.findMany({
-          where: whereClause,
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-          orderBy: { createdAt: 'desc' },
-          select: {
-            id: true,
-            subject: true,
-            location: true,
-            currentStatus: true,
-            isPrivate: true,
-            department: {
-              select: { id: true, name: true },
-            },
-            category: { select: { id: true, name: true } },
-            createdAt: true,
-          },
-        }),
-        this.prisma.feedbacks.count({ where: whereClause }),
-      ]);
+      const rawResults = await this.prisma.$queryRawUnsafe<any[]>(
+        `
+      SELECT
+        f.*,
+        d."name" as "departmentName",
+        c."name" as "categoryName"
+      FROM "Feedbacks" f
+      LEFT JOIN "Departments" d ON f."departmentId" = d."id"
+      LEFT JOIN "Categories" c ON f."categoryId" = c."id"
+      ${joinClause}
+      ${whereClause}
+      GROUP BY f."id", d."name", c."name"
+      ${orderByClause}
+      OFFSET ${(page - 1) * pageSize}
+      LIMIT ${pageSize}
+      `,
+        ...params,
+      );
+
+      const [result] = await this.prisma.$queryRawUnsafe<{ count: bigint }[]>(
+        `
+      SELECT COUNT(*) as count
+      FROM "Feedbacks" f
+      ${whereClause}
+      `,
+        ...params,
+      );
+
+      const total = Number(result.count);
+
+      const results: FeedbackSummary[] = rawResults.map((f) => ({
+        id: f.id,
+        subject: f.subject,
+        location: f.location ? f.location : null,
+        currentStatus: f.currentStatus,
+        isPrivate: f.isPrivate,
+        department: {
+          id: f.departmentId,
+          name: f.departmentName,
+        },
+        category: {
+          id: f.categoryId,
+          name: f.categoryName,
+        },
+        createdAt: new Date(f.createdAt).toISOString(),
+      }));
+
       return {
-        results: items
-          ? items.map((item) => ({
-              ...item,
-              location: item.location ? item.location : null,
-              createdAt: item.createdAt.toISOString(),
-            }))
-          : [],
+        results,
         total,
       };
     } catch (error) {
