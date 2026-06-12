@@ -19,7 +19,7 @@ logger=logging.getLogger(__name__)
 def get_active_urls():
     logger.info("Fetching active URLs from backend...")
     try:
-        response = requests.get("https://api.uniportal.giahuynguyen28.id.vn/active-urls")
+        response = requests.get("https://api.uniportal.giahuynguyen28.id.vn/social-data-source/active-urls")
         response.raise_for_status()
         urls = response.json()
         if not urls:
