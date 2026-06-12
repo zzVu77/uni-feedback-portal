@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { REQUEST_USER_KEY } from '../constants/auth.constants';
 import { TokenService } from '../token.service';
 import { Reflector } from '@nestjs/core';
@@ -51,7 +51,21 @@ export class AccessTokenGuard implements CanActivate {
       where: { id: payload.sub },
     });
 
+    const clearAuthCookies = () => {
+      const response = context.switchToHttp().getResponse<Response>();
+      const isProduction = process.env.NODE_ENV === 'production';
+      const cookieOptions = {
+        path: '/',
+        domain: isProduction ? '.giahuynguyen28.id.vn' : 'localhost',
+        secure: isProduction,
+        httpOnly: true,
+      };
+      response.clearCookie('refreshToken', cookieOptions);
+      response.clearCookie('accessToken', cookieOptions);
+    };
+
     if (!user || user.status === UserStatus.PERMANENTLY_DELETED) {
+      clearAuthCookies();
       throw new ForbiddenException(
         `Tài khoản của bạn đang bị tạm khóa vô thời hạn. Vui lòng liên hệ Admin.`,
       );
@@ -67,6 +81,7 @@ export class AccessTokenGuard implements CanActivate {
         const deactivatedUntil = user.deactivatedUntil
           ? user.deactivatedUntil.toLocaleString()
           : 'không xác định';
+        clearAuthCookies();
         throw new ForbiddenException(
           `Tài khoản của bạn đang bị tạm khóa đến [${deactivatedUntil}]. Vui lòng liên hệ Admin.`,
         );
