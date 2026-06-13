@@ -103,6 +103,20 @@ export class FeedbackDetail {
     type: [FileAttachmentDto],
   })
   fileAttachments: FileAttachmentDto[];
+
+  @ApiProperty({
+    example: 5,
+    description: 'Rating score given by the user (1-5)',
+    nullable: true,
+  })
+  ratingScore?: number | null;
+
+  @ApiProperty({
+    example: 'Fast response and very helpful.',
+    description: 'Additional comment provided with the rating',
+    nullable: true,
+  })
+  comment?: string | null;
 }
 
 export class FeedbackSummary extends OmitType(FeedbackDetail, [
@@ -110,6 +124,8 @@ export class FeedbackSummary extends OmitType(FeedbackDetail, [
   'statusHistory',
   'fileAttachments',
   'isPublic',
+  'ratingScore',
+  'comment',
 ] as const) {}
 export class GetMyFeedbacksResponseDto {
   @ApiProperty({

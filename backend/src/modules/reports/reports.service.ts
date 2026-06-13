@@ -13,6 +13,7 @@ import {
   FeedbackTrendDto,
   TopInteractivePostDto,
   RadarStatsDto,
+  DepartmentRatingDto,
 } from './dto/report-response.dto';
 
 @Injectable()
@@ -64,7 +65,17 @@ export class ReportsService {
       if (g.currentStatus === 'REJECTED') result.rejectedCount = g._count._all;
     });
 
-    return result;
+    const ratingStats = await this.prisma.feedbackRatings.aggregate({
+      where: { feedback: where },
+      _avg: { ratingScore: true },
+    });
+
+    return {
+      ...result,
+      avgScore: ratingStats._avg.ratingScore
+        ? Number(ratingStats._avg.ratingScore.toFixed(2))
+        : null,
+    };
   }
 
   // 2. Top performing Departments
@@ -188,6 +199,30 @@ export class ReportsService {
     return result;
   }
 
+  // 6. Department Ratings
+  async getDepartmentRatings(
+    dto: ReportFilterDto,
+  ): Promise<DepartmentRatingDto[]> {
+    const fromDate = dto.from ? new Date(dto.from) : new Date('2000-01-01');
+    const toDate = dto.to
+      ? new Date(new Date(dto.to).setDate(new Date(dto.to).getDate() + 1))
+      : new Date();
+
+    const rawData: any[] = await this.prisma.$queryRaw`
+      SELECT 
+        d.id as "departmentId",
+        d.name as "departmentName",
+        AVG(r."ratingScore")::float as "averageRating"
+      FROM "Departments" d
+      LEFT JOIN "Feedbacks" f ON f."departmentId" = d.id AND f."createdAt" >= ${fromDate} AND f."createdAt" < ${toDate}
+      LEFT JOIN "FeedbackRatings" r ON f.id = r."feedbackId"
+      GROUP BY d.id, d.name
+      ORDER BY "averageRating" DESC NULLS LAST;
+    `;
+
+    return rawData;
+  }
+
   // 1. Staff Overview
   async getStaffOverview(
     dto: ReportFilterDto,
@@ -224,7 +259,17 @@ export class ReportsService {
       if (g.currentStatus === 'REJECTED') result.rejectedCount = g._count._all;
     });
 
-    return result;
+    const ratingStats = await this.prisma.feedbackRatings.aggregate({
+      where: { feedback: where },
+      _avg: { ratingScore: true },
+    });
+
+    return {
+      ...result,
+      avgScore: ratingStats._avg.ratingScore
+        ? Number(ratingStats._avg.ratingScore.toFixed(2))
+        : null,
+    };
   }
 
   // 2. Staff Top Categories

@@ -17,6 +17,7 @@ import {
   FeedbackTrendDto,
   TopInteractivePostDto,
   RadarStatsDto,
+  DepartmentRatingDto,
 } from './dto/report-response.dto';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
@@ -67,6 +68,15 @@ export class ReportsController {
   @ApiResponse({ status: 200, type: [TopInteractivePostDto] })
   async getTopInteractivePosts(@Query() query: ReportFilterDto) {
     return this.reportsService.getTopInteractivePosts(query);
+  }
+
+  @Get('admin/departments/ratings')
+  @ApiOperation({
+    summary: 'Get average feedback rating for each department',
+  })
+  @ApiResponse({ status: 200, type: [DepartmentRatingDto] })
+  async getDepartmentRatings(@Query() query: ReportFilterDto) {
+    return this.reportsService.getDepartmentRatings(query);
   }
 
   // 1. Tổng quan số liệu (Staff)
