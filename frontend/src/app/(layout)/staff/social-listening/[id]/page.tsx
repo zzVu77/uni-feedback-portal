@@ -120,7 +120,7 @@ const SocialListeningDetailPage = () => {
 
       urlParams.set("page", "1");
 
-      router.push(`/social-listening/${id}?${urlParams.toString()}`, {
+      router.push(`/staff/social-listening/${id}?${urlParams.toString()}`, {
         scroll: false,
       });
     },
