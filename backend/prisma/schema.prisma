@@ -416,10 +416,9 @@ model AiFeedbackSummaries {
   periodType             ReportPeriodType
   startDate              DateTime
   endDate                DateTime
-  topIssues              Json
+  frequentCategories     Json
   sentimentScore         Float
   overallSummary         String           @db.Text
-  recommendations        Json
   totalFeedbacksAnalyzed Int
   createdAt              DateTime         @default(now())
 

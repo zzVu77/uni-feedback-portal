@@ -53,6 +53,9 @@ export class AiAnalyticsService {
         id: true,
         subject: true,
         description: true,
+        category: {
+          select: { id: true, name: true },
+        },
       },
     });
 
@@ -73,7 +76,7 @@ export class AiAnalyticsService {
       const batch = batches[i];
       let inputData = '';
       for (const fb of batch) {
-        inputData += `--- BÀI VIẾT ID: ${fb.id} ---\nTiêu đề: ${fb.subject}\nNội dung: ${fb.description}\n\n`;
+        inputData += `--- BÀI VIẾT ID: ${fb.id} ---\nDanh mục: ${fb.category?.name || 'Không xác định'} (ID: ${fb.category?.id || 'Unknown'})\nTiêu đề: ${fb.subject}\nNội dung: ${fb.description}\n\n`;
       }
 
       const prompt = `Bạn là một chuyên gia phân tích dữ liệu và tâm lý học hành vi chuyên biệt trong lĩnh vực giáo dục đại học.
@@ -105,6 +108,13 @@ export class AiAnalyticsService {
       return null;
     }
 
+    const categories = await this.prisma.categories.findMany({
+      select: { id: true, name: true },
+    });
+    const categoriesList = categories
+      .map((c) => `- ${c.name} (ID: ${c.id})`)
+      .join('\n');
+
     this.logger.log(
       'Aggregating partial summaries into final WEEKLY report...',
     );
@@ -112,14 +122,21 @@ export class AiAnalyticsService {
     Dưới đây là các bản tóm tắt thành phần từ nhiều lô dữ liệu góp ý (feedback) nội bộ của sinh viên gửi cho nhà trường trong một tuần.
     Nhiệm vụ của bạn là tổng hợp tất cả lại thành một Báo Cáo Tuần duy nhất để trình lên Ban Giám Hiệu, giúp họ nắm bắt tình hình và đưa ra quyết định nhanh chóng.
     
+    DANH SÁCH CÁC DANH MỤC HỢP LỆ VÀ ID TƯƠNG ỨNG (BẮT BUỘC SỬ DỤNG ID TỪ DANH SÁCH NÀY NẾU TRÙNG TÊN DANH MỤC):
+    ${categoriesList}
+
     Yêu cầu định dạng JSON (chỉ trả về JSON, không kèm text markdown nào khác):
     {
       "overallSummary": "Tóm tắt chung về tình hình tuần qua...",
       "sentimentScore": [Điểm từ -1.0 đến 1.0, -1.0 là cực kỳ tiêu cực, 1.0 là cực kỳ tích cực],
-      "topIssues": [
-        {"issue": "Tên vấn đề", "count": 15, "urgency": "HIGH/MEDIUM/LOW"}
-      ],
-      "recommendations": ["Đề xuất 1", "Đề xuất 2"]
+      "frequentCategories": [
+        {
+          "categoryId": "UUID của danh mục (Lấy chính xác từ ID trong dữ liệu đầu vào)",
+          "categoryName": "Tên danh mục",
+          "count": 15,
+          "commonIssues": ["Vấn đề 1", "Vấn đề 2"]
+        }
+      ]
     }
     
     Dữ liệu tóm tắt thành phần:
@@ -147,8 +164,7 @@ export class AiAnalyticsService {
           endDate,
           overallSummary: reportData.overallSummary || '',
           sentimentScore: reportData.sentimentScore || 0,
-          topIssues: reportData.topIssues || [],
-          recommendations: reportData.recommendations || [],
+          frequentCategories: reportData.frequentCategories || [],
           totalFeedbacksAnalyzed: feedbacks.length,
         },
       });
@@ -200,23 +216,37 @@ export class AiAnalyticsService {
       inputData += `--- BÁO CÁO TUẦN (${report.startDate.toISOString()} - ${report.endDate.toISOString()}) ---\n`;
       inputData += `Tóm tắt: ${report.overallSummary}\n`;
       inputData += `Điểm cảm xúc: ${report.sentimentScore}\n`;
-      inputData += `Vấn đề nổi bật: ${JSON.stringify(report.topIssues)}\n\n`;
+      inputData += `Các danh mục nổi bật: ${JSON.stringify((report as any).frequentCategories || report.frequentCategories)}\n\n`;
     }
+
+    const categories = await this.prisma.categories.findMany({
+      select: { id: true, name: true },
+    });
+    const categoriesList = categories
+      .map((c) => `- ${c.name} (ID: ${c.id})`)
+      .join('\n');
 
     this.logger.log('Aggregating weekly reports into final MONTHLY report...');
     const finalPrompt = `Bạn là một chuyên gia phân tích dữ liệu giáo dục và quản lý chất lượng đại học cấp cao. 
     Dưới đây là các báo cáo tổng kết của các tuần trong một tháng về tình hình góp ý (feedback) của sinh viên.
     Nhiệm vụ của bạn là gộp và tổng hợp tất cả lại thành một Báo Cáo Tháng duy nhất trình lên Ban Giám Hiệu.
-    Gộp các vấn đề giống nhau lại, cộng dồn số lượng, đánh giá mức độ nghiêm trọng và tính toán trung bình cảm xúc cho hợp lý.
+    Gộp các vấn đề giống nhau trong cùng một danh mục lại, cộng dồn số lượng, và tính toán trung bình cảm xúc cho hợp lý.
     
+    DANH SÁCH CÁC DANH MỤC HỢP LỆ VÀ ID TƯƠNG ỨNG (BẮT BUỘC SỬ DỤNG ID TỪ DANH SÁCH NÀY NẾU TRÙNG TÊN DANH MỤC):
+    ${categoriesList}
+
     Yêu cầu định dạng JSON (chỉ trả về JSON, không kèm text markdown nào khác):
     {
       "overallSummary": "Tóm tắt chung về tình hình tháng qua...",
       "sentimentScore": [Điểm từ -1.0 đến 1.0],
-      "topIssues": [
-        {"issue": "Tên vấn đề", "count": 15, "urgency": "HIGH/MEDIUM/LOW"}
-      ],
-      "recommendations": ["Đề xuất 1", "Đề xuất 2"]
+      "frequentCategories": [
+        {
+          "categoryId": "UUID của danh mục",
+          "categoryName": "Tên danh mục",
+          "count": 15,
+          "commonIssues": ["Vấn đề 1", "Vấn đề 2"]
+        }
+      ]
     }
     
     Dữ liệu các báo cáo tuần:
@@ -244,8 +274,7 @@ export class AiAnalyticsService {
           endDate,
           overallSummary: reportData.overallSummary || '',
           sentimentScore: reportData.sentimentScore || 0,
-          topIssues: reportData.topIssues || [],
-          recommendations: reportData.recommendations || [],
+          frequentCategories: reportData.frequentCategories || [],
           totalFeedbacksAnalyzed: totalFeedbacks,
         },
       });
