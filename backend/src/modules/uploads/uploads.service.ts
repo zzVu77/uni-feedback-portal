@@ -191,6 +191,19 @@ export class UploadsService {
         (f) => !existingFiles.some((e) => e.fileKey === f.fileKey),
       ) ?? [];
 
+    const uniqueFilesToAdd = Array.from(
+      new Map(filesToAdd.map((f) => [f.fileKey, f])).values(),
+    );
+
+    const keysAlreadyInDb = await this.getExistingFileKeys(
+      uniqueFilesToAdd.map((f) => f.fileKey),
+    );
+    if (keysAlreadyInDb.length > 0) {
+      throw new ConflictException(
+        `Some fileKeys already exist in the database`,
+      );
+    }
+
     if (filesToDelete.length > 0) {
       await Promise.all(
         filesToDelete.map((file) => this.deleteFileFromS3(file.fileKey)),
@@ -200,17 +213,10 @@ export class UploadsService {
         where: { id: { in: filesToDelete.map((f) => f.id) } },
       });
     }
-    const keysAlreadyInDb = await this.getExistingFileKeys(
-      filesToAdd.map((f) => f.fileKey),
-    );
-    if (keysAlreadyInDb.length > 0) {
-      throw new ConflictException(
-        `Some fileKeys already exist in the database`,
-      );
-    }
-    if (filesToAdd.length > 0) {
+
+    if (uniqueFilesToAdd.length > 0) {
       await this.prisma.fileAttachments.createMany({
-        data: filesToAdd.map((file) => ({
+        data: uniqueFilesToAdd.map((file) => ({
           targetId,
           targetType,
           fileName: file.fileName,

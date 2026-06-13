@@ -6,6 +6,7 @@ import {
   ValidateNested,
   IsArray,
   IsUUID,
+  ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -74,6 +75,7 @@ export class CreateFeedbackDto {
   })
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(5, { message: 'Maximum 5 files allowed' })
   @ValidateNested({ each: true })
   @Type(() => CreateFileAttachmentDto)
   fileAttachments?: CreateFileAttachmentDto[];
