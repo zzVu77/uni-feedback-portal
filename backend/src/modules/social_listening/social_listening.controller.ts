@@ -23,7 +23,7 @@ export class SocialListeningController {
 
   @Get('trending-issues')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get trending issues data for dashboard with dynamic filters',
   })
@@ -37,7 +37,7 @@ export class SocialListeningController {
 
   @Get('kpi-overview')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get KPI overview statistics for social listening',
   })
@@ -51,7 +51,7 @@ export class SocialListeningController {
 
   @Get('sentiment-trend')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get sentiment trend statistics grouped by date',
   })
@@ -65,7 +65,7 @@ export class SocialListeningController {
 
   @Get('topic-distribution')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get topic distribution statistics',
   })
@@ -79,7 +79,7 @@ export class SocialListeningController {
 
   @Get('classification-sentiment')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get post count grouped by sentiment label',
   })
@@ -93,7 +93,7 @@ export class SocialListeningController {
 
   @Get('post-count-by-date')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get total post count grouped by date',
   })
@@ -107,7 +107,7 @@ export class SocialListeningController {
 
   @Get('posts-by-sentiment')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get all positive and negative posts',
   })
@@ -121,7 +121,7 @@ export class SocialListeningController {
 
   @Get('topic-by-sentiment')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get sentiment distribution for each topic',
   })

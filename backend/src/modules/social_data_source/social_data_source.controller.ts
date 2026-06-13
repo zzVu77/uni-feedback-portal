@@ -63,7 +63,7 @@ export class SocialDataSourceController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get all data sources (Admin only)' })
   @ApiResponse({ status: 200, type: SocialDataSourceListResponseDto })
   findAll(@Query() query: QuerySocialDataSourceDto) {
@@ -72,7 +72,7 @@ export class SocialDataSourceController {
 
   @Get(':id')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get a specific data source (Admin only)' })
   @ApiResponse({ status: 200, type: SocialDataSourceDto })
   findOne(@Param('id') id: string) {
