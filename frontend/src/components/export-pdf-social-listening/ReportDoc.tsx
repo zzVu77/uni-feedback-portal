@@ -43,7 +43,7 @@ export const ReportDoc = ({
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.cover}>
-            <Image src="/logo-hcmute.png" style={styles.logo} />
+            <Image src="/ute_logo.png" style={styles.logo} />
             <Text style={styles.title}>
               BÁO CÁO PHÂN TÍCH XU HƯỚNG {"\n"} CÁC VẤN ĐỀ NỔI BẬT ĐƯỢC THẢO
               LUẬN TRÊN MẠNG XÃ HỘI {"\n"} ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT TP.HCM
