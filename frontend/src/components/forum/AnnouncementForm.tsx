@@ -202,6 +202,13 @@ const AnnouncementForm = ({
       };
 
       await onSubmit(payload);
+      setTimeout(() => {
+        if (user?.role === "STAFF_ASSISTANT") {
+          router.replace(`/staff-assistant/announcement-management/`);
+        } else {
+          router.replace(`/staff/announcement-management/`);
+        }
+      }, 1000);
       setIsSubmitDialogOpen(false);
       form.reset();
       setExistingFiles([]);
