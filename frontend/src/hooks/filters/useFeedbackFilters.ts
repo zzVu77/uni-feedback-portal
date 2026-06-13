@@ -2,7 +2,7 @@ import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { FeedbackFilter, FeedbackStatus } from "@/types";
 
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 12;
 
 export function useFeedbackFilters(): FeedbackFilter {
   const searchParams = useSearchParams();
