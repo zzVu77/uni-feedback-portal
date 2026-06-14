@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -16,6 +18,7 @@ import {
   bulkUpdateStaffFeedbackStatus,
   resubmitFeedbackById,
   bulkForwardStaffFeedbacks,
+  createFeedbackRating,
 } from "@/services/feedback-service";
 import {
   FeedbackFilter,
@@ -24,8 +27,9 @@ import {
   BulkUpdateFeedbackStatusParams,
   ForwardFeedbackParams,
   BulkForwardFeedbackParams,
+  CreateFeedbackRatingPayload,
 } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const FEEDBACK_QUERY_KEYS = {
@@ -121,6 +125,34 @@ export const useResubmitFeedbackById = () => {
     },
     onError: () => {
       toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    },
+  });
+};
+
+export const useSubmitFeedbackRating = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: CreateFeedbackRatingPayload;
+    }) => createFeedbackRating(id, data),
+    retry: false,
+    onSuccess: (_, variables) => {
+      toast.success("Đánh giá thành công! Cảm ơn phản hồi của bạn.");
+      queryClient.invalidateQueries({
+        queryKey: [
+          FEEDBACK_QUERY_KEYS.student.MY_FEEDBACK_DETAIL,
+          variables.id,
+        ],
+      });
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message || "Có lỗi xảy ra khi gửi đánh giá!",
+      );
     },
   });
 };
