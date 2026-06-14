@@ -79,9 +79,7 @@ export default function AdminDashboardPage() {
               Thống kê
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-slate-500 sm:text-base">
-              Theo dõi và quản lý hiệu suất giải quyết phản hồi từ các phòng
-              ban, đồng thời nắm bắt các xu hướng thảo luận nổi bật nhất trên hệ
-              thống.
+              Xem tổng quan và chi tiết hiệu suất phản hồi của các phòng ban,
             </p>
           </div>
 

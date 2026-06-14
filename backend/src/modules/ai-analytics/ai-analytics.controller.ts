@@ -21,6 +21,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { TriggerReportDto, GetReportsDto } from './dto/trigger-report.dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
 
 @ApiTags('AI Analytics')
 @ApiBearerAuth()
@@ -47,7 +48,10 @@ export class AiAnalyticsController {
     status: 400,
     description: 'Invalid input data or dates.',
   })
-  triggerReport(@Body() body: TriggerReportDto) {
+  async triggerReport(
+    @Body() body: TriggerReportDto,
+    @ActiveUser('sub') userId: string,
+  ) {
     const { periodType, startDate, endDate } = body;
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -56,22 +60,44 @@ export class AiAnalyticsController {
       throw new BadRequestException('Invalid start or end date');
     }
 
+    const existing = await this.prisma.aiFeedbackSummaries.findFirst({
+      where: { periodType, startDate: start, endDate: end },
+    });
+
+    if (existing) {
+      return {
+        message:
+          'Báo cáo cho khoảng thời gian này đã tồn tại, không cần phân tích lại.',
+        status: 'ALREADY_EXISTS',
+        reportId: existing.id,
+      };
+    }
+
     // Run in background without await
     if (periodType === ReportPeriodType.WEEKLY) {
-      this.aiAnalyticsService.generateWeeklyReport(start, end).catch((err) => {
-        console.error('Background Weekly Report Generation Failed:', err);
-      });
+      this.aiAnalyticsService
+        .generateWeeklyReport(start, end, userId)
+        .catch((err) => {
+          console.error('Background Weekly Report Generation Failed:', err);
+        });
     } else if (periodType === ReportPeriodType.MONTHLY) {
-      this.aiAnalyticsService.generateMonthlyReport(start, end).catch((err) => {
-        console.error('Background Monthly Report Generation Failed:', err);
-      });
+      if (periodType === ReportPeriodType.MONTHLY && end >= new Date()) {
+        throw new BadRequestException(
+          'Chỉ có thể tạo báo cáo cho các tháng đã kết thúc hoàn toàn (tháng trong quá khứ).',
+        );
+      }
+      this.aiAnalyticsService
+        .generateMonthlyReport(start, end, userId)
+        .catch((err) => {
+          console.error('Background Monthly Report Generation Failed:', err);
+        });
     } else {
       throw new BadRequestException('Invalid period type');
     }
 
     return {
       message:
-        'Đang tiến hành tạo báo cáo trong nền. Quá trình này có thể mất vài phút tuỳ thuộc vào lượng dữ liệu.',
+        'Đang tiến hành phân tích. Quá trình này có thể mất vài phút tuỳ thuộc vào lượng dữ liệu.',
       status: 'PROCESSING',
     };
   }

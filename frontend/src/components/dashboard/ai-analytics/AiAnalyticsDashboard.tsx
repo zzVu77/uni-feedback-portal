@@ -35,7 +35,15 @@ import {
 } from "@/hooks/queries/useAiAnalyticsQueries";
 import { cn } from "@/lib/utils";
 import { ReportPeriodType } from "@/types/ai-analytics";
-import { addDays, endOfMonth, format, parseISO, subDays } from "date-fns";
+import {
+  addDays,
+  endOfMonth,
+  format,
+  parseISO,
+  subDays,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 import {
   Activity,
   AlertCircle,
@@ -160,11 +168,14 @@ export function AiAnalyticsDashboard() {
   }, [reports, selectedReportId]);
 
   const handleTrigger = () => {
+    const start = startOfDay(parseISO(startDate));
+    const end = endOfDay(parseISO(endDate));
+
     triggerMutation.mutate(
       {
         periodType,
-        startDate: `${startDate}T00:00:00Z`,
-        endDate: `${endDate}T23:59:59Z`,
+        startDate: start.toISOString(),
+        endDate: end.toISOString(),
       },
       {
         onSuccess: () => setIsTriggerOpen(false),
@@ -447,7 +458,12 @@ export function AiAnalyticsDashboard() {
                                 i,
                                 1,
                               );
-                              const isFuture = monthDate > new Date();
+                              const now = new Date();
+                              const isFutureOrCurrent =
+                                monthDate.getFullYear() > now.getFullYear() ||
+                                (monthDate.getFullYear() ===
+                                  now.getFullYear() &&
+                                  i >= now.getMonth());
                               const isSelected =
                                 i === parseISO(monthStr + "-01").getMonth();
                               return (
@@ -461,7 +477,7 @@ export function AiAnalyticsDashboard() {
                                     !isSelected &&
                                       "hover:bg-indigo-50 hover:text-indigo-900",
                                   )}
-                                  disabled={isFuture}
+                                  disabled={isFutureOrCurrent}
                                   onClick={() => {
                                     const val = format(monthDate, "yyyy-MM");
                                     setMonthStr(val);
@@ -587,7 +603,7 @@ export function AiAnalyticsDashboard() {
               <div className="mt-2 space-y-4">
                 <h4 className="flex items-center gap-2 border-t border-slate-100 pt-6 text-sm font-bold tracking-widest text-slate-500 uppercase">
                   <AlertCircle className="h-4 w-4 text-rose-400" />
-                  Các danh mục thường bị khiếu nại
+                  Tóm tắt theo danh mục
                 </h4>
 
                 {!reportDetail.frequentCategories ||

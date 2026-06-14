@@ -77,5 +77,5 @@ export const generateNotificationUrl = (
   if (REPORT_GROUP_NOTIFICATIONS.includes(notificationType)) {
     return `/admin/reported-comment-management?id=${id}&open=true`;
   }
-  return "/";
+  return "#";
 };
