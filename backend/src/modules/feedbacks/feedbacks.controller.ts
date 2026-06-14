@@ -25,6 +25,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { CreateFeedbackRatingDto } from './dto/create-feedback-rating.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
@@ -161,6 +162,33 @@ export class FeedbacksController {
     @ActiveUser() user: ActiveUserData,
   ): Promise<void> {
     return this.feedbacksService.resubmitFeedback(params, user);
+  }
+
+  @Post('/me/:feedbackId/rating')
+  @HttpCode(201)
+  @ApiOperation({
+    summary:
+      'Submit a rating for a resolved or rejected feedback (Student only)',
+    description:
+      'Allows the student who created the feedback to submit a rating score (1-5) and optional comment once the feedback is resolved or rejected.',
+  })
+  @ApiBody({ type: CreateFeedbackRatingDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Rating submitted successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden (Not resolved/rejected)',
+  })
+  @ApiResponse({ status: 404, description: 'Feedback not found' })
+  @ApiResponse({ status: 409, description: 'Feedback already rated' })
+  createRating(
+    @Param() params: FeedbackParamDto,
+    @Body() dto: CreateFeedbackRatingDto,
+    @ActiveUser() user: ActiveUserData,
+  ): Promise<void> {
+    return this.feedbacksService.createRating(params, dto, user);
   }
 
   @Get('/feedback-toxic/:jobId')

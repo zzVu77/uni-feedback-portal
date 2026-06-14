@@ -23,7 +23,7 @@ export const ALLOWED_FILE_TYPES = [
 ];
 
 export const ALLOWED_AVATAR_FILE_TYPES = ['image/png', 'image/jpeg'];
-export const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export class BaseFileItemDto {
   @ApiProperty({ example: 'screenshot.png' })
@@ -40,7 +40,7 @@ export class BaseFileItemDto {
   @ApiProperty({ example: 350000 })
   @IsInt()
   @Min(1)
-  @Max(MAX_FILE_SIZE, { message: 'File size must be less than 100MB' })
+  @Max(MAX_FILE_SIZE, { message: 'File size must be less than 10MB' })
   fileSize: number;
 }
 

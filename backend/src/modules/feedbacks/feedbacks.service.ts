@@ -7,6 +7,7 @@ import {
   NotFoundException,
   ForbiddenException,
   BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { FeedbackStatus, FileTargetType } from '@prisma/client';
@@ -19,6 +20,7 @@ import {
   FeedbackSortOption,
 } from './dto';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { CreateFeedbackRatingDto } from './dto/create-feedback-rating.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { UploadsService } from '../uploads/uploads.service';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
@@ -239,6 +241,9 @@ export class FeedbacksService {
           },
           orderBy: { createdAt: 'asc' },
         },
+        rating: {
+          select: { ratingScore: true, comment: true },
+        },
       },
     });
 
@@ -281,6 +286,8 @@ export class FeedbacksService {
       },
       statusHistory: unifiedTimeline,
       fileAttachments: fileAttachments,
+      ratingScore: feedback.rating ? feedback.rating.ratingScore : null,
+      comment: feedback.rating ? feedback.rating.comment : null,
     };
     return result;
   }
@@ -715,6 +722,44 @@ export class FeedbacksService {
       },
     );
     return;
+  }
+
+  async createRating(
+    params: FeedbackParamDto,
+    dto: CreateFeedbackRatingDto,
+    actor: ActiveUserData,
+  ): Promise<void> {
+    const { feedbackId } = params;
+
+    const feedback = await this.prisma.feedbacks.findUnique({
+      where: { id: feedbackId, userId: actor.sub },
+      include: { rating: true },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found.`);
+    }
+
+    if (
+      feedback.currentStatus !== FeedbackStatus.RESOLVED &&
+      feedback.currentStatus !== FeedbackStatus.REJECTED
+    ) {
+      throw new ForbiddenException(
+        'Feedback must be RESOLVED or REJECTED to submit a rating.',
+      );
+    }
+
+    if (feedback.rating) {
+      throw new ConflictException('This feedback has already been rated.');
+    }
+
+    await this.prisma.feedbackRatings.create({
+      data: {
+        feedbackId: feedbackId,
+        ratingScore: dto.ratingScore,
+        comment: dto.comment,
+      },
+    });
   }
   async getToxicJobStatus(jobId: string) {
     const job = await this.feedbackToxicQueue.getJob(jobId);

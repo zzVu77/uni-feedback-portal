@@ -81,7 +81,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ),
 });
 
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const formSchema = z.object({
   subject: z
@@ -112,9 +112,10 @@ const formSchema = z.object({
   attachments: z
     .array(z.instanceof(File))
     .optional()
+    .refine((files) => !files || files.length <= 5, "Tối đa 5 file đính kèm.")
     .refine(
       (files) => !files || files.every((file) => file.size <= MAX_FILE_SIZE),
-      `Kích thước file tối đa là 100MB.`,
+      `Kích thước file tối đa là 10MB.`,
     )
     .refine(
       (files) =>

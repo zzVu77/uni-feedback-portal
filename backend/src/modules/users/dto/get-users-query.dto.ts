@@ -8,6 +8,8 @@ export enum UserOrderBy {
   VIOLATION_COUNT_DESC = 'violationCount_desc',
   VIOLATION_COUNT_ASC = 'violationCount_asc',
   CREATED_AT_DESC = 'createdAt_desc',
+  NAME_ASC = 'name_asc',
+  NAME_DESC = 'name_desc',
 }
 
 export class GetUsersQueryDto {
@@ -60,10 +62,10 @@ export class GetUsersQueryDto {
   @ApiPropertyOptional({
     description: 'Order by field',
     enum: UserOrderBy,
-    default: UserOrderBy.CREATED_AT_DESC,
+    default: UserOrderBy.NAME_ASC,
     example: UserOrderBy.VIOLATION_COUNT_DESC,
   })
   @IsEnum(UserOrderBy)
   @IsOptional()
-  orderBy?: UserOrderBy = UserOrderBy.CREATED_AT_DESC;
+  orderBy?: UserOrderBy = UserOrderBy.NAME_ASC;
 }

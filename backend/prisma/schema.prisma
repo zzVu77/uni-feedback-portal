@@ -83,6 +83,17 @@ model Feedbacks {
   forumPost               ForumPosts?
   forwardingLogs          ForwardingLogs[]
   assignee     Users?    @relation("FeedbackAssignee", fields: [assigneeId], references: [id])
+  rating       FeedbackRatings?
+}
+
+model FeedbackRatings {
+  id          String    @id @default(uuid()) @db.Uuid
+  feedbackId  String    @unique @db.Uuid
+  ratingScore Int
+  comment     String?
+  createdAt   DateTime  @default(now())
+
+  feedback    Feedbacks @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 }
 
 model FeedbackEmbeddings {
@@ -424,4 +435,10 @@ model AiFeedbackSummaries {
 
   @@unique([periodType, startDate, endDate])
   @@index([startDate, endDate])
+}
+model ToxicKeyword {
+  id        String   @id @default(uuid()) @db.Uuid
+  keyword   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

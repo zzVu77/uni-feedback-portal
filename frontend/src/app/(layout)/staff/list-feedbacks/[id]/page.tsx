@@ -14,8 +14,9 @@ import {
 } from "@/hooks/queries/useFeedbackQueries";
 import { useIsClient } from "@/hooks/useIsClient";
 import { mapFeedbackDetailToHeader } from "@/utils/mappers";
-import { History, List, MessageCircleMore } from "lucide-react";
+import { History, List, MessageCircleMore, Star } from "lucide-react";
 import { useParams } from "next/navigation";
+import { FeedbackRatingView } from "@/components/feedback/FeedbackRatingView";
 
 const Page = () => {
   const params = useParams();
@@ -91,65 +92,80 @@ const Page = () => {
         {/* Bottom Section - Tabs */}
         <div>
           <Tabs defaultValue="timeline" className="w-full">
-            <TabsList className="flex h-10 w-full rounded-full border border-gray-200/90 bg-white p-1 shadow-lg">
+            <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 rounded-2xl border border-gray-200/90 bg-white p-1.5 shadow-lg md:h-12 md:flex-nowrap md:justify-center md:rounded-full">
               <TabsTrigger
                 value="timeline"
-                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+                className="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
               >
-                <History />
+                <History className="mr-1 h-4 w-4" />
                 Lịch sử
               </TabsTrigger>
               <TabsTrigger
                 value="conversation"
-                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+                className="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
               >
-                <MessageCircleMore />
+                <MessageCircleMore className="mr-1 h-4 w-4" />
                 Trao đổi
               </TabsTrigger>
               <TabsTrigger
                 value="related"
-                className="md: flex cursor-pointer items-center gap-2 rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+                className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-lime-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
               >
-                <List />
+                <List className="h-4 w-4" />
                 <div className="flex flex-row items-center justify-center gap-1.5">
                   <span>Góp ý tương tự</span>
-                  <span className="ml-auto flex min-w-5 items-center justify-center rounded-full bg-red-600 px-0.5 py-0.5 text-[10px] font-bold text-white">
+                  <span className="ml-auto flex min-w-5 items-center justify-center rounded-full bg-rose-500 px-0.5 py-0.5 text-[10px] font-bold text-white">
                     {relatedFeedbacks?.results?.length
                       ? relatedFeedbacks.results.length - 1
                       : 0}
                   </span>
                 </div>
               </TabsTrigger>
+              <TabsTrigger
+                value="rating"
+                className="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-amber-500 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+              >
+                <Star className="mr-1 h-4 w-4" />
+                Đánh giá
+              </TabsTrigger>
             </TabsList>
-            <TabsContent
-              value="timeline"
-              className="m-0 focus-visible:outline-none"
-            >
-              <StatusTimeLine statusHistory={feedbackDetail.statusHistory} />
-            </TabsContent>
-            <TabsContent
-              value="conversation"
-              className="m-0 focus-visible:outline-none"
-            >
-              <ConversationSection
-                role="staff"
-                isForwarded={feedbackDetail.isForwarding}
-                currentFeedbackStatus={feedbackDetail.currentStatus}
-              />
-            </TabsContent>
-            <TabsContent
-              value="related"
-              className="m-0 focus-visible:outline-none"
-            >
-              <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-                <RelatedFeedbackTable
-                  feedbacksList={relatedFeedbacks?.results || []}
-                  isLoading={relatedIsLoading}
-                  isError={relatedIsError}
-                  originalFeedbackId={feedbackDetail.id}
+            <div className="mt-4">
+              <TabsContent
+                value="timeline"
+                className="m-0 focus-visible:outline-none"
+              >
+                <StatusTimeLine statusHistory={feedbackDetail.statusHistory} />
+              </TabsContent>
+              <TabsContent
+                value="conversation"
+                className="m-0 focus-visible:outline-none"
+              >
+                <ConversationSection
+                  role="staff"
+                  isForwarded={feedbackDetail.isForwarding}
+                  currentFeedbackStatus={feedbackDetail.currentStatus}
                 />
-              </div>
-            </TabsContent>
+              </TabsContent>
+              <TabsContent
+                value="related"
+                className="m-0 focus-visible:outline-none"
+              >
+                <div className="overflow-hidden">
+                  <RelatedFeedbackTable
+                    feedbacksList={relatedFeedbacks?.results || []}
+                    isLoading={relatedIsLoading}
+                    isError={relatedIsError}
+                    originalFeedbackId={feedbackDetail.id}
+                  />
+                </div>
+              </TabsContent>
+              <TabsContent
+                value="rating"
+                className="m-0 focus-visible:outline-none"
+              >
+                <FeedbackRatingView feedback={feedbackDetail} />
+              </TabsContent>
+            </div>
           </Tabs>
         </div>
       </div>

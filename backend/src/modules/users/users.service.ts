@@ -224,7 +224,7 @@ export class UsersService implements UsersServiceContract {
       status,
       departmentId,
       lookbackDays = 30,
-      orderBy = 'createdAt_desc',
+      orderBy = UserOrderBy.NAME_ASC,
     } = query;
     const skip = (page - 1) * limit;
 
@@ -246,7 +246,9 @@ export class UsersService implements UsersServiceContract {
 
     if (
       orderBy === UserOrderBy.VIOLATION_COUNT_DESC ||
-      orderBy === UserOrderBy.VIOLATION_COUNT_ASC
+      orderBy === UserOrderBy.VIOLATION_COUNT_ASC ||
+      orderBy === UserOrderBy.NAME_ASC ||
+      orderBy === UserOrderBy.NAME_DESC
     ) {
       const allUsers = await this.prisma.users.findMany({
         where,
@@ -260,6 +262,11 @@ export class UsersService implements UsersServiceContract {
       const userIds = allUsers.map((u) => u.id);
       const violationMap = await this.getViolationCounts(userIds, dateLimit);
 
+      const getFirstName = (fullName: string) => {
+        const parts = fullName.trim().split(' ');
+        return parts.length > 0 ? parts[parts.length - 1] : '';
+      };
+
       const usersWithCount = allUsers.map((u) => ({
         ...u,
         violationCount: violationMap.get(u.id) || 0,
@@ -268,7 +275,26 @@ export class UsersService implements UsersServiceContract {
       usersWithCount.sort((a, b) => {
         if (orderBy === UserOrderBy.VIOLATION_COUNT_DESC)
           return b.violationCount - a.violationCount;
-        return a.violationCount - b.violationCount;
+        if (orderBy === UserOrderBy.VIOLATION_COUNT_ASC)
+          return a.violationCount - b.violationCount;
+
+        if (
+          orderBy === UserOrderBy.NAME_ASC ||
+          orderBy === UserOrderBy.NAME_DESC
+        ) {
+          const nameA = getFirstName(a.fullName);
+          const nameB = getFirstName(b.fullName);
+          const cmp = nameA.localeCompare(nameB, 'vi');
+
+          if (cmp !== 0) {
+            return orderBy === UserOrderBy.NAME_ASC ? cmp : -cmp;
+          }
+
+          const fullCmp = a.fullName.localeCompare(b.fullName, 'vi');
+          return orderBy === UserOrderBy.NAME_ASC ? fullCmp : -fullCmp;
+        }
+
+        return 0;
       });
 
       const total = usersWithCount.length;

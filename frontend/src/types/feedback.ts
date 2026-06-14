@@ -49,6 +49,8 @@ export type FeedbackDetail = {
   } | null;
   //TODO: isPublic field is just temporarily added here, need to check and remove if not necessary
   isPublic: boolean;
+  ratingScore?: number | null;
+  comment?: string | null;
 };
 export type MyFeedbackHistoryItem = Pick<
   FeedbackDetail,
@@ -137,3 +139,8 @@ export type RelatedFeedbackItem = Pick<
   | "department"
   | "student"
 >;
+
+export type CreateFeedbackRatingPayload = {
+  ratingScore: number;
+  comment?: string;
+};

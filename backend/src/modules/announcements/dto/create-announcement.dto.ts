@@ -4,6 +4,7 @@ import {
   IsString,
   MinLength,
   ValidateNested,
+  ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -34,6 +35,7 @@ export class CreateAnnouncementDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
+  @ArrayMaxSize(5)
   @Type(() => CreateFileAttachmentDto)
   files?: CreateFileAttachmentDto[];
 }

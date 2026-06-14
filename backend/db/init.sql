@@ -874,447 +874,447 @@ INSERT INTO
     )
 VALUES (
         'f0000000-0000-0000-0000-000000000001',
-        'Cải thiện cơ sở vật chất phòng học',
-        'Phòng học ở tòa A thiếu máy chiếu hiện đại, ảnh hưởng đến chất lượng giảng dạy.',
+        'Phản ánh tình trạng trang thiết bị phòng học ảnh hưởng đến giờ thanh tra',
+        'Kính gửi Phòng Thanh tra, hiện nay hệ thống máy chiếu tại giảng đường A101 thường xuyên bị nhấp nháy và mất tín hiệu giữa chừng. Điều này không chỉ gây gián đoạn nghiêm trọng đến tiến độ bài giảng của giảng viên mà còn khiến việc kiểm tra, giám sát chất lượng giờ dạy của đoàn thanh tra gặp nhiều khó khăn. Kính mong nhà trường kiểm tra và nâng cấp sớm.',
         'Tòa nhà A - Phòng A101',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-11-01 09:15:00'
+        '2026-03-27 13:45:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000002',
-        'Vấn đề đào tạo học vụ',
-        'Thời khóa biểu thường xuyên thay đổi mà không thông báo kịp thời.',
+        'Kiếu nại việc thay đổi thời khóa biểu đột xuất không thông báo',
+        'Tôi viết đơn này xin phản ánh về việc môn học Cơ sở dữ liệu đột ngột thay đổi lịch học và phòng học vào sáng nay mà không có bất kỳ thông báo nào trên hệ thống hay email. Nhiều sinh viên vẫn đến phòng cũ và bị lỡ mất buổi học. Kính đề nghị Phòng Thanh tra giáo dục vào cuộc làm rõ trách nhiệm quản lý và kiểm tra lại quy trình cập nhật thời khóa biểu này.',
         NULL,
-        'REJECTED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-01 14:30:00'
+        '2026-04-01 10:42:15'
     ),
     (
         'f0000000-0000-0000-0000-000000000003',
-        'Hoạt động ngoại khóa cần đa dạng hơn',
-        'Các sự kiện ngoại khóa ít và không hấp dẫn sinh viên tham gia.',
+        'Kiểm tra công tác tổ chức và phân bổ giờ cho hoạt động ngoại khóa',
+        'Các hoạt động ngoại khóa hiện tại đang bị trùng lặp quá nhiều vào khung giờ học chính khóa của các khoa công nghệ, dẫn đến việc sinh viên phải phân vân giữa việc đi điểm danh học tập hoặc tham gia phong trào. Kính mong Phòng Thanh tra xem xét, kiểm tra lại việc phân bổ quỹ thời gian này để đảm bảo quyền lợi học tập của sinh viên.',
         'Sân trường',
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-02 10:45:00'
+        '2026-04-01 14:18:32'
     ),
     (
         'f0000000-0000-0000-0000-000000000004',
-        'Tác phong giảng viên chưa chuyên nghiệp',
-        'Một số giảng viên đến muộn và không chuẩn bị bài giảng kỹ.',
+        'Phản ánh tác phong sư phạm và tình trạng đi muộn của giảng viên',
+        'Tôi xin phản ánh (ẩn danh) về tình trạng giảng viên phụ trách phòng B201 vào sáng thứ Hai thường xuyên đi trễ từ 15 đến 20 phút mà không có lý do chính đáng, đồng thời nội dung giảng dạy rất sơ sài, chủ yếu cho sinh viên tự đọc slide. Kính mong Phòng Thanh tra giáo dục tăng cường kiểm tra đột xuất khu vực này để chấn chỉnh kỷ cương giảng dạy.',
         'Phòng học B201',
         'RESOLVED',
         true,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000004',
-        '2025-11-03 08:00:00'
+        '2026-04-01 16:55:04'
     ),
     (
         'f0000000-0000-0000-0000-000000000005',
-        'Học phí và tài chính cần minh bạch',
-        'Thông tin học phí không rõ ràng, gây khó khăn cho sinh viên.',
+        'Yêu cầu thanh tra tính minh bạch trong việc thu chi và hoàn trả học phí',
+        'Quy trình giải quyết hoàn trả học phí khi sinh viên hủy học phần hiện tại rất mập mờ, thời gian kéo dài nhiều tháng và nhân viên không giải thích rõ ràng. Chúng tôi đề nghị Phòng Thanh tra giáo dục thực hiện chức năng giám sát, thanh tra lại quy trình làm việc của bộ phận tài chính để bảo vệ quyền lợi chính đáng và tài chính của người học.',
         NULL,
         'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-03 11:20:00'
+        '2026-05-09 13:05:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000006',
-        'Cơ sở vật chất thư viện',
-        'Thư viện thiếu sách mới và không gian học tập chật hẹp.',
+        'Kiểm tra điều kiện môi trường tự học tại Thư viện Trung tâm',
+        'Không gian tự học tại Thư viện Trung tâm đang bị xuống cấp nghiêm trọng, hệ thống điều hòa liên tục hỏng hóc trong thời tiết nắng nóng, sách chuyên khảo quá cũ không được cập nhật. Kính đề nghị bộ phận thanh tra khảo sát thực tế và có biên bản ghi nhận gửi Ban giám hiệu nhằm cải thiện môi trường học tập cho sinh viên.',
         'Thư viện Trung tâm',
-        'RESOLVED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-11-03 15:45:00'
+        '2026-04-02 08:22:41'
     ),
     (
         'f0000000-0000-0000-0000-000000000007',
-        'Đào tạo học vụ cải thiện',
-        'Quy trình đăng ký học phần phức tạp và hay lỗi hệ thống.',
+        'Phản ánh sự cố hệ thống đăng ký học phần gây bất công cho sinh viên',
+        'Trong đợt đăng ký tín chỉ vừa qua, cổng thông tin trực tuyến bị sập liên tục khiến nhiều sinh viên năm cuối không thể đăng ký được các môn tiên quyết để ra trường. Đáng nói là có hiện tượng một số tài khoản vẫn vào được và đăng ký bình thường. Đề nghị Phòng Thanh tra tiến hành kiểm tra, rà soát lại tính công bằng và minh bạch của hệ thống này.',
         'Phòng Đào tạo',
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-04 09:30:00'
+        '2026-03-14 11:50:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000008',
-        'Hoạt động ngoại khóa thiếu',
-        'Cần thêm các câu lạc bộ thể thao cho sinh viên.',
+        'Kiến nghị rà soát chất lượng quản lý của các CLB thể thao tại Nhà thi đấu',
+        'Việc quản lý giờ giấc và cơ sở vật chất tại Nhà thi đấu dành cho các hoạt động ngoại khóa đang có dấu hiệu lạm quyền khi ưu tiên cho các đơn vị bên ngoài thuê sân vào giờ sinh hoạt của sinh viên. Kính đề nghị Phòng Thanh tra giáo dục kiểm tra lại hợp đồng và lịch phân bổ để trả lại không gian cho người học.',
         'Nhà Thi đấu',
-        'REJECTED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-04 13:00:00'
+        '2026-04-02 11:05:19'
     ),
     (
         'f0000000-0000-0000-0000-000000000009',
-        'Tác phong giảng viên',
-        'Giảng viên cần nhiệt tình hơn trong giờ học.',
+        'Phản ánh thái độ thờ ơ, thiếu nhiệt tình của giảng viên trong giờ thảo luận',
+        'Sinh viên phản ánh một số giảng viên trong các tiết bài tập/thảo luận chỉ giao đề bài rồi làm việc riêng, bấm điện thoại, không hề hướng dẫn hay giải đáp thắc mắc của người học. Kính mong Phòng Thanh tra tăng cường công tác giám sát camera phòng học để đánh giá đúng thực tế tác phong và trách nhiệm sư phạm này.',
         NULL,
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000004',
-        '2025-11-05 10:15:00'
+        '2026-02-10 14:10:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000010',
-        'Học phí cao',
-        'Học phí tăng mà không có lý do rõ ràng.',
+        'Đơn kiến nghị làm rõ căn cứ tăng học phí niên độ mới',
+        'Nhà trường vừa công bố mức học phí mới tăng đột biến mà không có văn bản giải trình cụ thể về các hạng mục đầu tư tương xứng. Đứng dưới góc độ giám sát tuân thủ quy định pháp luật giáo dục, đề nghị Phòng Thanh tra yêu cầu các bên liên quan công khai minh bạch đề án định mức học phí để toàn thể sinh viên được rõ.',
         'Phòng Tài chính',
-        'RESOLVED',
+        'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-05 14:50:00'
+        '2026-05-04 16:05:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000011',
-        'An ninh trật tự kém',
-        'Khu ký túc xá hay mất đồ.',
+        'Phản ánh lỗ hổng trong công tác kiểm soát an ninh tại Ký túc xá Khu A',
+        'Thời gian gần đây tại Ký túc xá Khu A liên tục xảy ra các vụ mất trộm tài sản cá nhân giá trị cao vào ban ngày. Sinh viên nghi ngờ có sự buông lỏng trong khâu kiểm soát thẻ ra vào của lực lượng bảo vệ. Kính đề nghị Phòng Thanh tra thực hiện đợt giám sát đột xuất công tác trực ban và quy trình an ninh tại đây.',
         'Ký túc xá Khu A',
-        'REJECTED',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000006',
-        '2025-11-05 16:30:00'
+        '2026-04-02 15:34:02'
     ),
     (
         'f0000000-0000-0000-0000-000000000012',
-        'Góp ý khác về cơ sở',
-        'Cần thêm cây xanh trong khuôn viên trường.',
+        'Kiến nghị kiểm tra cảnh quan môi trường sư phạm trong khuôn viên trường',
+        'Khu vực sân trường hiện tại có một số khu vực rác thải sinh hoạt tồn đọng lâu ngày không được xử lý gây mùi hôi thối, ảnh hưởng nghiêm trọng đến mỹ quan học đường và sức khỏe của giảng viên, sinh viên. Đề nghị phòng thanh tra ghi nhận thực tế và đôn đốc bộ phận vệ sinh cảnh quan hoàn thành đúng trách nhiệm.',
         'Sân trường',
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-11-06 08:45:00'
+        '2026-04-03 09:12:48'
     ),
     (
         'f0000000-0000-0000-0000-000000000013',
-        'Đào tạo cần cập nhật',
-        'Chương trình học lỗi thời so với thực tế.',
+        'Kiến nghị thanh tra nội dung khung chương trình đào tạo bị lỗi thời',
+        'Nhiều môn chuyên ngành thuộc khối kỹ thuật hiện tại vẫn dạy lý thuyết của thập kỷ trước, không có giá trị áp dụng thực tế và sai lệch so với chuẩn đầu ra đã công bố. Đề nghị Phòng Thanh tra Giáo dục tổ chức rà soát, kiểm tra độc lập đề cương chi tiết của các môn học này để đảm bảo chất lượng giáo dục đúng cam kết.',
         NULL,
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         true,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-07 11:00:00'
+        '2026-03-20 14:45:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000014',
-        'Hoạt động ngoại khóa',
-        'Tổ chức thêm chuyến đi thực tế.',
+        'Phản ánh việc ép buộc sinh viên tham gia các chuyến thực tế có thu phí',
+        'Sinh viên phản ánh việc một số bộ phận liên kết với doanh nghiệp bên ngoài, đưa ra quy định bắt buộc phải tham gia chuyến đi thực tế có thu phí cao thì mới được công nhận điểm chuyên cần ngoại khóa. Đề nghị Phòng Thanh tra làm rõ dấu hiệu trục lợi và tính tự nguyện trong hoạt động này.',
         'Phòng Quan hệ doanh nghiệp',
-        'REJECTED',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-08 13:15:00'
+        '2026-04-03 13:50:21'
     ),
     (
         'f0000000-0000-0000-0000-000000000015',
-        'Tác phong cần cải thiện',
-        'Giảng viên nên tương tác nhiều hơn với sinh viên.',
+        'Phản ánh giảng viên vi phạm quy chế, thiếu tương tác và bỏ tiết',
+        'Tại phòng học C501, giảng viên môn Kỹ năng mềm thường xuyên bật video cho sinh viên tự xem rồi đi ra ngoài giải quyết việc riêng, cuối giờ vào điểm danh. Đây là hành vi thiếu trách nhiệm, vi phạm nghiêm trọng quy chế giảng dạy. Đề nghị Phòng Thanh tra giáo dục trích xuất camera giám sát để có hình thức xử lý thích đáng.',
         'Phòng học C501',
-        'RESOLVED',
-        false,
-        'e0000000-0000-0000-0000-000000000001',
-        'd0000000-0000-0000-0000-000000000001',
-        'c0000000-0000-0000-0000-000000000004',
-        '2025-11-09 09:00:00'
-    ),
-    (
-        'f0000000-0000-0000-0000-000000000016',
-        'Tài chính học phí',
-        'Cần hỗ trợ học bổng cho sinh viên nghèo.',
-        NULL,
-        'RESOLVED',
-        false,
-        'e0000000-0000-0000-0000-000000000003',
-        'd0000000-0000-0000-0000-000000000001',
-        'c0000000-0000-0000-0000-000000000005',
-        '2025-11-10 14:00:00'
-    ),
-    (
-        'f0000000-0000-0000-0000-000000000017',
-        'Cơ sở vật chất lab',
-        'Phòng thí nghiệm thiếu thiết bị an toàn.',
-        'Phòng thí nghiệm B201',
         'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
+        'c0000000-0000-0000-0000-000000000004',
+        '2026-06-04 09:30:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000016',
+        'Yêu cầu giám sát tính công bằng trong quy trình xét duyệt học bổng',
+        'Danh sách sinh viên nhận học bổng hỗ trợ khó khăn vừa qua có nhiều điểm bất thường, một số trường hợp có gia cảnh tốt vẫn được duyệt trong khi nhiều sinh viên nghèo thực sự lại bị loại. Kính đề nghị Phòng Thanh tra giáo dục tiếp nhận hồ sơ, tiến hành rà soát lại toàn bộ quy trình chấm điểm và xét duyệt này.',
+        NULL,
+        'IN_PROGRESS',
+        false,
+        'e0000000-0000-0000-0000-000000000003',
+        'd0000000-0000-0000-0000-000000000001',
+        'c0000000-0000-0000-0000-000000000005',
+        '2026-04-03 17:08:44'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000017',
+        'Báo cáo phòng thực hành thí nghiệm không tuân thủ quy định an toàn',
+        'Phòng thí nghiệm hóa sinh B201 hiện đang thiếu hụt nghiêm trọng các thiết bị bảo hộ, tủ hút khí độc bị hỏng từ lâu nhưng chưa sửa, đe dọa trực tiếp đến an toàn sức khỏe của giảng viên và sinh viên trong giờ thực hành. Đề nghị phòng thanh tra lập biên bản đình chỉ sử dụng cho đến khi khắc phục xong các lỗi an toàn.',
+        'Phòng thí nghiệm B201',
+        'VIOLATED_CONTENT',
+        false,
+        'e0000000-0000-0000-0000-000000000001',
+        'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-11-10 16:45:00'
+        '2026-05-04 16:05:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000018',
-        'Học vụ đăng ký',
-        'Hệ thống đăng ký online chậm và hay crash.',
+        'Phản ánh tình trạng lỗi hệ thống khảo sát ý kiến giảng viên đầu ra',
+        'Hệ thống đánh giá giảng viên trực tuyến vào cuối kỳ liên tục bị nghẽn mạng và tự động lưu kết quả mặc định "Tốt" khi sinh viên chưa kịp chọn. Điều này làm sai lệch hoàn toàn kết quả thanh tra chất lượng giảng dạy. Đề nghị Phòng Thanh tra phối hợp với bộ phận IT để kiểm tra và tổ chức đánh giá lại một cách trung thực.',
         'Phòng Đào tạo',
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-11 10:30:00'
+        '2026-04-04 10:25:33'
     ),
     (
         'f0000000-0000-0000-0000-000000000019',
-        'Ngoại khóa văn nghệ',
-        'Cần thêm sự kiện văn nghệ cho sinh viên.',
+        'Phản ánh việc lạm dụng quỹ thời gian chính khóa cho tập duyệt văn nghệ',
+        'Một số khoa đang có tình trạng ép sinh viên nghỉ học các tiết chính khóa để tham gia tập duyệt văn nghệ chuẩn bị cho ngày lễ lớn của trường, nếu không đi sẽ bị trừ điểm rèn luyện. Việc này vi phạm nghiêm trọng quy chế đào tạo. Kính mong Phòng Thanh tra giáo dục chấn chỉnh ngay tình trạng ép buộc sai quy định này.',
         'Nhà Văn hóa',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-12 12:00:00'
+        '2026-02-02 10:25:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000020',
-        'Giảng viên muộn giờ',
-        'Giảng viên thường xuyên muộn giờ học.',
+        'Khiếu nại giảng viên thường xuyên đi muộn về sớm làm cắt giảm giờ học',
+        'Chúng tôi xin phản ánh tình trạng một số giảng viên lớp lý thuyết buổi tối thường xuyên đi muộn 30 phút và cho lớp về sớm trước 45 phút, làm ảnh hưởng nghiêm trọng đến lượng kiến thức truyền tải. Đề nghị Phòng Thanh tra giáo dục thực hiện việc điểm danh đột xuất các lớp học này để bảo vệ quyền lợi cho người học.',
         NULL,
         'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000004',
-        '2025-11-13 08:15:00'
+        '2026-04-04 14:44:12'
     ),
     (
         'f0000000-0000-0000-0000-000000000021',
-        'Học phí minh bạch',
-        'Yêu cầu công khai chi tiết sử dụng học phí.',
+        'Kiến nghị công khai biên bản quyết toán các khoản thu ngoài học phí',
+        'Sinh viên phải đóng nhiều khoản phụ phí như phí tài liệu, phí duy trì tài khoản thư viện nhưng không có hóa đơn chứng từ rõ ràng từ phòng tài chính. Đứng trên góc độ kiểm soát nội bộ, đề nghị Phòng Thanh tra làm rõ tính hợp pháp của các khoản thu phát sinh này để đảm bảo nhà trường thực hiện đúng pháp luật.',
         'Phòng Tài chính',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-13 11:45:00'
+        '2026-06-12 15:15:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000022',
-        'An ninh camera',
-        'Cần lắp thêm camera ở khu đỗ xe.',
+        'Kiến nghị bổ sung camera giám sát tại bãi đỗ xe phòng ngừa mất cắp',
+        'Khu vực bãi đỗ xe sinh viên liên tục bị phản ánh về tình trạng bẻ gương, rạch yên xe và mất mũ bảo hiểm cao cấp nhưng khi lên làm việc với đội bảo vệ thì không có bằng chứng đối chiếu do thiếu camera. Kính mong Phòng Thanh tra giám sát đôn đốc ban quản lý tòa nhà triển khai lắp đặt ngay hệ thống camera an ninh.',
         'Bãi đỗ xe',
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000006',
-        '2025-11-14 15:00:00'
+        '2026-04-04 16:19:50'
     ),
     (
         'f0000000-0000-0000-0000-000000000023',
-        'Góp ý cơ sở wifi',
-        'Wifi trường yếu, cần nâng cấp.',
+        'Phản ánh chất lượng mạng Wifi phục vụ học tập quá kém',
+        'Mạng wifi nội bộ của trường tại các khu giảng đường liên tục bị mất kết nối, băng thông quá yếu khiến sinh viên không thể truy cập vào hệ thống LMS để làm bài kiểm tra trực tuyến ngay tại lớp. Điều này ảnh hưởng trực tiếp đến kết quả đánh giá học tập. Đề nghị Thanh tra có ý kiến bằng văn bản gửi phòng hạ tầng CNTT nâng cấp khẩn cấp.',
         NULL,
-        'REJECTED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-11-15 09:45:00'
+        '2026-02-15 09:55:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000024',
-        'Đào tạo thực hành',
-        'Tăng giờ thực hành cho các môn kỹ thuật.',
+        'Kiểm tra việc cắt giảm thời lượng thực hành sai quy định tại xưởng kỹ thuật',
+        'Theo khung chương trình môn Dung sai kỹ thuật có 5 buổi thực hành tại xưởng, tuy nhiên giảng viên phụ trách đã tự ý cắt giảm xuống còn 3 buổi và yêu cầu sinh viên tự làm báo cáo ở nhà cho đủ số tiết. Đề nghị Phòng Thanh tra giáo dục kiểm tra lại nhật ký giảng dạy và chấn chỉnh hành vi cắt xén chương trình này.',
         'Xưởng Thực hành',
-        'RESOLVED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-15 13:30:00'
+        '2026-04-05 08:51:07'
     ),
     (
         'f0000000-0000-0000-0000-000000000025',
-        'Ngoại khóa tình nguyện',
-        'Tổ chức thêm hoạt động tình nguyện.',
+        'Yêu cầu thanh tra tài chính và phân bổ ngân sách cho hoạt động tình nguyện',
+        'Chúng tôi nhận thấy có sự thiếu minh bạch trong khâu quyết toán ngân sách chiến dịch Mùa hè xanh vừa qua, nhiều khoản chi thực tế cho sinh viên tình nguyện bị cắt xén không rõ lý do. Đề nghị Phòng Thanh tra tiến hành kiểm tra chứng từ, hóa đơn của ban tổ chức để đảm bảo dòng tiền được sử dụng đúng mục đích.',
         'Đoàn trường',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-15 16:00:00'
+        '2026-06-08 13:10:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000026',
-        'Tác phong phục vụ',
-        'Nhân viên hành chính chậm trễ trong xử lý giấy tờ.',
+        'Phản ánh thái độ làm việc hách dịch, chậm trễ của nhân viên hành chính',
+        'Khi sinh viên đến phòng hành chính xin cấp bảng điểm để bổ sung hồ sơ xin việc, nhân viên tại đây có thái độ rất hách dịch, quát mắng sinh viên và kéo dài thời gian hẹn trả kết quả lên đến 3 tuần thay vì 3 ngày theo quy định. Kính đề nghị Phòng Thanh tra kiểm tra tác phong công sở và quy trình một cửa tại bộ phận này.',
         'Phòng Hành chính',
-        'REJECTED',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000004',
-        '2025-11-16 10:00:00'
+        '2026-04-05 11:36:29'
     ),
     (
         'f0000000-0000-0000-0000-000000000027',
-        'Tài chính hỗ trợ',
-        'Cần thêm quỹ hỗ trợ sinh viên khó khăn.',
+        'Kiến nghị giám sát hoạt động phân phối quỹ hỗ trợ sinh viên gặp thiên tai',
+        'Nhà trường có kêu gọi đóng góp quỹ hỗ trợ cho sinh viên vùng lũ lụt, tuy nhiên đến nay đã qua kỳ học mới vẫn chưa thấy công bố danh sách giải ngân và tiêu chí xét duyệt nhận hỗ trợ. Để tránh tình trạng thất thoát quỹ, đề nghị Phòng Thanh tra giáo dục đứng ra giám sát rà soát lại tiến độ thực hiện của ban quản lý quỹ.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-17 14:15:00'
+        '2026-03-05 11:15:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000028',
-        'Cơ sở vệ sinh',
-        'Nhà vệ sinh cần sạch sẽ hơn.',
+        'Phản ánh tình trạng mất vệ sinh tại khu vực nhà vệ sinh tòa nhà A',
+        'Khu vệ sinh nam nữ tại tòa nhà A thường xuyên bị tắc nghẽn, không có nước sạch và bốc mùi hôi thối nồng nặc lan vào tận các phòng học bên cạnh, ảnh hưởng trực tiếp tới môi trường sư phạm của trường. Đề nghị phòng thanh tra khảo sát, lập biên bản nhắc nhở đơn vị đấu thầu vệ sinh thực hiện đúng cam kết hợp đồng.',
         'Tòa nhà A',
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-11-18 08:30:00'
+        '2026-04-05 15:02:54'
     ),
     (
         'f0000000-0000-0000-0000-000000000029',
-        'Học vụ thi cử',
-        'Lịch thi cần công bố sớm hơn.',
+        'Khiếu nại việc công bố lịch thi học kỳ quá muộn vi phạm quy chế',
+        'Theo quy chế đào tạo, lịch thi kết thúc học phần phải được công bố trước ít nhất 2 tuần để sinh viên chuẩn bị kế hoạch ôn tập. Tuy nhiên hiện tại chỉ còn 3 ngày nữa là thi nhưng lịch thi cụ thể của một số môn vẫn chưa có trên hệ thống. Đề nghị Phòng Thanh tra kiểm tra quy trình làm việc của phòng Đào tạo và giải quyết gấp cho sinh viên.',
         'Phòng Đào tạo',
-        'REJECTED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-19 11:45:00'
+        '2026-02-20 14:50:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000030',
-        'Ngoại khóa hội thảo',
-        'Tổ chức hội thảo việc làm thường xuyên.',
+        'Yêu cầu thanh tra chất lượng các buổi hội thảo hướng nghiệp bắt buộc',
+        'Nhiều buổi hội thảo mang danh nghĩa hướng nghiệp nhưng nội dung thực chất lại là quảng cáo đa cấp hoặc bán các khóa học tiếng Anh kỹ năng ngoài trường với giá đắt đỏ, trong khi trường lại bắt buộc sinh viên đi để lấy điểm rèn luyện. Đề nghị Phòng Thanh tra giáo dục kiểm duyệt chặt chẽ nội dung trước khi cho phép tổ chức.',
         NULL,
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-20 15:00:00'
+        '2026-04-06 09:40:11'
     ),
     (
         'f0000000-0000-0000-0000-000000000031',
-        'Giảng viên đánh giá',
-        'Phương pháp đánh giá chưa công bằng.',
+        'Phản ánh tình trạng chấm thi không công bằng, có dấu hiệu tiêu cực',
+        'Chúng tôi làm đơn này xin phản ánh về việc chấm bài tập lớn môn Thiết kế máy của giảng viên tại phòng B501 có biểu hiện thiếu khách quan, trù dập điểm số của những sinh viên không đi học thêm tại trung tâm riêng của thầy. Đề nghị Phòng Thanh tra giáo dục thành lập hội đồng độc lập để chấm thẩm định lại toàn bộ bài thi lớp này.',
         'Phòng học B501',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000004',
-        '2025-11-21 09:15:00'
+        '2026-04-14 16:05:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000032',
-        'Học phí giảm',
-        'Giảm học phí cho sinh viên xuất sắc.',
+        'Kiến nghị giám sát quy trình xét giảm học phí cho sinh viên xuất sắc',
+        'Nghị định của Chính phủ có quy định rõ về mức miễn giảm học phí cho sinh viên đạt thành tích học tập loại xuất sắc, nhưng nhà trường lại tự ý chuyển đổi khoản này thành các voucher khóa học kỹ năng không có giá trị quy đổi tiền mặt. Đề nghị Phòng Thanh tra xem xét lại tính pháp lý của quy định nội bộ này.',
         'Phòng Tài chính',
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-22 13:30:00'
+        '2026-04-06 13:21:45'
     ),
     (
         'f0000000-0000-0000-0000-000000000033',
-        'An ninh đêm khuya',
-        'Tăng cường an ninh vào ban đêm.',
+        'Phản ánh lực lượng bảo vệ trực đêm lơ là nhiệm vụ phòng chống cháy nổ',
+        'Vào khoảng 23h đêm qua, tôi có đi học nhóm về muộn và chứng kiến chốt bảo vệ khu trung tâm không có người trực, đi kiểm tra thì thấy họ đang tụ tập uống rượu bia tại góc khuất bãi xe. Đây là hành vi vi phạm kỷ luật lao động nghiêm trọng, đe dọa an toàn tài sản trường học. Đề nghị Phòng Thanh tra lập biên bản xử lý nghiêm.',
         'Khuôn viên trường',
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000006',
-        '2025-11-23 16:45:00'
+        '2026-06-11 13:25:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000034',
-        'Góp ý khác',
-        'Cải thiện dịch vụ căn tin.',
+        'Kiểm tra công tác đảm bảo an toàn vệ sinh thực phẩm tại Căn tin trường',
+        'Nhiều sinh viên phản ánh tình trạng ngộ độc thực phẩm nhẹ sau khi ăn cơm trưa tại căn tin trường, đồng thời phát hiện có côn trùng trong thức ăn nhưng chủ hộ kinh doanh né tránh trách nhiệm. Kính đề nghị Phòng Thanh tra phối hợp cùng y tế trường kiểm tra đột xuất chứng nhận an toàn thực phẩm và nguồn gốc nguyên liệu tại đây.',
         'Căn tin',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000007',
-        '2025-12-01 10:00:00'
+        '2026-04-06 16:58:30'
     ),
     (
         'f0000000-0000-0000-0000-000000000035',
-        'Cơ sở thiết bị',
-        'Thiết bị máy tính cũ kỹ.',
+        'Phản ánh dàn máy tính phòng thực hành tin học quá cũ gây lỗi khi thi',
+        'Hệ thống máy tính tại phòng Máy tính khu B đã quá lạc hậu, chip xử lý yếu và thường xuyên bị treo máy ngẫu nhiên. Trong đợt thi vừa qua, nhiều sinh viên bị mất toàn bộ bài làm môn Lập trình nâng cao do máy sập nguồn giữa chừng mà không tự lưu. Đề nghị Phòng Thanh tra ghi nhận và yêu cầu trung tâm máy tính khắc phục hậu quả.',
         'Phòng Máy tính',
-        'RESOLVED',
+        'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-12-02 14:15:00'
+        '2026-05-05 13:10:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000036',
-        'Đào tạo trực tuyến',
-        'Nâng cấp nền tảng học trực tuyến.',
+        'Yêu cầu giám sát chất lượng và tính bảo mật của nền tảng thi trực tuyến',
+        'Tôi xin phản ánh bảo mật (ẩn danh) về nền tảng thi trắc nghiệm trực tuyến mới triển khai có lỗ hổng lớn, cho phép sinh viên mở tab khác tra cứu tài liệu hoặc sử dụng tool hack mà không bị hệ thống cảnh báo đánh dấu vi phạm. Đề nghị Phòng Thanh tra khẩn cấp đình chỉ việc tổ chức thi trên hệ thống này cho đến khi thẩm định lại độ an toàn.',
         NULL,
         'IN_PROGRESS',
         true,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-12-03 09:30:00'
+        '2026-04-07 10:11:05'
     ),
     (
         'f0000000-0000-0000-0000-000000000037',
-        'Hoạt động ngoại khóa mùa đông',
-        'Tổ chức sự kiện mùa đông cho sinh viên.',
+        'Kiến nghị rà soát quy trình thu tiền bắt buộc tham gia Hội quân mùa đông',
+        'Ban cán sự một số lớp đang truyền đạt thông tin bắt buộc mọi đoàn viên phải nộp 200.000đ đóng phí tham gia chiến dịch tình nguyện mùa đông, nếu không tham gia sẽ bị hạ bậc hạnh kiểm cuối năm. Yêu cầu Phòng Thanh tra giáo dục kiểm tra tính đúng đắn của văn bản chỉ đạo này từ phía Đoàn thanh niên xem có đúng quy chế không.',
         'Sân trường',
-        'PENDING',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000001',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-05 13:00:00'
+        '2026-05-28 16:10:00'
     );
 
 INSERT INTO
@@ -1334,399 +1334,399 @@ VALUES
     -- Department thứ 2: Phòng Quan hệ doanh nghiệp (d000...002) → 33 feedbacks
     (
         'f0000000-0000-0000-0000-000000000038',
-        'Kết nối doanh nghiệp còn hạn chế',
-        'Rất ít công ty lớn đến tuyển dụng, cần mở rộng mạng lưới đối tác.',
+        'Mạng lưới doanh nghiệp liên kết còn hạn chế về quy mô và thương hiệu lớn',
+        'Em nhận thấy số lượng các tập đoàn đa quốc gia và doanh nghiệp lớn đến trường để ký kết hợp tác hoặc tuyển dụng trực tiếp còn khá ít. Phần lớn là các công ty vừa và nhỏ với quy mô hạn chế, khiến cơ hội tiếp cận môi trường chuyên nghiệp của sinh viên bị thu hẹp. Kính mong Nhà trường và Phòng Quan hệ Doanh nghiệp chủ động mở rộng mạng lưới đối tác chiến lược sâu rộng hơn.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-02 10:20:00'
+        '2026-04-07 14:52:18'
     ),
     (
         'f0000000-0000-0000-0000-000000000039',
-        'Ngày hội việc làm quá ít',
-        'Chỉ có 1 ngày hội việc làm trong năm, cần tổ chức ít nhất 3 lần.',
+        'Tần suất tổ chức Ngày hội việc làm (Job Fair) trong năm còn quá thưa thớt',
+        'Hiện tại trường chúng ta chỉ tổ chức một Ngày hội việc làm lớn duy nhất trong năm tại Nhà thi đấu đa năng. Số lượng sinh viên tham gia quá đông dẫn đến tình trạng chen chúc, nghẽn mạng đăng ký trực tuyến và không có đủ thời gian phỏng vấn sâu với các HR. Em đề xuất phòng nên tăng tần suất tổ chức lên ít nhất là 2 đến 3 lần một năm hoặc chia nhỏ theo từng khối ngành nghề cụ thể.',
         'Nhà thi đấu đa năng',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-03 15:10:00'
+        '2026-04-21 16:25:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000040',
-        'Hỗ trợ thực tập chưa hiệu quả',
-        'Sinh viên khó tìm được chỗ thực tập chất lượng, phòng cần hỗ trợ nhiều hơn.',
+        'Công tác hỗ trợ và giới thiệu đơn vị thực tập tốt nghiệp chưa đạt hiệu quả cao',
+        'Nhiều sinh viên năm cuối gặp rất nhiều khó khăn trong việc tự liên hệ nơi thực tập đúng chuyên ngành học. Khi lên phòng xin hỗ trợ thì danh sách công ty giới thiệu đã quá hạn hoặc không còn nhận người. Kính đề xuất phòng cần có một bộ phận chuyên trách cập nhật liên tục vị trí thực tập chất lượng cao để kịp thời điều hướng và hỗ trợ sinh viên ứng tuyển thuận lợi.',
         NULL,
         'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-04 11:30:00'
+        '2026-04-07 17:24:41'
     ),
     (
         'f0000000-0000-0000-0000-000000000041',
-        'Học bổng doanh nghiệp quá ít',
-        'Số lượng học bổng từ doanh nghiệp chỉ đếm trên đầu ngón tay.',
+        'Số lượng và giá trị học bổng tài trợ từ phía doanh nghiệp còn quá khiêm tốn',
+        'Em thấy số suất học bổng đến từ các doanh nghiệp liên kết chỉ đếm trên đầu ngón tay và điều kiện xét duyệt lại quá khắt khe, đôi khi không thực tế với điều kiện của sinh viên nghèo vượt khó. Mong phòng Quan hệ doanh nghiệp tích cực đàm phán, kêu gọi các nguồn quỹ xã hội hóa để nâng cao số lượng cũng như giá trị các suất học bổng tài trợ này.',
         NULL,
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-05 09:45:00'
+        '2026-04-08 08:33:14'
     ),
     (
         'f0000000-0000-0000-0000-000000000042',
-        'Hội thảo hướng nghiệp không hấp dẫn',
-        'Diễn giả ít tên tuổi, nội dung chung chung, sinh viên không hứng thú.',
+        'Nội dung các buổi hội thảo định hướng nghề nghiệp còn mang tính hình thức, lý thuyết',
+        'Các chương trình workshop, talkshow hướng nghiệp do phòng phối hợp tổ chức tại hội trường thời gian qua có nội dung khá chung chung, chưa đi sâu vào thực tế thị trường lao động khốc liệt hiện nay. Diễn giả chủ yếu nói về lý thuyết kỹ năng mà thiếu đi các case study thực tế, khiến cho sinh viên cảm thấy không hứng thú và tham gia mang tính chất đối phó điểm rèn luyện.',
         'Hội trường A201',
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-06 14:00:00'
+        '2026-04-02 09:10:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000043',
-        'Chưa có danh sách đối tác công khai',
-        'Sinh viên không biết liên hệ công ty nào để xin thực tập.',
+        'Thiếu cổng thông tin công khai danh sách các đối tác doanh nghiệp chiến lược',
+        'Sinh viên chúng em hoàn toàn mù mờ, không rõ nhà trường đang ký kết hợp tác (MOU) với những công ty nào để chủ động nộp hồ sơ xin thực tập hoặc xin tài trợ nghiên cứu khoa học. Kiến nghị phòng Quan hệ doanh nghiệp xây dựng một danh mục công khai rõ ràng trên website, đính kèm thông tin người liên hệ của từng doanh nghiệp để sinh viên tiện tra cứu.',
         NULL,
-        'REJECTED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-07 16:20:00'
+        '2026-04-08 11:47:52'
     ),
     (
         'f0000000-0000-0000-0000-000000000044',
-        'Cần thêm chương trình mentorship',
-        'Mong có cựu sinh viên hoặc nhân sự doanh nghiệp mentor 1-1.',
+        'Đề xuất xây dựng mạng lưới Mentorship kết nối sâu sắc với mạng lưới Cựu sinh viên',
+        'Mạng lưới cựu sinh viên thành đạt của trường chúng ta rất lớn nhưng chưa được khai thác hiệu quả. Em mong muốn phòng Quan hệ doanh nghiệp đứng ra thành lập một chương trình "Alumni Mentorship" dài hạn. Nơi mà mỗi cựu sinh viên đi trước có thể kèm cặp, chia sẻ trải nghiệm thực tế và định hướng trực tiếp 1-1 cho các bạn sinh viên năm 3, năm 4 trước khi ra trường.',
         NULL,
-        'RESOLVED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-08 10:15:00'
+        '2026-04-08 15:16:09'
     ),
     (
         'f0000000-0000-0000-0000-000000000045',
-        'Thông tin việc làm cập nhật chậm',
-        'Tin tuyển dụng đăng lên fanpage trễ, sinh viên bỏ lỡ cơ hội.',
+        'Tốc độ cập nhật tin tức tuyển dụng trên các kênh truyền thông chính thức còn rất chậm',
+        'Rất nhiều thông tin tuyển dụng, chương trình Quản trị viên tập sự của các tập đoàn lớn có hạn nộp hồ sơ rất gấp. Tuy nhiên, khi thông tin này được duyệt và đăng tải lên fanpage hay cổng thông tin của phòng thì thời hạn chỉ còn 1-2 ngày, khiến sinh viên không kịp chuẩn bị CV chỉn chu. Rất mong bộ phận truyền thông của phòng tối ưu hóa quy trình duyệt bài đăng.',
         NULL,
         'RESOLVED',
         true,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-09 13:40:00'
+        '2026-05-04 16:05:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000046',
-        'Hỗ trợ CV và phỏng vấn',
-        'Cần tổ chức workshop viết CV và mock interview thường xuyên.',
+        'Cần mở thêm các workshop chuyên sâu về kỹ năng viết CV chuyên nghiệp và Mock Interview',
+        'Hiện tại, sinh viên trường mình có thế mạnh về kỹ thuật và kiến thức chuyên môn nhưng kỹ năng viết CV tiếng Anh và trả lời phỏng vấn còn rất yếu. Em đề xuất phòng phối hợp với các chuyên gia nhân sự từ doanh nghiệp mở các lớp sửa CV trực tiếp và tổ chức các buổi phỏng vấn thử (Mock Interview) định kỳ hàng tháng để tăng tính cọ xát thực tế cho sinh viên.',
         'Phòng A102',
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-10 11:00:00'
+        '2026-04-09 09:29:36'
     ),
     (
         'f0000000-0000-0000-0000-000000000047',
-        'Doanh nghiệp nhỏ quá nhiều',
-        'Hầu hết công ty đến trường chỉ tuyển lao động phổ thông.',
+        'Chất lượng công việc từ các đối tác tuyển dụng chưa tương xứng với trình độ kỹ sư',
+        'Em thấy một số doanh nghiệp đến trường tuyển dụng tại ngày hội việc làm đưa ra các vị trí công việc có tính chất như lao động phổ thông, công nhân kỹ thuật hoặc nhân viên bán hàng đại trà. Những vị trí này hoàn toàn không phù hợp với định hướng đào tạo kỹ sư chất lượng cao của nhà trường. Mong phòng có sự sàng lọc đối tác kỹ càng hơn trước khi cho phép tuyển dụng.',
         NULL,
-        'REJECTED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-11 15:30:00'
+        '2026-04-09 13:08:22'
     ),
     (
         'f0000000-0000-0000-0000-000000000048',
-        'Học bổng ký túc xá từ doanh nghiệp',
-        'Mong có thêm học bổng hỗ trợ tiền ký túc xá từ doanh nghiệp.',
+        'Đề xuất vận động quỹ học bổng hỗ trợ chi phí Ký túc xá cho sinh viên hoàn cảnh khó khăn',
+        'Chi phí lưu trú tại ký túc xá tuy không quá cao nhưng vẫn là gánh nặng với nhiều bạn sinh viên vùng sâu vùng xa. Thay vì chỉ nhận học bổng tiền mặt thông thường, phòng có thể làm việc với các doanh nghiệp lớn để họ tài trợ trực tiếp theo gói "Học bổng lưu trú", chi trả toàn bộ tiền phòng ký túc xá cho những sinh viên có hoàn cảnh đặc biệt khó khăn.',
         NULL,
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-12 09:20:00'
+        '2026-03-29 15:40:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000049',
-        'Thực tập có lương rất ít',
-        'Hầu hết chỗ thực tập không trả lương hoặc trả rất thấp.',
+        'Phần lớn các vị trí thực tập do trường giới thiệu đều không hỗ trợ lương/trợ cấp',
+        'Khi tham gia thực tập tại các đơn vị do phòng Quan hệ doanh nghiệp giới thiệu, rất nhiều bạn phản ánh là phải làm việc toàn thời gian như một nhân viên chính thức nhưng không nhận được bất kỳ khoản hỗ trợ xăng xe hay ăn trưa nào. Kính mong phòng khi làm việc với doanh nghiệp cần đưa điều khoản hỗ trợ sinh viên thực tập tối thiểu vào thỏa thuận hợp tác.',
         NULL,
-        'RESOLVED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-13 14:45:00'
+        '2026-04-09 16:41:55'
     ),
     (
         'f0000000-0000-0000-0000-000000000050',
-        'Cần mời FPT, VNG, VinGroup',
-        'Mong phòng mời các tập đoàn lớn về tuyển dụng thường xuyên.',
+        'Cần chủ động mời gọi các tập đoàn công nghệ hàng đầu (FPT, VNG, VinGroup) về trường',
+        'Sinh viên khối ngành kỹ thuật và công nghệ rất mong muốn có cơ hội được thực tập và làm việc tại các tập đoàn lớn trong nước như FPT, VNG, Viettel hay VinGroup. Tuy nhiên hiện tại sự hiện diện của các đơn vị này tại trường khá mờ nhạt. Kính đề nghị phòng tăng cường các hoạt động ngoại giao, tiếp cận để đưa các "ông lớn" này về trường tuyển dụng thường niên.',
         NULL,
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-14 10:30:00'
+        '2026-05-25 13:40:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000051',
-        'Thiếu thông tin việc làm part-time',
-        'Sinh viên năm 1-2 rất cần việc làm thêm nhưng không có kênh thông tin.',
+        'Thiếu kênh thông tin kết nối và xác thực cho các công việc bán thời gian (part-time)',
+        'Nhu cầu tìm việc làm thêm để trang trải cuộc sống của sinh viên năm 1, năm 2 là rất lớn. Do không có kênh thông tin chính thống từ nhà trường, nhiều bạn đã bị lừa đảo qua các hội nhóm Facebook đa cấp, lừa đảo việc làm. Mong phòng Quan hệ doanh nghiệp có thể thiết lập một chuyên mục "Việc làm bán thời gian an toàn" để bảo vệ và hỗ trợ sinh viên tối đa.',
         NULL,
-        'REJECTED',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-15 16:00:00'
+        '2026-04-10 10:04:18'
     ),
     (
         'f0000000-0000-0000-0000-000000000052',
-        'Hội thảo kỹ năng mềm',
-        'Cần nhiều hội thảo kỹ năng mềm hơn, hiện tại quá ít.',
+        'Các chương trình đào tạo kỹ năng mềm cốt lõi chưa đáp ứng được kỳ vọng của sinh viên',
+        'Mặc dù phòng thường xuyên tổ chức các chuyên đề kỹ năng mềm tại hội trường lớn, nhưng quy mô tổ chức quá đông (hàng trăm sinh viên/buổi) khiến việc tương tác thực hành gần như bằng không. Sinh viên chỉ ngồi nghe thụ động nên hiệu quả tiếp thu rất thấp. Kính mong phòng chuyển đổi sang mô hình workshop quy mô nhỏ để sinh viên được thực hành kỹ năng trực tiếp.',
         'Hội trường lớn',
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-16 11:15:00'
+        '2026-04-10 14:26:47'
     ),
     (
         'f0000000-0000-0000-0000-000000000053',
-        'Danh sách thực tập chưa cập nhật',
-        'File danh sách chỗ thực tập năm ngoái vẫn còn treo trên web.',
+        'Danh sách dữ liệu doanh nghiệp nhận thực tập trên hệ thống website đã quá lỗi thời',
+        'Em có lên website chính thức của phòng để tìm kiếm biểu mẫu thông tin và danh sách công ty nhận thực tập. Tuy nhiên, tệp dữ liệu đính kèm trên trang lại là danh sách từ năm học trước, nhiều công ty trong đó đã giải thể hoặc thay đổi địa chỉ và số điện thoại liên lạc. Kính mong thầy cô phụ trách quản trị trang web rà soát và cập nhật lại dữ liệu mới nhất.',
         NULL,
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         true,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-17 13:50:00'
+        '2026-04-27 16:40:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000054',
-        'Cần job fair chuyên ngành',
-        'Mỗi khoa nên có job fair riêng thay vì chung chung.',
+        'Cần đa dạng hóa mô hình Job Fair bằng các ngày hội việc làm chuyên sâu theo khoa',
+        'Việc gộp chung tất cả các ngành nghề từ kinh tế, ngôn ngữ cho đến cơ khí, điện tử vào một ngày hội việc làm duy nhất khiến hiệu quả kết nối không cao. Các doanh nghiệp ngành kỹ thuật bị loãng giữa các gian hàng dịch vụ khác. Đề xuất phòng phối hợp chặt chẽ với Ban chỉ huy các khoa để tổ chức chuỗi "Mini Job Fair" chuyên biệt cho từng nhóm ngành cụ thể.',
         NULL,
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-18 09:40:00'
+        '2026-04-10 17:50:12'
     ),
     (
         'f0000000-0000-0000-0000-000000000055',
-        'Học bổng khởi nghiệp',
-        'Cần học bổng dành riêng cho sinh viên có dự án khởi nghiệp.',
-        NULL,
-        'PENDING',
-        false,
-        'e0000000-0000-0000-0000-000000000003',
-        'd0000000-0000-0000-0000-000000000002',
-        'c0000000-0000-0000-0000-000000000005',
-        '2025-11-19 15:20:00'
-    ),
-    (
-        'f0000000-0000-0000-0000-000000000056',
-        'Doanh nghiệp nước ngoài',
-        'Mong có thêm công ty nước ngoài đến tuyển dụng.',
-        NULL,
-        'RESOLVED',
-        false,
-        'e0000000-0000-0000-0000-000000000001',
-        'd0000000-0000-0000-0000-000000000002',
-        'c0000000-0000-0000-0000-000000000003',
-        '2025-11-20 10:10:00'
-    ),
-    (
-        'f0000000-0000-0000-0000-000000000057',
-        'Chương trình Alumni',
-        'Cần kết nối mạnh hơn với cựu sinh viên đang làm ở doanh nghiệp lớn.',
-        NULL,
-        'RESOLVED',
-        false,
-        'e0000000-0000-0000-0000-000000000002',
-        'd0000000-0000-0000-0000-000000000002',
-        'c0000000-0000-0000-0000-000000000003',
-        '2025-11-21 14:30:00'
-    ),
-    (
-        'f0000000-0000-0000-0000-000000000058',
-        'Thực tập hè 2026',
-        'Đã đến tháng 11 nhưng chưa có thông tin thực tập hè năm sau.',
+        'Đề xuất triển khai gói học bổng/quỹ đầu tư dành riêng cho các dự án khởi nghiệp sáng tạo',
+        'Hiện tại, phong trào nghiên cứu khoa học và khởi nghiệp (Startup) trong sinh viên diễn ra rất sôi nổi, tuy nhiên khó khăn lớn nhất luôn là nguồn vốn mồi để làm sản phẩm thử nghiệm. Rất mong phòng Quan hệ doanh nghiệp kết nối với các quỹ đầu tư thiên thần hoặc các vườn ươm doanh nghiệp để tài trợ riêng các suất học bổng phát triển ý tưởng khởi nghiệp này.',
         NULL,
         'REJECTED',
         false,
+        'e0000000-0000-0000-0000-000000000003',
+        'd0000000-0000-0000-0000-000000000002',
+        'c0000000-0000-0000-0000-000000000005',
+        '2026-04-11 08:15:39'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000056',
+        'Cơ hội ứng tuyển vào các doanh nghiệp nước ngoài (FDI) tại trường còn tương đối ít',
+        'Xu hướng sinh viên hiện nay muốn làm việc tại các công ty FDI để rèn luyện ngoại ngữ và nhận mức lương tốt hơn. Thế nhưng các thông tin tuyển dụng từ các doanh nghiệp Nhật Bản, Hàn Quốc hay Âu Mỹ gửi về trường vẫn còn khá hạn chế. Đề xuất phòng tích cực ngoại giao với các hiệp hội doanh nghiệp nước ngoài (như Jetro, AmCham, EuroCham) để mang cơ hội về cho sinh viên.',
+        NULL,
+        'IN_PROGRESS',
+        false,
+        'e0000000-0000-0000-0000-000000000001',
+        'd0000000-0000-0000-0000-000000000002',
+        'c0000000-0000-0000-0000-000000000003',
+        '2026-06-05 14:15:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000057',
+        'Hoạt động của Mạng lưới cựu sinh viên còn mang tính bề nổi, chưa đi vào chiều sâu',
+        'Em thấy hàng năm trường vẫn tổ chức họp mặt cựu sinh viên nhưng sau đó các hoạt động liên kết lại rơi vào im lặng, không có tính bền vững. Mong phòng thiết kế một nền tảng số riêng cho Cựu sinh viên để duy trì tương tác thường xuyên, làm cầu nối hỗ trợ học thuật, chuyển giao công nghệ và tạo cơ hội việc làm thực tế xuyên suốt cả năm cho khóa sau.',
+        NULL,
+        'VIOLATED_CONTENT',
+        false,
+        'e0000000-0000-0000-0000-000000000002',
+        'd0000000-0000-0000-0000-000000000002',
+        'c0000000-0000-0000-0000-000000000003',
+        '2026-04-11 11:31:04'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000058',
+        'Chậm trễ trong việc công bố kế hoạch chuẩn bị cho kỳ thực tập tốt nghiệp hè sắp tới',
+        'Mặc dù đã bước sang cuối tháng 11 nhưng phía phòng Quan hệ doanh nghiệp vẫn chưa có bất kỳ thông báo hay lộ trình hướng dẫn cụ thể nào về việc chuẩn bị hồ sơ cho đợt thực tập lớn vào mùa hè năm sau. Điều này khiến sinh viên chúng em rất bị động và lo lắng trong việc tìm kiếm công ty thích hợp phù hợp với lịch trình học tập cá nhân.',
+        NULL,
+        'AI_REVIEW_FAILED',
+        false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-22 11:45:00'
+        '2026-03-31 13:20:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000059',
-        'Job fair online',
-        'Nên tổ chức thêm job fair online để sinh viên ở xa tham gia.',
+        'Đề xuất đa dạng hóa phương thức kết nối bằng việc tổ chức Ngày hội việc làm trực tuyến (Job Fair Online)',
+        'Đối với những sinh viên đang đi thực tập xa hoặc lịch học quân sự dày đặc không thể tham gia Job Fair trực tiếp tại sân trường, các bạn sẽ chịu thiệt thòi rất lớn. Phòng nên nghiên cứu xây dựng thêm một nền tảng Ngày hội việc làm trực tuyến (Virtual Job Fair) chạy song song, cho phép sinh viên nộp CV và phỏng vấn sơ loại từ xa với doanh nghiệp.',
         NULL,
         'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-23 16:00:00'
+        '2026-04-11 15:44:23'
     ),
     (
         'f0000000-0000-0000-0000-000000000060',
-        'Học bổng doanh nghiệp mới',
-        'Cần tìm thêm nguồn học bổng từ các công ty khởi nghiệp.',
+        'Cần chủ động tìm kiếm các nguồn học bổng tài trợ từ các doanh nghiệp đổi mới sáng tạo',
+        'Phần lớn học bổng hiện tại đến từ các công ty sản xuất truyền thống với giá trị cố định và thủ tục rườm rà. Em đề xuất phòng nên chủ động tiếp cận với các doanh nghiệp thuộc mảng công nghệ mới, thương mại điện tử hoặc các startup Fintech lớn. Họ luôn có quỹ ngân sách linh hoạt và sẵn sàng đầu tư mạnh tay cho nguồn nhân lực tài năng trẻ từ nhà trường.',
         NULL,
-        'RESOLVED',
+        'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-24 09:30:00'
+        '2026-04-12 09:53:51'
     ),
     (
         'f0000000-0000-0000-0000-000000000061',
-        'Thực tập quốc tế',
-        'Mong có chương trình thực tập trao đổi quốc tế.',
+        'Thiếu các chương trình và cơ hội thực tập, trao đổi sinh viên quốc tế (Global Internship)',
+        'Xu hướng hội nhập toàn cầu đòi hỏi sinh viên phải có trải nghiệm làm việc quốc tế. Tuy nhiên hiện tại phòng chưa có nhiều chương trình liên kết đưa sinh viên đi thực tập tại nước ngoài (như Nhật Bản, Singapore, Đức...). Kính mong phòng tích cực đẩy mạnh hợp tác với các tổ chức phái cử quốc tế để mở rộng lộ trình "Global Internship" cho sinh viên trường.',
         NULL,
-        'PENDING',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-25 13:15:00'
+        '2026-03-22 10:10:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000062',
-        'Cần group Zalo việc làm',
-        'Hiện tại thông tin việc làm chỉ đăng trên web, rất ít sinh viên biết.',
+        'Đề xuất xây dựng các group Zalo theo ngành để cập nhật nhanh chóng tin tức tuyển dụng khẩn cấp',
+        'Phương thức đăng tin tuyển dụng lên website hiện tại đã không còn phù hợp với thói quen sử dụng mạng xã hội của giới trẻ, dẫn đến tỷ lệ tiếp cận thông tin cực kỳ thấp. Phòng nên thành lập và phân loại các cộng đồng/group Zalo, Telegram tuyển dụng chính thức theo từng khoa. Như vậy, tin tuyển dụng khẩn cấp từ doanh nghiệp sẽ được đẩy trực tiếp đến điện thoại của sinh viên ngay lập tức.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-26 10:40:00'
+        '2026-04-12 13:12:08'
     ),
     (
         'f0000000-0000-0000-0000-000000000063',
-        'Doanh nghiệp công nghệ cao',
-        'Mong mời thêm các công ty công nghệ cao về tuyển dụng.',
+        'Cần liên kết sâu rộng hơn với các doanh nghiệp thuộc lĩnh vực công nghệ lõi và sản xuất thông minh',
+        'Là một trường đại học hàng đầu về kỹ thuật công nghệ, nhưng em thấy số lượng doanh nghiệp liên kết về mảng vi mạch bán dẫn, tự động hóa cấp cao hay AI còn rất ít. Phần lớn vẫn là các doanh nghiệp gia công truyền thống. Đề xuất phòng đổi mới chiến lược tiếp cận, bắt tay với các doanh nghiệp công nghệ lõi để sinh viên không bị tụt hậu so với sự phát triển toàn cầu.',
         NULL,
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-27 15:20:00'
+        '2026-03-12 14:50:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000064',
-        'Học bổng toàn phần',
-        'Cần thêm học bổng toàn phần từ doanh nghiệp cho sinh viên giỏi.',
+        'Đề xuất đàm phán ký kết các suất học bổng toàn phần cam kết đầu ra việc làm với doanh nghiệp',
+        'Nhiều sinh viên giỏi có hoàn cảnh đặc biệt khó khăn luôn sống trong nỗi lo học phí tăng qua từng năm. Mong phòng đứng ra làm đầu mối đàm phán ký kết mô hình hợp tác ba bên: Doanh nghiệp tài trợ học bổng toàn phần – Sinh viên cam kết học tập tốt – Doanh nghiệp tiếp nhận làm việc ngay sau khi tốt nghiệp. Mô hình này sẽ giúp giải quyết triệt để bài toán kinh tế lẫn việc làm.',
         NULL,
-        'RESOLVED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-28 11:00:00'
+        '2026-04-12 16:38:45'
     ),
     (
         'f0000000-0000-0000-0000-000000000065',
-        'Thực tập bắt buộc',
-        'Nhiều sinh viên chưa có chỗ thực tập bắt buộc kỳ tới.',
+        'Tình trạng quá tải và thiếu chỗ thực tập bắt buộc cho sinh viên khối ngành Kinh tế',
+        'Hiện tại đang vào cao điểm chuẩn bị hồ sơ thực tập nhưng số lượng công ty đối tác ngành quản trị, kế toán, logistics gửi về phòng quá ít so với quy mô sinh viên của trường. Nhiều bạn đang rơi vào tình thế tiến thoái lưỡng nan vì không tìm được nơi tiếp nhận đóng mộc báo cáo. Kính đề nghị phòng khẩn trương liên hệ các đơn vị vận tải, tài chính để mở thêm chỉ tiêu khẩn cấp.',
         NULL,
-        'IN_PROGRESS',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-12-01 14:30:00'
+        '2026-04-13 10:20:17'
     ),
     (
         'f0000000-0000-0000-0000-000000000066',
-        'Job fair cuối năm',
-        'Mong có thêm 1 job fair lớn vào cuối tháng 12.',
+        'Nguyện vọng tổ chức thêm một đợt Ngày hội việc làm cuối năm để giải quyết việc làm cho sinh viên tốt nghiệp muộn',
+        'Đợt Job Fair chính thức thường rơi vào giữa năm, trong khi có một số lượng lớn sinh viên hoàn thành chương trình học và tốt nghiệp muộn vào đợt tháng 12. Giai đoạn này các bạn bơ vơ và rất khó tìm việc do thị trường cuối năm đóng băng. Mong muốn phòng tổ chức một ngày hội tuyển dụng quy mô vừa vào cuối tháng 12 để tiếp sức kịp thời cho các bạn ra trường muộn.',
         NULL,
-        'PENDING',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-02 10:15:00'
+        '2026-06-14 16:20:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000067',
-        'Học bổng năm 2026',
-        'Chưa thấy thông báo học bổng doanh nghiệp cho năm học mới.',
+        'Chưa công khai danh mục thông tin học bổng doanh nghiệp cho học kỳ mới',
+        'Đã bước sang tháng 12 nhưng trên cổng thông tin hỗ trợ sinh viên của phòng vẫn hoàn toàn trống trơn thông tin về các chương trình học bổng doanh nghiệp đồng hành cho kỳ tới. Sinh viên cần thông tin sớm để chuẩn bị bảng điểm, viết thư động lực chỉn chu nhằm gia tăng cơ hội đạt học bổng. Kính mong các thầy cô sớm đốc thúc các doanh nghiệp đối tác gửi thông tin thông báo.',
         NULL,
-        'IN_PROGRESS',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-12-03 16:45:00'
+        '2026-04-13 14:05:56'
     ),
     (
         'f0000000-0000-0000-0000-000000000068',
-        'Kết nối startup',
-        'Mong phòng kết nối sinh viên với các startup để thực tập.',
+        'Đề xuất đẩy mạnh ký kết hợp tác chuyên sâu với hệ sinh thái các công ty Startup công nghệ',
+        'Môi trường tại các công ty khởi nghiệp (Startup) tuy áp lực nhưng là nơi lý tưởng để sinh viên được cọ xát đa năng và thăng tiến nhanh. Hiện tại danh sách đối tác của phòng hầu như chỉ có các nhà máy, công ty truyền thống quy mô lớn cồng kềnh. Kính đề nghị phòng đa dạng hóa hệ sinh thái đối tác bằng cách liên kết với các vườn ươm doanh nghiệp thế hệ mới.',
         NULL,
-        'PENDING',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-05 11:20:00'
+        '2026-04-13 17:14:29'
     ),
     (
         'f0000000-0000-0000-0000-000000000069',
-        'Hội thảo tuyển dụng 2026',
-        'Cần sớm có kế hoạch các hội thảo tuyển dụng năm 2026.',
+        'Cần sớm ban hành cẩm nang định hướng và lộ trình tham gia chuỗi hội thảo tuyển dụng năm sau',
+        'Để sinh viên chủ động sắp xếp thời gian học tập hợp lý tại trường không bị trùng lịch, em mong muốn phòng Quan hệ doanh nghiệp ban hành sớm khung kế hoạch hoặc cuốn cẩm nang số tổng hợp toàn bộ các chuỗi hội thảo định hướng, talkshow và các kỳ tuyển dụng lớn dự kiến diễn ra trong năm tới để sinh viên tiện theo dõi và chủ động chuẩn bị hồ sơ.',
         NULL,
         'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-06 09:50:00'
+        '2026-03-15 14:30:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000070',
-        'Thực tập nước ngoài',
-        'Mong có thêm cơ hội thực tập tại nước ngoài.',
+        'Thủ tục cấp Giấy chứng nhận tốt nghiệp tạm thời tại phòng còn rườm rà và mất nhiều thời gian chờ đợi',
+        'Em xin phản ánh về quy trình làm thủ tục hành chính tại phòng. Khi sinh viên đã hoàn thành chương trình học và cần gấp Giấy chứng nhận tốt nghiệp tạm thời để nộp hồ sơ ứng tuyển cho doanh nghiệp theo thời hạn của họ, quy trình xử lý giấy tờ tại phòng kéo dài đến hơn một tuần và yêu cầu quá nhiều chữ ký xác nhận qua lại. Kính mong phòng số hóa quy trình này để rút ngắn thời gian trả kết quả cho sinh viên.',
         NULL,
-        'PENDING',
+        'RESOLVED',
         true,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000002',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-07 14:00:00'
+        '2026-04-14 08:42:33'
     );
 
 INSERT INTO
@@ -1746,8 +1746,8 @@ VALUES
     -- Department thứ 3: Phòng Khoa học & Công nghệ (d000...003) → đúng 30 feedbacks
     (
         'f0000000-0000-0000-0000-000000000071',
-        'Hỗ trợ đăng ký đề tài NCKH rất chậm',
-        'Nộp hồ sơ đề tài từ tháng 9 nhưng đến nay vẫn chưa được duyệt.',
+        'Quy trình xét duyệt đề tài NCKH sinh viên kéo dài, thiếu minh bạch',
+        'Em đã nộp hồ sơ đăng ký đề tài nghiên cứu khoa học cấp trường từ đầu tháng 9 năm 2025, tuy nhiên đến nay đã gần 2 tháng vẫn chưa nhận được bất kỳ phản hồi nào từ Phòng Khoa học & Công nghệ. Không có thông báo về tiến độ xét duyệt, không có email xác nhận đã tiếp nhận hồ sơ, và khi em trực tiếp đến phòng hỏi thì được yêu cầu chờ thêm mà không có mốc thời gian cụ thể. Điều này ảnh hưởng rất lớn đến kế hoạch nghiên cứu của nhóm, vì nhiều hoạt động cần triển khai song song nhưng phải chờ có quyết định phê duyệt mới được cấp kinh phí và tiếp cận thiết bị. Kính đề nghị Phòng KH&CN xây dựng quy trình xét duyệt rõ ràng với thời hạn cụ thể (ví dụ tối đa 30 ngày làm việc), đồng thời có hệ thống thông báo tự động hoặc portal tra cứu trạng thái hồ sơ để sinh viên chủ động theo dõi.',
         NULL,
         'RESOLVED',
         false,
@@ -1758,10 +1758,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000072',
-        'Kinh phí nghiên cứu sinh viên quá thấp',
-        'Mức hỗ trợ tối đa chỉ 5 triệu/đề tài, không đủ mua linh kiện.',
+        'Mức kinh phí hỗ trợ đề tài NCKH sinh viên quá thấp, không đáp ứng nhu cầu thực tế',
+        'Hiện tại mức hỗ trợ tối đa cho một đề tài NCKH sinh viên chỉ là 5 triệu đồng/đề tài. Con số này hoàn toàn không đủ để triển khai một đề tài nghiên cứu có chiều sâu, đặc biệt trong các lĩnh vực kỹ thuật, điện tử và tự động hóa – nơi chỉ riêng chi phí mua linh kiện, cảm biến, vi điều khiển và vật tư thực nghiệm đã vượt mức cho phép. Ví dụ, nhóm em đang thực hiện đề tài về robot tự hành, chi phí ước tính tối thiểu để có prototype hoạt động được là khoảng 12-15 triệu đồng. Phần thiếu hụt, nhóm phải tự bỏ tiền túi hoặc xin tài trợ từ doanh nghiệp bên ngoài, rất mất thời gian và không bền vững. Đề nghị Phòng KH&CN xem xét tăng mức hỗ trợ tối đa lên ít nhất 15-20 triệu đồng/đề tài, và có thêm các gói hỗ trợ bổ sung theo kết quả đánh giá giữa kỳ để khuyến khích các đề tài có tiềm năng.',
         NULL,
-        'REJECTED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
@@ -1770,10 +1770,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000073',
-        'Chưa có hội nghị NCKH sinh viên năm 2025',
-        'Năm ngoái tổ chức tháng 4, năm nay chưa thấy thông báo gì.',
+        'Hội nghị Nghiên cứu Khoa học Sinh viên năm 2025 chưa được tổ chức',
+        'Theo thông lệ những năm trước, Hội nghị Nghiên cứu Khoa học Sinh viên cấp trường thường được tổ chức vào khoảng tháng 4 hằng năm, tạo cơ hội để sinh viên trình bày kết quả nghiên cứu, giao lưu học thuật và nhận phản hồi từ hội đồng chuyên môn. Tuy nhiên, tính đến tháng 11 năm 2025, vẫn chưa có bất kỳ thông báo chính thức nào từ Phòng KH&CN về việc tổ chức sự kiện này. Nhiều nhóm sinh viên đã hoàn thành đề tài và đang chờ cơ hội báo cáo, nhưng không có sân chơi chính thức. Điều này không chỉ làm giảm động lực nghiên cứu mà còn ảnh hưởng đến cơ hội được công nhận thành tích học thuật. Kính đề nghị Phòng sớm lên kế hoạch tổ chức hội nghị, thông báo lịch trình cụ thể và mở đăng ký cho sinh viên ít nhất 2 tháng trước ngày diễn ra.',
         'Hội trường A201',
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000003',
@@ -1782,8 +1782,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000074',
-        'Quy trình bảo hộ sáng chế quá phức tạp',
-        'Hồ sơ nộp từ tháng 7 vẫn chưa được hướng dẫn tiếp.',
+        'Quy trình đăng ký bảo hộ sáng chế phức tạp, thiếu hỗ trợ từ phòng chức năng',
+        'Nhóm nghiên cứu của em đã phát triển được một giải pháp kỹ thuật có tính mới và khả năng ứng dụng thực tiễn cao. Từ tháng 7/2025, nhóm đã liên hệ Phòng KH&CN để được hướng dẫn thủ tục đăng ký bảo hộ sáng chế, tuy nhiên đến nay vẫn chưa nhận được hướng dẫn đầy đủ. Hồ sơ đã nộp ban đầu bị trả lại với lý do thiếu tài liệu nhưng không có biểu mẫu mẫu hay checklist cụ thể. Chi phí thuê luật sư sở hữu trí tuệ bên ngoài để hoàn thiện hồ sơ lên đến 15-20 triệu đồng, hoàn toàn vượt khả năng của sinh viên. Kính mong Phòng KH&CN xây dựng quy trình chuẩn hóa, cung cấp tư vấn trực tiếp từ chuyên viên sở hữu trí tuệ, và hỗ trợ một phần hoặc toàn bộ chi phí nộp đơn cho các sáng chế xuất phát từ nghiên cứu của sinh viên trường.',
         NULL,
         'RESOLVED',
         true,
@@ -1794,10 +1794,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000075',
-        'Thiếu không gian co-working cho nhóm NCKH',
-        'Phải làm đồ án ở căng tin vì không có phòng riêng.',
+        'Thiếu không gian làm việc nhóm dành riêng cho các đề tài NCKH sinh viên',
+        'Hiện nay các nhóm sinh viên đang thực hiện đề tài NCKH không có không gian làm việc riêng, cố định và được trang bị đầy đủ. Nhóm em và nhiều nhóm khác phải làm việc tại căng tin, hành lang hoặc phòng học trống vào cuối tuần – những nơi ồn ào, thiếu ổ cắm điện, không có bảng trắng và không an toàn để để thiết bị nghiên cứu qua đêm. Điều này làm giảm đáng kể hiệu suất làm việc và tiềm ẩn nguy cơ mất mát tài sản nghiên cứu. Đề nghị Phòng KH&CN phối hợp với Ban Quản lý Cơ sở Vật chất bố trí ít nhất 2-3 phòng co-working dành riêng cho NCKH sinh viên, có đầy đủ bàn ghế, máy chiếu, ổ cắm điện, tủ khóa cá nhân và kết nối mạng tốc độ cao, mở cửa ít nhất đến 22 giờ các ngày trong tuần.',
         'Tòa nhà A - Phòng A201',
-        'RESOLVED',
+        'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
@@ -1806,10 +1806,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000076',
-        'Chưa có quỹ khởi nghiệp sinh viên',
-        'Nhiều trường đã có quỹ 1-2 tỷ hỗ trợ startup sinh viên.',
+        'Nhà trường chưa có quỹ hỗ trợ khởi nghiệp dành cho sinh viên',
+        'Trong khi nhiều trường đại học kỹ thuật và công nghệ đã thành lập quỹ hỗ trợ khởi nghiệp sinh viên với quy mô từ 1 đến 2 tỷ đồng, trường ta vẫn chưa có cơ chế tài chính chính thức nào dành cho các dự án startup của sinh viên. Các nhóm có ý tưởng tốt, sản phẩm khả thi nhưng không có vốn để phát triển prototype, đăng ký thương hiệu hay tiếp cận thị trường. Một số nhóm đã phải bỏ cuộc hoặc chuyển sang triển khai ở trường khác có hệ sinh thái khởi nghiệp tốt hơn. Đề nghị Phòng KH&CN phối hợp với Ban Giám hiệu và các đối tác doanh nghiệp để xây dựng quỹ hỗ trợ khởi nghiệp sinh viên, có thể bắt đầu với quy mô nhỏ (500 triệu – 1 tỷ đồng) và tăng dần theo từng năm, kèm theo tiêu chí xét duyệt rõ ràng và quy trình mentor chuyên nghiệp.',
         NULL,
-        'REJECTED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000003',
@@ -1818,10 +1818,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000077',
-        'Hội thảo công bố quốc tế ít quá',
-        'Cả năm chỉ có 1-2 buổi hướng dẫn viết paper Scopus.',
+        'Hội thảo hướng dẫn viết bài báo khoa học quốc tế tổ chức quá ít',
+        'Trong cả năm học 2024-2025, Phòng KH&CN chỉ tổ chức 1-2 buổi hội thảo hướng dẫn viết bài báo đăng tạp chí Scopus/ISI. Số lượng buổi này quá ít so với nhu cầu thực tế của sinh viên và giảng viên trẻ muốn tiếp cận công bố quốc tế. Các buổi hội thảo hiện tại cũng chủ yếu mang tính tổng quát, chưa đi sâu vào từng bước cụ thể như cách viết abstract chuẩn, chọn tạp chí phù hợp, xử lý phản biện, hay tránh các lỗi thường gặp dẫn đến bị từ chối. Đề nghị Phòng KH&CN tổ chức định kỳ ít nhất 1 buổi/tháng, mời chuyên gia có kinh nghiệm công bố quốc tế, và xây dựng chương trình theo lộ trình từ cơ bản đến nâng cao để sinh viên có thể theo học xuyên suốt.',
         NULL,
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000003',
@@ -1830,10 +1830,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000078',
-        'Hỗ trợ đăng ký hội nghị quốc tế',
-        'Mong phòng tài trợ 50-100% chi phí tham gia hội nghị nước ngoài.',
+        'Đề nghị có chính sách hỗ trợ kinh phí tham dự hội nghị khoa học quốc tế',
+        'Nhiều sinh viên và nhóm nghiên cứu đã có bài báo được chấp nhận đăng tại các hội nghị quốc tế uy tín, nhưng không có kinh phí để tham dự trực tiếp do chi phí đăng ký, vé máy bay và lưu trú rất cao (thường từ 30 đến 100 triệu đồng/người tùy địa điểm). Hiện tại nhà trường chưa có chính sách hỗ trợ rõ ràng cho trường hợp này, khiến nhiều sinh viên phải từ chối cơ hội quý giá để trình bày và mạng lưới với cộng đồng khoa học quốc tế. Kính đề nghị Phòng KH&CN xây dựng chính sách hỗ trợ từ 50% đến 100% chi phí tham dự hội nghị quốc tế cho sinh viên có bài báo được chấp nhận, ưu tiên các hội nghị thuộc danh sách ISI/Scopus, kèm theo nghĩa vụ báo cáo kết quả sau khi tham dự.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
@@ -1842,8 +1842,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000079',
-        'Chưa có giải thưởng NCKH cấp trường',
-        'Nhiều trường có giải thưởng 20-50 triệu cho đề tài xuất sắc.',
+        'Trường chưa có giải thưởng NCKH cấp trường để ghi nhận thành tích xuất sắc của sinh viên',
+        'Tại nhiều trường đại học lớn, hằng năm đều tổ chức lễ trao giải thưởng NCKH với giá trị từ 20 đến 50 triệu đồng cho các đề tài xuất sắc nhất, cùng bằng khen của Ban Giám hiệu và các ưu đãi học thuật khác. Điều này tạo động lực rất lớn cho sinh viên đầu tư nghiêm túc vào nghiên cứu. Hiện tại trường ta chưa có giải thưởng tương tự, khiến không ít sinh viên cảm thấy thiếu sự ghi nhận và không có đủ động lực bỏ nhiều tháng công sức vào một đề tài NCKH. Đề nghị Phòng KH&CN tham mưu Ban Giám hiệu thành lập Giải thưởng NCKH Sinh viên Xuất sắc hằng năm, với các hạng mục rõ ràng theo lĩnh vực, và có giá trị giải thưởng đủ sức hấp dẫn để khuyến khích phong trào nghiên cứu trong toàn trường.',
         NULL,
         'RESOLVED',
         false,
@@ -1854,8 +1854,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000080',
-        'Phòng thí nghiệm nghiên cứu chưa mở cửa 24/7',
-        'Chỉ mở đến 22h, nhóm NCKH robot phải về sớm.',
+        'Phòng thí nghiệm nghiên cứu đóng cửa quá sớm, ảnh hưởng nghiêm trọng đến tiến độ đề tài',
+        'Nhóm NCKH về robot tự hành của em hiện đang làm việc tại phòng Lab CNC, tuy nhiên phòng chỉ mở cửa đến 22 giờ mỗi ngày. Do đặc thù công việc nghiên cứu kỹ thuật, nhiều quy trình thử nghiệm cần thực hiện liên tục trong nhiều giờ mà không thể dừng giữa chừng (ví dụ: chạy thử nghiệm thuật toán điều hướng, hiệu chỉnh cảm biến, kiểm thử phần cứng). Việc phải dừng đột ngột lúc 22 giờ gây lãng phí công sức và làm chậm tiến độ đáng kể. Nhiều trường đại học kỹ thuật trên thế giới cho phép các nhóm NCKH đăng ký sử dụng phòng lab 24/7 với thẻ từ và camera giám sát. Đề nghị Phòng KH&CN nghiên cứu áp dụng mô hình này, ít nhất thí điểm cho các nhóm có đề tài đang trong giai đoạn thực nghiệm.',
         'Phòng Lab CNC',
         'REJECTED',
         false,
@@ -1866,8 +1866,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000081',
-        'Thiếu thiết bị cho đề tài AI',
-        'Không có GPU RTX 4090 để train mô hình.',
+        'Phòng Machine Learning thiếu GPU hiệu năng cao, không đáp ứng yêu cầu huấn luyện mô hình AI',
+        'Nhóm nghiên cứu AI của em đang thực hiện đề tài về mô hình nhận diện hình ảnh y tế sử dụng deep learning. Tuy nhiên, phòng Machine Learning hiện không có GPU đủ mạnh để huấn luyện các mô hình lớn – cụ thể là thiếu GPU RTX 4090 hoặc tương đương. Các máy hiện có chỉ trang bị GTX 1060, khiến thời gian train một epoch lên đến hàng chục giờ, không thực tế cho nghiên cứu. Nhóm phải sử dụng Google Colab miễn phí với giới hạn GPU hạn chế, thường xuyên bị ngắt kết nối giữa chừng và không thể lưu trạng thái. Việc đầu tư thêm 2-4 máy trạm AI với GPU RTX 4090 hoặc A100 sẽ phục vụ được nhiều nhóm nghiên cứu AI cùng lúc và nâng cao đáng kể chất lượng đề tài trong lĩnh vực này.',
         'Phòng Machine Learning',
         'RESOLVED',
         false,
@@ -1878,10 +1878,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000082',
-        'Hỗ trợ công bố bài báo',
-        'Mong phòng hỗ trợ phí APC cho bài báo Open Access.',
+        'Đề nghị hỗ trợ phí xuất bản bài báo Open Access (APC) cho sinh viên',
+        'Nhiều tạp chí khoa học uy tín hiện nay chỉ tiếp nhận bài báo theo mô hình Open Access, yêu cầu tác giả trả phí APC (Article Processing Charge) từ 500 USD đến 3.000 USD tùy tạp chí. Đây là khoản chi hoàn toàn ngoài khả năng của sinh viên. Hiện tại nhà trường chưa có chính sách hỗ trợ khoản phí này, dẫn đến tình trạng nhiều bài báo chất lượng tốt không thể được công bố hoặc phải chọn tạp chí kém uy tín hơn chỉ vì lý do tài chính. Đề nghị Phòng KH&CN thiết lập quỹ hỗ trợ APC, ưu tiên các bài báo thuộc danh mục Q1/Q2 Scopus, với mức hỗ trợ tối thiểu 50% và tối đa 100% tùy chất lượng tạp chí và thành tích học tập của tác giả.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000003',
@@ -1890,10 +1890,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000083',
-        'Cuộc thi ý tưởng khởi nghiệp chưa có',
-        'Đã 2 năm trường không tổ chức Startup Day.',
+        'Trường đã 2 năm không tổ chức Ngày hội Khởi nghiệp Sinh viên (Startup Day)',
+        'Startup Day từng là sự kiện thường niên được sinh viên rất mong đợi, tạo cơ hội để các nhóm khởi nghiệp trình bày ý tưởng, gặp gỡ nhà đầu tư và kết nối cộng đồng. Tuy nhiên, đã 2 năm liên tiếp (2024-2025) sự kiện này không được tổ chức mà không có thông báo lý do hay kế hoạch tái tổ chức. Nhiều nhóm sinh viên đang có ý tưởng tốt, đã phát triển được MVP nhưng không có sân chơi để showcase và tìm kiếm nguồn hỗ trợ. Kính đề nghị Phòng KH&CN phục hồi và nâng cấp sự kiện Startup Day, tổ chức ít nhất 1 lần/năm, có sự tham gia của nhà đầu tư thiên thần, quỹ đầu tư mạo hiểm và doanh nghiệp công nghệ để tạo cơ hội thực sự cho sinh viên khởi nghiệp.',
         NULL,
-        'RESOLVED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000003',
@@ -1902,10 +1902,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000084',
-        'Hỗ trợ chuyển giao công nghệ',
-        'Đề tài có sản phẩm nhưng không biết bán cho doanh nghiệp nào.',
+        'Thiếu cơ chế hỗ trợ chuyển giao công nghệ từ đề tài NCKH sinh viên sang doanh nghiệp',
+        'Nhóm nghiên cứu của em đã phát triển thành công một hệ thống giám sát năng lượng thông minh cho tòa nhà, được hội đồng đánh giá cao và có tiềm năng thương mại hóa rõ ràng. Tuy nhiên, khi muốn chuyển giao hoặc bán giải pháp cho doanh nghiệp, nhóm hoàn toàn không biết bắt đầu từ đâu: không có danh sách doanh nghiệp đối tác, không có mẫu hợp đồng chuyển giao công nghệ, không có tư vấn pháp lý và không có kênh kết nối chính thức. Đây là lãng phí lớn vì nhiều sản phẩm nghiên cứu tốt "chết" sau khi báo cáo nghiệm thu. Đề nghị Phòng KH&CN xây dựng sàn kết nối chuyển giao công nghệ, duy trì cơ sở dữ liệu doanh nghiệp có nhu cầu, và hỗ trợ pháp lý cho sinh viên trong quá trình thương mại hóa kết quả nghiên cứu.',
         NULL,
-        'REJECTED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
@@ -1914,8 +1914,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000085',
-        'Thiếu mentor nghiên cứu',
-        'Nhóm sinh viên không có giảng viên hướng dẫn thường xuyên.',
+        'Sinh viên nghiên cứu thiếu giảng viên hướng dẫn thường xuyên và chuyên sâu',
+        'Phần lớn các nhóm NCKH sinh viên hiện nay chỉ được gặp giảng viên hướng dẫn 1-2 lần/tháng, và nhiều giảng viên do bận nhiều công việc giảng dạy và nghiên cứu riêng nên phản hồi email rất chậm. Thiếu sự hướng dẫn thường xuyên khiến sinh viên dễ đi lạc hướng, mất nhiều thời gian thử sai và kết quả cuối cùng kém chất lượng. Đề nghị Phòng KH&CN xây dựng chương trình Mentor NCKH chính thức, trong đó mỗi nhóm sinh viên có ít nhất 1 mentor cam kết họp định kỳ tối thiểu 2 lần/tháng và phản hồi trong vòng 48 giờ. Đồng thời, có thể mở rộng mạng lưới mentor bằng cách mời chuyên gia từ doanh nghiệp tham gia hướng dẫn các đề tài có tính ứng dụng cao.',
         NULL,
         'RESOLVED',
         false,
@@ -1926,8 +1926,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000086',
-        'Không gian Innovation Hub',
-        'Cần khu vực riêng để trưng bày sản phẩm NCKH sinh viên.',
+        'Đề xuất thành lập không gian Innovation Hub trưng bày sản phẩm NCKH sinh viên',
+        'Hiện tại các sản phẩm nghiên cứu của sinh viên sau khi nghiệm thu xong không có nơi trưng bày thường xuyên – chúng bị cất vào kho hoặc mang về nhà, không ai biết đến. Điều này rất lãng phí vì nhiều sản phẩm rất ấn tượng và có thể truyền cảm hứng cho các sinh viên khóa sau. Nhiều trường đại học đã xây dựng Innovation Hub – không gian trưng bày kết hợp co-working, nơi các sản phẩm được giới thiệu thường xuyên và khách tham quan, doanh nghiệp có thể tiếp cận. Đề nghị Phòng KH&CN phối hợp với trường dành một khu vực tại tầng trệt Tòa nhà A để xây dựng Innovation Hub, với tủ kính trưng bày, màn hình giới thiệu, và tổ chức open day định kỳ để giới thiệu sản phẩm NCKH đến cộng đồng.',
         'Tòa nhà A',
         'RESOLVED',
         false,
@@ -1938,10 +1938,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000087',
-        'Hỗ trợ phần mềm bản quyền',
-        'Sinh viên phải dùng bản crack vì không có license Matlab, SolidWorks.',
+        'Sinh viên phải dùng phần mềm bản crack vì trường chưa cung cấp license bản quyền',
+        'Nhiều sinh viên làm đề tài NCKH cần sử dụng các phần mềm chuyên ngành như Matlab, SolidWorks, AutoCAD, ANSYS, LabVIEW… nhưng phải dùng bản crack hoặc bản trial giới hạn vì giá license quá cao (hàng chục đến hàng trăm triệu đồng/năm). Điều này không chỉ vi phạm bản quyền phần mềm mà còn tiềm ẩn rủi ro bảo mật, kết quả nghiên cứu cũng không đảm bảo tính hợp lệ khi công bố. Nhiều trường đại học đã ký kết thỏa thuận campus license với nhà cung cấp để cung cấp miễn phí cho toàn bộ sinh viên và giảng viên. Đề nghị Phòng KH&CN chủ trì đàm phán campus license cho ít nhất các phần mềm phổ biến nhất trong nghiên cứu kỹ thuật, ưu tiên Matlab và SolidWorks trong năm học 2025-2026.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
@@ -1950,10 +1950,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000088',
-        'Cuộc thi Robocon, CDIO',
-        'Nhà trường cần đầu tư mạnh hơn cho các cuộc thi quốc tế.',
+        'Đầu tư cho các đội thi Robocon, CDIO và cuộc thi kỹ thuật quốc tế còn hạn chế',
+        'Các cuộc thi như ABU Robocon, CDIO, VEX Robotics hay IEEE Student Branch Competition là cơ hội cực kỳ quý giá để sinh viên thể hiện năng lực kỹ thuật và xây dựng hồ sơ quốc tế. Tuy nhiên, kinh phí hỗ trợ từ trường cho các đội tuyển còn rất hạn chế, không đủ để mua nguyên vật liệu chế tạo robot và trang trải chi phí di chuyển, ăn ở khi thi đấu tại các địa điểm xa. Các đội tuyển phải tự xin tài trợ từ doanh nghiệp, rất bấp bênh và tốn nhiều thời gian. Kính đề nghị Phòng KH&CN xây dựng kế hoạch ngân sách bài bản hơn cho hoạt động thi đấu kỹ thuật quốc tế, đồng thời thiết lập mối quan hệ tài trợ dài hạn với doanh nghiệp thay vì để sinh viên tự lo từng năm.',
         NULL,
-        'PENDING',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000003',
@@ -1962,10 +1962,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000089',
-        'Quỹ hạt giống cho startup',
-        'Mong có quỹ đầu tư mạo hiểm dành riêng cho sinh viên.',
+        'Đề xuất thành lập quỹ đầu tư hạt giống (seed fund) dành cho startup sinh viên',
+        'Nhiều nhóm sinh viên có ý tưởng khởi nghiệp tiềm năng, đã qua giai đoạn ý tưởng và cần nguồn vốn nhỏ (từ 30 đến 100 triệu đồng) để phát triển sản phẩm thực tế và kiểm chứng thị trường. Hiện tại không có quỹ đầu tư mạo hiểm nào dành riêng cho sinh viên trường, khiến họ phải tìm đến các nguồn bên ngoài với rào cản lớn. Đề nghị Phòng KH&CN phối hợp với các đối tác doanh nghiệp và quỹ đầu tư để lập Seed Fund dành cho startup sinh viên, với quy mô ban đầu 500 triệu – 1 tỷ đồng, quy trình xét duyệt minh bạch, có mentor chuyên nghiệp đi kèm và cơ chế theo dõi sau đầu tư để tối đa hóa tỷ lệ thành công của các startup.',
         NULL,
-        'RESOLVED',
+        'IN_PROGRESS',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000003',
@@ -1974,8 +1974,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000090',
-        'Hỗ trợ nộp đơn patent',
-        'Chi phí luật sư quá cao, mong phòng hỗ trợ 100%.',
+        'Đề nghị nhà trường hỗ trợ toàn bộ chi phí nộp đơn đăng ký sáng chế cho sinh viên',
+        'Chi phí để đăng ký sáng chế tại Việt Nam, bao gồm phí nộp đơn, phí tra cứu, phí thẩm định và đặc biệt là phí dịch vụ luật sư sở hữu trí tuệ, lên đến 15-25 triệu đồng một trường hợp. Con số này hoàn toàn ngoài tầm với của sinh viên. Kết quả là nhiều giải pháp kỹ thuật sáng tạo bị bỏ ngỏ, không được bảo hộ, và có nguy cơ bị bên thứ ba đăng ký trước. Nhà trường sẽ được hưởng lợi trực tiếp từ số lượng sáng chế được bảo hộ – đây là chỉ số xếp hạng đại học quan trọng. Đề nghị Phòng KH&CN xây dựng chính sách hỗ trợ 100% chi phí đăng ký sáng chế cho sinh viên trường, kèm theo hỗ trợ pháp lý toàn trình từ soạn thảo đơn đến theo dõi kết quả thẩm định.',
         NULL,
         'RESOLVED',
         true,
@@ -1986,8 +1986,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000091',
-        'Đề tài NCKH cấp bộ',
-        'Chưa thấy thông báo đăng ký đề tài cấp Bộ năm 2026.',
+        'Chưa có thông báo đăng ký đề tài NCKH cấp Bộ năm 2026',
+        'Theo chu kỳ thông thường, thông báo đăng ký đề tài nghiên cứu khoa học cấp Bộ năm 2026 cần được phát hành vào quý 3 hoặc đầu quý 4 năm 2025 để giảng viên và sinh viên có đủ thời gian chuẩn bị hồ sơ. Tuy nhiên, đến nay (tháng 11/2025) vẫn chưa có bất kỳ thông báo nào từ Phòng KH&CN. Điều này gây khó khăn cho việc lập kế hoạch nghiên cứu dài hạn. Đề nghị Phòng KH&CN sớm cập nhật thông tin về kế hoạch đề tài cấp Bộ năm 2026, bao gồm lịch mở đăng ký, danh mục ưu tiên và hướng dẫn nộp hồ sơ, đồng thời tổ chức buổi tư vấn trực tiếp để hỗ trợ sinh viên và giảng viên trẻ lần đầu đăng ký.',
         NULL,
         'RESOLVED',
         false,
@@ -1998,10 +1998,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000092',
-        'Hội nghị khoa học trẻ',
-        'Mong tổ chức hội nghị riêng cho sinh viên trình bày kết quả.',
+        'Đề xuất tổ chức Hội nghị Khoa học Trẻ dành riêng cho sinh viên trình bày kết quả nghiên cứu',
+        'Hiện nay sinh viên chủ yếu chỉ được báo cáo đề tài NCKH trong phòng kín trước hội đồng, thiếu cơ hội trình bày trước đông đảo khán giả và nhận phản hồi đa chiều từ cộng đồng học thuật. Đề nghị Phòng KH&CN tổ chức Hội nghị Khoa học Trẻ hằng năm – một sự kiện học thuật theo mô hình conference chuyên nghiệp, nơi sinh viên được trình bày poster và oral presentation, trao đổi với giảng viên, chuyên gia và sinh viên từ các trường bạn. Đây cũng là cơ hội để sinh viên rèn luyện kỹ năng trình bày khoa học bằng tiếng Anh – một năng lực ngày càng quan trọng trong bối cảnh hội nhập quốc tế. Nếu có thể, nên mời thêm đại diện từ các trường đại học quốc tế trong khu vực tham dự.',
         NULL,
-        'RESOLVED',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000003',
@@ -2010,10 +2010,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000093',
-        'Máy in 3D hỏng lâu ngày',
-        'Máy in 3D ở lab bị hỏng hơn 2 tháng chưa sửa.',
+        'Máy in 3D tại phòng Lab bị hỏng hơn 2 tháng chưa được sửa chữa',
+        'Máy in 3D tại phòng Lab 3D đã bị hỏng từ khoảng đầu tháng 9/2025, tức là đã gần 3 tháng chưa hoạt động được. Đây là thiết bị quan trọng không thể thiếu đối với nhiều nhóm NCKH cần tạo prototype vật lý, đặc biệt trong các đề tài về cơ khí, tự động hóa và thiết kế sản phẩm. Tình trạng này khiến nhiều nhóm phải thuê dịch vụ in 3D bên ngoài với chi phí cao, hoặc phải thay đổi hướng thiết kế vì không có prototype để kiểm chứng. Đề nghị Phòng KH&CN phối hợp với bộ phận kỹ thuật ưu tiên sửa chữa hoặc thay thế máy in 3D trong thời gian sớm nhất, đồng thời xây dựng quy trình bảo trì định kỳ để tránh tình trạng tương tự tái diễn.',
         'Phòng Lab 3D',
-        'REJECTED',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
@@ -2022,8 +2022,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000094',
-        'Hỗ trợ tham gia ABU Robocon 2026',
-        'Đội tuyển cần kinh phí sớm để chuẩn bị từ bây giờ.',
+        'Đội tuyển ABU Robocon 2026 cần kinh phí sớm để chuẩn bị từ giai đoạn đầu',
+        'Cuộc thi ABU Robocon 2026 dự kiến diễn ra vào tháng 8/2026, nhưng để có robot thi đấu ở mức cạnh tranh, đội tuyển cần bắt đầu thiết kế và chế tạo từ ngay bây giờ (tháng 11/2025). Chi phí dự kiến cho toàn bộ quá trình chuẩn bị, bao gồm nguyên vật liệu, linh kiện điện tử, phần mềm và chi phí di chuyển đến vòng loại quốc gia, lên đến khoảng 80-120 triệu đồng. Năm ngoái kinh phí được phê duyệt quá muộn (tháng 3) khiến đội không có đủ thời gian hoàn thiện robot. Kính đề nghị Phòng KH&CN xem xét phê duyệt ngân sách sớm trong tháng 12/2025 để đội có thể triển khai kế hoạch chuẩn bị từ đầu năm 2026.',
         NULL,
         'RESOLVED',
         false,
@@ -2034,10 +2034,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000095',
-        'Chương trình tăng tốc khởi nghiệp',
-        'Mong có chương trình 3-6 tháng đào tạo startup chuyên sâu.',
+        'Đề xuất xây dựng chương trình tăng tốc khởi nghiệp (startup accelerator) 3-6 tháng tại trường',
+        'Hiện tại các hoạt động hỗ trợ khởi nghiệp tại trường chủ yếu là các buổi workshop rời rạc, thiếu tính hệ thống và chiều sâu. Để thực sự tạo ra startup thành công, sinh viên cần được đào tạo bài bản theo lộ trình: từ phát triển ý tưởng, nghiên cứu thị trường, xây dựng MVP, đến pitching và gọi vốn. Mô hình startup accelerator 3-6 tháng đã được chứng minh hiệu quả tại nhiều trường đại học trên thế giới. Đề nghị Phòng KH&CN thiết kế chương trình accelerator chuyên nghiệp, có mentor từ cộng đồng startup thực tế, kết nối với hệ sinh thái đầu tư, và cấp chứng nhận hoàn thành được công nhận trong ngành, để tạo đòn bẩy thực sự cho phong trào khởi nghiệp sinh viên.',
         NULL,
-        'PENDING',
+        'REJECTED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000003',
@@ -2046,8 +2046,8 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000096',
-        'Đề tài NCKH 2026',
-        'Chưa có kế hoạch chi tiết cho đợt đề tài NCKH năm tới.',
+        'Đề nghị sớm công bố kế hoạch chi tiết đợt đề tài NCKH sinh viên năm 2026',
+        'Để sinh viên có thể chuẩn bị tốt hồ sơ đề tài NCKH năm 2026 – từ chọn chủ đề, tìm giảng viên hướng dẫn, xây dựng nhóm nghiên cứu đến soạn thảo thuyết minh – cần có thông báo ít nhất 3 tháng trước thời điểm mở đăng ký. Hiện tại vẫn chưa có bất kỳ thông tin nào từ Phòng KH&CN về kế hoạch đợt NCKH 2026: không có lịch, không có danh mục chủ đề ưu tiên, không có thông tin về thay đổi quy định (nếu có). Đề nghị Phòng sớm ban hành kế hoạch chi tiết, bao gồm lịch mở đăng ký, tiêu chí chấm điểm, mức kinh phí dự kiến và danh sách giảng viên sẵn sàng hướng dẫn, để sinh viên chủ động lên kế hoạch từ học kỳ này.',
         NULL,
         'IN_PROGRESS',
         false,
@@ -2058,10 +2058,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000097',
-        'Cuộc thi ý tưởng 2026',
-        'Mong sớm có thông báo cuộc thi ý tưởng khởi nghiệp 2026.',
+        'Mong sớm có thông báo chính thức về Cuộc thi Ý tưởng Khởi nghiệp Sinh viên 2026',
+        'Cuộc thi Ý tưởng Khởi nghiệp Sinh viên là hoạt động học thuật rất được sinh viên trường mong đợi, vì đây là cơ hội hiếm có để thử sức với môi trường kinh doanh thực tế và nhận phản hồi từ chuyên gia. Tuy nhiên, đến đầu tháng 12/2025 vẫn chưa có thông báo chính thức nào về phiên bản 2026 của cuộc thi: không biết khi nào mở đăng ký, thể lệ có thay đổi gì, và liệu cuộc thi năm tới có được tổ chức hay không. Nhiều nhóm đang có ý tưởng và muốn chuẩn bị từ sớm để có hồ sơ thuyết phục. Kính đề nghị Phòng KH&CN sớm công bố thông báo về cuộc thi ý tưởng 2026 ít nhất 3 tháng trước hạn nộp hồ sơ.',
         NULL,
-        'PENDING',
+        'VIOLATED_CONTENT',
         false,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000003',
@@ -2070,10 +2070,10 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000098',
-        'Hỗ trợ công bố Q1',
-        'Sinh viên có bài báo Q1 nhưng chưa được thưởng xứng đáng.',
+        'Sinh viên có bài báo đăng tạp chí Q1 quốc tế chưa được thưởng xứng đáng',
+        'Việc một sinh viên đại học có bài báo được chấp nhận đăng trên tạp chí Q1 quốc tế là thành tích xuất sắc, đòi hỏi nhiều tháng nghiên cứu nghiêm túc và đạt tiêu chuẩn phản biện quốc tế khắt khe. Tuy nhiên, chính sách khen thưởng hiện tại của trường chưa phản ánh đúng giá trị của thành tích này – mức thưởng còn thấp và chưa có cơ chế công nhận chính thức (ví dụ cộng điểm rèn luyện, miễn giảm học phí, hoặc ưu tiên trong xét học bổng). Đề nghị Phòng KH&CN đề xuất với Ban Giám hiệu xây dựng chính sách khen thưởng mới, trong đó mức thưởng cho bài báo Q1 ít nhất là 10-20 triệu đồng, cộng với các ưu đãi phi tài chính để tạo động lực cho sinh viên theo đuổi nghiên cứu chất lượng cao.',
         NULL,
-        'IN_PROGRESS',
+        'AI_REVIEW_FAILED',
         false,
         'e0000000-0000-0000-0000-000000000003',
         'd0000000-0000-0000-0000-000000000003',
@@ -2082,27 +2082,27 @@ VALUES
     ),
     (
         'f0000000-0000-0000-0000-000000000099',
-        'Phòng lab mới',
-        'Mong sớm có phòng lab chuyên sâu về AI và IoT.',
+        'Đề nghị đầu tư xây dựng phòng lab chuyên sâu về AI và IoT',
+        'Trí tuệ nhân tạo (AI) và Internet of Things (IoT) đang là hai lĩnh vực công nghệ cốt lõi của cuộc cách mạng công nghiệp 4.0, thu hút rất nhiều sinh viên nghiên cứu và làm đề tài. Tuy nhiên, hiện tại trường chưa có phòng lab được trang bị chuyên biệt cho hai lĩnh vực này. Các nhóm nghiên cứu AI thiếu GPU mạnh và cơ sở hạ tầng điện toán hiệu năng cao, trong khi các nhóm IoT thiếu bo mạch, cảm biến, kit phát triển và môi trường thử nghiệm thực tế. Đề nghị Phòng KH&CN lập kế hoạch đầu tư phòng AI & IoT Lab với đầy đủ thiết bị hiện đại, có thể mở theo cơ chế đặt lịch linh hoạt cho tất cả sinh viên nghiên cứu, và cập nhật thiết bị định kỳ để theo kịp tốc độ phát triển của công nghệ.',
         NULL,
-        'PENDING',
+        'RESOLVED',
         false,
         'e0000000-0000-0000-0000-000000000001',
         'd0000000-0000-0000-0000-000000000003',
         'c0000000-0000-0000-0000-000000000001',
-        '2025-12-05 15:50:00'
+        '2026-05-16 15:45:12'
     ),
     (
         'f0000000-0000-0000-0000-000000000100',
-        'Hội nghị NCKH sinh viên 2026',
-        'Cần lên kế hoạch sớm để sinh viên chuẩn bị bài báo.',
+        'Cần sớm lên kế hoạch Hội nghị NCKH Sinh viên 2026 để sinh viên chuẩn bị bài viết',
+        'Hội nghị NCKH Sinh viên là sự kiện học thuật thường niên quan trọng nhất dành cho sinh viên nghiên cứu. Để sinh viên có thể chuẩn bị bài báo đạt chất lượng tốt – từ khâu thu thập dữ liệu, phân tích kết quả đến viết và chỉnh sửa theo phản hồi – cần có thông báo ít nhất 4-6 tháng trước ngày diễn ra. Tính đến tháng 12/2025, chưa có bất kỳ thông tin nào về Hội nghị NCKH Sinh viên 2026: không có ngày tổ chức, không có chủ đề định hướng, không có hướng dẫn định dạng bài viết. Kính đề nghị Phòng KH&CN sớm công bố kế hoạch tổ chức chi tiết, bao gồm lịch kêu gọi tóm tắt (call for abstract), hạn nộp bài, danh sách hội đồng phản biện và thể lệ trình bày, để sinh viên có đủ thời gian chuẩn bị bài báo chất lượng cao.',
         NULL,
-        'IN_PROGRESS',
+        'REJECTED',
         true,
         'e0000000-0000-0000-0000-000000000002',
         'd0000000-0000-0000-0000-000000000003',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-07 09:30:00'
+        '2026-05-22 14:10:05'
     );
 
 INSERT INTO
@@ -2130,7 +2130,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000004',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-04 10:15:00'
+        '2026-05-04 10:15:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000102',
@@ -2142,7 +2142,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000005',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-07 14:30:00'
+        '2026-05-07 14:30:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000103',
@@ -2154,7 +2154,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000006',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-11-10 09:20:00'
+        '2026-05-10 09:20:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000104',
@@ -2166,7 +2166,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000004',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-13 16:45:00'
+        '2026-05-13 16:45:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000105',
@@ -2178,7 +2178,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000010',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-16 11:10:00'
+        '2026-05-16 11:10:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000106',
@@ -2190,7 +2190,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000011',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-19 13:25:00'
+        '2026-05-19 13:25:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000107',
@@ -2202,7 +2202,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000012',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-11-22 15:40:00'
+        '2026-05-22 15:40:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000108',
@@ -2214,7 +2214,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000013',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-11-25 10:00:00'
+        '2026-05-25 10:00:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000109',
@@ -2226,7 +2226,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000004',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000003',
-        '2025-12-02 14:15:00'
+        '2026-06-02 14:15:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000110',
@@ -2238,7 +2238,7 @@ VALUES
         'e0000000-0000-0000-0000-000000000005',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000005',
-        '2025-12-05 09:30:00'
+        '2026-06-05 09:30:00'
     ),
     (
         'f0000000-0000-0000-0000-000000000111',
@@ -2250,7 +2250,67 @@ VALUES
         'e0000000-0000-0000-0000-000000000006',
         'd0000000-0000-0000-0000-000000000004',
         'c0000000-0000-0000-0000-000000000002',
-        '2025-12-07 11:45:00'
+        '2026-06-07 11:45:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000421',
+        'Chương trình thực tập quốc tế tại các tập đoàn nước ngoài còn hạn chế',
+        'Hiện tại phòng chủ yếu hỗ trợ học bổng học thuật, em mong muốn phòng đẩy mạnh tìm kiếm và ký kết các chương trình thực tập (Internship) tại các doanh nghiệp nước ngoài cho sinh viên năm cuối.',
+        'NULL',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000010',
+        'd0000000-0000-0000-0000-000000000004',
+        'c0000000-0000-0000-0000-000000000003',
+        '2026-06-09 08:20:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000422',
+        'Bất cập trong quy trình chuyển đổi tín chỉ sau khi đi trao đổi về',
+        'Sinh viên sau khi hoàn thành học kỳ trao đổi ở nước ngoài gặp rất nhiều khó khăn trong việc đối chiếu và làm thủ tục công nhận điểm quy đổi tại trường. Kính mong phòng phối hợp với Phòng Đào tạo đơn giản hóa quy trình này.',
+        'NULL',
+        'IN_PROGRESS',
+        false,
+        'e0000000-0000-0000-0000-000000000011',
+        'd0000000-0000-0000-0000-000000000004',
+        'c0000000-0000-0000-0000-000000000002',
+        '2026-06-11 14:35:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000423',
+        'Hỗ trợ gia hạn visa cho sinh viên nước ngoài đang học tập tại trường',
+        'Tôi là sinh viên quốc tế hiện đang học tại trường, thủ tục gia hạn visa tạm trú của tôi gặp một số trục trặc từ phía cục Xuất nhập cảnh. Tôi rất cần sự hỗ trợ pháp lý và giấy tờ xác nhận nhanh chóng từ phòng Quan hệ quốc tế.',
+        'Phòng A1.705',
+        'IN_PROGRESS',
+        true,
+        'e0000000-0000-0000-0000-000000000013',
+        'd0000000-0000-0000-0000-000000000004',
+        'c0000000-0000-0000-0000-000000000002',
+        '2026-06-12 10:00:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000424',
+        'Đề xuất tạo kênh tư vấn trực tuyến (Live Chat) giải đáp về học bổng',
+        'Do việc lên trực tiếp văn phòng trong giờ hành chính khá bất tiện vì vướng lịch học, em mong phòng có thể triển khai một kênh hỗ trợ trực tuyến trên website hoặc fanpage để phản hồi nhanh các thắc mắc về hồ sơ du học.',
+        'NULL',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000012',
+        'd0000000-0000-0000-0000-000000000004',
+        'c0000000-0000-0000-0000-000000000003',
+        '2026-06-13 15:50:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000425',
+        'Tài liệu hướng dẫn viết bài luận xin học bổng chưa tối ưu',
+        'Các bài đăng hướng dẫn viết Motivation Letter hoặc CV chuẩn quốc tế của phòng còn sơ sài. Mong phòng có thể chia sẻ thêm các bài viết chuyên sâu hoặc template mẫu từ các cựu sinh viên đã ứng tuyển thành công.',
+        'NULL',
+        'RESOLVED',
+        false,
+        'e0000000-0000-0000-0000-000000000004',
+        'd0000000-0000-0000-0000-000000000004',
+        'c0000000-0000-0000-0000-000000000005',
+        '2026-06-14 09:10:00'
     ),
 
 -- 5. Phòng Thiết bị – Vật tư (d000...005) → 12 feedbacks
@@ -2264,7 +2324,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000010',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-03 08:10:00'
+    '2026-05-03 08:10:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000113',
@@ -2276,7 +2336,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000011',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-06 13:20:00'
+    '2026-05-06 13:20:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000114',
@@ -2288,7 +2348,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000012',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-09 10:40:00'
+    '2026-05-09 10:40:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000115',
@@ -2300,7 +2360,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000013',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-12 15:15:00'
+    '2026-05-12 15:15:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000116',
@@ -2312,7 +2372,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000014',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-15 11:30:00'
+    '2026-05-15 11:30:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000117',
@@ -2324,7 +2384,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000015',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-18 09:00:00'
+    '2026-05-18 09:00:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000118',
@@ -2336,7 +2396,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000016',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-21 14:50:00'
+    '2026-05-21 14:50:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000119',
@@ -2348,7 +2408,7 @@ VALUES
     'e0000000-0000-0000-0000-000000000017',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-24 10:20:00'
+    '2026-05-24 10:20:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000120',
@@ -2360,19 +2420,19 @@ VALUES
     'e0000000-0000-0000-0000-000000000020',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-27 16:10:00'
+    '2026-05-27 16:10:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000121',
     'Cần mua thêm máy CNC',
     'Lab cơ khí chỉ có 1 máy CNC cho toàn trường.',
     'Xưởng Cơ khí',
-    'PENDING',
+    'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000010',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-01 13:40:00'
+    '2026-06-01 13:40:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000122',
@@ -2384,178 +2444,298 @@ VALUES
     'e0000000-0000-0000-0000-000000000011',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-04 09:25:00'
+    '2026-06-04 09:25:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000123',
     'Cần nâng cấp wifi toàn trường',
     'Tốc độ wifi hiện tại chỉ 5-10 Mbps.',
     'NULL',
-    'PENDING',
+    'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000012',
     'd0000000-0000-0000-0000-000000000005',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-06 15:30:00'
+    '2026-06-06 15:30:00'
 ),
+(
+        'f0000000-0000-0000-0000-000000000426',
+        'Hệ thống rèm cửa chống chói tại Tòa nhà trung tâm bị rách',
+        'Rèm cửa chắn nắng ở các phòng học phía hướng Tây tòa nhà trung tâm bị hỏng ròng rọc và rách nhiều mảng, khiến ánh sáng chiếu trực tiếp vào bảng gây chói, không thấy chữ.',
+        'Tòa nhà trung tâm',
+        'IN_PROGRESS',
+        false,
+        'e0000000-0000-0000-0000-000000000013',
+        'd0000000-0000-0000-0000-000000000005',
+        'c0000000-0000-0000-0000-000000000001',
+        '2026-06-08 10:15:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000427',
+        'Nhiều ổ cắm điện dưới bàn giảng viên và góc tường bị bong tróc',
+        'Tại dãy phòng học khu B, các ổ cắm điện âm tường bị lỏng và bung phần vỏ nhựa bảo vệ ra ngoài, tiềm ẩn nguy cơ cao về rò rỉ điện, gây nguy hiểm khi cắm sạc laptop.',
+        'Tòa nhà B',
+        'IN_PROGRESS',
+        false,
+        'e0000000-0000-0000-0000-000000000014',
+        'd0000000-0000-0000-0000-000000000005',
+        'c0000000-0000-0000-0000-000000000001',
+        '2026-06-10 11:20:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000428',
+        'Đề xuất thay thế hệ thống bóng đèn huỳnh quang bị cháy',
+        'Phòng học lý thuyết hiện tại bị cháy mất 3 bóng đèn tuýp, không đủ điều kiện ánh sáng vào các ca học buổi tối (ca 3). Mong phòng vật tư sớm cử người xuống thay thế.',
+        'Phòng B402',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000015',
+        'd0000000-0000-0000-0000-000000000005',
+        'c0000000-0000-0000-0000-000000000001',
+        '2026-06-11 16:45:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000429',
+        'Bất cập trong thời gian tiếp nhận hoàn trả vật tư tiêu hao',
+        'Giờ đóng cửa kho nhận lại dụng cụ, vật tư thực hành của phòng quá sát giờ tan ca, khiến nhiều nhóm sinh viên dọn dẹp xưởng xong xuống hoàn trả thì kho đã nghỉ, dẫn đến việc phải mang thiết bị về nhà tự bảo quản.',
+        'Phòng A1.703',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000010',
+        'd0000000-0000-0000-0000-000000000005',
+        'c0000000-0000-0000-0000-000000000001',
+        '2026-06-13 14:00:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000430',
+        'Nút bấm điều khiển màn chiếu điện tử tại giảng đường bị kẹt',
+        'Hệ thống công tắc bấm để cuộn/hạ màn hình máy chiếu tự động bị kẹt cứng, giảng viên phải kéo thủ công bằng tay rất bất tiện và dễ làm rách màn chiếu.',
+        'Hội trường lớn Tòa nhà trung tâm',
+        'RESOLVED',
+        false,
+        'e0000000-0000-0000-0000-000000000011',
+        'd0000000-0000-0000-0000-000000000005',
+        'c0000000-0000-0000-0000-000000000001',
+        '2026-06-14 08:30:00'
+    ),
 
 -- 6. Phòng Quản trị chiến lược (d000...006) → 13 feedbacks
 (
     'f0000000-0000-0000-0000-000000000124',
-    'Chưa công bố chiến lược 2026-2030',
-    'Sinh viên muốn biết định hướng phát triển trường.',
+    'Đề xuất công bố Chiến lược phát triển Nhà trường giai đoạn 2026-2030',
+    'Người học rất quan tâm đến tầm nhìn lâu dài của trường. Kính mong phòng ban sớm tham mưu công khai đề án chiến lược phát triển tổng thể giai đoạn 2026-2030 lên cổng thông tin.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000013',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-11-05 11:15:00'
+    '2026-05-05 11:15:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000125',
-    'Chỉ tiêu tuyển sinh không thực tế',
-    'Nhiều ngành tuyển vượt chỉ tiêu dẫn đến quá tải phòng học.',
+    'Bất cập về việc điều chỉnh chỉ tiêu tuyển sinh hệ ngoài chính quy',
+    'Chỉ tiêu tuyển sinh một số ngành thuộc hệ vừa làm vừa học tăng quá nhanh trong khi quy mô phòng học cố định, dẫn đến hiện tượng quá tải cục bộ tại các cơ sở liên kết.',
     'NULL',
     'REJECTED',
     false,
     'e0000000-0000-0000-0000-000000000014',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000002',
-    '2025-11-08 14:20:00'
+    '2026-05-08 14:20:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000126',
-    'Chưa có khảo sát sinh viên định kỳ',
-    'Không biết sinh viên nghĩ gì về chất lượng đào tạo.',
+    'Cần triển khai khảo sát định kỳ ý kiến học viên hệ Đào tạo từ xa',
+    'Để cải tiến chất lượng phục vụ, phòng ban nên xây dựng các biểu mẫu khảo sát trực tuyến định kỳ mỗi học kỳ nhằm lắng nghe đánh giá của học viên về chất lượng bài giảng video.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000015',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-11-11 09:40:00'
+    '2026-05-11 09:40:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000127',
-    'Xếp hạng trường giảm',
-    'Từ top 20 xuống top 35 trong bảng xếp hạng VN.',
+    'Phân tích giải pháp khắc phục tình trạng sụt giảm thứ hạng đại học',
+    'Bảng xếp hạng đại học quốc gia vừa qua ghi nhận trường có sự sụt giảm bậc nhẹ. Đề xuất phòng ban có những định hướng điều chỉnh tiêu chí phát triển đào tạo để cải thiện vị thế.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000016',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-11-14 13:10:00'
+    '2026-05-14 13:10:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000128',
-    'Chưa có kế hoạch tự chủ đại học',
-    'Nhiều trường đã tự chủ, trường mình vẫn phụ thuộc ngân sách.',
+    'Yêu cầu làm rõ lộ trình thực hiện tự chủ tài chính đại học',
+    'Nhiều trường đại học kỹ thuật lớn đã hoàn thành tự chủ, xin hỏi định hướng của trường mình đối với phân khúc đào tạo phát triển liên kết trong đề án tự chủ sắp tới như thế nào?',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000017',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-11-17 16:30:00'
+    '2026-05-17 16:30:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000129',
-    'KPIs giảng viên chưa công khai',
-    'Sinh viên không biết tiêu chí đánh giá giảng viên.',
+    'Đề xuất công khai khung KPI đánh giá hiệu quả giảng dạy',
+    'Để nâng cao tính minh bạch, học viên mong muốn được tiếp cận bộ tiêu chí đánh giá chất lượng bài giảng áp dụng riêng cho khối đào tạo kết hợp và vừa làm vừa học.',
     'NULL',
     'REJECTED',
     false,
     'e0000000-0000-0000-0000-000000000020',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000004',
-    '2025-11-20 10:50:00'
+    '2026-05-20 10:50:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000130',
-    'Chưa có báo cáo thường niên',
-    'Muốn đọc báo cáo hoạt động và tài chính của trường.',
+    'Chưa công bố Báo cáo thường niên về hoạt động liên kết đào tạo',
+    'Học viên và các đối tác liên kết cần xem số liệu công khai về kết quả hoạt động, báo cáo tài chính thường niên để đánh giá uy tín chất lượng của chương trình.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000021',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-11-23 14:15:00'
+    '2026-05-23 14:15:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000131',
-    'Định hướng ngành mới',
-    'Mong trường mở thêm ngành Trí tuệ nhân tạo, An ninh mạng.',
+    'Đề xuất mở thêm các mã ngành mới thuộc khối Công nghệ thông tin',
+    'Nhu cầu thị trường đối với ngành Trí tuệ nhân tạo (AI) và An ninh mạng hệ vừa làm vừa học hiện rất lớn, mong phòng khảo sát mở thêm các lớp tối hoặc cuối tuần cho ngành này.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000022',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000002',
-    '2025-11-26 11:20:00'
+    '2026-05-26 11:20:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000132',
-    'Tỷ lệ sinh viên có việc làm',
-    'Chưa công bố tỷ lệ việc làm sau 12 tháng tốt nghiệp.',
+    'Thống kê và công bố tỷ lệ việc làm của cựu học viên hệ đào tạo từ xa',
+    'Nhà trường nên thực hiện khảo sát việc làm sau 12 tháng tốt nghiệp đối với hệ đào tạo từ xa để gia tăng độ tin cậy và thu hút thêm người học mới đăng ký.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000013',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-11-29 15:45:00'
+    '2026-05-29 15:45:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000133',
-    'Chiến lược quốc tế hóa',
-    'Trường cần mục tiêu cụ thể về tỷ lệ sinh viên quốc tế.',
+    'Xây dựng chiến lược quốc tế hóa mô hình đào tạo trực tuyến',
+    'Cần có mục tiêu cụ thể về việc xuất khẩu giáo dục, thu hút học viên từ các quốc gia lân cận tham gia học các khóa học trực tuyến ngắn hạn do trường phát triển.',
     'NULL',
     'PENDING',
     false,
     'e0000000-0000-0000-0000-000000000014',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-12-01 10:30:00'
+    '2026-06-01 10:30:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000134',
-    'Kế hoạch xây dựng cơ sở 2',
-    'Chưa thấy lộ trình xây dựng campus mới.',
+    'Đề nghị cập nhật tiến độ xây dựng phân hiệu/cơ sở đào tạo mới',
+    'Học viên hệ liên kết rất mong đợi thông tin về lộ trình hoàn thiện cơ sở hạ tầng mới để phục vụ cho các kỳ thi tập trung cuối kỳ được rộng rãi, khang trang hơn.',
     'NULL',
     'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000015',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-03 14:00:00'
+    '2026-06-03 14:00:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000135',
-    'Chỉ tiêu nghiên cứu khoa học',
-    'Mục tiêu bài báo Scopus của giảng viên quá thấp.',
+    'Nâng cao chỉ tiêu nghiên cứu khoa học đối với khối giảng viên cơ hữu',
+    'Mục tiêu số lượng bài báo quốc tế Scopus/ISI giao cho đội ngũ nghiên cứu phát triển chương trình còn thấp, chưa tương xứng với tiềm năng học thuật của nhà trường.',
     'NULL',
     'PENDING',
     false,
     'e0000000-0000-0000-0000-000000000016',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-12-05 09:15:00'
+    '2026-06-05 09:15:00'
 ),
 (
     'f0000000-0000-0000-0000-000000000136',
-    'Chiến lược chuyển đổi số',
-    'Trường cần lộ trình chuyển đổi số toàn diện 2026-2030.',
+    'Xây dựng lộ trình Chuyển đổi số toàn diện trong quản lý đào tạo liên kết',
+    'Nhà trường cần số hóa 100% quy trình đăng ký môn học và đóng học phí trực tuyến cho hệ Vừa làm vừa học để giảm thiểu thủ tục xếp hàng nộp biên lai giấy tại văn phòng.',
     'NULL',
     'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000017',
     'd0000000-0000-0000-0000-000000000006',
     'c0000000-0000-0000-0000-000000000007',
-    '2025-12-07 13:40:00'
+    '2026-06-07 13:40:00'
 ),
+(
+        'f0000000-0000-0000-0000-000000000431',
+        'Nền tảng E-learning hệ đào tạo từ xa thường xuyên bị nghẽn mạng',
+        'Vào các khung giờ cao điểm buổi tối khi học viên đi làm về truy cập xem video bài giảng, hệ thống quản lý học tập (LMS) phản hồi cực kỳ chậm, thường xuyên báo lỗi máy chủ.',
+        'Hệ thống trực tuyến',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000010',
+        'd0000000-0000-0000-0000-000000000006',
+        'c0000000-0000-0000-0000-000000000003',
+        '2026-06-09 19:30:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000432',
+        'Đề xuất chính sách giãn tiến độ đóng học phí cho học viên hệ VLVH',
+        'Do đa số người học hệ vừa làm vừa học tự chi trả học phí từ lương tháng, việc phải hoàn thành toàn bộ học phí đầu học kỳ gây áp lực lớn. Kính mong phòng xem xét cơ chế chia nhỏ thành 2 đợt đóng.',
+        'NULL',
+        'IN_PROGRESS',
+        false,
+        'e0000000-0000-0000-0000-000000000011',
+        'd0000000-0000-0000-0000-000000000006',
+        'c0000000-0000-0000-0000-000000000005',
+        '2026-06-11 10:15:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000433',
+        'Lịch thi tập trung cuối kỳ hệ từ xa xếp quá dày vào ngày Chủ nhật',
+        'Việc xếp 3 môn thi liên tục vào một ngày Chủ nhật duy nhất khiến học viên hệ từ xa không thể chuẩn bị bài tốt và gây mệt mỏi, mong phòng giãn tiến độ thi sang các ngày thứ Bảy.',
+        'Phòng A1.406',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000012',
+        'd0000000-0000-0000-0000-000000000006',
+        'c0000000-0000-0000-0000-000000000002',
+        '2026-06-12 15:20:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000434',
+        'Đẩy mạnh ký kết đào tạo nhân lực theo đặt hàng của doanh nghiệp',
+        'Mong phòng tăng cường liên kết với các khu công nghiệp, tập đoàn lớn để mở các lớp đại học văn bằng 2 hoặc bồi dưỡng ngắn hạn theo nhu cầu thực tế của nhà máy, tạo đầu ra tốt cho hệ liên kết.',
+        'NULL',
+        'PENDING',
+        false,
+        'e0000000-0000-0000-0000-000000000013',
+        'd0000000-0000-0000-0000-000000000006',
+        'c0000000-0000-0000-0000-000000000003',
+        '2026-06-13 09:00:00'
+    ),
+    (
+        'f0000000-0000-0000-0000-000000000435',
+        'Hệ thống xét tuyển trực tuyến cho học viên mới chưa rõ ràng',
+        'Giao diện đăng ký hồ sơ xét tuyển học bạ trực tuyến cho hệ VLVH còn nhập nhằng ở bước tải lên các văn bằng tương đương dẫn đến việc nhiều thí sinh bị hủy hồ sơ oan. Mong phòng tối ưu lại form đăng ký.',
+        'Hệ thống đăng ký tuyển sinh',
+        'RESOLVED',
+        false,
+        'e0000000-0000-0000-0000-000000000015',
+        'd0000000-0000-0000-0000-000000000006',
+        'c0000000-0000-0000-0000-000000000002',
+        '2026-06-14 11:10:00'
+    ),
 
 -- 7. Phòng Đảm bảo chất lượng (d000...007) → 14 feedbacks
 (
@@ -2912,425 +3092,656 @@ VALUES
 -- 9. Phòng Quản trị cơ sở vật chất (d000...009) → 17 feedbacks
 (
     'f0000000-0000-0000-0000-000000000166',
-    'Nhà vệ sinh bẩn',
-    'Nhiều nhà vệ sinh thiếu giấy, xà phòng và rất bẩn.',
+    'Tình trạng nhà vệ sinh xuống cấp và mất vệ sinh nghiêm trọng',
+    'Hiện tại, hệ thống nhà vệ sinh tại khu vực tầng 3 và tầng 4 của Tòa nhà B thường xuyên rơi vào tình trạng bẩn thỉu do thiếu nhân viên lao công dọn dẹp định kỳ. Ngoài ra, các bồn rửa tay thường xuyên hết xà phòng, vòi nước bị rò rỉ gây ngập úng nhẹ trên sàn và hoàn toàn không có giấy vệ sinh, gây ảnh hưởng cực kỳ lớn đến sinh hoạt của sinh viên và giảng viên giữa các tiết học.',
     'Tòa nhà B',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000010',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-04 12:10:00'
+    '2026-05-11 10:22:41'
 ),
 (
     'f0000000-0000-0000-0000-000000000167',
-    'Điện hay mất',
-    'Mất điện giữa giờ học 2-3 lần/tuần.',
+    'Sự cố mất điện cục bộ đột ngột diễn ra liên tục ảnh hưởng giờ học',
+    'Trong khoảng hai tuần trở lại đây, tình trạng mất điện đột ngột đã xảy ra từ 2 đến 3 lần mỗi tuần ngay trong khung giờ học cao điểm. Việc này không chỉ làm gián đoạn bài giảng của giảng viên, khiến các thiết bị như máy chiếu, máy tính thực hành tắt đột ngột nguy cơ gây hư hỏng phần cứng, mà còn làm phòng học trở nên rất ngột ngạt và nóng bức.',
     'Toàn trường',
-    'RESOLVED',
+    'AI_REVIEW_FAILED',
     false,
     'e0000000-0000-0000-0000-000000000011',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-07 15:30:00'
+    '2026-05-11 14:56:13'
 ),
 (
     'f0000000-0000-0000-0000-000000000168',
-    'Nước uống miễn phí',
-    'Cần lắp thêm máy lọc nước nóng lạnh ở các tòa nhà.',
+    'Đề xuất lắp đặt thêm hệ thống máy lọc nước uống nóng lạnh miễn phí',
+    'Hiện số lượng cây nước uống miễn phí tại các khu vực giảng đường công cộng còn rất hạn chế, sinh viên phải di chuyển xa hoặc xuống căng tin mua nước đóng chai gây tốn kém và phát thải rác thải nhựa. Kính mong Nhà trường xem xét lắp đặt bổ sung thêm các máy lọc nước uống nóng lạnh tại hành lang các tòa nhà lớn để phục vụ nhu cầu thiết yếu của sinh viên.',
     'NULL',
-    'RESOLVED',
+    'VIOLATED_CONTENT',
     false,
     'e0000000-0000-0000-0000-000000000012',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-10 10:20:00'
+    '2026-05-11 17:18:35'
 ),
 (
     'f0000000-0000-0000-0000-000000000169',
-    'Cây xanh ít',
-    'Khuôn viên trường ít cây xanh, rất nóng vào mùa hè.',
+    'Thiếu thốn hệ thống cây xanh bóng mát trong khuôn viên trường',
+    'Khuôn viên trung tâm của trường hiện tại có diện tích bê tông hóa quá lớn nhưng lại có rất ít cây xanh tán rộng để che bóng mát. Vào mùa hè, ánh nắng chiếu trực tiếp xuống sân trường tạo ra hiện tượng bức xạ nhiệt rất lớn, khiến không khí oi bức, ngột ngạt, sinh viên không có không gian thoáng đãng để ôn bài hoặc nghỉ ngơi ngoài trời.',
     'Khuôn viên',
-    'RESOLVED',
+    'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000013',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-13 14:40:00'
+    '2026-05-12 08:14:50'
 ),
 (
     'f0000000-0000-0000-0000-000000000170',
-    'Bãi xe chật',
-    'Bãi xe máy đầy, phải gửi ngoài tốn thêm tiền.',
+    'Quá tải bãi giữ xe máy sinh viên và tình trạng chèo kéo bên ngoài',
+    'Vào các khung giờ cao điểm đầu giờ sáng hoặc đầu giờ chiều, bãi xe máy bên trong trường luôn rơi vào trạng thái quá tải nghiêm trọng, bảo vệ đóng cửa không cho vào. Sinh viên buộc phải mang xe ra gửi tại các bãi tự phát bên ngoài khuôn viên trường với chi phí rất đắt đỏ, thường xuyên bị chèo kéo và không đảm bảo an toàn mất mát tài sản.',
     'Bãi xe',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000014',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-16 09:15:00'
+    '2026-05-12 11:32:17'
 ),
 (
     'f0000000-0000-0000-0000-000000000171',
-    'Đường nội bộ hỏng',
-    'Đường từ cổng chính vào tòa A lún, ngập nước mưa.',
+    'Hệ thống đường nội bộ bị sụt lún và ngập úng cục bộ khi trời mưa',
+    'Đoạn đường nội bộ dẫn từ cổng chính đi vào khu vực sảnh Tòa nhà A đang xuất hiện nhiều điểm sụt lún, tạo thành các hố sâu tích nước. Mỗi khi trời mưa lớn, khu vực này bị ngập úng cục bộ, nước bẩn bắn tung tóe khi có phương tiện di chuyển qua, gây nguy hiểm cho các bạn sinh viên đi bộ và làm mất đi mỹ quan chung của nhà trường.',
     'Đường nội bộ',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000015',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-19 11:50:00'
+    '2026-05-12 15:40:59'
 ),
 (
     'f0000000-0000-0000-0000-000000000172',
-    'Thang máy hay hỏng',
-    'Thang máy tòa C thường xuyên kẹt.',
+    'Hệ thống thang máy Tòa nhà C thường xuyên gặp sự cố kỹ thuật',
+    'Thang máy số 2 tại Tòa nhà C liên tục gặp các sự cố kỹ thuật như kẹt cửa, không nhận tầng hoặc rung lắc mạnh trong quá trình vận hành, gây tâm lý hoang mang lo sợ cho sinh viên và thầy cô khi sử dụng. Rất mong bộ phận kỹ thuật của phòng quản trị kiểm tra toàn diện, bảo trì định kỳ hoặc thay thế linh kiện để đảm bảo an toàn tính mạng.',
     'Tòa nhà C',
-    'RESOLVED',
+    'AI_REVIEW_FAILED',
     false,
     'e0000000-0000-0000-0000-000000000016',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-22 13:20:00'
+    '2026-06-01 08:42:19'
 ),
 (
     'f0000000-0000-0000-0000-000000000173',
-    'Phòng học nóng',
-    'Nhiều phòng không đủ máy lạnh.',
+    'Công suất hệ thống điều hòa không đủ làm mát trong các phòng học lớn',
+    'Một số phòng học lý thuyết diện tích lớn tại Tòa nhà E hiện tại chỉ được trang bị 2 máy lạnh công suất nhỏ, kết hợp với quạt trần đã cũ kỹ. Vào những ngày thời tiết nắng nóng đỉnh điểm, lượng sinh viên tập trung đông khiến nhiệt độ phòng cực kỳ oi bức, ngột ngạt, làm giảm khả năng tập trung tiếp thu bài vở của người học.',
     'Tòa nhà E',
-    'RESOLVED',
+    'VIOLATED_CONTENT',
     false,
     'e0000000-0000-0000-0000-000000000017',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-25 16:10:00'
+    '2026-06-01 11:15:52'
 ),
 (
     'f0000000-0000-0000-0000-000000000174',
-    'Rác không được dọn',
-    'Có ngày rác để 2-3 ngày mới dọn.',
+    'Tồn đọng rác thải tại các khu vực công cộng không được thu gom trong ngày',
+    'Tại khu vực ghế đá xung quanh khuôn viên trường, tình trạng rác thải sinh hoạt, ly nhựa và hộp thức ăn thừa bị tồn đọng qua 2-3 ngày mà không thấy nhân viên vệ sinh đi thu gom. Rác bốc mùi hôi thối khó chịu, thu hút ruồi muỗi, gây ô nhiễm môi trường nghiêm trọng và làm ảnh hưởng lớn đến không gian sinh hoạt chung ngoài trời.',
     'Khuôn viên',
-    'RESOLVED',
+    'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000020',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-11-28 10:30:00'
+    '2026-06-01 15:34:06'
 ),
 (
     'f0000000-0000-0000-0000-000000000175',
-    'Cần thêm ghế đá',
-    'Khuôn viên ít ghế cho sinh viên nghỉ ngơi.',
+    'Đề xuất lắp đặt thêm hệ thống ghế đá phục vụ tự học ngoài trời',
+    'Nhu cầu học nhóm và nghỉ ngơi của sinh viên sau các giờ học trên lớp là rất lớn, tuy nhiên số lượng ghế đá dưới các bóng cây ở khuôn viên hiện tại quá ít. Nhiều bạn phải ngồi vạ vật ở bậc thềm sảnh tòa nhà hoặc hành lang đi lại rất mất mỹ quan. Kính mong phòng cơ sở vật chất bổ sung thêm ghế đá tại khu vực râm mát.',
     'Khuôn viên',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000021',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-01 14:45:00'
+    '2026-06-02 09:28:44'
 ),
 (
     'f0000000-0000-0000-0000-000000000176',
-    'Hệ thống PCCC',
-    'Nhiều bình chữa cháy hết hạn sử dụng.',
+    'Hệ thống phòng cháy chữa cháy (PCCC) có dấu hiệu hết hạn kiểm định',
+    'Tôi có đi kiểm tra thử một số bình chữa cháy dạng bột được treo dọc hành lang các tầng của các tòa nhà thì phát hiện kim đồng hồ áp suất đã chỉ về vạch đỏ (hết áp lực) và hạn kiểm định ghi trên tem đã quá hạn từ lâu. Đây là mối nguy hiểm tiềm ẩn cực lớn nếu chẳng may có sự cố hỏa hoạn xảy ra trong trường.',
     'Các tòa nhà',
-    'IN_PROGRESS',
+    'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000022',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000006',
-    '2025-12-02 09:20:00'
+    '2026-06-02 13:50:11'
 ),
 (
     'f0000000-0000-0000-0000-000000000177',
-    'Sân thể thao xuống cấp',
-    'Sân bóng đá mặt cỏ bị trọc, nguy hiểm.',
+    'Sân bóng đá cỏ nhân tạo thuộc khu thể thao bị xuống cấp trầm trọng',
+    'Mặt sân bóng đá cỏ nhân tạo hiện tại đã bị bong tróc phần lớn lớp cỏ mượt, trơ ra nền bê tông cứng và các hạt cao su bị dồn cục, tạo thành nhiều chỗ gồ ghề nguy hiểm. Sinh viên khi tham gia môn học Giáo dục thể chất hoặc đá bóng giao lưu thường xuyên bị trượt ngã, trầy xước và chấn thương khớp lật cổ chân.',
     'Sân thể thao',
-    'PENDING',
+    'AI_REVIEW_FAILED',
     false,
     'e0000000-0000-0000-0000-000000000030',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-03 15:10:00'
+    '2026-05-31 09:37:04'
 ),
 (
     'f0000000-0000-0000-0000-000000000178',
-    'Nhà để xe mưa dột',
-    'Xe máy bị ướt khi trời mưa.',
+    'Mái che bãi giữ xe bị dột nát gây ướt phương tiện khi trời mưa',
+    'Hệ thống mái tôn che chắn tại bãi giữ xe máy số 2 đã quá cũ kỹ, xuất hiện nhiều vết thủng lớn và hở ron nối. Khi trời mưa, nước mưa xối trực tiếp xuống làm ướt sũng yên xe, để lâu ngày nước lọt vào ổ khóa và các bộ phận máy móc gây hư hỏng, rỉ sét phương tiện đi lại của cán bộ công nhân viên lẫn sinh viên.',
     'Bãi xe',
-    'IN_PROGRESS',
+    'VIOLATED_CONTENT',
     false,
     'e0000000-0000-0000-0000-000000000031',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-04 11:40:00'
+    '2026-05-31 13:19:42'
 ),
 (
     'f0000000-0000-0000-0000-000000000179',
-    'Cần sơn lại tường',
-    'Nhiều tòa nhà tường bong tróc, cũ kỹ.',
+    'Tường ngoài các tòa nhà bị bong tróc sơn, rêu mốc gây mất mỹ quan',
+    'Mặt tường phía ngoài của Tòa nhà A trải qua nhiều năm mùa mưa bão hiện đã bị ố vàng, mọc rêu mốc đen kịt và nhiều mảng sơn lớn bị bong tróc rụng xuống sảnh. Điều này làm cho diện mạo tổng thể của nhà trường trông rất cũ kỹ, xuống cấp, không tương xứng với một môi trường giáo dục hiện đại, chuyên nghiệp.',
     'Tòa nhà A',
-    'PENDING',
+    'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000032',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-05 13:25:00'
+    '2026-05-31 16:05:11'
 ),
 (
     'f0000000-0000-0000-0000-000000000180',
-    'Hồ bơi chưa hoạt động',
-    'Hồ bơi xây xong 2 năm nhưng chưa mở cửa.',
+    'Khu vực hồ bơi sinh viên đã nghiệm thu lâu năm nhưng chưa mở cửa',
+    'Dự án hồ bơi phục vụ môn bơi lội và rèn luyện thể chất cho sinh viên đã thấy hoàn thiện xây dựng, bơm nước hoàn chỉnh cách đây gần 2 năm nhưng đến nay vẫn đóng cửa im lìm, không thấy đưa vào hoạt động khai thác. Sinh viên mong muốn phòng chức năng giải thích rõ lý do và sớm mở cửa phục vụ nhu cầu thể thao.',
     'Khu thể thao',
-    'RESOLVED',
+    'REJECTED',
     false,
     'e0000000-0000-0000-0000-000000000033',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-06 10:15:00'
+    '2026-05-02 09:22:15'
 ),
 (
     'f0000000-0000-0000-0000-000000000181',
-    'Cần thêm thùng rác',
-    'Khu vực căng tin thiếu thùng rác.',
+    'Thiếu hụt trầm trọng thùng phân loại rác tại khuôn viên khu vực căng tin',
+    'Tại khu vực căng tin tập trung ăn uống đông đúc của sinh viên, số lượng thùng rác bố trí quá ít và không có nhãn mác hướng dẫn phân loại rác vô cơ, rác hữu cơ. Do đó, rác thải thường bị vứt tràn lan ra mặt bàn, mặt đất xung quanh thùng rác, gây mất vệ sinh an toàn thực phẩm tại khu ăn uống.',
     'Căng tin',
-    'RESOLVED',
+    'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000040',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000001',
-    '2025-12-07 12:30:00'
+    '2026-05-04 15:40:33'
 ),
 (
     'f0000000-0000-0000-0000-000000000182',
-    'Khuôn viên thiếu đèn',
-    'Ban đêm một số khu vực tối, không an toàn.',
+    'Hệ thống đèn cao áp chiếu sáng ban đêm tại các lối đi nội bộ bị hỏng',
+    'Một số khu vực đường đi bộ góc khuất phía sau các tòa nhà nối liền ra bãi xe ban đêm rất tối do các bóng đèn cao áp chiếu sáng công cộng đã bị cháy từ lâu nhưng chưa được thay thế. Sinh viên học các ca tối muộn khi đi qua khu vực này cảm thấy rất bất an vì tiềm ẩn nguy cơ mất an ninh trật tự, trộm cắp tài sản.',
     'Khuôn viên',
-    'IN_PROGRESS',
+    'VIOLATED_CONTENT',
     false,
     'e0000000-0000-0000-0000-000000000041',
     'd0000000-0000-0000-0000-000000000009',
     'c0000000-0000-0000-0000-000000000006',
-    '2025-12-07 16:50:00'
+    '2026-06-02 16:12:55'
+),
+
+-- BỔ SUNG THÊM 10 FEEDBACKS MỚI CHO PHÒNG QUẢN TRỊ CƠ SỞ VẬT CHẤT
+(
+    'f0000000-0000-0000-0000-000000000183',
+    'Bàn ghế phòng học lý thuyết bị gãy hỏng rách nát nệm da gây chấn thương',
+    'Tại các dãy phòng học tầng 5 tòa trung tâm, rất nhiều bộ bàn ghế liền kề bị lỏng ốc vít rơ lắc, một số ghế nệm da thì bị rách lòi lò xo sắt nhọn ra ngoài. Nhiều bạn sinh viên khi ngồi học sơ ý đã bị móc rách quần áo, thậm chí trầy xước da chảy máu. Đề xuất phòng quản trị rà soát và thu hồi sửa chữa gấp.',
+    'Tòa nhà trung tâm',
+    'AI_REVIEW_FAILED',
+    false,
+    'e0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-03 10:05:27'
+),
+(
+    'f0000000-0000-0000-0000-000000000184',
+    'Thủ tục mượn phòng học phục vụ hoạt động ngoại khóa còn quá rườm rà',
+    'Mỗi khi các câu lạc bộ đội nhóm cần mượn phòng học trống để tổ chức họp tuần hoặc tập luyện văn nghệ, quy trình ký giấy tờ qua lại giữa các bên mất từ 3-5 ngày và bắt buộc phải lấy chữ ký trực tiếp rất mất thời gian. Đề xuất phòng QTCSVC chuyển đổi số, tích hợp tính năng đăng ký mượn phòng trực tuyến qua app trường.',
+    'Phòng A1.706',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000011',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000003',
+    '2026-06-03 14:44:39'
+),
+(
+    'f0000000-0000-0000-0000-000000000185',
+    'Hệ thống loa micro trong giảng đường bị rè và thường xuyên mất tín hiệu',
+    'Hệ thống âm thanh trợ giảng bao gồm âm ly, micro không dây và hệ thống loa tại Giảng đường lớn tòa A bị lỗi kỹ thuật nghiêm trọng. Âm thanh phát ra thường xuyên bị rú rít chói tai hoặc bị rè tiếng không thể nghe rõ giảng viên nói gì, thỉnh thoảng đang nói lại mất tín hiệu hoàn toàn làm ngắt quãng mạch bài giảng.',
+    'Tòa nhà A',
+    'REJECTED',
+    false,
+    'e0000000-0000-0000-0000-000000000012',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-03 17:21:08'
+),
+(
+    'f0000000-0000-0000-0000-000000000186',
+    'Hệ thống cửa kính cường lực ở sảnh chính bị xệ bản lề tiềm ẩn nguy cơ đổ vỡ',
+    'Cánh cửa kính cường lực lớn phía bên tay trái sảnh ra vào Tòa nhà B hiện đang bị xệ bản lề thủy lực, mỗi khi đóng mở phát ra tiếng kêu cọ sát kèn kẹt rất lớn dưới sàn gạch. Nếu không được căn chỉnh hoặc thay thế bản lề sớm, cánh cửa này có nguy cơ bị nổ vỡ kính hoặc đổ sập trúng người qua lại bất cứ lúc nào.',
+    'Tòa nhà B',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000013',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-04 08:19:54'
+),
+(
+    'f0000000-0000-0000-0000-000000000187',
+    'Tình trạng ngập nước tràn vào hành lang mỗi khi trời mưa bão lớn',
+    'Do hệ thống ban công không có gờ chắn nước đủ cao và hệ thống ống thoát nước sàn quá nhỏ lại hay bị lá cây bít kín, mỗi khi trời mưa to kèm gió lớn là nước mưa tràn lê láng vào hành lang lớp học khu vực tòa D. Nước tràn sát vào cửa phòng học làm hư hại sàn gỗ kỹ thuật và gây trơn trượt nguy hiểm.',
+    'Tòa nhà D',
+    'AI_REVIEW_FAILED',
+    false,
+    'e0000000-0000-0000-0000-000000000014',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-06 11:15:44'
+),
+(
+    'f0000000-0000-0000-0000-000000000188',
+    'Máy chiếu phòng học bị mờ nhòe hình ảnh và sai lệch màu sắc nghiêm trọng',
+    'Thiết bị máy chiếu tại phòng lý thuyết E302 có tuổi thọ bóng đèn hình đã quá già, dẫn đến hiện tượng hình ảnh trình chiếu bị mờ tối, nhòe chữ dù đã cố gắng điều chỉnh tiêu cự focus. Thêm vào đó màu sắc hiển thị bị lệch tông (bị ám xanh hoàn toàn) khiến sinh viên ngồi dưới không thể đọc được nội dung slide bài giảng.',
+    'Tòa nhà E',
+    'VIOLATED_CONTENT',
+    false,
+    'e0000000-0000-0000-0000-000000000015',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-08 14:50:21'
+),
+(
+    'f0000000-0000-0000-0000-000000000189',
+    'Đề xuất cải tạo khu nhà thi đấu đa năng do rách lưới chắn bóng và hỏng sàn',
+    'Khu vực sàn gỗ của nhà thi đấu thể thao đa năng hiện tại có nhiều chỗ bị phồng rộp, bong tróc tạo khe hở sắc nhọn dễ gây vấp ngã. Đồng thời, hệ thống lưới chắn bóng xung quanh sân bóng chuyền, cầu lông cũng đã bị rách tả tơi khiến bóng thường xuyên bay thẳng vào khu vực khán đài gây nguy hiểm cho người xem.',
+    'Khu thể thao',
+    'IN_PROGRESS',
+    false,
+    'e0000000-0000-0000-0000-000000000016',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-10 10:33:12'
+),
+(
+    'f0000000-0000-0000-0000-000000000190',
+    'Mùi hôi bốc lên từ hệ thống hố ga thoát nước lộ thiên cạnh khu vực học tập',
+    'Hệ thống mương thoát nước và các hố ga lộ thiên đoạn nằm giữa Tòa nhà C và Tòa nhà D hiện không có nắp đậy kín kẽ. Vào những ngày thời tiết oi bức hoặc sau mưa dông, mùi chất thải hôi thối nồng nặc bốc lên xộc thẳng vào các giảng đường xung quanh, tạo ra môi trường cực kỳ độc hại và khó chịu cho người học.',
+    'Các tòa nhà',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000017',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-12 16:08:55'
+),
+(
+    'f0000000-0000-0000-0000-000000000191',
+    'Hệ thống rèm cửa che nắng tại các phòng học hướng Tây bị rách nát hoàn toàn',
+    'Các phòng học dãy số chẵn của tòa B nằm ở hướng Tây chịu ánh nắng chiều chiếu trực tiếp cực kỳ gay gắt. Tuy nhiên, toàn bộ hệ thống rèm cuốn che nắng tại đây đã bị rách nát, rụng rơi chỉ còn trơ khung sắt. Ánh nắng chiếu thẳng vào mặt sinh viên và màn hình máy chiếu làm lóa mắt, phòng học nóng lên như lò thiêu.',
+    'Tòa nhà B',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000020',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-14 08:44:19'
+),
+(
+    'f0000000-0000-0000-0000-000000000192',
+    'Bảng viết phấn ở nhiều phòng học bị mòn láng, không ăn phấn và khó lau sạch',
+    'Bảng đen chống lóa tại một số phòng học khu vực tòa cổ kính đã sử dụng quá nhiều năm dẫn đến bề mặt bị mòn láng bóng. Giảng viên khi viết phấn rất khó ăn mực, nét chữ bị mờ nhạt, đồng thời khi lau bảng lại tạo thành một vệt trắng xóa nhòe nhẹ khiến sinh viên ngồi từ hàng ghế giữa trở xuống hoàn toàn không nhìn rõ chữ.',
+    'Toàn trường',
+    'AI_REVIEW_FAILED',
+    false,
+    'e0000000-0000-0000-0000-000000000021',
+    'd0000000-0000-0000-0000-000000000009',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-16 13:12:40'
 ),
 
 -- 10. Phòng Tuyển sinh và CTSV (d000...010) → 18 feedbacks
 (
-    'f0000000-0000-0000-0000-000000000183',
-    'Thông tin tuyển sinh 2026 chưa có',
-    'Đến tháng 12 vẫn chưa thấy đề án tuyển sinh.',
-    'NULL',
-    'RESOLVED',
-    false,
-    'e0000000-0000-0000-0000-000000000001',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000002',
-    '2025-11-03 10:30:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000184',
-    'Học bổng tân sinh viên ít',
-    'Chỉ có 10 suất học bổng 100% cho thí sinh cao điểm.',
-    'NULL',
-    'REJECTED',
-    false,
-    'e0000000-0000-0000-0000-000000000002',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-11-06 13:45:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000185',
-    'Tư vấn tuyển sinh online kém',
-    'Chatbot trả lời không đúng, nhân viên ít phản hồi.',
-    'NULL',
-    'RESOLVED',
-    false,
-    'e0000000-0000-0000-0000-000000000003',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000002',
-    '2025-11-09 15:20:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000186',
-    'Tuần sinh hoạt công dân dài',
-    '1 tuần toàn học chính trị, sinh viên rất chán.',
-    'NULL',
-    'RESOLVED',
-    false,
-    'e0000000-0000-0000-0000-000000000004',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000002',
-    '2025-11-12 11:10:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000187',
-    'Hỗ trợ miễn giảm học phí chậm',
-    'Hồ sơ nộp từ tháng 9 đến nay chưa giải quyết.',
-    'NULL',
-    'RESOLVED',
-    false,
-    'e0000000-0000-0000-0000-000000000005',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-11-15 14:30:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000188',
-    'Chưa có ký túc xá cho tân sinh viên',
-    'Tân sinh viên ở xa phải thuê trọ giá cao.',
-    'Ký túc xá',
-    'RESOLVED',
-    false,
-    'e0000000-0000-0000-0000-000000000006',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000001',
-    '2025-11-18 09:50:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000189',
-    'Chương trình định hướng nghề nghiệp',
-    'Tuần sinh hoạt công dân thiếu nội dung hướng nghiệp.',
-    'NULL',
-    'RESOLVED',
+    'f0000000-0000-0000-0000-000000000193',
+    'Phản ánh tình trạng vệ sinh xuống cấp nghiêm trọng tại khu nhà vệ sinh Tòa B',
+    'Hệ thống nhà vệ sinh tại tầng 3 và tầng 4 của Tòa nhà B thường xuyên trong tình trạng hết giấy vệ sinh, nước rửa tay xà phòng không được châm mới. Ngoài ra, sàn nhà luôn ẩm ướt, bốc mùi hôi thối nồng nặc gây ảnh hưởng lớn đến sinh hoạt của sinh viên giữa các tiết học.',
+    'Tòa nhà B',
+    'VIOLATED_CONTENT',
     false,
     'e0000000-0000-0000-0000-000000000010',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000003',
-    '2025-11-21 13:15:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-04 11:32:15'
 ),
 (
-    'f0000000-0000-0000-0000-000000000190',
-    'Học bổng khuyến khích học tập',
-    'Tiêu chí quá cao, ít sinh viên đạt được.',
-    'NULL',
-    'REJECTED',
+    'f0000000-0000-0000-0000-000000000194',
+    'Sự cố mất điện đột ngột diễn ra liên tục trong giờ học chính khóa',
+    'Trong khoảng 2 tuần trở lại đây, hệ thống điện tại các khu lớp học khuya và khu trung tâm thường xuyên bị ngắt đột ngột từ 2-3 lần mỗi tuần. Việc này làm gián đoạn bài giảng của giảng viên, tắt toàn bộ máy chiếu và máy lạnh, gây mất tập trung và ảnh hưởng nghiêm trọng đến chất lượng tiếp thu kiến thức.',
+    'Toàn trường',
+    'IN_PROGRESS',
     false,
     'e0000000-0000-0000-0000-000000000011',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-11-24 16:40:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-04 15:56:40'
 ),
 (
-    'f0000000-0000-0000-0000-000000000191',
-    'Hỗ trợ vay học phí',
-    'Chưa có thông tin vay học phí lãi suất 0%.',
+    'f0000000-0000-0000-0000-000000000195',
+    'Kiến nghị lắp đặt thêm hệ thống máy lọc nước uống nóng lạnh tại các tầng lầu',
+    'Hiện tại số lượng cây nước uống miễn phí tại các tòa nhà là quá ít so với quy mô sinh viên. Kính mong Nhà trường và phòng Quản trị cơ sở vật chất xem xét khảo sát và lắp đặt bổ sung các trụ máy lọc nước nóng lạnh tại hành lang mỗi tầng để đảm bảo nhu cầu giải khát, phục vụ sinh hoạt thiết yếu.',
     'NULL',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000012',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-11-27 10:20:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-05 09:41:12'
 ),
 (
-    'f0000000-0000-0000-0000-000000000192',
-    'Hoạt động chào tân sinh viên',
-    'Năm nay không có đêm gala chào tân sinh viên.',
-    'Nhà văn hóa',
+    'f0000000-0000-0000-0000-000000000196',
+    'Quy hoạch bổ sung cây xanh bóng mát giảm nhiệt mùa nắng nóng cho khuôn viên',
+    'Khu vực sân trường xung quanh các khối nhà học hiện tại rất thưa thớt cây xanh, phần lớn là bê tông hóa. Vào mùa hè, nền nhiệt độ tăng cao khiến không gian ngoài trời cực kỳ oi bức, sinh viên không có bóng mát để nghỉ ngơi hay tự học sau giờ lên lớp. Kiến nghị trồng thêm cây thân gỗ tán rộng.',
+    'Khuôn viên',
     'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000013',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000003',
-    '2025-11-30 14:50:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000193',
-    'Chính sách sinh viên khó khăn',
-    'Nhiều sinh viên nghèo chưa được hỗ trợ kịp thời.',
-    'NULL',
-    'PENDING',
-    false,
-    'e0000000-0000-0000-0000-000000000014',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-12-01 11:30:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000194',
-    'Đề án tuyển sinh 2026',
-    'Vẫn chưa công bố chỉ tiêu từng ngành.',
-    'NULL',
-    'IN_PROGRESS',
-    false,
-    'e0000000-0000-0000-0000-000000000015',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000002',
-    '2025-12-02 15:20:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000195',
-    'Học bổng tài năng',
-    'Chưa có học bổng dành riêng cho sinh viên đạt giải quốc gia.',
-    'NULL',
-    'PENDING',
-    false,
-    'e0000000-0000-0000-0000-000000000016',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-12-03 09:40:00'
-),
-(
-    'f0000000-0000-0000-0000-000000000196',
-    'Chương trình cố vấn học tập',
-    'Mỗi lớp cần có cố vấn học tập đồng hành.',
-    'NULL',
-    'IN_PROGRESS',
-    false,
-    'e0000000-0000-0000-0000-000000000017',
-    'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000002',
-    '2025-12-04 13:10:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-05 13:14:50'
 ),
 (
     'f0000000-0000-0000-0000-000000000197',
-    'Hỗ trợ tâm lý sinh viên',
-    'Nhiều sinh viên áp lực học tập nhưng chưa có phòng tư vấn.',
-    'NULL',
-    'PENDING',
+    'Tình trạng quá tải nghiêm trọng tại các bãi giữ xe máy của sinh viên',
+    'Vào các khung giờ cao điểm (như tiết 1 và tiết 7), bãi xe máy sinh viên luôn trong tình trạng hết chỗ giữ. Nhiều bạn phải xếp hàng chờ rất lâu hoặc buộc phải mang xe ra các bãi tư nhân bên ngoài trường với chi phí đắt đỏ và không đảm bảo an toàn. Kính mong phòng ban tìm giải pháp mở rộng diện tích giữ xe.',
+    'Bãi xe',
+    'AI_REVIEW_FAILED',
     false,
-    'e0000000-0000-0000-0000-000000000020',
+    'e0000000-0000-0000-0000-000000000014',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000007',
-    '2025-12-05 16:30:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-05 16:48:23'
 ),
 (
     'f0000000-0000-0000-0000-000000000198',
-    'Chính sách bảo hiểm y tế',
-    'Nhiều sinh viên chưa được hướng dẫn đóng BHYT đúng cách.',
-    'NULL',
-    'RESOLVED',
+    'Yêu cầu dặm vá, sửa chữa đoạn đường nội bộ bị sụt lún và ngập nước',
+    'Đoạn đường nội bộ dẫn từ khu vực cổng chính đi vào Tòa nhà A hiện tại đã bị bong tróc lớp nhựa, xuất hiện nhiều ổ gà lún sâu. Mỗi khi trời mưa lớn, nước bị ứ đọng lại thành những vũng lớn gây trơn trượt, rất nguy hiểm cho các phương tiện giao thông di chuyển bên trong trường.',
+    'Đường nội bộ',
+    'VIOLATED_CONTENT',
     false,
-    'e0000000-0000-0000-0000-000000000021',
+    'e0000000-0000-0000-0000-000000000015',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000007',
-    '2025-12-06 10:45:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-06 10:52:05'
 ),
 (
     'f0000000-0000-0000-0000-000000000199',
-    'Học bổng vượt khó',
-    'Cần tăng giá trị học bổng cho sinh viên mồ côi, hộ nghèo.',
-    'NULL',
+    'Thang máy Tòa C liên tục gặp sự cố kỹ thuật và kẹt buồng cabin',
+    'Hệ thống thang máy số 2 tại Tòa nhà C dạo gần đây hoạt động không ổn định, thường phát ra âm thanh lớn khi di chuyển và đã có 2 lần bị kẹt cabin khiến sinh viên hoảng loạn. Để đảm bảo an toàn tính mạng cho người sử dụng, đề nghị bộ phận kỹ thuật tiến hành bảo trì, kiểm tra tổng thể ngay lập tức.',
+    'Tòa nhà C',
     'IN_PROGRESS',
+    false,
+    'e0000000-0000-0000-0000-000000000016',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-06 14:08:33'
+),
+(
+    'f0000000-0000-0000-0000-000000000401',
+    'Không khí ngột ngạt tại các phòng học Tòa E do thiếu máy điều hòa',
+    'Các phòng học lý thuyết tại dãy Tòa nhà E có diện tích khá lớn nhưng chỉ được trang bị quạt trần cũ kỹ, gió rất yếu. Với số lượng sinh viên tập trung đông hơn 60 người/lớp, không khí trong phòng cực kỳ nóng bức, ngột ngạt làm giảm khả năng tiếp thu và ảnh hưởng sức khỏe của cả thầy lẫn trò.',
+    'Tòa nhà E',
+    'REJECTED',
+    false,
+    'e0000000-0000-0000-0000-000000000017',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-06 17:35:11'
+),
+(
+    'f0000000-0000-0000-0000-000000000402',
+    'Tình trạng rác thải ùn ứ tại các thùng rác công cộng ngoài khuôn viên',
+    'Tôi nhận thấy các thùng rác lớn đặt dọc lối đi khuôn viên xanh đôi khi bị bỏ quên từ 2-3 ngày không thấy đơn vị vệ sinh đến thu gom. Rác thải sinh hoạt tràn ra ngoài, thu hút ruồi nhặng và bốc mùi khó chịu, làm mất đi mỹ quan chung của không gian sư phạm nhà trường.',
+    'Khuôn viên',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000020',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-07 08:33:14'
+),
+(
+    'f0000000-0000-0000-0000-000000000403',
+    'Đề xuất bố trí thêm ghế đá tại các khu vực râm mát ngoài sân trường',
+    'Nhu cầu ngồi nghỉ ngơi, trao đổi bài học nhóm của sinh viên vào giờ giải lao là rất lớn nhưng số lượng ghế đá hiện tại xung quanh sân trường còn hạn chế. Kính mong phòng Quản trị cơ sở vật chất cấp kinh phí mua sắm và bố trí thêm một số băng ghế đá tại các khu vực có bóng cây mát.',
+    'Khuôn viên',
+    'VIOLATED_CONTENT',
+    false,
+    'e0000000-0000-0000-0000-000000000021',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-07 11:51:47'
+),
+(
+    'f0000000-0000-0000-0000-000000000404',
+    'Cảnh báo hệ thống phòng cháy chữa cháy (PCCC) có nhiều bình hết hạn',
+    'Qua kiểm tra các tủ thiết bị an toàn dọc hành lang các tòa nhà, chúng em phát hiện rất nhiều bình chữa cháy dạng bột đã quá hạn kiểm định ghi trên tem, kim áp suất đều chỉ về vạch đỏ. Kính đề nghị phòng chức năng cho thu hồi, nạp sạc lại gas/bột để phòng hờ trường hợp khẩn cấp.',
+    'Các tòa nhà',
+    'AI_REVIEW_FAILED',
     false,
     'e0000000-0000-0000-0000-000000000022',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000005',
-    '2025-12-07 12:15:00'
+    'c0000000-0000-0000-0000-000000000006',
+    '2026-06-07 15:22:09'
 ),
 (
-    'f0000000-0000-0000-0000-000000000200',
-    'Ngày hội tư vấn tuyển sinh',
-    'Năm nay chưa tổ chức ngày hội tư vấn cho học sinh THPT.',
-    'NULL',
-    'PENDING',
+    'f0000000-0000-0000-0000-000000000405',
+    'Mặt sân bóng đá cỏ nhân tạo bị bong tróc sâu, tiềm ẩn nguy cơ chấn thương',
+    'Sân bóng đá mini thuộc khu tổ hợp thể thao trường hiện đã xuống cấp nghiêm trọng. Nhiều mảng cỏ nhân tạo bị trọc lóc trơ cả nền cát và đá dăm phía dưới, tạo thành các hố nhỏ lồi lõm khiến sinh viên rất dễ lật cổ chân hoặc trầy xước nặng khi tham gia hoạt động thể dục thể thao.',
+    'Sân thể thao',
+    'RESOLVED',
     false,
     'e0000000-0000-0000-0000-000000000030',
     'd0000000-0000-0000-0000-000000000010',
-    'c0000000-0000-0000-0000-000000000003',
-    '2025-12-07 15:50:00'
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-08 09:10:42'
+),
+(
+    'f0000000-0000-0000-0000-000000000406',
+    'Mái tôn bãi để xe máy bị dột nát nghiêm trọng khi có mưa lớn',
+    'Phần mái che bằng tôn tại bãi giữ xe máy số 2 đang bị rỉ sét và rách một mảng lớn. Mỗi khi trời mưa đổ xuống, nước chảy thành dòng trực tiếp xuống khu vực để xe khiến yên xe, đầu xe của sinh viên bị ướt sũng, gây hư hỏng tài sản cá nhân và chập điện xe.',
+    'Bãi xe',
+    'REJECTED',
+    false,
+    'e0000000-0000-0000-0000-000000000031',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-08 13:47:15'
+),
+(
+    'f0000000-0000-0000-0000-000000000407',
+    'Đề xuất sơn sửa, khắc phục mảng tường ẩm mốc loang lổ tại mặt tiền Tòa A',
+    'Mặt tiền phía trước của Tòa nhà A do chịu ảnh hưởng trực tiếp từ thời tiết nên lớp sơn tường bên ngoài đã bị bong tróc nặng, xuất hiện nhiều mảng ố vàng và rêu mốc đen kịt nhìn rất mất thẩm mỹ đối với một trường đại học. Cần có kế hoạch cạo rỉ và dặm lại lớp sơn mới.',
+    'Tòa nhà A',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000032',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-18 11:25:52'
+),
+(
+    'f0000000-0000-0000-0000-000000000408',
+    'Thắc mắc về tiến độ bàn giao và mở cửa đưa vào sử dụng công trình hồ bơi',
+    'Hồ bơi sinh viên của trường chúng ta theo thông tin đã hoàn thiện xây dựng phần thô từ lâu nhưng đến nay vẫn đóng cửa, khóa xích im lìm, nước bên trong bắt đầu chuyển sang màu xanh lục do tù đọng. Sinh viên rất muốn biết khi nào công trình này mới chính thức hoạt động phục vụ môn bơi lội.',
+    'Khu thể thao',
+    'AI_REVIEW_FAILED',
+    false,
+    'e0000000-0000-0000-0000-000000000033',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-20 15:35:14'
+),
+(
+    'f0000000-0000-0000-0000-000000000409',
+    'Bổ sung thùng phân loại rác tại khu vực sảnh căng tin ăn uống trung tâm',
+    'Tại khu vực căng tin của trường, lượng rác thải nhựa và thức ăn thừa phát sinh hàng ngày là cực kỳ khổng lồ. Tuy nhiên ở đây lại đang thiếu trầm trọng các thùng rác có vách ngăn phân loại. Đề nghị đặt thêm bộ ba thùng rác phân loại hữu cơ - vô cơ - rác tái chế tại lối ra vào.',
+    'Căng tin',
+    'VIOLATED_CONTENT',
+    false,
+    'e0000000-0000-0000-0000-000000000040',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-05-22 09:18:04'
+),
+(
+    'f0000000-0000-0000-0000-000000000410',
+    'Hệ thống đèn cao áp chiếu sáng ban đêm ngoài khuôn viên bị hỏng',
+    'Đoạn đường đi bộ nối liền giữa thư viện cũ và khu tự học vào buổi tối rất tăm tối do hai bóng đèn cao áp treo trên cột điện đã bị cháy từ tuần trước. Đoạn này có nhiều bụi rậm, việc thiếu ánh sáng làm dấy lên nỗi lo sợ về an ninh trật tự, trộm cắp hoặc tai nạn vấp ngã cho các bạn học đêm.',
+    'Khuôn viên',
+    'IN_PROGRESS',
+    false,
+    'e0000000-0000-0000-0000-000000000041',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000006',
+    '2026-05-24 14:55:27'
+),
+-- TẠO THÊM 10 FEEDBACKS MỚI (Từ ID 411 đến 420)
+(
+    'f0000000-0000-0000-0000-000000000411',
+    'Thủ tục mượn phòng học cho hoạt động CLB ngoại khóa còn rườm rà',
+    'Hiện tại, mỗi khi các Câu lạc bộ muốn mượn phòng học trống vào buổi tối để sinh hoạt kỹ năng thì quy trình ký giấy tờ bản cứng chạy qua chạy lại giữa các bên rất mất thời gian. Kính mong phòng Quản trị cơ sở vật chất số hóa quy trình này, cho phép đăng ký trực tuyến qua hệ thống portal.',
+    'Phòng A1.706',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000042',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-08 16:19:58'
+),
+(
+    'f0000000-0000-0000-0000-000000000412',
+    'Hệ thống micro tại giảng đường lớn X thường xuyên bị hú và mất tiếng',
+    'Khi tham gia các buổi hội thảo và học tập tập trung tại giảng đường lớn X, hệ thống âm thanh ở đây cực kỳ tệ. Micro không dây thường xuyên bị mất tín hiệu kết nối hoặc phát ra tiếng hú rít chói tai, gây gián đoạn lớn đến quá trình lắng nghe thông tin của hàng trăm sinh viên ngồi phía dưới.',
+    'Giảng đường X',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-09 10:25:31'
+),
+(
+    'f0000000-0000-0000-0000-000000000413',
+    'Cửa kính của phòng học lý thuyết Tòa B bị nứt vỡ nguy hiểm',
+    'Em xin báo cáo tình trạng ô cửa kính phía sau của phòng học B402 đang bị một vết nứt rất lớn kéo dài, có thể đổ sập xuống bất cứ lúc nào nếu gặp gió to hoặc có bạn nào vô tình va chạm phải. Kính mong đội ngũ sửa chữa cơ sở vật chất xuống thay thế tấm kính mới để đảm bảo an toàn.',
+    'Tòa nhà B',
+    'AI_REVIEW_FAILED',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-09 14:56:04'
+),
+(
+    'f0000000-0000-0000-0000-000000000414',
+    'Bàn ghế học viên bị gãy tựa lưng và rỉ sắt gây rách trang phục',
+    'Tại dãy phòng học lý thuyết khu C, cụ thể là phòng C105, có khoảng 4-5 bộ bàn ghế liền kề đã bị hỏng mất phần ốp gỗ tựa lưng, để lộ ra các thanh sắt nhọn hoắt bị rỉ sét. Một số bạn sinh viên khi ngồi đã vô tình bị quẹt trúng làm rách quần áo và trầy xước nhẹ da thịt.',
+    'Tòa nhà C',
+    'VIOLATED_CONTENT',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-09 17:43:50'
+),
+(
+    'f0000000-0000-0000-0000-000000000415',
+    'Áp lực nước tại vòi rửa tay nhà vệ sinh khu trung tâm quá yếu',
+    'Hệ thống vòi nước cảm ứng tại khu vệ sinh chung tầng trệt tòa nhà trung tâm chảy cực kỳ yếu, thậm chí có vòi chỉ nhỏ giọt. Việc này khiến sinh viên mất rất nhiều thời gian xếp hàng chỉ để rửa tay sau khi đi vệ sinh, gây ùn ứ cục bộ. Đề nghị tăng áp lực bơm nước lên.',
+    'Tòa nhà Trung tâm',
+    'IN_PROGRESS',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-10 08:45:12'
+),
+(
+    'f0000000-0000-0000-0000-000000000416',
+    'Máy chiếu phòng học bị mờ nhòe và sai lệch màu sắc nghiêm trọng',
+    'Thiết bị máy chiếu tại phòng học A204 hiện đã quá tuổi thọ, hình ảnh phát ra bị mờ căm và chuyển hẳn sang tông màu vàng xám, rất khó để đọc được các dòng chữ trên slide bài giảng của thầy cô dù đã kéo hết rèm cửa che nắng. Mong phòng kiểm tra đổi bóng đèn hình mới.',
+    'Tòa nhà A',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-10 11:03:29'
+),
+(
+    'f0000000-0000-0000-0000-000000000417',
+    'Tình trạng ngập úng cục bộ tại khu vực lối vào hầm giữ xe khi mưa lớn',
+    'Hệ thống cống thoát nước ngay trước dốc rẽ xuống hầm gửi xe tòa nhà trung tâm đang bị nghẹt do lá cây và rác lấp đầy. Cứ hễ có mưa lớn dồn dập khoảng 15 phút là nước dâng lên ngập quá nửa bánh xe, khiến xe máy của sinh viên dễ bị tắt máy và gây nguy cơ trơn trượt ngã xe.',
+    'Bãi xe hầm',
+    'RESOLVED',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-10 15:18:55'
+),
+(
+    'f0000000-0000-0000-0000-000000000418',
+    'Phản ánh rèm cửa che nắng tại các phòng học hướng Tây bị rách nát',
+    'Các phòng học dãy số lẻ của Tòa nhà E nằm ở hướng Tây đón nắng chiều vô cùng gay gắt. Thế nhưng hệ thống rèm vải che nắng ở các ô cửa sổ đều đã rách bươm hoặc rớt thanh treo. Nắng chiếu thẳng vào bàn học làm chói mắt, khiến sinh viên không thể quan sát được bảng viết.',
+    'Tòa nhà E',
+    'VIOLATED_CONTENT',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-11 09:35:06'
+),
+(
+    'f0000000-0000-0000-0000-000000000419',
+    'Kiến nghị bảo trì hệ thống quạt hút thông gió tại khu vực xưởng thực hành',
+    'Không gian bên trong khu xưởng thực hành cơ khí động lực tích tụ rất nhiều khí thải độc hại, mùi dầu nhớt và khói hàn trong quá trình làm việc. Tuy nhiên, hệ thống quạt hút thông gió gắn trên tường hoạt động lờ đờ và không đủ công suất giải nhiệt, không khí ngột ngạt dễ ngất xỉu.',
+    'Khu xưởng thực hành',
+    'IN_PROGRESS',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000006',
+    '2026-06-11 13:21:44'
+),
+(
+    'f0000000-0000-0000-0000-000000000420',
+    'Sàn hành lang lớp học trơn trượt nguy hiểm do nước đọng từ máy lạnh rò rỉ',
+    'Cục nóng và đường ống thoát nước thải của hệ thống điều hòa lắp dọc hành lang tầng 2 tòa nhà B đang gặp sự cố rò rỉ nước, xả trực tiếp ra lối đi chung. Nước đọng lâu ngày tạo thành rêu xanh trơn trượt, đã có trường hợp sinh viên đi lại nhanh bị trượt ngã va đập mạnh.',
+    'Tòa nhà B',
+    'REJECTED',
+    false,
+    'e0000000-0000-0000-0000-000000000043',
+    'd0000000-0000-0000-0000-000000000010',
+    'c0000000-0000-0000-0000-000000000001',
+    '2026-06-11 16:59:12'
 );
 
 INSERT INTO
@@ -5913,7 +6324,7 @@ VALUES
     (
         '30000000-0000-0000-0000-000000000003',
         'f0000000-0000-0000-0000-000000000036',
-        '2025-12-03 09:30:00'
+        '2026-04-07 10:11:05'
     ),
     (
         '30000000-0000-0000-0000-000000000004',
@@ -5945,12 +6356,12 @@ VALUES
 (
     '30000000-0000-0000-0000-000000000009',
     'f0000000-0000-0000-0000-000000000069',
-    '2025-12-06 09:50:00'
+    '2026-03-15 14:30:00'
 ),
 (
     '30000000-0000-0000-0000-000000000010',
     'f0000000-0000-0000-0000-000000000070',
-    '2025-12-07 14:00:00'
+    '2026-04-14 08:42:33'
 ),
 
 -- Department 003 – Phòng Khoa học & Công nghệ (3 cái)
@@ -5972,12 +6383,12 @@ VALUES
 (
     '30000000-0000-0000-0000-000000000014',
     'f0000000-0000-0000-0000-000000000099',
-    '2025-12-05 15:50:00'
+    '2026-05-16 15:45:12'
 ),
 (
     '30000000-0000-0000-0000-000000000015',
     'f0000000-0000-0000-0000-000000000100',
-    '2025-12-07 09:30:00'
+    '2026-05-22 14:10:05'
 );
 
 -- =================================================================
@@ -5993,806 +6404,811 @@ INSERT INTO
         "note",
         "createdAt"
     )
-VALUES (
-        '10000000-0000-0000-0000-000000000001',
-        'f0000000-0000-0000-0000-000000000201',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-02 16:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000002',
-        'f0000000-0000-0000-0000-000000000202',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-03 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000003',
-        'f0000000-0000-0000-0000-000000000203',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-01-05 18:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000004',
-        'f0000000-0000-0000-0000-000000000204',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-07 20:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000005',
-        'f0000000-0000-0000-0000-000000000205',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-08 23:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000006',
-        'f0000000-0000-0000-0000-000000000206',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-10 17:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000007',
-        'f0000000-0000-0000-0000-000000000207',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-01-12 21:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000008',
-        'f0000000-0000-0000-0000-000000000208',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-14 19:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000009',
-        'f0000000-0000-0000-0000-000000000209',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-15 22:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000010',
-        'f0000000-0000-0000-0000-000000000210',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-01-17 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000011',
-        'f0000000-0000-0000-0000-000000000211',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-18 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000012',
-        'f0000000-0000-0000-0000-000000000212',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-20 17:35:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000013',
-        'f0000000-0000-0000-0000-000000000213',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-22 21:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000014',
-        'f0000000-0000-0000-0000-000000000214',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-01-24 18:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000015',
-        'f0000000-0000-0000-0000-000000000215',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-25 22:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000016',
-        'f0000000-0000-0000-0000-000000000216',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-27 16:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000017',
-        'f0000000-0000-0000-0000-000000000217',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-28 23:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000018',
-        'f0000000-0000-0000-0000-000000000218',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-01-29 19:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000019',
-        'f0000000-0000-0000-0000-000000000219',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-30 23:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000020',
-        'f0000000-0000-0000-0000-000000000220',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-01-31 18:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000021',
-        'f0000000-0000-0000-0000-000000000221',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-01 17:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000022',
-        'f0000000-0000-0000-0000-000000000222',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-02-03 21:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000023',
-        'f0000000-0000-0000-0000-000000000223',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-05 18:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000024',
-        'f0000000-0000-0000-0000-000000000224',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-07 22:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000025',
-        'f0000000-0000-0000-0000-000000000225',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-02-08 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000026',
-        'f0000000-0000-0000-0000-000000000226',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-10 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000027',
-        'f0000000-0000-0000-0000-000000000227',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-12 17:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000028',
-        'f0000000-0000-0000-0000-000000000228',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-02-14 21:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000029',
-        'f0000000-0000-0000-0000-000000000229',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-15 18:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000030',
-        'f0000000-0000-0000-0000-000000000230',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-17 23:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000031',
-        'f0000000-0000-0000-0000-000000000231',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-02-18 19:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000032',
-        'f0000000-0000-0000-0000-000000000232',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000033',
-        'f0000000-0000-0000-0000-000000000233',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-20 17:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000034',
-        'f0000000-0000-0000-0000-000000000234',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-21 22:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000035',
-        'f0000000-0000-0000-0000-000000000235',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-02-22 18:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000036',
-        'f0000000-0000-0000-0000-000000000236',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000037',
-        'f0000000-0000-0000-0000-000000000237',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-25 19:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000038',
-        'f0000000-0000-0000-0000-000000000238',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-02-26 23:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000039',
-        'f0000000-0000-0000-0000-000000000239',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-27 17:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000040',
-        'f0000000-0000-0000-0000-000000000240',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-02-28 21:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000041',
-        'f0000000-0000-0000-0000-000000000241',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-01 18:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000042',
-        'f0000000-0000-0000-0000-000000000242',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-03-03 22:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000043',
-        'f0000000-0000-0000-0000-000000000243',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-05 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000044',
-        'f0000000-0000-0000-0000-000000000244',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-07 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000045',
-        'f0000000-0000-0000-0000-000000000245',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-08 17:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000046',
-        'f0000000-0000-0000-0000-000000000246',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-03-10 21:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000047',
-        'f0000000-0000-0000-0000-000000000247',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-12 18:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000048',
-        'f0000000-0000-0000-0000-000000000248',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-14 22:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000049',
-        'f0000000-0000-0000-0000-000000000249',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-15 19:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000050',
-        'f0000000-0000-0000-0000-000000000250',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-03-17 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000051',
-        'f0000000-0000-0000-0000-000000000251',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-18 17:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000052',
-        'f0000000-0000-0000-0000-000000000252',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-19 22:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000053',
-        'f0000000-0000-0000-0000-000000000253',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-20 18:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000054',
-        'f0000000-0000-0000-0000-000000000254',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-03-21 22:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000055',
-        'f0000000-0000-0000-0000-000000000255',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-22 17:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000056',
-        'f0000000-0000-0000-0000-000000000256',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000057',
-        'f0000000-0000-0000-0000-000000000257',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-25 17:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000058',
-        'f0000000-0000-0000-0000-000000000258',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-03-26 23:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000059',
-        'f0000000-0000-0000-0000-000000000259',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-27 18:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000060',
-        'f0000000-0000-0000-0000-000000000260',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-03-28 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000061',
-        'f0000000-0000-0000-0000-000000000262',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-01 16:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000062',
-        'f0000000-0000-0000-0000-000000000263',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-04-03 21:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000063',
-        'f0000000-0000-0000-0000-000000000264',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-05 18:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000064',
-        'f0000000-0000-0000-0000-000000000265',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-07 22:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000065',
-        'f0000000-0000-0000-0000-000000000266',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-08 19:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000066',
-        'f0000000-0000-0000-0000-000000000267',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-04-10 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000067',
-        'f0000000-0000-0000-0000-000000000268',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-12 17:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000068',
-        'f0000000-0000-0000-0000-000000000269',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-14 21:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000069',
-        'f0000000-0000-0000-0000-000000000270',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-15 18:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000070',
-        'f0000000-0000-0000-0000-000000000271',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-04-17 23:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000071',
-        'f0000000-0000-0000-0000-000000000272',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-18 19:35:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000072',
-        'f0000000-0000-0000-0000-000000000273',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000073',
-        'f0000000-0000-0000-0000-000000000274',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-20 17:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000074',
-        'f0000000-0000-0000-0000-000000000275',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-04-21 22:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000075',
-        'f0000000-0000-0000-0000-000000000276',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-22 18:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000076',
-        'f0000000-0000-0000-0000-000000000277',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000077',
-        'f0000000-0000-0000-0000-000000000278',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-25 19:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000078',
-        'f0000000-0000-0000-0000-000000000279',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-04-26 23:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000079',
-        'f0000000-0000-0000-0000-000000000280',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-04-27 17:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000080',
-        'f0000000-0000-0000-0000-000000000281',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-01 16:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000081',
-        'f0000000-0000-0000-0000-000000000282',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-05-03 21:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000082',
-        'f0000000-0000-0000-0000-000000000283',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-05 18:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000083',
-        'f0000000-0000-0000-0000-000000000284',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-07 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000084',
-        'f0000000-0000-0000-0000-000000000285',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-08 19:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000085',
-        'f0000000-0000-0000-0000-000000000286',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-05-10 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000086',
-        'f0000000-0000-0000-0000-000000000287',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-12 17:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000087',
-        'f0000000-0000-0000-0000-000000000288',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-14 22:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000088',
-        'f0000000-0000-0000-0000-000000000289',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-15 18:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000089',
-        'f0000000-0000-0000-0000-000000000290',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-05-17 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000090',
-        'f0000000-0000-0000-0000-000000000291',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-18 19:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000091',
-        'f0000000-0000-0000-0000-000000000292',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000092',
-        'f0000000-0000-0000-0000-000000000293',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-20 17:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000093',
-        'f0000000-0000-0000-0000-000000000294',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-05-21 23:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000094',
-        'f0000000-0000-0000-0000-000000000295',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-22 18:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000095',
-        'f0000000-0000-0000-0000-000000000296',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000096',
-        'f0000000-0000-0000-0000-000000000297',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-25 19:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000097',
-        'f0000000-0000-0000-0000-000000000298',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-05-26 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000098',
-        'f0000000-0000-0000-0000-000000000299',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-05-27 17:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000099',
-        'f0000000-0000-0000-0000-000000000300',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-06-01 17:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000100',
-        'f0000000-0000-0000-0000-000000000301',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-06-03 21:45:00'
-    ),
+VALUES 
+-- Feedback 1: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-27 13:45:00'),
+    ('20000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-03-27 13:47:00'),
+    ('30000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-03-27 13:50:00'),
+    ('40000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-03-27 16:15:00'),
+
+    -- Feedback 2: AI_REVIEW_FAILED (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000002', 'f0000000-0000-0000-0000-000000000002', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-01 10:42:15'),
+    ('20000000-0000-0000-0000-000000000002', 'f0000000-0000-0000-0000-000000000002', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để kiểm tra thủ công.', NULL, '2026-04-01 10:44:15'),
+
+    -- Feedback 3: VIOLATED_CONTENT (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000003', 'f0000000-0000-0000-0000-000000000003', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-01 14:18:32'),
+    ('20000000-0000-0000-0000-000000000003', 'f0000000-0000-0000-0000-000000000003', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ xử lý.', NULL, '2026-04-01 14:20:32'),
+
+    -- Feedback 4: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000004', 'f0000000-0000-0000-0000-000000000004', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-01 16:55:04'),
+    ('20000000-0000-0000-0000-000000000004', 'f0000000-0000-0000-0000-000000000004', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-01 16:57:04'),
+    ('30000000-0000-0000-0000-000000000004', 'f0000000-0000-0000-0000-000000000004', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-01 17:00:04'),
+    ('40000000-0000-0000-0000-000000000004', 'f0000000-0000-0000-0000-000000000004', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-02 00:05:04'),
+
+    -- Feedback 5: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000005', 'f0000000-0000-0000-0000-000000000005', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-09 13:05:00'),
+    ('20000000-0000-0000-0000-000000000005', 'f0000000-0000-0000-0000-000000000005', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-09 13:07:00'),
+    ('30000000-0000-0000-0000-000000000005', 'f0000000-0000-0000-0000-000000000005', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-09 13:10:00'),
+    ('40000000-0000-0000-0000-000000000005', 'f0000000-0000-0000-0000-000000000005', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.', NULL, '2026-05-09 14:55:00'),
+
+    -- Feedback 6: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000006', 'f0000000-0000-0000-0000-000000000006', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-02 08:22:41'),
+    ('20000000-0000-0000-0000-000000000006', 'f0000000-0000-0000-0000-000000000006', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-02 08:24:41'),
+    ('30000000-0000-0000-0000-000000000006', 'f0000000-0000-0000-0000-000000000006', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-02 08:27:41'),
+    ('40000000-0000-0000-0000-000000000006', 'f0000000-0000-0000-0000-000000000006', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-02 11:37:41'),
+
+    -- Feedback 7: VIOLATED_CONTENT (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000007', 'f0000000-0000-0000-0000-000000000007', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-14 11:50:00'),
+    ('20000000-0000-0000-0000-000000000007', 'f0000000-0000-0000-0000-000000000007', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ xử lý.', NULL, '2026-03-14 11:52:00'),
+
+    -- Feedback 8: AI_REVIEW_FAILED (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000008', 'f0000000-0000-0000-0000-000000000008', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-02 11:05:19'),
+    ('20000000-0000-0000-0000-000000000008', 'f0000000-0000-0000-0000-000000000008', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để kiểm tra thủ công.', NULL, '2026-04-02 11:07:19'),
+
+    -- Feedback 9: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000009', 'f0000000-0000-0000-0000-000000000009', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-02-10 14:10:00'),
+    ('20000000-0000-0000-0000-000000000009', 'f0000000-0000-0000-0000-000000000009', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-02-10 14:12:00'),
+    ('30000000-0000-0000-0000-000000000009', 'f0000000-0000-0000-0000-000000000009', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-02-10 14:15:00'),
+    ('40000000-0000-0000-0000-000000000009', 'f0000000-0000-0000-0000-000000000009', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-02-10 17:30:00'),
+
+    -- Feedback 10: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000010', 'f0000000-0000-0000-0000-000000000010', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-04 16:05:00'),
+    ('20000000-0000-0000-0000-000000000010', 'f0000000-0000-0000-0000-000000000010', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-04 16:07:00'),
+    ('30000000-0000-0000-0000-000000000010', 'f0000000-0000-0000-0000-000000000010', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-04 16:10:00'),
+    ('40000000-0000-0000-0000-000000000010', 'f0000000-0000-0000-0000-000000000010', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.', NULL, '2026-05-04 18:20:00'),
+
+    -- Feedback 11: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000011', 'f0000000-0000-0000-0000-000000000011', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-02 15:34:02'),
+    ('20000000-0000-0000-0000-000000000011', 'f0000000-0000-0000-0000-000000000011', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-02 15:36:02'),
+    ('30000000-0000-0000-0000-000000000011', 'f0000000-0000-0000-0000-000000000011', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-02 15:39:02'),
+    ('40000000-0000-0000-0000-000000000011', 'f0000000-0000-0000-0000-000000000011', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-02 18:34:02'),
+
+    -- Feedback 12: AI_REVIEW_FAILED (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000012', 'f0000000-0000-0000-0000-000000000012', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-03 09:12:48'),
+    ('20000000-0000-0000-0000-000000000012', 'f0000000-0000-0000-0000-000000000012', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để kiểm tra thủ công.', NULL, '2026-04-03 09:14:48'),
+
+    -- Feedback 13: VIOLATED_CONTENT (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000013', 'f0000000-0000-0000-0000-000000000013', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-20 14:45:00'),
+    ('20000000-0000-0000-0000-000000000013', 'f0000000-0000-0000-0000-000000000013', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ xử lý.', NULL, '2026-03-20 14:47:00'),
+
+    -- Feedback 14: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000014', 'f0000000-0000-0000-0000-000000000014', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-03 13:50:21'),
+    ('20000000-0000-0000-0000-000000000014', 'f0000000-0000-0000-0000-000000000014', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-03 13:52:21'),
+    ('30000000-0000-0000-0000-000000000014', 'f0000000-0000-0000-0000-000000000014', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-03 13:55:21'),
+    ('40000000-0000-0000-0000-000000000014', 'f0000000-0000-0000-0000-000000000014', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-03 20:00:21'),
+
+    -- Feedback 15: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000015', 'f0000000-0000-0000-0000-000000000015', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-04 09:30:00'),
+    ('20000000-0000-0000-0000-000000000015', 'f0000000-0000-0000-0000-000000000015', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-04 09:32:00'),
+    ('30000000-0000-0000-0000-000000000015', 'f0000000-0000-0000-0000-000000000015', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-04 09:35:00'),
+    ('40000000-0000-0000-0000-000000000015', 'f0000000-0000-0000-0000-000000000015', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.', NULL, '2026-06-04 11:40:00'),
+
+    -- Feedback 16: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000016', 'f0000000-0000-0000-0000-000000000016', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-03 17:08:44'),
+    ('20000000-0000-0000-0000-000000000016', 'f0000000-0000-0000-0000-000000000016', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-03 17:10:44'),
+    ('30000000-0000-0000-0000-000000000016', 'f0000000-0000-0000-0000-000000000016', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-03 17:13:44'),
+    ('40000000-0000-0000-0000-000000000016', 'f0000000-0000-0000-0000-000000000016', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-03 20:23:44'),
+
+    -- Feedback 17: VIOLATED_CONTENT (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000017', 'f0000000-0000-0000-0000-000000000017', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-04 16:05:00'),
+    ('20000000-0000-0000-0000-000000000017', 'f0000000-0000-0000-0000-000000000017', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ xử lý.', NULL, '2026-05-04 16:07:00'),
+
+    -- Feedback 18: AI_REVIEW_FAILED (Dừng lại, không có PENDING)
+    ('10000000-0000-0000-0000-000000000018', 'f0000000-0000-0000-0000-000000000018', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-04 10:25:33'),
+    ('20000000-0000-0000-0000-000000000018', 'f0000000-0000-0000-0000-000000000018', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để kiểm tra thủ công.', NULL, '2026-04-04 10:27:33'),
+
+    -- Feedback 19: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000019', 'f0000000-0000-0000-0000-000000000019', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-02-02 10:25:00'),
+    ('20000000-0000-0000-0000-000000000019', 'f0000000-0000-0000-0000-000000000019', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-02-02 10:27:00'),
+    ('30000000-0000-0000-0000-000000000019', 'f0000000-0000-0000-0000-000000000019', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-02-02 10:30:00'),
+    ('40000000-0000-0000-0000-000000000019', 'f0000000-0000-0000-0000-000000000019', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-02-02 13:10:00'),
+
+    -- Feedback 20: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000020', 'f0000000-0000-0000-0000-000000000020', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-04 14:44:12'),
+    ('20000000-0000-0000-0000-000000000020', 'f0000000-0000-0000-0000-000000000020', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-04 14:46:12'),
+    ('30000000-0000-0000-0000-000000000020', 'f0000000-0000-0000-0000-000000000020', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-04 14:49:12'),
+    ('40000000-0000-0000-0000-000000000020', 'f0000000-0000-0000-0000-000000000020', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.', NULL, '2026-04-04 16:44:12'),
+    -- Feedback 21: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000021', 'f0000000-0000-0000-0000-000000000021', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-12 15:15:00'),
+    ('20000000-0000-0000-0000-000000000021', 'f0000000-0000-0000-0000-000000000021', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-12 15:17:00'),
+    ('30000000-0000-0000-0000-000000000021', 'f0000000-0000-0000-0000-000000000021', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-12 15:20:00'),
+    ('40000000-0000-0000-0000-000000000021', 'f0000000-0000-0000-0000-000000000021', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-06-12 17:35:00'),
+
+    -- Feedback 22: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000022', 'f0000000-0000-0000-0000-000000000022', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-04 16:19:50'),
+    ('20000000-0000-0000-0000-000000000022', 'f0000000-0000-0000-0000-000000000022', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để xử lý thủ công.', NULL, '2026-04-04 16:21:50'),
+
+    -- Feedback 23: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000023', 'f0000000-0000-0000-0000-000000000023', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-02-15 09:55:00'),
+    ('20000000-0000-0000-0000-000000000023', 'f0000000-0000-0000-0000-000000000023', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ duyệt.', NULL, '2026-02-15 09:57:00'),
+
+    -- Feedback 24: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000024', 'f0000000-0000-0000-0000-000000000024', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-05 08:51:07'),
+    ('20000000-0000-0000-0000-000000000024', 'f0000000-0000-0000-0000-000000000024', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-05 08:53:07'),
+    ('30000000-0000-0000-0000-000000000024', 'f0000000-0000-0000-0000-000000000024', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-05 08:56:07'),
+    ('40000000-0000-0000-0000-000000000024', 'f0000000-0000-0000-0000-000000000024', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-05 10:41:07'),
+
+    -- Feedback 25: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000025', 'f0000000-0000-0000-0000-000000000025', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-08 13:10:00'),
+    ('20000000-0000-0000-0000-000000000025', 'f0000000-0000-0000-0000-000000000025', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-08 13:12:00'),
+    ('30000000-0000-0000-0000-000000000025', 'f0000000-0000-0000-0000-000000000025', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-08 13:15:00'),
+    ('40000000-0000-0000-0000-000000000025', 'f0000000-0000-0000-0000-000000000025', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-06-08 17:00:00'),
+
+    -- Feedback 26: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000026', 'f0000000-0000-0000-0000-000000000026', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-05 11:36:29'),
+    ('20000000-0000-0000-0000-000000000026', 'f0000000-0000-0000-0000-000000000026', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-05 11:38:29'),
+    ('30000000-0000-0000-0000-000000000026', 'f0000000-0000-0000-0000-000000000026', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-05 11:41:29'),
+    ('40000000-0000-0000-0000-000000000026', 'f0000000-0000-0000-0000-000000000026', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-05 14:06:29'),
+
+    -- Feedback 27: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000027', 'f0000000-0000-0000-0000-000000000027', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-05 11:15:00'),
+    ('20000000-0000-0000-0000-000000000027', 'f0000000-0000-0000-0000-000000000027', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để xử lý thủ công.', NULL, '2026-03-05 11:17:00'),
+
+    -- Feedback 28: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000028', 'f0000000-0000-0000-0000-000000000028', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-05 15:02:54'),
+    ('20000000-0000-0000-0000-000000000028', 'f0000000-0000-0000-0000-000000000028', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ duyệt.', NULL, '2026-04-05 15:04:54'),
+
+    -- Feedback 29: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000029', 'f0000000-0000-0000-0000-000000000029', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-02-20 14:50:00'),
+    ('20000000-0000-0000-0000-000000000029', 'f0000000-0000-0000-0000-000000000029', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-02-20 14:52:00'),
+    ('30000000-0000-0000-0000-000000000029', 'f0000000-0000-0000-0000-000000000029', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-02-20 14:55:00'),
+    ('40000000-0000-0000-0000-000000000029', 'f0000000-0000-0000-0000-000000000029', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-02-20 16:20:00'),
+
+    -- Feedback 30: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000030', 'f0000000-0000-0000-0000-000000000030', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-06 09:40:11'),
+    ('20000000-0000-0000-0000-000000000030', 'f0000000-0000-0000-0000-000000000030', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-06 09:42:11'),
+    ('30000000-0000-0000-0000-000000000030', 'f0000000-0000-0000-0000-000000000030', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-06 09:45:11'),
+    ('40000000-0000-0000-0000-000000000030', 'f0000000-0000-0000-0000-000000000030', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-06 13:00:11'),
+
+    -- Feedback 31: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000031', 'f0000000-0000-0000-0000-000000000031', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-14 16:05:00'),
+    ('20000000-0000-0000-0000-000000000031', 'f0000000-0000-0000-0000-000000000031', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-14 16:07:00'),
+    ('30000000-0000-0000-0000-000000000031', 'f0000000-0000-0000-0000-000000000031', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-14 16:10:00'),
+    ('40000000-0000-0000-0000-000000000031', 'f0000000-0000-0000-0000-000000000031', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-14 18:45:00'),
+
+    -- Feedback 32: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000032', 'f0000000-0000-0000-0000-000000000032', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-06 13:21:45'),
+    ('20000000-0000-0000-0000-000000000032', 'f0000000-0000-0000-0000-000000000032', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để xử lý thủ công.', NULL, '2026-04-06 13:23:45'),
+
+    -- Feedback 33: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000033', 'f0000000-0000-0000-0000-000000000033', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 13:25:00'),
+    ('20000000-0000-0000-0000-000000000033', 'f0000000-0000-0000-0000-000000000033', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ duyệt.', NULL, '2026-06-11 13:27:00'),
+
+    -- Feedback 34: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000034', 'f0000000-0000-0000-0000-000000000034', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-06 16:58:30'),
+    ('20000000-0000-0000-0000-000000000034', 'f0000000-0000-0000-0000-000000000034', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-06 17:00:30'),
+    ('30000000-0000-0000-0000-000000000034', 'f0000000-0000-0000-0000-000000000034', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-06 17:03:30'),
+    ('40000000-0000-0000-0000-000000000034', 'f0000000-0000-0000-0000-000000000034', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.', NULL, '2026-04-06 22:38:30'),
+
+    -- Feedback 35: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000035', 'f0000000-0000-0000-0000-000000000035', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-05 13:10:00'),
+    ('20000000-0000-0000-0000-000000000035', 'f0000000-0000-0000-0000-000000000035', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-05 13:12:00'),
+    ('30000000-0000-0000-0000-000000000035', 'f0000000-0000-0000-0000-000000000035', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-05 13:15:00'),
+    ('40000000-0000-0000-0000-000000000035', 'f0000000-0000-0000-0000-000000000035', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.', NULL, '2026-05-05 15:00:00'),
+
+    -- Feedback 36: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000036', 'f0000000-0000-0000-0000-000000000036', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-07 10:11:05'),
+    ('20000000-0000-0000-0000-000000000036', 'f0000000-0000-0000-0000-000000000036', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-07 10:13:05'),
+    ('30000000-0000-0000-0000-000000000036', 'f0000000-0000-0000-0000-000000000036', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-07 10:16:05'),
+    ('40000000-0000-0000-0000-000000000036', 'f0000000-0000-0000-0000-000000000036', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-07 12:51:05'),
+
+    -- Feedback 37: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000037', 'f0000000-0000-0000-0000-000000000037', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-28 16:10:00'),
+    ('20000000-0000-0000-0000-000000000037', 'f0000000-0000-0000-0000-000000000037', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm hoặc vi phạm tiêu chuẩn, khóa tiến trình chờ duyệt.', NULL, '2026-05-28 16:12:00'),
+    
+
+    -- Feedback 38: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000038', 'f0000000-0000-0000-0000-000000000038', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-07 14:52:18'),
+    ('20000000-0000-0000-0000-000000000038', 'f0000000-0000-0000-0000-000000000038', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, tạm dừng tiến trình để xử lý thủ công.', NULL, '2026-04-07 14:54:18'),
+
+    -- Feedback 39: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000039', 'f0000000-0000-0000-0000-000000000039', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-21 16:25:00'),
+    ('20000000-0000-0000-0000-000000000039', 'f0000000-0000-0000-0000-000000000039', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-21 16:27:00'),
+    ('30000000-0000-0000-0000-000000000039', 'f0000000-0000-0000-0000-000000000039', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-21 16:30:00'),
+    ('40000000-0000-0000-0000-000000000039', 'f0000000-0000-0000-0000-000000000039', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-21 18:55:00'),
+
+    -- Feedback 40: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000040', 'f0000000-0000-0000-0000-000000000040', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-07 17:24:41'),
+    ('20000000-0000-0000-0000-000000000040', 'f0000000-0000-0000-0000-000000000040', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-07 17:26:41'),
+    ('30000000-0000-0000-0000-000000000040', 'f0000000-0000-0000-0000-000000000040', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-07 17:29:41'),
+    ('40000000-0000-0000-0000-000000000040', 'f0000000-0000-0000-0000-000000000040', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.', NULL, '2026-04-07 19:04:41'),
+
+    -- Feedback 41: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000041', 'f0000000-0000-0000-0000-000000000041', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-08 08:33:14'),
+    ('20000000-0000-0000-0000-000000000041', 'f0000000-0000-0000-0000-000000000041', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-08 08:35:14'),
+    ('30000000-0000-0000-0000-000000000041', 'f0000000-0000-0000-0000-000000000041', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-08 08:38:14'),
+    ('40000000-0000-0000-0000-000000000041', 'f0000000-0000-0000-0000-000000000041', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-08 10:48:14'),
+
+    -- Feedback 42: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000042', 'f0000000-0000-0000-0000-000000000042', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-02 09:10:00'),
+    ('20000000-0000-0000-0000-000000000042', 'f0000000-0000-0000-0000-000000000042', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-04-02 09:12:00'),
+
+    -- Feedback 43: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000043', 'f0000000-0000-0000-0000-000000000043', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-08 11:47:52'),
+    ('20000000-0000-0000-0000-000000000043', 'f0000000-0000-0000-0000-000000000043', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-04-08 11:49:52'),
+
+    -- Feedback 44: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000044', 'f0000000-0000-0000-0000-000000000044', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-08 15:16:09'),
+    ('20000000-0000-0000-0000-000000000044', 'f0000000-0000-0000-0000-000000000044', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-08 15:18:09'),
+    ('30000000-0000-0000-0000-000000000044', 'f0000000-0000-0000-0000-000000000044', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-08 15:21:09'),
+    ('40000000-0000-0000-0000-000000000044', 'f0000000-0000-0000-0000-000000000044', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-08 16:46:09'),
+
+    -- Feedback 45: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000045', 'f0000000-0000-0000-0000-000000000045', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-04 16:05:00'),
+    ('20000000-0000-0000-0000-000000000045', 'f0000000-0000-0000-0000-000000000045', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-04 16:07:00'),
+    ('30000000-0000-0000-0000-000000000045', 'f0000000-0000-0000-0000-000000000045', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-04 16:10:00'),
+    ('40000000-0000-0000-0000-000000000045', 'f0000000-0000-0000-0000-000000000045', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-05-04 18:50:00'),
+
+    -- Feedback 46: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000046', 'f0000000-0000-0000-0000-000000000046', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-09 09:29:36'),
+    ('20000000-0000-0000-0000-000000000046', 'f0000000-0000-0000-0000-000000000046', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-09 09:31:36'),
+    ('30000000-0000-0000-0000-000000000046', 'f0000000-0000-0000-0000-000000000046', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-09 09:34:36'),
+    ('40000000-0000-0000-0000-000000000046', 'f0000000-0000-0000-0000-000000000046', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-09 11:44:36'),
+
+    -- Feedback 47: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000047', 'f0000000-0000-0000-0000-000000000047', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-09 13:08:22'),
+    ('20000000-0000-0000-0000-000000000047', 'f0000000-0000-0000-0000-000000000047', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-04-09 13:10:22'),
+
+    -- Feedback 48: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000048', 'f0000000-0000-0000-0000-000000000048', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-29 15:40:00'),
+    ('20000000-0000-0000-0000-000000000048', 'f0000000-0000-0000-0000-000000000048', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-03-29 15:42:00'),
+
+    -- Feedback 49: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000049', 'f0000000-0000-0000-0000-000000000049', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-09 16:41:55'),
+    ('20000000-0000-0000-0000-000000000049', 'f0000000-0000-0000-0000-000000000049', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-09 16:43:55'),
+    ('30000000-0000-0000-0000-000000000049', 'f0000000-0000-0000-0000-000000000049', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-09 16:46:55'),
+    ('40000000-0000-0000-0000-000000000049', 'f0000000-0000-0000-0000-000000000049', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-09 18:31:55'),
+
+    -- Feedback 50: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000050', 'f0000000-0000-0000-0000-000000000050', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-25 13:40:00'),
+    ('20000000-0000-0000-0000-000000000050', 'f0000000-0000-0000-0000-000000000050', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-25 13:42:00'),
+    ('30000000-0000-0000-0000-000000000050', 'f0000000-0000-0000-0000-000000000050', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-25 13:45:00'),
+    ('40000000-0000-0000-0000-000000000050', 'f0000000-0000-0000-0000-000000000050', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-05-25 16:20:00'),
+
+    -- Feedback 51: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000051', 'f0000000-0000-0000-0000-000000000051', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-10 10:04:18'),
+    ('20000000-0000-0000-0000-000000000051', 'f0000000-0000-0000-0000-000000000051', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-10 10:06:18'),
+    ('30000000-0000-0000-0000-000000000051', 'f0000000-0000-0000-0000-000000000051', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-10 10:09:18'),
+    ('40000000-0000-0000-0000-000000000051', 'f0000000-0000-0000-0000-000000000051', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-10 12:19:18'),
+
+    -- Feedback 52: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000052', 'f0000000-0000-0000-0000-000000000052', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-10 14:26:47'),
+    ('20000000-0000-0000-0000-000000000052', 'f0000000-0000-0000-0000-000000000052', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-04-10 14:28:47'),
+
+    -- Feedback 53: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000053', 'f0000000-0000-0000-0000-000000000053', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-27 16:40:00'),
+    ('20000000-0000-0000-0000-000000000053', 'f0000000-0000-0000-0000-000000000053', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-04-27 16:42:00'),
+
+    -- Feedback 54: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000054', 'f0000000-0000-0000-0000-000000000054', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-10 17:50:12'),
+    ('20000000-0000-0000-0000-000000000054', 'f0000000-0000-0000-0000-000000000054', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-10 17:52:12'),
+    ('30000000-0000-0000-0000-000000000054', 'f0000000-0000-0000-0000-000000000054', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-10 17:55:12'),
+    ('40000000-0000-0000-0000-000000000054', 'f0000000-0000-0000-0000-000000000054', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-11 00:30:12'),
+
+    -- Feedback 55: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000055', 'f0000000-0000-0000-0000-000000000055', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-11 08:15:39'),
+    ('20000000-0000-0000-0000-000000000055', 'f0000000-0000-0000-0000-000000000055', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-11 08:17:39'),
+    ('30000000-0000-0000-0000-000000000055', 'f0000000-0000-0000-0000-000000000055', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-11 08:20:39'),
+    ('40000000-0000-0000-0000-000000000055', 'f0000000-0000-0000-0000-000000000055', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.', NULL, '2026-04-11 11:00:39'),
+
+    -- Feedback 56: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000056', 'f0000000-0000-0000-0000-000000000056', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-05 14:15:00'),
+    ('20000000-0000-0000-0000-000000000056', 'f0000000-0000-0000-0000-000000000056', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-05 14:17:00'),
+    ('30000000-0000-0000-0000-000000000056', 'f0000000-0000-0000-0000-000000000056', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-05 14:20:00'),
+    ('40000000-0000-0000-0000-000000000056', 'f0000000-0000-0000-0000-000000000056', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-05 17:15:00'),
+
+    -- Feedback 57: VIOLATED_CONTENT (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000057', 'f0000000-0000-0000-0000-000000000057', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-11 11:31:04'),
+    ('20000000-0000-0000-0000-000000000057', 'f0000000-0000-0000-0000-000000000057', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-04-11 11:33:04'),
+
+    -- Feedback 58: AI_REVIEW_FAILED (Dừng lại, không vào PENDING)
+    ('10000000-0000-0000-0000-000000000058', 'f0000000-0000-0000-0000-000000000058', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-31 13:20:00'),
+    ('20000000-0000-0000-0000-000000000058', 'f0000000-0000-0000-0000-000000000058', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-03-31 13:22:00'),
+
+    -- Feedback 59: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000059', 'f0000000-0000-0000-0000-000000000059', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-11 15:44:23'),
+    ('20000000-0000-0000-0000-000000000059', 'f0000000-0000-0000-0000-000000000059', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-11 15:46:23'),
+    ('30000000-0000-0000-0000-000000000059', 'f0000000-0000-0000-0000-000000000059', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-11 15:49:23'),
+    ('40000000-0000-0000-0000-000000000059', 'f0000000-0000-0000-0000-000000000059', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-11 17:34:23'),
+
+    -- Feedback 60: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000060', 'f0000000-0000-0000-0000-000000000060', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-12 09:53:51'),
+    ('20000000-0000-0000-0000-000000000060', 'f0000000-0000-0000-0000-000000000060', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-12 09:55:51'),
+    ('30000000-0000-0000-0000-000000000060', 'f0000000-0000-0000-0000-000000000060', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-12 09:58:51'),
+    ('40000000-0000-0000-0000-000000000060', 'f0000000-0000-0000-0000-000000000060', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.', NULL, '2026-04-12 11:23:51'),
+
+    -- Feedback 61: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000061', 'f0000000-0000-0000-0000-000000000061', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-22 10:10:00'),
+    ('20000000-0000-0000-0000-000000000061', 'f0000000-0000-0000-0000-000000000061', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-03-22 10:12:00'),
+    ('30000000-0000-0000-0000-000000000061', 'f0000000-0000-0000-0000-000000000061', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-03-22 10:15:00'),
+    ('40000000-0000-0000-0000-000000000061', 'f0000000-0000-0000-0000-000000000061', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-03-22 12:20:00'),
+
+    -- Feedback 62: AI_REVIEW_FAILED (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000062', 'f0000000-0000-0000-0000-000000000062', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-12 13:12:08'),
+    ('20000000-0000-0000-0000-000000000062', 'f0000000-0000-0000-0000-000000000062', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-04-12 13:14:08'),
+
+    -- Feedback 63: VIOLATED_CONTENT (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000063', 'f0000000-0000-0000-0000-000000000063', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-12 14:50:00'),
+    ('20000000-0000-0000-0000-000000000063', 'f0000000-0000-0000-0000-000000000063', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-03-12 14:52:00'),
+
+    -- Feedback 64: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000064', 'f0000000-0000-0000-0000-000000000064', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-12 16:38:45'),
+    ('20000000-0000-0000-0000-000000000064', 'f0000000-0000-0000-0000-000000000064', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-12 16:40:45'),
+    ('30000000-0000-0000-0000-000000000064', 'f0000000-0000-0000-0000-000000000064', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-12 16:43:45'),
+    ('40000000-0000-0000-0000-000000000064', 'f0000000-0000-0000-0000-000000000064', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-04-12 18:48:45'),
+
+    -- Feedback 65: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000065', 'f0000000-0000-0000-0000-000000000065', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-13 10:20:17'),
+    ('20000000-0000-0000-0000-000000000065', 'f0000000-0000-0000-0000-000000000065', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-13 10:22:17'),
+    ('30000000-0000-0000-0000-000000000065', 'f0000000-0000-0000-0000-000000000065', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-13 10:25:17'),
+    ('40000000-0000-0000-0000-000000000065', 'f0000000-0000-0000-0000-000000000065', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-13 12:45:17'),
+
+    -- Feedback 66: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000066', 'f0000000-0000-0000-0000-000000000066', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-14 16:20:00'),
+    ('20000000-0000-0000-0000-000000000066', 'f0000000-0000-0000-0000-000000000066', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-14 16:22:00'),
+    ('30000000-0000-0000-0000-000000000066', 'f0000000-0000-0000-0000-000000000066', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-14 16:25:00'),
+    ('40000000-0000-0000-0000-000000000066', 'f0000000-0000-0000-0000-000000000066', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-06-14 16:25:00'),
+
+    -- Feedback 67: AI_REVIEW_FAILED (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000067', 'f0000000-0000-0000-0000-000000000067', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-13 14:05:56'),
+    ('20000000-0000-0000-0000-000000000067', 'f0000000-0000-0000-0000-000000000067', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-04-13 14:07:56'),
+
+    -- Feedback 68: VIOLATED_CONTENT (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000068', 'f0000000-0000-0000-0000-000000000068', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-13 17:14:29'),
+    ('20000000-0000-0000-0000-000000000068', 'f0000000-0000-0000-0000-000000000068', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-04-13 17:16:29'),
+
+    -- Feedback 69: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000069', 'f0000000-0000-0000-0000-000000000069', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-03-15 14:30:00'),
+    ('20000000-0000-0000-0000-000000000069', 'f0000000-0000-0000-0000-000000000069', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-03-15 14:32:00'),
+    ('30000000-0000-0000-0000-000000000069', 'f0000000-0000-0000-0000-000000000069', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-03-15 14:35:00'),
+    ('40000000-0000-0000-0000-000000000069', 'f0000000-0000-0000-0000-000000000069', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-03-15 16:15:00'),
+
+    -- Feedback 70: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000070', 'f0000000-0000-0000-0000-000000000070', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-04-14 08:42:33'),
+    ('20000000-0000-0000-0000-000000000070', 'f0000000-0000-0000-0000-000000000070', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-04-14 08:44:33'),
+    ('30000000-0000-0000-0000-000000000070', 'f0000000-0000-0000-0000-000000000070', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-04-14 08:47:33'),
+    ('40000000-0000-0000-0000-000000000070', 'f0000000-0000-0000-0000-000000000070', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.', NULL, '2026-04-14 10:37:33'),
+
+    -- Feedback 71: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000071', 'f0000000-0000-0000-0000-000000000071', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-16 09:00:00'),
+    ('20000000-0000-0000-0000-000000000071', 'f0000000-0000-0000-0000-000000000071', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-04-16 09:02:00'),
+    ('30000000-0000-0000-0000-000000000071', 'f0000000-0000-0000-0000-000000000071', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-04-16 09:05:00'),
+    ('40000000-0000-0000-0000-000000000071', 'f0000000-0000-0000-0000-000000000071', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-04-16 11:30:00'),
+
+    -- Feedback 72: AI_REVIEW_FAILED (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000072', 'f0000000-0000-0000-0000-000000000072', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-17 14:00:00'),
+    ('20000000-0000-0000-0000-000000000072', 'f0000000-0000-0000-0000-000000000072', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2025-04-17 14:02:00'),
+
+    -- Feedback 73: VIOLATED_CONTENT (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000073', 'f0000000-0000-0000-0000-000000000073', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-19 10:10:00'),
+    ('20000000-0000-0000-0000-000000000073', 'f0000000-0000-0000-0000-000000000073', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2025-04-19 10:12:00'),
+
+    -- Feedback 74: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000074', 'f0000000-0000-0000-0000-000000000074', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-21 08:30:00'),
+    ('20000000-0000-0000-0000-000000000074', 'f0000000-0000-0000-0000-000000000074', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-04-21 08:32:00'),
+    ('30000000-0000-0000-0000-000000000074', 'f0000000-0000-0000-0000-000000000074', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-04-21 08:35:00'),
+    ('40000000-0000-0000-0000-000000000074', 'f0000000-0000-0000-0000-000000000074', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-04-21 14:40:00'),
+
+    -- Feedback 75: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000075', 'f0000000-0000-0000-0000-000000000075', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-22 21:00:00'),
+    ('20000000-0000-0000-0000-000000000075', 'f0000000-0000-0000-0000-000000000075', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-04-22 21:02:00'),
+    ('30000000-0000-0000-0000-000000000075', 'f0000000-0000-0000-0000-000000000075', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-04-22 21:05:00'),
+    ('40000000-0000-0000-0000-000000000075', 'f0000000-0000-0000-0000-000000000075', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.', NULL, '2025-04-22 23:10:00'),
+
+    -- Feedback 76: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000076', 'f0000000-0000-0000-0000-000000000076', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-24 11:00:00'),
+    ('20000000-0000-0000-0000-000000000076', 'f0000000-0000-0000-0000-000000000076', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-04-24 11:02:00'),
+    ('30000000-0000-0000-0000-000000000076', 'f0000000-0000-0000-0000-000000000076', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-04-24 11:05:00'),
+    ('40000000-0000-0000-0000-000000000076', 'f0000000-0000-0000-0000-000000000076', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2025-04-24 14:15:00'),
+
+    -- Feedback 77: VIOLATED_CONTENT (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000077', 'f0000000-0000-0000-0000-000000000077', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-26 15:30:00'),
+    ('20000000-0000-0000-0000-000000000077', 'f0000000-0000-0000-0000-000000000077', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2025-04-26 15:32:00'),
+
+    -- Feedback 78: AI_REVIEW_FAILED (Dừng lại, không tạo trạng thái phía sau)
+    ('10000000-0000-0000-0000-000000000078', 'f0000000-0000-0000-0000-000000000078', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-28 09:00:00'),
+    ('20000000-0000-0000-0000-000000000078', 'f0000000-0000-0000-0000-000000000078', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2025-04-28 09:02:00'),
+
+    -- Feedback 79: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000079', 'f0000000-0000-0000-0000-000000000079', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-29 13:00:00'),
+    ('20000000-0000-0000-0000-000000000079', 'f0000000-0000-0000-0000-000000000079', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-04-29 13:02:00'),
+    ('30000000-0000-0000-0000-000000000079', 'f0000000-0000-0000-0000-000000000079', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-04-29 13:05:00'),
+    ('40000000-0000-0000-0000-000000000079', 'f0000000-0000-0000-0000-000000000079', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-04-29 15:45:00'),
+
+    -- Feedback 80: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000080', 'f0000000-0000-0000-0000-000000000080', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-04-30 19:00:00'),
+    ('20000000-0000-0000-0000-000000000080', 'f0000000-0000-0000-0000-000000000080', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-04-30 19:02:00'),
+    ('30000000-0000-0000-0000-000000000080', 'f0000000-0000-0000-0000-000000000080', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-04-30 19:05:00'),
+    ('40000000-0000-0000-0000-000000000080', 'f0000000-0000-0000-0000-000000000080', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.', NULL, '2025-04-30 21:00:00'),
+
+    -- Feedback 81: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000081', 'f0000000-0000-0000-0000-000000000081', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-02 08:00:00'),
+    ('20000000-0000-0000-0000-000000000081', 'f0000000-0000-0000-0000-000000000081', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-02 08:02:00'),
+    ('30000000-0000-0000-0000-000000000081', 'f0000000-0000-0000-0000-000000000081', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-02 08:05:00'),
+    ('40000000-0000-0000-0000-000000000081', 'f0000000-0000-0000-0000-000000000081', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-05-02 09:50:00'),
+
+    -- Feedback 82: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000082', 'f0000000-0000-0000-0000-000000000082', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-03 11:00:00'),
+    ('20000000-0000-0000-0000-000000000082', 'f0000000-0000-0000-0000-000000000082', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2025-05-03 11:02:00'),
+
+    -- Feedback 83: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000083', 'f0000000-0000-0000-0000-000000000083', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-05 15:00:00'),
+    ('20000000-0000-0000-0000-000000000083', 'f0000000-0000-0000-0000-000000000083', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2025-05-05 15:02:00'),
+
+    -- Feedback 84: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000084', 'f0000000-0000-0000-0000-000000000084', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-06 09:30:00'),
+    ('20000000-0000-0000-0000-000000000084', 'f0000000-0000-0000-0000-000000000084', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-06 09:32:00'),
+    ('30000000-0000-0000-0000-000000000084', 'f0000000-0000-0000-0000-000000000084', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-06 09:35:00'),
+    ('40000000-0000-0000-0000-000000000084', 'f0000000-0000-0000-0000-000000000084', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2025-05-06 11:20:00'),
+
+    -- Feedback 85: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000085', 'f0000000-0000-0000-0000-000000000085', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-07 14:00:00'),
+    ('20000000-0000-0000-0000-000000000085', 'f0000000-0000-0000-0000-000000000085', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-07 14:02:00'),
+    ('30000000-0000-0000-0000-000000000085', 'f0000000-0000-0000-0000-000000000085', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-07 14:05:00'),
+    ('40000000-0000-0000-0000-000000000085', 'f0000000-0000-0000-0000-000000000085', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-05-07 16:15:00'),
+
+    -- Feedback 86: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000086', 'f0000000-0000-0000-0000-000000000086', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-09 10:00:00'),
+    ('20000000-0000-0000-0000-000000000086', 'f0000000-0000-0000-0000-000000000086', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-09 10:02:00'),
+    ('30000000-0000-0000-0000-000000000086', 'f0000000-0000-0000-0000-000000000086', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-09 10:05:00'),
+    ('40000000-0000-0000-0000-000000000086', 'f0000000-0000-0000-0000-000000000086', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-05-09 12:45:00'),
+
+    -- Feedback 87: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000087', 'f0000000-0000-0000-0000-000000000087', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-10 16:00:00'),
+    ('20000000-0000-0000-0000-000000000087', 'f0000000-0000-0000-0000-000000000087', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2025-05-10 16:02:00'),
+
+    -- Feedback 88: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000088', 'f0000000-0000-0000-0000-000000000088', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-12 11:15:00'),
+    ('20000000-0000-0000-0000-000000000088', 'f0000000-0000-0000-0000-000000000088', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2025-05-12 11:17:00'),
+
+    -- Feedback 89: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000089', 'f0000000-0000-0000-0000-000000000089', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-14 08:30:00'),
+    ('20000000-0000-0000-0000-000000000089', 'f0000000-0000-0000-0000-000000000089', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-14 08:32:00'),
+    ('30000000-0000-0000-0000-000000000089', 'f0000000-0000-0000-0000-000000000089', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-14 08:35:00'),
+    ('40000000-0000-0000-0000-000000000089', 'f0000000-0000-0000-0000-000000000089', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2025-05-14 10:45:00'),
+
+    -- Feedback 90: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000090', 'f0000000-0000-0000-0000-000000000090', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-15 13:00:00'),
+    ('20000000-0000-0000-0000-000000000090', 'f0000000-0000-0000-0000-000000000090', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-15 13:02:00'),
+    ('30000000-0000-0000-0000-000000000090', 'f0000000-0000-0000-0000-000000000090', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-15 13:05:00'),
+    ('40000000-0000-0000-0000-000000000090', 'f0000000-0000-0000-0000-000000000090', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-05-15 15:20:00'),
+
+    -- Feedback 91: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000091', 'f0000000-0000-0000-0000-000000000091', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-16 09:00:00'),
+    ('20000000-0000-0000-0000-000000000091', 'f0000000-0000-0000-0000-000000000091', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-16 09:02:00'),
+    ('30000000-0000-0000-0000-000000000091', 'f0000000-0000-0000-0000-000000000091', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-16 09:05:00'),
+    ('40000000-0000-0000-0000-000000000091', 'f0000000-0000-0000-0000-000000000091', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-05-16 11:10:00'),
+
+    -- Feedback 92: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000092', 'f0000000-0000-0000-0000-000000000092', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-17 14:00:00'),
+    ('20000000-0000-0000-0000-000000000092', 'f0000000-0000-0000-0000-000000000092', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2025-05-17 14:02:00'),
+
+    -- Feedback 93: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000093', 'f0000000-0000-0000-0000-000000000093', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-19 10:10:00'),
+    ('20000000-0000-0000-0000-000000000093', 'f0000000-0000-0000-0000-000000000093', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2025-05-19 10:12:00'),
+
+    -- Feedback 94: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000094', 'f0000000-0000-0000-0000-000000000094', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-21 08:30:00'),
+    ('20000000-0000-0000-0000-000000000094', 'f0000000-0000-0000-0000-000000000094', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-21 08:32:00'),
+    ('30000000-0000-0000-0000-000000000094', 'f0000000-0000-0000-0000-000000000094', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-21 08:35:00'),
+    ('40000000-0000-0000-0000-000000000094', 'f0000000-0000-0000-0000-000000000094', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2025-05-21 14:15:00'),
+
+    -- Feedback 95: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000095', 'f0000000-0000-0000-0000-000000000095', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-22 21:00:00'),
+    ('20000000-0000-0000-0000-000000000095', 'f0000000-0000-0000-0000-000000000095', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-22 21:02:00'),
+    ('30000000-0000-0000-0000-000000000095', 'f0000000-0000-0000-0000-000000000095', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-22 21:05:00'),
+    ('40000000-0000-0000-0000-000000000095', 'f0000000-0000-0000-0000-000000000095', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.', NULL, '2025-05-22 22:50:00'),
+
+    -- Feedback 96: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000096', 'f0000000-0000-0000-0000-000000000096', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-23 11:00:00'),
+    ('20000000-0000-0000-0000-000000000096', 'f0000000-0000-0000-0000-000000000096', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2025-05-23 11:02:00'),
+    ('30000000-0000-0000-0000-000000000096', 'f0000000-0000-0000-0000-000000000096', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2025-05-23 11:05:00'),
+    ('40000000-0000-0000-0000-000000000096', 'f0000000-0000-0000-0000-000000000096', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2025-05-23 13:30:00'),
+
+    -- Feedback 97: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000097', 'f0000000-0000-0000-0000-000000000097', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-25 15:30:00'),
+    ('20000000-0000-0000-0000-000000000097', 'f0000000-0000-0000-0000-000000000097', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2025-05-25 15:32:00'),
+
+    -- Feedback 98: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000098', 'f0000000-0000-0000-0000-000000000098', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2025-05-26 09:00:00'),
+    ('20000000-0000-0000-0000-000000000098', 'f0000000-0000-0000-0000-000000000098', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2025-05-26 09:02:00'),
+
+    -- Feedback 99: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000099', 'f0000000-0000-0000-0000-000000000099', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-16 15:45:12'),
+    ('20000000-0000-0000-0000-000000000099', 'f0000000-0000-0000-0000-000000000099', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-16 15:47:12'),
+    ('30000000-0000-0000-0000-000000000099', 'f0000000-0000-0000-0000-000000000099', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-16 15:50:12'),
+    ('40000000-0000-0000-0000-000000000099', 'f0000000-0000-0000-0000-000000000099', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.', NULL, '2026-05-16 18:05:12'),
+
+    -- Feedback 100: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000100', 'f0000000-0000-0000-0000-000000000100', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-22 14:10:05'),
+    ('20000000-0000-0000-0000-000000000100', 'f0000000-0000-0000-0000-000000000100', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-22 14:12:05'),
+    ('30000000-0000-0000-0000-000000000100', 'f0000000-0000-0000-0000-000000000100', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-22 14:15:05'),
+    ('40000000-0000-0000-0000-000000000100', 'f0000000-0000-0000-0000-000000000100', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.', NULL, '2026-05-22 15:55:05'),
+
+    -- Feedback 166: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000166', 'f0000000-0000-0000-0000-000000000166', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-11 10:22:41'),
+    ('20000000-0000-0000-0000-000000000166', 'f0000000-0000-0000-0000-000000000166', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-11 10:24:15'),
+    ('30000000-0000-0000-0000-000000000166', 'f0000000-0000-0000-0000-000000000166', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-11 10:27:30'),
+    ('40000000-0000-0000-0000-000000000166', 'f0000000-0000-0000-0000-000000000166', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-05-11 14:45:12'),
+
+    -- Feedback 167: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000167', 'f0000000-0000-0000-0000-000000000167', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-11 14:56:13'),
+    ('20000000-0000-0000-0000-000000000167', 'f0000000-0000-0000-0000-000000000167', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-05-11 14:58:25'),
+
+    -- Feedback 168: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000168', 'f0000000-0000-0000-0000-000000000168', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-11 17:18:35'),
+    ('20000000-0000-0000-0000-000000000168', 'f0000000-0000-0000-0000-000000000168', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-05-11 17:20:42'),
+
+    -- Feedback 169: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000169', 'f0000000-0000-0000-0000-000000000169', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-12 08:14:50'),
+    ('20000000-0000-0000-0000-000000000169', 'f0000000-0000-0000-0000-000000000169', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-12 08:16:35'),
+    ('30000000-0000-0000-0000-000000000169', 'f0000000-0000-0000-0000-000000000169', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-12 08:19:10'),
+    ('40000000-0000-0000-0000-000000000169', 'f0000000-0000-0000-0000-000000000169', 'IN_PROGRESS', 'Góp ý đang được bộ phận Phòng Quản trị cơ sở vật chất xử lý.', NULL, '2026-05-12 10:05:22'),
+
+    -- Feedback 170: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000170', 'f0000000-0000-0000-0000-000000000170', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-12 11:32:17'),
+    ('20000000-0000-0000-0000-000000000170', 'f0000000-0000-0000-0000-000000000170', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-12 11:34:17'),
+    ('30000000-0000-0000-0000-000000000170', 'f0000000-0000-0000-0000-000000000170', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-12 11:37:17'),
+    ('40000000-0000-0000-0000-000000000170', 'f0000000-0000-0000-0000-000000000170', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-05-12 14:02:17'),
+
+    -- Feedback 171: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000171', 'f0000000-0000-0000-0000-000000000171', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-12 15:40:59'),
+    ('20000000-0000-0000-0000-000000000171', 'f0000000-0000-0000-0000-000000000171', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-12 15:42:59'),
+    ('30000000-0000-0000-0000-000000000171', 'f0000000-0000-0000-0000-000000000171', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-12 15:45:59'),
+    ('40000000-0000-0000-0000-000000000171', 'f0000000-0000-0000-0000-000000000171', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-05-12 18:00:59'),
+
+    -- Feedback 172: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000172', 'f0000000-0000-0000-0000-000000000172', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-01 08:42:19'),
+    ('20000000-0000-0000-0000-000000000172', 'f0000000-0000-0000-0000-000000000172', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-06-01 08:44:19'),
+
+    -- Feedback 173: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000173', 'f0000000-0000-0000-0000-000000000173', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-01 11:15:52'),
+    ('20000000-0000-0000-0000-000000000173', 'f0000000-0000-0000-0000-000000000173', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-01 11:17:52'),
+
+    -- Feedback 174: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000174', 'f0000000-0000-0000-0000-000000000174', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-01 15:34:06'),
+    ('20000000-0000-0000-0000-000000000174', 'f0000000-0000-0000-0000-000000000174', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-01 15:36:06'),
+    ('30000000-0000-0000-0000-000000000174', 'f0000000-0000-0000-0000-000000000174', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-01 15:39:06'),
+    ('40000000-0000-0000-0000-000000000174', 'f0000000-0000-0000-0000-000000000174', 'IN_PROGRESS', 'Góp ý đang được bộ phận Phòng Quản trị cơ sở vật chất xử lý.', NULL, '2026-06-01 17:44:06'),
+
+    -- Feedback 175: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000175', 'f0000000-0000-0000-0000-000000000175', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-02 09:28:44'),
+    ('20000000-0000-0000-0000-000000000175', 'f0000000-0000-0000-0000-000000000175', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-02 09:30:44'),
+    ('30000000-0000-0000-0000-000000000175', 'f0000000-0000-0000-0000-000000000175', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-02 09:33:44'),
+    ('40000000-0000-0000-0000-000000000175', 'f0000000-0000-0000-0000-000000000175', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-06-02 11:43:44'),
+
+    -- Feedback 176: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000176', 'f0000000-0000-0000-0000-000000000176', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-02 13:50:11'),
+    ('20000000-0000-0000-0000-000000000176', 'f0000000-0000-0000-0000-000000000176', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-02 13:52:11'),
+    ('30000000-0000-0000-0000-000000000176', 'f0000000-0000-0000-0000-000000000176', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-02 13:55:11'),
+    ('40000000-0000-0000-0000-000000000176', 'f0000000-0000-0000-0000-000000000176', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-06-02 16:15:11'),
+
+    -- Feedback 177: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000177', 'f0000000-0000-0000-0000-000000000177', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-31 09:37:04'),
+    ('20000000-0000-0000-0000-000000000177', 'f0000000-0000-0000-0000-000000000177', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-05-31 09:39:04'),
+
+    -- Feedback 178: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000178', 'f0000000-0000-0000-0000-000000000178', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-31 13:19:42'),
+    ('20000000-0000-0000-0000-000000000178', 'f0000000-0000-0000-0000-000000000178', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-05-31 13:21:42'),
+
+    -- Feedback 179: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000179', 'f0000000-0000-0000-0000-000000000179', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-31 16:05:11'),
+    ('20000000-0000-0000-0000-000000000179', 'f0000000-0000-0000-0000-000000000179', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-31 16:07:11'),
+    ('30000000-0000-0000-0000-000000000179', 'f0000000-0000-0000-0000-000000000179', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-31 16:10:11'),
+    ('40000000-0000-0000-0000-000000000179', 'f0000000-0000-0000-0000-000000000179', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-05-31 21:30:11'),
+
+    -- Feedback 180: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000180', 'f0000000-0000-0000-0000-000000000180', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-02 09:22:15'),
+    ('20000000-0000-0000-0000-000000000180', 'f0000000-0000-0000-0000-000000000180', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-02 09:24:15'),
+    ('30000000-0000-0000-0000-000000000180', 'f0000000-0000-0000-0000-000000000180', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-02 09:27:15'),
+    ('40000000-0000-0000-0000-000000000180', 'f0000000-0000-0000-0000-000000000180', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quản trị cơ sở vật chất từ chối.', NULL, '2026-05-02 11:02:15'),
+
+    -- Feedback 181: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000181', 'f0000000-0000-0000-0000-000000000181', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-04 15:40:33'),
+    ('20000000-0000-0000-0000-000000000181', 'f0000000-0000-0000-0000-000000000181', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-04 15:42:33'),
+    ('30000000-0000-0000-0000-000000000181', 'f0000000-0000-0000-0000-000000000181', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-04 15:45:33'),
+    ('40000000-0000-0000-0000-000000000181', 'f0000000-0000-0000-0000-000000000181', 'IN_PROGRESS', 'Góp ý đang được bộ phận Phòng Quản trị cơ sở vật chất xử lý.', NULL, '2026-05-04 18:50:33'),
+
+    -- Feedback 182: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000182', 'f0000000-0000-0000-0000-000000000182', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-02 16:12:55'),
+    ('20000000-0000-0000-0000-000000000182', 'f0000000-0000-0000-0000-000000000182', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-02 16:14:55'),
+
+    -- Feedback 183: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000183', 'f0000000-0000-0000-0000-000000000183', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-03 10:05:27'),
+    ('20000000-0000-0000-0000-000000000183', 'f0000000-0000-0000-0000-000000000183', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-06-03 10:07:27'),
+
+    -- Feedback 184: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000184', 'f0000000-0000-0000-0000-000000000184', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-03 14:44:39'),
+    ('20000000-0000-0000-0000-000000000184', 'f0000000-0000-0000-0000-000000000184', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-03 14:46:39'),
+    ('30000000-0000-0000-0000-000000000184', 'f0000000-0000-0000-0000-000000000184', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-03 14:49:39'),
+    ('40000000-0000-0000-0000-000000000184', 'f0000000-0000-0000-0000-000000000184', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-06-03 16:54:39'),
+
+    -- Feedback 185: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000185', 'f0000000-0000-0000-0000-000000000185', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-03 17:21:08'),
+    ('20000000-0000-0000-0000-000000000185', 'f0000000-0000-0000-0000-000000000185', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-03 17:23:08'),
+    ('30000000-0000-0000-0000-000000000185', 'f0000000-0000-0000-0000-000000000185', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-03 17:26:08'),
+    ('40000000-0000-0000-0000-000000000185', 'f0000000-0000-0000-0000-000000000185', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quản trị cơ sở vật chất từ chối.', NULL, '2026-06-03 18:56:08'),
+
+    -- Feedback 186: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000186', 'f0000000-0000-0000-0000-000000000186', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-04 08:19:54'),
+    ('20000000-0000-0000-0000-000000000186', 'f0000000-0000-0000-0000-000000000186', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-04 08:21:54'),
+    ('30000000-0000-0000-0000-000000000186', 'f0000000-0000-0000-0000-000000000186', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-04 08:24:54'),
+    ('40000000-0000-0000-0000-000000000186', 'f0000000-0000-0000-0000-000000000186', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-06-04 10:34:54'),
+
+    -- Feedback 187: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000187', 'f0000000-0000-0000-0000-000000000187', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-06 11:15:44'),
+    ('20000000-0000-0000-0000-000000000187', 'f0000000-0000-0000-0000-000000000187', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-05-06 11:17:44'),
+
+    -- Feedback 188: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000188', 'f0000000-0000-0000-0000-000000000188', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-08 14:50:21'),
+    ('20000000-0000-0000-0000-000000000188', 'f0000000-0000-0000-0000-000000000188', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-05-08 14:52:21'),
+
+    -- Feedback 189: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000189', 'f0000000-0000-0000-0000-000000000189', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-10 10:33:12'),
+    ('20000000-0000-0000-0000-000000000189', 'f0000000-0000-0000-0000-000000000189', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-10 10:35:12'),
+    ('30000000-0000-0000-0000-000000000189', 'f0000000-0000-0000-0000-000000000189', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-10 10:38:12'),
+    ('40000000-0000-0000-0000-000000000189', 'f0000000-0000-0000-0000-000000000189', 'IN_PROGRESS', 'Góp ý đang được bộ phận Phòng Quản trị cơ sở vật chất xử lý.', NULL, '2026-05-10 12:33:12'),
+
+    -- Feedback 190: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000190', 'f0000000-0000-0000-0000-000000000190', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-12 16:08:55'),
+    ('20000000-0000-0000-0000-000000000190', 'f0000000-0000-0000-0000-000000000190', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-12 16:10:55'),
+    ('30000000-0000-0000-0000-000000000190', 'f0000000-0000-0000-0000-000000000190', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-12 16:13:55'),
+    ('40000000-0000-0000-0000-000000000190', 'f0000000-0000-0000-0000-000000000190', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-05-12 18:18:55'),
+
+    -- Feedback 191: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000191', 'f0000000-0000-0000-0000-000000000191', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-14 08:44:19'),
+    ('20000000-0000-0000-0000-000000000191', 'f0000000-0000-0000-0000-000000000191', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-14 08:46:19'),
+    ('30000000-0000-0000-0000-000000000191', 'f0000000-0000-0000-0000-000000000191', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-14 08:49:19'),
+    ('40000000-0000-0000-0000-000000000191', 'f0000000-0000-0000-0000-000000000191', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.', NULL, '2026-05-14 10:59:19'),
+
+    -- Feedback 192: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000192', 'f0000000-0000-0000-0000-000000000192', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-16 13:12:40'),
+    ('20000000-0000-0000-0000-000000000192', 'f0000000-0000-0000-0000-000000000192', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-05-16 13:14:40'),
+
+    -- Feedback 128: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000128', 'f0000000-0000-0000-0000-000000000193', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-04 11:32:15'),
+    ('20000000-0000-0000-0000-000000000128', 'f0000000-0000-0000-0000-000000000193', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-04 11:34:15'),
+
+    -- Feedback 129: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000129', 'f0000000-0000-0000-0000-000000000194', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-04 15:56:40'),
+    ('20000000-0000-0000-0000-000000000129', 'f0000000-0000-0000-0000-000000000194', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-04 15:58:40'),
+    ('30000000-0000-0000-0000-000000000129', 'f0000000-0000-0000-0000-000000000194', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-04 16:01:40'),
+    ('40000000-0000-0000-0000-000000000129', 'f0000000-0000-0000-0000-000000000194', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-04 18:16:40'),
+
+    -- Feedback 130: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000130', 'f0000000-0000-0000-0000-000000000195', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-05 09:41:12'),
+    ('20000000-0000-0000-0000-000000000130', 'f0000000-0000-0000-0000-000000000195', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-05 09:43:12'),
+    ('30000000-0000-0000-0000-000000000130', 'f0000000-0000-0000-0000-000000000195', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-05 09:46:12'),
+    ('40000000-0000-0000-0000-000000000130', 'f0000000-0000-0000-0000-000000000195', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-05 12:11:12'),
+
+    -- Feedback 131: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000131', 'f0000000-0000-0000-0000-000000000196', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-05 13:14:50'),
+    ('20000000-0000-0000-0000-000000000131', 'f0000000-0000-0000-0000-000000000196', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-05 13:16:50'),
+    ('30000000-0000-0000-0000-000000000131', 'f0000000-0000-0000-0000-000000000196', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-05 13:19:50'),
+    ('40000000-0000-0000-0000-000000000131', 'f0000000-0000-0000-0000-000000000196', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-05 15:34:50'),
+
+    -- Feedback 132: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000132', 'f0000000-0000-0000-0000-000000000197', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-05 16:48:23'),
+    ('20000000-0000-0000-0000-000000000132', 'f0000000-0000-0000-0000-000000000197', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-06-05 16:50:23'),
+
+    -- Feedback 133: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000133', 'f0000000-0000-0000-0000-000000000198', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-06 10:52:05'),
+    ('20000000-0000-0000-0000-000000000133', 'f0000000-0000-0000-0000-000000000198', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-06 10:54:05'),
+
+    -- Feedback 134: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000134', 'f0000000-0000-0000-0000-000000000199', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-06 14:08:33'),
+    ('20000000-0000-0000-0000-000000000134', 'f0000000-0000-0000-0000-000000000199', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-06 14:10:33'),
+    ('30000000-0000-0000-0000-000000000134', 'f0000000-0000-0000-0000-000000000199', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-06 14:13:33'),
+    ('40000000-0000-0000-0000-000000000134', 'f0000000-0000-0000-0000-000000000199', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-06 19:18:33'),
+
+    -- Feedback 135: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000135', 'f0000000-0000-0000-0000-000000000401', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-06 17:35:11'),
+    ('20000000-0000-0000-0000-000000000135', 'f0000000-0000-0000-0000-000000000401', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-06 17:37:11'),
+    ('30000000-0000-0000-0000-000000000135', 'f0000000-0000-0000-0000-000000000401', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-06 17:40:11'),
+    ('40000000-0000-0000-0000-000000000135', 'f0000000-0000-0000-0000-000000000401', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Tuyển sinh và Cộng tác sinh viên từ chối.', NULL, '2026-06-06 19:20:11'),
+
+    -- Feedback 136: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000136', 'f0000000-0000-0000-0000-000000000402', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-07 08:33:14'),
+    ('20000000-0000-0000-0000-000000000136', 'f0000000-0000-0000-0000-000000000402', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-07 08:35:14'),
+    ('30000000-0000-0000-0000-000000000136', 'f0000000-0000-0000-0000-000000000402', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-07 08:38:14'),
+    ('40000000-0000-0000-0000-000000000136', 'f0000000-0000-0000-0000-000000000402', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-07 08:38:14'),
+
+    -- Feedback 137: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000137', 'f0000000-0000-0000-0000-000000000403', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-07 11:51:47'),
+    ('20000000-0000-0000-0000-000000000137', 'f0000000-0000-0000-0000-000000000403', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-07 11:53:47'),
+
+    -- Feedback 138: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000138', 'f0000000-0000-0000-0000-000000000404', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-07 15:22:09'),
+    ('20000000-0000-0000-0000-000000000138', 'f0000000-0000-0000-0000-000000000404', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-06-07 15:24:09'),
+
+    -- Feedback 139: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000139', 'f0000000-0000-0000-0000-000000000405', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-08 09:10:42'),
+    ('20000000-0000-0000-0000-000000000139', 'f0000000-0000-0000-0000-000000000405', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-08 09:12:42'),
+    ('30000000-0000-0000-0000-000000000139', 'f0000000-0000-0000-0000-000000000405', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-08 09:15:42'),
+    ('40000000-0000-0000-0000-000000000139', 'f0000000-0000-0000-0000-000000000405', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-08 11:30:42'),
+
+    -- Feedback 140: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000140', 'f0000000-0000-0000-0000-000000000406', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-08 13:47:15'),
+    ('20000000-0000-0000-0000-000000000140', 'f0000000-0000-0000-0000-000000000406', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-08 13:49:15'),
+    ('30000000-0000-0000-0000-000000000140', 'f0000000-0000-0000-0000-000000000406', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-08 13:52:15'),
+    ('40000000-0000-0000-0000-000000000140', 'f0000000-0000-0000-0000-000000000406', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Tuyển sinh và Cộng tác sinh viên từ chối.', NULL, '2026-06-08 15:27:15'),
+
+    -- Feedback 141: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000141', 'f0000000-0000-0000-0000-000000000407', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-18 11:25:52'),
+    ('20000000-0000-0000-0000-000000000141', 'f0000000-0000-0000-0000-000000000407', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-18 11:27:52'),
+    ('30000000-0000-0000-0000-000000000141', 'f0000000-0000-0000-0000-000000000407', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-18 11:30:52'),
+    ('40000000-0000-0000-0000-000000000141', 'f0000000-0000-0000-0000-000000000407', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-05-18 13:55:52'),
+
+    -- Feedback 142: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000142', 'f0000000-0000-0000-0000-000000000408', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-20 15:35:14'),
+    ('20000000-0000-0000-0000-000000000142', 'f0000000-0000-0000-0000-000000000408', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-05-20 15:37:14'),
+
+    -- Feedback 143: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000143', 'f0000000-0000-0000-0000-000000000409', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-22 09:18:04'),
+    ('20000000-0000-0000-0000-000000000143', 'f0000000-0000-0000-0000-000000000409', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-05-22 09:20:04'),
+
+    -- Feedback 144: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000144', 'f0000000-0000-0000-0000-000000000410', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-24 14:55:27'),
+    ('20000000-0000-0000-0000-000000000144', 'f0000000-0000-0000-0000-000000000410', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-24 14:57:27'),
+    ('30000000-0000-0000-0000-000000000144', 'f0000000-0000-0000-0000-000000000410', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-24 15:00:27'),
+    ('40000000-0000-0000-0000-000000000144', 'f0000000-0000-0000-0000-000000000410', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-05-24 17:15:27'),
+
+    -- Feedback 145: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000145', 'f0000000-0000-0000-0000-000000000411', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-08 16:19:58'),
+    ('20000000-0000-0000-0000-000000000145', 'f0000000-0000-0000-0000-000000000411', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-08 16:21:58'),
+    ('30000000-0000-0000-0000-000000000145', 'f0000000-0000-0000-0000-000000000411', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-08 16:24:58'),
+    ('40000000-0000-0000-0000-000000000145', 'f0000000-0000-0000-0000-000000000411', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-08 18:49:58'),
+
+    -- Feedback 146: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000146', 'f0000000-0000-0000-0000-000000000412', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-09 10:25:31'),
+    ('20000000-0000-0000-0000-000000000146', 'f0000000-0000-0000-0000-000000000412', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-09 10:27:31'),
+    ('30000000-0000-0000-0000-000000000146', 'f0000000-0000-0000-0000-000000000412', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-09 10:30:31'),
+    ('40000000-0000-0000-0000-000000000146', 'f0000000-0000-0000-0000-000000000412', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-09 13:10:31'),
+
+    -- Feedback 147: AI_REVIEW_FAILED (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000147', 'f0000000-0000-0000-0000-000000000413', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-09 14:56:04'),
+    ('20000000-0000-0000-0000-000000000147', 'f0000000-0000-0000-0000-000000000413', 'AI_REVIEW_FAILED', 'Hệ thống AI gặp sự cố kiểm định, chuyển xử lý thủ công.', NULL, '2026-06-09 14:58:04'),
+
+    -- Feedback 148: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000148', 'f0000000-0000-0000-0000-000000000414', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-09 17:43:50'),
+    ('20000000-0000-0000-0000-000000000148', 'f0000000-0000-0000-0000-000000000414', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-09 17:45:50'),
+
+    -- Feedback 149: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000149', 'f0000000-0000-0000-0000-000000000415', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-10 08:45:12'),
+    ('20000000-0000-0000-0000-000000000149', 'f0000000-0000-0000-0000-000000000415', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-10 08:47:12'),
+    ('30000000-0000-0000-0000-000000000149', 'f0000000-0000-0000-0000-000000000415', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-10 08:50:12'),
+    ('40000000-0000-0000-0000-000000000149', 'f0000000-0000-0000-0000-000000000415', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-10 11:00:12'),
+
+    -- Feedback 150: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000150', 'f0000000-0000-0000-0000-000000000416', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-10 11:03:29'),
+    ('20000000-0000-0000-0000-000000000150', 'f0000000-0000-0000-0000-000000000416', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-10 11:05:29'),
+    ('30000000-0000-0000-0000-000000000150', 'f0000000-0000-0000-0000-000000000416', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-10 11:08:29'),
+    ('40000000-0000-0000-0000-000000000150', 'f0000000-0000-0000-0000-000000000416', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-10 13:43:29'),
+
+    -- ==================== TẠO THÊM 5 FEEDBACK MỚI (151 - 155) ====================
+
+    -- Feedback 151: AI_REVIEW_SUCCESS -> PENDING -> RESOLVED
+    ('10000000-0000-0000-0000-000000000151', 'f0000000-0000-0000-0000-000000000417', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-10 15:18:55'),
+    ('20000000-0000-0000-0000-000000000151', 'f0000000-0000-0000-0000-000000000417', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-10 15:20:55'),
+    ('30000000-0000-0000-0000-000000000151', 'f0000000-0000-0000-0000-000000000417', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-10 15:23:55'),
+    ('40000000-0000-0000-0000-000000000151', 'f0000000-0000-0000-0000-000000000417', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Tuyển sinh và Cộng tác sinh viên giải quyết.', NULL, '2026-06-10 17:33:55'),
+
+    -- Feedback 152: VIOLATED_CONTENT (Dừng luồng tự động)
+    ('10000000-0000-0000-0000-000000000152', 'f0000000-0000-0000-0000-000000000418', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 09:35:06'),
+    ('20000000-0000-0000-0000-000000000152', 'f0000000-0000-0000-0000-000000000418', 'VIOLATED_CONTENT', 'AI phát hiện từ ngữ nhạy cảm, chuyển duyệt thủ công.', NULL, '2026-06-11 09:37:06'),
+
+    -- Feedback 153: AI_REVIEW_SUCCESS -> PENDING -> IN_PROGRESS
+    ('10000000-0000-0000-0000-000000000153', 'f0000000-0000-0000-0000-000000000419', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 13:21:44'),
+    ('20000000-0000-0000-0000-000000000153', 'f0000000-0000-0000-0000-000000000419', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-11 13:23:44'),
+    ('30000000-0000-0000-0000-000000000153', 'f0000000-0000-0000-0000-000000000419', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-11 13:26:44'),
+    ('40000000-0000-0000-0000-000000000153', 'f0000000-0000-0000-0000-000000000419', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-11 15:51:44'),
+
+    -- Feedback 154: AI_REVIEW_SUCCESS -> PENDING -> REJECTED
+    ('10000000-0000-0000-0000-000000000154', 'f0000000-0000-0000-0000-000000000420', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 16:59:12'),
+    ('20000000-0000-0000-0000-000000000154', 'f0000000-0000-0000-0000-000000000420', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-11 17:01:12'),
+    ('30000000-0000-0000-0000-000000000154', 'f0000000-0000-0000-0000-000000000420', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-11 17:04:12'),
+    ('40000000-0000-0000-0000-000000000154', 'f0000000-0000-0000-0000-000000000420', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Tuyển sinh và Cộng tác sinh viên từ chối.', NULL, '2026-06-11 18:49:12'),
+
     (
         '10000000-0000-0000-0000-000000000101',
         'f0000000-0000-0000-0000-000000000302',
@@ -7010,222 +7426,6 @@ VALUES (
         '2025-07-17 23:59:00'
     ),
     (
-        '10000000-0000-0000-0000-000000000128',
-        'f0000000-0000-0000-0000-000000000329',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-18 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000129',
-        'f0000000-0000-0000-0000-000000000330',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000130',
-        'f0000000-0000-0000-0000-000000000331',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-20 17:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000131',
-        'f0000000-0000-0000-0000-000000000332',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-07-21 23:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000132',
-        'f0000000-0000-0000-0000-000000000333',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-22 18:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000133',
-        'f0000000-0000-0000-0000-000000000334',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000134',
-        'f0000000-0000-0000-0000-000000000335',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-25 19:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000135',
-        'f0000000-0000-0000-0000-000000000336',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-07-26 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000136',
-        'f0000000-0000-0000-0000-000000000337',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-07-27 17:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000137',
-        'f0000000-0000-0000-0000-000000000338',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-01 17:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000138',
-        'f0000000-0000-0000-0000-000000000339',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-08-03 21:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000139',
-        'f0000000-0000-0000-0000-000000000340',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-05 18:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000140',
-        'f0000000-0000-0000-0000-000000000341',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-07 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000141',
-        'f0000000-0000-0000-0000-000000000342',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-08 19:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000142',
-        'f0000000-0000-0000-0000-000000000343',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-08-10 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000143',
-        'f0000000-0000-0000-0000-000000000344',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-12 17:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000144',
-        'f0000000-0000-0000-0000-000000000345',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-14 21:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000145',
-        'f0000000-0000-0000-0000-000000000346',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-15 18:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000146',
-        'f0000000-0000-0000-0000-000000000347',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-08-17 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000147',
-        'f0000000-0000-0000-0000-000000000348',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-18 19:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000148',
-        'f0000000-0000-0000-0000-000000000349',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000149',
-        'f0000000-0000-0000-0000-000000000350',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-20 17:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000150',
-        'f0000000-0000-0000-0000-000000000351',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-08-21 23:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000151',
-        'f0000000-0000-0000-0000-000000000352',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-22 18:35:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000152',
-        'f0000000-0000-0000-0000-000000000353',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000153',
-        'f0000000-0000-0000-0000-000000000354',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-08-25 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000154',
-        'f0000000-0000-0000-0000-000000000355',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-08-26 23:59:00'
-    ),
-    (
         '10000000-0000-0000-0000-000000000155',
         'f0000000-0000-0000-0000-000000000356',
         'RESOLVED',
@@ -7314,222 +7514,6 @@ VALUES (
         '2025-09-17 23:59:00'
     ),
     (
-        '10000000-0000-0000-0000-000000000166',
-        'f0000000-0000-0000-0000-000000000367',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-18 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000167',
-        'f0000000-0000-0000-0000-000000000368',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000168',
-        'f0000000-0000-0000-0000-000000000369',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-20 17:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000169',
-        'f0000000-0000-0000-0000-000000000370',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-09-21 23:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000170',
-        'f0000000-0000-0000-0000-000000000371',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-22 18:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000171',
-        'f0000000-0000-0000-0000-000000000372',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000172',
-        'f0000000-0000-0000-0000-000000000373',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-25 19:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000173',
-        'f0000000-0000-0000-0000-000000000374',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-09-26 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000174',
-        'f0000000-0000-0000-0000-000000000375',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-09-27 17:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000175',
-        'f0000000-0000-0000-0000-000000000376',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-01 17:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000176',
-        'f0000000-0000-0000-0000-000000000377',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-10-03 21:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000177',
-        'f0000000-0000-0000-0000-000000000378',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-05 18:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000178',
-        'f0000000-0000-0000-0000-000000000379',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-07 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000179',
-        'f0000000-0000-0000-0000-000000000380',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-08 19:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000180',
-        'f0000000-0000-0000-0000-000000000381',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-10-10 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000181',
-        'f0000000-0000-0000-0000-000000000382',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-12 17:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000182',
-        'f0000000-0000-0000-0000-000000000383',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-14 22:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000183',
-        'f0000000-0000-0000-0000-000000000384',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-15 18:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000184',
-        'f0000000-0000-0000-0000-000000000385',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-10-17 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000185',
-        'f0000000-0000-0000-0000-000000000386',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-18 19:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000186',
-        'f0000000-0000-0000-0000-000000000387',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-19 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000187',
-        'f0000000-0000-0000-0000-000000000388',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-20 17:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000188',
-        'f0000000-0000-0000-0000-000000000389',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-10-21 23:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000189',
-        'f0000000-0000-0000-0000-000000000390',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-22 18:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000190',
-        'f0000000-0000-0000-0000-000000000391',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-24 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000191',
-        'f0000000-0000-0000-0000-000000000392',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-10-25 19:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000192',
-        'f0000000-0000-0000-0000-000000000393',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-10-26 23:59:00'
-    ),
-    (
         '10000000-0000-0000-0000-000000000193',
         'f0000000-0000-0000-0000-000000000394',
         'RESOLVED',
@@ -7594,363 +7578,34 @@ VALUES (
         '2025-03-30 21:10:00'
     );
 -- 37 feedbacks for Department d...010 (Phòng Thanh tra giáo dục)
-INSERT INTO
-    "FeedbackStatusHistory" (
-        "id",
-        "feedbackId",
-        "status",
-        "message",
-        "note",
-        "createdAt"
-    )
-VALUES
+-- INSERT INTO
+--     "FeedbackStatusHistory" (
+--         "id",
+--         "feedbackId",
+--         "status",
+--         "message",
+--         "note",
+--         "createdAt"
+--     )
+-- VALUES
     -- Tháng 11/2025: chỉ 1 status RESOLVED/REJECTED
-    (
-        '10000000-0000-0000-0000-000000000201',
-        'f0000000-0000-0000-0000-000000000001',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-01 15:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000202',
-        'f0000000-0000-0000-0000-000000000002',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-01 22:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000203',
-        'f0000000-0000-0000-0000-000000000003',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-02 18:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000204',
-        'f0000000-0000-0000-0000-000000000004',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-03 14:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000205',
-        'f0000000-0000-0000-0000-000000000005',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-03 19:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000206',
-        'f0000000-0000-0000-0000-000000000006',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-03 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000207',
-        'f0000000-0000-0000-0000-000000000007',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-04 16:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000208',
-        'f0000000-0000-0000-0000-000000000008',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-04 20:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000209',
-        'f0000000-0000-0000-0000-000000000009',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-05 17:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000210',
-        'f0000000-0000-0000-0000-000000000010',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-05 22:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000211',
-        'f0000000-0000-0000-0000-000000000011',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-05 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000212',
-        'f0000000-0000-0000-0000-000000000012',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-06 15:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000213',
-        'f0000000-0000-0000-0000-000000000013',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-07 18:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000214',
-        'f0000000-0000-0000-0000-000000000014',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-08 21:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000215',
-        'f0000000-0000-0000-0000-000000000015',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-09 16:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000216',
-        'f0000000-0000-0000-0000-000000000016',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-10 21:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000217',
-        'f0000000-0000-0000-0000-000000000017',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-10 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000218',
-        'f0000000-0000-0000-0000-000000000018',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-11 17:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000219',
-        'f0000000-0000-0000-0000-000000000019',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-12 19:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000220',
-        'f0000000-0000-0000-0000-000000000020',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-13 15:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000221',
-        'f0000000-0000-0000-0000-000000000021',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-13 19:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000222',
-        'f0000000-0000-0000-0000-000000000022',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-14 22:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000223',
-        'f0000000-0000-0000-0000-000000000023',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-15 17:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000224',
-        'f0000000-0000-0000-0000-000000000024',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-15 21:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000225',
-        'f0000000-0000-0000-0000-000000000025',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-15 23:59:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000226',
-        'f0000000-0000-0000-0000-000000000026',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-16 18:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000227',
-        'f0000000-0000-0000-0000-000000000027',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-17 22:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000228',
-        'f0000000-0000-0000-0000-000000000028',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-18 15:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000229',
-        'f0000000-0000-0000-0000-000000000029',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Thanh tra giáo dục từ chối.',
-        NULL,
-        '2025-11-19 19:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000230',
-        'f0000000-0000-0000-0000-000000000030',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-20 23:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000231',
-        'f0000000-0000-0000-0000-000000000031',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-21 16:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000232',
-        'f0000000-0000-0000-0000-000000000032',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết',
-        NULL,
-        '2025-11-30 13:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000233',
-        'f0000000-0000-0000-0000-000000000033',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-        NULL,
-        '2025-11-23 23:59:00'
-    ),
+    -- (
+    --     '10000000-0000-0000-0000-000000000201',
+    --     'f0000000-0000-0000-0000-000000000001',
+    --     'RESOLVED',
+    --     'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
+    --     NULL,
+    --     '2025-11-01 15:40:00'
+    -- ),
+
 
 -- Tháng 12/2025: tạo đầy đủ 3 trạng thái (hoặc ít hơn nếu chưa xong)
 -- f...034 - RESOLVED
-(
-    '10000000-0000-0000-0000-000000000234',
-    'f0000000-0000-0000-0000-000000000034',
-    'PENDING',
-    'Cảm ơn bạn đã gửi phản góp ý đến bộ phận Phòng Thanh tra giáo dục. Chúng tôi sẽ cố gắng xử lý góp ý của bạn trong thời gian sớm nhất.',
-    NULL,
-    '2025-12-01 10:00:00'
-),
-(
-    '10000000-0000-0000-0000-000000000235',
-    'f0000000-0000-0000-0000-000000000034',
-    'IN_PROGRESS',
-    'Góp ý đang được bộ phận Phòng Thanh tra giáo dục xử lý.',
-    NULL,
-    '2025-12-01 10:15:00'
-),
-(
-    '10000000-0000-0000-0000-000000000236',
-    'f0000000-0000-0000-0000-000000000034',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-    NULL,
-    '2025-12-01 18:30:00'
-),
 
--- f...035 - RESOLVED
-(
-    '10000000-0000-0000-0000-000000000237',
-    'f0000000-0000-0000-0000-000000000035',
-    'PENDING',
-    'Cảm ơn bạn đã gửi phản góp ý đến bộ phận Phòng Thanh tra giáo dục. Chúng tôi sẽ cố gắng xử lý góp ý của bạn trong thời gian sớm nhất.',
-    NULL,
-    '2025-12-02 14:15:00'
-),
-(
-    '10000000-0000-0000-0000-000000000238',
-    'f0000000-0000-0000-0000-000000000035',
-    'IN_PROGRESS',
-    'Góp ý đang được bộ phận Phòng Thanh tra giáo dục xử lý.',
-    NULL,
-    '2025-12-02 15:00:00'
-),
-(
-    '10000000-0000-0000-0000-000000000239',
-    'f0000000-0000-0000-0000-000000000035',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thanh tra giáo dục giải quyết.',
-    NULL,
-    '2025-12-03 09:00:00'
-),
 
 -- f...036 - IN_PROGRESS (hiện tại vẫn đang xử lý)
-(
-    '10000000-0000-0000-0000-000000000240',
-    'f0000000-0000-0000-0000-000000000036',
-    'PENDING',
-    'Cảm ơn bạn đã gửi phản góp ý đến bộ phận Phòng Thanh tra giáo dục. Chúng tôi sẽ cố gắng xử lý góp ý của bạn trong thời gian sớm nhất.',
-    NULL,
-    '2025-12-03 09:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000241',
-    'f0000000-0000-0000-0000-000000000036',
-    'IN_PROGRESS',
-    'Góp ý đang được bộ phận Phòng Thanh tra giáo dục xử lý.',
-    NULL,
-    '2025-12-05 11:00:00'
-),
 -- chưa có RESOLVED vì currentStatus = IN_PROGRESS
 
--- f...037 - PENDING (chưa xử lý xong)
-(
-    '10000000-0000-0000-0000-000000000242',
-    'f0000000-0000-0000-0000-000000000037',
-    'PENDING',
-    'Cảm ơn bạn đã gửi phản góp ý đến bộ phận Phòng Thanh tra giáo dục. Chúng tôi sẽ cố gắng xử lý góp ý của bạn trong thời gian sớm nhất.',
-    NULL,
-    '2025-12-05 13:00:00'
-);
 
 INSERT INTO
     "FeedbackStatusHistory" (
@@ -7963,206 +7618,7 @@ INSERT INTO
     )
 VALUES
     -- Phòng Quan hệ doanh nghiệp (d...002) – xử lý 20-23 tiếng
-    (
-        '10000000-0000-0000-0000-000000000243',
-        'f0000000-0000-0000-0000-000000000038',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-03 08:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000244',
-        'f0000000-0000-0000-0000-000000000039',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-04 13:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000245',
-        'f0000000-0000-0000-0000-000000000040',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.',
-        NULL,
-        '2025-11-05 09:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000246',
-        'f0000000-0000-0000-0000-000000000041',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-06 07:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000247',
-        'f0000000-0000-0000-0000-000000000042',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-07 12:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000248',
-        'f0000000-0000-0000-0000-000000000043',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.',
-        NULL,
-        '2025-11-08 14:35:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000249',
-        'f0000000-0000-0000-0000-000000000044',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-09 08:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000250',
-        'f0000000-0000-0000-0000-000000000045',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-10 11:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000251',
-        'f0000000-0000-0000-0000-000000000046',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-11 09:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000252',
-        'f0000000-0000-0000-0000-000000000047',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.',
-        NULL,
-        '2025-11-12 13:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000253',
-        'f0000000-0000-0000-0000-000000000048',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-13 07:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000254',
-        'f0000000-0000-0000-0000-000000000049',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-14 12:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000255',
-        'f0000000-0000-0000-0000-000000000050',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-15 08:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000256',
-        'f0000000-0000-0000-0000-000000000051',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.',
-        NULL,
-        '2025-11-16 14:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000257',
-        'f0000000-0000-0000-0000-000000000052',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-17 09:25:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000258',
-        'f0000000-0000-0000-0000-000000000053',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-18 11:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000259',
-        'f0000000-0000-0000-0000-000000000054',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-19 07:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000260',
-        'f0000000-0000-0000-0000-000000000056',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-21 08:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000261',
-        'f0000000-0000-0000-0000-000000000057',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-22 12:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000262',
-        'f0000000-0000-0000-0000-000000000058',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ doanh nghiệp từ chối.',
-        NULL,
-        '2025-11-23 09:55:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000263',
-        'f0000000-0000-0000-0000-000000000059',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-24 14:15:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000264',
-        'f0000000-0000-0000-0000-000000000060',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-25 07:35:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000265',
-        'f0000000-0000-0000-0000-000000000062',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-27 08:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000266',
-        'f0000000-0000-0000-0000-000000000063',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-28 13:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000267',
-        'f0000000-0000-0000-0000-000000000064',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ doanh nghiệp giải quyết.',
-        NULL,
-        '2025-11-29 09:10:00'
-    ),
+
 
 -- Phòng Khoa học & Công nghệ (d...003) – xử lý 20-23 tiếng
 (
@@ -8172,14 +7628,6 @@ VALUES
     'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
     NULL,
     '2025-11-02 09:25:00'
-),
-(
-    '10000000-0000-0000-0000-000000000269',
-    'f0000000-0000-0000-0000-000000000072',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.',
-    NULL,
-    '2025-11-03 12:15:00'
 ),
 (
     '10000000-0000-0000-0000-000000000270',
@@ -8198,14 +7646,6 @@ VALUES
     '2025-11-05 14:40:00'
 ),
 (
-    '10000000-0000-0000-0000-000000000272',
-    'f0000000-0000-0000-0000-000000000075',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
-    NULL,
-    '2025-11-06 08:20:00'
-),
-(
     '10000000-0000-0000-0000-000000000273',
     'f0000000-0000-0000-0000-000000000076',
     'REJECTED',
@@ -8220,15 +7660,7 @@ VALUES
     'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
     NULL,
     '2025-11-08 13:10:00'
-),
-(
-    '10000000-0000-0000-0000-000000000275',
-    'f0000000-0000-0000-0000-000000000078',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
-    NULL,
-    '2025-11-09 09:30:00'
-),
+), 
 (
     '10000000-0000-0000-0000-000000000276',
     'f0000000-0000-0000-0000-000000000079',
@@ -8244,14 +7676,6 @@ VALUES
     'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.',
     NULL,
     '2025-11-11 14:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000278',
-    'f0000000-0000-0000-0000-000000000081',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
-    NULL,
-    '2025-11-12 07:40:00'
 ),
 (
     '10000000-0000-0000-0000-000000000279',
@@ -8270,14 +7694,6 @@ VALUES
     '2025-11-14 08:55:00'
 ),
 (
-    '10000000-0000-0000-0000-000000000281',
-    'f0000000-0000-0000-0000-000000000084',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.',
-    NULL,
-    '2025-11-15 13:40:00'
-),
-(
     '10000000-0000-0000-0000-000000000282',
     'f0000000-0000-0000-0000-000000000085',
     'RESOLVED',
@@ -8294,28 +7710,12 @@ VALUES
     '2025-11-17 12:30:00'
 ),
 (
-    '10000000-0000-0000-0000-000000000284',
-    'f0000000-0000-0000-0000-000000000087',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
-    NULL,
-    '2025-11-18 07:55:00'
-),
-(
     '10000000-0000-0000-0000-000000000285',
     'f0000000-0000-0000-0000-000000000089',
     'RESOLVED',
     'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
     NULL,
     '2025-11-20 08:40:00'
-),
-(
-    '10000000-0000-0000-0000-000000000286',
-    'f0000000-0000-0000-0000-000000000090',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
-    NULL,
-    '2025-11-21 11:20:00'
 ),
 (
     '10000000-0000-0000-0000-000000000287',
@@ -8332,14 +7732,6 @@ VALUES
     'Góp ý đã được bộ phận Phòng Khoa học & Công nghệ giải quyết.',
     NULL,
     '2025-11-23 09:25:00'
-),
-(
-    '10000000-0000-0000-0000-000000000289',
-    'f0000000-0000-0000-0000-000000000093',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Khoa học & Công nghệ từ chối.',
-    NULL,
-    '2025-11-24 12:15:00'
 ),
 (
     '10000000-0000-0000-0000-000000000290',
@@ -8361,219 +7753,394 @@ INSERT INTO
     )
 VALUES
     -- Phòng Quan hệ quốc tế (d...004) – 24-72h
-    (
-        '10000000-0000-0000-0000-000000000291',
-        'f0000000-0000-0000-0000-000000000101',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.',
-        NULL,
-        '2025-11-06 14:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000292',
-        'f0000000-0000-0000-0000-000000000102',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ quốc tế từ chối.',
-        NULL,
-        '2025-11-10 09:45:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000293',
-        'f0000000-0000-0000-0000-000000000103',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.',
-        NULL,
-        '2025-11-13 16:30:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000294',
-        'f0000000-0000-0000-0000-000000000104',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.',
-        NULL,
-        '2025-11-16 11:10:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000295',
-        'f0000000-0000-0000-0000-000000000105',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.',
-        NULL,
-        '2025-11-19 15:50:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000296',
-        'f0000000-0000-0000-0000-000000000106',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.',
-        NULL,
-        '2025-11-22 10:20:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000297',
-        'f0000000-0000-0000-0000-000000000107',
-        'REJECTED',
-        'Góp ý đã bị bộ phận Phòng Quan hệ quốc tế từ chối.',
-        NULL,
-        '2025-11-25 13:40:00'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000298',
-        'f0000000-0000-0000-0000-000000000108',
-        'RESOLVED',
-        'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.',
-        NULL,
-        '2025-11-28 14:15:00'
-    ),
+    ('10000000-0000-0000-0000-000000000291', 'f0000000-0000-0000-0000-000000000101', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-04 10:15:00'),
+    ('20000000-0000-0000-0000-000000000291', 'f0000000-0000-0000-0000-000000000101', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-04 10:17:00'),
+    ('30000000-0000-0000-0000-000000000291', 'f0000000-0000-0000-0000-000000000101', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-04 10:20:00'),
+    ('40000000-0000-0000-0000-000000000291', 'f0000000-0000-0000-0000-000000000101', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-05-04 15:30:00'),
+    
+    ('10000000-0000-0000-0000-000000000292', 'f0000000-0000-0000-0000-000000000102', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-07 14:30:00'),
+    ('20000000-0000-0000-0000-000000000292', 'f0000000-0000-0000-0000-000000000102', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-07 14:32:00'),
+    ('30000000-0000-0000-0000-000000000292', 'f0000000-0000-0000-0000-000000000102', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-07 14:35:00'),
+    ('40000000-0000-0000-0000-000000000292', 'f0000000-0000-0000-0000-000000000102', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quan hệ quốc tế từ chối.', NULL, '2026-05-07 16:40:00'),
+
+    ('10000000-0000-0000-0000-000000000293', 'f0000000-0000-0000-0000-000000000103', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-10 09:20:00'),
+    ('20000000-0000-0000-0000-000000000293', 'f0000000-0000-0000-0000-000000000103', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-10 09:22:00'),
+    ('30000000-0000-0000-0000-000000000293', 'f0000000-0000-0000-0000-000000000103', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-10 09:25:00'),
+    ('40000000-0000-0000-0000-000000000293', 'f0000000-0000-0000-0000-000000000103', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-05-11 11:15:00'),
+    
+    -- ==========================================
+    -- f000...0104 (RESOLVED) | Created: 2026-05-13 16:45:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000294', 'f0000000-0000-0000-0000-000000000104', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-13 16:45:00'),
+    ('20000000-0000-0000-0000-000000000294', 'f0000000-0000-0000-0000-000000000104', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-13 16:47:00'),
+    ('30000000-0000-0000-0000-000000000294', 'f0000000-0000-0000-0000-000000000104', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-13 16:50:00'),
+    ('40000000-0000-0000-0000-000000000294', 'f0000000-0000-0000-0000-000000000104', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-05-14 14:20:00'),
+
+    -- ==========================================
+    -- f000...0105 (RESOLVED) | Created: 2026-05-16 11:10:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000295', 'f0000000-0000-0000-0000-000000000105', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-16 11:10:00'),
+    ('20000000-0000-0000-0000-000000000295', 'f0000000-0000-0000-0000-000000000105', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-16 11:12:00'),
+    ('30000000-0000-0000-0000-000000000295', 'f0000000-0000-0000-0000-000000000105', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-16 11:15:00'),
+    ('40000000-0000-0000-0000-000000000295', 'f0000000-0000-0000-0000-000000000105', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-05-17 09:30:00'),
+
+    -- ==========================================
+    -- f000...0106 (RESOLVED) | Created: 2026-05-19 13:25:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000296', 'f0000000-0000-0000-0000-000000000106', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-19 13:25:00'),
+    ('20000000-0000-0000-0000-000000000296', 'f0000000-0000-0000-0000-000000000106', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-19 13:27:00'),
+    ('30000000-0000-0000-0000-000000000296', 'f0000000-0000-0000-0000-000000000106', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-19 13:30:00'),
+    ('40000000-0000-0000-0000-000000000296', 'f0000000-0000-0000-0000-000000000106', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-05-20 10:00:00'),
+
+    -- ==========================================
+    -- f000...0107 (REJECTED) | Created: 2026-05-22 15:40:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000297', 'f0000000-0000-0000-0000-000000000107', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-22 15:40:00'),
+    ('20000000-0000-0000-0000-000000000297', 'f0000000-0000-0000-0000-000000000107', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-22 15:42:00'),
+    ('30000000-0000-0000-0000-000000000297', 'f0000000-0000-0000-0000-000000000107', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-22 15:45:00'),
+    ('40000000-0000-0000-0000-000000000297', 'f0000000-0000-0000-0000-000000000107', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quan hệ quốc tế từ chối.', NULL, '2026-05-23 09:15:00'),
+
+    -- ==========================================
+    -- f000...0108 (RESOLVED) | Created: 2026-05-25 10:00:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000298', 'f0000000-0000-0000-0000-000000000108', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-25 10:00:00'),
+    ('20000000-0000-0000-0000-000000000298', 'f0000000-0000-0000-0000-000000000108', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-25 10:02:00'),
+    ('30000000-0000-0000-0000-000000000298', 'f0000000-0000-0000-0000-000000000108', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-25 10:05:00'),
+    ('40000000-0000-0000-0000-000000000298', 'f0000000-0000-0000-0000-000000000108', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-05-26 14:00:00'),
+
+    -- ==========================================
+    -- f000...0109 (PENDING) | Created: 2026-06-02 14:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000299', 'f0000000-0000-0000-0000-000000000109', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-02 14:15:00'),
+    ('20000000-0000-0000-0000-000000000299', 'f0000000-0000-0000-0000-000000000109', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-02 14:17:00'),
+    ('30000000-0000-0000-0000-000000000299', 'f0000000-0000-0000-0000-000000000109', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-02 14:20:00'),
+
+    -- ==========================================
+    -- f000...0110 (IN_PROGRESS) | Created: 2026-06-05 09:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000300', 'f0000000-0000-0000-0000-000000000110', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-05 09:30:00'),
+    ('20000000-0000-0000-0000-000000000300', 'f0000000-0000-0000-0000-000000000110', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-05 09:32:00'),
+    ('30000000-0000-0000-0000-000000000300', 'f0000000-0000-0000-0000-000000000110', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-05 09:35:00'),
+    ('40000000-0000-0000-0000-000000000300', 'f0000000-0000-0000-0000-000000000110', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-05 15:45:00'),
+
+    -- ==========================================
+    -- f000...0111 (PENDING) | Created: 2026-06-07 11:45:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000301', 'f0000000-0000-0000-0000-000000000111', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-07 11:45:00'),
+    ('20000000-0000-0000-0000-000000000302', 'f0000000-0000-0000-0000-000000000111', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-07 11:47:00'),
+    ('30000000-0000-0000-0000-000000000303', 'f0000000-0000-0000-0000-000000000111', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-07 11:50:00'),
+
+    -- ==========================================
+    -- f000...0421 (PENDING) | Created: 2026-06-09 08:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000421', 'f0000000-0000-0000-0000-000000000421', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-09 08:20:00'),
+    ('20000000-0000-0000-0000-000000000421', 'f0000000-0000-0000-0000-000000000421', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-09 08:22:00'),
+    ('30000000-0000-0000-0000-000000000421', 'f0000000-0000-0000-0000-000000000421', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-09 08:25:00'),
+
+    -- ==========================================
+    -- f000...0422 (IN_PROGRESS) | Created: 2026-06-11 14:35:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000422', 'f0000000-0000-0000-0000-000000000422', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 14:35:00'),
+    ('20000000-0000-0000-0000-000000000422', 'f0000000-0000-0000-0000-000000000422', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-11 14:37:00'),
+    ('30000000-0000-0000-0000-000000000422', 'f0000000-0000-0000-0000-000000000422', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-11 14:40:00'),
+    ('40000000-0000-0000-0000-000000000422', 'f0000000-0000-0000-0000-000000000422', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-12 09:00:00'),
+
+    -- ==========================================
+    -- f000...0423 (IN_PROGRESS) | Created: 2026-06-12 10:00:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000423', 'f0000000-0000-0000-0000-000000000423', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-12 10:00:00'),
+    ('20000000-0000-0000-0000-000000000423', 'f0000000-0000-0000-0000-000000000423', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-12 10:02:00'),
+    ('30000000-0000-0000-0000-000000000423', 'f0000000-0000-0000-0000-000000000423', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-12 10:05:00'),
+    ('40000000-0000-0000-0000-000000000423', 'f0000000-0000-0000-0000-000000000423', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-12 16:15:00'),
+
+    -- ==========================================
+    -- f000...0424 (PENDING) | Created: 2026-06-13 15:50:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000424', 'f0000000-0000-0000-0000-000000000424', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-13 15:50:00'),
+    ('20000000-0000-0000-0000-000000000424', 'f0000000-0000-0000-0000-000000000424', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-13 15:52:00'),
+    ('30000000-0000-0000-0000-000000000424', 'f0000000-0000-0000-0000-000000000424', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-13 15:55:00'),
+
+    -- ==========================================
+    -- f000...0425 (RESOLVED) | Created: 2026-06-14 09:10:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000425', 'f0000000-0000-0000-0000-000000000425', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-14 09:10:00'),
+    ('20000000-0000-0000-0000-000000000425', 'f0000000-0000-0000-0000-000000000425', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-14 09:12:00'),
+    ('30000000-0000-0000-0000-000000000425', 'f0000000-0000-0000-0000-000000000425', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-14 09:15:00'),
+    ('40000000-0000-0000-0000-000000000425', 'f0000000-0000-0000-0000-000000000425', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quan hệ quốc tế giải quyết.', NULL, '2026-06-14 10:45:00'),
 
 -- Phòng Thiết bị – Vật tư (d...005) – 24-72h
-(
-    '10000000-0000-0000-0000-000000000299',
-    'f0000000-0000-0000-0000-000000000112',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-05 15:40:00'
-),
-(
-    '10000000-0000-0000-0000-000000000300',
-    'f0000000-0000-0000-0000-000000000113',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-09 10:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000301',
-    'f0000000-0000-0000-0000-000000000114',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Thiết bị – Vật tư từ chối.',
-    NULL,
-    '2025-11-12 16:50:00'
-),
-(
-    '10000000-0000-0000-0000-000000000302',
-    'f0000000-0000-0000-0000-000000000115',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-15 12:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000303',
-    'f0000000-0000-0000-0000-000000000116',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-18 14:10:00'
-),
-(
-    '10000000-0000-0000-0000-000000000304',
-    'f0000000-0000-0000-0000-000000000117',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-21 11:45:00'
-),
-(
-    '10000000-0000-0000-0000-000000000305',
-    'f0000000-0000-0000-0000-000000000118',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-24 16:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000306',
-    'f0000000-0000-0000-0000-000000000119',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Thiết bị – Vật tư từ chối.',
-    NULL,
-    '2025-11-27 09:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000307',
-    'f0000000-0000-0000-0000-000000000120',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Thiết bị – Vật tư giải quyết.',
-    NULL,
-    '2025-11-30 13:50:00'
-),
+-- ==========================================
+    -- f000...0112 (RESOLVED) | Created: 2026-05-03 08:10:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000304', 'f0000000-0000-0000-0000-000000000112', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-03 08:10:00'),
+    ('20000000-0000-0000-0000-000000000304', 'f0000000-0000-0000-0000-000000000112', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-03 08:12:00'),
+    ('30000000-0000-0000-0000-000000000304', 'f0000000-0000-0000-0000-000000000112', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-03 08:15:00'),
+    ('40000000-0000-0000-0000-000000000304', 'f0000000-0000-0000-0000-000000000112', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-03 14:25:00'),
 
--- Phòng Quản trị chiến lược (d...006) – 24-72h
-(
-    '10000000-0000-0000-0000-000000000308',
-    'f0000000-0000-0000-0000-000000000124',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-11-07 14:40:00'
-),
-(
-    '10000000-0000-0000-0000-000000000309',
-    'f0000000-0000-0000-0000-000000000125',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Quản trị chiến lược từ chối.',
-    NULL,
-    '2025-11-11 10:15:00'
-),
-(
-    '10000000-0000-0000-0000-000000000310',
-    'f0000000-0000-0000-0000-000000000126',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-11-14 16:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000311',
-    'f0000000-0000-0000-0000-000000000127',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-11-17 12:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000312',
-    'f0000000-0000-0000-0000-000000000128',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-11-20 15:45:00'
-),
-(
-    '10000000-0000-0000-0000-000000000313',
-    'f0000000-0000-0000-0000-000000000129',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Quản trị chiến lược từ chối.',
-    NULL,
-    '2025-11-23 14:10:00'
-),
-(
-    '10000000-0000-0000-0000-000000000314',
-    'f0000000-0000-0000-0000-000000000130',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-11-26 11:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000315',
-    'f0000000-0000-0000-0000-000000000131',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-11-29 13:50:00'
-),
-(
-    '10000000-0000-0000-0000-000000000316',
-    'f0000000-0000-0000-0000-000000000132',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị chiến lược giải quyết.',
-    NULL,
-    '2025-12-02 15:20:00'
-),
+    -- ==========================================
+    -- f000...0113 (RESOLVED) | Created: 2026-05-06 13:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000305', 'f0000000-0000-0000-0000-000000000113', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-06 13:20:00'),
+    ('20000000-0000-0000-0000-000000000305', 'f0000000-0000-0000-0000-000000000113', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-06 13:22:00'),
+    ('30000000-0000-0000-0000-000000000305', 'f0000000-0000-0000-0000-000000000113', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-06 13:25:00'),
+    ('40000000-0000-0000-0000-000000000305', 'f0000000-0000-0000-0000-000000000113', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-07 09:10:00'),
 
+    -- ==========================================
+    -- f000...0114 (REJECTED) | Created: 2026-05-09 10:40:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000306', 'f0000000-0000-0000-0000-000000000114', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-09 10:40:00'),
+    ('20000000-0000-0000-0000-000000000306', 'f0000000-0000-0000-0000-000000000114', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-09 10:42:00'),
+    ('30000000-0000-0000-0000-000000000306', 'f0000000-0000-0000-0000-000000000114', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-09 10:45:00'),
+    ('40000000-0000-0000-0000-000000000306', 'f0000000-0000-0000-0000-000000000114', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất từ chối.', NULL, '2026-05-09 15:30:00'),
+
+    -- ==========================================
+    -- f000...0115 (RESOLVED) | Created: 2026-05-12 15:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000307', 'f0000000-0000-0000-0000-000000000115', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-12 15:15:00'),
+    ('20000000-0000-0000-0000-000000000307', 'f0000000-0000-0000-0000-000000000115', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-12 15:17:00'),
+    ('30000000-0000-0000-0000-000000000307', 'f0000000-0000-0000-0000-000000000115', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-12 15:20:00'),
+    ('40000000-0000-0000-0000-000000000307', 'f0000000-0000-0000-0000-000000000115', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-13 10:00:00'),
+
+    -- ==========================================
+    -- f000...0116 (RESOLVED) | Created: 2026-05-15 11:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000308', 'f0000000-0000-0000-0000-000000000116', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-15 11:30:00'),
+    ('20000000-0000-0000-0000-000000000308', 'f0000000-0000-0000-0000-000000000116', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-15 11:32:00'),
+    ('30000000-0000-0000-0000-000000000308', 'f0000000-0000-0000-0000-000000000116', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-15 11:35:00'),
+    ('40000000-0000-0000-0000-000000000308', 'f0000000-0000-0000-0000-000000000116', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-16 15:40:00'),
+
+    -- ==========================================
+    -- f000...0117 (RESOLVED) | Created: 2026-05-18 09:00:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000309', 'f0000000-0000-0000-0000-000000000117', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-18 09:00:00'),
+    ('20000000-0000-0000-0000-000000000309', 'f0000000-0000-0000-0000-000000000117', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-18 09:02:00'),
+    ('30000000-0000-0000-0000-000000000309', 'f0000000-0000-0000-0000-000000000117', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-18 09:05:00'),
+    ('40000000-0000-0000-0000-000000000309', 'f0000000-0000-0000-0000-000000000117', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-19 11:20:00'),
+
+    -- ==========================================
+    -- f000...0118 (RESOLVED) | Created: 2026-05-21 14:50:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000310', 'f0000000-0000-0000-0000-000000000118', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-21 14:50:00'),
+    ('20000000-0000-0000-0000-000000000310', 'f0000000-0000-0000-0000-000000000118', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-21 14:52:00'),
+    ('30000000-0000-0000-0000-000000000310', 'f0000000-0000-0000-0000-000000000118', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-21 14:55:00'),
+    ('40000000-0000-0000-0000-000000000310', 'f0000000-0000-0000-0000-000000000118', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-22 16:30:00'),
+
+    -- ==========================================
+    -- f000...0119 (REJECTED) | Created: 2026-05-24 10:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000311', 'f0000000-0000-0000-0000-000000000119', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-24 10:20:00'),
+    ('20000000-0000-0000-0000-000000000311', 'f0000000-0000-0000-0000-000000000119', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-24 10:02:00'),
+    ('30000000-0000-0000-0000-000000000311', 'f0000000-0000-0000-0000-000000000119', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-24 10:25:00'),
+    ('40000000-0000-0000-0000-000000000311', 'f0000000-0000-0000-0000-000000000119', 'REJECTED', 'Góp ý đã bị bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất từ chối.', NULL, '2026-05-25 09:15:00'),
+
+    -- ==========================================
+    -- f000...0120 (RESOLVED) | Created: 2026-05-27 16:10:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000312', 'f0000000-0000-0000-0000-000000000120', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-27 16:10:00'),
+    ('20000000-0000-0000-0000-000000000312', 'f0000000-0000-0000-0000-000000000120', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-27 16:12:00'),
+    ('30000000-0000-0000-0000-000000000312', 'f0000000-0000-0000-0000-000000000120', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-27 16:15:00'),
+    ('40000000-0000-0000-0000-000000000312', 'f0000000-0000-0000-0000-000000000120', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-05-29 11:00:00'),
+
+    -- ==========================================
+    -- f000...0121 (IN_PROGRESS) | Created: 2026-06-01 13:40:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000313', 'f0000000-0000-0000-0000-000000000121', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-01 13:40:00'),
+    ('20000000-0000-0000-0000-000000000313', 'f0000000-0000-0000-0000-000000000121', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-01 13:42:00'),
+    ('30000000-0000-0000-0000-000000000313', 'f0000000-0000-0000-0000-000000000121', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-01 13:45:00'),
+    ('40000000-0000-0000-0000-000000000313', 'f0000000-0000-0000-0000-000000000121', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-02 10:30:00'),
+
+    -- ==========================================
+    -- f000...0122 (IN_PROGRESS) | Created: 2026-06-04 09:25:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000314', 'f0000000-0000-0000-0000-000000000122', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-04 09:25:00'),
+    ('20000000-0000-0000-0000-000000000314', 'f0000000-0000-0000-0000-000000000122', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-04 09:27:00'),
+    ('30000000-0000-0000-0000-000000000314', 'f0000000-0000-0000-0000-000000000122', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-04 09:30:00'),
+    ('40000000-0000-0000-0000-000000000314', 'f0000000-0000-0000-0000-000000000122', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-04 14:00:00'),
+
+    -- ==========================================
+    -- f000...0123 (IN_PROGRESS) | Created: 2026-06-06 15:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000315', 'f0000000-0000-0000-0000-000000000123', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-06 15:30:00'),
+    ('20000000-0000-0000-0000-000000000315', 'f0000000-0000-0000-0000-000000000123', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-06 15:32:00'),
+    ('30000000-0000-0000-0000-000000000315', 'f0000000-0000-0000-0000-000000000123', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-06 15:35:00'),
+    ('40000000-0000-0000-0000-000000000315', 'f0000000-0000-0000-0000-000000000123', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-08 08:30:00'),
+
+    -- ==========================================
+    -- f000...0426 (IN_PROGRESS) | Created: 2026-06-08 10:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000426', 'f0000000-0000-0000-0000-000000000426', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-08 10:15:00'),
+    ('20000000-0000-0000-0000-000000000426', 'f0000000-0000-0000-0000-000000000426', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-08 10:17:00'),
+    ('30000000-0000-0000-0000-000000000426', 'f0000000-0000-0000-0000-000000000426', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-08 10:20:00'),
+    ('40000000-0000-0000-0000-000000000426', 'f0000000-0000-0000-0000-000000000426', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-09 11:15:00'),
+
+    -- ==========================================
+    -- f000...0427 (IN_PROGRESS) | Created: 2026-06-10 11:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000427', 'f0000000-0000-0000-0000-000000000427', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-10 11:20:00'),
+    ('20000000-0000-0000-0000-000000000427', 'f0000000-0000-0000-0000-000000000427', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-10 11:22:00'),
+    ('30000000-0000-0000-0000-000000000427', 'f0000000-0000-0000-0000-000000000427', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-10 11:25:00'),
+    ('40000000-0000-0000-0000-000000000427', 'f0000000-0000-0000-0000-000000000427', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-11 09:40:00'),
+
+    -- ==========================================
+    -- f000...0428 (PENDING) | Created: 2026-06-11 16:45:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000428', 'f0000000-0000-0000-0000-000000000428', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 16:45:00'),
+    ('20000000-0000-0000-0000-000000000428', 'f0000000-0000-0000-0000-000000000428', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-11 16:47:00'),
+    ('30000000-0000-0000-0000-000000000428', 'f0000000-0000-0000-0000-000000000428', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-11 16:50:00'),
+
+    -- ==========================================
+    -- f000...0429 (PENDING) | Created: 2026-06-13 14:00:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000429', 'f0000000-0000-0000-0000-000000000429', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-13 14:00:00'),
+    ('20000000-0000-0000-0000-000000000429', 'f0000000-0000-0000-0000-000000000429', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-13 14:02:00'),
+    ('30000000-0000-0000-0000-000000000429', 'f0000000-0000-0000-0000-000000000429', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-13 14:05:00'),
+
+    -- ==========================================
+    -- f000...0430 (RESOLVED) | Created: 2026-06-14 08:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000430', 'f0000000-0000-0000-0000-000000000430', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-14 08:30:00'),
+    ('20000000-0000-0000-0000-000000000430', 'f0000000-0000-0000-0000-000000000430', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-14 08:32:00'),
+    ('30000000-0000-0000-0000-000000000430', 'f0000000-0000-0000-0000-000000000430', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-14 08:35:00'),
+    ('40000000-0000-0000-0000-000000000430', 'f0000000-0000-0000-0000-000000000430', 'RESOLVED', 'Góp ý đã được bộ phận Phòng Quản trị thiết bị và Cơ sở vật chất giải quyết.', NULL, '2026-06-14 10:45:00'),
+
+-- ==========================================
+    -- f000...0124 (RESOLVED) | Created: 2026-05-05 11:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000316', 'f0000000-0000-0000-0000-000000000124', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-05 11:15:00'),
+    ('20000000-0000-0000-0000-000000000316', 'f0000000-0000-0000-0000-000000000124', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-05 11:17:00'),
+    ('30000000-0000-0000-0000-000000000316', 'f0000000-0000-0000-0000-000000000124', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-05 11:20:00'),
+    ('40000000-0000-0000-0000-000000000316', 'f0000000-0000-0000-0000-000000000124', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-05-06 09:30:00'),
+
+    -- ==========================================
+    -- f000...0125 (REJECTED) | Created: 2026-05-08 14:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000336', 'f0000000-0000-0000-0000-000000000125', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-08 14:20:00'),
+    ('20000000-0000-0000-0000-000000000336', 'f0000000-0000-0000-0000-000000000125', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-08 14:22:00'),
+    ('30000000-0000-0000-0000-000000000336', 'f0000000-0000-0000-0000-000000000125', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-08 14:25:00'),
+    ('40000000-0000-0000-0000-000000000336', 'f0000000-0000-0000-0000-000000000125', 'REJECTED', 'Góp ý đã bị bộ phận Viện Hợp tác và Đào tạo liên kết từ chối.', NULL, '2026-05-08 17:10:00'),
+
+    -- ==========================================
+    -- f000...0126 (RESOLVED) | Created: 2026-05-11 09:40:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000337', 'f0000000-0000-0000-0000-000000000126', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-11 09:40:00'),
+    ('20000000-0000-0000-0000-000000000337', 'f0000000-0000-0000-0000-000000000126', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-11 09:42:00'),
+    ('30000000-0000-0000-0000-000000000337', 'f0000000-0000-0000-0000-000000000126', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-11 09:45:00'),
+    ('40000000-0000-0000-0000-000000000337', 'f0000000-0000-0000-0000-000000000126', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-05-12 11:15:00'),
+
+    -- ==========================================
+    -- f000...0127 (RESOLVED) | Created: 2026-05-14 13:10:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000338', 'f0000000-0000-0000-0000-000000000127', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-14 13:10:00'),
+    ('20000000-0000-0000-0000-000000000338', 'f0000000-0000-0000-0000-000000000127', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-14 13:12:00'),
+    ('30000000-0000-0000-0000-000000000338', 'f0000000-0000-0000-0000-000000000127', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-14 13:45:00'),
+    ('40000000-0000-0000-0000-000000000338', 'f0000000-0000-0000-0000-000000000127', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-05-15 16:00:00'),
+
+    -- ==========================================
+    -- f000...0128 (RESOLVED) | Created: 2026-05-17 16:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000339', 'f0000000-0000-0000-0000-000000000128', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-17 16:30:00'),
+    ('20000000-0000-0000-0000-000000000339', 'f0000000-0000-0000-0000-000000000128', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-17 16:32:00'),
+    ('30000000-0000-0000-0000-000000000339', 'f0000000-0000-0000-0000-000000000128', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-17 16:35:00'),
+    ('40000000-0000-0000-0000-000000000339', 'f0000000-0000-0000-0000-000000000128', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-05-19 10:20:00'),
+
+    -- ==========================================
+    -- f000...0129 (REJECTED) | Created: 2026-05-20 10:50:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000340', 'f0000000-0000-0000-0000-000000000129', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-20 10:50:00'),
+    ('20000000-0000-0000-0000-000000000340', 'f0000000-0000-0000-0000-000000000129', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-20 10:52:00'),
+    ('30000000-0000-0000-0000-000000000340', 'f0000000-0000-0000-0000-000000000129', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-20 10:55:00'),
+    ('40000000-0000-0000-0000-000000000340', 'f0000000-0000-0000-0000-000000000129', 'REJECTED', 'Góp ý đã bị bộ phận Viện Hợp tác và Đào tạo liên kết từ chối.', NULL, '2026-05-20 14:30:00'),
+
+    -- ==========================================
+    -- f000...0130 (RESOLVED) | Created: 2026-05-23 14:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000341', 'f0000000-0000-0000-0000-000000000130', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-23 14:15:00'),
+    ('20000000-0000-0000-0000-000000000341', 'f0000000-0000-0000-0000-000000000130', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-23 14:17:00'),
+    ('30000000-0000-0000-0000-000000000341', 'f0000000-0000-0000-0000-000000000130', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-23 14:20:00'),
+    ('40000000-0000-0000-0000-000000000341', 'f0000000-0000-0000-0000-000000000130', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-05-25 09:00:00'),
+
+    -- ==========================================
+    -- f000...0131 (RESOLVED) | Created: 2026-05-26 11:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000342', 'f0000000-0000-0000-0000-000000000131', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-26 11:20:00'),
+    ('20000000-0000-0000-0000-000000000342', 'f0000000-0000-0000-0000-000000000131', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-26 11:22:00'),
+    ('30000000-0000-0000-0000-000000000342', 'f0000000-0000-0000-0000-000000000131', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-26 11:25:00'),
+    ('40000000-0000-0000-0000-000000000342', 'f0000000-0000-0000-0000-000000000131', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-05-27 15:45:00'),
+
+    -- ==========================================
+    -- f000...0132 (RESOLVED) | Created: 2026-05-29 15:45:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000343', 'f0000000-0000-0000-0000-000000000132', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-05-29 15:45:00'),
+    ('20000000-0000-0000-0000-000000000343', 'f0000000-0000-0000-0000-000000000132', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-05-29 15:47:00'),
+    ('30000000-0000-0000-0000-000000000343', 'f0000000-0000-0000-0000-000000000132', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-05-29 15:50:00'),
+    ('40000000-0000-0000-0000-000000000343', 'f0000000-0000-0000-0000-000000000132', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-06-01 10:10:00'),
+
+    -- ==========================================
+    -- f000...0133 (PENDING) | Created: 2026-06-01 10:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000344', 'f0000000-0000-0000-0000-000000000133', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-01 10:30:00'),
+    ('20000000-0000-0000-0000-000000000344', 'f0000000-0000-0000-0000-000000000133', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-01 10:32:00'),
+    ('30000000-0000-0000-0000-000000000344', 'f0000000-0000-0000-0000-000000000133', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-01 10:35:00'),
+
+    -- ==========================================
+    -- f000...0134 (IN_PROGRESS) | Created: 2026-06-03 14:00:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000345', 'f0000000-0000-0000-0000-000000000134', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-03 14:00:00'),
+    ('20000000-0000-0000-0000-000000000345', 'f0000000-0000-0000-0000-000000000134', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-03 14:02:00'),
+    ('30000000-0000-0000-0000-000000000345', 'f0000000-0000-0000-0000-000000000134', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-03 14:05:00'),
+    ('40000000-0000-0000-0000-000000000345', 'f0000000-0000-0000-0000-000000000134', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-04 09:30:00'),
+
+    -- ==========================================
+    -- f000...0135 (PENDING) | Created: 2026-06-05 09:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000346', 'f0000000-0000-0000-0000-000000000135', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-05 09:15:00'),
+    ('20000000-0000-0000-0000-000000000346', 'f0000000-0000-0000-0000-000000000135', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-05 09:17:00'),
+    ('30000000-0000-0000-0000-000000000346', 'f0000000-0000-0000-0000-000000000135', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-05 09:20:00'),
+
+    -- ==========================================
+    -- f000...0136 (IN_PROGRESS) | Created: 2026-06-07 13:40:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000347', 'f0000000-0000-0000-0000-000000000136', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-07 13:40:00'),
+    ('20000000-0000-0000-0000-000000000347', 'f0000000-0000-0000-0000-000000000136', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-07 13:42:00'),
+    ('30000000-0000-0000-0000-000000000347', 'f0000000-0000-0000-0000-000000000136', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-07 13:45:00'),
+    ('40000000-0000-0000-0000-000000000347', 'f0000000-0000-0000-0000-000000000136', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-08 10:00:00'),
+
+    -- ==========================================
+    -- f000...0431 (PENDING) | Created: 2026-06-09 19:30:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000431', 'f0000000-0000-0000-0000-000000000431', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-09 19:30:00'),
+    ('20000000-0000-0000-0000-000000000431', 'f0000000-0000-0000-0000-000000000431', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-09 19:32:00'),
+    ('30000000-0000-0000-0000-000000000431', 'f0000000-0000-0000-0000-000000000431', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-09 19:35:00'),
+
+    -- ==========================================
+    -- f000...0432 (IN_PROGRESS) | Created: 2026-06-11 10:15:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000432', 'f0000000-0000-0000-0000-000000000432', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-11 10:15:00'),
+    ('20000000-0000-0000-0000-000000000432', 'f0000000-0000-0000-0000-000000000432', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-11 10:17:00'),
+    ('30000000-0000-0000-0000-000000000432', 'f0000000-0000-0000-0000-000000000432', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-11 10:20:00'),
+    ('40000000-0000-0000-0000-000000000432', 'f0000000-0000-0000-0000-000000000432', 'IN_PROGRESS', 'Góp ý đang được bộ phận chuyên trách xử lý.', NULL, '2026-06-12 08:30:00'),
+
+    -- ==========================================
+    -- f000...0433 (PENDING) | Created: 2026-06-12 15:20:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000433', 'f0000000-0000-0000-0000-000000000433', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-12 15:20:00'),
+    ('20000000-0000-0000-0000-000000000433', 'f0000000-0000-0000-0000-000000000433', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-12 15:22:00'),
+    ('30000000-0000-0000-0000-000000000433', 'f0000000-0000-0000-0000-000000000433', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-12 15:25:00'),
+
+    -- ==========================================
+    -- f000...0434 (PENDING) | Created: 2026-06-13 09:00:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000434', 'f0000000-0000-0000-0000-000000000434', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-13 09:00:00'),
+    ('20000000-0000-0000-0000-000000000434', 'f0000000-0000-0000-0000-000000000434', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-13 09:02:00'),
+    ('30000000-0000-0000-0000-000000000434', 'f0000000-0000-0000-0000-000000000434', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-13 09:05:00'),
+
+    -- ==========================================
+    -- f000...0435 (RESOLVED) | Created: 2026-06-14 11:10:00
+    -- ==========================================
+    ('10000000-0000-0000-0000-000000000435', 'f0000000-0000-0000-0000-000000000435', 'AI_REVIEWING', 'Hệ thống đang tự động kiểm tra nội dung góp ý.', NULL, '2026-06-14 11:10:00'),
+    ('20000000-0000-0000-0000-000000000435', 'f0000000-0000-0000-0000-000000000435', 'AI_REVIEW_SUCCESS', 'Hệ thống AI đánh giá nội dung hợp lệ.', NULL, '2026-06-14 11:12:00'),
+    ('30000000-0000-0000-0000-000000000435', 'f0000000-0000-0000-0000-000000000435', 'PENDING', 'Góp ý đang chờ tiếp nhận và xử lý.', NULL, '2026-06-14 11:15:00'),
+    ('40000000-0000-0000-0000-000000000435', 'f0000000-0000-0000-0000-000000000435', 'RESOLVED', 'Góp ý đã được bộ phận Viện Hợp tác và Đào tạo liên kết giải quyết.', NULL, '2026-06-14 15:30:00'),
 -- Phòng Đảm bảo chất lượng (d...007) – 24-72h
 (
     '10000000-0000-0000-0000-000000000317',
@@ -8720,195 +8287,11 @@ VALUES
     'Góp ý đã được bộ phận Phòng Tổ chức Hành chính giải quyết.',
     NULL,
     '2025-12-02 10:20:00'
-),
+);
 
 -- Phòng Quản trị cơ sở vật chất (d...009) – 24-72h
-(
-    '10000000-0000-0000-0000-000000000335',
-    'f0000000-0000-0000-0000-000000000166',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-06 15:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000336',
-    'f0000000-0000-0000-0000-000000000167',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-10 12:40:00'
-),
-(
-    '10000000-0000-0000-0000-000000000337',
-    'f0000000-0000-0000-0000-000000000168',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-13 14:15:00'
-),
-(
-    '10000000-0000-0000-0000-000000000338',
-    'f0000000-0000-0000-0000-000000000169',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-16 11:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000339',
-    'f0000000-0000-0000-0000-000000000170',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-19 13:50:00'
-),
-(
-    '10000000-0000-0000-0000-000000000340',
-    'f0000000-0000-0000-0000-000000000171',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-22 10:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000341',
-    'f0000000-0000-0000-0000-000000000172',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-25 15:40:00'
-),
-(
-    '10000000-0000-0000-0000-000000000342',
-    'f0000000-0000-0000-0000-000000000173',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-11-28 12:10:00'
-),
-(
-    '10000000-0000-0000-0000-000000000343',
-    'f0000000-0000-0000-0000-000000000174',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-12-01 14:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000344',
-    'f0000000-0000-0000-0000-000000000175',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-12-04 11:50:00'
-),
-(
-    '10000000-0000-0000-0000-000000000345',
-    'f0000000-0000-0000-0000-000000000180',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-12-09 13:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000346',
-    'f0000000-0000-0000-0000-000000000181',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Quản trị cơ sở vật chất giải quyết.',
-    NULL,
-    '2025-12-10 10:45:00'
-),
 
 -- Phòng Tuyển sinh và CTSV (d...010) – 24-72h
-(
-    '10000000-0000-0000-0000-000000000347',
-    'f0000000-0000-0000-0000-000000000183',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-05 15:40:00'
-),
-(
-    '10000000-0000-0000-0000-000000000348',
-    'f0000000-0000-0000-0000-000000000184',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Tuyển sinh và CTSV từ chối.',
-    NULL,
-    '2025-11-09 12:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000349',
-    'f0000000-0000-0000-0000-000000000185',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-12 14:50:00'
-),
-(
-    '10000000-0000-0000-0000-000000000350',
-    'f0000000-0000-0000-0000-000000000186',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-15 13:10:00'
-),
-(
-    '10000000-0000-0000-0000-000000000351',
-    'f0000000-0000-0000-0000-000000000187',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-18 16:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000352',
-    'f0000000-0000-0000-0000-000000000188',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-21 12:45:00'
-),
-(
-    '10000000-0000-0000-0000-000000000353',
-    'f0000000-0000-0000-0000-000000000189',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-24 15:20:00'
-),
-(
-    '10000000-0000-0000-0000-000000000354',
-    'f0000000-0000-0000-0000-000000000190',
-    'REJECTED',
-    'Góp ý đã bị bộ phận Phòng Tuyển sinh và CTSV từ chối.',
-    NULL,
-    '2025-11-27 14:10:00'
-),
-(
-    '10000000-0000-0000-0000-000000000355',
-    'f0000000-0000-0000-0000-000000000191',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-11-30 13:50:00'
-),
-(
-    '10000000-0000-0000-0000-000000000356',
-    'f0000000-0000-0000-0000-000000000192',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-12-03 12:30:00'
-),
-(
-    '10000000-0000-0000-0000-000000000357',
-    'f0000000-0000-0000-0000-000000000198',
-    'RESOLVED',
-    'Góp ý đã được bộ phận Phòng Tuyển sinh và CTSV giải quyết.',
-    NULL,
-    '2025-12-09 14:20:00'
-);
 -- =================================================================
 -- STEP 6: FORWARDING LOGS
 -- Fix ID: fl... -> 2000...
@@ -8933,7 +8316,7 @@ VALUES (
         'b0000000-0000-0000-0000-000000000010',
         'Chuyển phòng KHTC xử lý.',
         'Nộp nhầm',
-        '2025-10-28 09:30:00'
+        '2026-04-02 16:45:00'
     );
 
 -- =================================================================
@@ -10845,8 +10228,7 @@ INSERT INTO
         "departmentId"
     )
 VALUES
-
--- 1. Cán bộ Thanh tra (b...001) – 5 thông báo
+-- 1. Thông báo ID 01
 (
     '60000000-0000-0000-0000-000000000001',
     'Thông báo lịch thanh tra định kỳ học kỳ I năm học 2025-2026',
@@ -10855,20 +10237,22 @@ VALUES
 Căn cứ Kế hoạch công tác năm học 2025-2026, Phòng Thanh tra giáo dục sẽ tiến hành thanh tra định kỳ việc thực hiện quy chế đào tạo, đánh giá người học và đạo đức nhà giáo tại tất cả các khoa từ ngày 10/12/2025 đến ngày 28/12/2025. 
 Đoàn thanh tra sẽ kiểm tra hồ sơ giảng dạy, biên bản chấm thi, bảng điểm và các tài liệu liên quan. 
 Đề nghị lãnh đạo các khoa chỉ đạo giảng viên chuẩn bị đầy đủ hồ sơ theo phụ lục đính kèm. 
-Thông tin chi tiết vui lòng liên hệ phòng A101 hoặc email thanhtra@uni.edu.vn.
+Thông tin chi tiết vui lòng liên hệ trực tiếp tại Phòng A1.1003 (tầng 10), Tòa nhà trung tâm hoặc qua email pttgd@hcmute.edu.vn.
 
 Trân trọng thông báo.',
     '2025-12-04 09:00:00',
     'b0000000-0000-0000-0000-000000000001',
     'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 2. Thông báo ID 02
 (
     '60000000-0000-0000-0000-000000000002',
     'Hướng dẫn tiếp nhận và xử lý tố giác vi phạm đạo đức nhà giáo',
     'Kính gửi toàn thể cán bộ, giảng viên và sinh viên,
 
-Phòng Thanh tra giáo dục tiếp nhận mọi thông tin tố giác hành vi vi phạm đạo đức nhà giáo qua các kênh: hộp thư thanhtra@uni.edu.vn, hộp thư góp ý tại các tòa nhà, hoặc trực tiếp tại phòng A101. 
-Mọi thông tin được bảo mật tuyệt đối danh tính người cung cấp, được xác minh khách quan và xử lý nghiêm theo quy định. 
+Phòng Thanh tra giáo dục tiếp nhận mọi thông tin tố giác hành vi vi phạm đạo đức nhà giáo qua các kênh chính thức: hộp thư điện tử pttgd@hcmute.edu.vn, hộp thư góp ý tại các tòa nhà, hoặc gặp trực tiếp lãnh đạo phòng tại Phòng A1.1003 (tầng 10), Tòa nhà trung tâm. 
+Mọi thông tin tiếp nhận đều được bảo mật tuyệt đối danh tính người cung cấp, được tiến hành xác minh độc lập, khách quan và xử lý nghiêm theo quy định pháp luật. 
 Kính mong quý thầy cô và các em sinh viên tích cực tham gia giám sát, góp phần xây dựng môi trường giáo dục lành mạnh.
 
 Trân trọng!',
@@ -10876,42 +10260,45 @@ Trân trọng!',
     'b0000000-0000-0000-0000-000000000001',
     'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 3. Thông báo ID 03
 (
     '60000000-0000-0000-0000-000000000003',
     'Công bố kết quả xử lý khiếu nại học kỳ hè 2025',
     'Kính gửi toàn thể sinh viên,
 
-Phòng Thanh tra giáo dục đã hoàn tất xác minh 15 vụ khiếu nại liên quan đến chấm thi học kỳ hè 2025. 
-Kết quả xử lý đã được gửi đến các bên liên quan và công bố công khai trên cổng thông tin điện tử. 
-Các trường hợp vi phạm đã bị xử lý kỷ luật theo đúng quy định.
+Phòng Thanh tra giáo dục đã hoàn tất công tác xác minh và làm việc đối với 15 vụ việc khiếu nại liên quan đến quy trình chấm thi và điểm số trong học kỳ hè 2025. 
+Kết quả xử lý chi tiết đã được gửi trực tiếp đến các cá nhân liên quan, đồng thời niêm yết công khai tại bảng tin văn phòng Phòng A1.1003 (tầng 10), Tòa nhà trung tâm. Các trường hợp phát hiện sai sót hoặc vi phạm quy chế đều đã bị xử lý nghiêm túc, đảm bảo quyền lợi chính đáng cho người học.
 
 Trân trọng thông báo.',
     '2025-10-15 10:00:00',
     'b0000000-0000-0000-0000-000000000001',
     'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 4. Thông báo ID 04
 (
     '60000000-0000-0000-0000-000000000004',
     'Tập huấn quy chế thi và đạo đức nhà giáo',
     'Kính gửi toàn thể giảng viên,
 
-Phòng Thanh tra giáo dục tổ chức tập huấn “Quy chế thi và đạo đức nhà giáo” vào lúc 09h00 ngày 15/09/2025 tại Hội trường A. 
-Sự có mặt đầy đủ là bắt buộc. 
-Giảng viên vắng mặt cần có xác nhận của Trưởng khoa và tham gia buổi học bù.
+Phòng Thanh tra giáo dục tổ chức buổi tập huấn chuyên đề “Quy chế thi, công tác coi thi/chấm thi và đạo đức nhà giáo” vào lúc 09h00 ngày 15/09/2025 tại Hội trường A. 
+Đây là buổi sinh hoạt chuyên môn bắt buộc đối với toàn bộ giảng viên cơ hữu và giảng viên thỉnh giảng. Giảng viên vắng mặt không có lý do chính đáng sẽ được ghi nhận biên bản gửi về Hội đồng thi đua. Mọi thắc mắc và đơn xin nghỉ vui lòng nộp về Phòng A1.1003 (tầng 10) trước ngày diễn ra tập huấn.
 
 Trân trọng thông báo.',
     '2025-09-10 11:00:00',
     'b0000000-0000-0000-0000-000000000001',
     'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 5. Thông báo ID 05
 (
     '60000000-0000-0000-0000-000000000005',
     'Kế hoạch thanh tra nội bộ năm học 2025-2026',
-    'Kính gửi lãnh đạo các đơn vị,
+    'Kính gửi lãnh đạo các đơn vị, Khoa và Trung tâm,
 
-Phòng Thanh tra giáo dục công bố kế hoạch thanh tra nội bộ toàn diện năm học 2025-2026. 
-Lịch thanh tra chi tiết sẽ được gửi trước 15 ngày làm việc. 
-Đề nghị chuẩn bị đầy đủ hồ sơ theo phụ lục.
+Phòng Thanh tra giáo dục chính thức công bố kế hoạch thanh tra nội bộ toàn diện đối với hoạt động đào tạo, quản lý phôi bằng và kiểm tra tiến độ giảng dạy năm học 2025-2026. 
+Lịch thanh tra chi tiết cho từng đơn vị cụ thể sẽ được gửi bằng văn bản giấy và email trước 15 ngày làm việc. Đề nghị các đơn vị phân công đầu mối hỗ trợ, chuẩn bị hồ sơ minh chứng đầy đủ tại văn phòng làm việc để phối hợp cùng đoàn thanh tra trường.
 
 Trân trọng.',
     '2025-08-20 09:30:00',
@@ -10919,568 +10306,780 @@ Trân trọng.',
     'd0000000-0000-0000-0000-000000000001'
 ),
 
--- 2. Cán bộ Quản trị CSVC (b...009) – 5 thông báo
+-- 6. Thông báo ID 06
 (
     '60000000-0000-0000-0000-000000000006',
-    'Thông báo bảo trì hệ thống điện toàn trường',
-    'Kính gửi toàn thể cán bộ, giảng viên và sinh viên,
+    'Thông báo kiểm tra đột xuất việc chấp hành giờ giấc giảng dạy học kỳ II',
+    'Kính gửi lãnh đạo các đơn vị và quý thầy cô giảng viên,
 
-Phòng Quản trị cơ sở vật chất sẽ bảo trì hệ thống điện tòa nhà A, B, C từ ngày 20–25/12/2025. 
-Có thể tạm cắt điện cục bộ trong một số khung giờ. 
-Lịch chi tiết đã gửi qua email đơn vị.
+Nhằm tăng cường kỷ cương học đường và nâng cao chất lượng đào tạo, Phòng Thanh tra giáo dục sẽ phối hợp cùng các bên liên quan tiến hành kiểm tra đột xuất giờ giấc ra vào lớp, việc chấp hành thời khóa biểu và thực hiện giảng dạy theo đề cương chi tiết tại các giảng đường trong suốt học kỳ II.
+Mọi trường hợp đi muộn, về sớm hoặc tự ý thay đổi lịch học/phòng học mà không thông qua Giáo vụ Khoa sẽ được ban thanh tra lập biên bản tại chỗ và tổng hợp báo cáo gửi Ban Giám hiệu. Kính mong quý thầy cô lưu ý và thực hiện nghiêm túc.
 
 Trân trọng thông báo.',
-    '2025-12-01 08:00:00',
-    'b0000000-0000-0000-0000-000000000009',
-    'd0000000-0000-0000-0000-000000000009'
+    '2026-01-12 08:00:00',
+    'b0000000-0000-0000-0000-000000000001',
+    'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 7. Thông báo ID 07
 (
     '60000000-0000-0000-0000-000000000007',
-    'Thông báo tổng vệ sinh khuôn viên cuối năm',
-    'Kính gửi toàn thể sinh viên,
+    'Thông báo gia hạn thời gian nộp đơn phúc khảo và khiếu nại điểm thi',
+    'Kính gửi các bạn sinh viên toàn trường,
 
-Phòng Quản trị cơ sở vật chất tổ chức tổng vệ sinh khuôn viên và khu ký túc xá ngày 28–29/12/2025. 
-Kính mời các em sinh viên đăng ký tham gia tại Đoàn trường trước 25/12/2025. 
-Tham gia đầy đủ được tính giờ hoạt động ngoại khóa.
+Do sự cố kỹ thuật trong quá trình đồng bộ hệ thống quản lý điểm vừa qua, Phòng Thanh tra giáo dục quyết định gia hạn thời gian tiếp nhận đơn phúc khảo bài thi và khiếu nại điểm số của học kỳ I năm học 2025-2026.
+- Thời gian gia hạn: Đến hết ngày 15/02/2026.
+- Quy trình thực hiện: Sinh viên điền form trực tuyến trên cổng thông tin, sau đó nộp biên nhận cùng các minh chứng kèm theo trực tiếp tại văn phòng Phòng Thanh tra giáo dục (Phòng A1.1003, tầng 10, Tòa nhà trung tâm). Sau thời gian trên, hệ thống sẽ tự động đóng và không giải quyết thêm bất kỳ trường hợp ngoại lệ nào.
 
-Trân trọng kính mời!',
-    '2025-12-20 10:00:00',
-    'b0000000-0000-0000-0000-000000000009',
-    'd0000000-0000-0000-0000-000000000009'
+Thân ái.',
+    '2026-02-05 15:00:00',
+    'b0000000-0000-0000-0000-000000000001',
+    'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 8. Thông báo ID 08
 (
     '60000000-0000-0000-0000-000000000008',
-    'Thông báo sửa chữa giảng đường tầng 5 nhà B',
-    'Kính gửi giảng viên và sinh viên,
+    'Thông báo thanh tra chuyên đề công tác xét tốt nghiệp và cấp phát văn bằng',
+    'Kính gửi Phòng Đào tạo và Ban chủ nhiệm các Khoa,
 
-Phòng Quản trị cơ sở vật chất sửa chữa giảng đường tầng 5 nhà B từ 10–20/12/2025. 
-Các lớp học sẽ được chuyển địa điểm (thông báo riêng). 
-Không để lại tài sản cá nhân tại khu vực thi công.
+Thực hiện theo quyết định của Hiệu trưởng, Phòng Thanh tra giáo dục sẽ triển khai đợt thanh tra chuyên đề về "Công tác kiểm tra hồ sơ xét công nhận tốt nghiệp và quy trình cấp phát văn bằng tốt nghiệp năm 2026".
+Thời gian làm việc trực tiếp: Từ ngày 10/04/2026 đến ngày 25/04/2026.
+Đoàn thanh tra sẽ tiến hành rà soát ngẫu nhiên hồ sơ sinh viên đủ điều kiện tốt nghiệp, đối chiếu chứng chỉ đầu ra (ngoại ngữ, tin học) và kiểm tra việc ghi sổ gốc cấp phát bằng. Đề nghị các đơn vị chuẩn bị sẵn sàng không gian làm việc và tài liệu liên quan tại văn phòng Phòng A1.1003 (tầng 10).
 
 Trân trọng.',
-    '2025-11-28 09:00:00',
-    'b0000000-0000-0000-0000-000000000009',
-    'd0000000-0000-0000-0000-000000000009'
+    '2026-04-02 10:15:00',
+    'b0000000-0000-0000-0000-000000000001',
+    'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 9. Thông báo ID 09
 (
     '60000000-0000-0000-0000-000000000009',
-    'Thông báo trồng cây xanh khuôn viên trường',
-    'Kính gửi toàn thể sinh viên,
+    'V/v Giám sát và thanh tra công tác tổ chức kỳ thi kết thúc học kỳ II',
+    'Kính gửi Hội đồng thi và Ban coi thi trường,
 
-Phòng Quản trị cơ sở vật chất phối hợp Đoàn Thanh niên trồng mới 300 cây xanh trong tháng 11/2025. 
-Kính mời các em đăng ký tham gia tại Đoàn trường trước 10/11/2025.
+Để bảo đảm tính nghiêm túc, khách quan và đúng quy chế của kỳ thi kết thúc học kỳ II năm học 2025-2026, Phòng Thanh tra giáo dục yêu cầu các cán bộ thanh tra được phân công cắm chốt tại các khu vực thi thực hiện đúng, đủ nhiệm vụ được giao.
+- Đối với Giám thị: Yêu cầu kiểm tra kỹ thẻ sinh viên, tuyệt đối không cho phép mang tài liệu, thiết bị thông tin trái phép vào phòng thi. 
+- Đối với Sinh viên: Tuyệt đối tuân thủ quy chế phòng thi. Mọi trường hợp gian lận, sử dụng công nghệ cao sẽ bị lập biên bản đình chỉ thi ngay lập tức và chuyển hồ sơ về Phòng A1.1003 để hội đồng kỷ luật xử lý ở mức đình chỉ học tập có thời hạn.
 
-Trân trọng kính mời!',
-    '2025-10-30 14:00:00',
-    'b0000000-0000-0000-0000-000000000009',
-    'd0000000-0000-0000-0000-000000000009'
+Chúc các bạn sinh viên làm bài tốt.',
+    '2026-05-18 07:30:00',
+    'b0000000-0000-0000-0000-000000000001',
+    'd0000000-0000-0000-0000-000000000001'
 ),
+
+-- 10. Thông báo ID 10
 (
     '60000000-0000-0000-0000-000000000010',
-    'Thông báo kiểm tra an toàn PCCC toàn trường',
-    'Kính gửi toàn thể cán bộ, giảng viên, sinh viên,
+    'Kế hoạch rà soát và lấy ý kiến phản hồi của người học về hoạt động giảng dạy',
+    'Kính gửi toàn thể sinh viên trường,
 
-Phòng Quản trị cơ sở vật chất phối hợp Cảnh sát PCCC kiểm tra an toàn phòng cháy chữa cháy ngày 18/12/2025. 
-Đề nghị các đơn vị đảm bảo lối thoát hiểm thông thoáng, không để vật cản.
+Hoạt động đánh giá chất lượng giảng dạy thông qua phiếu khảo sát trực tuyến là kênh thông tin đặc biệt quan trọng giúp nhà trường điều chỉnh, cải tiến phương pháp và nâng cao chất lượng đào tạo. 
+Phòng Thanh tra giáo dục phối hợp với Phòng Đảm bảo chất lượng mở cổng khảo sát học kỳ II từ ngày 01/06/2026 đến ngày 15/06/2026. Đề nghị tất cả sinh viên đăng nhập hệ thống Portal và hoàn thành đầy đủ phiếu đánh giá trước khi xem điểm thi chính thức. Nhà trường cam kết bảo mật tuyệt đối danh tính của sinh viên tham gia khảo sát. Mọi phản ánh về kỹ thuật xin gửi về văn phòng Phòng A1.1003 (tầng 10).
 
-Trân trọng thông báo.',
-    '2025-12-10 08:30:00',
-    'b0000000-0000-0000-0000-000000000009',
-    'd0000000-0000-0000-0000-000000000009'
-),
+Trân trọng cảm ơn sự hợp tác của các em.',
+    '2026-05-28 11:20:00',
+    'b0000000-0000-0000-0000-000000000001',
+    'd0000000-0000-0000-0000-000000000001'
+);
 
--- 3. Chuyên viên CTSV (b...010) – 2 thông báo
+INSERT INTO "Announcements" (
+    "id",
+    "title",
+    "content",
+    "createdAt",
+    "userId",
+    "departmentId"
+)
+VALUES
+-- =========================================================================
+-- CHỈNH SỬA 5 THÔNG BÁO GỐC PHÙ HỢP VỚI PHÒNG QUAN HỆ DOANH NGHIỆP (ID: 11 - 15)
+-- =========================================================================
 (
     '60000000-0000-0000-0000-000000000011',
-    'Học bổng khuyến khích học tập học kỳ I 2025-2026',
-    'Kính gửi toàn thể sinh viên,
+    'Thông báo chương trình Thực tập sinh tiềm năng tại các Tập đoàn đối tác',
+    'Kính gửi toàn thể sinh viên năm 3 và năm cuối,
 
-Phòng Tuyển sinh và CTSV nhận hồ sơ xét học bổng khuyến khích học tập học kỳ I (GPA ≥ 3.6/4.0). 
-Hồ sơ nộp trước 20/12/2025 tại phòng Tầng trệt tòa A. 
-Kết quả công bố ngày 30/12/2025.
+Phòng Quan hệ doanh nghiệp triển khai chương trình tuyển dụng Thực tập sinh tiềm năng đợt 1 năm 2026 phối hợp cùng các tập đoàn công nghệ và sản xuất lớn. 
+Sinh viên tham gia sẽ được đào tạo thực tế và có cơ hội nhận học bổng hoặc ký hợp đồng chính thức sau thực tập. Lịch phỏng vấn chi tiết đã gửi qua email sinh viên.
 
-Trân trọng!',
-    '2025-12-04 10:00:00',
-    'b0000000-0000-0000-0000-000000000010',
-    'd0000000-0000-0000-0000-000000000010'
+Trân trọng thông báo.',
+    '2026-03-01 08:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
 ),
 (
     '60000000-0000-0000-0000-000000000012',
-    'Tuần sinh hoạt công dân đầu khóa 2025',
-    'Kính gửi tân sinh viên khóa 2025,
+    'Thông báo Ngày hội Việc làm và Tuyển dụng HCMUTE Career Day 2026',
+    'Kính gửi toàn thể sinh viên,
 
-Phòng Tuyển sinh và CTSV tổ chức Tuần sinh hoạt công dân từ 25–30/08/2025. 
-Nội dung: quy chế, nội quy, kỹ năng mềm, giao lưu văn nghệ. 
-Sự có mặt đầy đủ là bắt buộc.
+Phòng Quan hệ doanh nghiệp tổ chức Ngày hội Việc làm lớn nhất năm tại sân trường và khu trung tâm vào các ngày 15–16/05/2026. 
+Sự kiện quy tụ hơn 50 doanh nghiệp trong và ngoài nước tham gia phỏng vấn trực tiếp. Kính mời các em sinh viên chuẩn bị CV và đăng ký tham gia tại văn phòng Đoàn trường trước 12/05/2026. 
+Tham gia đầy đủ được tính điểm rèn luyện ngoại khóa.
+
+Trân trọng kính mời!',
+    '2026-04-20 10:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000013',
+    'Thông báo nộp hồ sơ xét nhận Học bổng Doanh nghiệp tài trợ đợt 2',
+    'Kính gửi giảng viên chủ nhiệm và sinh viên các khoa,
+
+Phòng Quan hệ doanh nghiệp tiếp nhận hồ sơ xét duyệt Học bổng vượt khó và tài năng từ quỹ đối tác doanh nghiệp năm học 2025–2026 từ ngày 10–20/04/2026. 
+Các lớp tiến hành bình bầu và gửi danh sách tổng hợp về phòng theo quy định. Không chấp nhận hồ sơ nộp trễ hạn sau thời gian trên.
+
+Trân trọng.',
+    '2026-03-28 09:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000014',
+    'Thông báo Khóa đào tạo Kỹ năng viết CV và Phỏng vấn chinh phục nhà tuyển dụng',
+    'Kính gửi toàn thể sinh viên,
+
+Phòng Quan hệ doanh nghiệp phối hợp với chuyên gia nhân sự tổ chức chuỗi chuyên đề huấn luyện kỹ năng mềm miễn phí trong tháng 04/2026. 
+Kính mời các em đăng ký tham gia trực tuyến qua cổng thông tin phòng trước ngày 10/04/2026 để ban tổ chức sắp xếp phòng học.
+
+Trân trọng kính mời!',
+    '2026-03-30 14:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000015',
+    'Thông báo quy trình tiếp nhận và xử lý cấp Giấy chứng nhận tốt nghiệp tạm thời',
+    'Kính gửi toàn thể sinh viên đủ điều kiện tốt nghiệp đợt tháng 5/2026,
+
+Phòng Quan hệ doanh nghiệp sẽ phối hợp với Phòng Đào tạo tiến hành tiếp nhận thông tin và cấp Giấy chứng nhận tốt nghiệp tạm thời hỗ trợ các em đi xin việc từ ngày 18/05/2026. 
+Đề nghị các bạn kiểm tra kỹ thông tin cá nhân trên hệ thống, chuẩn bị đầy đủ các phiếu khảo sát việc làm trước khi đến lấy chứng nhận.
 
 Trân trọng thông báo.',
-    '2025-08-15 09:00:00',
+    '2026-05-10 08:30:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+
+-- =========================================================================
+-- TẠO THÊM 5 THÔNG BÁO MỚI CHO ĐỦ SỐ LƯỢNG 10 THÔNG BÁO (ID: 16 - 20)
+-- =========================================================================
+(
+    '60000000-0000-0000-0000-000000000016',
+    'Thông báo chương trình Giao lưu và Chia sẻ kinh nghiệm cùng Cựu sinh viên thành đạt',
+    'Kính gửi toàn thể sinh viên trường,
+
+Nhằm giúp sinh viên định hướng lộ trình nghề nghiệp rõ ràng hơn, Phòng Quan hệ doanh nghiệp tổ chức buổi tọa đàm "Hành trang lập nghiệp" vào lúc 08:00 ngày 22/05/2026 tại Hội trường lớn.
+Khách mời là các anh chị cựu sinh viên hiện là Giám đốc kỹ thuật, Quản lý tại các công ty đa quốc gia.
+
+Thân mời các em tham gia đăng ký.',
+    '2026-05-15 09:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000017',
+    'Thông báo khảo sát tình hình việc làm của sinh viên sau tốt nghiệp',
+    'Kính gửi các Anh/Chị cựu sinh viên vừa tốt nghiệp đợt cuối năm 2025,
+
+Để phục vụ công tác kiểm định chất lượng giáo dục và cải tiến chương trình đào tạo, Phòng Quan hệ doanh nghiệp triển khai đợt khảo sát tình hình việc làm. 
+Rất mong các Anh/Chị dành ra 3 phút để hoàn thành form khảo sát trực tuyến được gửi qua email cá nhân trước ngày 30/06/2026.
+
+Xin chân thành cảm ơn.',
+    '2026-06-01 07:30:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000018',
+    'Thông báo tham quan thực tế nhà máy sản xuất (Company Tour 2026)',
+    'Kính gửi sinh viên các khoa Cơ khí, Điện - Điện tử, và CNTT,
+
+Phòng Quan hệ doanh nghiệp tổ chức chuyến đi thực tế (Company Tour) tại nhà máy Intel Products Vietnam và Esoteric Robotic vào ngày 12/06/2026. 
+Số lượng giới hạn 80 sinh viên đăng ký sớm nhất. Link đăng ký sẽ mở vào lúc 12:00 ngày 08/06/2026 trên trang fanpage của phòng. Trường hỗ trợ xe đưa đón miễn phí.
+
+Trân trọng thông báo.',
+    '2026-06-05 15:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000019',
+    'Thông báo Tuyển dụng bán thời gian (Part-time) phục vụ dự án hè từ doanh nghiệp',
+    'Kính gửi các bạn sinh viên muốn tìm việc làm thêm,
+
+Phòng Quan hệ doanh nghiệp vừa tiếp nhận thông tin từ các đối tác thương mại và dịch vụ quanh khu vực Thủ Đức đang cần tuyển hơn 200 vị trí nhân viên bán thời gian, hỗ trợ kỹ thuật và cộng tác viên dự án hè 2026. 
+Mức lương hấp dẫn và thời gian linh hoạt phù hợp với lịch học học kỳ hè. Chi tiết mô tả công việc xem tại bảng tin tầng 4 tòa nhà trung tâm.
+
+Chúc các bạn tìm được công việc phù hợp.',
+    '2026-05-25 11:00:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+),
+(
+    '60000000-0000-0000-0000-000000000020',
+    'Thông báo chương trình Học bổng Toàn phần Tu nghiệp ngắn hạn tại Nhật Bản',
+    'Kính gửi sinh viên năm cuối xuất sắc,
+
+Đối tác chiến lược của trường thông báo tài trợ 5 suất học bổng toàn phần khóa tu nghiệp kỹ sư chất lượng cao ngắn hạn (3 tháng) tại Tokyo, Nhật Bản khởi hành vào tháng 09/2026. 
+Tiêu chí xét tuyển: Đang làm đồ án tốt nghiệp, tiếng Anh hoặc tiếng Nhật giao tiếp tốt. Hạn chót nộp hồ sơ trực tiếp tại phòng A1.402 là ngày 20/06/2026.
+
+Trân trọng kính mời các bạn ứng tuyển.',
+    '2026-06-02 14:30:00',
+    'b0000000-0000-0000-0000-000000000002',
+    'd0000000-0000-0000-0000-000000000002'
+);
+
+
+INSERT INTO "Announcements" (
+    "id",
+    "title",
+    "content",
+    "createdAt",
+    "userId",
+    "departmentId"
+)
+VALUES
+-- =========================================================================
+-- KHỐI THÔNG BÁO PHÒNG KHOA HỌC & CÔNG NGHỆ (ID: 21 -> 30)
+-- Người đăng: Cán bộ Phòng KH&CN (b0000000-0000-0000-0000-000000000003)
+-- Phòng ban: Phòng Khoa học & Công nghệ (d0000000-0000-0000-0000-000000000003)
+-- =========================================================================
+
+-- 21. Thông báo ID 21
+(
+    '60000000-0000-0000-0000-000000000021',
+    'Thông báo phát động và tiếp nhận đề xuất Đề tài Nghiên cứu khoa học sinh viên năm học 2026 - 2027',
+    'Kính gửi toàn thể sinh viên và quý thầy cô hướng dẫn,
+
+Phòng Khoa học & Công nghệ chính thức phát động phong trào Nghiên cứu khoa học sinh viên năm học 2026 - 2027. Đây là cơ hội lớn để các em sinh viên phát triển tư duy sáng tạo, ứng dụng lý thuyết vào thực tiễn và khẳng định năng lực bản thân.
+Hệ thống sẽ mở cổng tiếp nhận thuyết minh đề tài trực tuyến từ ngày 15/07/2026 đến hết ngày 30/08/2026. Sinh viên có nhu cầu tư vấn chọn đề tài hoặc tìm giảng viên hướng dẫn có thể đến trao đổi trực tiếp tại Phòng A1.902 (tầng 9), Tòa nhà trung tâm hoặc gửi mail về địa chỉ khcn@hcmute.edu.vn.
+
+Trân trọng thông báo.',
+    '2026-06-01 08:00:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 22. Thông báo ID 22
+(
+    '60000000-0000-0000-0000-000000000022',
+    'Thông báo Lịch nghiệm thu các đề tài Nghiên cứu khoa học sinh viên cấp trường năm 2025 - 2026 (Chính thức)',
+    'Kính gửi các nhóm sinh viên nghiên cứu và Hội đồng khoa học,
+
+Phòng Khoa học & Công nghệ thông báo lịch tổ chức hội đồng nghiệm thu chính thức cho các đề tài nghiên cứu khoa học của sinh viên năm học 2025 - 2026.
+Thời gian diễn ra các phiên hội đồng từ ngày 22/06/2026 đến ngày 10/07/2026 tại các phòng hội thảo chuyên dụng. Các nhóm sinh viên lưu ý nộp 05 bản in báo cáo tổng kết và file thuyết trình (Slide) về văn phòng phòng tại Phòng A1.902 trước ngày 15/06/2026 để gửi tới các thành viên hội đồng phản biện.
+
+Chúc các nhóm đạt kết quả cao.',
+    '2026-06-05 09:30:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 23. Thông báo ID 23
+(
+    '60000000-0000-0000-0000-000000000023',
+    'Thông báo xét chọn Đề tài xuất sắc tham dự giải thưởng sinh viên nghiên cứu khoa học cấp Bộ 2026',
+    'Kính gửi Ban chủ nhiệm các Khoa và các nhóm nghiên cứu,
+
+Phòng Khoa học & Công nghệ thông báo kế hoạch tiếp nhận hồ sơ xét chọn các công trình nghiên cứu xuất sắc nhất tham gia giải thưởng cấp Bộ năm 2026. Sinh viên nộp đơn đăng ký kèm toàn bộ hồ sơ minh chứng, bài báo đã công bố (nếu có) trực tiếp tại quầy tiếp nhận Phòng A1.902 (tầng 9), Tòa nhà trung tâm.
+Thời gian tiếp nhận hồ sơ từ ngày 10/06/2026 đến hết ngày 20/06/2026. Mọi hồ sơ thiếu minh chứng hoặc nộp trễ hạn sẽ bị loại khỏi danh mục xét duyệt.
+
+Trân trọng.',
+    '2026-06-08 14:00:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 24. Thông báo ID 24
+(
+    '60000000-0000-0000-0000-000000000024',
+    'Thông báo nhắc nhở tiến độ và dự kiến thu hồi kinh phí các đề tài NCKH chậm tiến độ',
+    'Kính gửi các chủ nhiệm đề tài sinh viên và Giảng viên hướng dẫn,
+
+Qua công tác kiểm tra, rà soát tiến độ định kỳ, Phòng Khoa học & Công nghệ công bố danh sách các đề tài nghiên cứu khoa học sinh viên đang bị chậm tiến độ nghiêm trọng so với hợp đồng đã ký kết.
+Đề nghị các chủ nhiệm đề tài có tên trong danh sách khẩn trương nộp báo cáo giải trình kèm theo xác nhận của giảng viên hướng dẫn về văn phòng Phòng KH&CN tại Phòng A1.902 trước 17:00 ngày 25/06/2026. Quá thời hạn trên, phòng sẽ tham mưu ban hành quyết định dừng thực hiện và thu hồi kinh phí tạm ứng.
+
+Trân trọng thông báo.',
+    '2026-06-10 10:00:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 25. Thông báo ID 25
+(
+    '60000000-0000-0000-0000-000000000025',
+    'Thông báo tổ chức Chuỗi bài giảng tập huấn Phương pháp nghiên cứu khoa học và Viết bài báo quốc tế',
+    'Kính gửi toàn thể sinh viên yêu thích nghiên cứu,
+
+Nhằm trang bị các kiến thức nền tảng về tư duy nghiên cứu, cách tra cứu tài liệu trong các cơ sở dữ liệu lớn (Scopus, Web of Science) và kỹ năng viết báo cáo học thuật, Phòng Khoa học & Công nghệ tổ chức khóa tập huấn chuyên đề hè 2026.
+Thời gian học: Các ngày thứ Bảy từ 20/07/2026 đến 25/08/2026. Sinh viên có nhu cầu tham gia vui lòng điền form đăng ký trực tuyến hoặc nộp đơn trực tiếp về phòng tại Phòng A1.902 trước ngày 30/06/2026 để ban tổ chức chuẩn bị tài liệu và phòng máy thực hành.
+
+Trân trọng.',
+    '2026-06-09 11:15:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 26. Thông báo ID 26
+(
+    '60000000-0000-0000-0000-000000000026',
+    'Thông báo tiếp nhận hồ sơ hỗ trợ kinh phí công bố bài báo khoa học quốc tế (ISI/Scopus)',
+    'Kính gửi các nhà khoa học trẻ và sinh viên trường,
+
+Nhà trường tiếp tục triển khai chính sách khuyến khích, hỗ trợ tài chính đối với các công bố khoa học có sự tham gia của sinh viên làm tác giả chính hoặc đồng tác giả.
+Phòng Khoa học & Công nghệ thông báo lịch tiếp nhận đơn xin hỗ trợ kinh phí đăng bài trên các tạp chí thuộc danh mục ISI/Scopus danh tiếng. Người nộp đơn tải biểu mẫu trên website, kèm theo minh chứng bài báo đã xuất bản thành công và nộp trực tiếp tại Phòng A1.902 (tầng 9) từ ngày 12/06/2026 đến hết ngày 26/06/2026.
+
+Trân trọng.',
+    '2026-06-10 08:30:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 27. Thông báo ID 27
+(
+    '60000000-0000-0000-0000-000000000027',
+    'Thông báo kết quả thẩm định và phê duyệt kinh phí bổ sung cho các đề tài nghiên cứu trọng điểm',
+    'Kính gửi các chủ nhiệm đề tài nghiên cứu tiềm năng,
+
+Phòng Khoa học & Công nghệ đã hoàn tất công tác thẩm định nội dung và phê duyệt danh sách bổ sung kinh phí đối với các đề tài nghiên cứu công nghệ có tính ứng dụng cao và có khả năng thương mại hóa sản phẩm.
+Các nhóm nghiên cứu có tên trong danh sách phê duyệt sẽ nhận nguồn vốn bổ sung phục vụ mua sắm vật tư, linh kiện đặc thù. Sinh viên tra cứu trạng thái giải quyết hồ sơ trên cổng thông tin trực tuyến hoặc liên hệ trực tiếp bộ phận kế toán khoa học qua hòm thư khcn@hcmute.edu.vn để hoàn thiện thủ tục giải ngân.
+
+Trân trọng thông báo.',
+    '2026-06-07 16:00:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 28. Thông báo ID 28
+(
+    '60000000-0000-0000-0000-000000000028',
+    'Thông báo kiểm tra và chuẩn hóa thông tin dữ liệu lý lịch khoa học trên hệ thống nội bộ',
+    'Kính gửi các thành viên mạng lưới nghiên cứu viên và sinh viên toàn trường,
+
+Để chuẩn bị cho công tác thống kê số liệu phục vụ kiểm định chất lượng trường và đánh giá xếp hạng đại học, Phòng Khoa học & Công nghệ yêu cầu tất cả sinh viên từng tham gia đề tài nghiên cứu thực hiện rà soát thông tin cá nhân bao gồm: Mã số sinh viên, Số ORCID, danh mục các bài báo và sở hữu trí tuệ đã khai báo.
+Hạn chót phản hồi, bổ sung thông tin chỉnh sửa sai sót trực tiếp tại văn phòng Phòng KH&CN (Phòng A1.902) là trước 11:30 ngày 18/06/2026 để làm cơ sở tính điểm cộng học thuật.
+
+Trân trọng thông báo.',
+    '2026-06-04 14:20:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 29. Thông báo ID 29
+(
+    '60000000-0000-0000-0000-000000000029',
+    'Thông báo mở cổng khảo sát nhu cầu cơ sở vật chất và phòng thí nghiệm phục vụ NCKH năm 2026',
+    'Kính gửi toàn thể sinh viên và các nhóm nghiên cứu,
+
+Nhằm cải thiện điều kiện làm việc, nâng cấp trang thiết bị máy móc tại các phòng thí nghiệm trọng điểm và khu vực làm việc chung (Co-working space), Phòng Khoa học & Công nghệ tổ chức đợt lấy ý kiến phản hồi quy mô toàn trường.
+Ý kiến đóng góp của các em là cơ sở quan trọng để nhà trường phê duyệt danh mục đầu tư thiết bị công nghệ mới. Thời gian thực hiện khảo sát trực tuyến từ ngày 12/06/2026 đến ngày 30/06/2026. Mọi ý kiến đóng góp chi tiết xin gửi về hòm thư khcn@hcmute.edu.vn.
+
+Phòng Khoa học & Công nghệ mong nhận được sự cộng tác của các em.',
+    '2026-06-03 09:00:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+),
+
+-- 30. Thông báo ID 30
+(
+    '60000000-0000-0000-0000-000000000030',
+    'Thông báo bổ sung, điều chỉnh thể lệ Cuộc thi Ý tưởng Sáng tạo Khoa học Công nghệ trẻ 2026',
+    'Kính gửi các đội thi và sinh viên quan tâm,
+
+Do có sự thay đổi từ Hội đồng cố vấn công nghệ của các tập đoàn tài trợ, Ban tổ chức cuộc thi quyết định điều chỉnh cơ cấu giải thưởng nâng cao và bổ sung thêm tiêu chí đánh giá giải pháp chuyển đổi xanh, phát triển bền vững vào vòng Chung kết.
+Chi tiết thể lệ cập nhật mới và danh sách các chuyên gia hướng dẫn (Mentor) đồng hành cùng các đội thi đã được đăng tải trực tiếp trên fanpage và website của phòng. Đề nghị các nhóm trưởng lưu ý theo dõi để chuẩn bị sản phẩm demo tốt nhất. Mọi thắc mắc xin vui lòng liên hệ trực tiếp tại Phòng A1.902.
+
+Trân trọng cảm ơn.',
+    '2026-06-02 10:45:00',
+    'b0000000-0000-0000-0000-000000000003',
+    'd0000000-0000-0000-0000-000000000003'
+);
+
+INSERT INTO "Announcements" (
+    "id",
+    "title",
+    "content",
+    "createdAt",
+    "userId",
+    "departmentId"
+)
+VALUES
+-- =========================================================================
+-- KHỐI THÔNG BÁO PHÒNG QUẢN TRỊ CƠ SỞ VẬT CHẤT (ID: 81 -> 90)
+-- Người đăng: Cán bộ Phòng QTCSVC (b0000000-0000-0000-0000-000000000009)
+-- Phòng ban: Phòng Quản trị cơ sở vật chất (d0000000-0000-0000-0000-000000000009)
+-- =========================================================================
+
+-- 81. Thông báo ID 81
+(
+    '60000000-0000-0000-0000-000000000081',
+    'Thông báo quy trình đăng ký mượn phòng học, giảng đường phục vụ hoạt động ôn tập nhóm và sinh hoạt ngoại khóa của sinh viên',
+    'Nhằm quản lý hiệu quả tài nguyên giảng đường và tạo điều kiện không gian tốt nhất cho sinh viên tổ chức các buổi học nhóm, ôn thi cuối kỳ hoặc sinh hoạt câu lạc bộ, Phòng Quản trị cơ sở vật chất thông báo hướng dẫn quy trình mượn phòng học áp dụng từ ngày 15/06/2026:
+
+1. Điều kiện và đối tượng được cấp phép: Tất cả các tập thể lớp chính quy, nhóm sinh viên nghiên cứu khoa học hoặc các Ban điều hành Câu lạc bộ/Đội/Nhóm trực thuộc trường có nhu cầu sử dụng phòng học ngoài giờ giảng dạy chính khóa. Người đại diện đăng ký bắt buộc phải là Lớp trưởng, Bí thư hoặc Chủ nhiệm CLB và phải chịu trách nhiệm hoàn toàn về tài sản trong phòng suốt thời gian mượn.
+
+2. Quy trình nộp đơn đăng ký trực tuyến và trực tiếp: 
+- Bước 1: Sinh viên truy cập hệ thống quản lý cơ sở vật chất trực tuyến để kiểm tra lịch trống của các phòng học tại các khu A, B, C, E.
+- Bước 2: Điền mẫu đơn xin mượn phòng (ghi rõ mục đích, số lượng người tham gia, danh sách thiết bị cần sử dụng như máy chiếu, âm thanh, micro) và lấy xác nhận của Giáo viên chủ nhiệm hoặc Đoàn trường.
+- Bước 3: Nộp đơn giấy trực tiếp tại quầy số 1, Phòng A1.706 (tầng 7), Tòa nhà trung tâm hoặc gửi file scan có ký số về email p.qtcsvc@hcmute.edu.vn trước tối thiểu 03 ngày làm việc.
+
+3. Quy định khi bàn giao và hoàn trả: Sau khi đơn được phê duyệt, người đăng ký mang thẻ sinh viên đến gặp bộ phận kỹ thuật trực tòa nhà để nhận chìa khóa. Khi kết thúc buổi sinh hoạt, sinh viên có trách nhiệm tắt toàn bộ hệ thống đèn, máy lạnh, máy chiếu, thu dọn rác thải, kê lại bàn ghế đúng vị trí ban đầu và bàn giao khóa về văn phòng phòng tại tầng 7.
+
+Trân trọng thông báo.',
+    '2026-06-01 08:00:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 82. Thông báo ID 82
+(
+    '60000000-0000-0000-0000-000000000082',
+    'Thông báo kế hoạch tạm ngưng cấp điện toàn diện tại Khu bài tập thực hành chất lượng cao phục vụ công tác bảo trì định kỳ hệ thống trạm biến áp',
+    'Để đảm bảo hệ thống lưới điện toàn trường vận hành an toàn, ổn định, phòng chống các nguy cơ chập cháy trong mùa cao điểm nắng nóng và thực hiện công tác kiểm tra kỹ thuật định kỳ hệ thống điện thông minh, Phòng Quản trị cơ sở vật chất thông báo kế hoạch tạm cắt điện để bảo dưỡng thiết bị như sau:
+
+1. Phạm vi ảnh hưởng: Toàn bộ hệ thống điện chiếu sáng, điện động lực, máy điều hòa không khí và mạng lưới internet nội bộ tại tất cả các phòng thí nghiệm, xưởng thực hành thuộc Khu nhà X xưởng cơ khí, Khu giảng đường chất lượng cao và hệ thống chiếu sáng hành lang phụ cận.
+
+2. Thời gian triển khai chi tiết: Công tác cắt điện bảo trì sẽ diễn ra liên tục từ 07:30 đến 17:30 ngày Chủ Nhật (21/06/2026). Hệ thống điện có thể được tái cấp sớm hơn dự kiến nếu các kỹ sư hoàn thành hạng mục thử tải nghiệm thu trước thời hạn.
+
+3. Khuyến cáo đối với các đơn vị: Đề nghị các Khoa chủ quản nhà xưởng bố trí cán bộ kỹ thuật sao lưu toàn bộ dữ liệu máy tính chuyên dụng, ngắt áp-tô-mát (CB) tổng của các thiết bị máy móc CNC, cánh tay robot để tránh hiện tượng sốc điện khi hệ thống được cấp điện trở lại. Trong thời gian này, nghiêm cấm sinh viên tự ý vào khu vực xưởng thực hành để làm đồ án nhằm đảm bảo an toàn lao động tối đa. Mọi thông tin khẩn cấp liên quan đến kỹ thuật điện, quý thầy cô liên hệ hotline phòng qua số 028 3722 3502.
+
+Kính mong quý thầy cô và các em sinh viên thông cảm vì sự bất tiện này.',
+    '2026-06-02 09:30:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 83. Thông báo ID 83
+(
+    '60000000-0000-0000-0000-000000000083',
+    'Thông báo triển khai chiến dịch "Giảng đường xanh": Tiết kiệm năng lượng, bảo vệ tài sản công và phân loại rác thải tại nguồn năm 2026',
+    'Nhằm mục đích xây dựng một không gian đại học xanh, văn minh, sạch đẹp, đồng thời nâng cao ý thức trách nhiệm của người học trong việc sử dụng tiết kiệm tài nguyên quốc gia, Phòng Quản trị cơ sở vật chất phát động chương trình hành động "Giảng đường xanh" với các nội dung cốt lõi sau:
+
+1. Quy định sử dụng thiết bị điện trong lớp học: Sinh viên và giảng viên chỉ bật hệ thống điều hòa không khí khi nhiệt độ phòng trên 26 độ C và phòng có trên 15 người; chỉ mở hệ thống đèn tại những khu vực thiếu ánh sáng tự nhiên. Yêu cầu bắt buộc đối với người rời phòng học cuối cùng (hoặc lớp trưởng) phải thực hiện kiểm tra, ngắt hoàn toàn công tắc đèn, máy quạt, rút phích cắm máy chiếu và đóng kín hệ thống cửa sổ để phòng tránh mưa giông hắt làm hỏng thiết bị điện tử.
+
+2. Triển khai phân loại rác thải tại nguồn: Kể từ ngày 18/06/2026, phòng tiến hành lắp đặt hệ thống thùng rác ba màu chuyên dụng tại sảnh trệt của tất cả các khu giảng đường. Sinh viên có trách nhiệm phân loại rác đúng quy định: Thùng màu xanh chứa rác hữu cơ dễ phân hủy; thùng màu vàng chứa rác tái chế (chai nhựa, lon nước, giấy vụn); thùng màu đỏ chứa rác thải sinh hoạt còn lại.
+
+3. Biện pháp giám sát kỷ luật: Đội tự quản cơ sở vật chất phối hợp cùng lực lượng lao công sẽ tăng cường đi kiểm tra ngẫu nhiên các phòng học sau mỗi ca học. Những tập thể lớp cố tình ra về không tắt điện, để rác bừa bãi trên bàn học sẽ bị lập biên bản, gửi danh sách về Khoa chủ quản xử lý trừ điểm rèn luyện và tạm thời thu hồi quyền mượn phòng tự học trong 1 tháng. Mọi đóng góp về cảnh quan, sinh viên gửi về email p.qtcsvc@hcmute.edu.vn.
+
+Hành động nhỏ của mỗi sinh viên sẽ góp phần tạo nên một môi trường học tập bền vững.',
+    '2026-06-03 14:00:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 84. Thông báo ID 84
+(
+    '60000000-0000-0000-0000-000000000084',
+    'Thông báo quy trình tiếp nhận và xử lý thông tin phản ánh sự cố kỹ thuật về thiết bị cơ sở vật chất (máy chiếu, mic, bóng đèn, điện nước) tại các giảng đường',
+    'Để đảm bảo các điều kiện phục vụ công tác giảng dạy và học tập luôn trong trạng thái tốt nhất, không làm gián đoạn tiến độ truyền đạt kiến thức của thầy cô và tiếp thu của sinh viên, Phòng Quản trị cơ sở vật chất thông báo chuẩn hóa quy trình tiếp nhận thông tin phản ánh sự cố hỏng hóc thiết bị:
+
+1. Các kênh tiếp nhận phản ánh khẩn cấp: Khi phát hiện các sự cố phát sinh trực tiếp tại phòng học như: Máy chiếu bị mờ/mất màu; micro không có tín hiệu âm thanh; máy lạnh chảy nước/không lạnh; hệ thống cửa kính, rèm cửa bị hỏng; hoặc nhà vệ sinh mất nước, sinh viên và giảng viên phản ánh qua 2 cách:
+- Cách 1: Quét mã QR code được dán cố định tại góc bàn giáo viên của mỗi phòng học để điền nhanh form báo lỗi tự động (Hệ thống sẽ đẩy thông báo trực tiếp đến điện thoại của kỹ sư trực tầng).
+- Cách 2: Liên hệ hotline đường dây nóng phản ứng nhanh kỹ thuật tại số 028 3722 1223.
+
+2. Cam kết thời gian khắc phục sự cố: Đối với các lỗi kỹ thuật cơ bản liên quan đến micro, đường dây kết nối máy chiếu, bóng đèn cháy, đội ngũ kỹ thuật viên thường trực tại tầng 7 tòa nhà trung tâm có trách nhiệm có mặt tại phòng học trong vòng tối đa 10 phút kể từ khi nhận thông tin để sửa chữa hoặc thay thế thiết bị dự phòng, đảm bảo ca học tiếp tục mượt mà.
+
+3. Xử lý các hạng mục hỏng hóc lớn: Đối với các hư hỏng kết cấu nặng cần thời gian sửa chữa trên 1 tiếng, phòng sẽ phối hợp với Phòng Đào tạo để tiến hành điều chuyển lớp học sang một phòng học dự phòng khác và phát thông báo đổi phòng khẩn cấp qua app sinh viên. Mọi văn bản đề xuất nâng cấp thiết bị dài hạn của các Khoa, kính gửi về văn phòng Phòng A1.707 hoặc email p.qtcsvc@hcmute.edu.vn.
+
+Trân trọng thông báo.',
+    '2026-06-04 10:00:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 85. Thông báo ID 85
+(
+    '60000000-0000-0000-0000-000000000085',
+    'Thông báo kế hoạch tổng kiểm kê, đánh giá hiện trạng tài sản công và trang thiết bị giảng đường cuối năm học 2025 - 2026',
+    'Căn cứ vào quy chế quản lý tài sản công của Nhà nước và quy định nội bộ của nhà trường, nhằm chuẩn bị cơ sở dữ liệu vật chất cho việc mua sắm bổ sung thiết bị phục vụ năm học mới, Phòng Quản trị cơ sở vật chất phối hợp cùng Phòng Kế hoạch Tài chính thành lập đoàn kiểm kê tài sản cuối năm học:
+
+1. Nội dung và đối tượng kiểm kê: Tiến hành rà soát, đối chiếu số hiệu thẻ tài sản, kiểm tra số lượng và đánh giá chất lượng sử dụng thực tế của toàn bộ các danh mục bao gồm: Bàn ghế học sinh, bảng từ, hệ thống tủ tài liệu văn phòng, máy tính để bàn phòng lab, máy chiếu, màn chiếu, hệ thống loa âm thanh trần, tivi tương tác thông minh và các thiết bị đo đạc chuyên dụng tại tất cả các phòng ban, khoa, trung tâm trực thuộc.
+
+2. Thời gian triển khai chi tiết: Đoàn kiểm kê sẽ làm việc liên tục từ ngày 22/06/2026 đến ngày 30/06/2026 theo lịch trình cụ thể gửi đính kèm văn bản này. Kính đề nghị các đơn vị cử cán bộ thanh lý/quản lý tài sản của đơn vị mình túc trực tại phòng làm việc để phối hợp đối soát sổ sách và ký biên bản xác nhận tại chỗ.
+
+3. Xử lý tài sản hư hỏng, thất thoát: Đối với các thiết bị đã hết niên hạn sử dụng, hỏng hóc không thể sửa chữa, đoàn sẽ lập danh mục đề xuất thanh lý theo đúng quy trình pháp luật. Các trường hợp mất mát thiết bị không rõ lý do, đơn vị chủ quản phải làm văn bản giải trình chi tiết gửi về Phòng Quản trị cơ sở vật chất (Phòng A1.706) trước ngày 05/07/2026.
+
+Trân trọng kính báo.',
+    '2026-06-05 11:15:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 86. Thông báo ID 86
+(
+    '60000000-0000-0000-0000-000000000086',
+    'Thông báo kế hoạch súc rửa hệ thống bể chứa nước ngầm, khử khuẩn mạng lưới đường ống cấp nước sinh hoạt toàn trường đợt hè 2026',
+    'Để đảm bảo tiêu chuẩn vệ sinh an toàn nguồn nước sinh hoạt trực tiếp phục vụ cho cán bộ, giảng viên và sinh viên toàn trường, phòng ngừa các nguy cơ dịch bệnh lây truyền qua đường nước, Phòng Quản trị cơ sở vật chất thông báo kế hoạch thau rửa, súc xả định kỳ toàn bộ hệ thống lưu trữ nước toàn khuôn viên trường:
+
+1. Nội dung công việc triển khai: Lực lượng công nhân kỹ thuật môi trường sẽ tiến hành xả cạn, đánh rửa cặn bẩn cơ học và phun hóa chất Cloramin B khử khuẩn đối với hệ thống bể chứa nước ngầm trung tâm, các bồn chứa nước inox đặt trên mái các tòa nhà khu A, B, C, D, E và súc xả hệ thống đường ống dẫn nước đến các khu nhà vệ sinh, vòi uống nước công cộng.
+
+2. Thời gian tạm ngưng cấp nước: Để giảm thiểu tối đa ảnh hưởng đến sinh hoạt, công tác súc rửa bể nước sẽ được chia làm hai đợt và thực hiện vào các ngày cuối tuần:
+- Đợt 1: Khu vực tòa nhà trung tâm và khu giảng đường A, B (Ngắt nước từ 13:00 ngày Thứ Bảy 20/06/2026 đến 17:00 ngày Chủ Nhật 21/06/2026).
+- Đợt 2: Khu giảng đường C, D, E và khu xưởng (Ngắt nước vào tuần kế tiếp).
+
+3. Hướng dẫn chuẩn bị đối với các đơn vị: Các căng-tin trường học, các phòng thí nghiệm có sử dụng nguồn nước liên tục cần chủ động tích trữ nước dự phòng trong xô, chậu phục vụ nhu cầu tối thiểu. Sau khi hệ thống cấp nước trở lại, nguồn nước trong 5 phút đầu tiên có thể có mùi clo nhẹ hoặc cặn sẫm màu do súc ống, đề nghị mọi người xả bỏ nước đầu trước khi sử dụng trực tiếp. Mọi thông tin phản ánh xin gửi về email p.qtcsvc@hcmute.edu.vn.
+
+Trân trọng thông báo.',
+    '2026-06-06 08:30:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 87. Thông báo ID 87
+(
+    '60000000-0000-0000-0000-000000000087',
+    'Thông báo quy định nghiêm ngặt về việc bảo quản trang thiết bị và giữ gìn an toàn phòng cháy tại các không gian tự học (Co-working space) khu C',
+    'Không gian tự học khu C (Co-working space) là công trình tiện ích hiện đại do nhà trường đầu tư dành riêng cho sinh viên học tập, nghiên cứu và thảo luận đồ án. Tuy nhiên, thời gian gần đây bộ phận quản lý giảng đường ghi nhận tình trạng một số nhóm sinh viên có hành vi sử dụng sai mục đích, gây hỏng hóc tài sản công. Phòng Quản trị cơ sở vật chất chấn chỉnh quy định sử dụng như sau:
+
+1. Quy định về bảo quản thiết bị công nghệ: Sinh viên được tự do sử dụng hệ thống ổ cắm điện thông minh, cổng sạc USB và đường truyền wifi tốc độ cao tại các bàn học. Tuy nhiên, nghiêm cấm tuyệt đối các hành vi tự ý cạy phá, thay đổi cấu trúc ổ cắm, viết vẽ bậy lên mặt bàn gỗ, tường cách âm hoặc di chuyển bàn ghế cố định ra khỏi khu vực thiết kế ban đầu.
+
+2. Quy định về an toàn cháy nổ và vệ sinh: Nghiêm cấm mang các chất dễ cháy, dung môi độc hại, các thiết bị nấu nướng mini hoặc đồ ăn có mùi nồng vào không gian tự học. Sinh viên không được phép nằm ngủ trên các dãy ghế sofa dài, không làm mất trật tự ảnh hưởng đến người xung quanh. Trước khi rời khỏi vị trí học tập, học viên phải tự giác thu dọn ly nước, khăn giấy bỏ vào thùng rác quy định.
+
+3. Biện pháp xử lý vi phạm: Hệ thống camera an ninh AI tại khu vực tự học sẽ liên tục ghi hình và phát hiện các hành vi phá hoại tài sản. Sinh viên vi phạm sẽ bị khóa tài khoản đăng nhập thẻ từ vào không gian này vĩnh viễn, đồng thời phải bồi thường thiệt hại tài chính theo giá trị thị trường của thiết bị bị hỏng. Mọi phản ánh về tình trạng thiết bị lỗi, sinh viên đến Phòng A1.706 để báo cán bộ kỹ thuật xử lý.
+
+Phòng Quản trị cơ sở vật chất đề nghị tất cả các em sinh viên nâng cao tinh thần tự giác.',
+    '2026-06-07 16:00:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 88. Thông báo ID 88
+(
+    '60000000-0000-0000-0000-000000000088',
+    'Thông báo kế hoạch cải tạo cảnh quan sư phạm, cắt tỉa cây xanh cổ thụ phòng chống gãy đổ trong mùa mưa bão năm 2026',
+    'Để chủ động phòng tránh các sự cố mất an toàn do cây xanh bật gốc, gãy cành đè trúng phương tiện giao thông hoặc gây nguy hiểm cho tính mạng của cán bộ giảng viên và sinh viên trong khuôn viên trường khi bước vào cao điểm mùa mưa bão có dông lốc mạnh, Phòng Quản trị cơ sở vật chất thông báo kế hoạch cắt tỉa nhánh cây cụ thể:
+
+1. Nội dung triển khai: Phòng phối hợp cùng công ty công viên cây xanh tiến hành khảo sát, hạ độ cao ngọn cây, cắt tỉa bớt các cành nhánh bị sâu bệnh, mục rỗng, có nguy cơ gãy đổ cao của các cây cổ thụ (như cây xà cừ, cây phượng, cây điệp) dọc theo các tuyến đường nội bộ xung quanh khu giảng đường lớn, khu vực bãi giữ xe sinh viên khu A và sân bóng đá trung tâm.
+
+2. Thời gian và khu vực phong tỏa tạm thời: Công tác thi công dọn dẹp cành cây sẽ diễn ra từ ngày 15/06/2026 đến ngày 22/06/2026. Trong quá trình công nhân vận hành xe cẩu cắt cành, một số đoạn đường nội bộ sẽ bị phong tỏa tạm thời để tránh cành cây rơi trúng người di chuyển phía dưới.
+
+3. Khuyến cáo an toàn đối với sinh viên: Trong thời gian thi công, sinh viên tuyệt đối không đậu đỗ xe máy ngoài phạm vi nhà xe có mái che, không đi vào các khu vực đã căng dây cảnh báo nguy hiểm. Khi trời có mưa to, gió lớn, tuyệt đối không đứng trú mưa dưới các tán cây lớn hoặc di chuyển gần khu vực có lưới điện trần. Sự hợp tác của mọi người là cơ sở để đảm bảo an toàn. Email tiếp nhận thông tin phản ánh cây xanh có nguy cơ đổ: p.qtcsvc@hcmute.edu.vn.
+
+Trân trọng thông báo.',
+    '2026-06-08 14:20:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 89. Thông báo ID 89
+(
+    '60000000-0000-0000-0000-000000000089',
+    'Thông báo tiến độ thi công nâng cấp hệ thống thang máy trục chính tòa nhà trung tâm và hướng dẫn phân luồng di chuyển đối với cán bộ, sinh viên',
+    'Nằm trong dự án hiện đại hóa hạ tầng kỹ thuật và nâng cao năng lực vận chuyển hành khách theo chiều đứng của Tòa nhà trung tâm, Phòng Quản trị cơ sở vật chất thông báo về việc triển khai thi công thay thế, nâng cấp bo mạch điều khiển thông minh và hệ thống cáp tải của cụm thang máy số 3 và số 4 tòa nhà trung tâm:
+
+1. Tiến độ và kế hoạch thi công: Công trình chính thức khởi công từ ngày 12/06/2026 và dự kiến hoàn thành nghiệm thu đưa vào khai thác trở lại vào ngày 26/06/2026. Trong suốt thời gian này, cụm thang máy số 3 và số 4 sẽ ngừng hoạt động hoàn toàn để công nhân tháo dỡ thiết bị cũ trong giếng thang.
+
+2. Phương án phân luồng di chuyển dự phòng: Để giải quyết nhu cầu di chuyển lên các tầng cao của cán bộ và học viên, nhà trường vẫn duy trì vận hành tối đa công suất của cụm thang máy số 1 và số 2. Ưu tiên tuyệt đối quyền sử dụng thang máy cho các giảng viên lớn tuổi, phụ nữ mang thai và các bạn sinh viên bị khuyết tật vận động di chuyển khó khăn.
+
+3. Khuyến khích sử dụng thang bộ: Đối với sinh viên học tập tại các tầng thấp (từ tầng 1 đến tầng 4), nhà trường khuyến khích các em di chuyển bằng hệ thống thang bộ hành lang rộng rãi để rèn luyện sức khỏe, đồng thời giảm tải áp lực chờ đợi thang máy giờ cao điểm. Kính đề nghị các đơn vị lưu ý điều chỉnh thời gian di chuyển để không bị trễ giờ ca học. Cán bộ và sinh viên có thể đến trực tiếp Phòng A1.706 để được hướng dẫn sơ đồ phân luồng chi tiết.
+
+Trân trọng cảm ơn sự phối hợp của quý thầy cô và các em.',
+    '2026-06-09 09:00:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+
+-- 90. Thông báo ID 90
+(
+    '60000000-0000-0000-0000-000000000090',
+    'Thông báo quy trình đăng ký thuê mặt bằng, tổ chức gian hàng dịch vụ thương mại ngắn hạn trong khuôn viên ngày hội việc làm năm 2026',
+    'Để chuẩn bị cơ sở hạ tầng mặt bằng đồng bộ, an toàn và đảm bảo tính thẩm mỹ, trật tự chung phục vụ cho sự kiện "Ngày hội việc làm và kết nối doanh nghiệp năm 2026" sắp diễn ra, Phòng Quản trị cơ sở vật chất thông báo đến ban tổ chức chương trình, các đơn vị tài trợ và các nhóm sinh viên khởi nghiệp về quy định đăng ký vị trí dựng gian hàng hội chợ như sau:
+
+1. Quy trình đăng ký và phân bổ mặt bằng: Các đơn vị doanh nghiệp đối tác hoặc các nhóm sinh viên có nhu cầu thuê đất trống để dựng gian hàng (booth), treo bạt quảng cáo tại khu vực sân trung tâm phải nộp bản vẽ chi tiết kích thước gian hàng và sơ đồ bố trí thiết bị tải điện về Phòng Quản trị cơ sở vật chất xử lý thẩm định. Thời gian tiếp nhận hồ sơ kéo dài từ ngày 15/06/2026 đến hết ngày 25/06/2026 trực tiếp tại văn phòng Phòng A1.707 (tầng 7) hoặc qua hòm thư điện tử chính thức p.qtcsvc@hcmute.edu.vn. Phòng sẽ tiến hành bốc thăm vị trí công khai dựa trên phân nhóm ngành hàng dịch vụ.
+
+2. Quy chuẩn kỹ thuật về đấu nối điện và an toàn: Toàn bộ hệ thống dây dẫn điện cấp cho các gian hàng phải sử dụng dây bọc cách điện đôi lõi đồng chịu tải tốt, bắt buộc lắp đặt cầu dao chống rò điện (ELCB) riêng biệt cho từng gian hàng, tuyệt đối không được tự ý đấu nối trực tiếp vào tủ điện tổng của trường khi chưa có sự giám sát của kỹ sư phòng. Các gian hàng có sử dụng thiết bị phát nhiệt hoặc trình diễn công nghệ cao phải chuẩn bị sẵn tối thiểu 01 bình chữa cháy xách tay dạng bột đặt tại vị trí dễ thấy để chủ động ứng phó sự cố tại chỗ.
+
+3. Quy định về dọn dẹp vệ sinh môi trường: Sau khi sự kiện bế mạc, các đơn vị có thời gian tối đa là 12 tiếng để tiến hành tháo dỡ toàn bộ kết cấu khung sắt, bạt hiflex và thu gom toàn bộ rác thải công nghiệp phát sinh trong quá trình vận hành gian hàng. Đơn vị phải ký biên bản nghiệm thu bàn giao lại mặt bằng nguyên trạng sạch sẽ cho nhà trường thì mới được hoàn trả tiền quỹ cọc vệ sinh ban đầu theo hợp đồng kinh tế đã ký kết. Mọi thắc mắc kỹ thuật mặt bằng, liên hệ số máy bàn phòng 028 3722 3502 để gặp cán bộ phụ trách điều phối trực tiếp hướng dẫn mượt mà.
+
+Phòng Quản trị cơ sở vật chất kính chúc các đơn vị chuẩn bị tốt gian hàng sự kiện.',
+    '2026-06-10 10:45:00',
+    'b0000000-0000-0000-0000-000000000009',
+    'd0000000-0000-0000-0000-000000000009'
+),
+-- 91. Thông báo ID 91
+(
+    '60000000-0000-0000-0000-000000000091',
+    'Thông báo triển khai kế hoạch xét duyệt Học bổng Khuyến khích học tập và hỗ trợ chi phí phương tiện cho sinh viên chính quy trong học kỳ vừa qua',
+    'Nhằm kịp thời động viên, khuyến khích các cá nhân có thành tích xuất sắc trong học tập cũng như hỗ trợ một phần gánh nặng chi phí sinh hoạt cho người học, Phòng Tuyển sinh và Cộng tác sinh viên phối hợp cùng Ban Giám hiệu nhà trường chính thức khởi động quy trình xét duyệt Học bổng Khuyến khích học tập (HB KKHT) với các nội dung trọng tâm như sau:
+
+1. Điều kiện xét tuyển và phân cấp học bổng: Đối tượng áp dụng là toàn bộ sinh viên hệ chính quy đang theo học tại trường có kết quả học tập đạt từ loại Khá trở lên và điểm rèn luyện (ĐRL) đạt từ 70 điểm trở lên trong học kỳ xét duyệt. Học bổng sẽ được phân chia thành 3 mức: Xuất sắc, Giỏi và Khá dựa trên quỹ học bổng được phân bổ riêng cho từng Khoa/Ngành. Lưu ý, những sinh viên bị điểm F ở bất kỳ môn học nào trong học kỳ hoặc đang trong thời gian bị kỷ luật từ mức khiển trách trở lên sẽ không được đưa vào danh sách xét duyệt.
+
+2. Quy trình kiểm tra rà soát dữ liệu: Hệ thống dữ liệu đồng bộ từ Phòng Đào tạo và cổng quản lý sinh viên sẽ tự động kết xuất danh sách dự kiến dựa trên bộ lọc tiêu chí. Toàn bộ sinh viên có trách nhiệm đăng nhập trực tiếp vào tài khoản cá nhân để đối soát các thông tin về: Điểm trung bình học kỳ, số tín chỉ tích lũy, phân loại ĐRL. Mọi thắc mắc, khiếu nại về sai lệch thông tin dữ liệu phải được gửi bằng văn bản trực tiếp tại văn phòng Phòng A1.203 trước ngày 20/06/2026, quá thời hạn trên nhà trường sẽ chốt cổng dữ liệu để tiến hành lập danh sách chi trả ngân hàng.
+
+3. Hình thức và thời gian giải ngân: Sau khi Hội đồng xét duyệt cấp trường ký quyết định ban hành chính thức, tiền học bổng sẽ được chuyển khoản trực tiếp 100% vào tài khoản ngân hàng liên kết của sinh viên đã đăng ký trên hệ thống quản lý. Sinh viên lưu ý không tự ý khóa hoặc hủy thẻ ngân hàng trong thời gian này để tránh sự cố lỗi giao dịch. Mọi thông tin chi tiết liên quan đến định mức chi trả của từng khóa ngành, sinh viên vui lòng liên hệ hotline phòng 028 3722 2764 để nhận được sự tư vấn và hướng dẫn cụ thể từ cán bộ phụ trách.
+
+Phòng Tuyển sinh và Cộng tác sinh viên kính chúc các bạn sinh viên đạt kết quả cao.',
+    '2026-06-11 08:00:00',
     'b0000000-0000-0000-0000-000000000010',
     'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 1. Giáo vụ Khoa CNTT (b000...016) – Khoa Công nghệ Thông tin
+-- 92. Thông báo ID 92
 (
-    '60000000-0000-0000-0000-000000000013',
-    'Cuộc thi lập trình sinh viên vòng trường 2025',
-    'Kính gửi toàn thể sinh viên Khoa Công nghệ Thông tin và các bạn yêu thích lập trình,
+    '60000000-0000-0000-0000-000000000092',
+    'Thông báo hướng dẫn quy trình tiếp nhận và thẩm định hồ sơ chính sách miễn, giảm học phí, trợ cấp xã hội học kỳ mới dành cho đối tượng đặc thù',
+    'Thực hiện theo các nghị định hành chính hiện hành của Chính phủ về chính sách hỗ trợ chi phí học tập cho người học, Phòng Tuyển sinh và Cộng tác sinh viên thông báo đến toàn thể sinh viên thuộc các diện ưu tiên, hộ nghèo, cận nghèo về việc nộp hồ sơ gia hạn và mở mới chế độ miễn giảm học phí như sau:
 
-Khoa Công nghệ Thông tin tổ chức vòng trường cuộc thi lập trình sinh viên quốc gia ACM-ICPC năm 2025 vào lúc 08h00 ngày 25/11/2025 tại phòng lab C501. 
-Thể thức thi theo đội (tối đa 3 thành viên), giải nhất 30 triệu đồng kèm suất tham dự vòng khu vực Đông Nam Á. 
-Đăng ký đội thi trước ngày 15/11/2025 tại phòng C501 hoặc qua link https://fit.uni.edu.vn/acm2025. 
-Đây là cơ hội tuyệt vời để các em rèn luyện kỹ năng và khẳng định năng lực lập trình.
+1. Phân loại đối tượng và hồ sơ chứng thực bắt buộc: Sinh viên thuộc nhóm được miễn 100% học phí (con thương binh liệt sỹ, sinh viên khuyết tật nặng, người dân tộc thiểu số thuộc hộ nghèo/cận nghèo) và nhóm giảm 70% hoặc 50% học phí cần chuẩn bị đầy đủ các giấy tờ pháp lý bao gồm: Đơn xin miễn giảm học phí theo mẫu quy định của nhà trường, bản sao chứng thực Căn cước công dân, và Giấy chứng nhận hộ nghèo/cận nghèo năm 2026 hoặc sổ lĩnh tiền trợ cấp hàng tháng (có công chứng không quá 6 tháng). Các trường hợp thiếu giấy tờ minh chứng từ cơ quan có thẩm quyền ở địa phương sẽ bị từ chối tiếp nhận.
 
-Trân trọng kính mời!',
-    '2025-11-10 09:00:00',
-    'b0000000-0000-0000-0000-000000000016',
-    'd0000000-0000-0000-0000-000000000016'
-),
-(
-    '60000000-0000-0000-0000-000000000014',
-    'Thông báo tuyển sinh chương trình chất lượng cao ngành CNTT khóa 2025',
-    'Kính gửi thí sinh và phụ huynh,
+2. Phương thức và thời hạn nộp hồ sơ trực tiếp: Để phục vụ công tác đối soát dữ liệu tài chính kịp thời trước khi cổng đóng học phí của học kỳ tiếp theo bắt đầu, toàn bộ hồ sơ bản giấy phải được sắp xếp ngăn nắp trong túi đựng hồ sơ, ghi rõ họ tên, mã số sinh viên bên ngoài và nộp trực tiếp tại bàn tiếp nhận số 2 - Phòng A1.203 (tầng 2 tòa nhà trung tâm). Thời gian làm việc liên tục từ ngày 16/06/2026 đến hết ngày 30/06/2026 (trừ các ngày Thứ Bảy và Chủ Nhật). Nhà trường tuyệt đối không giải quyết các trường hợp nộp trễ hạn với lý do cá nhân.
 
-Khoa Công nghệ Thông tin thông báo tuyển sinh chương trình chất lượng cao (giảng dạy 100% bằng tiếng Anh, giáo trình Mỹ) khóa 2025. 
-Học phí: 75 triệu đồng/năm. 
-Sinh viên tốt nghiệp được cấp bằng chính quy và có cơ hội chuyển tiếp sang các trường đối tác tại Mỹ, Úc, Singapore. 
-Hạn nộp hồ sơ: 31/12/2025 tại phòng C501.
+3. Quy định xử lý tài chính liên quan: Những sinh viên đã nộp hồ sơ đầy đủ và được phòng thẩm định phê duyệt trạng thái hợp lệ trên hệ thống tạm thời sẽ không phải đóng phần học phí được miễn giảm trong đợt quét học phí tự động. Trường hợp sinh viên đã lỡ hoàn tất đóng toàn bộ học phí trước đó, nhà trường sẽ làm thủ tục quyết toán hoàn trả lại số tiền thừa vào tài khoản cá nhân vào cuối học kỳ. Mọi vướng mắc về thủ tục pháp lý, vui lòng liên hệ qua hòm thư điện tử chính thức p.cthssv@hcmute.edu.vn để được giải đáp.
 
-Trân trọng thông báo!',
-    '2025-12-02 10:00:00',
-    'b0000000-0000-0000-0000-000000000016',
-    'd0000000-0000-0000-0000-000000000016'
-),
-(
-    '60000000-0000-0000-0000-000000000015',
-    'Hội thảo “Ứng dụng trí tuệ nhân tạo trong y tế”',
-    'Kính gửi toàn thể sinh viên và giảng viên,
-
-Khoa Công nghệ Thông tin phối hợp với FPT AI và Google tổ chức hội thảo “Ứng dụng trí tuệ nhân tạo trong y tế” vào lúc 13h30 ngày 15/10/2025 tại Hội trường C. 
-Diễn giả là các chuyên gia hàng đầu trong lĩnh vực AI Healthcare. 
-Sinh viên tham dự được cấp chứng nhận và có cơ hội thực tập tại các tập đoàn công nghệ lớn.
-
-Trân trọng kính mời!',
-    '2025-09-25 14:00:00',
-    'b0000000-0000-0000-0000-000000000016',
-    'd0000000-0000-0000-0000-000000000016'
+Phòng Tuyển sinh và Cộng tác sinh viên thông báo để sinh viên chủ động thực hiện.',
+    '2026-06-11 08:45:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 2. NV Dịch vụ sinh viên (b000...027) – Trung tâm Dịch vụ sinh viên
+-- 93. Thông báo ID 93
 (
-    '60000000-0000-0000-0000-000000000016',
-    'Khuyến mãi dịch vụ in ấn – photocopy – văn phòng phẩm tháng 12',
-    'Kính gửi toàn thể sinh viên,
+    '60000000-0000-0000-0000-000000000093',
+    'Thông báo về việc tổ chức Tuần sinh hoạt công dân - Giáo dục chính trị và quy chế rèn luyện giữa khóa dành cho toàn thể sinh viên năm thứ hai và năm thứ ba',
+    'Căn cứ theo kế hoạch đào tạo toàn diện và định hướng tư tưởng, đạo đức lối sống cho người học trong môi trường giáo dục đại học, Phòng Tuyển sinh và Cộng tác sinh viên thông báo lịch học tập tập trung cho chuyên đề "Tuần sinh hoạt công dân - Giáo dục chính trị" năm học 2026 cụ thể như sau:
 
-Trung tâm Dịch vụ sinh viên triển khai chương trình khuyến mãi cuối năm: giảm 25% tất cả dịch vụ in ấn, photocopy màu/đen trắng, đóng luận văn, mua văn phòng phẩm từ ngày 01–20/12/2025. 
-Tặng thêm 200 tờ A4 miễn phí cho hóa đơn từ 300.000 đồng. 
-Địa điểm: Khu dịch vụ Canteen và tầng trệt tòa A.
+1. Nội dung chương trình và giảng viên chuyên trách: Chuỗi chuyên đề đợt này sẽ tập trung phổ biến các nội dung cốt lõi bao gồm: Cập nhật các sửa đổi mới nhất trong quy chế đào tạo và chuẩn đầu ra ngoại ngữ, tin học; giáo dục phòng chống tội phạm công nghệ cao và các tệ nạn xã hội xâm nhập học đường; định hướng tư duy khởi nghiệp sáng tạo. Bài giảng sẽ do đại diện Ban Giám hiệu, đại diện các cơ quan ban ngành pháp luật và các chuyên gia tâm lý, doanh nghiệp trực tiếp điều phối, chia sẻ.
 
-Trân trọng thông báo!',
-    '2025-11-28 10:00:00',
-    'b0000000-0000-0000-0000-000000000027',
-    'd0000000-0000-0000-0000-000000000027'
-),
-(
-    '60000000-0000-0000-0000-000000000017',
-    'Thông báo lịch hoạt động căng tin và siêu thị mini dịp Tết',
-    'Kính gửi toàn thể sinh viên,
+2. Hình thức triển khai và lịch phân bổ theo Khoa: Chương trình được tổ chức theo hình thức kết hợp giữa học trực tiếp tại Hội trường lớn tòa nhà Trung tâm và làm bài kiểm tra trắc nghiệm thu hoạch trực tuyến trên hệ thống quản lý học tập (LMS). Sinh viên theo dõi lịch phân bổ ca học chi tiết theo từng Khoa chuyên môn được đính kèm dưới thông báo này để đi học đúng giờ, đúng trang phục quy định (áo đồng phục trường hoặc áo sơ mi lịch sự), nghiêm túc chấp hành việc quét mã QR điểm danh tại cửa ra vào.
 
-Trung tâm Dịch vụ sinh viên thông báo lịch hoạt động dịp Tết Dương lịch 2026:  
-- Căng tin chính: mở cửa đến 17h00 ngày 31/12/2025, nghỉ từ 01–04/01/2026, mở lại từ 05/01/2026.  
-- Siêu thị mini: mở cửa 07h00–22h00 đến hết ngày 30/12/2025.  
-Đề nghị các em chủ động mua sắm trước khi nghỉ lễ.
+3. Đánh giá kết quả và chế tài xử lý vi phạm: Việc tham gia đầy đủ và hoàn thành bài đánh giá thu hoạch đạt điểm từ Trung bình trở lên là điều kiện bắt buộc để tính điểm rèn luyện ở mục Điểm nhận thức chính trị (tối đa 10 điểm). Những sinh viên vắng mặt không có lý do chính đáng hoặc không hoàn thành bài thi trắc nghiệm trên hệ thống LMS đúng hạn sẽ bị nhận mức ĐRL loại Yếu cho hạng mục tương ứng, đồng thời bị đưa vào danh sách nhắc nhở xem xét tư cách khen thưởng cuối năm.
 
-Trân trọng thông báo!',
-    '2025-12-20 09:00:00',
-    'b0000000-0000-0000-0000-000000000027',
-    'd0000000-0000-0000-0000-000000000027'
-),
-(
-    '60000000-0000-0000-0000-000000000018',
-    'Tuyển dụng nhân viên phục vụ bán thời gian',
-    'Kính gửi sinh viên có nhu cầu làm thêm,
-
-Trung tâm Dịch vụ sinh viên tuyển 20 nhân viên phục vụ bán thời gian tại căng tin và siêu thị mini.  
-Thu nhập: 35.000 đồng/giờ, làm việc linh hoạt theo ca.  
-Ứng tuyển trực tiếp tại quầy thông tin Khu dịch vụ Canteen trước ngày 15/09/2025.
-
-Trân trọng thông báo!',
-    '2025-08-30 11:00:00',
-    'b0000000-0000-0000-0000-000000000027',
-    'd0000000-0000-0000-0000-000000000027'
+Phòng Tuyển sinh và Cộng tác sinh viên yêu cầu các lớp trưởng đôn đốc thành viên tham gia nghiêm túc.',
+    '2026-06-11 09:30:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 3. NV Dạy học số (b000...028) – Trung tâm Dạy học số
+-- 94. Thông báo ID 94
 (
-    '60000000-0000-0000-0000-000000000019',
-    'Tập huấn sử dụng LMS phiên bản mới 2025',
-    'Kính gửi toàn thể giảng viên và sinh viên,
+    '60000000-0000-0000-0000-000000000094',
+    'Thông báo tuyển dụng Đại sứ sinh viên tham gia Đội ngũ tư vấn tuyển sinh và truyền thông hướng nghiệp đại học năm học 2026 - 2027',
+    'Để chuẩn bị cho chiến dịch quảng bá hình ảnh, tư vấn hướng nghiệp và hỗ trợ công tác tuyển sinh đại học hệ chính quy cho mùa tuyển sinh mới đạt hiệu quả tối ưu, Phòng Tuyển sinh và Cộng tác sinh viên thông báo phát động chương trình tuyển chọn thành viên Đội hình Đại sứ sinh viên (Student Ambassadors) với thông tin chi tiết như sau:
 
-Trung tâm Dạy học số tổ chức các buổi tập huấn sử dụng Hệ thống quản lý học tập (LMS) phiên bản 2025 vào ngày 20–22/08/2025.  
-Phiên bản mới tích hợp AI hỗ trợ học tập, chấm bài tự động và theo dõi tiến độ cá nhân.  
-Lịch tập huấn chi tiết đã được gửi qua email giảng viên và lớp trưởng.  
-Buổi tập huấn là bắt buộc đối với giảng viên chủ nhiệm học phần.
+1. Tiêu chí tuyển chọn ứng viên: Chương trình chào đón tất cả sinh viên từ năm nhất đến năm cuối có tinh thần trách nhiệm cao, năng nổ, nhiệt huyết. Ưu tiên những ứng viên sở hữu các kỹ năng mềm tốt như giao tiếp tự tin trước đám đông, xử lý tình huống linh hoạt, có khả năng nói tiếng Anh giao tiếp hoặc có năng khiếu nghệ thuật, quay dựng video ngắn, quản trị fanpage. Sinh viên tham gia phải đảm bảo có kết quả học tập kỳ gần nhất đạt loại Khá trở lên và điểm rèn luyện từ 80 điểm.
 
-Trân trọng thông báo.',
-    '2025-08-18 09:00:00',
-    'b0000000-0000-0000-0000-000000000028',
-    'd0000000-0000-0000-0000-000000000028'
-),
-(
-    '60000000-0000-0000-0000-000000000020',
-    'Thông báo bảo trì hệ thống E-learning',
-    'Kính gửi toàn thể giảng viên và sinh viên,
+2. Mô tả nhiệm vụ và quyền lợi được hưởng: Các đại sứ sinh viên sau khi trúng tuyển sẽ được tập huấn chuyên sâu về cẩm nang quy chế tuyển sinh, sơ đồ ngành nghề của trường. Nhiệm vụ chính bao gồm: Tham gia hỗ trợ trực tiếp tại các gian hàng tư vấn ở các trường THPT; tiếp đón phụ huynh học sinh đến tham quan trường; trực tổng đài giải đáp thắc mắc trực tuyến. Quyền lợi nhận được gồm có: Được cấp trang phục đại sứ riêng biệt, hỗ trợ phụ cấp đi lại, ăn trưa theo ngày công tác, và được cộng điểm rèn luyện ưu tiên ở mục Hoạt động đóng góp cho cộng đồng.
 
-Trung tâm Dạy học số sẽ bảo trì hệ thống E-learning từ 22h00 ngày 10/12/2025 đến 06h00 ngày 11/12/2025.  
-Trong thời gian này, hệ thống sẽ tạm ngừng hoạt động.  
-Đề nghị quý thầy cô và các em hoàn tất nộp bài, điểm danh trước thời gian bảo trì.
+3. Quy trình đăng ký và phỏng vấn trực tiếp: Sinh viên có nhu cầu thử sức vui lòng điền đầy đủ thông tin cá nhân và tải lên CV tóm tắt năng lực qua liên kết form trực tuyến của phòng trước 17h00 ngày 22/06/2026. Vòng phỏng vấn trực tiếp đánh giá tác phong và phản xạ ứng biến sẽ được tổ chức vào cuối tuần tại phòng họp A1.204. Danh sách các bạn vượt qua vòng sơ loại sẽ được gửi qua email trường cấp để thông báo mốc thời gian cụ thể.
 
-Trân trọng thông báo!',
-    '2025-12-05 16:00:00',
-    'b0000000-0000-0000-0000-000000000028',
-    'd0000000-0000-0000-0000-000000000028'
-),
-(
-    '60000000-0000-0000-0000-000000000021',
-    'Khóa học miễn phí “Kỹ năng học trực tuyến hiệu quả”',
-    'Kính gửi toàn thể sinh viên,
-
-Trung tâm Dạy học số mở khóa học miễn phí “Kỹ năng học trực tuyến hiệu quả” khai giảng ngày 10/10/2025.  
-Nội dung: quản lý thời gian, ghi chú thông minh, sử dụng công cụ hỗ trợ học tập.  
-Đăng ký tại https://elearning.uni.edu.vn/kynang2025.  
-Hoàn thành khóa học được cấp chứng nhận và tính 10 giờ hoạt động ngoại khóa.
-
-Trân trọng kính mời!',
-    '2025-09-25 10:00:00',
-    'b0000000-0000-0000-0000-000000000028',
-    'd0000000-0000-0000-0000-000000000028'
+Phòng Tuyển sinh và Cộng tác sinh viên rất mong chờ những gương mặt đại diện năng động.',
+    '2026-06-11 10:15:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 4. Kỹ thuật viên TTMT (b000...029) – Trung tâm Thông tin – Máy tính
+-- 95. Thông báo ID 95
 (
-    '60000000-0000-0000-0000-000000000022',
-    'Chính thức nâng cấp băng thông Internet lên 3Gbps',
-    'Kính gửi toàn thể cán bộ, giảng viên và sinh viên,
+    '60000000-0000-0000-0000-000000000095',
+    'Thông báo về việc rà soát, chuẩn hóa dữ liệu hồ sơ cá nhân và cập nhật thông tin cư trú bắt buộc trên cổng thông tin sinh viên toàn trường',
+    'Nhằm mục đích hoàn thiện cơ sở dữ liệu quốc gia về giáo dục đại học, đồng thời phục vụ cho công tác quản lý thông tin cư trú, tạm trú, cấp phát thẻ sinh viên tích hợp và xác nhận hồ sơ vay vốn tín dụng, Phòng Tuyển sinh và Cộng tác sinh viên đề nghị toàn thể sinh viên tiến hành kiểm tra, chuẩn hóa dữ liệu cá nhân theo các quy định sau:
 
-Trung tâm Thông tin – Máy tính trân trọng thông báo từ ngày 01/12/2025, băng thông Internet toàn trường được nâng cấp lên 3Gbps, đồng thời triển khai Wi-Fi 6 tại tất cả các tòa nhà và ký túc xá.  
-Tốc độ tải xuống dự kiến tăng gấp 3 lần, đáp ứng tốt nhu cầu học tập trực tuyến, nghiên cứu và giải trí.  
-Hệ thống Eduroam cũng được kích hoạt toàn trường.
+1. Các trường dữ liệu cần rà soát và bổ sung: Sinh viên bắt buộc phải đăng nhập vào hệ thống quản lý dữ liệu trực tuyến bằng tài khoản nội bộ và truy cập vào mục "Cập nhật hồ sơ". Tại đây, cần rà soát chính xác các mục thông tin cốt lõi bao gồm: Số định danh cá nhân (CCCD), ngày cấp, nơi cấp; địa chỉ thường trú theo sổ hộ khẩu cũ hoặc cơ sở dữ liệu cư trú mới; địa chỉ tạm trú hiện tại (ghi rõ tên nhà trọ, số phòng, tên đường, phường/xã, quận/huyện); và số điện thoại liên lạc của phụ huynh trong trường hợp khẩn cấp.
 
-Trân trọng thông báo!',
-    '2025-11-30 09:00:00',
-    'b0000000-0000-0000-0000-000000000029',
-    'd0000000-0000-0000-0000-000000000029'
-),
-(
-    '60000000-0000-0000-0000-000000000023',
-    'Thông báo bảo trì phòng máy tính C301–C305',
-    'Kính gửi giảng viên và sinh viên,
+2. Quy định tải lên ảnh minh chứng pháp lý: Hệ thống yêu cầu sinh viên phải đính kèm bản quét (scan) hoặc ảnh chụp rõ nét hai mặt của Căn cước công dân (định dạng file .jpg hoặc .pdf, dung lượng không quá 2MB, không bị mờ góc hoặc lóa sáng). Đối với những sinh viên thuộc diện nam công dân trong độ tuổi thực hiện nghĩa vụ quân sự, bắt buộc phải bổ sung ảnh chụp "Giấy chứng nhận đăng ký nghĩa vụ quân sự" do Ban chỉ huy quân sự cấp huyện nơi cư trú cấp để nhà trường làm căn cứ xuất văn bản tạm hoãn nghĩa vụ theo quy định.
 
-Trung tâm Thông tin – Máy tính sẽ bảo trì, nâng cấp phòng máy tính C301–C305 từ ngày 25–27/08/2025.  
-Trong thời gian này, các phòng sẽ tạm ngừng hoạt động.  
-Đề nghị quý thầy cô chuyển lịch thực hành sang các phòng khác (thông tin chi tiết đã gửi qua email).
+3. Thời hạn thực hiện và hình thức chế tài: Thời gian dành cho việc cập nhật trực tuyến bắt đầu từ ngày thông báo đến hết 23h59 ngày 28/06/2026. Sau thời gian này, hệ thống sẽ tự động khóa chức năng chỉnh sửa. Những cá nhân không hoàn thành hoặc cố tình khai báo thông tin sai sự thật sẽ phải chịu hoàn toàn trách nhiệm khi xảy ra sai sót trong việc cấp phát văn bằng tốt nghiệp, đồng thời phòng sẽ tạm đóng quyền đăng ký các dịch vụ hành chính công trực tuyến tại trường đối với các tài khoản vi phạm này.
 
-Trân trọng thông báo!',
-    '2025-08-20 11:00:00',
-    'b0000000-0000-0000-0000-000000000029',
-    'd0000000-0000-0000-0000-000000000029'
-),
-(
-    '60000000-0000-0000-0000-000000000024',
-    'Hướng dẫn sử dụng Wi-Fi Eduroam',
-    'Kính gửi toàn thể sinh viên và giảng viên,
-
-Trung tâm Thông tin – Máy tính hướng dẫn sử dụng Wi-Fi Eduroam – hệ thống kết nối miễn phí tại hơn 10.000 trường đại học trên toàn thế giới.  
-Chỉ cần đăng nhập một lần bằng tài khoản sinh viên/giảng viên là có thể sử dụng ở bất kỳ đâu có Eduroam.  
-Hướng dẫn chi tiết tại https://ttmt.uni.edu.vn/eduroam.
-
-Trân trọng thông báo!',
-    '2025-10-10 14:00:00',
-    'b0000000-0000-0000-0000-000000000029',
-    'd0000000-0000-0000-0000-000000000029'
+Phòng Tuyển sinh và Cộng tác sinh viên yêu cầu sinh viên nghiêm túc thực hiện để bảo vệ quyền lợi cá nhân.',
+    '2026-06-11 11:00:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 5. Giảng viên GDTC (b000...030) – TT GD Thể chất và Quốc phòng
+-- 96. Thông báo ID 96
 (
-    '60000000-0000-0000-0000-000000000025',
-    'Giải bóng đá sinh viên cúp “Mùa thu 2025”',
-    'Kính gửi các câu lạc bộ bóng đá sinh viên,
+    '60000000-0000-0000-0000-000000000096',
+    'Thông báo về việc gia hạn thời gian đóng kinh phí và bổ sung hồ sơ tham gia Bảo hiểm y tế bắt buộc đối với sinh viên chưa hoàn thành nghĩa vụ năm học',
+    'Bảo hiểm y tế (BHYT) là hình thức bảo hiểm bắt buộc được luật pháp quy định nhằm chăm sóc sức khỏe ban đầu cho học sinh, sinh viên tại các cơ sở giáo dục. Qua số liệu rà soát phối hợp cùng Cơ quan Bảo hiểm xã hội quận, Phòng Tuyển sinh và Cộng tác sinh viên nhận thấy hiện vẫn còn một bộ phận lớn sinh viên chưa hoàn tất việc tham gia. Do đó phòng thông báo đợt gia hạn cuối cùng như sau:
 
-Trung tâm GD Thể chất và Quốc phòng phối hợp Hội Sinh viên tổ chức Giải bóng đá sinh viên cúp “Mùa thu 2025” khai mạc ngày 15/10/2025 tại sân trung tâm.  
-Thể thức: sân 7 người, giải nhất 50 triệu đồng + cúp luân lưu.  
-Đăng ký đội bóng trước ngày 30/09/2025 tại Nhà Thi đấu Đa năng.
+1. Đối tượng áp dụng và mức phí đóng gia hạn: Toàn bộ sinh viên chưa thực hiện gia hạn thẻ BHYT tại trường hoặc chưa cập nhật mã thẻ BHYT thuộc diện hộ nghèo, cận nghèo, hoặc thân nhân quân đội (được địa phương cấp thẻ miễn phí) đều phải thực hiện đợt rà soát này. Số tiền đóng bảo hiểm được tính theo quy định chung của nhà nước cho số tháng còn lại của niên độ. Phương thức đóng tiền được thực hiện hoàn toàn qua cổng thanh toán trực tuyến của ngân hàng đối tác hoặc quét mã QR tĩnh của nhà trường, tuyệt đối không thu tiền mặt tại văn phòng.
 
-Trân trọng kính mời!',
-    '2025-09-20 10:00:00',
-    'b0000000-0000-0000-0000-000000000030',
-    'd0000000-0000-0000-0000-000000000030'
-),
-(
-    '60000000-0000-0000-0000-000000000026',
-    'Thông báo kiểm tra thể lực học kỳ I 2025-2026',
-    'Kính gửi toàn thể sinh viên,
+2. Quy trình minh chứng đối với sinh viên đã có thẻ tại địa phương: Đối với các bạn sinh viên đã được cấp thẻ BHYT theo các nhóm đối tượng đặc thù tại quê nhà và còn giá trị sử dụng đến hết năm, yêu cầu bắt buộc phải chụp ảnh thẻ BHYT rõ mã số BHXH và tải lên phân hệ "Khai báo Bảo hiểm y tế" trên trang cá nhân của mình. Việc này giúp nhà trường loại bỏ tên sinh viên khỏi danh sách nợ bảo hiểm, tránh việc hệ thống tiếp tục gửi thông báo nhắc nhở đôn đốc làm ảnh hưởng đến quá trình học tập.
 
-Trung tâm GD Thể chất và Quốc phòng tổ chức kiểm tra thể lực học kỳ I từ ngày 01–15/12/2025.  
-Nội dung: chạy 1.500m (nam), 800m (nữ), hít đất, gập bụng.  
-Sinh viên đạt chuẩn được cộng 10% điểm môn GDTC.  
-Lịch kiểm tra chi tiết đã gửi qua lớp trưởng.
+3. Thời hạn cuối và hình thức kỷ luật quy chế: Cổng tiếp nhận hồ sơ minh chứng và thanh toán kinh phí sẽ mở đến trước 16h30 ngày 25/06/2026. Những sinh viên cố tình trốn tránh, không tham gia BHYT bắt buộc mà không có lý do chính đáng sẽ bị phòng lập danh sách gửi về các Khoa chuyên trách để hạ một bậc phân loại điểm rèn luyện tại mục "Chấp hành pháp luật và nội quy nhà trường", đồng thời tạm dừng xét duyệt mọi danh hiệu thi đua, khen thưởng hoặc học bổng tài trợ trong học kỳ hiện tại.
 
-Trân trọng thông báo!',
-    '2025-11-28 08:00:00',
-    'b0000000-0000-0000-0000-000000000030',
-    'd0000000-0000-0000-0000-000000000030'
-),
-(
-    '60000000-0000-0000-0000-000000000027',
-    'Lớp học bơi lội miễn phí cho sinh viên năm nhất',
-    'Kính gửi sinh viên năm nhất,
-
-Trung tâm GD Thể chất và Quốc phòng mở lớp học bơi lội miễn phí dành cho sinh viên năm nhất, khai giảng ngày 10/09/2025 tại bể bơi trong nhà.  
-Mỗi lớp 20 học viên, học 12 buổi.  
-Đăng ký tại Nhà Thi đấu Đa năng trước ngày 05/09/2025.
-
-Trân trọng kính mời!',
-    '2025-08-28 14:00:00',
-    'b0000000-0000-0000-0000-000000000030',
-    'd0000000-0000-0000-0000-000000000030'
+Phòng Tuyển sinh và Cộng tác sinh viên đề nghị sinh viên khẩn trương hoàn thành.',
+    '2026-06-11 13:30:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 6. Thủ thư Thư viện (b000...034)
+-- 97. Thông báo ID 97
 (
-    '60000000-0000-0000-0000-000000000028',
-    'Thư viện mở cửa 24/7 dịp ôn thi học kỳ I',
-    'Kính gửi toàn thể sinh viên,
+    '60000000-0000-0000-0000-000000000097',
+    'Thông báo chương trình học bổng doanh nghiệp đối tác và cơ hội thực tập, phát triển nghề nghiệp toàn diện năm 2026 dành cho sinh viên khối kỹ thuật',
+    'Nằm trong chuỗi chiến lược hợp tác toàn diện giữa nhà trường và các tập đoàn công nghệ, doanh nghiệp sản xuất đa quốc gia hàng đầu, Phòng Tuyển sinh và Cộng tác sinh viên vinh hạnh làm đầu mối kết nối, chính thức công bố chương trình Học bổng Doanh nghiệp đối tác năm 2026 với cơ cấu giải thưởng và lộ trình cam kết tuyển dụng hấp dẫn:
 
-Thư viện Trung tâm mở cửa 24/7 từ ngày 20/12/2025 đến hết ngày 15/01/2026 phục vụ nhu cầu ôn thi và làm đồ án cuối kỳ.  
-Khu vực tự học tầng 5 được trang bị thêm 200 chỗ ngồi, ổ cắm điện và Wi-Fi tốc độ cao.  
-Dịch vụ mượn tài liệu qua đêm và hỗ trợ tra cứu trực tuyến 24/7.
+1. Cơ cấu số lượng và giá trị học bổng tài trợ: Trong đợt này, các đơn vị đối tác chiến lược ký kết tài trợ tổng cộng 30 suất học bổng toàn phần (trị giá tương đương 100% học phí một năm học) và 50 suất học bổng bán phần (hỗ trợ chi phí nghiên cứu và sinh hoạt phí). Đi kèm với phần thưởng tiền mặt, những sinh viên nhận học bổng xuất sắc sẽ được đặc cách tham gia trực tiếp vào các dự án nghiên cứu và phát triển sản phẩm thực tế của doanh nghiệp dưới sự dẫn dắt của các kỹ sư trưởng giàu kinh nghiệm.
 
-Trân trọng thông báo!',
-    '2025-12-10 10:00:00',
-    'b0000000-0000-0000-0000-000000000034',
-    'd0000000-0000-0000-0000-000000000034'
-),
-(
-    '60000000-0000-0000-0000-000000000029',
-    'Triển lãm sách kỷ niệm 70 năm thành lập Trường',
-    'Kính gửi toàn thể cán bộ, giảng viên, sinh viên,
+2. Tiêu chuẩn nộp hồ sơ dành cho ứng viên tiềm năng: Chương trình hướng đến đối tượng là sinh viên năm thứ ba và năm cuối thuộc các chuyên ngành công nghệ, kỹ thuật. Yêu cầu có điểm trung bình tích lũy (GPA) tính đến thời điểm hiện tại đạt từ 3.2/4.0 trở lên, có khả năng đọc hiểu tài liệu kỹ thuật bằng tiếng Anh tốt (ưu tiên ứng viên có chứng chỉ TOEIC từ 650 hoặc IELTS từ 5.5 trở lên). Những sinh viên từng đạt giải thưởng tại các cuộc thi học thuật, nghiên cứu khoa học cấp khoa/trường hoặc các cuộc thi lập trình là một lợi thế cạnh tranh rất lớn.
 
-Thư viện tổ chức Triển lãm sách “70 năm một chặng đường” từ ngày 10–20/11/2025 tại sảnh chính Thư viện Trung tâm.  
-Trưng bày hơn 1.000 tư liệu quý, sách cổ và hình ảnh lịch sử Nhà trường.  
-Lễ khai mạc: 18h00 ngày 10/11/2025.
+3. Bộ hồ sơ đăng ký và quy trình thẩm định hai vòng: Hồ sơ bản mềm (softcopy) bao gồm: CV bằng tiếng Anh, bảng điểm học tập có xác nhận điện tử của phòng đào tạo, và một bài luận ngắn (không quá 500 từ) trình bày về mục tiêu phát triển nghề nghiệp tương lai. Toàn bộ tài liệu gửi về địa chỉ email phòng trước ngày 24/06/2026. Các hồ sơ vượt qua vòng thẩm định lý lịch sẽ được phòng liên hệ trực tiếp để tham gia vòng phỏng vấn chuyên sâu cùng hội đồng chuyên gia của doanh nghiệp tổ chức tại phòng họp tòa trung tâm.
 
-Trân trọng kính mời!',
-    '2025-11-01 09:00:00',
-    'b0000000-0000-0000-0000-000000000034',
-    'd0000000-0000-0000-0000-000000000034'
-),
-(
-    '60000000-0000-0000-0000-000000000030',
-    'Hội thảo “Kỹ năng tìm tài liệu học thuật hiệu quả”',
-    'Kính gửi sinh viên năm 3–4 và học viên cao học,
-
-Thư viện tổ chức hội thảo “Kỹ năng tìm tài liệu học thuật hiệu quả” vào lúc 14h00 ngày 15/09/2025.  
-Nội dung: sử dụng Scopus, Web of Science, Google Scholar, tránh đạo văn.  
-Đăng ký tại quầy thông tin Thư viện.
-
-Trân trọng kính mời!',
-    '2025-09-05 14:00:00',
-    'b0000000-0000-0000-0000-000000000034',
-    'd0000000-0000-0000-0000-000000000034'
+Phòng Tuyển sinh và Cộng tác sinh viên chúc các bạn tự tin nắm bắt cơ hội nâng tầm bản thân.',
+    '2026-06-11 14:15:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 7. Quản lý KTX (b000...035)
+-- 98. Thông báo ID 98
 (
-    '60000000-0000-0000-0000-000000000031',
-    'Đăng ký ở nội trú học kỳ I năm học 2025-2026',
-    'Kính gửi tân sinh viên và sinh viên các khóa,
+    '60000000-0000-0000-0000-000000000098',
+    'Thông báo mở cổng hệ thống tự đánh giá và nộp minh chứng Điểm rèn luyện trực tuyến của sinh viên áp dụng cho học kỳ hiện tại',
+    'Điểm rèn luyện là một trong những chỉ số pháp lý quan trọng phản ánh kết quả rèn luyện đạo đức, tư tưởng và kỹ năng xã hội của sinh viên, được sử dụng làm căn cứ xét học bổng, xét tốt nghiệp và khen thưởng. Phòng Tuyển sinh và Cộng tác sinh viên thông báo quy trình và các mốc mốc mốc thời gian bắt buộc cho việc tự đánh giá điểm rèn luyện trực tuyến cụ thể như sau:
 
-Ban Quản lý ký túc xá nhận hồ sơ đăng ký ở nội trú học kỳ I từ ngày 01/12 đến 31/12/2025.  
-Phí nội trú: 1.200.000 đồng/học kỳ (đã bao gồm điện nước).  
-Ưu tiên sinh viên chính sách, hoàn cảnh khó khăn và sinh viên nữ.  
-Nộp hồ sơ tại https://ktx.uni.edu.vn/dangky2025.
+1. Quy trình thực hiện đánh giá ba cấp: Quy trình gồm 3 bước tuần tự bắt buộc. Đầu tiên, sinh viên đăng nhập vào hệ thống quản lý tích hợp, tiến hành tích chọn tự chấm điểm cho bản thân ở từng mục tiêu chí dựa trên khung quy định. Bước hai, ban cán sự lớp phối hợp cùng thầy cô Cố vấn học tập tổ chức họp lớp họp trực tuyến hoặc trực tiếp để xem xét, thông qua bảng điểm rèn luyện của từng thành viên, tiến hành bỏ phiếu thống nhất. Bước ba, Hội đồng đánh giá cấp Khoa rà soát và phê duyệt dữ liệu cuối cùng gửi về phòng.
 
-Trân trọng thông báo!',
-    '2025-12-05 08:00:00',
-    'b0000000-0000-0000-0000-000000000035',
-    'd0000000-0000-0000-0000-000000000035'
-),
-(
-    '60000000-0000-0000-0000-000000000032',
-    'Thông báo tổng vệ sinh ký túc xá cuối năm',
-    'Kính gửi sinh viên nội trú,
+2. Quy chuẩn về việc chuẩn bị và tải lên file minh chứng: Đối với các hạng mục điểm được cộng thêm ngoài khung học tập cố định (như tham gia hoạt động tình nguyện, đạt giải cuộc thi, hiến máu nhân đạo, tham gia hội thảo khoa học), sinh viên bắt buộc phải chụp ảnh rõ nét hoặc quét giấy chứng nhận, giấy khen và tải lên hệ thống tại mục tương ứng. Hệ thống chỉ công nhận điểm cộng khi có file minh chứng đi kèm hợp lệ. Các trường hợp khai khống thông tin mà không có giấy tờ đối soát sẽ bị hệ thống tự động loại bỏ điểm cộng mà không thông báo trước.
 
-Ban Quản lý ký túc xá tổ chức tổng vệ sinh toàn bộ khu nội trú vào ngày 28–30/12/2025.  
-Yêu cầu các phòng dọn dẹp vệ sinh, phân loại rác đúng quy định.  
-Sinh viên không hợp tác sẽ bị nhắc nhở kỷ luật.
+3. Thời hạn đóng cổng dữ liệu và xử lý chậm trễ: Cổng tự đánh giá dành cho sinh viên sẽ chính thức mở từ ngày 15/06/2026 và tự động đóng vào lúc 17h00 ngày 25/06/2026 để chuyển giao dữ liệu cho cấp lớp và khoa đánh giá. Những sinh viên không thực hiện tự chấm điểm trên hệ thống đúng thời hạn quy định sẽ bị mặc định nhận mức điểm rèn luyện loại Trung bình hoặc Yếu tùy thuộc vào lịch sử vi phạm, đồng thời mất quyền khiếu nại về sau. Mọi thắc mắc kỹ thuật hệ thống, vui lòng liên hệ bàn trực tại phòng A1.204 để được hỗ trợ kỹ thuật trực tiếp.
 
-Trân trọng thông báo!',
-    '2025-12-20 10:00:00',
-    'b0000000-0000-0000-0000-000000000035',
-    'd0000000-0000-0000-0000-000000000035'
-),
-(
-    '60000000-0000-0000-0000-000000000033',
-    'Thông báo sửa chữa hệ thống nước nóng KTX khu B',
-    'Kính gửi sinh viên nội trú khu B,
-
-Ban Quản lý ký túc xá sẽ sửa chữa hệ thống nước nóng khu B từ ngày 15–20/11/2025.  
-Trong thời gian này, nước nóng sẽ tạm ngừng cung cấp.  
-Nhà trường sẽ bố trí xe đưa đón miễn phí đến khu tắm công cộng.
-
-Trân trọng thông báo!',
-    '2025-11-10 09:00:00',
-    'b0000000-0000-0000-0000-000000000035',
-    'd0000000-0000-0000-0000-000000000035'
+Phòng Tuyển sinh và Cộng tác sinh viên đề nghị ban cán sự các lớp đôn đốc thực hiện nghiêm túc.',
+    '2026-06-11 15:00:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- Kế toán viên
+-- 99. Thông báo ID 99
 (
-    '60000000-0000-0000-0000-000000000034',
-    'Thông báo đóng học phí học kỳ I năm học 2025-2026',
-    'Kính gửi toàn thể sinh viên,
+    '60000000-0000-0000-0000-000000000099',
+    'Thông báo phát động phong trào đề cử, xét chọn danh hiệu "Sinh viên tiêu biểu" và gương mặt trẻ xuất sắc trong hoạt động cộng đồng năm học 2025 - 2026',
+    'Nhằm mục đích tôn vinh các cá nhân có thành tích xuất sắc, có đóng góp tích cực và tầm ảnh hưởng sâu rộng trong công tác phong trào, hoạt động tình nguyện vì cộng đồng cũng như đạt kết quả cao trong nghiên cứu khoa học, Phòng Tuyển sinh và Cộng tác sinh viên phối hợp cùng Ban Chấp hành Đoàn Thanh niên - Hội Sinh viên trường chính thức phát động phong trào xét chọn danh hiệu "Sinh viên tiêu biểu" cấp trường với nội dung chi tiết như sau:
 
-Phòng Kế hoạch – Tài chính thông báo thời hạn đóng học phí học kỳ I năm học 2025-2026 là ngày 31/12/2025. 
-Sinh viên có thể thanh toán qua chuyển khoản ngân hàng, ví điện tử Momo/ZaloPay hoặc trực tiếp tại quầy thu ngân (tầng trệt tòa A). 
-Trường hợp chậm nộp sẽ bị tính phạt 0,05%/ngày theo quy định tại Quyết định 125/QĐ-ĐH. 
-Thông tin tài khoản thụ hưởng và hướng dẫn chi tiết đã được gửi qua email sinh viên và đăng tải trên cổng thông tin. 
-Mọi thắc mắc vui lòng liên hệ phòng A105 hoặc email khtc@uni.edu.vn.
+1. Tiêu chuẩn xét duyệt danh hiệu cao quý: Ứng viên tham gia xét chọn phải đạt được sự cân bằng xuất sắc giữa học tập và rèn luyện. Cụ thể: Điểm trung bình học tập cả năm học đạt từ 3.2/4.0 trở lên (đối với khối ngành Kinh tế, Ngôn ngữ) hoặc từ 3.0/4.0 trở lên (đối với khối ngành Kỹ thuật); Điểm rèn luyện đạt từ 85 điểm trở lên (loại Xuất sắc). Ngoài ra, ứng viên bắt buộc phải là nhân tố nòng cốt tham gia tổ chức tối thiểu 02 chiến dịch tình nguyện lớn (như Tiếp sức mùa thi, Mùa hè xanh) hoặc có đề tài nghiên cứu khoa học được nghiệm thu cấp trường trở lên.
 
-Trân trọng thông báo.',
-    '2025-12-05 08:00:00',
-    'b0000000-0000-0000-0000-000000000011',
-    'd0000000-0000-0000-0000-000000000011'
-),
-(
-    '60000000-0000-0000-0000-000000000035',
-    'Kế hoạch tài chính năm 2026',
-    'Kính gửi lãnh đạo các đơn vị,
+2. Cấu trúc hồ sơ đề cử và tài liệu đính kèm: Sinh viên tự nguyện nộp hồ sơ hoặc được tập thể lớp, Khoa đề cử chuẩn bị bộ tài liệu bao gồm: Đơn đăng ký xét chọn danh hiệu theo mẫu đính kèm; Bản khai thành tích chi tiết cá nhân có chữ ký xác nhận của Ban chủ nhiệm Khoa quản lý; Bảng điểm học tập và rèn luyện chính thức có đóng dấu đỏ mộc; Bản sao các loại bằng khen, giấy chứng nhận thành tích đạt được trong năm học. Toàn bộ hồ sơ bản giấy được xếp gọn gàng trong bì đựng hồ sơ chuyên dụng và nộp về phòng A1.203.
 
-Phòng Kế hoạch – Tài chính đang lấy ý kiến xây dựng dự toán ngân sách năm 2026 với tổng kinh phí 500 tỷ đồng. 
-Đề nghị các đơn vị nộp báo cáo nhu cầu chi tiêu trước ngày 15/11/2025. 
-Dự toán được phê duyệt sẽ là căn cứ phân bổ ngân sách và kiểm soát chi tiêu trong năm. 
-Mọi góp ý vui lòng gửi về email khtc@uni.edu.vn.
+3. Lộ trình thẩm định và lễ tuyên dương chính thức: Thời gian tiếp nhận hồ sơ kéo dài từ ngày 18/06/2026 đến hết ngày 30/06/2026. Hội đồng thi đua khen thưởng cấp trường sẽ tiến hành họp rà soát, thẩm định hồ sơ công khai và công bố danh sách đạt danh hiệu trên trang chủ nhà trường. Những cá nhân xuất sắc được vinh danh sẽ nhận được Bằng khen của Hiệu trưởng, kỷ niệm chương cùng phần thưởng tiền mặt giá trị cao tại Đêm hội tuyên dương Sinh viên tiêu biểu tổ chức vào dịp khai giảng năm học mới.
 
-Trân trọng!',
-    '2025-11-10 10:00:00',
-    'b0000000-0000-0000-0000-000000000011',
-    'd0000000-0000-0000-0000-000000000011'
-),
-(
-    '60000000-0000-0000-0000-000000000036',
-    'Báo cáo quyết toán ngân sách năm 2025',
-    'Kính gửi toàn thể cán bộ,
-
-Phòng Kế hoạch – Tài chính yêu cầu các đơn vị nộp báo cáo quyết toán ngân sách năm 2025 trước ngày 30/09/2025. 
-Nội dung bao gồm thu chi chi tiết, hóa đơn chứng từ và báo cáo tài chính. 
-Báo cáo sẽ được kiểm toán độc lập và trình Ban Giám hiệu phê duyệt.
-
-Trân trọng thông báo.',
-    '2025-09-15 14:00:00',
-    'b0000000-0000-0000-0000-000000000011',
-    'd0000000-0000-0000-0000-000000000011'
-),
-(
-    '60000000-0000-0000-0000-000000000037',
-    'Hướng dẫn nộp báo cáo chi tiêu hàng quý',
-    'Kính gửi lãnh đạo các phòng ban,
-
-Phòng Kế hoạch – Tài chính hướng dẫn nộp báo cáo chi tiêu quý III năm 2025 trước ngày 15/10/2025. 
-Báo cáo bao gồm biểu mẫu Excel đính kèm, hóa đơn và biên lai. 
-Mọi sai sót sẽ ảnh hưởng đến phân bổ ngân sách quý IV.
-
-Trân trọng.',
-    '2025-10-01 09:30:00',
-    'b0000000-0000-0000-0000-000000000011',
-    'd0000000-0000-0000-0000-000000000011'
-),
-(
-    '60000000-0000-0000-0000-000000000038',
-    'Thông báo kiểm toán nội bộ tài chính',
-    'Kính gửi toàn thể đơn vị,
-
-Phòng Kế hoạch – Tài chính sẽ kiểm toán nội bộ tài chính từ ngày 20/08/2025. 
-Đề nghị chuẩn bị đầy đủ sổ sách, chứng từ. 
-Kết quả kiểm toán sẽ được công bố vào tháng 09/2025.
-
-Trân trọng thông báo.',
-    '2025-08-10 11:00:00',
-    'b0000000-0000-0000-0000-000000000011',
-    'd0000000-0000-0000-0000-000000000011'
+Phòng Tuyển sinh và Cộng tác sinh viên khuyến khích các cá nhân có thành tích xuất sắc mạnh dạn tự tin nộp hồ sơ đăng ký.',
+    '2026-06-11 15:45:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 ),
 
--- 2. Giáo vụ Đào tạo (b...012) – Phòng Đào tạo – 5 thông báo
+-- 100. Thông báo ID 100
 (
-    '60000000-0000-0000-0000-000000000039',
-    'Lịch thi kết thúc học kỳ I năm học 2025-2026',
-    'Kính gửi toàn thể sinh viên,
+    '60000000-0000-0000-0000-000000000100',
+    'Thông báo phân công nhiệm vụ phối hợp và chuẩn bị cơ sở vật chất phục vụ công tác tiếp nhận hồ sơ nhập học tập trung dành cho Tân sinh viên khóa mới',
+    'Để chuẩn bị chu đáo, chuyên nghiệp và khoa học cho công tác tiếp đón, hướng dẫn thủ tục nhập học trực tiếp cho hàng ngàn tân sinh viên trúng tuyển vào trường trong kỳ tuyển sinh đại học hệ chính quy sắp tới, Phòng Tuyển sinh và Cộng tác sinh viên thông báo kế hoạch phân công nhân sự và điều phối hạ tầng cơ sở phục vụ chuỗi ngày hội nhập học như sau:
 
-Phòng Đào tạo công bố lịch thi kết thúc học kỳ I từ ngày 05/01/2026 đến 20/01/2026. 
-Lịch thi chi tiết theo lớp, phòng thi đã đăng tải trên cổng thông tin sinh viên và gửi qua email lớp trưởng. 
-Sinh viên vui lòng kiểm tra kỹ thông tin và mang theo thẻ sinh viên khi dự thi. 
-Mọi thắc mắc liên hệ phòng A106.
+1. Bố trí không gian và sơ đồ dây chuyền tiếp nhận: Toàn bộ quy trình nhập học trực tiếp sẽ được tổ chức tập trung tại khu vực Sảnh lớn tòa nhà Trung tâm hành chính. Không gian được chia cắt thành các phân khu chức năng riêng biệt theo mô hình khép kín một chiều bao gồm: Khu vực tra cứu danh sách trúng tuyển; Khu vực phát và hướng dẫn ghi tờ khai lý lịch; Khu vực bàn thu hồ sơ gốc (phân chia theo từng Khoa); Khu vực ngân hàng thu học phí và các khoản bảo hiểm; Khu vực đo may đồng phục và đăng ký ký túc xá. Yêu cầu các đơn vị phụ trách lắp đặt đầy đủ biển chỉ dẫn rõ ràng.
 
-Trân trọng thông báo.',
-    '2025-12-02 09:00:00',
-    'b0000000-0000-0000-0000-000000000012',
-    'd0000000-0000-0000-0000-000000000012'
-),
-(
-    '60000000-0000-0000-0000-000000000040',
-    'Hướng dẫn đăng ký học phần học kỳ II 2025-2026',
-    'Kính gửi toàn thể sinh viên,
+2. Phân công nhân sự và thành lập tổ hỗ trợ: Phòng thiết lập 5 tổ công tác chuyên trách hoạt động liên tục dưới sự điều phối trực tiếp của Trưởng phòng. Lực lượng nòng cốt bao gồm các chuyên viên của phòng phối hợp cùng 100 tình nguyện viên thuộc Đội ngũ Đại sứ sinh viên. Nhiệm vụ chính là túc trực tại các bàn kỹ thuật để giải quyết các hồ sơ bị lỗi thông tin, hỗ trợ phụ huynh làm thủ tục nhanh chóng, phân luồng giao thông tránh ùn tắc cục bộ tại sảnh chính tòa nhà vào các khung giờ cao điểm sáng và chiều.
 
-Phòng Đào tạo mở đăng ký học phần học kỳ II từ ngày 10–20/12/2025 qua cổng thông tin sinh viên. 
-Sinh viên kiểm tra số tín chỉ, điều kiện tiên quyết trước khi đăng ký. 
-Hệ thống hỗ trợ 24/7, thắc mắc liên hệ email pdt@uni.edu.vn.
+3. Chế độ thông tin trực hotline hỗ trợ từ xa: Song song với công tác chuẩn bị tại hiện trường, bộ phận truyền thông của phòng có nhiệm vụ duy trì vận hành ổn định các kênh tư vấn trực tuyến bao gồm hệ thống chatbox fanpage và hai số điện thoại máy bàn đường dây nóng: 028 3722 2764 và 028 3722 1223. Cán bộ trực hotline có trách nhiệm giải đáp tận tình, mượt mà mọi thắc mắc của thí sinh về quy trình rút nộp hồ sơ, giấy chứng nhận kết quả thi, và các giấy tờ xác nhận đối tượng ưu tiên để bảo đảm không có thí sinh nào bị bỏ lại phía sau do thiếu thông tin.
 
-Trân trọng!',
-    '2025-11-28 14:00:00',
-    'b0000000-0000-0000-0000-000000000012',
-    'd0000000-0000-0000-0000-000000000012'
-),
-(
-    '60000000-0000-0000-0000-000000000041',
-    'Thông báo xét tốt nghiệp đợt tháng 01/2026',
-    'Kính gửi sinh viên sắp tốt nghiệp,
-
-Phòng Đào tạo thông báo nhận hồ sơ xét tốt nghiệp đợt tháng 01/2026 trước ngày 15/12/2025. 
-Hồ sơ bao gồm bảng điểm, chứng chỉ tiếng Anh, xác nhận hoàn thành nghĩa vụ. 
-Lễ tốt nghiệp dự kiến ngày 25/01/2026.
-
-Trân trọng.',
-    '2025-11-10 10:00:00',
-    'b0000000-0000-0000-0000-000000000012',
-    'd0000000-0000-0000-0000-000000000012'
-),
-(
-    '60000000-0000-0000-0000-000000000042',
-    'Cập nhật chương trình đào tạo năm học 2025-2026',
-    'Kính gửi toàn thể giảng viên và sinh viên,
-
-Phòng Đào tạo cập nhật chương trình đào tạo năm học 2025-2026 với thêm 5 môn tự chọn mới. 
-Chi tiết đăng tải tại https://pdt.uni.edu.vn/ctdt2025. 
-Đề nghị các khoa điều chỉnh thời khóa biểu theo.
-
-Trân trọng thông báo.',
-    '2025-10-20 09:30:00',
-    'b0000000-0000-0000-0000-000000000012',
-    'd0000000-0000-0000-0000-000000000012'
-),
-(
-    '60000000-0000-0000-0000-000000000043',
-    'Lịch thi lại các môn học kỳ hè 2025',
-    'Kính gửi sinh viên thi lại,
-
-Phòng Đào tạo tổ chức thi lại các môn học kỳ hè 2025 từ ngày 15–20/09/2025. 
-Lịch thi chi tiết gửi qua email sinh viên. 
-Phí thi lại 500.000 đồng/môn, nộp trước 10/09/2025.
-
-Trân trọng.',
-    '2025-08-25 11:00:00',
-    'b0000000-0000-0000-0000-000000000012',
-    'd0000000-0000-0000-0000-000000000012'
+Phòng Tuyển sinh và Cộng tác sinh viên đề nghị toàn thể cán bộ, chuyên viên và các đội hình phối hợp nghiêm túc triển khai nhiệm vụ.',
+    '2026-06-11 16:30:00',
+    'b0000000-0000-0000-0000-000000000010',
+    'd0000000-0000-0000-0000-000000000010'
 );
+-- 1. Giáo vụ Khoa CNTT (b000...016) – Khoa Công nghệ Thông tin
+
 -- =================================================================
 -- COMMENTS CHO 3 ANNOUNCEMENT NGÀY 20/12/2025
 -- Mỗi cái 10 comments + 1 comment vi phạm (spam/quảng cáo)
@@ -12359,270 +11958,270 @@ Call/Zalo ngay: 0377.xxx.888.999 để được tư vấn miễn phí!!!',
 --         '2025-12-06 09:10:00'
 --     );
 
-INSERT INTO dashboard_trending_issues (
-    post_id,
-    author,
-    content,
-    post_link,
-    posted_at,
-    reaction_count,
-    comment_count,
-    engagement_score,
-    topic,
-    sentiment_score,
-    ai_summary,
-    sentiment_label,
-    analyzed_at
-) VALUES
-(
-    '45a536403ed63ff7b781e93fa36eae0c', 'Người tham gia ẩn danh', 'Anh chị giúp em cách fix với ạ,nó k hiện chỗ wifi ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175201173304378/', '2026-04-28 13:26:05', 
-    14, 45, 104, 'Cơ sở vật chất & Bãi xe', 0.0, 'Sinh viên đang gặp vấn đề không kết nối được wifi và cần hỗ trợ khắc phục sự cố này để đảm bảo trải nghiệm học tập tốt hơn.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '30f6086fe5863e055fff712b29dc878a', 'MotivatedPapaya1825', 'Lễ trường có mở cửa không mọi người, mình kh về quê nên mình định vô ngồi học làm bài', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176165993207896/', '2026-04-29 16:02:04', 
-    5, 6, 17, 'Cơ sở vật chất & Bãi xe', 0.0, 'Sinh viên hỏi liệu trường có mở cửa trong dịp lễ không để có thể vào học bài, cần thông tin về lịch hoạt động của cơ sở vật chất.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '9d218cbd76eda133fa71949675bf9490', 'LavenderFirefly8798', 'Trường cho đề công bằng vãi đề toán 2 buổi chiều ko học hì cũng qua còn buổi sáng ...', 'https://www.facebook.com/groups/utethacmachoctap/posts/2165585674265928/', '2026-04-17 10:53:24', 
-    28, 59, 146, 'Giảng viên & Đào tạo', -1.0, 'Sinh viên châm biếm về sự thiếu công bằng nghiêm trọng trong đề thi Toán 2, chỉ ra rằng đề thi buổi chiều quá dễ đến mức không cần học cũng qua, trong khi đề thi buổi sáng lại rất khó. Điều này gây bức xúc sâu sắc về sự chênh lệch chất lượng đề thi.', 'Tiêu cực', '2026-04-19 05:05:33.904'
-),
-(
-    '6a075f7395b29ca01a7e771778e53ac7', 'CharmingYuzu1146', 'Thứ 7 này mình bảo vệ khoá luận tốt nghiệp ngành Quản lý Công nghiệp. Cho mình hỏi hội đồng 5 ai biết có hắc ám không? Mất ngủ mấy đêm rồi.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170791843745311/', '2026-04-23 14:02:59', 
-    3, 2, 7, 'Giảng viên & Đào tạo', -0.7, 'Sinh viên bày tỏ sự lo lắng và mất ngủ kéo dài về buổi bảo vệ khóa luận tốt nghiệp sắp tới, đặc biệt là nỗi sợ hãi về hội đồng chấm thi ''hắc ám'', cho thấy áp lực tâm lý rất lớn.', 'Tiêu cực', '2026-04-23 14:41:23.083'
-),
-(
-    '5940f3ca9114445420ebafeeebd41654', 'conchồncute', 'Thi mạch điện ai cũng nói số đẹp có mình tôi số xấu thôi hả', 'https://www.facebook.com/groups/utethacmachoctap/posts/2169698303854665/', '2026-04-22 07:52:47', 
-    12, 16, 44, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên bày tỏ sự thất vọng và cảm thấy không may mắn sau kỳ thi Mạch điện, khi ''ai cũng nói số đẹp'' (đề dễ hoặc kết quả tốt) nhưng bản thân lại gặp ''số xấu'' (đề khó hoặc kết quả không như ý).', 'Trung lập', '2026-04-23 14:41:23.083'
-),
-(
-    'fdefff546182e5e5d84a7153dd28d52c', 'Người tham gia ẩn danh', 'Xin cánh tay của những bạn 8+ toán 2 ạ, đề khê quá huhu', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175209119970250/', '2026-04-28 13:37:03', 
-    9, 22, 53, 'Giảng viên & Đào tạo', -0.2, 'Sinh viên bày tỏ sự thất vọng và khó khăn với đề thi môn toán 2 quá phức tạp, tìm kiếm sự hỗ trợ từ những bạn học tốt hơn.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '26f823082f216770c14e380f349bf415', 'Người tham gia ẩn danh', 'A/c nào học môn công nghệ kim loại của thầy Nguyễn Thanh Tân rồi cho e hỏi, bữa đầu thầy có điểm danh hay làm bài test nào k các anh chị', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173590736798755/', '2026-04-26 17:21:58', 
-    2, 3, 8, 'Giảng viên & Đào tạo', 0.0, 'Sinh viên hỏi về phương pháp điểm danh hoặc bài kiểm tra đầu tiên của giảng viên môn công nghệ kim loại để chuẩn bị cho buổi học.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '754e5da373a7edc38f80299935e4d7d6', 'Người tham gia ẩn danh', 'Ai có đáp án lí 2 cho em xin với ạ.Làm bài rất ok nhưng điểm rất khê ạ.Em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175340013290494/', '2026-04-28 16:44:07', 
-    0, 0, 0, 'Giảng viên & Đào tạo', -0.2, 'Sinh viên bày tỏ sự không hài lòng với kết quả điểm môn lí 2, cho rằng điểm số thấp hơn so với nỗ lực làm bài. Đây là một điểm đau về tính công bằng hoặc minh bạch trong đánh giá.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    'aa8e4430636a36939ea452531fd0bea0', 'Lê Tùng Dương', 'Cảm ơn thầy Khương vì con điểm này. Dù là học mooc và gặp các bạn một cách rất tình cờ, nhưng mọi người đều đồng lòng và chung sức làm bài\nShout out đến:\nĐức Khang\nLê Bùi Thanh Danh\nPhạm Gia Tuệ\nTrương Tấn Sang\nCảm ơn các bạn rất nhiều', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175334263291069/', '2026-04-28 16:35:06', 
-    20, 4, 28, 'Giảng viên & Đào tạo', 0.6, 'Sinh viên bày tỏ lòng biết ơn thầy Khương về kết quả học tập và khen ngợi sự hợp tác hiệu quả của nhóm bạn trong quá trình làm bài học mooc, thể hiện môi trường học tập tích cực.', 'Tích cực', '2026-04-28 17:26:13.403'
-),
-(
-    '9010e20c067fef08d727fb2e82f6cc0f', 'EmpatheticBison8003', 'Học lại lần 2 rồi k qua nản quá mn. Giảng vin nào buff qt 7 thi 3 chia sẽ em vs ạ 😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176143709876791/', '2026-04-29 15:47:28', 
-    11, 26, 63, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên đang rất nản lòng vì đã thi trượt môn học lần thứ hai và đang tìm kiếm giảng viên được cho là dễ tính hoặc có cách ra đề ôn tập giúp sinh viên qua môn dễ hơn, phản ánh áp lực học tập.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '02971db010648d7b1b2403b3d6782199', 'Người tham gia ẩn danh', 'Dạ anh chị có tài liệu toán ứng dụng kỹ sư và mạch điện bản tiếng việt cho e xin với ạ ,sách tiếng anh đọc lú quá😭😭. Dạ e cảm ơn nhiều 💓', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175792466578582/', '2026-04-29 07:11:41', 
-    1, 6, 13, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên gặp khó khăn khi học tài liệu toán ứng dụng kỹ sư và mạch điện bằng tiếng Anh và mong muốn tìm tài liệu tiếng Việt. Đây là một điểm yếu về hỗ trợ tài liệu học tập.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    '7e3a825d61686835420558674a608411', 'Người tham gia ẩn danh', 'Bạn nào học buổi đầu ngày hôm nay cho mình hỏi thầy có gr zalo hay có hay dặn dò gì hong ạ. Mình cảm ơn.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175951323229363/', '2026-04-29 10:53:26', 
-    0, 3, 6, 'Giảng viên & Đào tạo', 0.0, 'Sinh viên hỏi về thông tin liên lạc (nhóm Zalo) hoặc dặn dò từ giảng viên trong buổi học đầu tiên để không bỏ lỡ thông báo quan trọng.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    'ae299209db55e6a97f9489d83f91d831', 'Người tham gia ẩn danh', 'Dạ là Em có đăng kí học lại 1 môn 3tc mà học phí lại vẫn để 18 triệu.Vậy số tiền học lại mình đóng sao ạ😭😭😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2125700394921123/', '2026-03-01 09:58:51', 
-    0, 1, 2, 'Học phí & Hành chính', -0.2, 'Sinh viên đăng ký học lại 1 môn 3 tín chỉ nhưng hệ thống hiển thị tổng học phí là 18 triệu đồng, gây hoang mang về cách tính và đóng tiền. Nhà trường cần kiểm tra lại hệ thống tính toán học phí cho các môn học lại và cung cấp hướng dẫn rõ ràng để tránh nhầm lẫn cho sinh viên.', 'Trung lập', '2026-03-31 15:29:45.402'
-),
-(
-    '5c8ee2245d31c1a60ae20cb0e4d9557d', 'Người tham gia ẩn danh', 'Cho mik hỏi mng đủ điều kiện, có nhận được hoàn trả số tiền BHYT để trừ vào học phí chưa ạ, trước tết đã khai báo ở trạm y tế trường r ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2167095264114969/', '2026-04-19 04:51:21', 
-    0, 1, 2, 'Học phí & Hành chính', -0.1, 'Sinh viên thắc mắc về việc chưa nhận được hoàn trả số tiền Bảo hiểm Y tế (BHYT) để trừ vào học phí, mặc dù đã khai báo. Nhà trường cần rà soát quy trình và tiến độ hoàn trả BHYT.', 'Trung lập', '2026-04-19 05:05:33.904'
-),
-(
-    '3cb84a39d49e36a8553ad758dde50144', 'Người tham gia ẩn danh', 'Dạ anh chị cho em hỏi. Em đóng học phí HK II vào đợt 2 được không ạ. Em nhớ là đóng muộn vào đợt 2 chỉ bị trừ đrl mà sao em đọc thông tin thì bị Khiển Trách ạ, huhu.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166596684164827/', '2026-04-18 13:30:00', 
-    2, 4, 10, 'Học phí & Hành chính', -0.3, 'Sinh viên bối rối và lo lắng (''huhu'') về thông tin đóng học phí muộn, có sự không nhất quán giữa ''trừ điểm rèn luyện'' và ''bị khiển trách''. Cần rà soát và làm rõ chính sách để tránh gây hoang mang cho sinh viên.', 'Trung lập', '2026-04-23 14:41:23.083'
-),
-(
-    '01421ffb2d1312c6462e3016cff30583', 'toiiuute', 'Có bạn nào chuyển ngành ngành thành công đợt này chưa, mình đợi thông báo thấy lâu quá', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174003423424153/', '2026-04-27 05:03:31', 
-    1, 0, 1, 'Học phí & Hành chính', -0.2, 'Sinh viên đang bày tỏ sự sốt ruột vì chờ đợi thông báo kết quả chuyển ngành quá lâu, cho thấy thủ tục hành chính về chuyển ngành còn chậm trễ, gây ảnh hưởng tâm lý và kế hoạch học tập của sinh viên.', 'Trung lập', '2026-04-27 05:15:38.684'
-),
-(
-    '2d8d00d825e317f68c3f0fd49f98cbc8', 'Người tham gia ẩn danh', 'Mng cho em hỏi trường mình có nhận đầu ra bằng chứng chỉ Aptis kh ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/1934604494030715/', '2025-07-18 10:59:23', 
-    3, 7, 17, 'Học phí & Hành chính', 0.0, 'Sinh viên hỏi về việc trường có chấp nhận chứng chỉ Aptis làm điều kiện đầu ra ngoại ngữ hay không, cần thông tin rõ ràng về quy định chứng chỉ.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '549bb2406df9f2b789a650a63a0749da', 'T.Hehehe.M', 'Mn cho em hỏi về qui trình xin cấp lại thẻ sinh viên có tích hợp thẻ ngân hàng, làm như thế nào và làm ở đâu ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176198636537965/', '2026-04-29 16:49:29', 
-    0, 1, 2, 'Học phí & Hành chính', 0.0, 'Sinh viên cần biết quy trình và địa điểm để xin cấp lại thẻ sinh viên có tích hợp thẻ ngân hàng, yêu cầu hướng dẫn thủ tục chi tiết.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '1059e8b3eb8ba22154558a81fe08ce72', 'Người tham gia ẩn danh', 'Dạ ac cho em hỏi em k25 đóng hp qp12( hk1) vào đợt 2 này thì có bị ảnh hưởng hbkkht của hk1 năm 2 ko ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176204733204022/', '2026-04-29 16:58:43', 
-    0, 0, 0, 'Học phí & Hành chính', 0.0, 'Sinh viên khóa K25 hỏi liệu việc đóng học phí quốc phòng học kỳ 1 vào đợt 2 có ảnh hưởng đến học bổng khuyến khích học tập của học kỳ 1 năm 2 hay không.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    'e97a14f9918540427c89002e5348f9fe', 'Người tham gia ẩn danh', 'Cho mình hỏi nợ hp quốc phòng với thể chất bao h mới hết hạn đóng v ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176165436541285/', '2026-04-29 16:01:14', 
-    1, 1, 3, 'Học phí & Hành chính', 0.0, 'Sinh viên hỏi về thời hạn đóng học phí các môn quốc phòng và thể chất.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    '519d650b32b2ce084eb0f6e4c1ae4679', '10p GG', 'E k23 học quốc phòng kì 2, bây giờ đã có thể lấy chứng chỉ đc chưa ạ?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175727956585033/', '2026-04-29 04:22:26', 
-    10, 16, 42, 'Học phí & Hành chính', 0.0, 'Sinh viên khóa K23 hỏi về thời điểm có thể nhận chứng chỉ giáo dục quốc phòng kỳ 2. Cần cung cấp thông tin rõ ràng về quy trình và lịch trả chứng chỉ.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    'a01835389bbba081cbbe0d1f78c7ca74', 'Người tham gia ẩn danh', 'Cầu mong mn vt review nhiều hơn ạ 😔😔😔 ko chỉ tích đức mà còn cứu rỗi bt bao tầm hồn vụn vỡ vì gpa sắp đát như em 😭😭😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166426580848504/', '2026-04-18 12:48:22', 
-    23, 20, 63, 'Học vụ & Đăng ký môn', -0.4, 'Sinh viên bày tỏ sự tuyệt vọng vì điểm GPA thấp, tha thiết mong muốn có thêm các bài review (về môn học/giảng viên/kinh nghiệm học) từ cộng đồng để cải thiện tình hình học tập. Đây là một vấn đề về nhu cầu hỗ trợ học thuật và chia sẻ kinh nghiệm giữa sinh viên.', 'Trung lập', '2026-04-19 05:05:33.904'
-),
-(
-    'a6364b3efb34c7669200214ced3a68e9', 'Mass Queue', '[THẮC MẮC] Link tra cứu Kho Học Liệu Số hỗ trợ học tập - Ôn tập mùa thi\nCho mình hỏi có ai nhận được mail này và truy cập được liên kết không? Mình truy cập tới bước login Mail của trường xong thì bị chặn.\n\nXin cám ơn!', 'https://www.facebook.com/groups/utethacmachoctap/posts/2167094180781744/', '2026-04-19 04:49:20', 
-    0, 0, 0, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên gặp lỗi kỹ thuật khi cố gắng truy cập Kho Học Liệu Số hỗ trợ học tập của trường, bị chặn sau khi đăng nhập bằng email. Nhà trường cần kiểm tra lại hệ thống truy cập tài liệu để đảm bảo sinh viên có thể sử dụng.', 'Trung lập', '2026-04-19 05:05:33.904'
-),
-(
-    'b183f3ccab53897e614c2b0f48e1b7c3', 'Người tham gia ẩn danh', 'Sao toán 2 chưa có điểm vậy mọi người ơi, mình chữ K :((', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170704490420713/', '2026-04-23 12:01:26', 
-    2, 6, 14, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên đang lo lắng về việc môn Toán 2 chưa có điểm và bày tỏ sự hoang mang về khả năng nhận điểm ''K'', cần nhà trường đẩy nhanh việc công bố kết quả để giảm bớt sự bất an cho sinh viên.', 'Trung lập', '2026-04-23 14:41:23.083'
-),
-(
-    '02eea46dff6d8ad72cfe239a1cbc4846', 'Người tham gia ẩn danh', 'Tha thiết xin slot ạ kì sau em có đồ án mà không vô được. Ai có nhường cho em xin với ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170514637106365/', '2026-04-23 07:09:27', 
-    1, 3, 7, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên đang tha thiết xin slot môn học cho đồ án vì không đăng ký được, cho thấy vấn đề về số lượng chỗ hoặc hệ thống đăng ký môn cần được cải thiện.', 'Trung lập', '2026-04-23 14:43:43.214'
-),
-(
-    'fae2a613483ca624efd5f4bbacebb69a', 'SilverCaterpillar3243', 'Mn ơi giúp mình với. Mình nhớ đã hủy môn xstk rồi mà sao ở phần kết quả học tập vẫn còn hiện môn đó', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173989266758902/', '2026-04-27 04:40:54', 
-    1, 2, 5, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên bày tỏ sự khó hiểu và lo lắng khi môn học đã hủy nhưng vẫn xuất hiện trong kết quả học tập. Điều này chỉ ra một lỗi tiềm ẩn trong hệ thống hoặc quy trình học vụ cần được nhà trường xem xét và điều chỉnh.', 'Trung lập', '2026-04-27 04:50:02.482'
-),
-(
-    'd6c118c5ecede1deb9ed6714ed6975a1', 'Người tham gia ẩn danh', 'Tình hình là em mới học lại thấy làm ổn lắm mà điểm như này thì phúc khảo đâu ạ🥹🥹', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173860706771758/', '2026-04-27 03:46:05', 
-    1, 3, 7, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên bày tỏ sự thất vọng và không hài lòng về điểm thi môn học lại, cảm thấy kết quả không xứng đáng với nỗ lực và tìm hiểu về thủ tục phúc khảo.', 'Trung lập', '2026-04-27 05:15:38.684'
-),
-(
-    '025eb61e4df5bdf2cefe4b5703927769', 'Đức Mạnh', 'Mọi người cho em hỏi em đăng kí anh văn 4 sao mà nó ra 3 vậy ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173998150091347/', '2026-04-27 04:54:45', 
-    1, 1, 3, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên gặp vấn đề trong quá trình đăng ký môn học khi hệ thống hiển thị sai kết quả đăng ký môn Anh văn 4 thành Anh văn 3, cần hỗ trợ kiểm tra và khắc phục lỗi hệ thống.', 'Trung lập', '2026-04-27 05:15:38.684'
-),
-(
-    'fd66c3e48f0d1209ceafcf2ac41e3ded', 'Người tham gia ẩn danh', 'Có ní nào có điểm lý 1 chưa ạ,các môn đại cương khác có điểm vèo vèo hết r sao mỗi môn này chưa có 🥲', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173999493424546/', '2026-04-27 04:56:40', 
-    0, 0, 0, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên không hài lòng vì môn Lý 1 chưa có điểm trong khi các môn đại cương khác đã có, gây ra sự chậm trễ và thắc mắc về quy trình công bố điểm.', 'Trung lập', '2026-04-27 05:17:53.265'
-),
-(
-    'f164c09a3957d4e2e39d007b58f136b7', 'Người tham gia ẩn danh', 'Cho em hỏi môn này em cúp 1 buổi có sao không mọi người🥲', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173972756760553/', '2026-04-27 04:16:34', 
-    0, 2, 4, 'Học vụ & Đăng ký môn', -0.1, 'Sinh viên hỏi về hậu quả của việc vắng mặt một buổi học trong một môn cụ thể, thể hiện sự lo lắng về quy định điểm danh và ảnh hưởng đến kết quả học tập.', 'Trung lập', '2026-04-27 05:17:53.265'
-),
-(
-    '50ade1715d3a5e5ce87d88a4ad5f2b54', 'MrBeastUTE', 'Bữa đầu học thực tập đo lường cảm biến cô Nguyễn Thị Ngọc Thảo cúp có sao khong v moi nguoi😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173997896758039/', '2026-04-27 04:54:31', 
-    0, 0, 0, 'Học vụ & Đăng ký môn', -0.1, 'Sinh viên lo lắng về việc vắng mặt trong buổi học thực tập đầu tiên môn đo lường cảm biến với cô Nguyễn Thị Ngọc Thảo và muốn biết liệu có ảnh hưởng đến kết quả học tập hay không.', 'Trung lập', '2026-04-27 05:17:53.265'
-),
-(
-    '90376ffb780787b89861a35ad2d0e7c7', 'Người tham gia ẩn danh', 'Em đăng kí học mooc môn pldc, nhưng mà giờ vẫn chưa nhận được link group zalo thì có sao không ạ. Em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174459766711852/', '2026-04-27 16:10:02', 
-    0, 3, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên đăng ký học MOOC môn pldc nhưng chưa nhận được link nhóm Zalo, lo lắng không biết có ảnh hưởng gì đến việc học. Nhà trường cần đảm bảo gửi thông tin đầy đủ và kịp thời sau khi sinh viên đăng ký.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '5a3fafff1d15afe5ae9935cb07529f98', 'Người tham gia ẩn danh', 'Mn cho e hỏi e hc triết học rồi giờ e đki học tthcm được ko ạ hay phải học kte triết trc ạ em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175337776624051/', '2026-04-28 16:40:47', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên cần tư vấn về trình tự đăng ký các môn học Triết học và Tư tưởng Hồ Chí Minh, mong muốn được hướng dẫn rõ ràng về quy tắc học phần tiên quyết.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '7ebb57cfb90c1f2d6f8ca24a63e6f850', 'ExcitingKangaroo8981', 'Dạ môn này nếu nghỉ buổi đầu có sao hong ạ tại em ở quê sợ vào hong kịp', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175277359963426/', '2026-04-28 15:15:53', 
-    1, 1, 3, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi liệu việc nghỉ buổi học đầu tiên của một môn có ảnh hưởng gì không vì lý do ở quê chưa thể vào kịp. Cần thông tin về quy định điểm danh và việc học bù/theo kịp bài.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '7d0b44e1f8a60cd6436ef5c8f59d3641', 'Người tham gia ẩn danh', 'Đợt xét tốt nghiệp tháng 5 này nhà trường xét tự động nên sốt ruột quá huhu 🥺 \nRáng 10 - 15 ngày nữa có kq\nHy vọng 🙂‍↕️', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173940120097150/', '2026-04-27 03:46:03', 
-    4, 14, 32, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên bày tỏ sự sốt ruột và lo lắng về quy trình xét tốt nghiệp tự động, mong chờ kết quả sớm để giảm bớt căng thẳng.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '48fc02cd3f317e51b504c90d8beea937', 'Người tham gia ẩn danh', 'Em có đăng ký Mooc_nhóm 35 pldc cô Hương mà sao em chưa thấy thông báo gì hết vậy ạ? Lần đầu em học Mooc nên hơi bỡ ngỡ mong anh chị giúp', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175012023323293/', '2026-04-28 08:33:18', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về việc chưa nhận được thông báo cho môn học Mooc đã đăng ký, cần nhà trường hoặc giảng viên cung cấp thông tin kịp thời về khóa học.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    'aec3f6bf01d739166ad20e944c2f1bc0', 'Dừa dằm sữa đặc', 'Mn ơi có ai học moc nhóm 4 tư tưởng Hồ Chí Minh đợt 2 này, do cô Phượng dạy mà chưa có nhóm hông mn, với lại đăng kí nhóm ở đâu ấy:,))) đọc thông báo thấy rối quá', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175327663291729/', '2026-04-28 16:25:01', 
-    0, 3, 6, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên học MOOC nhóm 4 môn tư tưởng Hồ Chí Minh gặp khó khăn trong việc tìm nhóm và không biết cách đăng ký nhóm vì thông báo của trường quá rối. Nhà trường cần cải thiện sự rõ ràng và chi tiết của các thông báo quy trình học tập.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '2229c0813f50580f5c333e9ddc3aba4b', 'Người tham gia ẩn danh', 'Không biết trong group mình có bạn nào nhận kèm Lý 1 và xstk không ạ? Nếu có mọi người cứ cmt thông tin phía dưới mình sẽ chủ động liên hệ ạ. Cảm ơn add đã duyệt bài.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174791600012002/', '2026-04-28 02:05:30', 
-    0, 3, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên đang tìm kiếm bạn nhận kèm môn Lý 1 và XSTK để cải thiện kết quả học tập. Đây là nhu cầu tìm kiếm hỗ trợ học thuật từ cộng đồng sinh viên.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '88712d0255f9a77d798a364127191a31', 'Người tham gia ẩn danh', 'mình lần đầu học khóa MOOC, mình tìm nhóm kiểu j thế mn, không thể xem danh sách sinh viên trong nhóm zalo', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175328089958353/', '2026-04-28 16:35:08', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên lần đầu học MOOC gặp khó khăn trong việc tìm nhóm và không thể xem danh sách thành viên trong nhóm Zalo. Nhà trường cần cung cấp hướng dẫn rõ ràng hơn về quy trình tham gia và quản lý nhóm học cho sinh viên mới.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '1cfb939eb57447c273d3261ba185a7e4', 'Người tham gia ẩn danh', 'Mình làm đơn xin nhận điểm I trêng trang online r thì có cần nộp trực tiếp giấy tờ j nữa ko ạ, nếu có thì thời gian nộp là khi nào vậy', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175314513293044/', '2026-04-28 16:06:05', 
-    0, 4, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về quy trình nộp giấy tờ sau khi đăng ký xin điểm I online, muốn biết có cần nộp bản cứng và thời hạn nộp nếu có. Đây là một câu hỏi về thủ tục hành chính học vụ.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '85dd063468c2c807a0377019efa83ee5', 'Hướng nội thích MXH', 'Lớp Mooc LSĐ thầy Chung có vào gr zalo hay có thông báo gì chưa mn?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175337663290729/', '2026-04-28 16:40:40', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về thông báo hoặc nhóm Zalo cho lớp Mooc Lịch sử Đảng thầy Chung, thể hiện nhu cầu thông tin rõ ràng và kênh liên lạc chính thức.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '1cc3fb0d545fd4f9a77dad5bff8178c0', 'Người tham gia ẩn danh', 'Em chào mn.Em có đăng kí 1 môn xong em hủy nhưng trong phần kết quả học tập vẫn có.Còn trong phần thanh toán học phí và thời khó biểu ko có thì môn đó em đã hủy thành công chưa ạ.Em cảm ơn ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175333096624519/', '2026-04-28 16:33:16', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về trạng thái hủy môn học, vì môn đó vẫn hiển thị trong kết quả học tập nhưng không có trong thanh toán hay thời khóa biểu, gây bối rối về việc hủy thành công.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '8f5f455e8f8ec2a6a16f0459831271d2', 'Người tham gia ẩn danh', 'Cho mình hỏi là nếu mình cần nộp phúc khảo điểm mà bị vướng lịch hc quốc phòng thì làm như nào để có thể nộp đơn đc v ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176193203205175/', '2026-04-29 16:41:19', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về cách nộp đơn phúc khảo điểm khi bị trùng lịch học quốc phòng, cần hướng dẫn quy trình giải quyết tình huống đặc biệt này.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    'da63ceafcaacde622b0824c6edc47c13', 'Người tham gia ẩn danh', 'Dạ a/c cho e hỏi môn thí nghiệm vật lý 1 sẽ học những gì và kiểm tra ntn ạ, dạ với lại dễ lấy điểm cao k ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176184349872727/', '2026-04-29 16:27:54', 
-    2, 2, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên cần thông tin chi tiết về nội dung môn thí nghiệm Vật lý 1, cách thức kiểm tra và khả năng đạt điểm cao để chuẩn bị tốt cho việc học.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '5112aed04af424c5cc46c6bd92ccbaf6', 'Người tham gia ẩn danh', 'Mọi người cho em hỏi chứng chỉ tiếng Anh aptis có được miễn avdr không mn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2148446855979810/', '2026-03-27 17:37:22', 
-    0, 2, 4, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về quy định miễn học phần tiếng Anh đầu vào bằng chứng chỉ Aptis để nắm rõ thủ tục và điều kiện.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '22a1ebf738fcc6b5c34e1c0339514af3', 'Người tham gia ẩn danh', 'anh chị ơi cứu e sao nó cứ báo lỗi có cách nào khắc phục không ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176187383205757/', '2026-04-29 16:32:34', 
-    0, 2, 4, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên đang gặp lỗi khi sử dụng một hệ thống hoặc thực hiện một thao tác nào đó và cần được hỗ trợ khắc phục. Cần xác định lỗi cụ thể để hỗ trợ.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    '5bc05d0e015bb7b38d6952670bd394ad', 'Người tham gia ẩn danh', 'utex sập rồi hả mọi người, bao giờ vào lại được vậy ạa', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176144716543357/', '2026-04-29 15:47:28', 
-    0, 1, 2, 'Học vụ & Đăng ký môn', -0.3, 'Hệ thống utex đang gặp sự cố và không thể truy cập, gây gián đoạn cho sinh viên. Cần thông báo thời gian khắc phục và khôi phục hoạt động.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    'e17124a8272d191463f53b9d083ab8ce', 'Người tham gia ẩn danh', 'anh chị cho em hỏi e chưa học avgt1-2 có đk thi avdr được k ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176134236544405/', '2026-04-29 15:15:52', 
-    1, 6, 13, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về điều kiện dự thi chứng chỉ ngoại ngữ AVDR khi chưa hoàn thành các môn AVGT1-2, cần được giải đáp về quy định học vụ.', 'Trung lập', '2026-04-29 17:19:07.868'
-),
-(
-    '794fc61a9365415615a9f168231a4a91', 'Người tham gia ẩn danh', 'Dạ cho em hỏi mình đăng ký thi avdr xong thì coi lịch thi ở đâu ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173241440167018/', '2026-04-26 08:36:12', 
-    2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về cách tra cứu lịch thi sau khi đã đăng ký thi chứng chỉ AVDR, cho thấy có thể thông tin về lịch thi chưa được hiển thị rõ ràng.', 'Trung lập', '2026-04-29 17:19:07.868'
-),
-(
-    'e673f96684c7c1711ebdc83709725c57', 'Người tham gia ẩn danh', 'Cho em hỏi bằng b1 Aptis có pass đầu ra và pass avgt 0,1,2 không ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2058413104983186/', '2025-12-09 13:37:28', 
-    2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về việc chứng chỉ B1 Aptis có được công nhận để đạt chuẩn đầu ra và các môn AVGT 0,1,2 hay không, cần thông tin rõ ràng về quy đổi tín chỉ ngoại ngữ.', 'Trung lập', '2026-04-29 17:19:07.868'
-),
-(
-    '666075d6939ec84ce64a1875b420423f', 'BrilliantLynx2509', 'Cho em hỏi chứng chỉ aptis cho khóa k23 chỉ cần B1 thôi phải không ạ? Có yêu cầu là B1 nhưng tổng điểm phải trên bao nhiêu điểm mới được xét không ạ?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2155015325322963/', '2026-04-04 09:47:32', 
-    2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về tiêu chuẩn chứng chỉ Aptis B1 cho khóa K23, cụ thể là liệu có yêu cầu điểm tổng tối thiểu nào kèm theo hay không, cần nhà trường làm rõ quy định.', 'Trung lập', '2026-04-29 17:19:07.868'
-),
-(
-    '521824a6ae3a2ead33564166d62a9739', 'keoconhocute', 'Em vừa mới rớt môn mạch điện ạ, theo mọi người thì em nên trả nợ môn này vào năm 2 hay 3 là ổn nhất mà không bị quá nặng kiến thức ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176171133207382/', '2026-04-29 16:08:38', 
-    1, 6, 13, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên vừa rớt môn mạch điện và đang tìm lời khuyên về thời điểm thích hợp để học lại môn này nhằm tránh quá tải kiến thức. Đây là một câu hỏi học vụ thông thường.', 'Trung lập', '2026-04-29 17:19:07.868'
-),
-(
-    'd8e9ff366058cfcd2be593d49ac13f73', 'Hướng nội thích MXH', 'mọi người ơi sao hội thao em không thấy Bóng đá Nữ ạ? em nghe bảo mấy năm trước có mà ạ 😭 đừng bỏ đá bóng nữ mà em mong chờ từ đầu năm tới giờ, help me plsssss', 'https://www.facebook.com/groups/utethacmachoctap/posts/2126293278195168/', '2026-03-01 09:56:46', 
-    1, 1, 3, 'Đời sống sinh viên', -0.6, 'Sinh viên bày tỏ sự thất vọng sâu sắc và đề nghị nhà trường xem xét lại quyết định bỏ môn Bóng đá Nữ trong hội thao, vì đây là hoạt động được nhiều sinh viên mong chờ và quan tâm.', 'Tiêu cực', '2026-03-31 15:29:45.402'
-),
-(
-    'e30a7fc4daafacd37fff926c21d2daad', 'Khầy Kụt nè coăn 🐧🐧🐧', 'Tiến ơi Tiến, chơi tiktok lịch sự tí đi e. Cán bộ lụm đó e', 'https://www.facebook.com/groups/utethacmachoctap/posts/2126209124870250/', '2026-03-01 09:56:45', 
-    32, 14, 60, 'Đời sống sinh viên', -0.2, 'Một sinh viên đang nhắc nhở bạn cùng trường về việc sử dụng TikTok không lịch sự, cảnh báo hành vi này có thể bị cán bộ nhà trường xử lý. Vấn đề liên quan đến ý thức và hành vi cá nhân của sinh viên trong môi trường chung cần được lưu ý.', 'Trung lập', '2026-03-31 15:29:45.402'
-),
-(
-    '8ef7a9a2f8f4715c0fb92417d30dd7c7', 'thangthatbai123', 'ac ơi em hối hận quá!em mới năm nhất thôi đã rớt hơn 8 tín và bị hạ bằng chỉ vì ham chơi em sợ cầm tấm bằng khá sẽ không có tương lai quá g em phải làm sao ạ😞', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166681710822991/', '2026-04-19 03:47:10', 
-    33, 55, 143, 'Đời sống sinh viên', -0.7, 'Sinh viên năm nhất bày tỏ sự hối hận và lo lắng sâu sắc vì đã rớt nhiều tín chỉ và bị hạ bằng do ham chơi. Sinh viên sợ tấm bằng khá sẽ ảnh hưởng đến tương lai và đang tìm kiếm lời khuyên để khắc phục tình hình học tập và định hướng nghề nghiệp.', 'Tiêu cực', '2026-04-19 05:05:33.904'
-),
-(
-    '60641a516d6575684c159710fcd1bd38', 'Người tham gia ẩn danh', 'rớt mạch điện có phải là quá tệ ko ạ, em lần đầu rớt môn, giờ buồn và stress quá ạ😔', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175215486636280/', '2026-04-28 14:01:45', 
-    7, 10, 27, 'Đời sống sinh viên', -0.3, 'Sinh viên bày tỏ nỗi buồn và căng thẳng vì lần đầu rớt môn mạch điện, tìm kiếm sự đồng cảm và lời khuyên từ cộng đồng.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '4eccfff654fda67c1c8a8ca996b376f0', 'Người tham gia ẩn danh', 'Dạ cho em hỏi là nếu học TOEIC hoặc IELTS thì em nên học ở đâu, em ở khu vực gần trường mình ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175288569962305/', '2026-04-28 15:28:41', 
-    3, 8, 19, 'Đời sống sinh viên', 0.0, 'Sinh viên hỏi cộng đồng về các trung tâm học TOEIC hoặc IELTS uy tín ở khu vực gần trường.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '290b60a806f91dc5161d3941ca6264fa', 'Người tham gia ẩn danh', 'Mình học tư tưởng hcm cô phượng(mooc-nhóm 4).Hiện nhóm mình còn thiếu 3 bạn,bạn nào chưa có nhóm để lại zalo mình ib rồi vào nhóm nhaaa', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175316289959533/', '2026-04-28 16:35:12', 
-    1, 3, 7, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm 3 thành viên cho nhóm môn Tư tưởng Hồ Chí Minh (MOOC) của cô Phượng, yêu cầu các bạn chưa có nhóm để lại Zalo để liên hệ.', 'Trung lập', '2026-04-28 17:26:13.403'
-),
-(
-    '16f712b75470cd82d9edfa5b20e09d3a', 'Người tham gia ẩn danh', 'Mấy anh chị bạn bè nào có học môn vẽ kỹ thuật rồi thì cho em xin phép hỏi muốn mua mấy cái dụng cụ để vẽ thì nên mua ở chỗ nào gần trường ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176176029873559/', '2026-04-29 16:15:46', 
-    0, 2, 4, 'Đời sống sinh viên', 0.0, 'Sinh viên hỏi tìm địa điểm mua dụng cụ vẽ kỹ thuật gần trường, cần thông tin về các cửa hàng cung cấp vật tư học tập cho môn học.', 'Trung lập', '2026-04-29 17:11:03.287'
-),
-(
-    '764b4a71b7e0fe25b64ef0a2e5a5b0b0', 'Người tham gia ẩn danh', 'Có bạn nào học lớp chiều thứ 7 cô Huyền Châu được tham gia gr zalo hông , cho mình xin vô với ạ .', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174454683379027/', '2026-04-27 18:14:35', 
-    1, 1, 3, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm link nhóm Zalo của lớp học chiều thứ 7 cô Huyền Châu để tham gia.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    '2d10da37cf33a6fd4e8293a1a7dec96c', 'Người tham gia ẩn danh', 'nhận học bù cho mọi người về quê chơi lễ, mình là nam, ai cần thì để lại sđt dưới BL nhé', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176205403203955/', '2026-04-29 16:59:40', 
-    4, 3, 10, 'Đời sống sinh viên', 0.0, 'Sinh viên đăng bài nhận học bù hộ bạn bè về quê chơi lễ, cho thấy tiềm ẩn rủi ro gian lận trong điểm danh.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    '6bff6adbd5f8b19696e484b212749323', 'Người tham gia ẩn danh', 'Dạ k biết trường mình có tổ chức các sự kiện giống như ghép đối đường phố k ạ, chứ e cô đơn quá huhu', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176098976547931/', '2026-04-29 14:26:53', 
-    60, 66, 192, 'Đời sống sinh viên', -0.1, 'Sinh viên hỏi liệu trường có tổ chức các sự kiện ghép đôi hoặc hoạt động xã hội tương tự không vì cảm thấy cô đơn, mong muốn trường tăng cường các hoạt động kết nối cho sinh viên.', 'Trung lập', '2026-04-29 17:14:25.838'
-),
-(
-    '3dccc867867a572e4736e42a8f4b58f4', 'Người tham gia ẩn danh', 'có bạn nào học av4 lớp cô Thanh Hằng ngày t4 không ạ, mình có việc phải nghỉ nên cho mình hỏi ít việc với ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2070556787102151/', '2025-12-25 01:59:33', 
-    1, 8, 17, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm thông tin bài học từ bạn học do nghỉ buổi học AV4 lớp cô Thanh Hằng.', 'Trung lập', '2026-04-29 17:14:25.838'
-);
+-- INSERT INTO dashboard_trending_issues (
+--     post_id,
+--     author,
+--     content,
+--     post_link,
+--     posted_at,
+--     reaction_count,
+--     comment_count,
+--     engagement_score,
+--     topic,
+--     sentiment_score,
+--     ai_summary,
+--     sentiment_label,
+--     analyzed_at
+-- ) VALUES
+-- (
+--     '45a536403ed63ff7b781e93fa36eae0c', 'Người tham gia ẩn danh', 'Anh chị giúp em cách fix với ạ,nó k hiện chỗ wifi ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175201173304378/', '2026-04-28 13:26:05', 
+--     14, 45, 104, 'Cơ sở vật chất & Bãi xe', 0.0, 'Sinh viên đang gặp vấn đề không kết nối được wifi và cần hỗ trợ khắc phục sự cố này để đảm bảo trải nghiệm học tập tốt hơn.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '30f6086fe5863e055fff712b29dc878a', 'MotivatedPapaya1825', 'Lễ trường có mở cửa không mọi người, mình kh về quê nên mình định vô ngồi học làm bài', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176165993207896/', '2026-04-29 16:02:04', 
+--     5, 6, 17, 'Cơ sở vật chất & Bãi xe', 0.0, 'Sinh viên hỏi liệu trường có mở cửa trong dịp lễ không để có thể vào học bài, cần thông tin về lịch hoạt động của cơ sở vật chất.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '9d218cbd76eda133fa71949675bf9490', 'LavenderFirefly8798', 'Trường cho đề công bằng vãi đề toán 2 buổi chiều ko học hì cũng qua còn buổi sáng ...', 'https://www.facebook.com/groups/utethacmachoctap/posts/2165585674265928/', '2026-04-17 10:53:24', 
+--     28, 59, 146, 'Giảng viên & Đào tạo', -1.0, 'Sinh viên châm biếm về sự thiếu công bằng nghiêm trọng trong đề thi Toán 2, chỉ ra rằng đề thi buổi chiều quá dễ đến mức không cần học cũng qua, trong khi đề thi buổi sáng lại rất khó. Điều này gây bức xúc sâu sắc về sự chênh lệch chất lượng đề thi.', 'Tiêu cực', '2026-04-19 05:05:33.904'
+-- ),
+-- (
+--     '6a075f7395b29ca01a7e771778e53ac7', 'CharmingYuzu1146', 'Thứ 7 này mình bảo vệ khoá luận tốt nghiệp ngành Quản lý Công nghiệp. Cho mình hỏi hội đồng 5 ai biết có hắc ám không? Mất ngủ mấy đêm rồi.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170791843745311/', '2026-04-23 14:02:59', 
+--     3, 2, 7, 'Giảng viên & Đào tạo', -0.7, 'Sinh viên bày tỏ sự lo lắng và mất ngủ kéo dài về buổi bảo vệ khóa luận tốt nghiệp sắp tới, đặc biệt là nỗi sợ hãi về hội đồng chấm thi ''hắc ám'', cho thấy áp lực tâm lý rất lớn.', 'Tiêu cực', '2026-04-23 14:41:23.083'
+-- ),
+-- (
+--     '5940f3ca9114445420ebafeeebd41654', 'conchồncute', 'Thi mạch điện ai cũng nói số đẹp có mình tôi số xấu thôi hả', 'https://www.facebook.com/groups/utethacmachoctap/posts/2169698303854665/', '2026-04-22 07:52:47', 
+--     12, 16, 44, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên bày tỏ sự thất vọng và cảm thấy không may mắn sau kỳ thi Mạch điện, khi ''ai cũng nói số đẹp'' (đề dễ hoặc kết quả tốt) nhưng bản thân lại gặp ''số xấu'' (đề khó hoặc kết quả không như ý).', 'Trung lập', '2026-04-23 14:41:23.083'
+-- ),
+-- (
+--     'fdefff546182e5e5d84a7153dd28d52c', 'Người tham gia ẩn danh', 'Xin cánh tay của những bạn 8+ toán 2 ạ, đề khê quá huhu', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175209119970250/', '2026-04-28 13:37:03', 
+--     9, 22, 53, 'Giảng viên & Đào tạo', -0.2, 'Sinh viên bày tỏ sự thất vọng và khó khăn với đề thi môn toán 2 quá phức tạp, tìm kiếm sự hỗ trợ từ những bạn học tốt hơn.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '26f823082f216770c14e380f349bf415', 'Người tham gia ẩn danh', 'A/c nào học môn công nghệ kim loại của thầy Nguyễn Thanh Tân rồi cho e hỏi, bữa đầu thầy có điểm danh hay làm bài test nào k các anh chị', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173590736798755/', '2026-04-26 17:21:58', 
+--     2, 3, 8, 'Giảng viên & Đào tạo', 0.0, 'Sinh viên hỏi về phương pháp điểm danh hoặc bài kiểm tra đầu tiên của giảng viên môn công nghệ kim loại để chuẩn bị cho buổi học.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '754e5da373a7edc38f80299935e4d7d6', 'Người tham gia ẩn danh', 'Ai có đáp án lí 2 cho em xin với ạ.Làm bài rất ok nhưng điểm rất khê ạ.Em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175340013290494/', '2026-04-28 16:44:07', 
+--     0, 0, 0, 'Giảng viên & Đào tạo', -0.2, 'Sinh viên bày tỏ sự không hài lòng với kết quả điểm môn lí 2, cho rằng điểm số thấp hơn so với nỗ lực làm bài. Đây là một điểm đau về tính công bằng hoặc minh bạch trong đánh giá.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     'aa8e4430636a36939ea452531fd0bea0', 'Lê Tùng Dương', 'Cảm ơn thầy Khương vì con điểm này. Dù là học mooc và gặp các bạn một cách rất tình cờ, nhưng mọi người đều đồng lòng và chung sức làm bài\nShout out đến:\nĐức Khang\nLê Bùi Thanh Danh\nPhạm Gia Tuệ\nTrương Tấn Sang\nCảm ơn các bạn rất nhiều', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175334263291069/', '2026-04-28 16:35:06', 
+--     20, 4, 28, 'Giảng viên & Đào tạo', 0.6, 'Sinh viên bày tỏ lòng biết ơn thầy Khương về kết quả học tập và khen ngợi sự hợp tác hiệu quả của nhóm bạn trong quá trình làm bài học mooc, thể hiện môi trường học tập tích cực.', 'Tích cực', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '9010e20c067fef08d727fb2e82f6cc0f', 'EmpatheticBison8003', 'Học lại lần 2 rồi k qua nản quá mn. Giảng vin nào buff qt 7 thi 3 chia sẽ em vs ạ 😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176143709876791/', '2026-04-29 15:47:28', 
+--     11, 26, 63, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên đang rất nản lòng vì đã thi trượt môn học lần thứ hai và đang tìm kiếm giảng viên được cho là dễ tính hoặc có cách ra đề ôn tập giúp sinh viên qua môn dễ hơn, phản ánh áp lực học tập.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '02971db010648d7b1b2403b3d6782199', 'Người tham gia ẩn danh', 'Dạ anh chị có tài liệu toán ứng dụng kỹ sư và mạch điện bản tiếng việt cho e xin với ạ ,sách tiếng anh đọc lú quá😭😭. Dạ e cảm ơn nhiều 💓', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175792466578582/', '2026-04-29 07:11:41', 
+--     1, 6, 13, 'Giảng viên & Đào tạo', -0.3, 'Sinh viên gặp khó khăn khi học tài liệu toán ứng dụng kỹ sư và mạch điện bằng tiếng Anh và mong muốn tìm tài liệu tiếng Việt. Đây là một điểm yếu về hỗ trợ tài liệu học tập.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     '7e3a825d61686835420558674a608411', 'Người tham gia ẩn danh', 'Bạn nào học buổi đầu ngày hôm nay cho mình hỏi thầy có gr zalo hay có hay dặn dò gì hong ạ. Mình cảm ơn.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175951323229363/', '2026-04-29 10:53:26', 
+--     0, 3, 6, 'Giảng viên & Đào tạo', 0.0, 'Sinh viên hỏi về thông tin liên lạc (nhóm Zalo) hoặc dặn dò từ giảng viên trong buổi học đầu tiên để không bỏ lỡ thông báo quan trọng.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     'ae299209db55e6a97f9489d83f91d831', 'Người tham gia ẩn danh', 'Dạ là Em có đăng kí học lại 1 môn 3tc mà học phí lại vẫn để 18 triệu.Vậy số tiền học lại mình đóng sao ạ😭😭😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2125700394921123/', '2026-03-01 09:58:51', 
+--     0, 1, 2, 'Học phí & Hành chính', -0.2, 'Sinh viên đăng ký học lại 1 môn 3 tín chỉ nhưng hệ thống hiển thị tổng học phí là 18 triệu đồng, gây hoang mang về cách tính và đóng tiền. Nhà trường cần kiểm tra lại hệ thống tính toán học phí cho các môn học lại và cung cấp hướng dẫn rõ ràng để tránh nhầm lẫn cho sinh viên.', 'Trung lập', '2026-03-31 15:29:45.402'
+-- ),
+-- (
+--     '5c8ee2245d31c1a60ae20cb0e4d9557d', 'Người tham gia ẩn danh', 'Cho mik hỏi mng đủ điều kiện, có nhận được hoàn trả số tiền BHYT để trừ vào học phí chưa ạ, trước tết đã khai báo ở trạm y tế trường r ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2167095264114969/', '2026-04-19 04:51:21', 
+--     0, 1, 2, 'Học phí & Hành chính', -0.1, 'Sinh viên thắc mắc về việc chưa nhận được hoàn trả số tiền Bảo hiểm Y tế (BHYT) để trừ vào học phí, mặc dù đã khai báo. Nhà trường cần rà soát quy trình và tiến độ hoàn trả BHYT.', 'Trung lập', '2026-04-19 05:05:33.904'
+-- ),
+-- (
+--     '3cb84a39d49e36a8553ad758dde50144', 'Người tham gia ẩn danh', 'Dạ anh chị cho em hỏi. Em đóng học phí HK II vào đợt 2 được không ạ. Em nhớ là đóng muộn vào đợt 2 chỉ bị trừ đrl mà sao em đọc thông tin thì bị Khiển Trách ạ, huhu.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166596684164827/', '2026-04-18 13:30:00', 
+--     2, 4, 10, 'Học phí & Hành chính', -0.3, 'Sinh viên bối rối và lo lắng (''huhu'') về thông tin đóng học phí muộn, có sự không nhất quán giữa ''trừ điểm rèn luyện'' và ''bị khiển trách''. Cần rà soát và làm rõ chính sách để tránh gây hoang mang cho sinh viên.', 'Trung lập', '2026-04-23 14:41:23.083'
+-- ),
+-- (
+--     '01421ffb2d1312c6462e3016cff30583', 'toiiuute', 'Có bạn nào chuyển ngành ngành thành công đợt này chưa, mình đợi thông báo thấy lâu quá', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174003423424153/', '2026-04-27 05:03:31', 
+--     1, 0, 1, 'Học phí & Hành chính', -0.2, 'Sinh viên đang bày tỏ sự sốt ruột vì chờ đợi thông báo kết quả chuyển ngành quá lâu, cho thấy thủ tục hành chính về chuyển ngành còn chậm trễ, gây ảnh hưởng tâm lý và kế hoạch học tập của sinh viên.', 'Trung lập', '2026-04-27 05:15:38.684'
+-- ),
+-- (
+--     '2d8d00d825e317f68c3f0fd49f98cbc8', 'Người tham gia ẩn danh', 'Mng cho em hỏi trường mình có nhận đầu ra bằng chứng chỉ Aptis kh ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/1934604494030715/', '2025-07-18 10:59:23', 
+--     3, 7, 17, 'Học phí & Hành chính', 0.0, 'Sinh viên hỏi về việc trường có chấp nhận chứng chỉ Aptis làm điều kiện đầu ra ngoại ngữ hay không, cần thông tin rõ ràng về quy định chứng chỉ.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '549bb2406df9f2b789a650a63a0749da', 'T.Hehehe.M', 'Mn cho em hỏi về qui trình xin cấp lại thẻ sinh viên có tích hợp thẻ ngân hàng, làm như thế nào và làm ở đâu ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176198636537965/', '2026-04-29 16:49:29', 
+--     0, 1, 2, 'Học phí & Hành chính', 0.0, 'Sinh viên cần biết quy trình và địa điểm để xin cấp lại thẻ sinh viên có tích hợp thẻ ngân hàng, yêu cầu hướng dẫn thủ tục chi tiết.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '1059e8b3eb8ba22154558a81fe08ce72', 'Người tham gia ẩn danh', 'Dạ ac cho em hỏi em k25 đóng hp qp12( hk1) vào đợt 2 này thì có bị ảnh hưởng hbkkht của hk1 năm 2 ko ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176204733204022/', '2026-04-29 16:58:43', 
+--     0, 0, 0, 'Học phí & Hành chính', 0.0, 'Sinh viên khóa K25 hỏi liệu việc đóng học phí quốc phòng học kỳ 1 vào đợt 2 có ảnh hưởng đến học bổng khuyến khích học tập của học kỳ 1 năm 2 hay không.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     'e97a14f9918540427c89002e5348f9fe', 'Người tham gia ẩn danh', 'Cho mình hỏi nợ hp quốc phòng với thể chất bao h mới hết hạn đóng v ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176165436541285/', '2026-04-29 16:01:14', 
+--     1, 1, 3, 'Học phí & Hành chính', 0.0, 'Sinh viên hỏi về thời hạn đóng học phí các môn quốc phòng và thể chất.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     '519d650b32b2ce084eb0f6e4c1ae4679', '10p GG', 'E k23 học quốc phòng kì 2, bây giờ đã có thể lấy chứng chỉ đc chưa ạ?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175727956585033/', '2026-04-29 04:22:26', 
+--     10, 16, 42, 'Học phí & Hành chính', 0.0, 'Sinh viên khóa K23 hỏi về thời điểm có thể nhận chứng chỉ giáo dục quốc phòng kỳ 2. Cần cung cấp thông tin rõ ràng về quy trình và lịch trả chứng chỉ.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     'a01835389bbba081cbbe0d1f78c7ca74', 'Người tham gia ẩn danh', 'Cầu mong mn vt review nhiều hơn ạ 😔😔😔 ko chỉ tích đức mà còn cứu rỗi bt bao tầm hồn vụn vỡ vì gpa sắp đát như em 😭😭😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166426580848504/', '2026-04-18 12:48:22', 
+--     23, 20, 63, 'Học vụ & Đăng ký môn', -0.4, 'Sinh viên bày tỏ sự tuyệt vọng vì điểm GPA thấp, tha thiết mong muốn có thêm các bài review (về môn học/giảng viên/kinh nghiệm học) từ cộng đồng để cải thiện tình hình học tập. Đây là một vấn đề về nhu cầu hỗ trợ học thuật và chia sẻ kinh nghiệm giữa sinh viên.', 'Trung lập', '2026-04-19 05:05:33.904'
+-- ),
+-- (
+--     'a6364b3efb34c7669200214ced3a68e9', 'Mass Queue', '[THẮC MẮC] Link tra cứu Kho Học Liệu Số hỗ trợ học tập - Ôn tập mùa thi\nCho mình hỏi có ai nhận được mail này và truy cập được liên kết không? Mình truy cập tới bước login Mail của trường xong thì bị chặn.\n\nXin cám ơn!', 'https://www.facebook.com/groups/utethacmachoctap/posts/2167094180781744/', '2026-04-19 04:49:20', 
+--     0, 0, 0, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên gặp lỗi kỹ thuật khi cố gắng truy cập Kho Học Liệu Số hỗ trợ học tập của trường, bị chặn sau khi đăng nhập bằng email. Nhà trường cần kiểm tra lại hệ thống truy cập tài liệu để đảm bảo sinh viên có thể sử dụng.', 'Trung lập', '2026-04-19 05:05:33.904'
+-- ),
+-- (
+--     'b183f3ccab53897e614c2b0f48e1b7c3', 'Người tham gia ẩn danh', 'Sao toán 2 chưa có điểm vậy mọi người ơi, mình chữ K :((', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170704490420713/', '2026-04-23 12:01:26', 
+--     2, 6, 14, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên đang lo lắng về việc môn Toán 2 chưa có điểm và bày tỏ sự hoang mang về khả năng nhận điểm ''K'', cần nhà trường đẩy nhanh việc công bố kết quả để giảm bớt sự bất an cho sinh viên.', 'Trung lập', '2026-04-23 14:41:23.083'
+-- ),
+-- (
+--     '02eea46dff6d8ad72cfe239a1cbc4846', 'Người tham gia ẩn danh', 'Tha thiết xin slot ạ kì sau em có đồ án mà không vô được. Ai có nhường cho em xin với ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2170514637106365/', '2026-04-23 07:09:27', 
+--     1, 3, 7, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên đang tha thiết xin slot môn học cho đồ án vì không đăng ký được, cho thấy vấn đề về số lượng chỗ hoặc hệ thống đăng ký môn cần được cải thiện.', 'Trung lập', '2026-04-23 14:43:43.214'
+-- ),
+-- (
+--     'fae2a613483ca624efd5f4bbacebb69a', 'SilverCaterpillar3243', 'Mn ơi giúp mình với. Mình nhớ đã hủy môn xstk rồi mà sao ở phần kết quả học tập vẫn còn hiện môn đó', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173989266758902/', '2026-04-27 04:40:54', 
+--     1, 2, 5, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên bày tỏ sự khó hiểu và lo lắng khi môn học đã hủy nhưng vẫn xuất hiện trong kết quả học tập. Điều này chỉ ra một lỗi tiềm ẩn trong hệ thống hoặc quy trình học vụ cần được nhà trường xem xét và điều chỉnh.', 'Trung lập', '2026-04-27 04:50:02.482'
+-- ),
+-- (
+--     'd6c118c5ecede1deb9ed6714ed6975a1', 'Người tham gia ẩn danh', 'Tình hình là em mới học lại thấy làm ổn lắm mà điểm như này thì phúc khảo đâu ạ🥹🥹', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173860706771758/', '2026-04-27 03:46:05', 
+--     1, 3, 7, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên bày tỏ sự thất vọng và không hài lòng về điểm thi môn học lại, cảm thấy kết quả không xứng đáng với nỗ lực và tìm hiểu về thủ tục phúc khảo.', 'Trung lập', '2026-04-27 05:15:38.684'
+-- ),
+-- (
+--     '025eb61e4df5bdf2cefe4b5703927769', 'Đức Mạnh', 'Mọi người cho em hỏi em đăng kí anh văn 4 sao mà nó ra 3 vậy ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173998150091347/', '2026-04-27 04:54:45', 
+--     1, 1, 3, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên gặp vấn đề trong quá trình đăng ký môn học khi hệ thống hiển thị sai kết quả đăng ký môn Anh văn 4 thành Anh văn 3, cần hỗ trợ kiểm tra và khắc phục lỗi hệ thống.', 'Trung lập', '2026-04-27 05:15:38.684'
+-- ),
+-- (
+--     'fd66c3e48f0d1209ceafcf2ac41e3ded', 'Người tham gia ẩn danh', 'Có ní nào có điểm lý 1 chưa ạ,các môn đại cương khác có điểm vèo vèo hết r sao mỗi môn này chưa có 🥲', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173999493424546/', '2026-04-27 04:56:40', 
+--     0, 0, 0, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên không hài lòng vì môn Lý 1 chưa có điểm trong khi các môn đại cương khác đã có, gây ra sự chậm trễ và thắc mắc về quy trình công bố điểm.', 'Trung lập', '2026-04-27 05:17:53.265'
+-- ),
+-- (
+--     'f164c09a3957d4e2e39d007b58f136b7', 'Người tham gia ẩn danh', 'Cho em hỏi môn này em cúp 1 buổi có sao không mọi người🥲', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173972756760553/', '2026-04-27 04:16:34', 
+--     0, 2, 4, 'Học vụ & Đăng ký môn', -0.1, 'Sinh viên hỏi về hậu quả của việc vắng mặt một buổi học trong một môn cụ thể, thể hiện sự lo lắng về quy định điểm danh và ảnh hưởng đến kết quả học tập.', 'Trung lập', '2026-04-27 05:17:53.265'
+-- ),
+-- (
+--     '50ade1715d3a5e5ce87d88a4ad5f2b54', 'MrBeastUTE', 'Bữa đầu học thực tập đo lường cảm biến cô Nguyễn Thị Ngọc Thảo cúp có sao khong v moi nguoi😭', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173997896758039/', '2026-04-27 04:54:31', 
+--     0, 0, 0, 'Học vụ & Đăng ký môn', -0.1, 'Sinh viên lo lắng về việc vắng mặt trong buổi học thực tập đầu tiên môn đo lường cảm biến với cô Nguyễn Thị Ngọc Thảo và muốn biết liệu có ảnh hưởng đến kết quả học tập hay không.', 'Trung lập', '2026-04-27 05:17:53.265'
+-- ),
+-- (
+--     '90376ffb780787b89861a35ad2d0e7c7', 'Người tham gia ẩn danh', 'Em đăng kí học mooc môn pldc, nhưng mà giờ vẫn chưa nhận được link group zalo thì có sao không ạ. Em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174459766711852/', '2026-04-27 16:10:02', 
+--     0, 3, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên đăng ký học MOOC môn pldc nhưng chưa nhận được link nhóm Zalo, lo lắng không biết có ảnh hưởng gì đến việc học. Nhà trường cần đảm bảo gửi thông tin đầy đủ và kịp thời sau khi sinh viên đăng ký.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '5a3fafff1d15afe5ae9935cb07529f98', 'Người tham gia ẩn danh', 'Mn cho e hỏi e hc triết học rồi giờ e đki học tthcm được ko ạ hay phải học kte triết trc ạ em cảm ơn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175337776624051/', '2026-04-28 16:40:47', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên cần tư vấn về trình tự đăng ký các môn học Triết học và Tư tưởng Hồ Chí Minh, mong muốn được hướng dẫn rõ ràng về quy tắc học phần tiên quyết.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '7ebb57cfb90c1f2d6f8ca24a63e6f850', 'ExcitingKangaroo8981', 'Dạ môn này nếu nghỉ buổi đầu có sao hong ạ tại em ở quê sợ vào hong kịp', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175277359963426/', '2026-04-28 15:15:53', 
+--     1, 1, 3, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi liệu việc nghỉ buổi học đầu tiên của một môn có ảnh hưởng gì không vì lý do ở quê chưa thể vào kịp. Cần thông tin về quy định điểm danh và việc học bù/theo kịp bài.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '7d0b44e1f8a60cd6436ef5c8f59d3641', 'Người tham gia ẩn danh', 'Đợt xét tốt nghiệp tháng 5 này nhà trường xét tự động nên sốt ruột quá huhu 🥺 \nRáng 10 - 15 ngày nữa có kq\nHy vọng 🙂‍↕️', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173940120097150/', '2026-04-27 03:46:03', 
+--     4, 14, 32, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên bày tỏ sự sốt ruột và lo lắng về quy trình xét tốt nghiệp tự động, mong chờ kết quả sớm để giảm bớt căng thẳng.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '48fc02cd3f317e51b504c90d8beea937', 'Người tham gia ẩn danh', 'Em có đăng ký Mooc_nhóm 35 pldc cô Hương mà sao em chưa thấy thông báo gì hết vậy ạ? Lần đầu em học Mooc nên hơi bỡ ngỡ mong anh chị giúp', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175012023323293/', '2026-04-28 08:33:18', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về việc chưa nhận được thông báo cho môn học Mooc đã đăng ký, cần nhà trường hoặc giảng viên cung cấp thông tin kịp thời về khóa học.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     'aec3f6bf01d739166ad20e944c2f1bc0', 'Dừa dằm sữa đặc', 'Mn ơi có ai học moc nhóm 4 tư tưởng Hồ Chí Minh đợt 2 này, do cô Phượng dạy mà chưa có nhóm hông mn, với lại đăng kí nhóm ở đâu ấy:,))) đọc thông báo thấy rối quá', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175327663291729/', '2026-04-28 16:25:01', 
+--     0, 3, 6, 'Học vụ & Đăng ký môn', -0.2, 'Sinh viên học MOOC nhóm 4 môn tư tưởng Hồ Chí Minh gặp khó khăn trong việc tìm nhóm và không biết cách đăng ký nhóm vì thông báo của trường quá rối. Nhà trường cần cải thiện sự rõ ràng và chi tiết của các thông báo quy trình học tập.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '2229c0813f50580f5c333e9ddc3aba4b', 'Người tham gia ẩn danh', 'Không biết trong group mình có bạn nào nhận kèm Lý 1 và xstk không ạ? Nếu có mọi người cứ cmt thông tin phía dưới mình sẽ chủ động liên hệ ạ. Cảm ơn add đã duyệt bài.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174791600012002/', '2026-04-28 02:05:30', 
+--     0, 3, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên đang tìm kiếm bạn nhận kèm môn Lý 1 và XSTK để cải thiện kết quả học tập. Đây là nhu cầu tìm kiếm hỗ trợ học thuật từ cộng đồng sinh viên.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '88712d0255f9a77d798a364127191a31', 'Người tham gia ẩn danh', 'mình lần đầu học khóa MOOC, mình tìm nhóm kiểu j thế mn, không thể xem danh sách sinh viên trong nhóm zalo', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175328089958353/', '2026-04-28 16:35:08', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên lần đầu học MOOC gặp khó khăn trong việc tìm nhóm và không thể xem danh sách thành viên trong nhóm Zalo. Nhà trường cần cung cấp hướng dẫn rõ ràng hơn về quy trình tham gia và quản lý nhóm học cho sinh viên mới.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '1cfb939eb57447c273d3261ba185a7e4', 'Người tham gia ẩn danh', 'Mình làm đơn xin nhận điểm I trêng trang online r thì có cần nộp trực tiếp giấy tờ j nữa ko ạ, nếu có thì thời gian nộp là khi nào vậy', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175314513293044/', '2026-04-28 16:06:05', 
+--     0, 4, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về quy trình nộp giấy tờ sau khi đăng ký xin điểm I online, muốn biết có cần nộp bản cứng và thời hạn nộp nếu có. Đây là một câu hỏi về thủ tục hành chính học vụ.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '85dd063468c2c807a0377019efa83ee5', 'Hướng nội thích MXH', 'Lớp Mooc LSĐ thầy Chung có vào gr zalo hay có thông báo gì chưa mn?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175337663290729/', '2026-04-28 16:40:40', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về thông báo hoặc nhóm Zalo cho lớp Mooc Lịch sử Đảng thầy Chung, thể hiện nhu cầu thông tin rõ ràng và kênh liên lạc chính thức.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '1cc3fb0d545fd4f9a77dad5bff8178c0', 'Người tham gia ẩn danh', 'Em chào mn.Em có đăng kí 1 môn xong em hủy nhưng trong phần kết quả học tập vẫn có.Còn trong phần thanh toán học phí và thời khó biểu ko có thì môn đó em đã hủy thành công chưa ạ.Em cảm ơn ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175333096624519/', '2026-04-28 16:33:16', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về trạng thái hủy môn học, vì môn đó vẫn hiển thị trong kết quả học tập nhưng không có trong thanh toán hay thời khóa biểu, gây bối rối về việc hủy thành công.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '8f5f455e8f8ec2a6a16f0459831271d2', 'Người tham gia ẩn danh', 'Cho mình hỏi là nếu mình cần nộp phúc khảo điểm mà bị vướng lịch hc quốc phòng thì làm như nào để có thể nộp đơn đc v ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176193203205175/', '2026-04-29 16:41:19', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về cách nộp đơn phúc khảo điểm khi bị trùng lịch học quốc phòng, cần hướng dẫn quy trình giải quyết tình huống đặc biệt này.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     'da63ceafcaacde622b0824c6edc47c13', 'Người tham gia ẩn danh', 'Dạ a/c cho e hỏi môn thí nghiệm vật lý 1 sẽ học những gì và kiểm tra ntn ạ, dạ với lại dễ lấy điểm cao k ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176184349872727/', '2026-04-29 16:27:54', 
+--     2, 2, 6, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên cần thông tin chi tiết về nội dung môn thí nghiệm Vật lý 1, cách thức kiểm tra và khả năng đạt điểm cao để chuẩn bị tốt cho việc học.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '5112aed04af424c5cc46c6bd92ccbaf6', 'Người tham gia ẩn danh', 'Mọi người cho em hỏi chứng chỉ tiếng Anh aptis có được miễn avdr không mn', 'https://www.facebook.com/groups/utethacmachoctap/posts/2148446855979810/', '2026-03-27 17:37:22', 
+--     0, 2, 4, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về quy định miễn học phần tiếng Anh đầu vào bằng chứng chỉ Aptis để nắm rõ thủ tục và điều kiện.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '22a1ebf738fcc6b5c34e1c0339514af3', 'Người tham gia ẩn danh', 'anh chị ơi cứu e sao nó cứ báo lỗi có cách nào khắc phục không ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176187383205757/', '2026-04-29 16:32:34', 
+--     0, 2, 4, 'Học vụ & Đăng ký môn', -0.3, 'Sinh viên đang gặp lỗi khi sử dụng một hệ thống hoặc thực hiện một thao tác nào đó và cần được hỗ trợ khắc phục. Cần xác định lỗi cụ thể để hỗ trợ.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     '5bc05d0e015bb7b38d6952670bd394ad', 'Người tham gia ẩn danh', 'utex sập rồi hả mọi người, bao giờ vào lại được vậy ạa', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176144716543357/', '2026-04-29 15:47:28', 
+--     0, 1, 2, 'Học vụ & Đăng ký môn', -0.3, 'Hệ thống utex đang gặp sự cố và không thể truy cập, gây gián đoạn cho sinh viên. Cần thông báo thời gian khắc phục và khôi phục hoạt động.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     'e17124a8272d191463f53b9d083ab8ce', 'Người tham gia ẩn danh', 'anh chị cho em hỏi e chưa học avgt1-2 có đk thi avdr được k ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176134236544405/', '2026-04-29 15:15:52', 
+--     1, 6, 13, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về điều kiện dự thi chứng chỉ ngoại ngữ AVDR khi chưa hoàn thành các môn AVGT1-2, cần được giải đáp về quy định học vụ.', 'Trung lập', '2026-04-29 17:19:07.868'
+-- ),
+-- (
+--     '794fc61a9365415615a9f168231a4a91', 'Người tham gia ẩn danh', 'Dạ cho em hỏi mình đăng ký thi avdr xong thì coi lịch thi ở đâu ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2173241440167018/', '2026-04-26 08:36:12', 
+--     2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên hỏi về cách tra cứu lịch thi sau khi đã đăng ký thi chứng chỉ AVDR, cho thấy có thể thông tin về lịch thi chưa được hiển thị rõ ràng.', 'Trung lập', '2026-04-29 17:19:07.868'
+-- ),
+-- (
+--     'e673f96684c7c1711ebdc83709725c57', 'Người tham gia ẩn danh', 'Cho em hỏi bằng b1 Aptis có pass đầu ra và pass avgt 0,1,2 không ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2058413104983186/', '2025-12-09 13:37:28', 
+--     2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về việc chứng chỉ B1 Aptis có được công nhận để đạt chuẩn đầu ra và các môn AVGT 0,1,2 hay không, cần thông tin rõ ràng về quy đổi tín chỉ ngoại ngữ.', 'Trung lập', '2026-04-29 17:19:07.868'
+-- ),
+-- (
+--     '666075d6939ec84ce64a1875b420423f', 'BrilliantLynx2509', 'Cho em hỏi chứng chỉ aptis cho khóa k23 chỉ cần B1 thôi phải không ạ? Có yêu cầu là B1 nhưng tổng điểm phải trên bao nhiêu điểm mới được xét không ạ?', 'https://www.facebook.com/groups/utethacmachoctap/posts/2155015325322963/', '2026-04-04 09:47:32', 
+--     2, 3, 8, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên thắc mắc về tiêu chuẩn chứng chỉ Aptis B1 cho khóa K23, cụ thể là liệu có yêu cầu điểm tổng tối thiểu nào kèm theo hay không, cần nhà trường làm rõ quy định.', 'Trung lập', '2026-04-29 17:19:07.868'
+-- ),
+-- (
+--     '521824a6ae3a2ead33564166d62a9739', 'keoconhocute', 'Em vừa mới rớt môn mạch điện ạ, theo mọi người thì em nên trả nợ môn này vào năm 2 hay 3 là ổn nhất mà không bị quá nặng kiến thức ạ.', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176171133207382/', '2026-04-29 16:08:38', 
+--     1, 6, 13, 'Học vụ & Đăng ký môn', 0.0, 'Sinh viên vừa rớt môn mạch điện và đang tìm lời khuyên về thời điểm thích hợp để học lại môn này nhằm tránh quá tải kiến thức. Đây là một câu hỏi học vụ thông thường.', 'Trung lập', '2026-04-29 17:19:07.868'
+-- ),
+-- (
+--     'd8e9ff366058cfcd2be593d49ac13f73', 'Hướng nội thích MXH', 'mọi người ơi sao hội thao em không thấy Bóng đá Nữ ạ? em nghe bảo mấy năm trước có mà ạ 😭 đừng bỏ đá bóng nữ mà em mong chờ từ đầu năm tới giờ, help me plsssss', 'https://www.facebook.com/groups/utethacmachoctap/posts/2126293278195168/', '2026-03-01 09:56:46', 
+--     1, 1, 3, 'Đời sống sinh viên', -0.6, 'Sinh viên bày tỏ sự thất vọng sâu sắc và đề nghị nhà trường xem xét lại quyết định bỏ môn Bóng đá Nữ trong hội thao, vì đây là hoạt động được nhiều sinh viên mong chờ và quan tâm.', 'Tiêu cực', '2026-03-31 15:29:45.402'
+-- ),
+-- (
+--     'e30a7fc4daafacd37fff926c21d2daad', 'Khầy Kụt nè coăn 🐧🐧🐧', 'Tiến ơi Tiến, chơi tiktok lịch sự tí đi e. Cán bộ lụm đó e', 'https://www.facebook.com/groups/utethacmachoctap/posts/2126209124870250/', '2026-03-01 09:56:45', 
+--     32, 14, 60, 'Đời sống sinh viên', -0.2, 'Một sinh viên đang nhắc nhở bạn cùng trường về việc sử dụng TikTok không lịch sự, cảnh báo hành vi này có thể bị cán bộ nhà trường xử lý. Vấn đề liên quan đến ý thức và hành vi cá nhân của sinh viên trong môi trường chung cần được lưu ý.', 'Trung lập', '2026-03-31 15:29:45.402'
+-- ),
+-- (
+--     '8ef7a9a2f8f4715c0fb92417d30dd7c7', 'thangthatbai123', 'ac ơi em hối hận quá!em mới năm nhất thôi đã rớt hơn 8 tín và bị hạ bằng chỉ vì ham chơi em sợ cầm tấm bằng khá sẽ không có tương lai quá g em phải làm sao ạ😞', 'https://www.facebook.com/groups/utethacmachoctap/posts/2166681710822991/', '2026-04-19 03:47:10', 
+--     33, 55, 143, 'Đời sống sinh viên', -0.7, 'Sinh viên năm nhất bày tỏ sự hối hận và lo lắng sâu sắc vì đã rớt nhiều tín chỉ và bị hạ bằng do ham chơi. Sinh viên sợ tấm bằng khá sẽ ảnh hưởng đến tương lai và đang tìm kiếm lời khuyên để khắc phục tình hình học tập và định hướng nghề nghiệp.', 'Tiêu cực', '2026-04-19 05:05:33.904'
+-- ),
+-- (
+--     '60641a516d6575684c159710fcd1bd38', 'Người tham gia ẩn danh', 'rớt mạch điện có phải là quá tệ ko ạ, em lần đầu rớt môn, giờ buồn và stress quá ạ😔', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175215486636280/', '2026-04-28 14:01:45', 
+--     7, 10, 27, 'Đời sống sinh viên', -0.3, 'Sinh viên bày tỏ nỗi buồn và căng thẳng vì lần đầu rớt môn mạch điện, tìm kiếm sự đồng cảm và lời khuyên từ cộng đồng.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '4eccfff654fda67c1c8a8ca996b376f0', 'Người tham gia ẩn danh', 'Dạ cho em hỏi là nếu học TOEIC hoặc IELTS thì em nên học ở đâu, em ở khu vực gần trường mình ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175288569962305/', '2026-04-28 15:28:41', 
+--     3, 8, 19, 'Đời sống sinh viên', 0.0, 'Sinh viên hỏi cộng đồng về các trung tâm học TOEIC hoặc IELTS uy tín ở khu vực gần trường.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '290b60a806f91dc5161d3941ca6264fa', 'Người tham gia ẩn danh', 'Mình học tư tưởng hcm cô phượng(mooc-nhóm 4).Hiện nhóm mình còn thiếu 3 bạn,bạn nào chưa có nhóm để lại zalo mình ib rồi vào nhóm nhaaa', 'https://www.facebook.com/groups/utethacmachoctap/posts/2175316289959533/', '2026-04-28 16:35:12', 
+--     1, 3, 7, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm 3 thành viên cho nhóm môn Tư tưởng Hồ Chí Minh (MOOC) của cô Phượng, yêu cầu các bạn chưa có nhóm để lại Zalo để liên hệ.', 'Trung lập', '2026-04-28 17:26:13.403'
+-- ),
+-- (
+--     '16f712b75470cd82d9edfa5b20e09d3a', 'Người tham gia ẩn danh', 'Mấy anh chị bạn bè nào có học môn vẽ kỹ thuật rồi thì cho em xin phép hỏi muốn mua mấy cái dụng cụ để vẽ thì nên mua ở chỗ nào gần trường ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176176029873559/', '2026-04-29 16:15:46', 
+--     0, 2, 4, 'Đời sống sinh viên', 0.0, 'Sinh viên hỏi tìm địa điểm mua dụng cụ vẽ kỹ thuật gần trường, cần thông tin về các cửa hàng cung cấp vật tư học tập cho môn học.', 'Trung lập', '2026-04-29 17:11:03.287'
+-- ),
+-- (
+--     '764b4a71b7e0fe25b64ef0a2e5a5b0b0', 'Người tham gia ẩn danh', 'Có bạn nào học lớp chiều thứ 7 cô Huyền Châu được tham gia gr zalo hông , cho mình xin vô với ạ .', 'https://www.facebook.com/groups/utethacmachoctap/posts/2174454683379027/', '2026-04-27 18:14:35', 
+--     1, 1, 3, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm link nhóm Zalo của lớp học chiều thứ 7 cô Huyền Châu để tham gia.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     '2d10da37cf33a6fd4e8293a1a7dec96c', 'Người tham gia ẩn danh', 'nhận học bù cho mọi người về quê chơi lễ, mình là nam, ai cần thì để lại sđt dưới BL nhé', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176205403203955/', '2026-04-29 16:59:40', 
+--     4, 3, 10, 'Đời sống sinh viên', 0.0, 'Sinh viên đăng bài nhận học bù hộ bạn bè về quê chơi lễ, cho thấy tiềm ẩn rủi ro gian lận trong điểm danh.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     '6bff6adbd5f8b19696e484b212749323', 'Người tham gia ẩn danh', 'Dạ k biết trường mình có tổ chức các sự kiện giống như ghép đối đường phố k ạ, chứ e cô đơn quá huhu', 'https://www.facebook.com/groups/utethacmachoctap/posts/2176098976547931/', '2026-04-29 14:26:53', 
+--     60, 66, 192, 'Đời sống sinh viên', -0.1, 'Sinh viên hỏi liệu trường có tổ chức các sự kiện ghép đôi hoặc hoạt động xã hội tương tự không vì cảm thấy cô đơn, mong muốn trường tăng cường các hoạt động kết nối cho sinh viên.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- ),
+-- (
+--     '3dccc867867a572e4736e42a8f4b58f4', 'Người tham gia ẩn danh', 'có bạn nào học av4 lớp cô Thanh Hằng ngày t4 không ạ, mình có việc phải nghỉ nên cho mình hỏi ít việc với ạ', 'https://www.facebook.com/groups/utethacmachoctap/posts/2070556787102151/', '2025-12-25 01:59:33', 
+--     1, 8, 17, 'Đời sống sinh viên', 0.0, 'Sinh viên tìm kiếm thông tin bài học từ bạn học do nghỉ buổi học AV4 lớp cô Thanh Hằng.', 'Trung lập', '2026-04-29 17:14:25.838'
+-- );
