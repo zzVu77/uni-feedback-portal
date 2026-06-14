@@ -68,7 +68,15 @@ export class UploadsService {
     }
 
     // ===== 2. Generate object key =====
-    const key = generateFileKey(userId, targetType, fileName);
+    const sanitizedFileName = fileName
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd')
+      .replace(/Đ/g, 'D')
+      .replace(/[^a-zA-Z0-9.\-_ ]/g, '')
+      .trim();
+
+    const key = generateFileKey(userId, targetType, sanitizedFileName);
 
     // ===== 3. Create PutObject command =====
     const command = new PutObjectCommand({
