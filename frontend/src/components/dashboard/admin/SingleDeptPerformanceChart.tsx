@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { TopDepartmentStatsDto } from "@/types/report";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { Star } from "lucide-react";
 
 const chartConfig = {
   resolved: {
@@ -55,15 +56,28 @@ export const SingleDeptPerformanceChart = ({ dept, className }: Props) => {
         className,
       )}
     >
-      <div className="mb-2 flex w-full items-center justify-between px-1">
+      <div className="mb-2 flex w-full items-center justify-between gap-2 px-1">
         <div
           className="line-clamp-1 flex-1 text-sm font-bold tracking-tight text-slate-700 transition-colors group-hover:text-indigo-700"
           title={dept.departmentName}
         >
           {dept.departmentName}
         </div>
-        <div className="ml-2 flex shrink-0 items-center justify-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500 transition-colors group-hover:bg-indigo-100 group-hover:text-indigo-700">
-          {total} góp ý
+        <div className="flex shrink-0 items-center gap-1.5">
+          <div
+            className="flex shrink-0 items-center justify-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-600 transition-colors group-hover:bg-amber-100"
+            title={`Đánh giá trung bình: ${(dept.avgScore && dept.avgScore > 0 ? dept.avgScore : 5).toFixed(1)} / 5.0`}
+          >
+            <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+            <span>
+              {(dept.avgScore && dept.avgScore > 0 ? dept.avgScore : 5).toFixed(
+                1,
+              )}
+            </span>
+          </div>
+          <div className="flex shrink-0 items-center justify-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500 transition-colors group-hover:bg-indigo-100 group-hover:text-indigo-700">
+            {total} góp ý
+          </div>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 // src/components/dashboard/StatsOverviewCards.tsx
 import { StatsOverviewDto } from "@/types/report";
-import { Activity, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { Activity, CheckCircle2, Clock, XCircle, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -11,8 +11,8 @@ interface Props {
 export const StatsOverviewCards = ({ data, isLoading }: Props) => {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-        {[1, 2, 3, 4].map((i) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+        {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
             className="h-[120px] w-full animate-pulse rounded-2xl bg-slate-200/60"
@@ -71,10 +71,34 @@ export const StatsOverviewCards = ({ data, isLoading }: Props) => {
         ring: "ring-rose-100",
       },
     },
+    ...(data &&
+    "avgScore" in data &&
+    data.avgScore !== undefined &&
+    data.avgScore !== null
+      ? [
+          {
+            title: "Đánh giá trung bình",
+            value: `${(data.avgScore > 0 ? data.avgScore : 5).toFixed(1)} / 5.0`,
+            icon: Star,
+            desc: "Mức độ hài lòng của sinh viên",
+            styles: {
+              bg: "bg-amber-50",
+              text: "text-amber-600",
+              iconColor: "text-amber-500",
+              ring: "ring-amber-100",
+            },
+          },
+        ]
+      : []),
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+    <div
+      className={cn(
+        "grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6",
+        items.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4",
+      )}
+    >
       {items.map((item, index) => (
         <div
           key={index}

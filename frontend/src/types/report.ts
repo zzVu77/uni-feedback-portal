@@ -11,6 +11,7 @@ export type StatsOverviewDto = {
   inProgressCount: number;
   resolvedCount: number;
   rejectedCount: number;
+  avgScore?: number;
 };
 
 // 2. Top Department Stats
@@ -21,6 +22,7 @@ export type TopDepartmentStatsDto = {
   resolvedCount: number;
   unresolvedCount: number;
   avgResolutionTimeHours: number;
+  avgScore?: number;
 };
 
 // 3. Feedback Trends
