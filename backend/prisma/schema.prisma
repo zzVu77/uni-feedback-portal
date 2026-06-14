@@ -425,3 +425,9 @@ model AiFeedbackSummaries {
   @@unique([periodType, startDate, endDate])
   @@index([startDate, endDate])
 }
+model ToxicKeyword {
+  id        String   @id @default(uuid()) @db.Uuid
+  keyword   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

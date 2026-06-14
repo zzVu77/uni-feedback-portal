@@ -29,6 +29,7 @@ import { SocialDataSourceModule } from './modules/social_data_source/social_data
 import { GithubActionModule } from './modules/github-action/github-action.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AiAnalyticsModule } from './modules/ai-analytics/ai-analytics.module';
+import { ToxicKeywordsModule } from './modules/toxic-keywords/toxic-keywords.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { AiAnalyticsModule } from './modules/ai-analytics/ai-analytics.module';
     GithubActionModule,
     ScheduleModule.forRoot(),
     AiAnalyticsModule,
+    ToxicKeywordsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

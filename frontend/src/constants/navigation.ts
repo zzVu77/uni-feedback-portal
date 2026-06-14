@@ -12,6 +12,7 @@ import {
   MessageSquareWarning,
   Users,
   Building2,
+  ShieldBan,
 } from "lucide-react";
 export type NavigationItem = {
   href: string;
@@ -56,6 +57,11 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin/reported-comment-management",
     label: "Quản lý bình luận vi phạm",
     icon: MessageSquareWarning,
+  },
+  {
+    href: "/admin/keywords-management",
+    label: "Quản lý từ khóa cấm",
+    icon: ShieldBan,
   },
   {
     href: "/admin/category-management",

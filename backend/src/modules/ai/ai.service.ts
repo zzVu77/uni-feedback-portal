@@ -3,7 +3,6 @@ import { GoogleGenAI } from '@google/genai';
 import {
   containsToxicKeyword,
   toxicityPrompt,
-  toxicKeywords,
 } from './prompts/toxicity.prompt';
 import { PrismaService } from '../prisma/prisma.service';
 import { FeedbackStatus } from '@prisma/client';
@@ -33,7 +32,9 @@ export class AiService {
     const parts = [subject, description].filter(Boolean);
     const dataCheck = parts.join('\n');
     // check keywords for toxicity
-    const detectedKeyword = containsToxicKeyword(dataCheck, toxicKeywords);
+    const toxicKeywordsObj = await this.prisma.toxicKeyword.findMany();
+    const toxicKeywordsList = toxicKeywordsObj.map((k) => k.keyword);
+    const detectedKeyword = containsToxicKeyword(dataCheck, toxicKeywordsList);
     if (detectedKeyword) {
       console.warn(`Toxic keyword detected: ${detectedKeyword}`);
       return true;
