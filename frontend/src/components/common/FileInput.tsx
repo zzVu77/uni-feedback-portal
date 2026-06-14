@@ -1,6 +1,7 @@
 "use client";
 import { Trash2, Upload } from "lucide-react";
 import React, { useRef, useState } from "react";
+import { toast } from "sonner";
 
 interface FileInputProps {
   value?: File[];
@@ -49,10 +50,28 @@ export const FileInput = ({ value = [], onChange }: FileInputProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const addFiles = (newFiles: File[]) => {
+    const totalFiles = value.length + newFiles.length;
+    if (totalFiles > 5) {
+      toast.error("Bạn chỉ được chọn tối đa 5 tệp.");
+      const allowedCount = 5 - value.length;
+      if (allowedCount > 0) {
+        onChange([...value, ...newFiles.slice(0, allowedCount)]);
+      }
+    } else {
+      onChange([...value, ...newFiles]);
+    }
+
+    // Reset file input value to allow selecting the same file again if it was removed
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      onChange([...value, ...newFiles]);
+      addFiles(newFiles);
     }
   };
 
@@ -71,7 +90,7 @@ export const FileInput = ({ value = [], onChange }: FileInputProps) => {
     setIsDragging(false);
     if (e.dataTransfer.files) {
       const newFiles = Array.from(e.dataTransfer.files);
-      onChange([...value, ...newFiles]);
+      addFiles(newFiles);
     }
   };
 
@@ -97,7 +116,9 @@ export const FileInput = ({ value = [], onChange }: FileInputProps) => {
           <span className="font-semibold">Chọn tệp </span> hoặc{" "}
           <span className="font-semibold">kéo thả </span> vào đây để tải lên
         </p>
-        <p className="text-xs text-gray-500">Kích thước tối đa: 100 MB</p>
+        <p className="text-xs text-gray-500">
+          Kích thước tối đa: 10 MB. Tối đa: 5 tệp.
+        </p>
         <button
           type="button"
           className="bg-neutral-light-primary-300 hover:bg-neutral-light-primary-400 mt-4 cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-black/40"
