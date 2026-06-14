@@ -3,6 +3,7 @@ import {
   FeedbackDetail,
   FeedbackFilter,
   CreateFeedbackPayload,
+  CreateFeedbackRatingPayload,
   MyFeedbackHistoryItem,
   PaginatedResponse,
   RelatedFeedbackItem,
@@ -47,6 +48,12 @@ export const deleteFeedbackById = async (id: string) => {
 };
 export const resubmitFeedbackById = async (id: string) => {
   await axiosInstance.post(`${studentFeedbackBaseUrl}/me/${id}/resubmit`);
+};
+export const createFeedbackRating = async (
+  id: string,
+  data: CreateFeedbackRatingPayload,
+) => {
+  await axiosInstance.post(`${studentFeedbackBaseUrl}/me/${id}/rating`, data);
 };
 
 // Feedback service functions for staff

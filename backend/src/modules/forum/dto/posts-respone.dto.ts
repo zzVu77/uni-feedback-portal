@@ -5,6 +5,8 @@ export class FeedbackForumDto extends OmitType(FeedbackDetail, [
   // 'forwardingLogs',
   'createdAt',
   'isPublic',
+  'ratingScore',
+  'comment',
 ] as const) {
   @ApiProperty({
     description: 'Response from office handling the feedback',

@@ -12,6 +12,8 @@ export class StatsOverviewDto {
   resolvedCount: number;
   @ApiProperty({ example: 10 })
   rejectedCount: number;
+  @ApiProperty({ example: 4.5, nullable: true })
+  avgScore: number | null;
 }
 
 export class TopDepartmentStatsDto {
@@ -32,6 +34,9 @@ export class TopDepartmentStatsDto {
 
   @ApiProperty({ example: 24.5, description: 'Average hours to resolve' })
   avgResolutionTimeHours: number;
+
+  @ApiProperty({ example: 4.5, nullable: true })
+  avgScore: number | null;
 }
 
 export class FeedbackTrendDto {

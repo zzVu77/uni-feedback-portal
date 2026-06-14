@@ -64,7 +64,17 @@ export class ReportsService {
       if (g.currentStatus === 'REJECTED') result.rejectedCount = g._count._all;
     });
 
-    return result;
+    const ratingStats = await this.prisma.feedbackRatings.aggregate({
+      where: { feedback: where },
+      _avg: { ratingScore: true },
+    });
+
+    return {
+      ...result,
+      avgScore: ratingStats._avg.ratingScore
+        ? Number(ratingStats._avg.ratingScore.toFixed(2))
+        : null,
+    };
   }
 
   // 2. Top performing Departments
@@ -80,18 +90,20 @@ export class ReportsService {
       SELECT 
         d.name as "departmentName",
         d.id as "departmentId",
-        COUNT(f.id)::int as "feedbackCount",
-        COUNT(CASE WHEN f."currentStatus" IN ('PENDING', 'IN_PROGRESS') THEN 1 END)::int as "unresolvedCount",
-        COUNT(CASE WHEN f."currentStatus" IN ('RESOLVED', 'REJECTED') THEN 1 END)::int as "resolvedCount",
+        COUNT(DISTINCT f.id)::int as "feedbackCount",
+        COUNT(DISTINCT CASE WHEN f."currentStatus" IN ('PENDING', 'IN_PROGRESS') THEN f.id END)::int as "unresolvedCount",
+        COUNT(DISTINCT CASE WHEN f."currentStatus" IN ('RESOLVED', 'REJECTED') THEN f.id END)::int as "resolvedCount",
         COALESCE(
           AVG(
             EXTRACT(EPOCH FROM (h."createdAt" - f."createdAt")) / 3600
           ) FILTER (WHERE h.status = 'RESOLVED'), 
           0
-        )::float as "avgResolutionTimeHours"
+        )::float as "avgResolutionTimeHours",
+        AVG(fr."ratingScore")::float as "avgScore"
       FROM "Feedbacks" f
       JOIN "Departments" d ON f."departmentId" = d.id
       LEFT JOIN "FeedbackStatusHistory" h ON f.id = h."feedbackId" AND h.status = 'RESOLVED'
+      LEFT JOIN "FeedbackRatings" fr ON f.id = fr."feedbackId"
       WHERE f."createdAt" >= ${fromDate} AND f."createdAt" < ${toDate}
       GROUP BY d.id, d.name
       ORDER BY "feedbackCount" DESC
@@ -224,7 +236,17 @@ export class ReportsService {
       if (g.currentStatus === 'REJECTED') result.rejectedCount = g._count._all;
     });
 
-    return result;
+    const ratingStats = await this.prisma.feedbackRatings.aggregate({
+      where: { feedback: where },
+      _avg: { ratingScore: true },
+    });
+
+    return {
+      ...result,
+      avgScore: ratingStats._avg.ratingScore
+        ? Number(ratingStats._avg.ratingScore.toFixed(2))
+        : null,
+    };
   }
 
   // 2. Staff Top Categories

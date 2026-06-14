@@ -118,6 +118,9 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
+        rating: {
+          select: { ratingScore: true, comment: true },
+        },
       },
     });
 
@@ -194,6 +197,8 @@ export class FeedbackManagementService {
       category: feedback.category,
       statusHistory: unifiedTimeline,
       fileAttachments: fileAttachments,
+      ratingScore: feedback.rating?.ratingScore ?? null,
+      comment: feedback.rating?.comment ?? null,
     };
 
     return result;
@@ -663,6 +668,9 @@ export class FeedbackManagementService {
           },
           orderBy: { createdAt: 'asc' },
         },
+        rating: {
+          select: { ratingScore: true, comment: true },
+        },
       },
     });
 
@@ -732,6 +740,8 @@ export class FeedbackManagementService {
             email: feedback.assignee.email,
           }
         : null,
+      ratingScore: feedback.rating?.ratingScore ?? null,
+      comment: feedback.rating?.comment ?? null,
     };
 
     return result;
