@@ -31,7 +31,7 @@ export class ToxicKeywordsController {
   @Get()
   @Roles(UserRole.ADMIN)
   findAll(@Query() query: QueryToxicKeywordDto) {
-    return this.toxicKeywordsService.findAll(query.search);
+    return this.toxicKeywordsService.findAll(query);
   }
 
   @Get(':id')

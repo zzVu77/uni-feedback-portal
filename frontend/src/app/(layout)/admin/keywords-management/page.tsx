@@ -3,7 +3,19 @@
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { Search, Plus, Trash2, Edit2, Loader2, ShieldBan } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Trash2,
+  Edit2,
+  Loader2,
+  ShieldBan,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -37,18 +49,65 @@ export default function KeywordsManagementPage() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
 
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [orderBy, setOrderBy] = useState<"keyword" | "date">("date");
+  const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc");
+
+  // Reset page when search changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   const {
-    data: keywords,
+    data: getKeywordsRes,
     error,
     isLoading,
     mutate,
   } = useSWR(
-    ["toxic-keywords", debouncedSearch],
-    () => toxicKeywordsService.getKeywords(debouncedSearch),
+    [
+      "toxic-keywords",
+      debouncedSearch,
+      page,
+      pageSize,
+      orderBy,
+      orderDirection,
+    ],
+    () =>
+      toxicKeywordsService.getKeywords({
+        search: debouncedSearch,
+        page,
+        pageSize,
+        orderBy,
+        orderDirection,
+      }),
     {
       revalidateOnFocus: false,
     },
   );
+
+  const keywords = (getKeywordsRes as any)?.results || [];
+  const total = (getKeywordsRes as any)?.total || 0;
+  const totalPages = Math.ceil(total / pageSize);
+
+  const handleSort = (field: "keyword" | "date") => {
+    if (orderBy === field) {
+      setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
+    } else {
+      setOrderBy(field);
+      setOrderDirection("desc");
+    }
+  };
+
+  const renderSortIcon = (field: "keyword" | "date") => {
+    if (orderBy !== field)
+      return <ArrowUpDown className="ml-1 h-4 w-4 opacity-50" />;
+    return orderDirection === "asc" ? (
+      <ArrowUp className="ml-1 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-1 h-4 w-4" />
+    );
+  };
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -200,8 +259,24 @@ export default function KeywordsManagementPage() {
             <TableHeader className="bg-background sticky top-0 z-10 shadow-sm">
               <TableRow>
                 <TableHead className="w-[100px]">STT</TableHead>
-                <TableHead>Từ khóa</TableHead>
-                <TableHead>Ngày tạo</TableHead>
+                <TableHead
+                  className="hover:bg-muted/50 cursor-pointer select-none"
+                  onClick={() => handleSort("keyword")}
+                >
+                  <div className="flex items-center">
+                    Từ khóa
+                    {renderSortIcon("keyword")}
+                  </div>
+                </TableHead>
+                <TableHead
+                  className="hover:bg-muted/50 cursor-pointer select-none"
+                  onClick={() => handleSort("date")}
+                >
+                  <div className="flex items-center">
+                    Ngày tạo
+                    {renderSortIcon("date")}
+                  </div>
+                </TableHead>
                 <TableHead className="text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
@@ -231,9 +306,12 @@ export default function KeywordsManagementPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                keywords?.map((keyword, index) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                keywords?.map((keyword: any, index: any) => (
                   <TableRow key={keyword.id}>
-                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell className="font-medium">
+                      {(page - 1) * pageSize + index + 1}
+                    </TableCell>
                     <TableCell>{keyword.keyword}</TableCell>
                     <TableCell>
                       {format(new Date(keyword.createdAt), "dd/MM/yyyy HH:mm")}
@@ -262,6 +340,39 @@ export default function KeywordsManagementPage() {
             </TableBody>
           </Table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t p-4">
+            <p className="text-muted-foreground text-sm">
+              Hiển thị {(page - 1) * pageSize + 1} -{" "}
+              {Math.min(page * pageSize, total)} trong {total} từ khóa
+            </p>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                <ChevronLeft className="mr-1 h-4 w-4" />
+                Trước
+              </Button>
+              <div className="text-sm font-medium">
+                Trang {page} / {totalPages}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+              >
+                Sau
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Edit Modal */}

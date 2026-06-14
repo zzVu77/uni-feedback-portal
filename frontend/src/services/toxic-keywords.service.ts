@@ -8,12 +8,27 @@ export interface ToxicKeyword {
   updatedAt: string;
 }
 
+export interface GetToxicKeywordsParams {
+  search?: string;
+  page?: number;
+  pageSize?: number;
+  orderBy?: "keyword" | "date";
+  orderDirection?: "asc" | "desc";
+}
+
+export interface GetToxicKeywordsResponse {
+  results: ToxicKeyword[];
+  total: number;
+}
+
 export const toxicKeywordsService = {
-  getKeywords: async (search?: string) => {
-    const params = search ? { search } : {};
-    return await axiosInstance.get<ToxicKeyword[]>("/toxic-keywords", {
-      params,
-    });
+  getKeywords: async (params?: GetToxicKeywordsParams) => {
+    return await axiosInstance.get<GetToxicKeywordsResponse>(
+      "/toxic-keywords",
+      {
+        params,
+      },
+    );
   },
 
   createKeyword: async (keyword: string) => {
