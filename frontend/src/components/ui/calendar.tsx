@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -35,7 +36,7 @@ function Calendar({
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
       )}
-      locale={vi}
+      locale={vi as any}
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) =>
