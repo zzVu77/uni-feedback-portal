@@ -82,24 +82,24 @@ const Page = () => {
         </div>
         <div>
           <Tabs defaultValue="timeline" className="w-full">
-            <TabsList className="flex h-10 w-full rounded-full border border-gray-200/90 bg-white p-1 shadow-lg">
+            <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 rounded-2xl border border-gray-200/90 bg-white p-1.5 shadow-lg md:h-12 md:flex-nowrap md:justify-center md:rounded-full">
               <TabsTrigger
                 value="timeline"
-                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+                className="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
               >
                 <History className="mr-1 h-4 w-4" />
                 Lịch sử
               </TabsTrigger>
               <TabsTrigger
                 value="conversation"
-                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+                className="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
               >
                 <MessageCircleMoreIcon className="mr-1 h-4 w-4" />
                 Trao đổi
               </TabsTrigger>
               <TabsTrigger
                 value="rating"
-                className="md: cursor-pointer rounded-full px-1 text-[12px] transition-all data-[state=active]:bg-amber-500 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
+                className="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-[12px] whitespace-nowrap transition-all data-[state=active]:bg-amber-500 data-[state=active]:text-white data-[state=active]:shadow-sm md:text-[14px]"
               >
                 <Star className="mr-1 h-4 w-4" />
                 Đánh giá

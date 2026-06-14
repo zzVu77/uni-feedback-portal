@@ -95,8 +95,8 @@ export function RelatedFeedbackTable({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
-        <div className="mb-4 animate-pulse rounded-full bg-slate-50 p-4">
+      <div className="flex flex-col items-center justify-center rounded-xl border border-gray-200/90 bg-white px-4 py-16 text-center">
+        <div className="mb-4 animate-pulse rounded-full bg-red-500 p-4">
           <Inbox className="h-8 w-8 text-slate-300" />
         </div>
         <h3 className="mb-1 font-medium text-slate-900">Đang tải...</h3>
@@ -106,7 +106,7 @@ export function RelatedFeedbackTable({
 
   if (isError || feedbacksList.length - 1 === 0) {
     return (
-      <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
+      <div className="flex flex-col items-center justify-center rounded-xl border border-gray-200/90 bg-white px-4 py-16 text-center">
         <div className="mb-4 rounded-full bg-slate-50 p-4">
           <Inbox className="h-8 w-8 text-slate-400" />
         </div>
