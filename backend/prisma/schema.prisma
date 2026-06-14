@@ -405,3 +405,23 @@ enum UserStatus {
   DEACTIVATED
   PERMANENTLY_DELETED
 }
+
+enum ReportPeriodType {
+  WEEKLY
+  MONTHLY
+}
+
+model AiFeedbackSummaries {
+  id                     String           @id @default(uuid()) @db.Uuid
+  periodType             ReportPeriodType
+  startDate              DateTime
+  endDate                DateTime
+  frequentCategories     Json
+  sentimentScore         Float
+  overallSummary         String           @db.Text
+  totalFeedbacksAnalyzed Int
+  createdAt              DateTime         @default(now())
+
+  @@unique([periodType, startDate, endDate])
+  @@index([startDate, endDate])
+}

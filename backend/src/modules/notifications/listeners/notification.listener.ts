@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { NotificationsService } from '../notifications.service';
-import { PrismaService } from '../../prisma/prisma.service';
 import {
   CommentTargetType,
   FeedbackStatus,
   NotificationType,
   UserRole,
 } from '@prisma/client';
-import { FeedbackCreatedEvent } from '../../feedbacks/events/feedback-created.event';
-import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/events/feedback-status-updated.event';
+import { ClarificationsGateway } from 'src/modules/clarifications/clarifications.gateway';
 import { ClarificationMessageSentEvent } from 'src/modules/clarifications/events/clarification-message-sent.event';
 import { ClarificationEvent } from 'src/modules/clarifications/events/clarification.event';
 import { CommentCreatedEvent } from 'src/modules/comment/events/comment-created.event';
 import { CommentReportCreatedEvent } from 'src/modules/comment/events/comment-report-created.event';
-import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
-import { ClarificationsGateway } from 'src/modules/clarifications/clarifications.gateway';
 import { FeedbackForwardingEvent } from 'src/modules/feedback_management/events/feedback-forwarding.event';
+import { FeedbackStatusUpdatedEvent } from 'src/modules/feedback_management/events/feedback-status-updated.event';
+import { ForumPostVotedEvent } from 'src/modules/forum/events/forum-post-voted.event';
+import { FeedbackCreatedEvent } from '../../feedbacks/events/feedback-created.event';
+import { PrismaService } from '../../prisma/prisma.service';
+import { NotificationsService } from '../notifications.service';
 
 @Injectable()
 export class NotificationEventListener {
@@ -617,5 +617,31 @@ export class NotificationEventListener {
       targetId: payload.feedbackId,
       title: payload.subject,
     });
+  }
+
+  @OnEvent('ai_analytics.report_failed', { async: true })
+  async handleAiAnalyticsReportFailed(payload: {
+    userId: string;
+    periodType: string;
+    error: string;
+  }) {
+    this.logger.log(
+      `[Notification] Processing AI Analytics report failure for User: ${payload.userId}`,
+    );
+    try {
+      const periodName = payload.periodType === 'WEEKLY' ? 'Tuần' : 'Tháng';
+      const content = `Quá trình phân tích Báo Cáo ${periodName} đã thất bại do lỗi hệ thống hoặc quá tải dịch vụ AI. Vui lòng thử lại sau ít phút.`;
+      await this.notificationsService.createNotifications({
+        userIds: [payload.userId],
+        type: NotificationType.SYSTEM_ANNOUNCEMENT_NOTIFICATION,
+        title: 'Lỗi phân tích AI',
+        content,
+        targetId: null,
+      });
+    } catch (error) {
+      this.logger.error(
+        `[Notification] Error notifying AI Analytics failure: ${(error as Error).message}`,
+      );
+    }
   }
 }
