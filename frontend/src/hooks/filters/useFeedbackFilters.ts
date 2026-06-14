@@ -19,6 +19,10 @@ export function useFeedbackFilters(): FeedbackFilter {
     if (status) parsedFilters.status = status as FeedbackStatus;
     if (department) parsedFilters.departmentId = department || "";
     if (category) parsedFilters.categoryId = category || "";
+    const from = params.get("from");
+    const to = params.get("to");
+    if (from) parsedFilters.from = from;
+    if (to) parsedFilters.to = to;
     return parsedFilters;
   }, [searchParams]);
 

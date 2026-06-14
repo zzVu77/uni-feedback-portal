@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
     <Wrapper>
       <div className="flex w-full flex-col gap-6">
         {/* Page Header */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between lg:items-center">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between lg:items-center">
           <div className="flex-1 space-y-2">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Thống kê
@@ -99,14 +99,24 @@ export default function AdminDashboardPage() {
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
-          className="w-full"
+          className="flex w-full flex-col gap-2"
         >
-          <TabsList className="mb-4">
-            <TabsTrigger value="overview">Tổng quan AI</TabsTrigger>
-            <TabsTrigger value="department-performance">
-              Hiệu suất phòng ban
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
+            <TabsList className="grid w-full max-w-[400px] grid-cols-2 rounded-xl bg-slate-100/80 p-1">
+              <TabsTrigger
+                value="overview"
+                className="cursor-pointer rounded-lg data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm"
+              >
+                Tổng quan
+              </TabsTrigger>
+              <TabsTrigger
+                value="department-performance"
+                className="cursor-pointer rounded-lg data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm"
+              >
+                Chi tiết phòng ban
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="mt-0">
             <AiAnalyticsDashboard />
