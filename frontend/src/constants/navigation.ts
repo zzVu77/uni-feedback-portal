@@ -102,7 +102,7 @@ export const staffAssistantNavigation: NavigationItem[] = [
     icon: Megaphone,
   },
   { href: "/notifications", label: "Thông báo", icon: Bell },
-  // { href: "/staff-assistant/dashboard", label: "Thống kê", icon: ChartColumn },
+  { href: "/staff-assistant/dashboard", label: "Thống kê", icon: ChartColumn },
   {
     href: "/staff-assistant/social-listening",
     label: "Lắng nghe sinh viên",

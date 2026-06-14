@@ -71,7 +71,7 @@ export class ReportsController {
 
   // 1. Tổng quan số liệu (Staff)
   @Get('staff/overview')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get overview stats for current department' })
   @ApiResponse({ status: 200, type: StatsOverviewDto })
   async getStaffOverview(
@@ -83,7 +83,7 @@ export class ReportsController {
 
   // 2. Top Category (Staff)
   @Get('staff/categories')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get top categories for current department' })
   async getStaffTopCategories(
     @Query() query: ReportFilterDto,
@@ -97,7 +97,7 @@ export class ReportsController {
 
   // 3. Trends (Staff)
   @Get('staff/trends')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get feedback trends for current department' })
   @ApiResponse({ status: 200, type: [FeedbackTrendDto] })
   async getStaffTrends(
@@ -112,7 +112,7 @@ export class ReportsController {
 
   // 4. Performance (Staff)
   @Get('staff/performance')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({ summary: 'Get performance metrics for current department' })
   @ApiResponse({ status: 200, type: TopDepartmentStatsDto })
   async getStaffPerformance(
@@ -124,7 +124,7 @@ export class ReportsController {
 
   // 5. Radar Chart (Staff)
   @Get('staff/radar-chart')
-  @Roles(UserRole.DEPARTMENT_STAFF)
+  @Roles(UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
   @ApiOperation({
     summary: 'Get data for Radar Chart (Resolved vs Unresolved)',
   })
