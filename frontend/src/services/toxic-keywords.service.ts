@@ -1,49 +1,52 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/config/axiosConfig";
+import {
+  CreateToxicKeywordPayload,
+  ToxicKeywordListResponse,
+  ToxicKeywordResponse,
+  ToxicKeywordsFilter,
+  UpdateToxicKeywordPayload,
+} from "@/types/toxic-keywords";
 
-export interface ToxicKeyword {
-  id: string;
-  keyword: string;
-  createdAt: string;
-  updatedAt: string;
-}
+const baseUrl = "/toxic-keywords";
 
-export interface GetToxicKeywordsParams {
-  search?: string;
-  page?: number;
-  pageSize?: number;
-  orderBy?: "keyword" | "date";
-  orderDirection?: "asc" | "desc";
-}
+export const getToxicKeywords = async (
+  filter: ToxicKeywordsFilter,
+): Promise<ToxicKeywordListResponse> => {
+  // Map our frontend "limit" to backend "pageSize"
+  const params: any = { ...filter };
+  if (params.limit !== undefined) {
+    params.pageSize = params.limit;
+    delete params.limit;
+  }
 
-export interface GetToxicKeywordsResponse {
-  results: ToxicKeyword[];
-  total: number;
-}
+  const response = await axiosInstance.get<ToxicKeywordListResponse>(baseUrl, {
+    params,
+  });
+  return response;
+};
 
-export const toxicKeywordsService = {
-  getKeywords: async (params?: GetToxicKeywordsParams) => {
-    return await axiosInstance.get<GetToxicKeywordsResponse>(
-      "/toxic-keywords",
-      {
-        params,
-      },
-    );
-  },
+export const createToxicKeyword = async (
+  payload: CreateToxicKeywordPayload,
+): Promise<ToxicKeywordResponse> => {
+  const response = await axiosInstance.post<ToxicKeywordResponse>(
+    baseUrl,
+    payload,
+  );
+  return response;
+};
 
-  createKeyword: async (keyword: string) => {
-    return await axiosInstance.post<ToxicKeyword>("/toxic-keywords", {
-      keyword,
-    });
-  },
+export const updateToxicKeyword = async (
+  id: string,
+  payload: UpdateToxicKeywordPayload,
+): Promise<ToxicKeywordResponse> => {
+  const response = await axiosInstance.patch<ToxicKeywordResponse>(
+    `${baseUrl}/${id}`,
+    payload,
+  );
+  return response;
+};
 
-  updateKeyword: async (id: string, keyword: string) => {
-    return await axiosInstance.patch<ToxicKeyword>(`/toxic-keywords/${id}`, {
-      keyword,
-    });
-  },
-
-  deleteKeyword: async (id: string) => {
-    return await axiosInstance.delete(`/toxic-keywords/${id}`);
-  },
+export const deleteToxicKeyword = async (id: string): Promise<void> => {
+  await axiosInstance.delete(`${baseUrl}/${id}`);
 };
