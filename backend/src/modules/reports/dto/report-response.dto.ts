@@ -34,17 +34,9 @@ export class TopDepartmentStatsDto {
 
   @ApiProperty({ example: 24.5, description: 'Average hours to resolve' })
   avgResolutionTimeHours: number;
-}
-
-export class DepartmentRatingDto {
-  @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
-  departmentId: string;
-
-  @ApiProperty({ example: 'Phòng Đào tạo' })
-  departmentName: string;
 
   @ApiProperty({ example: 4.5, nullable: true })
-  averageRating: number | null;
+  avgScore: number | null;
 }
 
 export class FeedbackTrendDto {
