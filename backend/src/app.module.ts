@@ -27,6 +27,8 @@ import { FeedbackSimilarityModule } from './modules/feedback-similarity/feedback
 import { SocialListeningModule } from './modules/social_listening/social_listening.module';
 import { SocialDataSourceModule } from './modules/social_data_source/social_data_source.module';
 import { GithubActionModule } from './modules/github-action/github-action.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { AiAnalyticsModule } from './modules/ai-analytics/ai-analytics.module';
 
 @Module({
   imports: [
@@ -64,6 +66,8 @@ import { GithubActionModule } from './modules/github-action/github-action.module
     SocialListeningModule,
     SocialDataSourceModule,
     GithubActionModule,
+    ScheduleModule.forRoot(),
+    AiAnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

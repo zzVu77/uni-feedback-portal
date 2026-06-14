@@ -1,8 +1,9 @@
-import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
-import React, { Suspense } from "react";
-import Filter from "./filter/Filter";
-import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
 import { FeedbackStatus, StaffFeedbackStatus } from "@/constants/data";
+import { useCategoryOptionsData } from "@/hooks/filters/useCategoryOptions";
+import { useGetDepartmentOptions } from "@/hooks/queries/useDepartmentQueries";
+import { Suspense } from "react";
+import { DateRangePicker } from "./filter/DateRangePicker";
+import Filter from "./filter/Filter";
 
 export const CategorySelection = () => {
   const { data } = useCategoryOptionsData("all");
@@ -116,6 +117,14 @@ export const UserStatusSelection = () => {
   );
 };
 
+export const DateSelection = () => {
+  return (
+    <Suspense fallback={null}>
+      <DateRangePicker />
+    </Suspense>
+  );
+};
+
 const CommonFilter = {
   CategorySelection,
   DepartmentSelection,
@@ -125,6 +134,7 @@ const CommonFilter = {
   ReportReasonSelection,
   UserRoleSelection,
   UserStatusSelection,
+  DateSelection,
 };
 
 export default CommonFilter;
