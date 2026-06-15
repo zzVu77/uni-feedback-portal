@@ -109,11 +109,15 @@ export class FeedbacksService {
     // Base: STATUS ORDER
     const statusOrderExpr = `
     CASE
-      WHEN f."currentStatus" = 'PENDING' THEN 1
-      WHEN f."currentStatus" = 'IN_PROGRESS' THEN 2
-      WHEN f."currentStatus" = 'RESOLVED' THEN 3
-      WHEN f."currentStatus" = 'REJECTED' THEN 4
-      ELSE 5
+      WHEN f."currentStatus" = 'AI_REVIEWING' THEN 1
+      WHEN f."currentStatus" = 'VIOLATED_CONTENT' THEN 2
+      WHEN f."currentStatus" = 'AI_REVIEW_FAILED' THEN 3
+      WHEN f."currentStatus" = 'AI_REVIEW_SUCCESS' THEN 4
+      WHEN f."currentStatus" = 'PENDING' THEN 5
+      WHEN f."currentStatus" = 'IN_PROGRESS' THEN 6
+      WHEN f."currentStatus" = 'RESOLVED' THEN 7
+      WHEN f."currentStatus" = 'REJECTED' THEN 8
+      ELSE 9
     END
   `;
 
