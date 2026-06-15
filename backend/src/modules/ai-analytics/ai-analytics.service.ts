@@ -176,16 +176,16 @@ export class AiAnalyticsService {
     DANH SÁCH CÁC DANH MỤC HỢP LỆ VÀ ID TƯƠNG ỨNG (BẮT BUỘC SỬ DỤNG ID TỪ DANH SÁCH NÀY NẾU TRÙNG TÊN DANH MỤC):
     ${categoriesList}
 
-    Yêu cầu định dạng JSON (chỉ trả về JSON, không kèm text markdown nào khác):
+    Yêu cầu định dạng JSON (chỉ trả về JSON, không kèm khối markdown \`\`\`json bao quanh):
     {
-      "overallSummary": "Tóm tắt chung về tình hình tuần qua...",
+      "overallSummary": "Tóm tắt chung về tình hình tuần qua. BẮT BUỘC SỬ DỤNG định dạng Markdown (dùng **in đậm**, *in nghiêng*, gạch đầu dòng). Khi diễn đạt xong một ý hoặc một vấn đề, phải XUỐNG HÀNG (tạo đoạn văn mới) trước khi tóm tắt vấn đề khác để nội dung được phân tách rõ ràng, dễ đọc, chuyên nghiệp.",
       "sentimentScore": [Điểm từ -1.0 đến 1.0, -1.0 là cực kỳ tiêu cực, 1.0 là cực kỳ tích cực],
       "frequentCategories": [
         {
           "categoryId": "UUID của danh mục (Lấy chính xác từ ID trong dữ liệu đầu vào)",
           "categoryName": "Tên danh mục",
           "count": 15,
-          "commonIssues": ["Vấn đề 1", "Vấn đề 2"]
+          "commonIssues": ["Vấn đề 1 (sử dụng Markdown nhấn mạnh **từ khóa** nếu cần)", "Vấn đề 2"]
         }
       ]
     }
@@ -311,16 +311,16 @@ export class AiAnalyticsService {
       DANH SÁCH CÁC DANH MỤC HỢP LỆ VÀ ID TƯƠNG ỨNG (BẮT BUỘC SỬ DỤNG ID TỪ DANH SÁCH NÀY NẾU TRÙNG TÊN DANH MỤC):
       ${categoriesList}
 
-      Yêu cầu định dạng JSON (chỉ trả về JSON, không kèm text markdown nào khác):
+      Yêu cầu định dạng JSON (chỉ trả về JSON, không kèm khối markdown \`\`\`json bao quanh):
       {
-        "overallSummary": "Tóm tắt chung về tình hình tháng qua...",
+        "overallSummary": "Tóm tắt chung về tình hình tháng qua. BẮT BUỘC SỬ DỤNG định dạng Markdown (dùng **in đậm**, *in nghiêng*, gạch đầu dòng). Khi diễn đạt xong một ý hoặc một vấn đề, phải XUỐNG HÀNG (tạo đoạn văn mới) trước khi tóm tắt vấn đề khác để nội dung được phân tách rõ ràng, dễ đọc, chuyên nghiệp.",
         "sentimentScore": [Điểm từ -1.0 đến 1.0],
         "frequentCategories": [
           {
             "categoryId": "UUID của danh mục",
             "categoryName": "Tên danh mục",
             "count": 15,
-            "commonIssues": ["Vấn đề 1", "Vấn đề 2"]
+            "commonIssues": ["Vấn đề 1 (sử dụng Markdown nhấn mạnh **từ khóa** nếu cần)", "Vấn đề 2"]
           }
         ]
       }

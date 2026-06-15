@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -61,56 +62,191 @@ import {
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const SentimentMeter = ({ score }: { score: number }) => {
   // Score is between -1 and 1
-  const percentage = ((score + 1) / 2) * 100;
-
-  let colorClass = "from-rose-500 to-rose-400";
   let textColor = "text-rose-600";
   let label = "Tiêu cực";
+  let bgColor = "bg-rose-50";
 
-  if (score > -0.3 && score < 0.3) {
-    colorClass = "from-amber-400 to-amber-300";
+  if (score >= -0.2 && score <= 0.2) {
     textColor = "text-amber-600";
     label = "Trung lập";
-  } else if (score >= 0.3) {
-    colorClass = "from-emerald-500 to-emerald-400";
+    bgColor = "bg-amber-50";
+  } else if (score > 0.2 && score <= 0.6) {
     textColor = "text-emerald-600";
     label = "Tích cực";
+    bgColor = "bg-emerald-50";
+  } else if (score > 0.6) {
+    textColor = "text-indigo-600";
+    label = "Rất tích cực";
+    bgColor = "bg-indigo-50";
   }
+
+  // Map score from -1..1 to 0..180 degrees
+  const angle = ((score + 1) / 2) * 180;
+  // Needle points UP (90deg) by default.
+  // Rotation from UP: -90 (left) to +90 (right)
+  const rotation = angle - 90;
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-4">
-      <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-slate-200 bg-linear-to-br from-slate-50 to-slate-100 shadow-inner">
-        <div
-          className={`absolute inset-2 rounded-full bg-linear-to-tr opacity-20 ${colorClass} animate-pulse`}
-        ></div>
-        <div className="z-10 flex flex-col items-center">
-          <span className={`text-4xl font-black tracking-tighter ${textColor}`}>
-            {score > 0 ? "+" : ""}
-            {score.toFixed(2)}
-          </span>
-          <span
-            className={`mt-1 text-xs font-semibold tracking-widest uppercase ${textColor}`}
+      <div className="relative flex flex-col items-center justify-center">
+        {/* Speedometer SVG */}
+        <svg viewBox="0 0 180 115" className="h-auto w-64 drop-shadow-sm">
+          <defs>
+            <linearGradient
+              id="gaugeGradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
+              <stop offset="0%" stopColor="#f43f5e" /> {/* rose-500 */}
+              <stop offset="40%" stopColor="#fbbf24" /> {/* amber-400 */}
+              <stop offset="80%" stopColor="#10b981" /> {/* emerald-500 */}
+              <stop offset="100%" stopColor="#6366f1" /> {/* indigo-500 */}
+            </linearGradient>
+            <filter
+              id="needleShadow"
+              x="-20%"
+              y="-20%"
+              width="140%"
+              height="140%"
+            >
+              <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.2" />
+            </filter>
+          </defs>
+
+          {/* Background Track */}
+          <path
+            d="M 20 90 A 70 70 0 0 1 160 90"
+            fill="none"
+            stroke="#f1f5f9"
+            strokeWidth="16"
+            strokeLinecap="round"
+          />
+
+          {/* Colored Gradient Arc */}
+          <path
+            d="M 20 90 A 70 70 0 0 1 160 90"
+            fill="none"
+            stroke="url(#gaugeGradient)"
+            strokeWidth="16"
+            strokeLinecap="round"
+          />
+
+          {/* Zone separator ticks */}
+          <line
+            x1="90"
+            y1="16"
+            x2="90"
+            y2="24"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <line
+            x1="38"
+            y1="38"
+            x2="44"
+            y2="44"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <line
+            x1="142"
+            y1="38"
+            x2="136"
+            y2="44"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+
+          {/* Needle Group */}
+          <g
+            style={{
+              transform: `rotate(${rotation}deg)`,
+              transformOrigin: "90px 90px",
+              transition: "transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
           >
-            {label}
+            {/* Needle shape */}
+            <polygon
+              points="87,90 93,90 90,30"
+              fill="#334155"
+              filter="url(#needleShadow)"
+            />
+            {/* Center dot base */}
+            <circle cx="90" cy="90" r="7" fill="#1e293b" />
+            <circle cx="90" cy="90" r="3" fill="#ffffff" />
+          </g>
+
+          {/* Gauge Label inside SVG */}
+          <text
+            x="90"
+            y="110"
+            textAnchor="middle"
+            className="fill-slate-400 text-[10px] font-bold tracking-widest uppercase"
+          >
+            Xu Hướng
+          </text>
+        </svg>
+
+        {/* Legend / Range labels */}
+        <div className="absolute bottom-2 flex w-full justify-between px-4 text-[9px] font-bold text-slate-300">
+          <span>TIÊU CỰC</span>
+          <span>TÍCH CỰC</span>
+        </div>
+      </div>
+
+      {/* Result Card */}
+      <div
+        className={`mt-2 flex w-full max-w-[220px] flex-col items-center justify-center rounded-xl px-4 py-3 text-center shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)] ${bgColor}`}
+      >
+        <span
+          className={`text-lg font-black tracking-wider uppercase ${textColor}`}
+        >
+          {label}
+        </span>
+        <div className="mt-1 flex items-center gap-1">
+          <span className="text-[11px] font-medium text-slate-500">
+            Chỉ số phân tích:{" "}
+            <strong className="text-slate-700">
+              {score > 0 ? "+" : ""}
+              {score.toFixed(2)}
+            </strong>
           </span>
         </div>
       </div>
 
-      <div className="w-full px-4">
-        <div className="mb-1 flex justify-between text-xs font-medium text-slate-400">
-          <span>-1.0</span>
-          <span>0.0</span>
-          <span>+1.0</span>
-        </div>
-        <div className="relative h-2 w-full overflow-hidden rounded-full bg-slate-100">
-          <div className="absolute top-0 bottom-0 left-0 w-full bg-linear-to-r from-rose-500 via-amber-400 to-emerald-500 opacity-30"></div>
-          <div
-            className="absolute top-0 bottom-0 w-1 rounded-full bg-slate-800 shadow-[0_0_8px_rgba(0,0,0,0.5)] transition-all duration-1000 ease-out"
-            style={{ left: `calc(${percentage}% - 2px)` }}
-          ></div>
+      {/* Disclaimer & Legend */}
+      <div className="mt-4 flex w-full flex-col items-center gap-3 border-t border-slate-100/80 pt-4">
+        <span className="text-center text-[10px] leading-relaxed text-slate-400 italic">
+          *Chỉ số phân tích ngữ nghĩa bởi AI (từ -1.0 đến +1.0) mang tính chất
+          tham khảo.
+        </span>
+        <div className="grid w-full max-w-[240px] grid-cols-2 gap-x-2 gap-y-2 text-[9px] font-semibold text-slate-500">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500 shadow-sm"></span>
+            <span>&lt; -0.2: Tiêu cực</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400 shadow-sm"></span>
+            <span>-0.2 &rarr; 0.2: Trung lập</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500 shadow-sm"></span>
+            <span>0.2 &rarr; 0.6: Tích cực</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500 shadow-sm"></span>
+            <span>&gt; 0.6: Rất tích cực</span>
+          </div>
         </div>
       </div>
     </div>
@@ -577,16 +713,18 @@ export function AiAnalyticsDashboard() {
                     <div className="absolute top-0 right-0 p-4 opacity-[0.03]">
                       <FileText className="h-48 w-48" />
                     </div>
-                    <p className="relative z-10 text-[15px] leading-relaxed whitespace-pre-wrap text-slate-700">
-                      {reportDetail.overallSummary}
-                    </p>
+                    <div className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 relative z-10 max-w-none text-[15px] leading-relaxed text-slate-700">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {reportDetail.overallSummary || ""}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </div>
 
                 {/* Sentiment Meter */}
                 <div className="col-span-1 space-y-4">
                   <h4 className="flex items-center gap-2 text-sm font-bold tracking-widest text-slate-500 uppercase">
-                    Chỉ số Cảm xúc
+                    Xu hướng cảm xúc
                   </h4>
                   <div className="flex h-[calc(100%-2rem)] flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
                     <SentimentMeter score={reportDetail.sentimentScore || 0} />
@@ -673,10 +811,21 @@ export function AiAnalyticsDashboard() {
                                 (issue: string, issueIdx: number) => (
                                   <li
                                     key={issueIdx}
-                                    className="flex items-start text-sm leading-relaxed text-slate-700"
+                                    className="flex gap-2 text-[13px] leading-relaxed text-slate-600"
                                   >
-                                    <span className="mt-2 mr-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-rose-400 opacity-80"></span>
-                                    <span>{issue}</span>
+                                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-400" />
+                                    <div className="prose prose-sm prose-p:m-0 prose-ul:m-0 max-w-none">
+                                      <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                          p: ({ node, ...props }) => (
+                                            <span {...props} />
+                                          ),
+                                        }}
+                                      >
+                                        {issue || ""}
+                                      </ReactMarkdown>
+                                    </div>
                                   </li>
                                 ),
                               )}
