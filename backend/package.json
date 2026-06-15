@@ -28,9 +28,7 @@
     "migration:generate": "prisma migrate dev --name init",
     "migration:deploy": "prisma migrate deploy",
     "db:seed": "docker exec -i university-feedback psql -U root -d UniversityFeedback < db/init.sql",
-    "seed:dept": "ts-node -r tsconfig-paths/register src/modules/ai/embeddings/embeddingDepartment.ts",
-    "feedback-embedding:generate": "ts-node -r tsconfig-paths/register scripts/generate_feedback_embedding.ts",
-    "feedback-embedding:init": "ts-node -r tsconfig-paths/register scripts/init_feedback_embedding.ts"
+    "seed:dept": "ts-node -r tsconfig-paths/register src/modules/ai/embeddings/embeddingDepartment.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.981.0",
