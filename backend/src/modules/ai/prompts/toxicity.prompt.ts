@@ -199,13 +199,38 @@ export function containsToxicKeyword(
 ): string | null {
   const contentLower = text.toLowerCase();
 
+  const vietnameseSlangs = new Set([
+    'ngu',
+    'vcl',
+    'vkl',
+    'vl',
+    'clgt',
+    'sale',
+    'spam',
+  ]);
+  const urlPrefixes = new Set([
+    'https://shopee.vn/',
+    'https://tiki.vn/',
+    'https://lazada.vn/',
+    'https://fahasa.com/',
+    'https://thegioididong.com/',
+    'https://cellphones.com.vn/',
+  ]);
+
   for (const keyword of keywords) {
+    if (urlPrefixes.has(keyword)) {
+      if (contentLower.includes(keyword)) {
+        return keyword;
+      }
+      continue;
+    }
     const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const isAsciiOnly = /^[a-zA-Z0-9\s]+$/.test(keyword);
+    const isVietnameseSlang = vietnameseSlangs.has(keyword.toLowerCase());
 
     let pattern: RegExp;
 
-    if (isAsciiOnly) {
+    if (isAsciiOnly && !isVietnameseSlang) {
       // English
       pattern = new RegExp(`\\b${escaped}\\b`, 'i');
     } else {
