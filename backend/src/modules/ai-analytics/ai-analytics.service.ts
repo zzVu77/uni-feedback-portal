@@ -126,7 +126,7 @@ export class AiAnalyticsService {
 
         const prompt = `Bạn là một chuyên gia phân tích dữ liệu và tâm lý học hành vi chuyên biệt trong lĩnh vực giáo dục đại học.
       Nhiệm vụ của bạn là đọc các góp ý (feedback) nội bộ của sinh viên gửi cho nhà trường dưới đây.
-      Hãy phân tích, trích xuất các vấn đề chính, đánh giá thái độ chung và nhận diện nếu có bất kỳ dấu hiệu khủng hoảng hoặc bức xúc nghiêm trọng nào.
+      Hãy phân tích, trích xuất các vấn đề chính, đánh giá thái độ chung và nhận diện nếu có bất kỳ dấu hiệu khủng hoảng hoặc bức xúc nghiêm trọng nào. Hãy tóm tắt một cách ngắn gọn, súc tích nhưng vẫn đầy đủ ý chính, tập trung vào các vấn đề nổi bật, xu hướng cảm xúc và những điểm cần lưu ý đặc biệt.
       
       Dữ liệu:
       ${inputData}`;
@@ -170,7 +170,8 @@ export class AiAnalyticsService {
       );
       const finalPrompt = `Bạn là một chuyên gia phân tích dữ liệu giáo dục và quản lý chất lượng đại học cấp cao. 
     Dưới đây là các bản tóm tắt thành phần từ nhiều lô dữ liệu góp ý (feedback) nội bộ của sinh viên gửi cho nhà trường trong một tuần.
-    Nhiệm vụ của bạn là tổng hợp tất cả lại thành một Báo Cáo Tuần duy nhất để trình lên Ban Giám Hiệu, giúp họ nắm bắt tình hình và đưa ra quyết định nhanh chóng.
+    Nhiệm vụ của bạn là tổng hợp tất cả lại thành một Báo Cáo Tuần duy nhất để trình lên Ban Giám Hiệu, giúp họ nắm bắt tình hình và đưa ra quyết định nhanh chóng. Hãy tóm tắt một cách ngắn gọn, súc tích nhưng vẫn đầy đủ ý chính, tập trung vào các vấn đề nổi bật, xu hướng cảm xúc và những điểm cần lưu ý đặc biệt.
+    Đặc biệt, nếu có bất kỳ dấu hiệu nào cho thấy sự bức xúc nghiêm trọng hoặc khủng hoảng tiềm ẩn nào trong các góp ý, hãy nhấn mạnh điều đó trong phần tóm tắt chung.
     
     DANH SÁCH CÁC DANH MỤC HỢP LỆ VÀ ID TƯƠNG ỨNG (BẮT BUỘC SỬ DỤNG ID TỪ DANH SÁCH NÀY NẾU TRÙNG TÊN DANH MỤC):
     ${categoriesList}
