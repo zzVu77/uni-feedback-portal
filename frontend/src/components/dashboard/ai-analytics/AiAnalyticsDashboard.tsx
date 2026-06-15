@@ -328,6 +328,8 @@ export function AiAnalyticsDashboard() {
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
+                            fixedWeeks
+                            showOutsideDays
                             selected={
                               startDate ? parseISO(startDate) : undefined
                             }
@@ -606,28 +608,34 @@ export function AiAnalyticsDashboard() {
                   Tóm tắt theo danh mục
                 </h4>
 
-                {!reportDetail.frequentCategories ||
-                reportDetail.frequentCategories.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-slate-50/50 p-8 text-center">
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50">
-                      <Sparkles className="h-6 w-6 text-emerald-400" />
+                {(() => {
+                  const validCategories =
+                    reportDetail.frequentCategories?.filter(
+                      (cat: any) =>
+                        cat.count > 0 ||
+                        (cat.commonIssues && cat.commonIssues.length > 0),
+                    ) || [];
+
+                  return validCategories.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-slate-50/50 p-8 text-center">
+                      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50">
+                        <Sparkles className="h-6 w-6 text-emerald-400" />
+                      </div>
+                      <p className="font-medium text-slate-600">
+                        Tuyệt vời! Không có khiếu nại nổi bật nào.
+                      </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        Sinh viên hiện tại rất hài lòng với chất lượng dịch vụ.
+                      </p>
                     </div>
-                    <p className="font-medium text-slate-600">
-                      Tuyệt vời! Không có khiếu nại nổi bật nào.
-                    </p>
-                    <p className="mt-1 text-sm text-slate-400">
-                      Sinh viên hiện tại rất hài lòng với chất lượng dịch vụ.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {reportDetail.frequentCategories?.map(
-                      (cat: any, idx: number) => (
+                  ) : (
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                      {validCategories.map((cat: any, idx: number) => (
                         <div
                           key={idx}
-                          className="group relative flex flex-col rounded-2xl border border-rose-100/50 bg-linear-to-br from-rose-50/50 to-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md"
+                          className="group relative flex h-[350px] flex-col rounded-2xl border border-rose-100/50 bg-linear-to-br from-rose-50/50 to-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md"
                         >
-                          <div className="mb-5 flex items-start justify-between gap-4">
+                          <div className="mb-5 flex shrink-0 items-start justify-between gap-4">
                             <div className="flex flex-col">
                               {cat.categoryId ? (
                                 <Link
@@ -655,12 +663,12 @@ export function AiAnalyticsDashboard() {
                             </div>
                           </div>
 
-                          <div className="flex-1 rounded-xl border border-rose-50 bg-white/70 p-4 shadow-[inset_0_2px_10px_rgba(0,0,0,0.02)]">
-                            <h5 className="mb-3 flex items-center gap-1.5 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                          <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-rose-50 bg-white/70 p-4 shadow-[inset_0_2px_10px_rgba(0,0,0,0.02)]">
+                            <h5 className="mb-3 flex shrink-0 items-center gap-1.5 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
                               <MessageSquareWarning className="h-3.5 w-3.5 text-rose-400" />
                               Vấn đề thường gặp
                             </h5>
-                            <ul className="space-y-3">
+                            <ul className="flex-1 space-y-3 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200">
                               {cat.commonIssues?.map(
                                 (issue: string, issueIdx: number) => (
                                   <li
@@ -675,10 +683,10 @@ export function AiAnalyticsDashboard() {
                             </ul>
                           </div>
                         </div>
-                      ),
-                    )}
-                  </div>
-                )}
+                      ))}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           )}
