@@ -116,6 +116,7 @@ export function ListDepartmentFeedback() {
 
         {/* Desktop Filters */}
         <div className="hidden items-center gap-3 md:flex">
+          <CommonFilter.DateSelection />
           <CommonFilter.StatusSelection />
           <CommonFilter.CategorySelection />
         </div>
@@ -139,6 +140,14 @@ export function ListDepartmentFeedback() {
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-6 py-4">
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Ngày gửi
+                  </span>
+                  <div className="w-full [&>button]:w-full [&>input]:w-full">
+                    <CommonFilter.DateSelection />
+                  </div>
+                </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="ml-1 text-sm font-medium text-slate-700">
                     Trạng thái
@@ -166,6 +175,8 @@ export function ListDepartmentFeedback() {
                     params.delete("status");
                     params.delete("categoryId");
                     params.delete("q");
+                    params.delete("from");
+                    params.delete("to");
                     params.delete("page");
                     router.replace(`${pathname}?${params.toString()}`, {
                       scroll: false,
