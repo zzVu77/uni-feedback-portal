@@ -75,6 +75,7 @@ export function MyFeedbacksHistoryTable() {
 
         {/* Desktop Filters */}
         <div className="hidden items-center gap-2 md:flex">
+          <CommonFilter.DateSelection />
           <CommonFilter.DepartmentSelection />
           <CommonFilter.StatusSelection type="student" />
           <CommonFilter.CategorySelection />
@@ -96,6 +97,14 @@ export function MyFeedbacksHistoryTable() {
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-6 py-4">
+                <div className="flex flex-col gap-1.5">
+                  <span className="ml-1 text-sm font-medium text-slate-700">
+                    Ngày gửi
+                  </span>
+                  <div className="w-full [&>button]:w-full [&>input]:w-full">
+                    <CommonFilter.DateSelection />
+                  </div>
+                </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="ml-1 text-sm font-medium text-slate-700">
                     Phòng ban
@@ -132,6 +141,8 @@ export function MyFeedbacksHistoryTable() {
                     params.delete("status");
                     params.delete("categoryId");
                     params.delete("q");
+                    params.delete("from");
+                    params.delete("to");
                     params.delete("page");
                     router.replace(`${pathname}?${params.toString()}`, {
                       scroll: false,
