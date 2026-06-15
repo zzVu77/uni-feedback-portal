@@ -96,8 +96,11 @@ If there's a version error when the project is first created, run that command t
 ```bash
 npm run db:change-version
 ```
+
 ### 10. seed toxicity keyword
 
+Run this command in /backend
+
 ```bash
-npx prisma db execute --file init_toxicity_keyword.seed.sql --schema prisma/schema.prisma
+ npx prisma db execute --file db/init_toxicity_keyword.seed.sql --schema prisma/schema.prisma
 ```

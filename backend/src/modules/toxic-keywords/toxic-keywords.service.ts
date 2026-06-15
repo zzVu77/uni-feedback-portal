@@ -48,7 +48,7 @@ export class ToxicKeywordsService {
     const [results, total] = await Promise.all([
       this.prisma.toxicKeyword.findMany({
         where,
-        orderBy: { [sortField]: orderDirection },
+        orderBy: [{ [sortField]: orderDirection }, { id: 'asc' }],
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),
