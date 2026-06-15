@@ -211,7 +211,7 @@ export function AiAnalyticsDashboard() {
                 ) : (
                   groupedReports.map((group) => (
                     <SelectGroup key={group.label}>
-                      <SelectLabel className="sticky top-0 bg-slate-50/80 text-slate-500">
+                      <SelectLabel className="sticky top-[-5] z-10 bg-slate-50 text-slate-500">
                         {group.label}
                       </SelectLabel>
                       {group.items.map((r) => (
