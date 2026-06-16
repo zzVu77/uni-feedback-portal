@@ -31,16 +31,27 @@ export class AiService {
     }
     const parts = [subject, description].filter(Boolean);
     const dataCheck = parts.join('\n');
+    console.log(`\n--- [ToxicityCheck Debug] ---`);
+    console.log(`[ToxicityCheck] Checking content:\n${dataCheck}`);
+
     // check keywords for toxicity
     const toxicKeywordsObj = await this.prisma.toxicKeyword.findMany();
     const toxicKeywordsList = toxicKeywordsObj.map((k) => k.keyword);
     const detectedKeyword = containsToxicKeyword(dataCheck, toxicKeywordsList);
     if (detectedKeyword) {
-      console.warn(`Toxic keyword detected: ${detectedKeyword}`);
+      console.warn(`[ToxicityCheck] Result: TOXIC`);
+      console.warn(
+        `[ToxicityCheck] Reason: Detected keyword '${detectedKeyword}'`,
+      );
+      console.log(`-----------------------------\n`);
       return true;
     }
     const API_KEY = process.env.API_GEMINI_KEY || '';
     if (!API_KEY) {
+      console.error(
+        `[ToxicityCheck] Failed: Google Gemini API key is not configured.`,
+      );
+      console.log(`-----------------------------\n`);
       await this.handleFaultGeminiEvent(data, type);
       throw new Error('Google Gemini API key is not configured.');
     }
@@ -52,11 +63,26 @@ export class AiService {
     });
     try {
       const responseText = (await model).text;
+      console.log(`[ToxicityCheck] AI raw response: ${responseText}`);
       const parsed = JSON.parse(responseText || '{"toxic": false}') as {
         toxic: boolean;
       };
+      if (parsed.toxic) {
+        console.warn(`[ToxicityCheck] Result: TOXIC`);
+        console.warn(
+          `[ToxicityCheck] Reason: AI analysis determined it is toxic.`,
+        );
+      } else {
+        console.log(`[ToxicityCheck] Result: SAFE`);
+        console.log(
+          `[ToxicityCheck] Reason: Clean by AI analysis and Keyword check.`,
+        );
+      }
+      console.log(`-----------------------------\n`);
       return parsed.toxic;
-    } catch {
+    } catch (e) {
+      console.error(`[ToxicityCheck] AI check failed with error:`, e);
+      console.log(`-----------------------------\n`);
       await this.handleFaultGeminiEvent(data, type);
       throw new Error('Error parsing AI response for toxicity check.');
     }
