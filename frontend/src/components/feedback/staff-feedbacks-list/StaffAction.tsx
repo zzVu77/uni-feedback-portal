@@ -257,7 +257,7 @@ const StaffAction = ({
                 <FormControl>
                   <Textarea
                     disabled={isFinished}
-                    className="max-h-[200px] w-full"
+                    className="[field-sizing:fixed] max-h-[120px] min-h-[100px] w-full resize-none overflow-y-auto"
                     placeholder="Ghi chú (Không bắt buộc)"
                     {...field}
                   />
@@ -349,7 +349,7 @@ const StaffAction = ({
                   <FormItem>
                     <FormControl>
                       <Textarea
-                        className="max-h-[40vh]"
+                        className="[field-sizing:fixed] max-h-[120px] min-h-[100px] w-full max-w-[100px] resize-none overflow-y-auto"
                         placeholder="Ghi chú (Không bắt buộc)"
                         {...field}
                       />
