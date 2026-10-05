@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import {
   getClassificationSentiment,
   getKPIOverview,
@@ -28,7 +28,7 @@ export const useGetTrendingIssues = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.trendingIssues, filter],
     queryFn: () => getTrendingIssues(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -36,7 +36,7 @@ export const useGetKPIOverview = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.kpiOverview, filter],
     queryFn: () => getKPIOverview(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -44,7 +44,7 @@ export const useGetSentimentTrend = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.sentimentTrend, filter],
     queryFn: () => getSentimentTrend(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -52,7 +52,7 @@ export const useGetTopicDistribution = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.topicDistribution, filter],
     queryFn: () => getTopicDistribution(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -62,7 +62,7 @@ export const useGetClassificationSentiment = (
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.classificationSentiment, filter],
     queryFn: () => getClassificationSentiment(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -70,7 +70,7 @@ export const useGetPostCountByDate = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postCountByDate, filter],
     queryFn: () => getPostCountByDate(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -78,14 +78,14 @@ export const useGetPostsBySentiment = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postsBySentiment, filter],
     queryFn: () => getPostsBySentiment(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 export const useGetTopicBySentiment = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.topicBySentiment, filter],
     queryFn: () => getTopicBySentiment(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -93,6 +93,6 @@ export const useGetUrgentIssues = (filter: SocialListeningFilter) => {
   return useQuery({
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues, filter],
     queryFn: () => getUrgentIssues(filter),
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 };
