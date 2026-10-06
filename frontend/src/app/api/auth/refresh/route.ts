@@ -24,7 +24,6 @@ export async function GET(req: NextRequest) {
     );
 
     // 3. Handle Failure (Early Return Pattern)
-    // If the backend refuses to refresh (e.g., token expired/invalid/revoked)
     if (!backendResponse.ok) {
       const loginUrl = new URL("/login", req.url);
       loginUrl.searchParams.set("returnTo", returnTo);
@@ -38,16 +37,18 @@ export async function GET(req: NextRequest) {
       return failureResponse;
     }
 
-    // 4. Handle Success (Happy Path)
-    // Create a new response to redirect the user back to their intended destination
-    const successResponse = NextResponse.redirect(new URL(returnTo, req.url));
+    // 4. Handle Success (Happy Path) - ĐÃ ĐƯỢC CẬP NHẬT
+    // Nếu returnTo đang trỏ về /login, ta ép hướng về "/" để tránh kẹt lại ở trang đăng nhập
+    const finalDestination = returnTo === "/login" ? "/" : returnTo;
+    const successResponse = NextResponse.redirect(
+      new URL(finalDestination, req.url),
+    );
 
-    // Copy 'Set-Cookie' headers from the backend response to the Next.js response
-    // This ensures the new Access Token is set in the browser
-    backendResponse.headers.forEach((value, key) => {
-      if (key.toLowerCase() === "set-cookie") {
-        successResponse.headers.append("Set-Cookie", value);
-      }
+    // Sử dụng getSetCookie() để lấy mảng các cookie chuẩn thay vì dùng forEach trên Headers
+    const setCookies = backendResponse.headers.getSetCookie();
+
+    setCookies.forEach((cookie) => {
+      successResponse.headers.append("Set-Cookie", cookie);
     });
 
     return successResponse;
