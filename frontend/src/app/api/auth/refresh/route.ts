@@ -6,6 +6,25 @@ export async function GET(req: NextRequest) {
   // Get 'returnTo' from query parameters, default to "/"
   const returnTo = req.nextUrl.searchParams.get("returnTo") || "/";
 
+  const clearAuthCookies = (res: NextResponse) => {
+    const isProduction = process.env.NODE_ENV === "production";
+    res.cookies.delete("accessToken");
+    res.cookies.delete("refreshToken");
+
+    if (isProduction) {
+      res.cookies.delete({
+        name: "accessToken",
+        domain: ".giahuynguyen28.id.vn",
+        path: "/",
+      });
+      res.cookies.delete({
+        name: "refreshToken",
+        domain: ".giahuynguyen28.id.vn",
+        path: "/",
+      });
+    }
+  };
+
   // 1. Validation: If no refresh token is present, redirect to login immediately
   if (!refreshToken) {
     return NextResponse.redirect(new URL("/login", req.url));
@@ -13,15 +32,16 @@ export async function GET(req: NextRequest) {
 
   try {
     // 2. Call the backend endpoint to refresh the access token
-    const backendResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh-token`,
-      {
-        method: "POST",
-        headers: {
-          Cookie: `refreshToken=${refreshToken}`,
-        },
+    const rawBaseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8080";
+    const baseUrl = rawBaseUrl.replace(/\/+$/, "");
+
+    const backendResponse = await fetch(`${baseUrl}/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        Cookie: `refreshToken=${refreshToken}`,
       },
-    );
+    });
 
     // 3. Handle Failure (Early Return Pattern)
     // If the backend refuses to refresh (e.g., token expired/invalid/revoked)
@@ -30,10 +50,7 @@ export async function GET(req: NextRequest) {
       loginUrl.searchParams.set("returnTo", returnTo);
 
       const failureResponse = NextResponse.redirect(loginUrl);
-
-      // Clear invalid cookies to prevent infinite loops
-      failureResponse.cookies.delete("accessToken");
-      failureResponse.cookies.delete("refreshToken");
+      clearAuthCookies(failureResponse);
 
       return failureResponse;
     }
