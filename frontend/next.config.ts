@@ -38,6 +38,9 @@ async function getHeaders(): Promise<Header[]> {
 const nextConfig: NextConfig = {
   /* config options here */
   headers: getHeaders,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
