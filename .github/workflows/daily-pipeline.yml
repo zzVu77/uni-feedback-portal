@@ -8,7 +8,9 @@ on:
 
 jobs:
   run-data-pipeline:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
 
     steps:
       - name: 📥 Download code from server
@@ -17,7 +19,7 @@ jobs:
       - name: 🟢 Set up Node.js (for Crawler & Loader)
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: 🐍 Set up Python (for dbt & AI Gemini)
         uses: actions/setup-python@v5

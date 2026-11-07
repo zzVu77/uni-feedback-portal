@@ -46,7 +46,7 @@ function setupGraphQLInterception(page, capturedPosts, crawledAt) {
           const data = JSON.parse(chunk);
           extractPostsRecursively(data, capturedPosts, crawledAt);
         }
-      } catch (e) { }
+      } catch (e) {}
     }
   });
 }

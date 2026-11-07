@@ -5,7 +5,7 @@
 /**
  * Traverses an object to find the highest counts for reactions and comments.
  * It recursively searches for keys related to reactions, likes, and comments.
- * 
+ *
  * @param {Object} node - The object node to search.
  * @returns {Object} - An object containing reactions and comments counts.
  */
@@ -25,18 +25,30 @@ export function extractPostStats(node) {
           maxComments = v;
         } else if (v && typeof v.count === "number" && v.count > maxComments) {
           maxComments = v.count;
-        } else if (v && typeof v.total_count === "number" && v.total_count > maxComments) {
+        } else if (
+          v &&
+          typeof v.total_count === "number" &&
+          v.total_count > maxComments
+        ) {
           maxComments = v.total_count;
         }
       }
 
       // Extract Reactions/Likes count
       if (key.includes("reaction") || key.includes("like")) {
-        if (typeof v === "number" && key.includes("count") && v > maxReactions) {
+        if (
+          typeof v === "number" &&
+          key.includes("count") &&
+          v > maxReactions
+        ) {
           maxReactions = v;
         } else if (v && typeof v.count === "number" && v.count > maxReactions) {
           maxReactions = v.count;
-        } else if (v && typeof v.total_count === "number" && v.total_count > maxReactions) {
+        } else if (
+          v &&
+          typeof v.total_count === "number" &&
+          v.total_count > maxReactions
+        ) {
           maxReactions = v.total_count;
         }
       }
@@ -54,7 +66,7 @@ export function extractPostStats(node) {
 
 /**
  * Recursively searches for and extracts post data from a GraphQL node.
- * 
+ *
  * @param {Object} node - The GraphQL response node to process.
  * @param {Array} postsArray - The array to store extracted posts.
  * @param {string} crawledAt - The timestamp when the crawl started.
@@ -131,5 +143,7 @@ export function extractPostsRecursively(node, postsArray, crawledAt) {
   }
 
   // Recursively search for more Story objects in all children
-  Object.values(node).forEach((val) => extractPostsRecursively(val, postsArray, crawledAt));
+  Object.values(node).forEach((val) =>
+    extractPostsRecursively(val, postsArray, crawledAt),
+  );
 }
