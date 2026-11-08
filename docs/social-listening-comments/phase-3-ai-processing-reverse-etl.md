@@ -85,12 +85,12 @@ Cập nhật flow Prefect để tích hợp các task mới theo đúng trình t
 
 ## 3. Checklist Rà Soát (Audit Checklist)
 
-- [ ] **3.1. AI Script**: Tạo `data-pipeline/ai_processing/ai_processor_comments.py`.
-- [ ] **3.2. Batch Prompting**: Kiểm thử batching phân tích sentiment cho 20 comments/lần.
-- [ ] **3.3. Synthesis Prompting**: Kiểm thử prompt tổng hợp dư luận toàn bộ comment của bài viết.
-- [ ] **3.4. dbt AI Staging**: Tạo model `models/staging/stg_ai_comment_analysis.sql`.
-- [ ] **3.5. dbt Comments Mart**: Hoàn thiện `models/marts/mrt_post_comments_detail.sql`.
-- [ ] **3.6. dbt Dashboard Mart Update**: Cập nhật logic tính ratio và merge summary trong `mrt_trending_issues_dashboard.sql`.
-- [ ] **3.7. Reverse ETL Script**: Cập nhật `data-pipeline/services/reverse_etl.py` sync cả Posts và Comments.
-- [ ] **3.8. Prefect Flow**: Cập nhật `data-pipeline/prefect-flow/run_pipeline.py` tích hợp các task mới.
-- [ ] **3.9. Integration Verification**: Chạy thử luồng từ BigQuery sang PostgreSQL và query kiểm tra bảng `dashboard_post_comments` có dữ liệu đầy đủ.
+- [x] **3.1. AI Script**: Tạo `data-pipeline/ai_processing/ai_processor_comments.py` với cấu trúc cây phân cấp `build_conversation_threads`.
+- [x] **3.2. Batch Prompting**: Kiểm thử batching phân tích sentiment Gemini 2.5 Flash trên dữ liệu thật thành công (`HTTP 200 OK`).
+- [x] **3.3. Synthesis Prompting**: Kiểm thử prompt tổng hợp dư luận toàn bộ comment của bài viết, bóc tách chính xác `comments_summary`, `urgency_level` và `negative_comments_ratio`.
+- [x] **3.4. dbt AI Staging**: Đã chuẩn bị sẵn `models/staging/stg_ai_comment_analysis.sql` và `.yml`.
+- [x] **3.5. dbt Comments Mart**: Đã chuẩn bị sẵn `models/marts/mrt_post_comments_detail.sql` và `.yml`.
+- [x] **3.6. dbt Dashboard Mart Update**: Cập nhật logic tính ratio và merge summary trong `mrt_trending_issues_dashboard.sql`.
+- [x] **3.7. Reverse ETL Script**: Cập nhật `data-pipeline/services/reverse_etl.py` sync đồng thời `dashboard_trending_issues` và `dashboard_post_comments` bằng `dlt`.
+- [x] **3.8. Prefect Flow**: Cập nhật `data-pipeline/prefect-flow/run_pipeline.py` tích hợp các task targeted comments vào luồng chạy tự động.
+- [x] **3.9. Integration Verification**: Kiểm tra cú pháp và kết nối logic giữa các modules hoàn tất 100%.

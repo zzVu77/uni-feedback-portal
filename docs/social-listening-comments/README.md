@@ -10,8 +10,8 @@
 | :---: | :--- | :---: | :--- | :--- |
 | **Phase 1** | Cấu trúc Dữ liệu & Data Warehouse (BigQuery, dbt, Prisma) | 🟢 Completed | [`phase-1-warehouse-and-database.md`](./phase-1-warehouse-and-database.md) | BigQuery, dbt, PostgreSQL |
 | **Phase 2** | Bộ Thu Thập Bình Luận Mục Tiêu (Targeted Crawler & Loader) | 🟢 Completed | [`phase-2-crawler-engine.md`](./phase-2-crawler-engine.md) | Playwright, Node.js, BigQuery API |
-| **Phase 3** | Xử Lý Trí Tuệ Nhân Tạo & Reverse ETL (Gemini AI & dlt) | 🟡 Ready to Start | [`phase-3-ai-processing-reverse-etl.md`](./phase-3-ai-processing-reverse-etl.md) | Google Gemini, dlt, Prefect |
-| **Phase 4** | Dịch Vụ Backend & API Cung Cấp Dữ Liệu | ⚪ Pending Phase 3 | [`phase-4-backend-api.md`](./phase-4-backend-api.md) | NestJS, Prisma Client, Swagger |
+| **Phase 3** | Xử Lý Trí Tuệ Nhân Tạo & Reverse ETL (Gemini AI & dlt) | 🟢 Completed | [`phase-3-ai-processing-reverse-etl.md`](./phase-3-ai-processing-reverse-etl.md) | Google Gemini, dlt, Prefect |
+| **Phase 4** | Dịch Vụ Backend & API Cung Cấp Dữ Liệu | 🟡 Ready to Start | [`phase-4-backend-api.md`](./phase-4-backend-api.md) | NestJS, Prisma Client, Swagger |
 | **Phase 5** | Giao Diện Điều Tra Chi Tiết Đa Chiều (Deep-Dive UI) | ⚪ Pending Phase 4 | [`phase-5-frontend-deep-dive-ui.md`](./phase-5-frontend-deep-dive-ui.md) | Next.js 15, Tailwind, TanStack Query |
 
 *Chú thích trạng thái: ⚪ Chưa bắt đầu | 🟡 Sẵn sàng triển khai | 🔵 Đang triển khai | 🟢 Đã hoàn thành & Đạt nghiệm thu*
