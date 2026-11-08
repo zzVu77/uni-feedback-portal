@@ -202,18 +202,25 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                     </TableCell>
 
                     <TableCell className="py-5">
-                      <Badge
-                        variant="outline"
-                        className={cn(
-                          "border px-2.5 py-1 font-semibold shadow-sm",
-                          sentiment.bg,
-                          sentiment.color,
-                          sentiment.border,
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "border px-2.5 py-1 font-semibold shadow-sm",
+                            sentiment.bg,
+                            sentiment.color,
+                            sentiment.border,
+                          )}
+                        >
+                          {sentiment.icon}
+                          {post.sentimentLabel}
+                        </Badge>
+                        {post.urgencyLevel === "CRITICAL" && (
+                          <span className="rounded-full border border-rose-200 bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-800">
+                            Cấp bách
+                          </span>
                         )}
-                      >
-                        {sentiment.icon}
-                        {post.sentimentLabel}
-                      </Badge>
+                      </div>
                     </TableCell>
 
                     <TableCell className="py-5">
@@ -235,6 +242,14 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                             <MessageSquare className="h-3.5 w-3.5" />
                           </div>
                           {post.commentCount}
+                          {post.isCommentsCrawled && (
+                            <span
+                              className="py-0.2 ml-1 rounded-full bg-emerald-100 px-1.5 text-[10px] font-bold text-emerald-800"
+                              title="Đã quét và phân tích bình luận chi tiết"
+                            >
+                              ✓
+                            </span>
+                          )}
                         </div>
                       </div>
                     </TableCell>

@@ -3,8 +3,10 @@ import FeedbackForm from "@/components/feedback/FeedbackForm";
 import Wrapper from "@/components/shared/Wrapper";
 import { useCreateFeedback } from "@/hooks/queries/useFeedbackQueries";
 import { CreateFeedbackPayload } from "@/types";
-const page = () => {
+
+const Page = () => {
   const { mutateAsync: createFeedback, isPending } = useCreateFeedback();
+
   const handleSubmit = async (values: CreateFeedbackPayload) => {
     await createFeedback(values);
   };
@@ -20,4 +22,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

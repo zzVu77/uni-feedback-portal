@@ -28,6 +28,64 @@ export interface FeedbackPost {
   aiSummary: string;
   sentimentLabel: SentimentLabel;
   analyzedAt: string; // ISO string from backend
+  isCommentsCrawled?: boolean;
+  commentsAiSummary?: string | null;
+  negativeCommentsRatio?: number | null;
+  urgencyLevel?: string | null;
+}
+
+export interface PostCommentItem {
+  id: string;
+  commentId: string;
+  postId: string;
+  parentCommentId: string | null;
+  author: string;
+  content: string;
+  reactionCount: number;
+  commentedAt: string;
+  sentimentLabel: string;
+  sentimentScore: number;
+  isTopConcern: boolean;
+  crawledAt?: string;
+}
+
+export interface PostCommentsSentimentStats {
+  negative: number;
+  stressAnxiety: number;
+  neutral: number;
+  positive: number;
+  negativeRatio: number;
+}
+
+export interface PostCommentsOverviewInfo {
+  postLink?: string | null;
+  isCommentsCrawled?: boolean;
+  commentsAiSummary?: string | null;
+  negativeCommentsRatio?: number | null;
+  urgencyLevel?: string | null;
+}
+
+export interface PostCommentsResponse {
+  postId: string;
+  postInfo?: PostCommentsOverviewInfo;
+  totalComments: number;
+  filteredComments?: number;
+  sentimentStats: PostCommentsSentimentStats;
+  comments: PostCommentItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalPages: number;
+    totalRecords?: number;
+  };
+}
+
+export interface GetPostCommentsParams {
+  page?: number;
+  limit?: number;
+  sentimentLabel?: string;
+  isTopConcern?: boolean;
+  sortBy?: "reactions" | "date";
 }
 
 export interface SocialListeningFilter {

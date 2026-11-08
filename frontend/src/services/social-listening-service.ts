@@ -8,6 +8,8 @@ import {
   ClassificationSentimentData,
   PostCountByDateItem,
   FeedbackPost,
+  PostCommentsResponse,
+  GetPostCommentsParams,
 } from "@/types/social-listening";
 
 const socialListeningBaseUrl = "/social-listening";
@@ -117,5 +119,28 @@ export const getUrgentIssues = async (
       params: filter,
     },
   );
+  return response;
+};
+
+export const getPostComments = async (
+  postId: string,
+  params?: GetPostCommentsParams,
+): Promise<PostCommentsResponse> => {
+  const response = await axiosInstance.get<PostCommentsResponse>(
+    `${socialListeningBaseUrl}/posts/${postId}/comments`,
+    {
+      params,
+    },
+  );
+  return response;
+};
+
+export const triggerCrawlPostComments = async (
+  postId: string,
+): Promise<{ success: boolean; message: string }> => {
+  const response = await axiosInstance.post<{
+    success: boolean;
+    message: string;
+  }>(`${socialListeningBaseUrl}/posts/${postId}/crawl-comments`);
   return response;
 };

@@ -114,15 +114,15 @@ Thư mục: `frontend/src/components/dashboard/social-listening/`
 
 ## 3. Checklist Rà Soát (Audit Checklist)
 
-- [ ] **5.1. Type Definitions**: Thêm interfaces `PostCommentItem`, `PostCommentsResponse` vào `types/social-listening.ts`.
-- [ ] **5.2. Service Methods**: Viết các hàm gọi API trong `services/social-listening-service.ts`.
-- [ ] **5.3. Custom Hook**: Viết hook `useGetPostComments` trong React Query hooks.
-- [ ] **5.4. Sub-components**:
-  - Tạo component `CommentCard.tsx` hiển thị thẻ bình luận.
-  - Tạo component `SentimentRatioBar.tsx` hiển thị thanh % cảm xúc.
-  - Tạo component `CommentsFilterTabs.tsx` điều khiển bộ lọc.
-- [ ] **5.5. Dialog Redesign**: Tái cấu trúc layout 2 cột trong `PostDetailDialog.tsx`.
-- [ ] **5.6. Internal Feedback Action**: Tích hợp nút chuyển đổi bài đăng thành Ticket phản ánh nội bộ.
-- [ ] **5.7. Re-crawl Action**: Tích hợp nút trigger cào bình luận và xử lý Toast thông báo.
-- [ ] **5.8. Responsive Test**: Kiểm thử giao diện trên màn hình lớn Desktop, Laptop và Tablet.
-- [ ] **5.9. Final Polish**: Kiểm tra độ tương phản màu sắc, icon trạng thái, hiệu ứng hover, hoàn thiện trải nghiệm người dùng.
+- [x] **5.1. Type Definitions**: Thêm interfaces `PostCommentItem`, `PostCommentsResponse`, `GetPostCommentsParams` vào `types/social-listening.ts`.
+- [x] **5.2. Service Methods**: Viết các hàm gọi API `getPostComments` và `triggerCrawlPostComments` trong `services/social-listening-service.ts`.
+- [x] **5.3. Custom Hook**: Viết hooks `useGetPostComments` và `useTriggerCrawlComments` trong `hooks/queries/useSocialListeningQueries.ts`.
+- [x] **5.4. Sub-components**:
+  - Tạo component `CommentCard.tsx` hiển thị thẻ bình luận kèm badge cảm xúc, nested reply indicator, lượt thích.
+  - Tạo component `SentimentRatioBar.tsx` hiển thị thanh % cảm xúc nhiều màu trực quan.
+  - Tạo component `CommentsFilterTabs.tsx` điều khiển bộ lọc nhanh, sắp xếp và nút quét lại.
+- [x] **5.5. Dialog Redesign**: Tái cấu trúc layout 2 cột trong `PostDetailDialog.tsx` (Cột trái: Tổng quan & AI tổng hợp dư luận; Cột phải: Luồng bình luận tương tác).
+- [x] **5.6. Internal Feedback Action**: Tích hợp nút chuyển đổi bài đăng thành Ticket phản ánh nội bộ, tự động trích xuất nội dung sang form `/student/create-new-feedback`.
+- [x] **5.7. Re-crawl Action**: Tích hợp nút trigger cào bình luận và xử lý Sonner Toast thông báo.
+- [x] **5.8. Responsive Test**: Kiểm thử giao diện trên màn hình lớn Desktop, Laptop và Tablet (`lg:grid-cols-12`).
+- [x] **5.9. Final Polish**: Kiểm tra build (`next build`), type-check TypeScript thành công 100%, độ tương phản và hiệu ứng hover hoàn thiện.

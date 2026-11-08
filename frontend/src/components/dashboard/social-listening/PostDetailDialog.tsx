@@ -1,3 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+"use client";
+
+import { format } from "date-fns";
+import {
+  AlertCircle,
+  AlertTriangle,
+  Bot,
+  CalendarDays,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Flame,
+  MessageSquare,
+  MinusCircle,
+  RefreshCw,
+  Sparkles,
+  ThumbsUp,
+  User,
+} from "lucide-react";
+import React, { useState } from "react";
+import { toast } from "sonner";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,21 +32,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import { FeedbackPost } from "@/types/social-listening";
-import { format } from "date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-  AlertCircle,
-  Bot,
-  CalendarDays,
-  CheckCircle2,
-  ExternalLink,
-  MessageSquare,
-  MinusCircle,
-  ThumbsUp,
-  User,
-} from "lucide-react";
-import React from "react";
+  useGetPostComments,
+  useTriggerCrawlComments,
+} from "@/hooks/queries/useSocialListeningQueries";
+import { cn } from "@/lib/utils";
+import { FeedbackPost, GetPostCommentsParams } from "@/types/social-listening";
+import { CommentCard } from "./CommentCard";
+import { CommentFilterType, CommentsFilterTabs } from "./CommentsFilterTabs";
+import { SentimentRatioBar } from "./SentimentRatioBar";
 
 export const getSentimentInfo = (label: string) => {
   switch (label) {
@@ -82,33 +102,100 @@ export const PostDetailDialog: React.FC<PostDetailDialogProps> = ({
   post,
   onClose,
 }) => {
+  // Filters & Pagination state for comments
+  const [activeTab, setActiveTab] = useState<CommentFilterType>("all");
+  const [sortBy, setSortBy] = useState<"reactions" | "date">("reactions");
+  const [page, setPage] = useState<number>(1);
+
+  // Compute query params for comments
+  const commentsParams: GetPostCommentsParams = {
+    page,
+    limit: 15,
+    sortBy,
+    ...(activeTab === "negative" && { sentimentLabel: "Tiêu cực" }),
+    ...(activeTab === "top_concern" && { isTopConcern: true }),
+    ...(activeTab === "positive_neutral" && { sentimentLabel: "Tích cực" }),
+  };
+
+  // TanStack queries & mutations
+  const {
+    data: commentsData,
+    isLoading: isLoadingComments,
+    isFetching: isFetchingComments,
+  } = useGetPostComments(post?.postId, commentsParams);
+
+  const { mutate: triggerCrawl, isPending: isCrawling } =
+    useTriggerCrawlComments();
+
   if (!post) return null;
 
   const sentiment = getSentimentInfo(post.sentimentLabel);
+  const isUrgent =
+    post.urgencyLevel === "CRITICAL" ||
+    (post.negativeCommentsRatio != null && post.negativeCommentsRatio >= 70) ||
+    post.sentimentLabel === "Tiêu cực";
+
+  const commentsSummary =
+    commentsData?.postInfo?.commentsAiSummary || post.commentsAiSummary;
+  const isCrawled =
+    commentsData?.postInfo?.isCommentsCrawled ??
+    post.isCommentsCrawled ??
+    false;
+
+  const handleTabChange = (tab: CommentFilterType) => {
+    setActiveTab(tab);
+    setPage(1);
+  };
+
+  const handleSortChange = (newSort: "reactions" | "date") => {
+    setSortBy(newSort);
+    setPage(1);
+  };
+
+  const handleTriggerCrawl = () => {
+    triggerCrawl(post.postId, {
+      onSuccess: (res) => {
+        toast.success(
+          res.message ||
+            "Đã gửi yêu cầu quét bình luận cho bài viết thành công!",
+        );
+      },
+      onError: (err: any) => {
+        toast.error(
+          err?.response?.data?.message ||
+            "Không thể kích hoạt quét bình luận. Vui lòng thử lại sau.",
+        );
+      },
+    });
+  };
+
+  const totalPages = commentsData?.pagination?.totalPages || 1;
+  const commentsList = commentsData?.comments || [];
 
   return (
     <Dialog open={!!post} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-2xl sm:max-w-[700px]">
-        <>
+      <DialogContent className="flex max-h-[92vh] w-[96vw] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-2xl sm:max-w-[1100px] xl:max-w-[1250px]">
+        {/* Header Bar */}
+        <div
+          className={cn(
+            "relative shrink-0 overflow-hidden border-b border-slate-200/80 px-6 py-4.5",
+            sentiment.lightBg,
+          )}
+        >
           <div
             className={cn(
-              "relative shrink-0 overflow-hidden px-8 py-6",
-              sentiment.lightBg,
+              "absolute top-0 left-0 h-full w-1.5",
+              sentiment.indicator,
             )}
-          >
-            <div
-              className={cn(
-                "absolute top-0 left-0 h-full w-1.5",
-                sentiment.indicator,
-              )}
-            />
+          />
 
-            <DialogHeader>
-              <div className="mb-2 flex items-center justify-between">
+          <DialogHeader>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   variant="outline"
                   className={cn(
-                    "border bg-white px-3 py-1 font-bold shadow-sm",
+                    "border bg-white px-2.5 py-0.5 font-bold shadow-2xs",
                     sentiment.color,
                     sentiment.border,
                   )}
@@ -116,104 +203,238 @@ export const PostDetailDialog: React.FC<PostDetailDialogProps> = ({
                   {sentiment.icon}
                   {post.sentimentLabel}
                 </Badge>
-                <span className="flex items-center gap-1.5 text-sm font-medium text-slate-500">
-                  <CalendarDays className="h-4 w-4" />
-                  {format(new Date(post.postedAt), "dd/MM/yyyy 'lúc' HH:mm")}
-                </span>
-              </div>
 
-              <DialogTitle className="text-2xl leading-tight font-bold text-slate-900">
-                Vấn đề phản hồi
-              </DialogTitle>
-              <DialogDescription className="mt-2 text-base font-medium text-slate-600">
-                Thuộc chủ đề:{" "}
-                <span className="ml-1 rounded-md border bg-white px-2 py-0.5 text-[12px] text-slate-800 shadow-sm md:text-[14px]">
+                {isUrgent && (
+                  <Badge className="animate-pulse gap-1 bg-rose-600 px-2.5 py-0.5 font-semibold text-white shadow-2xs hover:bg-rose-700">
+                    <Flame className="h-3.5 w-3.5" />
+                    Cấp bách / Cần chú ý
+                  </Badge>
+                )}
+
+                <span className="rounded-md border border-slate-200/80 bg-white/90 px-2 py-0.5 text-xs font-semibold text-slate-700 shadow-2xs">
                   {post.topic}
                 </span>
-              </DialogDescription>
-            </DialogHeader>
-          </div>
-
-          <div className="flex-1 space-y-8 overflow-y-auto bg-white p-8">
-            {/* AI Summary Section */}
-            <div className="relative">
-              <div className="absolute top-0 bottom-0 -left-3 w-1 rounded-full bg-indigo-200" />
-              <div className="pl-4">
-                <div className="mb-2.5 flex items-center gap-2 text-indigo-600">
-                  <Bot className="h-5 w-5" />
-                  <h4 className="text-base font-bold tracking-wider uppercase">
-                    AI Tóm tắt
-                  </h4>
-                </div>
-                <p className="text-[16px] leading-relaxed font-medium text-slate-800">
-                  {post.aiSummary}
-                </p>
               </div>
+
+              <span className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                <CalendarDays className="h-3.5 w-3.5 text-slate-400" />
+                {format(new Date(post.postedAt), "dd/MM/yyyy 'lúc' HH:mm")}
+              </span>
             </div>
 
-            <hr className="border-slate-100" />
+            <DialogTitle className="mt-1.5 text-xl font-bold tracking-tight text-slate-900">
+              Điều Tra Chi Tiết Dư Luận & Luồng Bình Luận Mạng Xã Hội
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500">
+              Phân tích đa chiều phản ứng sinh viên, mức độ nghiêm trọng và
+              trích xuất bằng chứng xử lý kịp thời.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
 
-            {/* Original Content Section */}
-            <div>
-              <div className="mb-3 flex items-center gap-2 text-slate-500">
-                <User className="h-5 w-5 text-amber-500" />
-                <h4 className="text-sm font-bold tracking-wider text-amber-600 uppercase">
-                  Nội dung gốc
+        {/* 2-Column Responsive Body */}
+        <div className="grid flex-1 grid-cols-1 overflow-hidden bg-slate-50/50 lg:grid-cols-12">
+          {/* ================= LEFT COLUMN: Post Overview & AI Synthesis (40%) ================= */}
+          <div className="flex max-h-[45vh] flex-col gap-4 overflow-y-auto border-b border-slate-200/80 bg-white p-5 sm:p-6 lg:col-span-5 lg:max-h-[calc(92vh-100px)] lg:border-r lg:border-b-0">
+            {/* Crisis Alert Banner */}
+            {isUrgent && (
+              <div className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50/70 p-3.5 text-rose-900 shadow-2xs">
+                <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
+                <div className="text-xs leading-relaxed">
+                  <span className="block font-bold text-rose-800">
+                    Cảnh báo khủng hoảng dư luận
+                  </span>
+                  Bài viết có mức độ tiêu cực cao hoặc bức xúc lan rộng. Cần ưu
+                  tiên xem xét và lập Ticket xử lý nội bộ.
+                </div>
+              </div>
+            )}
+
+            {/* AI Summary Section */}
+            <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-4 shadow-2xs">
+              <div className="mb-2 flex items-center gap-2 text-indigo-700">
+                <Bot className="h-4 w-4" />
+                <h4 className="text-xs font-bold tracking-wider uppercase">
+                  AI Tóm tắt bài đăng
                 </h4>
               </div>
-              <div className="relative rounded-xl border border-amber-100 bg-amber-50/30 p-5 shadow-inner">
-                <p className="text-[15px] leading-relaxed whitespace-pre-wrap text-slate-700 italic">
-                  "{post.content}"
+              <p className="text-xs leading-relaxed font-medium text-slate-700">
+                {post.aiSummary}
+              </p>
+            </div>
+
+            {/* AI Comments Synthesis Section */}
+            {commentsSummary && (
+              <div className="rounded-xl border border-amber-200/80 bg-amber-50/50 p-4 shadow-2xs">
+                <div className="mb-2 flex items-center gap-2 text-amber-800">
+                  <Sparkles className="h-4 w-4 text-amber-600" />
+                  <h4 className="text-xs font-bold tracking-wider uppercase">
+                    AI Tổng hợp dư luận từ bình luận
+                  </h4>
+                </div>
+                <p className="text-xs leading-relaxed font-medium whitespace-pre-wrap text-slate-800">
+                  {commentsSummary}
                 </p>
               </div>
-            </div>
+            )}
 
-            {/* Actions & Metrics */}
-            <div className="flex flex-col items-center justify-between gap-4 pt-4 sm:flex-row">
-              <div className="flex items-center gap-6 rounded-xl border border-slate-100 bg-slate-50 p-3 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                    <ThumbsUp className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">
-                      Lượt thích
-                    </span>
-                    <span className="text-sm font-bold text-slate-700">
-                      {post.reactionCount}
-                    </span>
-                  </div>
+            {/* Original Post Content Box */}
+            <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 shadow-inner">
+              <div className="mb-2 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-slate-600">
+                  <User className="h-3.5 w-3.5 text-slate-400" />
+                  <span className="text-xs font-bold text-slate-800">
+                    {post.author}
+                  </span>
                 </div>
-                <div className="h-8 w-px bg-slate-200" />
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-600">
-                    <MessageSquare className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">
-                      Bình luận
-                    </span>
-                    <span className="text-sm font-bold text-slate-700">
-                      {post.commentCount}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-3 text-xs font-medium text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <ThumbsUp className="h-3 w-3 text-blue-500" />
+                    {post.reactionCount}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MessageSquare className="h-3 w-3 text-orange-500" />
+                    {post.commentCount}
+                  </span>
                 </div>
               </div>
 
-              {post.postLink && (
+              <p className="text-xs leading-relaxed whitespace-pre-wrap text-slate-700 italic">
+                "{post.content}"
+              </p>
+            </div>
+
+            {/* Sentiment Ratio Bar */}
+            <SentimentRatioBar
+              stats={commentsData?.sentimentStats}
+              totalComments={commentsData?.totalComments ?? post.commentCount}
+            />
+
+            {/* Action Buttons */}
+            {post.postLink && (
+              <div className="mt-auto pt-3">
                 <Button
                   onClick={() => window.open(post.postLink!, "_blank")}
-                  size="lg"
-                  className="w-full bg-indigo-600 text-white shadow-md transition-transform hover:bg-indigo-700 active:scale-95 sm:w-auto"
+                  className="w-full gap-2 bg-indigo-600 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 active:scale-[0.99]"
                 >
-                  Mở bài đăng gốc
-                  <ExternalLink className="ml-2 h-4 w-4" />
+                  <span>Mở bài đăng gốc trên Facebook</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
                 </Button>
+              </div>
+            )}
+          </div>
+
+          {/* ================= RIGHT COLUMN: Interactive Comments Thread (60%) ================= */}
+          <div className="flex max-h-[50vh] flex-col bg-slate-50/60 p-5 sm:p-6 lg:col-span-7 lg:max-h-[calc(92vh-100px)]">
+            {/* Filter Toolbar */}
+            <CommentsFilterTabs
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              sortBy={sortBy}
+              onSortChange={handleSortChange}
+              onRefresh={handleTriggerCrawl}
+              isRefreshing={isCrawling || isFetchingComments}
+              totalComments={commentsData?.totalComments ?? post.commentCount}
+              className="mb-3"
+            />
+
+            {/* Comments List Container */}
+            <div className="min-h-[300px] flex-1 space-y-2.5 overflow-y-auto pr-1">
+              {isLoadingComments ? (
+                <div className="space-y-3 p-2">
+                  <Skeleton className="h-20 w-full rounded-xl" />
+                  <Skeleton className="h-20 w-full rounded-xl" />
+                  <Skeleton className="h-20 w-full rounded-xl" />
+                </div>
+              ) : commentsList.length > 0 ? (
+                commentsList.map((c) => (
+                  <CommentCard key={c.id || c.commentId} comment={c} />
+                ))
+              ) : !isCrawled ? (
+                /* Empty state: Not crawled yet */
+                <div className="my-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-12 text-center shadow-2xs">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 shadow-inner">
+                    <MessageSquare className="h-6 w-6" />
+                  </div>
+                  <h4 className="mb-1 text-sm font-bold text-slate-800">
+                    Chưa có dữ liệu bình luận chi tiết
+                  </h4>
+                  <p className="mb-4 max-w-sm text-xs leading-relaxed text-slate-500">
+                    Hệ thống chưa tự động cào các bình luận của bài viết này.
+                    Bạn có thể nhấn nút bên dưới để khởi chạy bộ quét bình luận
+                    on-demand.
+                  </p>
+                  <Button
+                    onClick={handleTriggerCrawl}
+                    disabled={isCrawling}
+                    className="gap-1.5 bg-indigo-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700"
+                  >
+                    <RefreshCw
+                      className={cn(
+                        "h-3.5 w-3.5",
+                        isCrawling && "animate-spin",
+                      )}
+                    />
+                    <span>
+                      {isCrawling
+                        ? "Đang gửi lệnh quét..."
+                        : "Quét bình luận bài viết ngay"}
+                    </span>
+                  </Button>
+                </div>
+              ) : (
+                /* Empty state: Filter returned nothing */
+                <div className="flex flex-col items-center justify-center py-12 text-center text-slate-500">
+                  <p className="text-xs font-medium">
+                    Không tìm thấy bình luận nào phù hợp với bộ lọc hiện tại.
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleTabChange("all")}
+                    className="mt-2 text-xs text-indigo-600 hover:text-indigo-700"
+                  >
+                    Xem tất cả bình luận
+                  </Button>
+                </div>
               )}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-3 flex items-center justify-between border-t border-slate-200/80 pt-3 text-xs">
+                <span className="font-medium text-slate-500">
+                  Trang <span className="font-bold text-slate-800">{page}</span>{" "}
+                  / {totalPages}
+                </span>
+
+                <div className="flex items-center gap-1.5">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page <= 1 || isFetchingComments}
+                    className="h-7 w-7 border-slate-200 bg-white p-0 shadow-2xs"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page >= totalPages || isFetchingComments}
+                    className="h-7 w-7 border-slate-200 bg-white p-0 shadow-2xs"
+                  >
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
-        </>
+        </div>
       </DialogContent>
     </Dialog>
   );
 };
+
+export default PostDetailDialog;

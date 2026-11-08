@@ -23,6 +23,7 @@ comments_summary as (
         negative_comments_ratio,
         analyzed_at as comments_analyzed_at
     from {{ source('ai_raw', 'post_comments_summary') }}
+    qualify row_number() over (partition by post_id order by analyzed_at desc) = 1
 )
 
 select
@@ -69,6 +70,7 @@ left join comments_summary cs on p.post_id = cs.post_id
   -- or based on the most recent analyzed_at time in the target table, to ensure we capture any updates to AI analysis.
   where p.crawled_at > (select coalesce(max(crawled_at), '1970-01-01') from {{ this }})
      or a.analyzed_at > (select coalesce(max(analyzed_at), '1970-01-01') from {{ this }})
+     or cs.comments_analyzed_at is not null
 
 {% endif %}
 

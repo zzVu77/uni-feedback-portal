@@ -1,4 +1,9 @@
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import {
   getClassificationSentiment,
   getKPIOverview,
@@ -9,8 +14,13 @@ import {
   getPostsBySentiment,
   getTopicBySentiment,
   getUrgentIssues,
+  getPostComments,
+  triggerCrawlPostComments,
 } from "@/services/social-listening-service";
-import { SocialListeningFilter } from "@/types/social-listening";
+import {
+  SocialListeningFilter,
+  GetPostCommentsParams,
+} from "@/types/social-listening";
 
 export const SOCIAL_LISTENING_QUERY_KEYS = {
   trendingIssues: "social-listening-trending-issues",
@@ -22,6 +32,7 @@ export const SOCIAL_LISTENING_QUERY_KEYS = {
   postsBySentiment: "social-listening-posts-by-sentiment",
   topicBySentiment: "social-listening-topic-by-sentiment",
   urgentIssues: "social-listening-urgent-issues",
+  postComments: "social-listening-post-comments",
 };
 
 export const useGetTrendingIssues = (filter: SocialListeningFilter) => {
@@ -94,5 +105,35 @@ export const useGetUrgentIssues = (filter: SocialListeningFilter) => {
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues, filter],
     queryFn: () => getUrgentIssues(filter),
     placeholderData: keepPreviousData,
+  });
+};
+
+export const useGetPostComments = (
+  postId: string | null | undefined,
+  params?: GetPostCommentsParams,
+) => {
+  return useQuery({
+    queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postComments, postId, params],
+    queryFn: () => getPostComments(postId!, params),
+    enabled: Boolean(postId),
+    placeholderData: keepPreviousData,
+  });
+};
+
+export const useTriggerCrawlComments = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (postId: string) => triggerCrawlPostComments(postId),
+    onSuccess: (_data, postId) => {
+      void queryClient.invalidateQueries({
+        queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postComments, postId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: [SOCIAL_LISTENING_QUERY_KEYS.trendingIssues],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues],
+      });
+    },
   });
 };

@@ -58,37 +58,38 @@ async function getTargetPosts() {
   }
 
   // 2. Query BigQuery for Negative or High-Risk Posts
-  const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  if (keyPath && fs.existsSync(keyPath)) {
-    try {
-      console.log("🔍 Checking BigQuery for high-risk / negative posts needing comments...");
-      const bq = new BigQuery({
-        projectId: process.env.GOOGLE_CLOUD_PROJECT || "uni-feedback-data",
-        keyFilename: keyPath,
-      });
-
-      const query = `
-        SELECT post_id, post_link, sentiment_label, comment_count
-        FROM \`uni-feedback-data.uni_feedback_data_marts.mrt_trending_issues_dashboard\`
-        WHERE (sentiment_label IN ('Tiêu cực', 'Stress lo âu') OR sentiment_score <= -0.5)
-          AND post_link IS NOT NULL
-          AND post_link != ''
-          AND comment_count > 0
-        ORDER BY posted_at DESC
-        LIMIT 10
-      `;
-
-      const [rows] = await bq.query(query);
-      if (rows && rows.length > 0) {
-        console.log(`🎯 Found ${rows.length} high-risk posts from BigQuery for comment crawling.`);
-        return rows.map((r) => ({
-          post_link: r.post_link,
-          post_id: r.post_id,
-        }));
-      }
-    } catch (err) {
-      console.warn("⚠️ BigQuery query for critical posts skipped:", err.message);
+  try {
+    console.log("🔍 Checking BigQuery for high-risk / negative posts needing comments...");
+    const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    const bqOptions = {
+      projectId: process.env.GOOGLE_CLOUD_PROJECT || "uni-feedback-data",
+    };
+    if (keyPath && fs.existsSync(keyPath)) {
+      bqOptions.keyFilename = keyPath;
     }
+    const bq = new BigQuery(bqOptions);
+
+    const query = `
+      SELECT post_id, post_link, sentiment_label, comment_count
+      FROM \`uni-feedback-data.uni_feedback_data_marts.mrt_trending_issues_dashboard\`
+      WHERE (sentiment_label IN ('Tiêu cực', 'Stress lo âu') OR sentiment_score <= -0.5)
+        AND post_link IS NOT NULL
+        AND post_link != ''
+        AND comment_count > 0
+      ORDER BY posted_at DESC
+      LIMIT 10
+    `;
+
+    const [rows] = await bq.query(query);
+    if (rows && rows.length > 0) {
+      console.log(`🎯 Found ${rows.length} high-risk posts from BigQuery for comment crawling.`);
+      return rows.map((r) => ({
+        post_link: r.post_link,
+        post_id: r.post_id,
+      }));
+    }
+  } catch (err) {
+    console.warn("⚠️ BigQuery query for critical posts skipped:", err.message);
   }
 
   // 3. Fallback: Parse latest posts_*.json from crawler output

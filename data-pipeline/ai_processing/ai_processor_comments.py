@@ -16,9 +16,10 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-PROJECT_ID = process.env.get("GOOGLE_CLOUD_PROJECT", "uni-feedback-data") if "process" in locals() else os.environ.get("GOOGLE_CLOUD_PROJECT", "uni-feedback-data")
+PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "uni-feedback-data")
 DATASET_RAW = "ai_raw"
 DATASET_MARTS = "uni_feedback_data_marts"
+DATASET_STAGING = "uni_feedback_data_staging"
 
 def get_clients():
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -126,9 +127,22 @@ def analyze_comments_batch(ai_client, batch_comments):
         data = json.loads(response.text.strip(), strict=False)
         analyzed_at = datetime.utcnow().isoformat()
         
-        # Attach analyzed_at timestamp
+        # Build mapping of comment_id -> post_id from the batch
+        comment_to_post = {
+            str(c["comment_id"]): str(c.get("post_id", ""))
+            for c in batch_comments
+        }
+        fallback_post_id = (
+            str(batch_comments[0].get("post_id", ""))
+            if batch_comments
+            else ""
+        )
+
+        # Attach analyzed_at timestamp and required post_id
         for item in data:
             item["analyzed_at"] = analyzed_at
+            cid = str(item.get("comment_id", ""))
+            item["post_id"] = comment_to_post.get(cid) or fallback_post_id
             
         return data
     except Exception as e:
@@ -189,7 +203,7 @@ def fetch_unprocessed_comments(bq_client):
     """
     query = f"""
         SELECT c.comment_id, c.post_id, c.parent_comment_id, c.author, c.content, c.reaction_count, c.commented_at
-        FROM `{PROJECT_ID}.staging.stg_fb_comments` c
+        FROM `{PROJECT_ID}.{DATASET_STAGING}.stg_fb_comments` c
         WHERE c.comment_id NOT IN (
             SELECT comment_id FROM `{PROJECT_ID}.{DATASET_RAW}.comment_analysis`
         )
@@ -200,7 +214,7 @@ def fetch_unprocessed_comments(bq_client):
 
 def fetch_post_content(bq_client, post_id):
     query = f"""
-        SELECT content FROM `{PROJECT_ID}.staging.stg_fb_posts`
+        SELECT content FROM `{PROJECT_ID}.{DATASET_STAGING}.stg_fb_posts`
         WHERE post_id = '{post_id}'
         LIMIT 1
     """

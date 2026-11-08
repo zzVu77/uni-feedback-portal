@@ -2,6 +2,7 @@ import dlt
 from sqlalchemy import create_engine, text
 from google.cloud import bigquery
 import os
+import uuid
 import logging
 from dotenv import load_dotenv
 load_dotenv()
@@ -54,10 +55,10 @@ def sync_dashboard_data():
     # A. Sync Posts (dashboard_trending_issues)
     # ==========================================
     if max_crawled_date:
-        logger.info(f"Postgres Posts Watermark: {max_crawled_date}. Fetching new posts...")
+        logger.info(f"Postgres Posts Watermark: {max_crawled_date}. Fetching new or updated posts...")
         query_posts = f"""
             SELECT * FROM `uni-feedback-data.uni_feedback_data_marts.mrt_trending_issues_dashboard`
-            WHERE crawled_at > '{max_crawled_date}'
+            WHERE crawled_at > '{max_crawled_date}' OR is_comments_crawled = TRUE
         """
     else:
         logger.info("First run for posts. Fetching posts from the last 90 days...")
@@ -104,6 +105,11 @@ def sync_dashboard_data():
         comment_records = [dict(row) for row in comments_job.result()]
 
         if comment_records:
+            # Ensure each comment record has an id (UUID) to satisfy Prisma / Postgres primary key constraint
+            for r in comment_records:
+                if not r.get("id"):
+                    r["id"] = str(uuid.uuid4())
+
             logger.info(f"Pushing {len(comment_records)} comments to PostgreSQL using dlt...")
             comments_load_info = pipeline.run(
                 data=comment_records,
