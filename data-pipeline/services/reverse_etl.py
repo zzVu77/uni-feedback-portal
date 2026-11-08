@@ -21,16 +21,20 @@ def sync_dashboard_data():
     if not pg_uri:
         raise ValueError("DATABASE_URL is not set. Please check your .env file.")
     
-    engine = create_engine(pg_uri)
+    engine = create_engine(pg_uri, pool_pre_ping=True, pool_recycle=300)
 
     # 2. Find the most recent crawled_at timestamp in the target Postgres table to use as a watermark for incremental loading
     max_crawled_date = None
-    with engine.connect() as conn:
-        try:
+    try:
+        with engine.connect() as conn:
             result = conn.execute(text("SELECT MAX(crawled_at) FROM dashboard_trending_issues"))
             max_crawled_date = result.scalar()
-        except Exception as e:
-            logger.warning("Could not fetch max crawled_at from Postgres. Assuming first run. Error: " + str(e))
+    except Exception as e:
+        logger.warning(
+            "Could not connect to target Postgres or fetch max crawled_at. "
+            "Please check if your database instance (e.g. Render/Supabase) is active, not suspended or expired. Error: " + str(e)
+        )
+        raise e
 
     # 3. Hit BigQuery with an incremental query to get only new or updated posts since the last run, based on either the post's crawl time or the AI analysis time.
     if max_crawled_date:
