@@ -4,14 +4,22 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/modules/social_listening/social_listening.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { GithubActionService } from '../github-action/github-action.service';
+import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { GetTrendingIssuesDto } from './dto/get-trending-issues.dto';
+import { GetPostCommentsDto } from './dto/get-post-comments.dto';
 
 @Injectable()
 export class SocialListeningService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
+    private readonly githubActionService: GithubActionService,
+  ) {}
 
   private getDateFilter(
     dto: GetTrendingIssuesDto,
@@ -286,6 +294,18 @@ export class SocialListeningService {
       aiSummary: item.ai_summary || item.aiSummary,
       sentimentLabel: item.sentiment_label || item.sentimentLabel,
       analyzedAt: item.analyzed_at || item.analyzedAt,
+      isCommentsCrawled: Boolean(
+        item.is_comments_crawled ?? item.isCommentsCrawled ?? false,
+      ),
+      commentsAiSummary:
+        item.comments_ai_summary || item.commentsAiSummary || null,
+      negativeCommentsRatio:
+        item.negative_comments_ratio != null
+          ? Number(item.negative_comments_ratio)
+          : item.negativeCommentsRatio != null
+            ? Number(item.negativeCommentsRatio)
+            : null,
+      urgencyLevel: item.urgency_level || item.urgencyLevel || 'NORMAL',
     }));
 
     return {
@@ -557,6 +577,186 @@ export class SocialListeningService {
       aiSummary: item.ai_summary || item.aiSummary,
       sentimentLabel: item.sentiment_label || item.sentimentLabel,
       analyzedAt: item.analyzed_at || item.analyzedAt,
+      isCommentsCrawled: Boolean(
+        item.is_comments_crawled ?? item.isCommentsCrawled ?? false,
+      ),
+      commentsAiSummary:
+        item.comments_ai_summary || item.commentsAiSummary || null,
+      negativeCommentsRatio:
+        item.negative_comments_ratio != null
+          ? Number(item.negative_comments_ratio)
+          : item.negativeCommentsRatio != null
+            ? Number(item.negativeCommentsRatio)
+            : null,
+      urgencyLevel: item.urgency_level || item.urgencyLevel || 'NORMAL',
     }));
+  }
+
+  /**
+   * Retrieves detailed comments and sentiment analysis for a specific post.
+   */
+  async getPostComments(postId: string, dto: GetPostCommentsDto) {
+    const post = await this.prisma.dashboardTrendingIssues.findUnique({
+      where: { postId },
+      select: {
+        postId: true,
+        postLink: true,
+        isCommentsCrawled: true,
+        commentsAiSummary: true,
+        negativeCommentsRatio: true,
+        urgencyLevel: true,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Bài viết với ID "${postId}" không tồn tại.`);
+    }
+
+    const page = Number(dto.page) || 1;
+    const limit = Number(dto.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.DashboardPostCommentsWhereInput = {
+      postId,
+      ...(dto.sentimentLabel && { sentimentLabel: dto.sentimentLabel }),
+      ...(dto.isTopConcern !== undefined && { isTopConcern: dto.isTopConcern }),
+    };
+
+    const orderBy: Prisma.DashboardPostCommentsOrderByWithRelationInput[] =
+      dto.sortBy === 'date'
+        ? [{ commentedAt: 'desc' }]
+        : [{ reactionCount: 'desc' }, { commentedAt: 'desc' }];
+
+    const [
+      totalFilteredComments,
+      comments,
+      sentimentGroups,
+      totalPostComments,
+    ] = await Promise.all([
+      this.prisma.dashboardPostComments.count({ where }),
+      this.prisma.dashboardPostComments.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy,
+      }),
+      this.prisma.dashboardPostComments.groupBy({
+        by: ['sentimentLabel'],
+        where: { postId },
+        _count: { id: true },
+      }),
+      this.prisma.dashboardPostComments.count({ where: { postId } }),
+    ]);
+
+    const counts: Record<string, number> = {
+      'Tiêu cực': 0,
+      'Bức xúc': 0,
+      'Stress lo âu': 0,
+      'Trung lập': 0,
+      'Tích cực': 0,
+    };
+
+    sentimentGroups.forEach((g) => {
+      counts[g.sentimentLabel] = g._count.id;
+    });
+
+    const negative = counts['Tiêu cực'] || 0;
+    const stressAnxiety =
+      (counts['Stress lo âu'] || 0) + (counts['Bức xúc'] || 0);
+    const neutral = counts['Trung lập'] || 0;
+    const positive = counts['Tích cực'] || 0;
+    const totalEvaluated = negative + stressAnxiety + neutral + positive;
+    const negativeRatio =
+      totalEvaluated > 0
+        ? Math.round(((negative + stressAnxiety) / totalEvaluated) * 10000) /
+          100
+        : 0;
+
+    const totalPages = Math.ceil(totalFilteredComments / limit) || 1;
+
+    return {
+      postId,
+      postInfo: {
+        postLink: post.postLink,
+        isCommentsCrawled: post.isCommentsCrawled,
+        commentsAiSummary: post.commentsAiSummary,
+        negativeCommentsRatio: post.negativeCommentsRatio,
+        urgencyLevel: post.urgencyLevel,
+      },
+      totalComments: totalPostComments,
+      filteredComments: totalFilteredComments,
+      sentimentStats: {
+        negative,
+        stressAnxiety,
+        neutral,
+        positive,
+        negativeRatio,
+      },
+      comments,
+      pagination: {
+        page,
+        limit,
+        totalPages,
+        totalRecords: totalFilteredComments,
+      },
+    };
+  }
+
+  /**
+   * On-demand trigger to crawl comments for a specific post via GitHub Action.
+   */
+  async triggerCrawlPostComments(postId: string, actor: ActiveUserData) {
+    const post = await this.prisma.dashboardTrendingIssues.findUnique({
+      where: { postId },
+      select: {
+        postId: true,
+        postLink: true,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Bài viết với ID "${postId}" không tồn tại.`);
+    }
+
+    const owner =
+      this.configService.get<string>('GITHUB_REPO_OWNER') || 'zzVu77';
+    const repo =
+      this.configService.get<string>('GITHUB_REPO_NAME') ||
+      'uni-feedback-portal';
+    const workflowId =
+      this.configService.get<string>('GITHUB_WORKFLOW_ID') ||
+      'daily-pipeline.yml';
+    const ref = this.configService.get<string>('GITHUB_REF') || 'main';
+
+    let triggerResult: any = null;
+    try {
+      triggerResult = await this.githubActionService.triggerWorkflow({
+        owner,
+        repo,
+        workflowId,
+        ref,
+        inputs: {
+          target_post_id: postId,
+          target_post_url: post.postLink || '',
+        },
+      });
+    } catch (error: any) {
+      return {
+        success: false,
+        message: `Không thể kích hoạt GitHub Action: ${error?.message || 'Lỗi không xác định'}`,
+        postId,
+        postLink: post.postLink,
+        actor: { id: actor?.sub, role: actor?.role },
+      };
+    }
+
+    return {
+      success: true,
+      message: `Đã gửi yêu cầu cào bình luận cho bài viết thành công. Tiến trình pipeline đang được khởi chạy.`,
+      postId,
+      postLink: post.postLink,
+      actor: { id: actor?.sub, role: actor?.role },
+      details: triggerResult,
+    };
   }
 }

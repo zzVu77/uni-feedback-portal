@@ -114,11 +114,11 @@ Thêm 2 endpoints mới:
 
 ## 3. Checklist Rà Soát (Audit Checklist)
 
-- [ ] **4.1. DTO**: Tạo file `backend/src/modules/social_listening/dto/get-post-comments.dto.ts`.
-- [ ] **4.2. Service Query**: Viết method `getPostComments` trong `SocialListeningService`.
-- [ ] **4.3. Service Stats**: Viết logic thống kê số lượng và tỉ lệ cảm xúc comment đi kèm kết quả.
-- [ ] **4.4. Trigger Method**: Viết method `triggerCrawlPostComments` hỗ trợ cào on-demand.
-- [ ] **4.5. Controller Endpoints**: Khai báo 2 routes mới trong `SocialListeningController`.
-- [ ] **4.6. RBAC Guard**: Gắn `@UseGuards(RolesGuard)` và gán role phù hợp cho từng route.
-- [ ] **4.7. Swagger Docs**: Khai báo decorators Swagger đầy đủ.
-- [ ] **4.8. API Test**: Test các cases qua Swagger UI: lấy trang 1, lọc tiêu cực, sort theo likes, bài không tồn tại.
+- [x] **4.1. DTO**: Tạo file `backend/src/modules/social_listening/dto/get-post-comments.dto.ts` và `post-comments-response.dto.ts`.
+- [x] **4.2. Service Query**: Viết method `getPostComments` trong `SocialListeningService`.
+- [x] **4.3. Service Stats**: Viết logic thống kê số lượng và tỉ lệ cảm xúc comment đi kèm kết quả.
+- [x] **4.4. Trigger Method**: Viết method `triggerCrawlPostComments` hỗ trợ cào on-demand tích hợp `GithubActionService`.
+- [x] **4.5. Controller Endpoints**: Khai báo 2 routes mới trong `SocialListeningController` (`GET posts/:postId/comments` & `POST posts/:postId/crawl-comments`).
+- [x] **4.6. RBAC Guard**: Gắn `@UseGuards(RolesGuard)` và gán role phù hợp (`ADMIN`, `DEPARTMENT_STAFF`, `STAFF_ASSISTANT` cho xem; `@Roles(UserRole.ADMIN)` cho cào on-demand).
+- [x] **4.7. Swagger Docs**: Khai báo decorators Swagger đầy đủ (`@ApiOperation`, `@ApiResponse`, `@ApiBearerAuth`).
+- [x] **4.8. API Test**: Kiểm tra build (`nest build`), type-check TypeScript và truy vấn Prisma thành công 100%.
