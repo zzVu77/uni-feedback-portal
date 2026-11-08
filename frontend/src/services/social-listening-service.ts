@@ -122,6 +122,13 @@ export const getUrgentIssues = async (
   return response;
 };
 
+export const getPostById = async (postId: string): Promise<FeedbackPost> => {
+  const response = await axiosInstance.get<FeedbackPost>(
+    `${socialListeningBaseUrl}/posts/${postId}`,
+  );
+  return response;
+};
+
 export const getPostComments = async (
   postId: string,
   params?: GetPostCommentsParams,

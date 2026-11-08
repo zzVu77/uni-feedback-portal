@@ -15,6 +15,11 @@ export class PostCommentItem {
   })
   parentCommentId: string | null;
 
+  @ApiPropertyOptional({
+    description: 'Tên tác giả mà bình luận này phản hồi trực tiếp',
+  })
+  replyToAuthor?: string | null;
+
   @ApiProperty({ description: 'Tên tác giả comment' })
   author: string;
 
@@ -42,6 +47,12 @@ export class PostCommentItem {
 
   @ApiProperty({ description: 'Thời điểm cào dữ liệu' })
   crawledAt: Date;
+
+  @ApiPropertyOptional({
+    description: 'Danh sách bình luận con trả lời (nested replies)',
+    type: () => [PostCommentItem],
+  })
+  replies?: PostCommentItem[];
 }
 
 export class PostCommentsSentimentStats {

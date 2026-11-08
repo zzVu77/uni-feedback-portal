@@ -151,6 +151,24 @@ export class SocialListeningController {
     return this.socialListeningService.getUrgentIssues(query);
   }
 
+  @Get('posts/:postId')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
+  @ApiOperation({
+    summary: 'Lấy thông tin chi tiết một bài viết mạng xã hội theo ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Chi tiết bài viết mạng xã hội',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Bài viết không tồn tại',
+  })
+  async getPostById(@Param('postId') postId: string) {
+    return this.socialListeningService.getPostById(postId);
+  }
+
   @Get('posts/:postId/comments')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)

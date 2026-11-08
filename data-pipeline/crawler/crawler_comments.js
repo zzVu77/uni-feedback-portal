@@ -338,8 +338,8 @@ async function runCommentsCrawler() {
       // Select 'All Comments' filter
       await selectAllCommentsFilter(page);
 
-      // Expand comments and replies
-      await expandComments(page, 10);
+      // Expand comments and replies (up to 30 passes for long threads)
+      await expandComments(page, 30);
 
       // Final wait for ongoing GraphQL requests
       await page.waitForTimeout(3000);

@@ -197,7 +197,7 @@ def synthesize_post_comments(ai_client, post_id, post_content, comments):
         logger.error(f"Error synthesizing comments for post {post_id}: {e}")
         return None
 
-def fetch_unprocessed_comments(bq_client):
+def fetch_unprocessed_comments(bq_client, limit=500):
     """
     Fetches comments from BigQuery stg_fb_comments that haven't been analyzed yet.
     """
@@ -207,9 +207,9 @@ def fetch_unprocessed_comments(bq_client):
         WHERE c.comment_id NOT IN (
             SELECT comment_id FROM `{PROJECT_ID}.{DATASET_RAW}.comment_analysis`
         )
-        LIMIT 100
+        LIMIT {limit}
     """
-    logger.info("Fetching unprocessed comments from BigQuery...")
+    logger.info(f"Fetching up to {limit} unprocessed comments from BigQuery...")
     return [dict(row) for row in bq_client.query(query).result()]
 
 def fetch_post_content(bq_client, post_id):
@@ -233,6 +233,7 @@ def write_to_bigquery(bq_client, table_name, rows):
 def main():
     parser = argparse.ArgumentParser(description="Analyze Facebook comments with Gemini 2.5 Flash.")
     parser.add_argument("--test-file", type=str, help="Path to local comments JSON file to test without BigQuery.")
+    parser.add_argument("--limit", type=int, default=500, help="Maximum number of unprocessed comments to analyze (default: 500).")
     args = parser.parse_args()
 
     ai_client, bq_client = get_clients()
@@ -272,7 +273,7 @@ def main():
         logger.error("BigQuery client not available. Provide service account credentials or use --test-file.")
         sys.exit(1)
 
-    comments = fetch_unprocessed_comments(bq_client)
+    comments = fetch_unprocessed_comments(bq_client, limit=args.limit)
     if not comments:
         logger.info("No unprocessed comments to analyze. Exiting.")
         return

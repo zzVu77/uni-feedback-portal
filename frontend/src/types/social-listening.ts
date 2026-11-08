@@ -39,6 +39,7 @@ export interface PostCommentItem {
   commentId: string;
   postId: string;
   parentCommentId: string | null;
+  replyToAuthor?: string | null;
   author: string;
   content: string;
   reactionCount: number;
@@ -47,6 +48,7 @@ export interface PostCommentItem {
   sentimentScore: number;
   isTopConcern: boolean;
   crawledAt?: string;
+  replies?: PostCommentItem[];
 }
 
 export interface PostCommentsSentimentStats {

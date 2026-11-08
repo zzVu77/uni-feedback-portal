@@ -593,6 +593,21 @@ export class SocialListeningService {
   }
 
   /**
+   * Retrieves full details of a specific social listening post by ID.
+   */
+  async getPostById(postId: string) {
+    const post = await this.prisma.dashboardTrendingIssues.findUnique({
+      where: { postId },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Bài viết với ID "${postId}" không tồn tại.`);
+    }
+
+    return post;
+  }
+
+  /**
    * Retrieves detailed comments and sentiment analysis for a specific post.
    */
   async getPostComments(postId: string, dto: GetPostCommentsDto) {
@@ -613,41 +628,15 @@ export class SocialListeningService {
     }
 
     const page = Number(dto.page) || 1;
-    const limit = Number(dto.limit) || 20;
-    const skip = (page - 1) * limit;
+    const limit = Number(dto.limit) || 15;
 
-    const where: Prisma.DashboardPostCommentsWhereInput = {
-      postId,
-      ...(dto.sentimentLabel && { sentimentLabel: dto.sentimentLabel }),
-      ...(dto.isTopConcern !== undefined && { isTopConcern: dto.isTopConcern }),
-    };
+    // Fetch all comments for this post to accurately construct the hierarchical conversation tree
+    const allComments = await this.prisma.dashboardPostComments.findMany({
+      where: { postId },
+      orderBy: { commentedAt: 'asc' },
+    });
 
-    const orderBy: Prisma.DashboardPostCommentsOrderByWithRelationInput[] =
-      dto.sortBy === 'date'
-        ? [{ commentedAt: 'desc' }]
-        : [{ reactionCount: 'desc' }, { commentedAt: 'desc' }];
-
-    const [
-      totalFilteredComments,
-      comments,
-      sentimentGroups,
-      totalPostComments,
-    ] = await Promise.all([
-      this.prisma.dashboardPostComments.count({ where }),
-      this.prisma.dashboardPostComments.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy,
-      }),
-      this.prisma.dashboardPostComments.groupBy({
-        by: ['sentimentLabel'],
-        where: { postId },
-        _count: { id: true },
-      }),
-      this.prisma.dashboardPostComments.count({ where: { postId } }),
-    ]);
-
+    // Compute sentiment statistics across all comments of the post
     const counts: Record<string, number> = {
       'Tiêu cực': 0,
       'Bức xúc': 0,
@@ -656,8 +645,8 @@ export class SocialListeningService {
       'Tích cực': 0,
     };
 
-    sentimentGroups.forEach((g) => {
-      counts[g.sentimentLabel] = g._count.id;
+    allComments.forEach((c) => {
+      counts[c.sentimentLabel] = (counts[c.sentimentLabel] || 0) + 1;
     });
 
     const negative = counts['Tiêu cực'] || 0;
@@ -672,7 +661,80 @@ export class SocialListeningService {
           100
         : 0;
 
-    const totalPages = Math.ceil(totalFilteredComments / limit) || 1;
+    // Construct the parent-child nested comment tree
+    type CommentNode = (typeof allComments)[0] & {
+      replyToAuthor?: string | null;
+      replies: CommentNode[];
+    };
+
+    const commentMap = new Map<string, CommentNode>();
+    allComments.forEach((c) => {
+      commentMap.set(c.commentId, {
+        ...c,
+        replyToAuthor: null,
+        replies: [],
+      });
+    });
+
+    const roots: CommentNode[] = [];
+    allComments.forEach((c) => {
+      const node = commentMap.get(c.commentId)!;
+      if (c.parentCommentId && commentMap.has(c.parentCommentId)) {
+        const parent = commentMap.get(c.parentCommentId)!;
+        node.replyToAuthor = parent.author;
+        parent.replies.push(node);
+      } else {
+        roots.push(node);
+      }
+    });
+
+    // Filtering logic: include root if root matches OR any nested reply matches
+    const matchesCriteria = (node: CommentNode): boolean => {
+      let match = true;
+      if (dto.sentimentLabel && node.sentimentLabel !== dto.sentimentLabel) {
+        match = false;
+      }
+      if (
+        dto.isTopConcern !== undefined &&
+        node.isTopConcern !== dto.isTopConcern
+      ) {
+        match = false;
+      }
+      return match;
+    };
+
+    const hasMatchingDescendant = (node: CommentNode): boolean => {
+      if (matchesCriteria(node)) return true;
+      return node.replies.some((child) => hasMatchingDescendant(child));
+    };
+
+    const filteredRoots =
+      dto.sentimentLabel || dto.isTopConcern !== undefined
+        ? roots.filter(hasMatchingDescendant)
+        : roots;
+
+    // Sorting logic for root threads
+    if (dto.sortBy === 'date') {
+      filteredRoots.sort(
+        (a, b) =>
+          new Date(b.commentedAt).getTime() - new Date(a.commentedAt).getTime(),
+      );
+    } else {
+      // Default: sort by reaction count descending
+      filteredRoots.sort(
+        (a, b) =>
+          b.reactionCount - a.reactionCount ||
+          new Date(b.commentedAt).getTime() - new Date(a.commentedAt).getTime(),
+      );
+    }
+
+    // Pagination for root threads
+    const totalRoots = filteredRoots.length;
+    const totalPages = Math.ceil(totalRoots / limit) || 1;
+    const paginatedRoots = filteredRoots.slice(
+      (page - 1) * limit,
+      page * limit,
+    );
 
     return {
       postId,
@@ -683,8 +745,8 @@ export class SocialListeningService {
         negativeCommentsRatio: post.negativeCommentsRatio,
         urgencyLevel: post.urgencyLevel,
       },
-      totalComments: totalPostComments,
-      filteredComments: totalFilteredComments,
+      totalComments: allComments.length,
+      filteredComments: totalRoots,
       sentimentStats: {
         negative,
         stressAnxiety,
@@ -692,12 +754,12 @@ export class SocialListeningService {
         positive,
         negativeRatio,
       },
-      comments,
+      comments: paginatedRoots,
       pagination: {
         page,
         limit,
         totalPages,
-        totalRecords: totalFilteredComments,
+        totalRecords: totalRoots,
       },
     };
   }

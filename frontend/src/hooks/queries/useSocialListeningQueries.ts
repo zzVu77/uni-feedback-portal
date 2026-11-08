@@ -1,29 +1,31 @@
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  keepPreviousData,
-} from "@tanstack/react-query";
-import {
   getClassificationSentiment,
   getKPIOverview,
+  getPostById,
+  getPostComments,
   getPostCountByDate,
+  getPostsBySentiment,
   getSentimentTrend,
+  getTopicBySentiment,
   getTopicDistribution,
   getTrendingIssues,
-  getPostsBySentiment,
-  getTopicBySentiment,
   getUrgentIssues,
-  getPostComments,
   triggerCrawlPostComments,
 } from "@/services/social-listening-service";
 import {
-  SocialListeningFilter,
   GetPostCommentsParams,
+  SocialListeningFilter,
 } from "@/types/social-listening";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export const SOCIAL_LISTENING_QUERY_KEYS = {
   trendingIssues: "social-listening-trending-issues",
+  postDetail: "social-listening-post-detail",
   kpiOverview: "social-listening-kpi-overview",
   sentimentTrend: "social-listening-sentiment-trend",
   topicDistribution: "social-listening-topic-distribution",
@@ -105,6 +107,14 @@ export const useGetUrgentIssues = (filter: SocialListeningFilter) => {
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues, filter],
     queryFn: () => getUrgentIssues(filter),
     placeholderData: keepPreviousData,
+  });
+};
+
+export const useGetPostById = (postId: string | null | undefined) => {
+  return useQuery({
+    queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postDetail, postId],
+    queryFn: () => getPostById(postId!),
+    enabled: Boolean(postId),
   });
 };
 

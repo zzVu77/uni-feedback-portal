@@ -2,16 +2,18 @@ import { Button } from "@/components/ui/button";
 import { FeedbackPost } from "@/types/social-listening";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { ExternalLink, ShieldAlert } from "lucide-react";
-import React, { useState } from "react";
-import { PostDetailDialog, getSentimentInfo } from "./PostDetailDialog";
+import { ChevronRight, ShieldAlert } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+import { getSentimentInfo } from "./PostDetailDialog";
 
 interface UrgentIssuesAlertProps {
   issues: FeedbackPost[];
 }
 
 const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
-  const [selectedPost, setSelectedPost] = useState<FeedbackPost | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   if (!issues || issues.length === 0) return null;
 
@@ -78,21 +80,19 @@ const UrgentIssuesAlert: React.FC<UrgentIssuesAlertProps> = ({ issues }) => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setSelectedPost(issue)}
-                  className="w-full border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 sm:w-auto"
+                  onClick={() =>
+                    router.push(`${pathname}/posts/${issue.postId}`)
+                  }
+                  className="w-full gap-1 border-rose-200 font-semibold text-rose-600 hover:bg-rose-50 hover:text-rose-700 sm:w-auto"
                 >
-                  Xem chi tiết <ExternalLink className="ml-2 h-3.5 w-3.5" />
+                  <span>Xem chi tiết</span>
+                  <ChevronRight className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      <PostDetailDialog
-        post={selectedPost}
-        onClose={() => setSelectedPost(null)}
-      />
     </div>
   );
 };
