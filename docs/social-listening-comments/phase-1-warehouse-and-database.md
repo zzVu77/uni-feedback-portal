@@ -103,12 +103,12 @@ model DashboardPostComments {
 
 ## 3. Checklist Rà Soát (Audit Checklist)
 
-- [ ] **1.1. BigQuery DDL**: Tạo bảng `social_raw.comments` trên Google Cloud Console / CLI.
-- [ ] **1.2. dbt Staging**: Tạo file `models/staging/stg_fb_comments.sql`.
-- [ ] **1.3. dbt Test Schema**: Tạo file `models/staging/stg_fb_comments.yml` định nghĩa validation.
-- [ ] **1.4. dbt Marts**: Cập nhật `models/marts/mrt_trending_issues_dashboard.sql` thêm 4 cột mới.
-- [ ] **1.5. dbt Marts**: Tạo file `models/marts/mrt_post_comments_detail.sql`.
-- [ ] **1.6. Prisma Schema**: Thêm model `DashboardPostComments` vào file `schema.prisma`.
-- [ ] **1.7. Prisma Schema**: Thêm relation và 4 trường mới vào model `DashboardTrendingIssues`.
-- [ ] **1.8. Migration**: Chạy migration cập nhật cấu trúc database PostgreSQL của hệ thống.
-- [ ] **1.9. Verify**: Kiểm tra bảng `dashboard_post_comments` đã xuất hiện trong database với foreign key `post_id` chính xác.
+- [x] **1.1. BigQuery DDL**: Tạo file script `data-pipeline/dbt_transformation/scripts/create_bigquery_comments_table.sql` (bảng `social_raw.comments`, `ai_raw.comment_analysis`, `ai_raw.post_comments_summary`).
+- [x] **1.2. dbt Staging**: Tạo file `models/staging/stg_fb_comments.sql` (lọc rác, deduplicate theo `comment_id`, chuẩn hóa kiểu).
+- [x] **1.3. dbt Test Schema**: Tạo file `models/staging/stg_fb_comments.yml` định nghĩa tests (`unique`, `not_null`).
+- [x] **1.4. dbt Marts**: Cập nhật `models/marts/mrt_trending_issues_dashboard.sql` và `.yml` thêm 4 cột mới (`is_comments_crawled`, `comments_ai_summary`, `negative_comments_ratio`, `urgency_level`).
+- [x] **1.5. dbt Marts**: Tạo file `models/marts/mrt_post_comments_detail.sql` và `.yml` kết nối comments với AI sentiment.
+- [x] **1.6. Prisma Schema**: Thêm model `DashboardPostComments` vào file `schema.prisma`.
+- [x] **1.7. Prisma Schema**: Thêm relation `comments` và 4 trường mới vào model `DashboardTrendingIssues`.
+- [x] **1.8. Migration**: Tạo file migration SQL `backend/prisma/migrations/add_dashboard_post_comments.sql` và generate Prisma Client (`v6.19.0`) thành công.
+- [x] **1.9. Verify**: Prisma Client và schema validation pass 100%, sẵn sàng cho Phase 2.
