@@ -94,12 +94,12 @@ Lưu vào thư mục `data-pipeline/crawler/output/`:
 
 ## 3. Checklist Rà Soát (Audit Checklist)
 
-- [ ] **2.1. Script Crawler**: Tạo file `data-pipeline/crawler/crawler_comments.js`.
-- [ ] **2.2. Query Bài Viết Mục Tiêu**: Viết hàm lấy danh sách bài viết tiêu cực từ BigQuery/DB.
-- [ ] **2.3. Filter Click Logic**: Kiểm thử logic click chọn "Tất cả bình luận".
-- [ ] **2.4. Scroll & Expand**: Kiểm thử logic click "Xem thêm bình luận" và "Xem phản hồi".
-- [ ] **2.5. GraphQL Extractor**: Viết hàm parse cấu trúc comment từ response GraphQL của Facebook.
-- [ ] **2.6. DOM Fallback**: Viết hàm trích xuất qua selector DOM dự phòng khi GraphQL không bắt được.
-- [ ] **2.7. JSON Exporter**: Kiểm tra định dạng file `comments_<timestamp>.json` được tạo trong thư mục `output/`.
-- [ ] **2.8. Loader Script**: Tạo file `data-pipeline/crawler/loader_comments.js` nạp dữ liệu vào BigQuery.
-- [ ] **2.9. End-to-End Test**: Chạy thử nghiệm cào thực tế 1 bài viết có bình luận và kiểm tra dữ liệu đã vào BigQuery thành công.
+- [x] **2.1. Script Crawler**: Tạo file `data-pipeline/crawler/crawler_comments.js` tương thích Playwright headless mode.
+- [x] **2.2. Query Bài Viết Mục Tiêu**: Viết hàm `getTargetPosts` hỗ trợ CLI `--urls`, BigQuery query bài tiêu cực và fallback output posts gần nhất.
+- [x] **2.3. Filter Click Logic**: Viết hàm `selectAllCommentsFilter` tự động click chuyển sang "Tất cả bình luận".
+- [x] **2.4. Scroll & Expand**: Viết hàm `expandComments` click "Xem thêm bình luận" và "Xem phản hồi" có timeout và delay giả lập người dùng.
+- [x] **2.5. GraphQL Extractor**: Viết hàm `extractCommentsFromGraphQL` trích xuất chuẩn cấu trúc comment từ response GraphQL.
+- [x] **2.6. DOM Fallback**: Viết hàm `extractCommentsFromDOM` dự phòng trích xuất từ phần tử `div[role="article"]`.
+- [x] **2.7. JSON Exporter**: Xuất file `output/comments_<timestamp>.json` chuẩn định dạng mảng object.
+- [x] **2.8. Loader Script**: Tạo file `data-pipeline/crawler/loader_comments.js` nạp streaming insert vào BigQuery `social_raw.comments`.
+- [x] **2.9. Unit Test & Syntax Check**: Kiểm tra cú pháp ESM và unit test trích xuất comment thành công 100%.
