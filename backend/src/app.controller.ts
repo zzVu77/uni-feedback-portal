@@ -20,7 +20,7 @@ export class AppController {
   @ApiResponse({ status: 200, description: 'Application is running normally' })
   getHealth() {
     return {
-      status: 'ok',
+      status: 'ok health',
       timestamp: new Date().toISOString(),
       uptime: `${Math.floor(process.uptime())}s`,
     };
