@@ -75,8 +75,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/uni-feedback-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/uni-feedback-backend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/uni-portal-hub:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/uni-portal-hub:${{ github.sha }}
 
       # --- Báo Render kéo Image mới nhất từ Docker Hub về khởi chạy ---
       - name: Trigger Render Deploy
