@@ -55,3 +55,19 @@ models:
       - name: analyzed_at
         data_type: timestamp
         description: "The date and time when the AI analysis was performed."
+
+      - name: is_comments_crawled
+        data_type: bool
+        description: "Flag indicating whether comments have been scraped for this post."
+
+      - name: comments_ai_summary
+        data_type: string
+        description: "AI synthesized summary of crowd sentiments and specific complaints in comments."
+
+      - name: negative_comments_ratio
+        data_type: float64
+        description: "Ratio of negative comments to total comments."
+
+      - name: urgency_level
+        data_type: string
+        description: "Crisis urgency classification: NORMAL, WARNING, CRITICAL."

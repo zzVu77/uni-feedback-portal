@@ -23,7 +23,6 @@ import {
   CalendarDays,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
   FileTextIcon,
   MessageSquare,
   Sparkles,
@@ -32,7 +31,7 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import { PostDetailDialog, getSentimentInfo } from "./PostDetailDialog";
+import { getSentimentInfo } from "./PostDetailDialog";
 
 interface HotIssuesTableProps {
   data: FeedbackPost[];
@@ -44,9 +43,9 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [selectedPost, setSelectedPost] = React.useState<FeedbackPost | null>(
-    null,
-  );
+  const handleOpenDetail = (postId: string) => {
+    router.push(`${pathname}/posts/${postId}`);
+  };
 
   const activeTab = searchParams.get("sentimentLabel") || "Tất cả";
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -180,7 +179,7 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                   <TableRow
                     key={post.postId}
                     className="group relative cursor-pointer border-b border-slate-100/50 transition-all duration-200 hover:bg-slate-50/80"
-                    onClick={() => setSelectedPost(post)}
+                    onClick={() => handleOpenDetail(post.postId)}
                   >
                     <TableCell className="py-5 pl-8">
                       <div className="flex w-full max-w-[250px] items-start gap-3 md:max-w-[350px] lg:max-w-[400px]">
@@ -202,18 +201,25 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                     </TableCell>
 
                     <TableCell className="py-5">
-                      <Badge
-                        variant="outline"
-                        className={cn(
-                          "border px-2.5 py-1 font-semibold shadow-sm",
-                          sentiment.bg,
-                          sentiment.color,
-                          sentiment.border,
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "border px-2.5 py-1 font-semibold shadow-sm",
+                            sentiment.bg,
+                            sentiment.color,
+                            sentiment.border,
+                          )}
+                        >
+                          {sentiment.icon}
+                          {post.sentimentLabel}
+                        </Badge>
+                        {post.urgencyLevel === "CRITICAL" && (
+                          <span className="rounded-full border border-rose-200 bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-800">
+                            Cấp bách
+                          </span>
                         )}
-                      >
-                        {sentiment.icon}
-                        {post.sentimentLabel}
-                      </Badge>
+                      </div>
                     </TableCell>
 
                     <TableCell className="py-5">
@@ -235,6 +241,14 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                             <MessageSquare className="h-3.5 w-3.5" />
                           </div>
                           {post.commentCount}
+                          {post.isCommentsCrawled && (
+                            <span
+                              className="py-0.2 ml-1 rounded-full bg-emerald-100 px-1.5 text-[10px] font-bold text-emerald-800"
+                              title="Đã quét và phân tích bình luận chi tiết"
+                            >
+                              ✓
+                            </span>
+                          )}
                         </div>
                       </div>
                     </TableCell>
@@ -252,12 +266,12 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
                         size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (post.postLink)
-                            window.open(post.postLink, "_blank");
+                          handleOpenDetail(post.postId);
                         }}
-                        className="font-semibold text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+                        className="gap-1 font-semibold text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
                       >
-                        Chi tiết <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+                        <span>Chi tiết</span>
+                        <ChevronRight className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -315,11 +329,6 @@ const HotIssuesTable: React.FC<HotIssuesTableProps> = ({ data, total }) => {
           </div>
         </div>
       )}
-
-      <PostDetailDialog
-        post={selectedPost}
-        onClose={() => setSelectedPost(null)}
-      />
     </div>
   );
 };

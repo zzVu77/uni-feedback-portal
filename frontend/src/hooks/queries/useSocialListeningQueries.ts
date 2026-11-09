@@ -1,19 +1,31 @@
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import {
   getClassificationSentiment,
   getKPIOverview,
+  getPostById,
+  getPostComments,
   getPostCountByDate,
+  getPostsBySentiment,
   getSentimentTrend,
+  getTopicBySentiment,
   getTopicDistribution,
   getTrendingIssues,
-  getPostsBySentiment,
-  getTopicBySentiment,
   getUrgentIssues,
+  triggerCrawlPostComments,
 } from "@/services/social-listening-service";
-import { SocialListeningFilter } from "@/types/social-listening";
+import {
+  GetPostCommentsParams,
+  SocialListeningFilter,
+} from "@/types/social-listening";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export const SOCIAL_LISTENING_QUERY_KEYS = {
   trendingIssues: "social-listening-trending-issues",
+  postDetail: "social-listening-post-detail",
   kpiOverview: "social-listening-kpi-overview",
   sentimentTrend: "social-listening-sentiment-trend",
   topicDistribution: "social-listening-topic-distribution",
@@ -22,6 +34,7 @@ export const SOCIAL_LISTENING_QUERY_KEYS = {
   postsBySentiment: "social-listening-posts-by-sentiment",
   topicBySentiment: "social-listening-topic-by-sentiment",
   urgentIssues: "social-listening-urgent-issues",
+  postComments: "social-listening-post-comments",
 };
 
 export const useGetTrendingIssues = (filter: SocialListeningFilter) => {
@@ -94,5 +107,43 @@ export const useGetUrgentIssues = (filter: SocialListeningFilter) => {
     queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues, filter],
     queryFn: () => getUrgentIssues(filter),
     placeholderData: keepPreviousData,
+  });
+};
+
+export const useGetPostById = (postId: string | null | undefined) => {
+  return useQuery({
+    queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postDetail, postId],
+    queryFn: () => getPostById(postId!),
+    enabled: Boolean(postId),
+  });
+};
+
+export const useGetPostComments = (
+  postId: string | null | undefined,
+  params?: GetPostCommentsParams,
+) => {
+  return useQuery({
+    queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postComments, postId, params],
+    queryFn: () => getPostComments(postId!, params),
+    enabled: Boolean(postId),
+    placeholderData: keepPreviousData,
+  });
+};
+
+export const useTriggerCrawlComments = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (postId: string) => triggerCrawlPostComments(postId),
+    onSuccess: (_data, postId) => {
+      void queryClient.invalidateQueries({
+        queryKey: [SOCIAL_LISTENING_QUERY_KEYS.postComments, postId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: [SOCIAL_LISTENING_QUERY_KEYS.trendingIssues],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: [SOCIAL_LISTENING_QUERY_KEYS.urgentIssues],
+      });
+    },
   });
 };

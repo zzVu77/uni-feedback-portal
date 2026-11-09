@@ -257,24 +257,50 @@ model RefreshTokens {
 }
 
 model DashboardTrendingIssues {
-  postId          String    @id @map("post_id")
-  author          String
-  content         String
-  postLink        String?   @map("post_link")
-  postedAt        DateTime  @map("posted_at")
-  reactionCount   Int       @map("reaction_count")
-  commentCount    Int       @map("comment_count")
-  engagementScore Int       @map("engagement_score")
-  topic           String
-  sentimentScore  Float     @map("sentiment_score")
-  aiSummary       String    @map("ai_summary")
-  sentimentLabel  String    @map("sentiment_label")
-  analyzedAt      DateTime  @map("analyzed_at")
-  crawled_at      DateTime? @db.Timestamptz(6)
-  dlt_load_id     String    @map("_dlt_load_id") @db.VarChar
-  dlt_id          String    @unique @map("_dlt_id") @db.VarChar
+  postId                String                  @id @map("post_id")
+  author                String
+  content               String
+  postLink              String?                 @map("post_link")
+  postedAt              DateTime                @map("posted_at")
+  reactionCount         Int                     @map("reaction_count")
+  commentCount          Int                     @map("comment_count")
+  engagementScore       Int                     @map("engagement_score")
+  topic                 String
+  sentimentScore        Float                   @map("sentiment_score")
+  aiSummary             String                  @map("ai_summary")
+  sentimentLabel        String                  @map("sentiment_label")
+  analyzedAt            DateTime                @map("analyzed_at")
+  crawled_at            DateTime?               @db.Timestamptz(6)
+  isCommentsCrawled     Boolean                 @default(false) @map("is_comments_crawled")
+  commentsAiSummary     String?                 @map("comments_ai_summary") @db.Text
+  negativeCommentsRatio Float?                  @map("negative_comments_ratio")
+  urgencyLevel          String?                 @default("NORMAL") @map("urgency_level")
+  comments              DashboardPostComments[]
+  dlt_load_id           String                  @map("_dlt_load_id") @db.VarChar
+  dlt_id                String                  @unique @map("_dlt_id") @db.VarChar
 
   @@map("dashboard_trending_issues")
+}
+
+model DashboardPostComments {
+  id              String                  @id @default(uuid())
+  commentId       String                  @unique @map("comment_id")
+  postId          String                  @map("post_id")
+  parentCommentId String?                 @map("parent_comment_id")
+  author          String
+  content         String                  @db.Text
+  reactionCount   Int                     @default(0) @map("reaction_count")
+  commentedAt     DateTime                @map("commented_at")
+  sentimentLabel  String                  @map("sentiment_label")
+  sentimentScore  Float                   @map("sentiment_score")
+  isTopConcern    Boolean                 @default(false) @map("is_top_concern")
+  crawledAt       DateTime                @default(now()) @map("crawled_at")
+
+  post            DashboardTrendingIssues @relation(fields: [postId], references: [postId], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([sentimentLabel])
+  @@map("dashboard_post_comments")
 }
 
 model DepartmentEmbeddings {

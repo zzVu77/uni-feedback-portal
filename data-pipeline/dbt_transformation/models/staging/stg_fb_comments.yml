@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: stg_fb_comments
+    description: "Staging model for scraped Facebook comments, cleaning raw records and removing duplicates."
+    columns:
+      - name: comment_id
+        data_type: string
+        description: "Primary unique identifier of the comment."
+        tests:
+          - unique
+          - not_null
+
+      - name: post_id
+        data_type: string
+        description: "Foreign key referencing the parent post in stg_fb_posts."
+        tests:
+          - not_null
+
+      - name: parent_comment_id
+        data_type: string
+        description: "Parent comment ID if this comment is a reply."
+
+      - name: author
+        data_type: string
+        description: "Author name or 'Sinh viên ẩn danh'."
+
+      - name: content
+        data_type: string
+        description: "Text content of the comment."
+        tests:
+          - not_null
+
+      - name: reaction_count
+        data_type: int64
+        description: "Total reactions count on the comment."
+
+      - name: commented_at
+        data_type: timestamp
+        description: "Timestamp when comment was originally posted."
+
+      - name: crawled_at
+        data_type: timestamp
+        description: "Timestamp when comment was scraped."
+        tests:
+          - not_null

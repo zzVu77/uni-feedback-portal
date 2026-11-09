@@ -5,5 +5,6 @@ import { GithubActionService } from './github-action.service';
 @Module({
   controllers: [GithubActionController],
   providers: [GithubActionService],
+  exports: [GithubActionService],
 })
 export class GithubActionModule {}

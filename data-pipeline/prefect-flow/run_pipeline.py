@@ -59,17 +59,58 @@ def run_dbt_mrt_ai_feed():
     logger.info("Running DBT: Marts AI Feed")
     subprocess.run(["dbt", "run", "--select", "mrt_posts_for_ai_feed"], cwd=DBT_DIR, check=True)
 
+# ----- Phase: Targeted Comments Crawling & Processing -----
+@task(name="5.1. Crawl Targeted Comments", retries=2, retry_delay_seconds=60)
+def run_crawler_comments():
+    logger.info(f"Running Targeted Comments Crawler at: {CRAWLER_DIR}")
+    try:
+        subprocess.run(["node", "crawler_comments.js"], cwd=CRAWLER_DIR, check=True)
+    except Exception as e:
+        logger.warning(f"⚠️ Comments crawler skipped or encountered warning: {e}")
+
+@task(name="5.2. Load Comments to BigQuery", retries=2, retry_delay_seconds=60)
+def run_loader_comments():
+    logger.info(f"Loading comments to BigQuery at: {CRAWLER_DIR}")
+    try:
+        subprocess.run(["node", "loader_comments.js"], cwd=CRAWLER_DIR, check=True)
+    except Exception as e:
+        logger.warning(f"⚠️ Comments loader skipped or encountered warning: {e}")
+
+@task(name="5.3. DBT: Staging Comments")
+def run_dbt_stg_comments():
+    logger.info("Running DBT: Staging Comments")
+    try:
+        subprocess.run(["dbt", "run", "--select", "stg_fb_comments"], cwd=DBT_DIR, check=True)
+    except Exception as e:
+        logger.warning(f"⚠️ DBT Staging Comments warning: {e}")
+
 # ----- Phase: AI processing-----
 @task(name="6. AI Sentiment Analysis", retries=3, retry_delay_seconds=120)
 def run_ai_processor():
     logger.info("Running AI Sentiment Analysis...")
     subprocess.run(["python", "ai_processing/ai_processor.py"], cwd=ROOT_DIR, check=True)
 
+@task(name="6.1. AI Comments Analysis & Synthesis", retries=2, retry_delay_seconds=120)
+def run_ai_processor_comments():
+    logger.info("Running AI Comments Analysis & Synthesis...")
+    try:
+        subprocess.run(["python", "ai_processing/ai_processor_comments.py"], cwd=ROOT_DIR, check=True)
+    except Exception as e:
+        logger.warning(f"⚠️ AI Comments processor skipped or encountered warning: {e}")
+
 # ----- Phase: Post-AI Processing -----
 @task(name="7. DBT: Staging AI Analysis")
 def run_dbt_stg_ai_analysis():
     logger.info("Running DBT: Staging AI Analysis")
     subprocess.run(["dbt", "run", "--select", "stg_ai_post_analysis"], cwd=DBT_DIR, check=True)
+
+@task(name="7.1. DBT: Comments Marts")
+def run_dbt_mrt_comments():
+    logger.info("Running DBT: Comments Marts")
+    try:
+        subprocess.run(["dbt", "run", "--select", "stg_ai_comment_analysis mrt_post_comments_detail"], cwd=DBT_DIR, check=True)
+    except Exception as e:
+        logger.warning(f"⚠️ DBT Comments Marts warning: {e}")
 
 @task(name="8. DBT: Final Dashboard")
 def run_dbt_mrt_dashboard():
@@ -94,6 +135,7 @@ def uni_feedback_flow():
     
     urls = get_active_urls()
     
+    # Phase 1: Posts Ingestion
     run_crawler(urls)
     run_loader()
     
@@ -102,11 +144,19 @@ def uni_feedback_flow():
     run_dbt_stg_fb_posts()
     run_dbt_mrt_ai_feed()
     
+    # Phase 2: Posts AI Sentiment
     run_ai_processor()
-    
     run_dbt_stg_ai_analysis()
-    run_dbt_mrt_dashboard()
+    
+    # Phase 3: Targeted Comments Crawling & Processing
+    run_crawler_comments()
+    run_loader_comments()
+    run_dbt_stg_comments()
+    run_ai_processor_comments()
+    run_dbt_mrt_comments()
 
+    # Phase 4: Final Dashboard Mart & Reverse ETL
+    run_dbt_mrt_dashboard()
     run_reverse_etl()
     
     logger.info("Pipeline completed successfully! All tasks have been executed.")

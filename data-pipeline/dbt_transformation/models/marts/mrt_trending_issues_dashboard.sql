@@ -13,6 +13,17 @@ with posts as (
 ai_analysis as (
     select * from {{ ref('stg_ai_post_analysis') }}
     where is_relevant = TRUE 
+),
+
+comments_summary as (
+    select
+        post_id,
+        comments_summary,
+        urgency_level,
+        negative_comments_ratio,
+        analyzed_at as comments_analyzed_at
+    from {{ source('ai_raw', 'post_comments_summary') }}
+    qualify row_number() over (partition by post_id order by analyzed_at desc) = 1
 )
 
 select
@@ -40,11 +51,18 @@ select
         ELSE 'Không xác định'
     END as sentiment_label,
 
+    -- Comments synthesis & crisis indicators
+    COALESCE(cs.post_id is not null, FALSE) as is_comments_crawled,
+    cs.comments_summary as comments_ai_summary,
+    COALESCE(cs.negative_comments_ratio, 0.0) as negative_comments_ratio,
+    COALESCE(cs.urgency_level, 'NORMAL') as urgency_level,
+
     a.analyzed_at,
     p.crawled_at
 
 from posts p
 inner join ai_analysis a on p.post_id = a.post_id
+left join comments_summary cs on p.post_id = cs.post_id
 
 {% if is_incremental() %}
 
@@ -52,6 +70,7 @@ inner join ai_analysis a on p.post_id = a.post_id
   -- or based on the most recent analyzed_at time in the target table, to ensure we capture any updates to AI analysis.
   where p.crawled_at > (select coalesce(max(crawled_at), '1970-01-01') from {{ this }})
      or a.analyzed_at > (select coalesce(max(analyzed_at), '1970-01-01') from {{ this }})
+     or cs.comments_analyzed_at is not null
 
 {% endif %}
 

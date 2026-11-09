@@ -6,7 +6,10 @@
   "scripts": {
     "auth": "node auth.js",
     "crawl": "node crawler.js",
+    "crawl:comments": "node crawler_comments.js",
+    "crawl:comments:headed": "node crawler_comments.js --headed",
     "load": "node loader.js",
+    "load:comments": "node loader_comments.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

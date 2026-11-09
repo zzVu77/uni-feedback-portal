@@ -1,5 +1,5 @@
 // src/modules/social_listening/social_listening.controller.ts
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -11,6 +11,10 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { SocialListeningService } from './social_listening.service';
 import { GetTrendingIssuesDto } from './dto/get-trending-issues.dto';
+import { GetPostCommentsDto } from './dto/get-post-comments.dto';
+import { PostCommentsResponseDto } from './dto/post-comments-response.dto';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Social Listening')
@@ -145,5 +149,67 @@ export class SocialListeningController {
   })
   async getUrgentIssues(@Query() query: GetTrendingIssuesDto) {
     return this.socialListeningService.getUrgentIssues(query);
+  }
+
+  @Get('posts/:postId')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
+  @ApiOperation({
+    summary: 'Lấy thông tin chi tiết một bài viết mạng xã hội theo ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Chi tiết bài viết mạng xã hội',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Bài viết không tồn tại',
+  })
+  async getPostById(@Param('postId') postId: string) {
+    return this.socialListeningService.getPostById(postId);
+  }
+
+  @Get('posts/:postId/comments')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.DEPARTMENT_STAFF, UserRole.STAFF_ASSISTANT)
+  @ApiOperation({
+    summary:
+      'Lấy danh sách bình luận chi tiết và thống kê cảm xúc của bài viết',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Danh sách bình luận, phân loại cảm xúc và phân trang',
+    type: PostCommentsResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Bài viết không tồn tại',
+  })
+  async getPostComments(
+    @Param('postId') postId: string,
+    @Query() query: GetPostCommentsDto,
+  ) {
+    return this.socialListeningService.getPostComments(postId, query);
+  }
+
+  @Post('posts/:postId/crawl-comments')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: 'Kích hoạt cào bình luận theo yêu cầu cho bài viết (Admin only)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Yêu cầu cào bình luận đã được gửi tới hệ thống pipeline',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Bài viết không tồn tại',
+  })
+  async triggerCrawlPostComments(
+    @Param('postId') postId: string,
+    @ActiveUser() actor: ActiveUserData,
+  ) {
+    return this.socialListeningService.triggerCrawlPostComments(postId, actor);
   }
 }

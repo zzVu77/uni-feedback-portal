@@ -74,6 +74,31 @@ export class SocialPost {
     description: 'Timestamp when the AI analyzed this post',
   })
   analyzedAt: Date;
+
+  @ApiPropertyOptional({
+    description: 'Trạng thái đã cào bình luận hay chưa',
+    example: true,
+  })
+  isCommentsCrawled?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Tóm tắt tổng quan bình luận do AI phân tích',
+    example:
+      'Đa số sinh viên bày tỏ bức xúc vì điều hòa thư viện tầng 4 bị hỏng liên tục.',
+  })
+  commentsAiSummary?: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Tỉ lệ bình luận tiêu cực (%)',
+    example: 78.5,
+  })
+  negativeCommentsRatio?: number | null;
+
+  @ApiPropertyOptional({
+    description: 'Mức độ khẩn cấp: NORMAL, WARNING, CRITICAL',
+    example: 'WARNING',
+  })
+  urgencyLevel?: string | null;
 }
 
 export class TrendingIssuesResponseDto {
