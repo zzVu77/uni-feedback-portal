@@ -45,3 +45,41 @@ jobs:
 
       - name: Build Backend
         run: npm run build --workspace=backend
+
+      # --- Tự động đồng bộ Database Schema khi có migration mới ---
+      - name: Run Prisma Database Migrations
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma migrate deploy --schema=backend/prisma/schema.prisma
+
+      # --- Setup Docker Buildx ---
+      - name: Set up Docker Buildx
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/setup-buildx-action@v3
+
+      # --- Đăng nhập vào Docker Hub ---
+      - name: Log in to Docker Hub
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # --- Build Dockerfile thành Image và PUSH lên Docker Hub ---
+      - name: Build and Push Docker Image
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/uni-feedback-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/uni-feedback-backend:${{ github.sha }}
+
+      # --- Báo Render kéo Image mới nhất từ Docker Hub về khởi chạy ---
+      - name: Trigger Render Deploy
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
